@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.eclipse.iee.sample.image.actionSet1"
+            label="label"
+            visible="true">
+         <action
+               class="org.eclipse.iee.sample.image.actions.AddImageAction"
+               icon="icons/add-pad.png"
+               id="org.eclipse.iee.sample.image.AddImage"
+               label="Add Image"
+               menubarPath="AddImage"
+               style="push"
+               toolbarPath="AddImage">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
