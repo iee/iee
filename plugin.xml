@@ -6,11 +6,11 @@
          point="org.eclipse.ui.editors">
       <editor
             name="Sample Editor with IEE pads"
-            extensions="txt"
+            extensions="txt1"
             icon="icons/sample.gif"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             class="org.eclipse.iee.editor.sample.SampleExtendedEditor"
-            id="org.eclipse.iee.editor.sample.XMLEditor">
+            id="org.eclipse.iee.editor.sample.SampleExtendedEditor">
       </editor>
    </extension>
 

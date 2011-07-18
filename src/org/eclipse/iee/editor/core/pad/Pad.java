@@ -25,6 +25,11 @@ public abstract class Pad
 	}
 	
 	
+	void setContainerID(String containerID) {
+		fContainerID = containerID;
+	}
+	
+	
 	public String getContainerID()
 	{
 		return fContainerID;
@@ -76,5 +81,5 @@ public abstract class Pad
 	 * Copy pad with @param containerID
 	 * @return
 	 */
-	public abstract Pad copy(String containerID);
+	public abstract Pad copy();
 }

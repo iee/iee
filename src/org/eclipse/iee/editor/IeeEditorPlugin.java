@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor;
 
+import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -7,18 +8,19 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class IeeEditorPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.iee.editor";
 
 	// The shared instance
-	private static Activator plugin;
+	private static IeeEditorPlugin plugin;
 	
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public IeeEditorPlugin() {
+		fPadManager = new PadManager();
 	}
 
 	/*
@@ -44,7 +46,7 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static IeeEditorPlugin getDefault() {
 		return plugin;
 	}
 
@@ -57,5 +59,11 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+	
+	private PadManager fPadManager;	
+	public PadManager getPadManager() {
+		System.out.println("getPadManager");
+		return fPadManager;
 	}
 }

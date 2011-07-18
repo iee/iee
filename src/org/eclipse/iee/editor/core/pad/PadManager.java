@@ -1,6 +1,8 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.core.runtime.Assert;
@@ -10,40 +12,63 @@ import org.eclipse.iee.editor.core.container.ContainerManagerEvent;
 import org.eclipse.iee.editor.core.container.IContainerManagerListener;
 
 public class PadManager {
+
 	
-	private ContainerManager fContainerManager;
+	/* ContainerManagers */
+	
+	private Set<ContainerManager> fContainerManagers;
+	
+	private IContainerManagerListener fContainerManagerListener;
+	
+	
+	/* Pads */
 	
 	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
 	private Map<String, Pad> fSuspendedPads = new TreeMap<String, Pad>();
+
+	
+	public PadManager() {
+		fContainerManagers = new HashSet<ContainerManager>();
 		
-	public PadManager(ContainerManager containerManager) {
-		fContainerManager = containerManager;
-		
-		InitListeners();
+		InitListener();
 	}
 	
 	/* Public interface */
-    
-	public Object[] getElements() {
-		return fPads.keySet().toArray();
-    }
-		
-	public void addPad(Pad pad, int location) {
-		fSuspendedPads.put(pad.getContainerID(), pad);		
-		fContainerManager.RequestContainerAllocation(pad.getContainerID(), location);
+	
+	public void registerContainerManager(ContainerManager containerManager) {
+		System.out.println("registerContainerManager");
+		containerManager.addContainerManagerListener(fContainerManagerListener);
+		fContainerManagers.add(containerManager);
 	}
 	
-	public void removePad(Pad pad) {
+	public void releaseContainerManager(ContainerManager containerManager) {
+		containerManager.removeContainerManagerListener(fContainerManagerListener);
+		fContainerManagers.remove(containerManager);
+	}
+    
+	public Object[] getElements() {
+		return fPads.values().toArray();
+    }
+	
+	
+	public void createPad(Pad pad, int location, ContainerManager containerManager) {
+		Assert.isLegal(fContainerManagers.contains(containerManager));
+		fSuspendedPads.put(pad.getContainerID(), pad);
+		containerManager.RequestContainerAllocation(pad.getContainerID(), location);
+	}
+	
+	public void destroyPad(Pad pad, ContainerManager containerManager) {
 		if (pad.isContainerAttached()) {
-			String containerID = pad.getContainer().getContainerID();
-			fContainerManager.RequestContainerRelease(containerID);
+			String containerID = pad.getContainerID();
+			containerManager.RequestContainerRelease(containerID);
 		}
 	}
+		
 	
 	/* Internal functions */
 
-	protected void InitListeners() {
-		fContainerManager.addContainerManagerListener(new IContainerManagerListener() {
+	protected void InitListener() {
+		fContainerManagerListener = new IContainerManagerListener() {
 
 			@Override
 			public void containerCreated(ContainerManagerEvent event) {
@@ -51,7 +76,8 @@ public class PadManager {
 				String containerID = container.getContainerID();
 				
 				Pad pad = fSuspendedPads.get(containerID);
-				Assert.isNotNull(pad);
+				Assert.isLegal(pad.getContainerID().equals(containerID));
+				Assert.isNotNull(pad); // stash save
 				
 				pad.attachContainer(container);
 				fSuspendedPads.remove(containerID);
@@ -68,7 +94,8 @@ public class PadManager {
 				Pad original = fPads.get(event.getOriginalContainer().getContainerID());
 				Assert.isNotNull(original);
 				
-				Pad pad = original.copy(containerID);
+				Pad pad = original.copy();
+				pad.setContainerID(containerID);
 				pad.attachContainer(container);
 				fPads.put(containerID, pad);
 			}
@@ -87,6 +114,6 @@ public class PadManager {
 			@Override
 			public void debugNotification(ContainerManagerEvent event) {
 			}
-		});
+		};
 	}
 }

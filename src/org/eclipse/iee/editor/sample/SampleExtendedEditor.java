@@ -1,6 +1,6 @@
 package org.eclipse.iee.editor.sample;
 
-import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.jface.text.IDocument;
@@ -19,13 +19,9 @@ public class SampleExtendedEditor extends TextEditor {
 		StyledText styledText = getSourceViewer().getTextWidget();
 		IDocument document = getSourceViewer().getDocument();
 		
-		getSourceViewer().getDocument();
 		ContainerManager containerManager = new ContainerManager(document, styledText);
-
-		Container.setStyledText(getSourceViewer().getTextWidget());	
-		Container.setContainerManager(containerManager);
 		
-		@SuppressWarnings("unused")
-		PadManager padManager = new PadManager(containerManager);
+		PadManager padManager = IeeEditorPlugin.getDefault().getPadManager();
+		padManager.registerContainerManager(containerManager);
 	}
 }

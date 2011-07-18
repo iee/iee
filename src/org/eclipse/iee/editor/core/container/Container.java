@@ -28,30 +28,12 @@ public class Container {
 	private LineStyleListener fLineStyleListener;
 	private ControlListener fCompositeResizeListener;
 	
-	private static StyledText fStyledText;
-	private static ContainerManager fContainerManager;
+	private StyledText fStyledText;
+	private ContainerManager fContainerManager;
 	
 	
     private static Queue<Container> fContainerDocumentAccessQueue =
     	new ConcurrentLinkedQueue<Container>();
-
-    
-    /**
-     * Sets static StyledText instance
-     * @param styledText
-     */
-	public static void setStyledText(StyledText styledText) {
-		fStyledText = styledText;
-	}
-	
-	
-    /**
-     * Sets static ContainerManager instance
-     * @param styledText
-     */
-	public static void setContainerManager(ContainerManager containerManager) {
-		fContainerManager = containerManager;
-	}
 	
 	
 	/**
@@ -59,11 +41,14 @@ public class Container {
 	 * @param position
 	 * @param containerID
 	 */
-	Container(Position position, String containerID) {
+	Container(Position position, String containerID, StyledText styledText, ContainerManager containerManager) {
 		fPosition = position;
-		fContainerID = containerID;		
+		fContainerID = containerID;
 		fIsDisposed = false;
 		fIsTextRegionReleaseRequested = false;
+		
+		fStyledText = styledText;
+		fContainerManager = containerManager;
 		
 		fComposite = new Composite(fStyledText, SWT.NONE);
 		

@@ -337,7 +337,7 @@ public class ContainerManager extends EventManager {
                     		containerID = UUID.randomUUID().toString();
                     	}
                     	
-                    	Container container = new Container(
+                    	Container container = createContainer(
                         	new Position(region.getOffset(), region.getLength()),
                         	containerID);
                         
@@ -401,5 +401,10 @@ public class ContainerManager extends EventManager {
     		return c;
     	}
     	return null;
+    }
+    
+    protected Container createContainer(Position position, String containerID) {
+    	return new Container(
+            position, containerID, fStyledText, this);
     }
 }
