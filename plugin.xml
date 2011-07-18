@@ -6,7 +6,7 @@
          point="org.eclipse.ui.editors">
       <editor
             name="JavaEditor with Pads"
-            extensions="java"
+            extensions="java1"
             icon="icons/sample.gif"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             class="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor"
