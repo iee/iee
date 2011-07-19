@@ -11,7 +11,8 @@ import org.eclipse.swt.custom.StyledText;
 @SuppressWarnings("restriction")
 public class ExtendedJavaEditor extends CompilationUnitEditor {
 	
-	ContainerManager fContainerManager;
+	private ContainerManager fContainerManager;
+	private PadManager fPadManager;
 	
 	public void createPartControl(org.eclipse.swt.widgets.Composite parent) {
 		super.createPartControl(parent);
@@ -22,18 +23,25 @@ public class ExtendedJavaEditor extends CompilationUnitEditor {
 	protected void initIeeEditorCore() {
 		StyledText styledText = getSourceViewer().getTextWidget();
 		IDocument document = getSourceViewer().getDocument();
+
+		fContainerManager = new ContainerManager(document, styledText);
 		
-		ContainerManager containerManager = new ContainerManager(document, styledText);
-		
-		PadManager padManager = IeeEditorPlugin.getDefault().getPadManager();
-		padManager.registerContainerManager(containerManager);
+		fPadManager = IeeEditorPlugin.getDefault().getPadManager();
+		fPadManager.registerContainerManager(fContainerManager);
 	}
 	
-	public void addPad(Pad pad) {
-		
+	public void dispose() {
+		fPadManager.removeContainerManager(fContainerManager);
+		fContainerManager = null;
+				
+		super.dispose();
 	}
 	
-	public void removePad(Pad pad) {
-		
+	public void createPad(Pad pad, int location) {
+		fPadManager.createPad(pad, location, fContainerManager);	
+	}
+	
+	public int getCaretOffset() {
+		return getSourceViewer().getTextWidget().getCaretOffset();
 	}
 }
