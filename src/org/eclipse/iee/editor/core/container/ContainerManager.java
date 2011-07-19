@@ -1,11 +1,8 @@
 package org.eclipse.iee.editor.core.container;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NavigableSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.UUID;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
@@ -35,7 +32,6 @@ public class ContainerManager extends EventManager {
     private final IDocument fDocument;
     private final IDocumentPartitioner fDocumentPartitioner;
 
-    private final Map<String, Container> fID2ContainerMap;
     private final NavigableSet<Container> fContainers;
     private final ContainerComparator fContainerComparator;
     
@@ -60,12 +56,13 @@ public class ContainerManager extends EventManager {
 		}
     }
     
-    
+  /*  
     public void RequestContainerRelease(String containerID) {
     	Container container = fID2ContainerMap.get(containerID);
     	Assert.isNotNull(container);    	
     	container.requestTextRegionRelease();
     }
+  */
     
     
     /* Functions for observers */
@@ -99,14 +96,6 @@ public class ContainerManager extends EventManager {
     }
     
     
-    protected void fireContainerDuplicated(ContainerManagerEvent event) {
-        Object[] listeners = getListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            ((IContainerManagerListener) listeners[i]).containerDuplicated(event);
-        }
-    }
-    
-    
     protected void fireDebugNotification(ContainerManagerEvent event) {
         Object[] listeners = getListeners();
         for (int i = 0; i < listeners.length; i++) {
@@ -123,7 +112,6 @@ public class ContainerManager extends EventManager {
     	
         fContainerComparator = new ContainerComparator();
     	fContainers = new TreeSet<Container>(fContainerComparator);
-    	fID2ContainerMap = new TreeMap<String, Container>();
         fDocument = document;
 
         fDocumentPartitioner = new FastPartitioner(
@@ -310,7 +298,6 @@ public class ContainerManager extends EventManager {
                 			
                 			// XXX remove container
                 			
-                			fID2ContainerMap.remove(container.getContainerID());
                 			container.dispose();
                 			fireContainerRemoved(new ContainerManagerEvent(container));
                 		}
@@ -332,23 +319,12 @@ public class ContainerManager extends EventManager {
                     	String containerID =
                     			Container.getContainerIDFromTextRegion(containerTextRegion);                    	
                     	
-                    	Container original = fID2ContainerMap.get(containerID); 
-                    	if (original != null) {
-                    		containerID = UUID.randomUUID().toString();
-                    	}
-                    	
                     	Container container = createContainer(
                         	new Position(region.getOffset(), region.getLength()),
                         	containerID);
                         
-                        fID2ContainerMap.put(containerID, container);
-                        fContainers.add(container);
-                        
-                        if (original == null) {
-                        	fireContainerCreated(new ContainerManagerEvent(container));
-                        } else {
-                        	fireContainerDuplicated(new ContainerManagerEvent(container, original));
-                        }
+                        fContainers.add(container);                        
+                        fireContainerCreated(new ContainerManagerEvent(container));
                     }
                     offset += region.getLength();
                 }

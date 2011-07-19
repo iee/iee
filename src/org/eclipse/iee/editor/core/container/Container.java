@@ -100,6 +100,10 @@ public class Container {
 		fComposite.removeControlListener(fCompositeResizeListener);
 	}
 
+	public void setContainerID(String containerID) {
+		fContainerID = containerID;
+		requestTextRegionUpdate();
+	}
 	
 	public String getContainerID() {
 		return fContainerID;
@@ -120,6 +124,9 @@ public class Container {
 		return fIsDisposed;
 	}
 	
+	public void requestDispose() {
+		requestTextRegionRelease();
+	}	
 	
 	protected boolean isTextRegionReleaseRequested() {
 		return fIsTextRegionReleaseRequested;

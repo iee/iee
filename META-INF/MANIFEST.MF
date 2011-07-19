@@ -12,4 +12,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.iee.editor,
  org.eclipse.iee.editor.core.container,
- org.eclipse.iee.editor.core.pad
+ org.eclipse.iee.editor.core.pad,
+ org.eclipse.iee.editor.sample

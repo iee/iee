@@ -25,8 +25,9 @@ public class PadManager {
 	
 	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
 	private Map<String, Pad> fSuspendedPads = new TreeMap<String, Pad>();
-
+	private Map<String, Pad> fLoadingPads = new TreeMap<String, Pad>();
 	
+		
 	public PadManager() {
 		fContainerManagers = new HashSet<ContainerManager>();
 		
@@ -41,7 +42,7 @@ public class PadManager {
 		fContainerManagers.add(containerManager);
 	}
 	
-	public void releaseContainerManager(ContainerManager containerManager) {
+	public void removeContainerManager(ContainerManager containerManager) {
 		containerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.remove(containerManager);
 	}
@@ -59,8 +60,7 @@ public class PadManager {
 	
 	public void destroyPad(Pad pad, ContainerManager containerManager) {
 		if (pad.isContainerAttached()) {
-			String containerID = pad.getContainerID();
-			containerManager.RequestContainerRelease(containerID);
+			pad.getContainer().requestDispose();
 		}
 	}
 		
@@ -76,39 +76,72 @@ public class PadManager {
 				String containerID = container.getContainerID();
 				
 				Pad pad = fSuspendedPads.get(containerID);
-				Assert.isLegal(pad.getContainerID().equals(containerID));
-				Assert.isNotNull(pad); // stash save
+				if (pad != null) {
+					/* 
+					 * Case 1: container corresponds to suspended pad.
+					 * Attaching container to pad.
+					 */
+					Assert.isLegal(pad.getContainerID().equals(containerID));
+					pad.attachContainer(container);
+					fSuspendedPads.remove(containerID);
+					fPads.put(containerID, pad);
+					return;
+				}
 				
+				pad = fPads.get(containerID);
+				if (pad != null) {
+					/*
+					 * Case 2: container is copied from another place.
+					 * Copying pad and attaching container.
+					 */
+					Pad clone = pad.copy();					
+					clone.attachContainer(container);
+					fPads.put(clone.getContainerID(), clone);
+					return;
+				}
+				
+				pad = fLoadingPads.get(containerID);
+				if (pad != null) {
+					/*
+					 * Case 3: container with corresponding "loading" pad is copied from another place.
+					 * Creating new loading pad (container id remains the same).
+					 */
+					Pad clone = pad.copy();
+					clone.setContainerID(pad.getContainerID());
+					clone.attachContainer(container);
+					fPads.put(clone.getContainerID(), clone);
+					return;
+				}
+				
+				/*
+				 * Case 4: no corresponding pad.
+				 * Creating new "loading" pad.
+				 */
+				pad = new LoadingPad(containerID);
 				pad.attachContainer(container);
-				fSuspendedPads.remove(containerID);
-				fPads.put(containerID, pad);
+				fLoadingPads.put(containerID, pad);
 			}
 
 			@Override
-			public void containerDuplicated(ContainerManagerEvent event) {
-				Assert.isLegal(event.isContainerDuplicated());
-				
-				Container container = event.getContainer();
-				String containerID = container.getContainerID();
-				
-				Pad original = fPads.get(event.getOriginalContainer().getContainerID());
-				Assert.isNotNull(original);
-				
-				Pad pad = original.copy();
-				pad.setContainerID(containerID);
-				pad.attachContainer(container);
-				fPads.put(containerID, pad);
-			}
-
-			@Override
-			public void containerRemoved(ContainerManagerEvent event) {			
+			public void containerRemoved(ContainerManagerEvent event) {
 				String containerID = event.getContainer().getContainerID();
-				Pad pad = fPads.get(containerID);
-				Assert.isNotNull(pad);
 				
-				pad.detachContainer();
-				fPads.remove(containerID);
-				fSuspendedPads.put(containerID, pad);
+				Pad pad = fPads.get(containerID);
+				if (pad != null) {
+					pad.detachContainer();
+					fPads.remove(containerID);
+					fSuspendedPads.put(containerID, pad);
+					return;
+				}
+				
+				pad = fLoadingPads.get(containerID);
+				if (pad != null) {
+					pad.detachContainer();
+					fLoadingPads.remove(containerID);
+					return;
+				}
+				
+				Assert.isNotNull(pad);
 			}
 			
 			@Override

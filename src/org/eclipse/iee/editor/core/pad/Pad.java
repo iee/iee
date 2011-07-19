@@ -9,10 +9,9 @@ import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad
 {
-	protected String	fContainerID;
-	protected Container	fContainer;
-	protected Composite fComposite;
-
+	private String fContainerID;
+	private Container fContainer;
+	
 	
 	public Pad() {
 		fContainerID = UUID.randomUUID().toString();
@@ -52,7 +51,10 @@ public abstract class Pad
 	{
 		Assert.isNotNull(container);
 		Assert.isLegal(!isContainerAttached(), "Another container is already attached");
-		Assert.isLegal(fContainerID.equals(container.getContainerID()));
+		
+		if (!fContainerID.equals(container.getContainerID())) {
+			container.setContainerID(fContainerID);
+		}
 		
 		fContainer = container;
 		createPartControl(fContainer.getComposite());
