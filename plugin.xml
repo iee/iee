@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
-<plugin>
+<plugin>   
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.iee.sample.image.actionSet1"
-            label="label"
-            visible="true">
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.bitbucket.gashmish.fem.editor.containing.insertimage"
+            targetID="#CompilationUnitEditorContext">
          <action
-               class="org.eclipse.iee.sample.image.actions.AddImageAction"
-               icon="icons/add-pad.png"
-               id="org.eclipse.iee.sample.image.AddImage"
-               label="Add Image"
-               menubarPath="AddImage"
-               style="push"
-               toolbarPath="AddImage">
+               class="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
+               id="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
+               label="Insert ImagePad"
+               menubarPath="additions"
+               tooltip="Insert ImagePad">
          </action>
-      </actionSet>
+      </viewerContribution>
    </extension>
-
 </plugin>

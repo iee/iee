@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.image.pad;
 
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -9,8 +10,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-
-import pad.Pad;
 
 public class ImagePad extends Pad {
 
@@ -23,6 +22,12 @@ public class ImagePad extends Pad {
 		
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
+		fImagePath = null;
+	}
+	
+	protected ImagePad(int currentState, String imagePath) {
+		fCurrentState = currentState;
+		fImagePath = imagePath;
 	}
 	
 	
@@ -177,14 +182,9 @@ public class ImagePad extends Pad {
 		});
 	}
 
-	protected ImagePad(String containerID, int state, String imagePath) {
-		super(containerID);
-		fCurrentState = state;
-		fImagePath = imagePath;
-	}
-
+	
 	@Override
-	public Pad copy(String containerID) {
-		return new ImagePad(containerID, fCurrentState, fImagePath);
+	public Pad copy() {
+		return new ImagePad(fCurrentState, fImagePath);
 	}
 }
