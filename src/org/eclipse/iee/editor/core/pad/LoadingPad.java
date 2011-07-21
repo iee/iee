@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.core.pad;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -21,7 +22,8 @@ public class LoadingPad extends Pad {
 
 		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
 		label.setText("Loading...");
-		label.setSize(200, 100);		
+		label.setSize(200, 100);
+		label.setBackground(new Color(parent.getDisplay(), 10, 100, 10));
 		parent.pack();
 	}
 

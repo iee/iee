@@ -78,7 +78,6 @@ public class ContainerManager extends EventManager {
         Assert.isNotNull(listener);
         removeListenerObject(listener);
     }
-
     
     protected void fireContainerCreated(ContainerManagerEvent event) {
         Object[] listeners = getListeners();

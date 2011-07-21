@@ -5,13 +5,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.ContainerManagerEvent;
 import org.eclipse.iee.editor.core.container.IContainerManagerListener;
 
-public class PadManager {
+public class PadManager extends EventManager {
 
 	
 	/* ContainerManagers */
@@ -23,11 +24,11 @@ public class PadManager {
 	
 	/* Pads */
 	
-	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
+	private Map<String, Pad> fActivePads = new TreeMap<String, Pad>();
 	private Map<String, Pad> fSuspendedPads = new TreeMap<String, Pad>();
 	private Map<String, Pad> fLoadingPads = new TreeMap<String, Pad>();
+
 	
-		
 	public PadManager() {
 		fContainerManagers = new HashSet<ContainerManager>();
 		
@@ -47,10 +48,17 @@ public class PadManager {
 		fContainerManagers.remove(containerManager);
 	}
     
-	public Object[] getElements() {
-		return fPads.values().toArray();
+	public Object[] getActivePads() {
+		return fActivePads.values().toArray();
     }
 	
+	public Object[] getSuspendedPads() {
+		return fSuspendedPads.values().toArray();
+    }
+	
+	public Object[] getLoadingPads() {
+		return fLoadingPads.values().toArray();
+    }
 	
 	public void createPad(Pad pad, int location, ContainerManager containerManager) {
 		Assert.isLegal(fContainerManagers.contains(containerManager));
@@ -84,11 +92,11 @@ public class PadManager {
 					Assert.isLegal(pad.getContainerID().equals(containerID));
 					pad.attachContainer(container);
 					fSuspendedPads.remove(containerID);
-					fPads.put(containerID, pad);
+					fActivePads.put(containerID, pad);
 					return;
 				}
 				
-				pad = fPads.get(containerID);
+				pad = fActivePads.get(containerID);
 				if (pad != null) {
 					/*
 					 * Case 2: container is copied from another place.
@@ -96,7 +104,7 @@ public class PadManager {
 					 */
 					Pad clone = pad.copy();					
 					clone.attachContainer(container);
-					fPads.put(clone.getContainerID(), clone);
+					fActivePads.put(clone.getContainerID(), clone);
 					return;
 				}
 				
@@ -109,7 +117,7 @@ public class PadManager {
 					Pad clone = pad.copy();
 					clone.setContainerID(pad.getContainerID());
 					clone.attachContainer(container);
-					fPads.put(clone.getContainerID(), clone);
+					fActivePads.put(clone.getContainerID(), clone);
 					return;
 				}
 				
@@ -126,10 +134,10 @@ public class PadManager {
 			public void containerRemoved(ContainerManagerEvent event) {
 				String containerID = event.getContainer().getContainerID();
 				
-				Pad pad = fPads.get(containerID);
+				Pad pad = fActivePads.get(containerID);
 				if (pad != null) {
 					pad.detachContainer();
-					fPads.remove(containerID);
+					fActivePads.remove(containerID);
 					fSuspendedPads.put(containerID, pad);
 					return;
 				}
@@ -144,9 +152,29 @@ public class PadManager {
 				Assert.isNotNull(pad);
 			}
 			
-			@Override
-			public void debugNotification(ContainerManagerEvent event) {
+			@Override public void debugNotification(ContainerManagerEvent event) {
+				firePadManagerEvent(new PadManagerEvent());
 			}
 		};
+	}
+
+	
+	/* For observers */
+	
+	public void addPadManagerListener(IPadManagerListener listener) {
+		Assert.isNotNull(listener);
+		addListenerObject(listener);
+	}
+
+	public void removePadManagerListener(IPadManagerListener listener) {
+		Assert.isNotNull(listener);
+		removeListenerObject(listener);
+	}
+
+	protected void firePadManagerEvent(PadManagerEvent event) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IPadManagerListener) listeners[i]).padManagerUpdate(event);
+		}
 	}
 }
