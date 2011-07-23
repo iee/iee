@@ -20,9 +20,11 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 
@@ -34,7 +36,7 @@ public class ContainerManager extends EventManager {
 
     private final NavigableSet<Container> fContainers;
     private final ContainerComparator fContainerComparator;
-    
+    private Boolean fDirection;
     
     /* Public interface */
       
@@ -129,14 +131,31 @@ public class ContainerManager extends EventManager {
     
     
     void updateContainerPresentaions() {
+    	
     	Iterator<Container> it = fContainers.iterator();
     	while (it.hasNext()) {
     	    Container container = it.next();
-    	    container.setVisiable(true);
-    	    container.updatePresentation();
+    	    container.updatePresentation();    
     	}
+    	
     }
-
+    
+    void updateContainerVisibility(boolean visibility) {
+    	Iterator<Container> it = fContainers.iterator();
+    	while (it.hasNext()) {
+    	    Container container = it.next();
+    	    //container.setVisiable(true);
+    	    if (!visibility)
+        	{
+    	    	container.setVisible(false);
+        	} 
+    	    else
+    	    {
+    	    	container.setVisible(true);
+    	    }
+    	}
+    	
+    }
     
     /* Document modification event processing */
     
@@ -148,23 +167,37 @@ public class ContainerManager extends EventManager {
     	fStyledText.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {		
-            	/* Disallow modification within Container's text region */
+				/* Disallow modification within Container's text region */
 				if (getContainerHavingOffset(e.start) != null ||
             			getContainerHavingOffset(e.end) != null) {
 					e.doit = false;
 					return;
             	}
-				
-		    	/* Setting all Containers to invisible state */
-				Iterator<Container> it = fContainers.iterator();
-				while (it.hasNext()) {
-					Container c = it.next();
-					c.setVisiable(false);
-				}
+				updateContainerVisibility(false);	
 			}
         });
     	
-    	
+    	fStyledText.addVerifyKeyListener(new VerifyKeyListener() {
+			
+			@Override
+			public void verifyKey(VerifyEvent event) {
+				// TODO Auto-generated method stub
+				switch (event.keyCode)
+				{
+					case SWT.ARROW_LEFT:
+					{
+						fDirection = false;
+						break;
+					}
+					case SWT.ARROW_RIGHT:
+					{
+						fDirection = true;
+						break;
+					}
+				}
+				
+			}
+		});
     	/*
     	 * If caret is inside Container's text region, moving it to the beginning of line
     	 */    	
@@ -172,9 +205,12 @@ public class ContainerManager extends EventManager {
 			@Override
 			public void caretMoved(CaretEvent e) {
 				if (getContainerHavingOffset(e.caretOffset) != null) {
-					int lineBeginOffset = fStyledText.getOffsetAtLine(fStyledText.getLineAtOffset(e.caretOffset));
-					fStyledText.setCaretOffset(lineBeginOffset);
+					if (fDirection)
+						fStyledText.setCaretOffset(e.caretOffset + 1);
+					else
+						fStyledText.setCaretOffset(e.caretOffset - 1);
 				}
+				
 			}    		
     	});
     	
@@ -272,7 +308,8 @@ public class ContainerManager extends EventManager {
                 System.out.println("Iteration");
                 
             	Container.processNextDocumentAccessRequest(fDocument);
-                updateContainerPresentaions();
+            	updateContainerPresentaions();
+                updateContainerVisibility(true);
             	     	
                 /* For debug */
                 
@@ -380,6 +417,6 @@ public class ContainerManager extends EventManager {
     
     protected Container createContainer(Position position, String containerID) {
     	return new Container(
-            position, containerID, fStyledText, this);
+            position, containerID, fStyledText,fDocument, this);
     }
 }
