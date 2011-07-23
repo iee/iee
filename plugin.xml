@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.iee.sample.calendar.viewerContributionCalendar"
+            targetID="#TextEditorContext">
+         <action
+               class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
+               id="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
+               label="Insert CalendarPad"
+               menubarPath="additions">
+         </action>
+      </viewerContribution>
+   </extension>
+
+</plugin>
