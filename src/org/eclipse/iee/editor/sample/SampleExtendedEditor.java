@@ -7,6 +7,7 @@ import org.eclipse.iee.editor.core.container.ContainerManagerEvent;
 import org.eclipse.iee.editor.core.container.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -41,11 +42,24 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 		fContainerManager.addContainerManagerListener(fContainerManagerListener);
 		
 		fPadManager.registerContainerManager(fContainerManager);
+		
+		
+		/* Update document partitioning.
+		 * 
+		 * TODO: find smarter way. 
+		 */		
+		try {
+			String text = document.get();
+			document.replace(0, text.length(), "");
+			document.set(text);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void dispose() {
+	public void dispose() {		
 		fPadManager.removeContainerManager(fContainerManager);
-		
 		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManager = null;
 		
@@ -53,7 +67,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	}
 	
 	public void createPad(Pad pad, int location) {
-		fPadManager.createPad(pad, location, fContainerManager);	
+		fPadManager.insertPad(pad, location, fContainerManager);	
 	}
 	
 	public int getCaretOffset() {
@@ -62,11 +76,5 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	
 	public Object[] getElements() {
 		return fContainerManager.getElements();
-	}
-	
-	public Object getAdapter(Class adapter) {
-		if (ContainerManager.class.equals(adapter))
-			return fContainerManager;
-		return super.getAdapter(adapter);
 	}
 }

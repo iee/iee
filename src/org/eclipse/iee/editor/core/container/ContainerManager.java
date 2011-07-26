@@ -34,10 +34,10 @@ public class ContainerManager extends EventManager {
 
     private final NavigableSet<Container> fContainers;
     private final ContainerComparator fContainerComparator;
-    
-    
+
+
     /* Public interface */
-      
+
 
     public Object[] getElements() {
         return fContainers.toArray();
@@ -123,7 +123,7 @@ public class ContainerManager extends EventManager {
         initDocumentListener();
         fDocumentPartitioner.connect(fDocument);
     }
-    
+        
     
     /* Presentation update */
     
