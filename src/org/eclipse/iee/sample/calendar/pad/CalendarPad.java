@@ -16,6 +16,7 @@ public class CalendarPad extends Pad {
 	public void createPartControl(Composite parent)
 	{
 		parent.setLayout(new RowLayout());
+		@SuppressWarnings("unused")
 		DateTime calendar = new DateTime(parent, SWT.CALENDAR);
 	}
 

@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="org.eclipse.iee.sample.calendar.viewerContributionCalendar"
+            id="org.eclipse.iee.sample.calendar.context"
             targetID="#TextEditorContext">
          <action
                class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
                id="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-               label="Insert CalendarPad"
-               menubarPath="additions">
+               label="Insert Calendar" 
+               icon="icons/datetime.gif" 
+               menubarPath="additions"
+               tooltip="Insert Calendar">
          </action>
       </viewerContribution>
    </extension>
 
+	<extension
+    	point = "org.eclipse.ui.editorActions">
+		<editorContribution 
+        	id="org.eclipse.iee.sample.calendar.contribution" 
+         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+			<action id="org.eclipse.iee.sample.calendar.add" 
+	        	label="Add Calendar" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/datetime.gif" 
+	            tooltip="Add Calendar" 
+	            class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.calendar.add"
+	        /> 
+    	</editorContribution>
+	</extension>
+	
 </plugin>
