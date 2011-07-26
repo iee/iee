@@ -1,18 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
-<plugin>   
+<plugin>
+
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="org.bitbucket.gashmish.fem.editor.containing.insertimage"
-            targetID="#CompilationUnitEditorContext">
+            id="org.eclipse.iee.sample.image.context"
+            targetID="#TextEditorContext">
          <action
                class="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
                id="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
-               label="Insert ImagePad"
+               label="Insert Image" 
+               icon="icons/cat.gif" 
                menubarPath="additions"
-               tooltip="Insert ImagePad">
+               tooltip="Insert Image">
          </action>
       </viewerContribution>
    </extension>
+
+   
+   <extension
+    point = "org.eclipse.ui.editorActions">
+      <editorContribution 
+         id="org.eclipse.iee.sample.image.toolbar" 
+         targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+	   <action id="org.eclipse.iee.sample.image.insertimage" 
+              label="Insert Image" 
+              toolbarPath="TextEditor" 
+              icon="icons/cat.gif" 
+              tooltip="Insert Image" 
+              class="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
+              />
+      </editorContribution>
+ 	</extension>
+   
+
 </plugin>
