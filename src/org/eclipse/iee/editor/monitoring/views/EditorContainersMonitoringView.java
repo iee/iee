@@ -2,10 +2,7 @@ package org.eclipse.iee.editor.monitoring.views;
 
 
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.Container;
-import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;

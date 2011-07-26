@@ -31,7 +31,7 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 	
 	private TableViewer fActivePadsTableViewer;
 	private TableViewer fSuspendedPadsTableViewer;
-	private TableViewer fLoadingPadsTableViewer;
+	private TableViewer fTemporaryPadsTableViewer;
 	
 
 	class PadsContentProvider implements IStructuredContentProvider {
@@ -67,10 +67,10 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
 		
-		initActivePadsTableView(parent);
+		initActivePadsTableView(parent);		
 		initSuspendedPadsTableView(parent);
-		initLoadingPadsTableView(parent);
-
+		initTemporaryPadsTableView(parent);
+		
 		parent.pack();
 		
 		fPadManager.addPadManagerListener(this);
@@ -85,7 +85,7 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 	public void padManagerUpdate(PadManagerEvent event) {
 		fActivePadsTableViewer.setInput(fPadManager.getActivePads());
 		fSuspendedPadsTableViewer.setInput(fPadManager.getSuspendedPads());
-		fLoadingPadsTableViewer.setInput(fPadManager.getLoadingPads());
+		fTemporaryPadsTableViewer.setInput(fPadManager.getTemporaryPads());
 	}
 	
 
@@ -135,14 +135,14 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		fSuspendedPadsTableViewer.setInput(fPadManager.getSuspendedPads());
 	}
 	
-	protected void initLoadingPadsTableView(Composite parent) {
-		fLoadingPadsTableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+	protected void initTemporaryPadsTableView(Composite parent) {
+		fTemporaryPadsTableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
-		final Table table = fLoadingPadsTableViewer.getTable();
+		final Table table = fTemporaryPadsTableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		String[] columnNames = new String[] { "Loading pads" };
+		String[] columnNames = new String[] { "Temporary pads" };
 		int[] columnWidths = new int[] { 100 };
 		int[] columnAlignments = new int[] { SWT.LEFT };
 		
@@ -152,9 +152,9 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 			tableColumn.setWidth(columnWidths[i]);
 		}
 		
-		fLoadingPadsTableViewer.setContentProvider(new PadsContentProvider());
-		fLoadingPadsTableViewer.setLabelProvider(new PadsLabelProvider());
-		fLoadingPadsTableViewer.setInput(fPadManager.getLoadingPads());
+		fTemporaryPadsTableViewer.setContentProvider(new PadsContentProvider());
+		fTemporaryPadsTableViewer.setLabelProvider(new PadsLabelProvider());
+		fTemporaryPadsTableViewer.setInput(fPadManager.getTemporaryPads());
 	}
 
 	/**
