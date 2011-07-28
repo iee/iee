@@ -84,4 +84,10 @@ public abstract class Pad
 	 * @return
 	 */
 	public abstract Pad copy();
+	
+	/**
+	 * Get type of Pad, type is useful for debug
+	 * @return
+	 */
+	public abstract String getType();
 }

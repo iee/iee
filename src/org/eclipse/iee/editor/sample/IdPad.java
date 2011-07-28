@@ -33,4 +33,9 @@ public class IdPad extends Pad {
 	public Pad copy() {
 		return new IdPad();
 	}
+
+	@Override
+	public String getType() {
+		return "Id Pad";
+	}
 }

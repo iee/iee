@@ -41,4 +41,9 @@ public class LoadingPad extends Pad {
 	public Pad copy() {
 		return new LoadingPad();
 	}
+
+	@Override
+	public String getType() {
+		return "Loading Pad";
+	}
 }

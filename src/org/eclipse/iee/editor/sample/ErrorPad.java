@@ -32,4 +32,9 @@ public class ErrorPad extends Pad {
 	public Pad copy() {
 		return new ErrorPad();
 	}
+
+	@Override
+	public String getType() {
+		return "Error Pad";
+	}
 }
