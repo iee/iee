@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class Pad
 {
 	private String fContainerID;
+	private String fPadType;
 	private Container fContainer;
 	
 	
@@ -33,7 +34,6 @@ public abstract class Pad
 	{
 		return fContainerID;
 	}
-	
 	
 	public boolean isContainerAttached()
 	{
@@ -84,4 +84,11 @@ public abstract class Pad
 	 * @return
 	 */
 	public abstract Pad copy();
+	
+	/**
+	 * Get type of Pad, type is useful for debug
+	 * @return
+	 */
+	public abstract String getType();
+	
 }

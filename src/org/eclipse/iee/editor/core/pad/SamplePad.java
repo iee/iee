@@ -17,4 +17,9 @@ public class SamplePad extends Pad {
 	public Pad copy() {
 		return new SamplePad();
 	}
+
+	@Override
+	public String getType() {
+		return "Sample Pad";
+	}
 }
