@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.iee.sample.math.context"
+            targetID="#TextEditorContext">
+         <action
+               class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
+               id="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
+               label="Insert Math" 
+               icon="icons/math.jpg" 
+               menubarPath="additions"
+               tooltip="Insert Math">
+         </action>
+      </viewerContribution>
+   </extension>
+
+	<extension
+    	point = "org.eclipse.ui.editorActions">
+		<editorContribution 
+        	id="org.eclipse.iee.sample.math.contribution" 
+         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+			<action id="org.eclipse.iee.sample.math.add" 
+	        	label="Add Math" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/math.jpg" 
+	            tooltip="Add Math" 
+	            class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.math.add"
+	        /> 
+    	</editorContribution>
+	</extension>
+	
+</plugin>
