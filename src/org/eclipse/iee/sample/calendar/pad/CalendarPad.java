@@ -32,5 +32,10 @@ public class CalendarPad extends Pad {
 		return new CalendarPad();
 	}
 
+	@Override
+	public String getType() {
+		return "Calendar";
+	}
+
 }
 
