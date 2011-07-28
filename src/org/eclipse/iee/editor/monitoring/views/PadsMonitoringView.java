@@ -56,7 +56,8 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 			switch (columnIndex) {
 			case 0:
 				return pad.getContainerID();
-
+			case 1:
+				return pad.getType();
 			default:
 				return "unknown " + columnIndex;
 			}
@@ -96,9 +97,9 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		String[] columnNames = new String[] { "Active Pads" };
-		int[] columnWidths = new int[] { 100 };
-		int[] columnAlignments = new int[] { SWT.LEFT };
+		String[] columnNames = new String[] { "Active Pads", "Pad's type" };
+		int[] columnWidths = new int[] { 100, 100 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT };
 		
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
@@ -119,9 +120,9 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		String[] columnNames = new String[] { "Suspended pads" };
-		int[] columnWidths = new int[] { 100 };
-		int[] columnAlignments = new int[] { SWT.LEFT };
+		String[] columnNames = new String[] { "Suspended pads", "Pad's type" };
+		int[] columnWidths = new int[] { 100, 100 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT };
 		
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
@@ -142,9 +143,9 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		String[] columnNames = new String[] { "Temporary pads" };
-		int[] columnWidths = new int[] { 100 };
-		int[] columnAlignments = new int[] { SWT.LEFT };
+		String[] columnNames = new String[] { "Temporary pads", "Pad's type" };
+		int[] columnWidths = new int[] { 100, 100 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT };
 		
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
