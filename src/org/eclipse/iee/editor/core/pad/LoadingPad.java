@@ -8,14 +8,24 @@ import org.eclipse.swt.widgets.Label;
 
 public class LoadingPad extends Pad {
 
+	String fOriginalContainerID;
+
+	public void setOriginalContainerID(String originalContainerID) {
+		fOriginalContainerID = originalContainerID;
+	}
+
+	public String getOriginalContainerID() {
+		return fOriginalContainerID;
+	}
+
 	public LoadingPad() {
 		super();
 	}
-	
+
 	public LoadingPad(String containerID) {
 		super(containerID);
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
@@ -23,7 +33,7 @@ public class LoadingPad extends Pad {
 		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
 		label.setText("Loading...");
 		label.setSize(200, 100);
-		label.setBackground(new Color(parent.getDisplay(), 10, 100, 10));
+		label.setBackground(new Color(parent.getDisplay(), 205, 181, 205));
 		parent.pack();
 	}
 
