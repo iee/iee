@@ -187,4 +187,9 @@ public class ImagePad extends Pad {
 	public Pad copy() {
 		return new ImagePad(fCurrentState, fImagePath);
 	}
+
+	@Override
+	public String getType() {
+		return "Image Pad";
+	}
 }
