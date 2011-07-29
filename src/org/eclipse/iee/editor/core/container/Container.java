@@ -109,7 +109,7 @@ public class Container {
 			@Override
 			public void controlResized(ControlEvent e) {
 				fStyledText.redraw();
-				fContainerManager.updateContainerPresentaions();
+				fContainerManager.updateContainerPresentations();
 			}
 			
 			@Override public void controlMoved(ControlEvent e) {}

@@ -114,6 +114,7 @@ public class ContainerManager extends EventManager {
         fContainerComparator = new ContainerComparator();
     	fContainers = new TreeSet<Container>(fContainerComparator);
         fDocument = document;
+        fDirection = false;
 
         fDocumentPartitioner = new FastPartitioner(
             new PartitioningScanner(),
@@ -130,7 +131,7 @@ public class ContainerManager extends EventManager {
     /* Presentation update */
     
     
-    void updateContainerPresentaions() {
+    void updateContainerPresentations() {
     	
     	Iterator<Container> it = fContainers.iterator();
     	while (it.hasNext()) {
@@ -144,7 +145,6 @@ public class ContainerManager extends EventManager {
     	Iterator<Container> it = fContainers.iterator();
     	while (it.hasNext()) {
     	    Container container = it.next();
-    	    //container.setVisiable(true);
     	    if (!visibility)
         	{
     	    	container.setVisible(false);
@@ -241,7 +241,7 @@ public class ContainerManager extends EventManager {
             	 * It's calculated according following equation
             	 * 'unmodified offset' = max('end of partitioning changed area', 'end of document changed area') - 'moving_delta'
             	 */
-
+            	
             	int unmodifiedOffset;
             	final int movingDelta = event.getText().length() - event.getLength();
 
@@ -308,7 +308,7 @@ public class ContainerManager extends EventManager {
                 System.out.println("Iteration");
                 
             	Container.processNextDocumentAccessRequest(fDocument);
-            	updateContainerPresentaions();
+            	updateContainerPresentations();
                 updateContainerVisibility(true);
             	     	
                 /* For debug */
@@ -339,6 +339,7 @@ public class ContainerManager extends EventManager {
                 		}
                 	}
                 }
+                
 
                 /* Scanning for new containers */
 
