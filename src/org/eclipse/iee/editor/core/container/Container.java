@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -22,7 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 public class Container {
 
 	private String	  fContainerID;
-	private Position  fPosition;	
+	private Position  fPosition;
+	private int 	  fLineNumber;
 	private Composite fComposite;
 	protected IDocument fDocument;
 	private boolean   fIsDisposed;
@@ -57,6 +59,7 @@ public class Container {
 		
 		fStyledText = styledText;
 		fContainerManager = containerManager;
+		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
 		
 		fComposite = new Composite(fStyledText, SWT.NONE);
 		
@@ -73,14 +76,15 @@ public class Container {
 				Vector<StyleRange> styles = new Vector<StyleRange>();
 				fLineScanner.setRange(fDocument, event.lineOffset, event.lineText.length());
 				
+				
 				IToken token;
 		        while (!(token = fLineScanner.nextToken()).isEOF()) {
 		            if (token == PartitioningScanner.EMBEDDED_TOKEN) {
 		            	StyleRange compositeStyle = new StyleRange();
 						compositeStyle.start = fLineScanner.getTokenOffset();
 						compositeStyle.length = 1;
+						//to save constant line ascent (should be max from all containers for a line)
 						compositeStyle.metrics = new GlyphMetrics(fComposite.getSize().y, 0, fComposite.getSize().x);
-						//compositeStyle.borderStyle = SWT.BORDER_SOLID;
 						styles.addElement(compositeStyle);
 						
 						StyleRange hiddenTextStyle = new StyleRange();
@@ -97,8 +101,40 @@ public class Container {
 		            }
 		        }
 		        
+		        Iterator containerIterator = fContainerManager.getContainersAtLine(fLineNumber).iterator();
+		        
+		        //First cycle - looking for max ascent in containers
+		        System.out.println("Line offset:" + event.lineOffset + "########################################################################");
+		        System.out.println("Line number:" + fLineNumber + "************************************************************************");
+		        //clear, because container can be moved to another line or deleted
+		        fContainerManager.clearLineMaxAscents();
+		        while (containerIterator.hasNext ()) 
+		        {
+		        	Container c = (Container)containerIterator.next();
+		        	System.out.println("PadSize:" + c.fComposite.getSize().y);
+		        	if (c.fComposite.getSize().y > fContainerManager.getMaxContainerAscentByLine(fLineNumber))
+		        	{
+		        		fContainerManager.putMaxContainerAscentToMap(fLineNumber, c.fComposite.getSize().y);
+		        		
+		        	}
+		        }
+		        
+		        Iterator stylesIterator = styles.iterator();
+		        //Second cycle - Setting max ascent for styles
+		        while (stylesIterator.hasNext ()) 
+		        {
+		        	StyleRange style = (StyleRange)stylesIterator.next();
+		        	System.out.println("MaxPadSize:" + fContainerManager.getMaxContainerAscentByLine(fLineNumber));
+		        	if (style.metrics != null)
+		        		style.metrics.ascent = fContainerManager.getMaxContainerAscentByLine(fLineNumber);
+		        		style.background = fStyledText.getBackground();
+		        }
+		        
+		        
+		        
 		        event.styles = new StyleRange[styles.size()];
 		        styles.copyInto(event.styles);
+
 			}
 		};
 		fStyledText.addLineStyleListener(fLineStyleListener);
@@ -164,6 +200,7 @@ public class Container {
 	void updatePosition(int offset, int length) {
 		fPosition.setOffset(offset);
 		fPosition.setLength(length);
+		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
 	}
 	
 	
@@ -193,6 +230,7 @@ public class Container {
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
+		
 	}
 
 	
@@ -214,7 +252,7 @@ public class Container {
     	return
     		IConfiguration.EMBEDDED_REGION_BEGINS +
 			containerID +
-			IConfiguration.EMBEDDED_REGION_ENDS + "\n";
+			IConfiguration.EMBEDDED_REGION_ENDS;
     }
 	
 	
@@ -301,6 +339,14 @@ public class Container {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Get container's line number
+	 */	
+	public int getLineNumber()
+	{
+		return fLineNumber;
+	}
 
 	
     /* Functions for comparator */
@@ -321,4 +367,6 @@ public class Container {
 	private Container(Position position) {
 		fPosition = position;
 	}
+	
+	
 }

@@ -1,13 +1,18 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NavigableSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
+import org.eclipse.jface.text.DefaultLineTracker;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.DocumentPartitioningChangedEvent;
 import org.eclipse.jface.text.IDocument;
@@ -33,10 +38,14 @@ public class ContainerManager extends EventManager {
 	private final StyledText fStyledText;
     private final IDocument fDocument;
     private final IDocumentPartitioner fDocumentPartitioner;
+    private final DefaultLineTracker fLineTracker;
 
     private final NavigableSet<Container> fContainers;
     private final ContainerComparator fContainerComparator;
     private Boolean fDirection;
+    private int fNumberOfLines;
+    //Max ascents for lines containing containers
+    private Map<Integer, Integer> fLineMaxAscents = new TreeMap<Integer, Integer>();
     
     /* Public interface */
       
@@ -115,7 +124,7 @@ public class ContainerManager extends EventManager {
     	fContainers = new TreeSet<Container>(fContainerComparator);
         fDocument = document;
         fDirection = false;
-
+        
         fDocumentPartitioner = new FastPartitioner(
             new PartitioningScanner(),
             new String[] { IConfiguration.CONTENT_TYPE_EMBEDDED });
@@ -125,6 +134,10 @@ public class ContainerManager extends EventManager {
 
         initDocumentListener();
         fDocumentPartitioner.connect(fDocument);
+        
+        fLineTracker = new DefaultLineTracker();
+        fLineTracker.set(fDocument.get());
+        fNumberOfLines = fLineTracker.getNumberOfLines();
     }
     
     
@@ -304,6 +317,8 @@ public class ContainerManager extends EventManager {
                 }
                 
                 fChangedPartitioningRegion = null;
+                fLineTracker.set(fDocument.get());
+                fNumberOfLines = fLineTracker.getNumberOfLines();
                 
                 System.out.println("Iteration");
                 
@@ -405,6 +420,75 @@ public class ContainerManager extends EventManager {
         DocumentListener listener = new DocumentListener();
         fDocument.addDocumentPartitioningListener(listener);
         fDocument.addDocumentListener(listener);
+    }
+    
+    /**
+	 * Get containers list at line
+	 * @param line line
+	 */	
+    public ArrayList<Container> getContainersAtLine(int line)
+    {
+    	ArrayList<Container> containersAtLine = new ArrayList<Container>();
+    	Iterator iterator = fContainers.iterator();
+    	while (iterator.hasNext ()) 
+	        {
+	        	Container c = (Container)iterator.next();
+	        	if (c.getLineNumber() == line)
+	        		containersAtLine.add(c);
+	        		
+	        }
+    	return containersAtLine;
+    	
+    }
+    
+    /**
+	 * Get fDocument's line number
+	 */	
+    public int getNumberOfLines()
+    {
+		return fNumberOfLines;
+    }
+    
+    /**
+	 * Get line number in Document by offset
+	 */	
+    public int getLineNumberByOffset(int offset, IDocument fDocument)
+    {
+		fLineTracker.set(fDocument.get());
+		try {
+			return fLineTracker.getLineNumberOfOffset(offset);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+    }
+    
+    /**
+	 * Get max container's ascent at line
+	 */	
+    public int getMaxContainerAscentByLine(int line)
+    {
+    	if (fLineMaxAscents.containsKey(line))
+    		return fLineMaxAscents.get(line);
+    	else
+    		return 0;
+    }
+        
+    /**
+	 * Get max container's ascent at line
+	 */	
+    public void putMaxContainerAscentToMap(int line, int ascent)
+    {
+		fLineMaxAscents.put(line, ascent);
+    }
+    
+    /**
+	 * Clears fLineMaxAscents
+	 */	
+    public void clearLineMaxAscents()
+    {
+		fLineMaxAscents.clear();
     }
     
     
