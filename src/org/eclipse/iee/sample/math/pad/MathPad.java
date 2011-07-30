@@ -1,7 +1,6 @@
 package org.eclipse.iee.sample.math.pad;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -30,8 +29,13 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class MathPad extends Pad {
 
+	private final String fImagePath;
+	private String fExpression;
+
 	public MathPad() {
 		super();
+		fImagePath = this.getContainerID() + ".jpg";
+		fExpression = "";
 	}
 
 	@Override
@@ -65,7 +69,6 @@ public class MathPad extends Pad {
 		labelGridData.grabExcessVerticalSpace = true;
 		label.setLayoutData(labelGridData);
 
-		final String imagePath = this.getContainerID() + ".jpg";
 		calculate.setText("Calculate");
 		calculate.setToolTipText("Calculate expression");
 		calculate.addMouseListener(new MouseListener() {
@@ -74,7 +77,7 @@ public class MathPad extends Pad {
 			public void mouseUp(MouseEvent e) {
 
 				String output = "";
-				String expression = text.getText();
+				fExpression = text.getText();
 
 				try {
 					F.initSymbols(null);
@@ -82,7 +85,7 @@ public class MathPad extends Pad {
 					IExpr result = null;
 					StringBufferWriter buf = new StringBufferWriter();
 
-					result = util.evaluate(expression);
+					result = util.evaluate(fExpression);
 					OutputFormFactory.get().convert(buf, result);
 
 					output = buf.toString();
@@ -98,7 +101,7 @@ public class MathPad extends Pad {
 					TeXFormula formula = new TeXFormula(stw.toString());
 					/* */
 					formula.createJPEG(TeXConstants.STYLE_DISPLAY, 20,
-							imagePath, Color.white, Color.black);
+							fImagePath, Color.white, Color.black);
 
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
@@ -109,7 +112,7 @@ public class MathPad extends Pad {
 				}
 				Image image = null;
 				try {
-					image = new Image(parent.getDisplay(), imagePath);
+					image = new Image(parent.getDisplay(), fImagePath);
 				} catch (Exception exception) {
 
 					exception.printStackTrace();
@@ -132,11 +135,33 @@ public class MathPad extends Pad {
 
 	protected MathPad(String containerID) {
 		super(containerID);
+		fImagePath = containerID + ".jpg";
 	}
 
 	@Override
 	public Pad copy() {
-		return new MathPad();
+		MathPad newPad = new MathPad();
+		newPad.fExpression = this.fExpression;
+		File inputFile = new File(this.fImagePath);
+		File outputFile = new File(newPad.fImagePath);
+		FileReader in;
+		FileWriter out;
+		try {
+			in = new FileReader(inputFile);
+			out = new FileWriter(outputFile);
+			int c;
+
+			while ((c = in.read()) != -1)
+				out.write(c);
+			
+			in.close();
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return newPad;
 	}
 
 	@Override
