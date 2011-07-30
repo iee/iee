@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
@@ -24,16 +25,22 @@ public class PadManager extends EventManager {
 	/* Pads */
 	
 	/** Pads which are visible by user (have attached container) */
-	private Map<String, Pad> fActivePads = new TreeMap<String, Pad>();
+	//private Map<String, Pad> fActivePads = new TreeMap<String, Pad>();
 	
 	/** Pads which are stored in memory and temporarily not visible by user (don't have attached container) */
-	private Map<String, Pad> fSuspendedPads = new TreeMap<String, Pad>();
+	//private Map<String, Pad> fSuspendedPads = new TreeMap<String, Pad>();
 	
 	/** Temporary pads which are attached to existent container until corresponding pad is loaded.
 	 *  This pads are intended to show some loading animation or error message to user. 
 	 */
-	private Map<String, Pad> fTemporaryPads = new TreeMap<String, Pad>();
+	//private Map<String, Pad> fTemporaryPads = new TreeMap<String, Pad>();
 
+	
+	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
+	
+	private Set<String> fActivePads = new TreeSet<String>();
+	private Set<String> fSuspendedPads = new TreeSet<String>();
+	private Set<String> fTemporaryPads = new TreeSet<String>();
 	
 	public PadManager() {
 		fContainerManagers = new HashSet<ContainerManager>();		
@@ -61,20 +68,20 @@ public class PadManager extends EventManager {
 		containerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.remove(containerManager);
 	}
-    
+	
 	
 	/* Functions used by monitoring plug-in */
 	
 	public Object[] getActivePads() {
-		return fActivePads.values().toArray();
+		return fActivePads.toArray();
     }
 	
 	public Object[] getSuspendedPads() {
-		return fSuspendedPads.values().toArray();
+		return fSuspendedPads.toArray();
     }
 	
 	public Object[] getTemporaryPads() {
-		return fTemporaryPads.values().toArray();
+		return fTemporaryPads.toArray();
     }
     
 	
@@ -85,30 +92,33 @@ public class PadManager extends EventManager {
 	public void loadPad(Pad pad) {
 		String containerID = pad.getContainerID();
 		
-		Assert.isLegal(!fActivePads.containsKey(containerID));
-		Assert.isLegal(!fSuspendedPads.containsKey(containerID));
+		Assert.isLegal(!fActivePads.contains(containerID));
+		Assert.isLegal(!fSuspendedPads.contains(containerID));
 		
-		Pad loading = fTemporaryPads.get(containerID);
-		if (loading != null) {
+		if (fTemporaryPads.contains(containerID)) {
 			/*
 			 * Case 1: container with corresponding id already exists
 			 */
-			Container container = loading.getContainer();
+			Pad temporary = fPads.get(containerID);			
+			Container container = temporary.getContainer();
 			
 			/* Remove 'loading' pad */
-			loading.detachContainer();
+			temporary.detachContainer();
 			fTemporaryPads.remove(containerID);
+			fPads.remove(containerID);
 			
 			/* Adding pad */
 			pad.attachContainer(container);
-			fActivePads.put(containerID, pad);
+			fActivePads.add(containerID);
+			fPads.put(containerID, pad);
 			return;
 		}
 
 		/*
 		 * Case 2: no corresponding container, make pad suspended
 		 */
-		fSuspendedPads.put(containerID, pad);		
+		fSuspendedPads.add(containerID);
+		fPads.put(containerID, pad);
 	}
 
 	
@@ -120,7 +130,8 @@ public class PadManager extends EventManager {
 	 */
 	public void insertPad(Pad pad, int location, ContainerManager containerManager) {
 		Assert.isLegal(fContainerManagers.contains(containerManager));
-		fSuspendedPads.put(pad.getContainerID(), pad);
+		fSuspendedPads.add(pad.getContainerID());
+		fPads.put(pad.getContainerID(), pad);
 		containerManager.RequestContainerAllocation(pad.getContainerID(), location);
 	}
 	
@@ -147,41 +158,46 @@ public class PadManager extends EventManager {
 				Container container = event.getContainer();
 				String containerID = container.getContainerID();
 				
-				Pad pad = fSuspendedPads.get(containerID);
-				if (pad != null) {
+				if (fSuspendedPads.contains(containerID)) {
 					/* 
 					 * Case 1: container corresponds to suspended pad.
 					 * Attaching container to pad.
-					 */
+					 */					
+					Pad pad = fPads.get(containerID);
+					
 					Assert.isLegal(pad.getContainerID().equals(containerID));
 					pad.attachContainer(container);
-					fSuspendedPads.remove(containerID);
-					fActivePads.put(containerID, pad);
+					
+					fSuspendedPads.remove(containerID);				
+					fActivePads.add(containerID);
+					fPads.put(containerID, pad);
 					return;
 				}
 				
-				pad = fActivePads.get(containerID);
-				if (pad != null) {
+				if (fActivePads.contains(containerID)) {
 					/*
 					 * Case 2: container is copied from another place.
 					 * Copying pad and attaching container.
-					 */
+					 */					
+					Pad pad = fPads.get(containerID);
+					
 					Pad clone = pad.copy();
 					clone.attachContainer(container);
-					fActivePads.put(clone.getContainerID(), clone);
+					fActivePads.add(clone.getContainerID());
+					fPads.put(clone.getContainerID(), clone);
 					return;
 				}
 				
-				pad = fTemporaryPads.get(containerID);
-				if (pad != null) {
+				if (fTemporaryPads.contains(containerID)) {
 					/*
 					 * Case 3: container with corresponding "Temporary" pad is copied from another place.
 					 * Creating loading pad.
-					 */
-					pad = new LoadingPad();
+					 */					
+					Pad pad = new LoadingPad();
 					((LoadingPad)pad).setOriginalContainerID(containerID);
 					pad.attachContainer(container);
-					fTemporaryPads.put(pad.getContainerID(), pad);
+					fTemporaryPads.add(pad.getContainerID());
+					fPads.put(pad.getContainerID(), pad);
 					return;
 				}
 				
@@ -189,31 +205,33 @@ public class PadManager extends EventManager {
 				 * Case 4: no corresponding pad.
 				 * Creating new "loading" pad.
 				 */
-				pad = new LoadingPad(containerID);
+				Pad pad = new LoadingPad(containerID);
 				pad.attachContainer(container);
-				fTemporaryPads.put(containerID, pad);
+				fTemporaryPads.add(containerID);
+				fPads.put(containerID, pad);
 			}
 
 			@Override
 			public void containerRemoved(ContainerManagerEvent event) {
 				String containerID = event.getContainer().getContainerID();
 				
-				Pad pad = fActivePads.get(containerID);
-				if (pad != null) {
+				if (fActivePads.contains(containerID)) {
+					Pad pad = fPads.get(containerID);
+					
 					pad.detachContainer();
 					fActivePads.remove(containerID);
-					fSuspendedPads.put(containerID, pad);
+					fSuspendedPads.add(containerID);
 					return;
 				}
 				
-				pad = fTemporaryPads.get(containerID);
-				if (pad != null) {
+				if (fTemporaryPads.contains(containerID)) {
+					Pad pad = fPads.get(containerID);
 					pad.detachContainer();
 					fTemporaryPads.remove(containerID);
 					return;
 				}
 				
-				Assert.isNotNull(pad);
+				Assert.isLegal(false);
 			}
 			
 			@Override public void debugNotification(ContainerManagerEvent event) {
