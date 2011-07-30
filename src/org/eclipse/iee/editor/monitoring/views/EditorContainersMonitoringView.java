@@ -61,6 +61,9 @@ public class EditorContainersMonitoringView extends ViewPart {
 				
 			case 1:
 				return String.format("%d", container.getPosition().getOffset());
+			
+			case 2:	
+				return "" + container.getLineNumber();
 				
 			default:
 				return "unknown " + columnIndex;
@@ -130,9 +133,9 @@ public class EditorContainersMonitoringView extends ViewPart {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		String[] columnNames = new String[] { "Container ID", "Offset"};
-		int[] columnWidths = new int[] { 300, 100 };
-		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT };
+		String[] columnNames = new String[] { "Container ID", "Offset", "Line number"};
+		int[] columnWidths = new int[] { 300, 100, 100 };
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT};
 		
 		for (int i = 0; i < columnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
