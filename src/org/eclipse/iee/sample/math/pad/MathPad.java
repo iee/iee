@@ -41,12 +41,14 @@ public class MathPad extends Pad {
 	private String fExpression;
 
 	private boolean fIsTextVisible;
+	private Image fImage;
 
 	public MathPad() {
 		super();
 		fImagePath = this.getContainerID() + ".jpg";
 		fExpression = "";
 		fIsTextVisible = true;
+		fImage = null;
 	}
 
 	@Override
@@ -58,7 +60,6 @@ public class MathPad extends Pad {
 		layout.marginLeft = 3;
 		layout.marginTop = 3;
 		Group mathPad = new Group(parent, SWT.NONE);
-		mathPad.setSize(100, 100);
 		mathPad.setText("Sample math Pad");
 		mathPad.setLayout(layout);
 		mathPad.setToolTipText("Press DoubleClick on expression for calculation");
@@ -66,40 +67,37 @@ public class MathPad extends Pad {
 		final Text text = new Text(mathPad, SWT.BORDER | SWT.H_SCROLL);
 		text.setText(fExpression);
 		FormData textFormData = new FormData();
-		textFormData.top = new FormAttachment(10);
-		textFormData.left = new FormAttachment(10);
-		//textFormData.width = 100;
-		//textFormData.height = 30;
+		textFormData.top = new FormAttachment(20);
+		textFormData.left = new FormAttachment(50, -50);
+		textFormData.right = new FormAttachment(50, 50);
 		text.setLayoutData(textFormData);
 		text.setVisible(fIsTextVisible);
 
 		final Label label = new Label(mathPad, SWT.NONE);
 		FormData labelFormData = new FormData();
 		labelFormData.top = new FormAttachment(20);
-		labelFormData.left = new FormAttachment(10);
-		//labelFormData.width = 100;
-		//labelFormData.height = 30;
+		labelFormData.left = new FormAttachment(50, -50);
+		labelFormData.right = new FormAttachment(50, 50);
 		label.setLayoutData(labelFormData);
-		
+
 		if (!fImagePath.isEmpty()) {
 			File imageFile = new File(fImagePath);
 
 			if (imageFile.exists()) {
-				Image image = null;
 				try {
-					image = new Image(parent.getDisplay(), fImagePath);
+					fImage = new Image(parent.getDisplay(), fImagePath);
 				} catch (Exception exception) {
 					exception.printStackTrace();
 				}
-				label.setImage(image);
+				label.setImage(fImage);
 				parent.pack();
 			}
 		}
 
 		label.setVisible(!fIsTextVisible);
-		
+
 		parent.pack();
-		
+
 		// Listeners
 
 		text.addModifyListener(new ModifyListener() {
@@ -124,7 +122,9 @@ public class MathPad extends Pad {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				if (fIsTextVisible) {
-					text.setEditable(false);
+					fIsTextVisible = false;
+					text.setVisible(fIsTextVisible);
+					fExpression = text.getText();
 					String output = "";
 					try {
 						F.initSymbols(null);
@@ -147,6 +147,7 @@ public class MathPad extends Pad {
 						StringWriter stw = new StringWriter();
 						texUtil.toTeX(result, stw);
 						output = stw.toString();
+						fExpression = output;
 
 						TeXFormula formula = new TeXFormula(stw.toString());
 						/* */
@@ -160,19 +161,21 @@ public class MathPad extends Pad {
 					} catch (Exception e3) {
 						e3.printStackTrace();
 					}
-					Image image = null;
+					if (fImage != null)
+						if (!fImage.isDisposed()) {
+							fImage.dispose();
+							fImage = null;
+						}
 					try {
-						image = new Image(parent.getDisplay(), fImagePath);	
+						fImage = new Image(parent.getDisplay(), fImagePath);
 					} catch (Exception exception) {
 
 						exception.printStackTrace();
 
 					}
-					
-					fIsTextVisible = false;
-					text.setVisible(fIsTextVisible);
+					label.setImage(fImage);
 					label.setVisible(!fIsTextVisible);
-					label.setImage(image);
+					
 					parent.pack();
 				}
 			}
@@ -192,10 +195,9 @@ public class MathPad extends Pad {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (!fIsTextVisible) {
 					fIsTextVisible = true;
+					text.setText(fExpression);
 					text.setVisible(fIsTextVisible);
 					label.setVisible(!fIsTextVisible);
-					text.setEditable(true);
-					// mathPad.pack();
 					parent.pack();
 				}
 			}
@@ -208,6 +210,7 @@ public class MathPad extends Pad {
 		fImagePath = containerID + ".jpg";
 		fExpression = "";
 		fIsTextVisible = true;
+		fImage = null;
 	}
 
 	@Override
