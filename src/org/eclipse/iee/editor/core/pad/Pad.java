@@ -34,6 +34,10 @@ public abstract class Pad
 		return fContainerID;
 	}
 	
+	public String getContainerManagerID() {
+		return fContainer.getContainerManagerID();
+	}
+	
 	
 	public boolean isContainerAttached()
 	{

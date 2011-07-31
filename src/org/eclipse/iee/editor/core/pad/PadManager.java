@@ -1,6 +1,6 @@
 package org.eclipse.iee.editor.core.pad;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -18,7 +18,8 @@ public class PadManager extends EventManager {
 	
 	/* ContainerManagers */
 	
-	private Set<ContainerManager> fContainerManagers;
+	//private Set<ContainerManager> fContainerManagers;
+	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
 	
 	
@@ -43,7 +44,7 @@ public class PadManager extends EventManager {
 	private Set<String> fTemporaryPads = new TreeSet<String>();
 	
 	public PadManager() {
-		fContainerManagers = new HashSet<ContainerManager>();		
+		fContainerManagers = new TreeMap<String, ContainerManager>();		
 		InitListener();
 	}
 
@@ -55,9 +56,8 @@ public class PadManager extends EventManager {
 	 * @param containerManager
 	 */
 	public void registerContainerManager(ContainerManager containerManager) {
-		System.out.println("registerContainerManager");
 		containerManager.addContainerManagerListener(fContainerManagerListener);
-		fContainerManagers.add(containerManager);
+		fContainerManagers.put(containerManager.getContainerManagerID(), containerManager);
 	}
 	
 	/**
@@ -66,7 +66,23 @@ public class PadManager extends EventManager {
 	 */
 	public void removeContainerManager(ContainerManager containerManager) {
 		containerManager.removeContainerManagerListener(fContainerManagerListener);
-		fContainerManagers.remove(containerManager);
+		fContainerManagers.remove(containerManager.getContainerManagerID());
+	}
+	
+	
+	public Collection<Pad> selectPadsOfCategory(String category) {
+
+		return null;
+	}
+	
+	public Collection<Pad> selectPadsInContainerManager(String containerManager) {
+
+		return null;
+	}
+		
+	public Collection<Pad> selectPads(String containerManager, String category) {
+
+		return null;
 	}
 	
 	
@@ -129,7 +145,7 @@ public class PadManager extends EventManager {
 	 * @param containerManager
 	 */
 	public void insertPad(Pad pad, int location, ContainerManager containerManager) {
-		Assert.isLegal(fContainerManagers.contains(containerManager));
+		Assert.isLegal(fContainerManagers.containsKey(containerManager.getContainerManagerID()));
 		fSuspendedPads.add(pad.getContainerID());
 		fPads.put(pad.getContainerID(), pad);
 		containerManager.RequestContainerAllocation(pad.getContainerID(), location);

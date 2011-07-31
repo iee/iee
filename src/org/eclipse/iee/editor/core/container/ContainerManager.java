@@ -3,6 +3,7 @@ package org.eclipse.iee.editor.core.container;
 import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
@@ -28,6 +29,8 @@ import org.eclipse.swt.events.VerifyListener;
 
 public class ContainerManager extends EventManager {
 
+	private String fContainerManagerID;
+	
 	private final StyledText fStyledText;
     private final IDocument fDocument;
     private final IDocumentPartitioner fDocumentPartitioner;
@@ -107,6 +110,8 @@ public class ContainerManager extends EventManager {
     
     
     public ContainerManager(IDocument document, StyledText styledText) {
+    	fContainerManagerID = UUID.randomUUID().toString();
+    	
     	fStyledText = styledText;
     	
         fContainerComparator = new ContainerComparator();
@@ -122,6 +127,10 @@ public class ContainerManager extends EventManager {
 
         initDocumentListener();
         fDocumentPartitioner.connect(fDocument);
+    }
+    
+    public String getContainerManagerID() {
+    	return fContainerManagerID;
     }
         
     
