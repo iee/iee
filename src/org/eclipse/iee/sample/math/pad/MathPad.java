@@ -3,6 +3,8 @@ package org.eclipse.iee.sample.math.pad;
 import java.io.*;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -13,6 +15,7 @@ import javax.swing.text.BadLocationException;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -53,7 +56,7 @@ public class MathPad extends Pad {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		parent.setLayout(new RowLayout());
+		parent.setLayout(new FillLayout());
 		FormLayout layout = new FormLayout();
 		layout.marginBottom = 3;
 		layout.marginRight = 3;
@@ -68,16 +71,17 @@ public class MathPad extends Pad {
 		text.setText(fExpression);
 		FormData textFormData = new FormData();
 		textFormData.top = new FormAttachment(20);
-		textFormData.left = new FormAttachment(50, -50);
-		textFormData.right = new FormAttachment(50, 50);
+		//textFormData.left = new FormAttachment(50, -50);
+		//textFormData.right = new FormAttachment(50, 50);
 		text.setLayoutData(textFormData);
 		text.setVisible(fIsTextVisible);
 
-		final Label label = new Label(mathPad, SWT.NONE);
+		final Label label = new Label(mathPad, SWT.NONE|SWT.RESIZE);
+		label.setText(fExpression);
 		FormData labelFormData = new FormData();
 		labelFormData.top = new FormAttachment(20);
-		labelFormData.left = new FormAttachment(50, -50);
-		labelFormData.right = new FormAttachment(50, 50);
+		//labelFormData.left = new FormAttachment(50, -50);
+		//labelFormData.right = new FormAttachment(50, 50);
 		label.setLayoutData(labelFormData);
 
 		if (!fImagePath.isEmpty()) {
@@ -174,13 +178,16 @@ public class MathPad extends Pad {
 
 					}
 					label.setImage(fImage);
+					System.out.println("width:" + fImage.getBounds().width);
+					System.out.println("heigth:" + fImage.getBounds().height);
+					label.setSize(fImage.getBounds().width, fImage.getBounds().height);
 					label.setVisible(!fIsTextVisible);
 					
 					parent.pack();
 				}
 			}
 		});
-
+		
 		label.addMouseListener(new MouseListener() {
 
 			@Override
