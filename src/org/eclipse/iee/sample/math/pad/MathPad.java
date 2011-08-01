@@ -3,26 +3,17 @@ package org.eclipse.iee.sample.math.pad;
 import java.io.*;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import java.awt.Color;
 import javax.swing.text.BadLocationException;
-
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -62,7 +53,7 @@ public class MathPad extends Pad {
 		layout.marginRight = 3;
 		layout.marginLeft = 3;
 		layout.marginTop = 3;
-		Group mathPad = new Group(parent, SWT.NONE);
+		final Group mathPad = new Group(parent, SWT.NONE);
 		mathPad.setText("Sample math Pad");
 		mathPad.setLayout(layout);
 		mathPad.setToolTipText("Press DoubleClick on expression for calculation");
@@ -71,17 +62,14 @@ public class MathPad extends Pad {
 		text.setText(fExpression);
 		FormData textFormData = new FormData();
 		textFormData.top = new FormAttachment(20);
-		//textFormData.left = new FormAttachment(50, -50);
-		//textFormData.right = new FormAttachment(50, 50);
 		text.setLayoutData(textFormData);
+		text.setToolTipText("Use DoubleClick for calculation");
 		text.setVisible(fIsTextVisible);
 
-		final Label label = new Label(mathPad, SWT.NONE|SWT.RESIZE);
+		final Label label = new Label(mathPad, SWT.NONE | SWT.RESIZE);
 		label.setText(fExpression);
 		FormData labelFormData = new FormData();
 		labelFormData.top = new FormAttachment(20);
-		//labelFormData.left = new FormAttachment(50, -50);
-		//labelFormData.right = new FormAttachment(50, 50);
 		label.setLayoutData(labelFormData);
 
 		if (!fImagePath.isEmpty()) {
@@ -97,7 +85,7 @@ public class MathPad extends Pad {
 				parent.pack();
 			}
 		}
-
+		label.setToolTipText("Use DoubleClick for edit");
 		label.setVisible(!fIsTextVisible);
 
 		parent.pack();
@@ -127,6 +115,7 @@ public class MathPad extends Pad {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (fIsTextVisible) {
 					fIsTextVisible = false;
+					mathPad.setToolTipText("Press DoubleClick on expression for edit");
 					text.setVisible(fIsTextVisible);
 					fExpression = text.getText();
 					String output = "";
@@ -173,21 +162,18 @@ public class MathPad extends Pad {
 					try {
 						fImage = new Image(parent.getDisplay(), fImagePath);
 					} catch (Exception exception) {
-
 						exception.printStackTrace();
-
 					}
 					label.setImage(fImage);
-					System.out.println("width:" + fImage.getBounds().width);
-					System.out.println("heigth:" + fImage.getBounds().height);
-					label.setSize(fImage.getBounds().width, fImage.getBounds().height);
+					label.setSize(fImage.getBounds().width,
+							fImage.getBounds().height);
 					label.setVisible(!fIsTextVisible);
-					
+
 					parent.pack();
 				}
 			}
 		});
-		
+
 		label.addMouseListener(new MouseListener() {
 
 			@Override
@@ -202,6 +188,7 @@ public class MathPad extends Pad {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (!fIsTextVisible) {
 					fIsTextVisible = true;
+					mathPad.setToolTipText("Press DoubleClick on expression for calculation");
 					text.setText(fExpression);
 					text.setVisible(fIsTextVisible);
 					label.setVisible(!fIsTextVisible);
