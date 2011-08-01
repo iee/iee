@@ -10,10 +10,10 @@ import org.eclipse.swt.events.MouseListener;
 import java.awt.Color;
 import javax.swing.text.BadLocationException;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -47,7 +47,7 @@ public class MathPad extends Pad {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		parent.setLayout(new FillLayout());
+		parent.setLayout(new RowLayout());
 		FormLayout layout = new FormLayout();
 		layout.marginBottom = 3;
 		layout.marginRight = 3;
