@@ -130,8 +130,6 @@ public class Container {
 		        		style.background = fStyledText.getBackground();
 		        }
 		        
-		        
-		        
 		        event.styles = new StyleRange[styles.size()];
 		        styles.copyInto(event.styles);
 

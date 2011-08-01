@@ -456,7 +456,7 @@ public class ContainerManager extends EventManager {
     {
 		fLineTracker.set(fDocument.get());
 		try {
-			return fLineTracker.getLineNumberOfOffset(offset);
+			return fLineTracker.getLineNumberOfOffset(offset) + 1;
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
