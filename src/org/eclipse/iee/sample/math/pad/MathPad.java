@@ -56,7 +56,7 @@ public class MathPad extends Pad {
 		final Group mathPad = new Group(parent, SWT.NONE);
 		mathPad.setText("Sample math Pad");
 		mathPad.setLayout(layout);
-		mathPad.setToolTipText("Press DoubleClick on expression for calculation");
+		mathPad.setToolTipText("Use DoubleClick for any action");
 
 		final Text text = new Text(mathPad, SWT.BORDER | SWT.H_SCROLL);
 		text.setText(fExpression);
@@ -115,7 +115,6 @@ public class MathPad extends Pad {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (fIsTextVisible) {
 					fIsTextVisible = false;
-					mathPad.setToolTipText("Press DoubleClick on expression for edit");
 					text.setVisible(fIsTextVisible);
 					fExpression = text.getText();
 					String output = "";
@@ -188,7 +187,6 @@ public class MathPad extends Pad {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (!fIsTextVisible) {
 					fIsTextVisible = true;
-					mathPad.setToolTipText("Press DoubleClick on expression for calculation");
 					text.setText(fExpression);
 					text.setVisible(fIsTextVisible);
 					label.setVisible(!fIsTextVisible);
