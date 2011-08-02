@@ -20,14 +20,14 @@
       <view
             category="org.eclipse.iee.editor.monitoring"
             class="org.eclipse.iee.editor.monitoring.views.EditorContainersMonitoringView"
-            icon="icons/sample.gif"
+            icon="icons/iee_logo.png"
             id="org.eclipse.iee.editor.monitoring.views.EditorContainersMonitoringView"
             name="Editor&apos;s containers monitoring">
       </view>
       <view
             category="org.eclipse.iee.editor.monitoring"
             class="org.eclipse.iee.editor.monitoring.views.PadsMonitoringView"
-            icon="icons/sample.gif"
+            icon="icons/iee_logo.png"
             id="org.eclipse.iee.editor.monitoring.views.PadsMonitoringView"
             name="Pads monitoring"
             restorable="true">
