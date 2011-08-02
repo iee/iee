@@ -1,22 +1,14 @@
 package org.eclipse.iee.editor.core.container;
 
-import java.util.Iterator;
 import java.util.Queue;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.LineStyleEvent;
-import org.eclipse.swt.custom.LineStyleListener;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
@@ -32,12 +24,10 @@ public class Container {
 	
 	protected PartitioningScanner fLineScanner;
 
-	private LineStyleListener fLineStyleListener;
 	private ControlListener fCompositeResizeListener;
 	
 	private StyledText fStyledText;
 	private ContainerManager fContainerManager;
-	
 	
     private static Queue<Container> fContainerDocumentAccessQueue =
     	new ConcurrentLinkedQueue<Container>();
@@ -68,76 +58,7 @@ public class Container {
 	}
 	
 	
-	private void initListeners() {
-		fLineStyleListener = new LineStyleListener() {
-			@Override
-			public void lineGetStyle(LineStyleEvent event) {
-				// TODO Auto-generated method stub
-				Vector<StyleRange> styles = new Vector<StyleRange>();
-				fLineScanner.setRange(fDocument, event.lineOffset, event.lineText.length());
-				
-				
-				IToken token;
-		        while (!(token = fLineScanner.nextToken()).isEOF()) {
-		            if (token == PartitioningScanner.EMBEDDED_TOKEN) {
-		            	StyleRange compositeStyle = new StyleRange();
-						compositeStyle.start = fLineScanner.getTokenOffset();
-						compositeStyle.length = 1;
-						//to save constant line ascent (should be max from all containers for a line)
-						compositeStyle.metrics = new GlyphMetrics(fComposite.getSize().y, 0, fComposite.getSize().x);
-						styles.addElement(compositeStyle);
-						
-						StyleRange hiddenTextStyle = new StyleRange();
-						hiddenTextStyle.start = fLineScanner.getTokenOffset() + 1;
-						hiddenTextStyle.length = fLineScanner.getTokenLength();
-						hiddenTextStyle.metrics = new GlyphMetrics(0, 0, 0);
-						styles.addElement(hiddenTextStyle);
-						
-		            }
-		            if(token == PartitioningScanner.PLAINTEXT_TOKEN)
-		            {
-		            	StyleRange plainTextStyle = new StyleRange(fLineScanner.getTokenOffset(), fLineScanner.getTokenLength(), fStyledText.getForeground(), fStyledText.getBackground());
-		            	styles.addElement(plainTextStyle);
-		            }
-		        }
-		        
-		        Iterator containerIterator = fContainerManager.getContainersAtLine(fLineNumber).iterator();
-		        
-		        //First cycle - looking for max ascent in containers
-		        System.out.println("Line offset:" + event.lineOffset + "########################################################################");
-		        System.out.println("Line number:" + fLineNumber + "************************************************************************");
-		        //clear, because container can be moved to another line or deleted
-		        fContainerManager.clearLineMaxAscents();
-		        while (containerIterator.hasNext ()) 
-		        {
-		        	Container c = (Container)containerIterator.next();
-		        	System.out.println("PadSize:" + c.fComposite.getSize().y);
-		        	if (c.fComposite.getSize().y > fContainerManager.getMaxContainerAscentByLine(fLineNumber))
-		        	{
-		        		fContainerManager.putMaxContainerAscentToMap(fLineNumber, c.fComposite.getSize().y);
-		        		
-		        	}
-		        }
-		        
-		        Iterator stylesIterator = styles.iterator();
-		        //Second cycle - Setting max ascent for styles
-		        while (stylesIterator.hasNext ()) 
-		        {
-		        	StyleRange style = (StyleRange)stylesIterator.next();
-		        	System.out.println("MaxPadSize:" + fContainerManager.getMaxContainerAscentByLine(fLineNumber));
-		        	if (style.metrics != null)
-		        		style.metrics.ascent = fContainerManager.getMaxContainerAscentByLine(fLineNumber);
-		        		style.background = fStyledText.getBackground();
-		        }
-		        
-		        event.styles = new StyleRange[styles.size()];
-		        styles.copyInto(event.styles);
-
-			}
-		};
-		fStyledText.addLineStyleListener(fLineStyleListener);
-		
-		
+	private void initListeners() {		
 		fCompositeResizeListener = new ControlListener() {
 
 			@Override
@@ -153,7 +74,7 @@ public class Container {
 	
 	
 	private void releaseListeners() {
-		fStyledText.removeLineStyleListener(fLineStyleListener);
+		//fStyledText.removeLineStyleListener(fLineStyleListener);
 		fComposite.removeControlListener(fCompositeResizeListener);
 	}
 

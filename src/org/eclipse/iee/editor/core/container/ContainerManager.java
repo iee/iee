@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DefaultLineTracker;
@@ -25,13 +25,18 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.GlyphMetrics;
 
 public class ContainerManager extends EventManager {
 
@@ -132,12 +137,13 @@ public class ContainerManager extends EventManager {
         ((IDocumentExtension3) fDocument).setDocumentPartitioner(
             IConfiguration.PARTITIONING_ID, fDocumentPartitioner);
 
-        initDocumentListener();
         fDocumentPartitioner.connect(fDocument);
-        
         fLineTracker = new DefaultLineTracker();
         fLineTracker.set(fDocument.get());
         fNumberOfLines = fLineTracker.getNumberOfLines();
+        
+        initDocumentListener();
+        
     }
     
     
@@ -226,6 +232,85 @@ public class ContainerManager extends EventManager {
 				
 			}    		
     	});
+    	
+    	fStyledText.addLineStyleListener(new LineStyleListener() {
+			
+			@Override
+			public void lineGetStyle(LineStyleEvent event) {
+				// TODO Auto-generated method stub
+				Vector<StyleRange> styles = new Vector<StyleRange>();
+				PartitioningScanner lineScanner = new PartitioningScanner();
+				lineScanner.setRange(fDocument, event.lineOffset, event.lineText.length());
+				int lineNumber = 0;
+				try {
+					lineNumber = fLineTracker.getLineNumberOfOffset(event.lineOffset)+1;
+				} catch (BadLocationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				Iterator<Container> containerIterator1 = getContainersAtLine(lineNumber).iterator();
+				IToken token;
+		        while (!(token = lineScanner.nextToken()).isEOF()) {
+		            if (token == PartitioningScanner.EMBEDDED_TOKEN) {
+		            	if (containerIterator1.hasNext ())
+		            	{
+			            	Container c = (Container)containerIterator1.next();
+			            	StyleRange compositeStyle = new StyleRange();
+							compositeStyle.start = lineScanner.getTokenOffset();
+							compositeStyle.length = 1;
+							//to save constant line ascent (should be max from all containers for a line)
+							compositeStyle.metrics = new GlyphMetrics(c.getComposite().getSize().y, 0, c.getComposite().getSize().x);
+							styles.addElement(compositeStyle);
+							
+							StyleRange hiddenTextStyle = new StyleRange();
+							hiddenTextStyle.start = lineScanner.getTokenOffset() + 1;
+							hiddenTextStyle.length = lineScanner.getTokenLength();
+							hiddenTextStyle.metrics = new GlyphMetrics(0, 0, 0);
+							styles.addElement(hiddenTextStyle);
+		            	}
+		            }
+		            if(token == PartitioningScanner.PLAINTEXT_TOKEN)
+		            {
+		            	StyleRange plainTextStyle = new StyleRange(lineScanner.getTokenOffset(), lineScanner.getTokenLength(), fStyledText.getForeground(), fStyledText.getBackground());
+		            	styles.addElement(plainTextStyle);
+		            }
+		        }
+		        
+		        Iterator<Container> containerIterator2 = getContainersAtLine(lineNumber).iterator();
+		        
+		        //First cycle - looking for max ascent in containers
+		        System.out.println("Line offset:" + event.lineOffset + "########################################################################");
+		        System.out.println("Line number:" + lineNumber + "************************************************************************");
+		        //clear, because container can be moved to another line or deleted
+		        clearLineMaxAscents();
+		        while (containerIterator2.hasNext ()) 
+		        {
+		        	Container c = (Container)containerIterator2.next();
+		        	System.out.println("PadSize:" + c.getComposite().getSize().y);
+		        	if (c.getComposite().getSize().y > getMaxContainerAscentByLine(lineNumber))
+		        	{
+		        		putMaxContainerAscentToMap(lineNumber, c.getComposite().getSize().y);
+		        	}
+		        }
+		        
+		        Iterator<StyleRange> stylesIterator = styles.iterator();
+		        //Second cycle - Setting max ascent for styles
+		        while (stylesIterator.hasNext ()) 
+		        {
+		        	StyleRange style = (StyleRange)stylesIterator.next();
+		        	System.out.println("MaxPadSize:" + getMaxContainerAscentByLine(lineNumber));
+		        	if (style.metrics != null)
+		        		style.metrics.ascent = getMaxContainerAscentByLine(lineNumber);
+		        		style.background = fStyledText.getBackground();
+		        }
+		        
+		        event.styles = new StyleRange[styles.size()];
+		        styles.copyInto(event.styles);
+			}
+		});
+    	
+		
     	
     	
     	class DocumentListener implements
@@ -429,7 +514,7 @@ public class ContainerManager extends EventManager {
     public ArrayList<Container> getContainersAtLine(int line)
     {
     	ArrayList<Container> containersAtLine = new ArrayList<Container>();
-    	Iterator iterator = fContainers.iterator();
+    	Iterator<Container> iterator = fContainers.iterator();
     	while (iterator.hasNext ()) 
 	        {
 	        	Container c = (Container)iterator.next();
@@ -452,9 +537,9 @@ public class ContainerManager extends EventManager {
     /**
 	 * Get line number in Document by offset
 	 */	
-    public int getLineNumberByOffset(int offset, IDocument fDocument)
+    public int getLineNumberByOffset(int offset, IDocument document)
     {
-		fLineTracker.set(fDocument.get());
+		fLineTracker.set(document.get());
 		try {
 			return fLineTracker.getLineNumberOfOffset(offset) + 1;
 		} catch (BadLocationException e) {
