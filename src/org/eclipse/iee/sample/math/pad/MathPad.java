@@ -29,20 +29,18 @@ import org.matheclipse.core.interfaces.IExpr;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 
-public class MathPad extends Pad {
+public class MathPad extends Pad implements Serializable{
 
 	private String fImagePath;
 	private String fExpression;
-
 	private boolean fIsTextVisible;
-	private Image fImage;
 
 	public MathPad() {
 		super();
 		fImagePath = this.getContainerID() + ".jpg";
 		fExpression = "";
 		fIsTextVisible = true;
-		fImage = null;
+		save();
 	}
 
 	@Override
@@ -74,14 +72,14 @@ public class MathPad extends Pad {
 
 		if (!fImagePath.isEmpty()) {
 			File imageFile = new File(fImagePath);
-
+			Image image = null;
 			if (imageFile.exists()) {
 				try {
-					fImage = new Image(parent.getDisplay(), fImagePath);
+					image = new Image(parent.getDisplay(), fImagePath);
 				} catch (Exception exception) {
 					exception.printStackTrace();
 				}
-				label.setImage(fImage);
+				label.setImage(image);
 				parent.pack();
 			}
 		}
@@ -153,22 +151,20 @@ public class MathPad extends Pad {
 					} catch (Exception e3) {
 						e3.printStackTrace();
 					}
-					if (fImage != null)
-						if (!fImage.isDisposed()) {
-							fImage.dispose();
-							fImage = null;
-						}
+
+					Image image = null;
 					try {
-						fImage = new Image(parent.getDisplay(), fImagePath);
+						image = new Image(parent.getDisplay(), fImagePath);
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
-					label.setImage(fImage);
-					label.setSize(fImage.getBounds().width,
-							fImage.getBounds().height);
+					label.setImage(image);
+					label.setSize(image.getBounds().width,
+							image.getBounds().height);
 					label.setVisible(!fIsTextVisible);
 
 					parent.pack();
+					save();
 				}
 			}
 		});
@@ -191,6 +187,7 @@ public class MathPad extends Pad {
 					text.setVisible(fIsTextVisible);
 					label.setVisible(!fIsTextVisible);
 					parent.pack();
+					save();
 				}
 			}
 		});
@@ -202,7 +199,7 @@ public class MathPad extends Pad {
 		fImagePath = containerID + ".jpg";
 		fExpression = "";
 		fIsTextVisible = true;
-		fImage = null;
+		save();
 	}
 
 	@Override
@@ -239,5 +236,42 @@ public class MathPad extends Pad {
 	public String getType() {
 		return "Math";
 	}
+	
+	//Save&Load operations, use it for serialization
+	
+    public void save()
+    {
+    	try
+        {
+            FileOutputStream fos = new FileOutputStream(this.getContainerID() + ".bin");
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(this);
+            out.close();
+            fos.close();
+        }catch(IOException i)
+        {
+            i.printStackTrace();
+        }
+    }
+    
+    public MathPad load()
+    {
+    	MathPad loadedPad = null;
+    	try {
+            FileInputStream fis = new FileInputStream(this.getContainerID() + ".bin");
+            ObjectInputStream in = new ObjectInputStream(fis);
+            try {
+            	loadedPad = (MathPad)in.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            in.close();
+            fis.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+		return loadedPad;
+    }
 
 }
