@@ -7,8 +7,12 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
+
 import java.awt.Color;
 import javax.swing.text.BadLocationException;
+
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -46,6 +50,8 @@ public class MathPad extends Pad implements Serializable{
 	@Override
 	public void createPartControl(final Composite parent) {
 		parent.setLayout(new RowLayout());
+		Cursor containerCursor = new Cursor(null, SWT.CURSOR_ARROW);		
+		parent.setCursor(containerCursor);
 		FormLayout layout = new FormLayout();
 		layout.marginBottom = 3;
 		layout.marginRight = 3;
