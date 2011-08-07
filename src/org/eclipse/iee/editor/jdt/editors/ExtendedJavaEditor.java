@@ -38,7 +38,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor {
 	}
 	
 	public void createPad(Pad pad, int location) {
-		fPadManager.createPad(pad, location, fContainerManager);	
+		fPadManager.insertPad(pad, location, fContainerManager);	
 	}
 	
 	public int getCaretOffset() {
