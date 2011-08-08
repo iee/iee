@@ -46,6 +46,15 @@ public class ContainerManager extends EventManager {
         return fContainers.toArray();
     }
     
+    public String[] getContainerIDs() {
+    	String[] containerIDs = new String[fContainers.size()];
+    	int i = 0;
+    	for (Container container : fContainers) {
+    		containerIDs[i++] = container.getContainerID();
+    	}
+    	return containerIDs;
+    }
+    
         
     public void RequestContainerAllocation(String containerID, int offset) {
     	String containerEmbeddedRegion =
@@ -285,7 +294,7 @@ public class ContainerManager extends EventManager {
             	     	
                 /* For debug */
                 
-                fireDebugNotification(new ContainerManagerEvent(null));
+                fireDebugNotification(new ContainerManagerEvent(null, fContainerManagerID));
             }
 
             
@@ -307,7 +316,7 @@ public class ContainerManager extends EventManager {
                 			// XXX remove container
                 			
                 			container.dispose();
-                			fireContainerRemoved(new ContainerManagerEvent(container));
+                			fireContainerRemoved(new ContainerManagerEvent(container, fContainerManagerID));
                 		}
                 	}
                 }
@@ -332,7 +341,7 @@ public class ContainerManager extends EventManager {
                         	containerID);
                         
                         fContainers.add(container);                        
-                        fireContainerCreated(new ContainerManagerEvent(container));
+                        fireContainerCreated(new ContainerManagerEvent(container, fContainerManagerID));
                     }
                     offset += region.getLength();
                 }

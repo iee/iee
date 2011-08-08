@@ -67,6 +67,11 @@ public class PadManager extends EventManager {
 	public void removeContainerManager(ContainerManager containerManager) {
 		containerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.remove(containerManager.getContainerManagerID());
+		
+		for (String containerID : containerManager.getContainerIDs()) {
+			onContainerRemoved(containerID);
+		}
+		firePadManagerEvent(new PadManagerEvent());
 	}
 	
 	
@@ -136,8 +141,7 @@ public class PadManager extends EventManager {
 		fSuspendedPads.add(containerID);
 		fPads.put(containerID, pad);
 	}
-
-	
+		
 	/**
 	 * Used by external plug-in to insert new pad.
 	 * @param pad
@@ -229,33 +233,37 @@ public class PadManager extends EventManager {
 
 			@Override
 			public void containerRemoved(ContainerManagerEvent event) {
-				String containerID = event.getContainer().getContainerID();
-				
-				if (fActivePads.contains(containerID)) {
-					Pad pad = fPads.get(containerID);
-					
-					pad.detachContainer();
-					fActivePads.remove(containerID);
-					fSuspendedPads.add(containerID);
-					return;
-				}
-				
-				if (fTemporaryPads.contains(containerID)) {
-					Pad pad = fPads.get(containerID);
-					pad.detachContainer();
-					fTemporaryPads.remove(containerID);
-					return;
-				}
-				
-				Assert.isLegal(false);
+				onContainerRemoved(event.getContainer().getContainerID());
 			}
 			
-			@Override public void debugNotification(ContainerManagerEvent event) {
+			@Override
+			public void debugNotification(ContainerManagerEvent event) {
 				firePadManagerEvent(new PadManagerEvent());
 			}
 		};
 	}
+	
+	/* Internal functions */
 
+	protected void onContainerRemoved(String containerID) {
+		if (fActivePads.contains(containerID)) {
+			Pad pad = fPads.get(containerID);
+			
+			pad.detachContainer();
+			fActivePads.remove(containerID);
+			fSuspendedPads.add(containerID);
+			return;
+		}
+		
+		if (fTemporaryPads.contains(containerID)) {
+			Pad pad = fPads.get(containerID);
+			
+			pad.detachContainer();
+			fTemporaryPads.remove(containerID);
+			return;
+		}		
+		Assert.isLegal(false);
+	}
 	
 	/* For observers */
 	

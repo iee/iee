@@ -4,27 +4,18 @@ package org.eclipse.iee.editor.core.container;
 public class ContainerManagerEvent {
 
 	private Container fContainer;
-	private Container fOriginal;
+	private String fContainerManagerID;
 
-	ContainerManagerEvent(Container container) {
+	ContainerManagerEvent(Container container, String containerManagerID) {
 		fContainer = container;
-		fOriginal = null;
+		fContainerManagerID = containerManagerID;
 	}
 	
-	ContainerManagerEvent(Container container, Container original) {
-		fContainer = container;
-		fOriginal = original;
-	}	
-
 	public Container getContainer() {
 		return fContainer;
 	}
 	
-	public Container getOriginalContainer() {
-		return fOriginal;
-	}
-	
-	public boolean isContainerDuplicated() {
-		return fOriginal != null;
+	public String getContainerManagerID() {
+		return fContainerManagerID;
 	}
 }
