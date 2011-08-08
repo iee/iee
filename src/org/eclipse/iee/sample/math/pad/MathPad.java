@@ -1,26 +1,17 @@
 package org.eclipse.iee.sample.math.pad;
 
 import java.io.*;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-
 import java.awt.Color;
 import javax.swing.text.BadLocationException;
-
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.iee.editor.core.pad.Pad;
@@ -39,12 +30,14 @@ public class MathPad extends Pad implements Serializable {
 	private String fImagePath;
 	private String fExpression;
 	private boolean fIsTextVisible;
+	private boolean fIsFirstLaunch;
 
 	public MathPad() {
 		super();
 		fImagePath = this.getContainerID() + ".jpg";
-		fExpression = "";
+		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
+		fIsFirstLaunch = true;
 		save();
 	}
 
@@ -106,6 +99,11 @@ public class MathPad extends Pad implements Serializable {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
+				if (fIsFirstLaunch) {
+					fExpression = "";
+					text.setText(fExpression);
+					fIsFirstLaunch = false;
+				}
 			}
 
 			@Override
@@ -196,8 +194,9 @@ public class MathPad extends Pad implements Serializable {
 	protected MathPad(String containerID) {
 		super(containerID);
 		fImagePath = containerID + ".jpg";
-		fExpression = "";
+		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
+		fIsFirstLaunch = true;
 		save();
 	}
 
@@ -206,6 +205,7 @@ public class MathPad extends Pad implements Serializable {
 		MathPad newPad = new MathPad();
 		newPad.fExpression = this.fExpression;
 		newPad.fIsTextVisible = this.fIsTextVisible;
+		newPad.fIsFirstLaunch = this.fIsFirstLaunch;
 		File inputFile = new File(this.fImagePath);
 		File outputFile = new File(newPad.fImagePath);
 
