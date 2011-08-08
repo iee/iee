@@ -67,8 +67,10 @@ public class ImagePad extends Pad {
 		fImagePath = null;
 		
 		/* Initialize controls */
-
-	    parent.setLayout(new FillLayout(SWT.VERTICAL));
+		FillLayout layout = new FillLayout(SWT.VERTICAL);
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
+	    parent.setLayout(layout);
 
 		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
 		label.setText("This sample control is for inserting image into Eclipse editor");
@@ -115,6 +117,12 @@ public class ImagePad extends Pad {
 			@Override public void mouseDoubleClick(MouseEvent arg0) {}
 			@Override public void mouseDown(MouseEvent arg0) {}
 		});
+		
+		MouseEventManager mouseManager = new MouseEventManager(parent);
+		parent.addMouseTrackListener(mouseManager);
+		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
+		
 	}
 	
 	
@@ -136,18 +144,30 @@ public class ImagePad extends Pad {
 		
 		/* Initialize controls */
 				
-		parent.setLayout(new FillLayout(SWT.VERTICAL));
+		FillLayout layout = new FillLayout(SWT.VERTICAL);
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
+	    parent.setLayout(layout);
 		Label label = new Label(parent, SWT.NONE);
 		label.setImage(image);
 		
 		parent.pack();
+		
+		MouseEventManager mouseManager = new MouseEventManager(parent);
+		parent.addMouseTrackListener(mouseManager);
+		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
+		
 	}
 	
 	
 	protected void initErrorView(final Composite parent) {
 		System.out.println("initErrorView");
 		
-		parent.setLayout(new FillLayout(SWT.VERTICAL));
+		FillLayout layout = new FillLayout(SWT.VERTICAL);
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
+	    parent.setLayout(layout);
 		
 		final Label label = new Label(parent, SWT.NONE);
 		label.setText("Error occured");
@@ -156,6 +176,8 @@ public class ImagePad extends Pad {
 		button.setText("Reload");
 		
 		parent.pack();
+		
+		
 		
 		/* State logic */
 		
@@ -180,6 +202,12 @@ public class ImagePad extends Pad {
 			@Override public void mouseDoubleClick(MouseEvent arg0) {}
 			@Override public void mouseUp(MouseEvent arg0) {}
 		});
+		
+		MouseEventManager mouseManager = new MouseEventManager(parent);
+		parent.addMouseTrackListener(mouseManager);
+		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
+		
 	}
 
 	
