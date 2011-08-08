@@ -7,6 +7,7 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 public class MouseEventManager implements MouseListener, MouseMoveListener,
@@ -50,6 +51,8 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	@Override
 	public void mouseMove(MouseEvent e) {
 		int delta = 2;
+		System.out.println("x = " + e.x);
+		System.out.println("y = " + e.y);
 		Point border = fComposite.getSize();
 		for (int i = 0; i <= delta; i++) {
 			if (e.y == i && e.x == i) {
@@ -87,17 +90,31 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 
 	@Override
 	public void mouseDown(MouseEvent e) {
-		if (fCanResize) {
-			fIsResizing = true;
-		}
+		if (e.button == 1)
+			if (fCanResize) {
+				fIsResizing = true;
+			}
 	}
 
 	@Override
 	public void mouseUp(MouseEvent e) {
-		if (fIsResizing) {
-			fIsResizing = false;
-			fCanResize = false;
-		}
+		if (e.button == 1)
+			if (fIsResizing) {
+				// maybe unusefull
+				Point beforeResize = fComposite.getSize();
+				Rectangle beforeResizeBounds = fComposite.getBounds();
+				if (e.x > 0 && e.y > 0) {
+					Point afterResize = new Point(e.x, e.y);
+					Rectangle afterResizeBounds = new Rectangle(
+							beforeResizeBounds.x, beforeResizeBounds.y, e.x,
+							e.y);
+					fComposite.setSize(afterResize);
+					fComposite.setBounds(afterResizeBounds);
+					fComposite.redraw();
+				}
+				fIsResizing = false;
+				fCanResize = false;
+			}
 	}
 
 }

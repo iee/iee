@@ -3,6 +3,7 @@ package org.eclipse.iee.sample.math.pad;
 import java.io.*;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -13,6 +14,7 @@ import javax.swing.text.BadLocationException;
 
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -48,30 +50,19 @@ public class MathPad extends Pad implements Serializable {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		parent.setLayout(new RowLayout());
-		FormLayout layout = new FormLayout();
-		layout.marginBottom = 3;
-		layout.marginRight = 3;
-		layout.marginLeft = 3;
-		layout.marginTop = 3;
-		final Group mathPad = new Group(parent, SWT.NONE);
-		mathPad.setText("Sample math Pad");
-		mathPad.setLayout(layout);
-		mathPad.setToolTipText("Use DoubleClick for any action");
-
-		final Text text = new Text(mathPad, SWT.BORDER | SWT.H_SCROLL);
+		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
+		parent.setLayout(layout);
+		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
+		sashForm.setLayout(new FillLayout());
+		final Text text = new Text(sashForm, SWT.BORDER | SWT.H_SCROLL);
 		text.setText(fExpression);
-		FormData textFormData = new FormData();
-		textFormData.top = new FormAttachment(20);
-		text.setLayoutData(textFormData);
 		text.setToolTipText("Use DoubleClick for calculation");
 		text.setVisible(fIsTextVisible);
 
-		final Label label = new Label(mathPad, SWT.NONE | SWT.RESIZE);
+		final Label label = new Label(sashForm, SWT.NONE | SWT.RESIZE);
 		label.setText(fExpression);
-		FormData labelFormData = new FormData();
-		labelFormData.top = new FormAttachment(20);
-		label.setLayoutData(labelFormData);
 
 		if (!fImagePath.isEmpty()) {
 			File imageFile = new File(fImagePath);
@@ -96,6 +87,7 @@ public class MathPad extends Pad implements Serializable {
 		MouseEventManager mouseManager = new MouseEventManager(parent);
 		parent.addMouseTrackListener(mouseManager);
 		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
 
 		text.addModifyListener(new ModifyListener() {
 
