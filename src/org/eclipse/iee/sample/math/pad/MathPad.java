@@ -32,7 +32,7 @@ import org.matheclipse.core.interfaces.IExpr;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 
-public class MathPad extends Pad implements Serializable{
+public class MathPad extends Pad implements Serializable {
 
 	private String fImagePath;
 	private String fExpression;
@@ -92,7 +92,7 @@ public class MathPad extends Pad implements Serializable{
 		parent.pack();
 
 		// Listeners
-		
+
 		MouseEventManager mouseManager = new MouseEventManager(parent);
 		parent.addMouseTrackListener(mouseManager);
 		parent.addMouseMoveListener(mouseManager);
@@ -243,42 +243,40 @@ public class MathPad extends Pad implements Serializable{
 	public String getType() {
 		return "Math";
 	}
-	
-	//Save&Load operations, use it for serialization
-	
-    public void save()
-    {
-    	try
-        {
-            FileOutputStream fos = new FileOutputStream(this.getContainerID() + ".bin");
-            ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(this);
-            out.close();
-            fos.close();
-        }catch(IOException i)
-        {
-            i.printStackTrace();
-        }
-    }
-    
-    public MathPad load()
-    {
-    	MathPad loadedPad = null;
-    	try {
-            FileInputStream fis = new FileInputStream(this.getContainerID() + ".bin");
-            ObjectInputStream in = new ObjectInputStream(fis);
-            try {
-            	loadedPad = (MathPad)in.readObject();
+
+	// Save&Load operations, use it for serialization
+
+	public void save() {
+		try {
+			FileOutputStream fos = new FileOutputStream(this.getContainerID()
+					+ ".bin");
+			ObjectOutputStream out = new ObjectOutputStream(fos);
+			out.writeObject(this);
+			out.close();
+			fos.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
+	}
+
+	public MathPad load() {
+		MathPad loadedPad = null;
+		try {
+			FileInputStream fis = new FileInputStream(this.getContainerID()
+					+ ".bin");
+			ObjectInputStream in = new ObjectInputStream(fis);
+			try {
+				loadedPad = (MathPad) in.readObject();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            in.close();
-            fis.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
+			in.close();
+			fis.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
 		return loadedPad;
-    }
+	}
 
 }

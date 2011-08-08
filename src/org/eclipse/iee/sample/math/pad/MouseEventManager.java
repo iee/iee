@@ -7,7 +7,6 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 public class MouseEventManager implements MouseListener, MouseMoveListener,
@@ -20,6 +19,7 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	private Cursor fResizeCursorNESW;
 	private Composite fComposite;
 	private boolean fCanResize;
+	private boolean fIsResizing;
 
 	public MouseEventManager(final Composite composite) {
 		fComposite = composite;
@@ -29,6 +29,7 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 		fResizeCursorNWSE = new Cursor(null, SWT.CURSOR_SIZENWSE);
 		fResizeCursorNESW = new Cursor(null, SWT.CURSOR_SIZENESW);
 		fCanResize = false;
+		fIsResizing = false;
 	}
 
 	@Override
@@ -38,6 +39,8 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 
 	@Override
 	public void mouseExit(MouseEvent e) {
+		fComposite.setCursor(fArrowCursor);
+		fCanResize = false;
 	}
 
 	@Override
@@ -46,32 +49,36 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 
 	@Override
 	public void mouseMove(MouseEvent e) {
-		fCanResize = false;
+		int delta = 2;
 		Point border = fComposite.getSize();
-		System.out.println("width="+ border.x);
-		System.out.println("heigth="+ border.y);
-		if (e.y == 0 && e.x == 0 || e.y == border.y && e.x == border.x)
-		{
-			fComposite.setCursor(fResizeCursorNWSE);
-			fCanResize = true;
+		for (int i = 0; i <= delta; i++) {
+			if (e.y == i && e.x == i) {
+				fComposite.setCursor(fResizeCursorNWSE);
+				fCanResize = true;
+			}
+
+			if (e.y == border.y - i && e.x == border.x - i) {
+				fComposite.setCursor(fResizeCursorNWSE);
+				fCanResize = true;
+			}
+
+			if (e.x == i && e.y == border.y - i || e.y == i
+					&& e.x == border.x - i) {
+				fComposite.setCursor(fResizeCursorNESW);
+				fCanResize = true;
+			}
+			if (e.y == i && e.x > i && e.x < border.x - i
+					|| e.y == border.y - i && e.x > i && e.x < border.x - i) {
+				fComposite.setCursor(fResizeCursorNS);
+				fCanResize = true;
+			}
+			if (e.x == i && e.y > i && e.y < border.y - i
+					|| e.x == border.x - i && e.y > i && e.y < border.y - i) {
+				fComposite.setCursor(fResizeCursorEW);
+				fCanResize = true;
+			}
 		}
-		if (e.x == 0 && e.y == border.y || e.y == 0 && e.x == border.x)
-		{
-			fComposite.setCursor(fResizeCursorNESW);
-			fCanResize = true;
-		}
-		if (e.y == 0 && e.x > 0 && e.x < border.x || e.y == border.y && e.x > 0 && e.x < border.x) {
-			fComposite.setCursor(fResizeCursorNS);
-			fCanResize = true;
-		} 
-		if (e.x == 0 && e.y > 0 && e.y < border.y || e.x == border.x && e.y > 0 && e.y < border.y) {
-			fComposite.setCursor(fResizeCursorEW);
-			fCanResize = true;
-		}
-		if (!fCanResize)
-		{
-			fComposite.setCursor(fArrowCursor);
-		}
+
 	}
 
 	@Override
@@ -80,14 +87,17 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 
 	@Override
 	public void mouseDown(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		if (fCanResize) {
+			fIsResizing = true;
+		}
 	}
 
 	@Override
 	public void mouseUp(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		if (fIsResizing) {
+			fIsResizing = false;
+			fCanResize = false;
+		}
 	}
 
 }
