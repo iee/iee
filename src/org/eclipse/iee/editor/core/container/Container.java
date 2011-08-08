@@ -74,7 +74,6 @@ public class Container {
 	
 	
 	private void releaseListeners() {
-		//fStyledText.removeLineStyleListener(fLineStyleListener);
 		fComposite.removeControlListener(fCompositeResizeListener);
 	}
 
