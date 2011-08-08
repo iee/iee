@@ -50,7 +50,7 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 
 	@Override
 	public void mouseMove(MouseEvent e) {
-		int delta = 2;
+		int delta = 5;
 		System.out.println("x = " + e.x);
 		System.out.println("y = " + e.y);
 		Point border = fComposite.getSize();
