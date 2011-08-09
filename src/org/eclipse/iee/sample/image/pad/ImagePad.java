@@ -4,12 +4,9 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
@@ -138,28 +135,15 @@ public class ImagePad extends Pad {
 		}
 
 		/* Initialize controls */
-		// final Image insertedImage = new Image(parent.getDisplay(),
-		// image.getImageData().scaledTo(300,300));
-
-		// final Image insertedImage = image;
 		FillLayout layout = new FillLayout();
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
-		// Canvas photo = new Canvas(parent, SWT.RESIZE);
-		// photo.addPaintListener(new PaintListener() {
-		//
-		// @Override
-		// public void paintControl(PaintEvent e) {
-		// e.gc.drawImage(insertedImage, 0, 0);
-		// }
-		// });
 		Label label = new Label(parent, SWT.NONE);
 		label.setImage(image);
-
 		parent.pack();
 
-		MouseEventManager mouseManager = new MouseEventManager(parent);
+		MouseEventManager mouseManager = new MouseEventManager(parent, label);
 		parent.addMouseTrackListener(mouseManager);
 		parent.addMouseMoveListener(mouseManager);
 		parent.addMouseListener(mouseManager);

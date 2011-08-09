@@ -6,9 +6,11 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class MouseEventManager implements MouseListener, MouseMoveListener,
 		MouseTrackListener {
@@ -20,13 +22,15 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	private Cursor fResizeCursorNESW;
 	private boolean fIsCursorCanBeChanged;
 	private Composite fComposite;
+	private Label fLabel;
 	private boolean fCanResize;
 	private boolean fIsResizing;
 	private boolean fChangeX;
 	private boolean fChangeY;
 
-	public MouseEventManager(final Composite composite) {
+	public MouseEventManager(final Composite composite, final Label label) {
 		fComposite = composite;
+		fLabel = label;
 		fResizeCursorNS = new Cursor(null, SWT.CURSOR_SIZENS);
 		fResizeCursorEW = new Cursor(null, SWT.CURSOR_SIZEWE);
 		fArrowCursor = new Cursor(null, SWT.CURSOR_ARROW);
@@ -201,6 +205,11 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 							beforeResizeBounds.y, newWidth, newHeigth);
 					fComposite.setSize(afterResize);
 					fComposite.setBounds(afterResizeBounds);
+					Image image = fLabel.getImage();
+					
+					final Image resizedImage = new Image(fComposite.getDisplay(),
+					image.getImageData().scaledTo(newWidth, newHeigth));
+					fLabel.setImage(resizedImage);
 					fComposite.redraw();
 				}
 				fIsCursorCanBeChanged = true;
