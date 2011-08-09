@@ -53,9 +53,8 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		public String getColumnText(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return pad.getContainerID();
-			case 1:
-				return pad.getType();
+				return (String) element;
+
 			default:
 				return "unknown " + columnIndex;
 			}
