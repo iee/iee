@@ -74,6 +74,14 @@ public class PadManager extends EventManager {
 		firePadManagerEvent(new PadManagerEvent());
 	}
 	
+	public void savePadsInEditor(String containerManagerID) {
+		String[] containerIDs = fContainerManagers.get(containerManagerID).getContainerIDs();
+		for (String containerID : containerIDs) {			
+			if (fActivePads.contains(containerID)) {
+				fPads.get(containerID).save();
+			}
+		}
+	}
 	
 	public Collection<Pad> selectPadsOfCategory(String category) {
 

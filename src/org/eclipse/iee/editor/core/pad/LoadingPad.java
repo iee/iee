@@ -46,4 +46,9 @@ public class LoadingPad extends Pad {
 	public String getType() {
 		return "Loading Pad";
 	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+	}
 }

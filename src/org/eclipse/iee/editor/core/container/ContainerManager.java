@@ -41,7 +41,6 @@ public class ContainerManager extends EventManager {
 
     /* Public interface */
 
-
     public Object[] getElements() {
         return fContainers.toArray();
     }
@@ -54,8 +53,7 @@ public class ContainerManager extends EventManager {
     	}
     	return containerIDs;
     }
-    
-        
+            
     public void RequestContainerAllocation(String containerID, int offset) {
     	String containerEmbeddedRegion =
     		Container.getInitialTextRegion(containerID);
@@ -67,19 +65,10 @@ public class ContainerManager extends EventManager {
 			e.printStackTrace();
 		}
     }
-    
-  /*  
-    public void RequestContainerRelease(String containerID) {
-    	Container container = fID2ContainerMap.get(containerID);
-    	Assert.isNotNull(container);    	
-    	container.requestTextRegionRelease();
-    }
-  */
-    
+  
     
     /* Functions for observers */
 
-    
     public void addContainerManagerListener(IContainerManagerListener listener) {
         Assert.isNotNull(listener);
         addListenerObject(listener);
@@ -98,14 +87,12 @@ public class ContainerManager extends EventManager {
         }
     }
 
-    
     protected void fireContainerRemoved(ContainerManagerEvent event) {
         Object[] listeners = getListeners();
         for (int i = 0; i < listeners.length; i++) {
         	((IContainerManagerListener) listeners[i]).containerRemoved(event);	
         }
     }
-    
     
     protected void fireDebugNotification(ContainerManagerEvent event) {
         Object[] listeners = getListeners();
@@ -116,7 +103,6 @@ public class ContainerManager extends EventManager {
 
     
     /* Constructor */
-    
     
     public ContainerManager(IDocument document, StyledText styledText) {
     	fContainerManagerID = UUID.randomUUID().toString();
@@ -145,7 +131,6 @@ public class ContainerManager extends EventManager {
     
     /* Presentation update */
     
-    
     void updateContainerPresentaions() {
     	Iterator<Container> it = fContainers.iterator();
     	while (it.hasNext()) {
@@ -157,9 +142,6 @@ public class ContainerManager extends EventManager {
 
     
     /* Document modification event processing */
-    
-    
-//    private boolean allowStyledTextModification;
     
     protected void initDocumentListener() {  
    	

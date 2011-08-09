@@ -22,4 +22,9 @@ public class SamplePad extends Pad {
 	public String getType() {
 		return "Sample Pad";
 	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+	}
 }

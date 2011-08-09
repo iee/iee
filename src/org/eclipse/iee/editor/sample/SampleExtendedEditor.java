@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.sample;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
@@ -58,7 +59,8 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 		}
 	}
 	
-	public void dispose() {		
+	@Override
+	public void dispose() {
 		fPadManager.removeContainerManager(fContainerManager);
 		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManager = null;
@@ -76,5 +78,15 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	
 	public Object[] getElements() {
 		return fContainerManager.getElements();
+	}
+	
+	public void doSave(IProgressMonitor monitor) {
+		fPadManager.savePadsInEditor(fContainerManager.getContainerManagerID());
+		super.doSave(monitor);
+	}
+	
+	public void doSaveAs() {
+		fPadManager.savePadsInEditor(fContainerManager.getContainerManagerID());
+		super.doSaveAs();
 	}
 }

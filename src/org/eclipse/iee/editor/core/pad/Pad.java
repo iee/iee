@@ -82,12 +82,16 @@ public abstract class Pad
 	 */
 	public abstract void createPartControl(Composite parent);
 	
-	
 	/**
 	 * Copy pad with @param containerID
 	 * @return
 	 */
 	public abstract Pad copy();
+	
+	/**
+	 * Save pad
+	 */
+	public abstract void save();
 	
 	/**
 	 * Get type of Pad, type is useful for debug

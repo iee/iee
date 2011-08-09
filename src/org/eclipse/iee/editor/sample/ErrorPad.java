@@ -37,4 +37,9 @@ public class ErrorPad extends Pad {
 	public String getType() {
 		return "Error Pad";
 	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+	}
 }

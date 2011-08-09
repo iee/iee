@@ -38,4 +38,9 @@ public class IdPad extends Pad {
 	public String getType() {
 		return "Id Pad";
 	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+	}
 }
