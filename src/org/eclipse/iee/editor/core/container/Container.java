@@ -96,6 +96,9 @@ public class Container {
 		return fComposite;
 	}
 	
+	public String getContainerManagerID() {	
+	 	return fContainerManager.getContainerManagerID();
+ }
 	
 	public boolean isDisposed() {
 		return fIsDisposed;
