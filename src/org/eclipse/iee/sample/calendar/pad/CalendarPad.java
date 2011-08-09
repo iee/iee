@@ -37,5 +37,10 @@ public class CalendarPad extends Pad {
 		return "Calendar";
 	}
 
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+	}
+
 }
 
