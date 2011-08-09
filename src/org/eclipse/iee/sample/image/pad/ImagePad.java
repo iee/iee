@@ -1,6 +1,9 @@
 package org.eclipse.iee.sample.image.pad;
 
+import java.io.Serializable;
+
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -11,11 +14,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 
-public class ImagePad extends Pad {
+public class ImagePad extends Pad implements Serializable {
 
-	private final int STATE_MENU = 0;
-	private final int STATE_IMAGE = 1;
-	private final int STATE_ERROR = 2;
+	private transient static XmlFilesStorage fXmlFileStorage;		
+
+	public static void setStorage(XmlFilesStorage fStorage) {
+		ImagePad.fXmlFileStorage = fStorage;
+	}
+	
+	private transient static final int STATE_MENU = 0;
+	private transient static final int STATE_IMAGE = 1;
+	private transient static final int STATE_ERROR = 2;
+	
+	private static final long serialVersionUID = -5570698937452800023L;
 
 	private int fCurrentState;
 	protected String fImagePath;
@@ -205,5 +216,10 @@ public class ImagePad extends Pad {
 	@Override
 	public String getType() {
 		return "Image Pad";
+	}
+
+	@Override
+	public void save() {
+		ImagePad.fXmlFileStorage.saveToFile(this);
 	}
 }

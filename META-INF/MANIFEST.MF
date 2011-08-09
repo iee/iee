@@ -7,5 +7,4 @@ Bundle-Activator: org.eclipse.iee.sample.image.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.iee.editor
-Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
