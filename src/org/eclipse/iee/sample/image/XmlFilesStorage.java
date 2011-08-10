@@ -19,6 +19,7 @@ public class XmlFilesStorage {
 	
 	XmlFilesStorage(String directoryPath) {
 		System.out.println("XmlFilesStorage");
+		
 		fDirectoryPath = directoryPath;
 		File storageDirectory = new File(fDirectoryPath);
 		
@@ -53,15 +54,16 @@ public class XmlFilesStorage {
 		}
 	}
 	
-	ImagePad loadFromFile(String name) {
+	ImagePad loadFromFile(String containerID) {
 		System.out.println("loadFromFile");
 		ImagePad pad = null;
 		try {
-			File file = new File(fDirectoryPath + name);
+			File file = new File(fDirectoryPath + containerID);
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			try {
 				pad = (ImagePad) in.readObject();
+				pad.setContainerID(containerID);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
