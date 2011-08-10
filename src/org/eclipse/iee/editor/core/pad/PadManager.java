@@ -145,6 +145,8 @@ public class PadManager extends EventManager {
 			fTemporaryPads.remove(containerID);
 			fPads.remove(containerID);
 
+			container.recreateComposite();
+			
 			/* Adding pad */
 			pad.attachContainer(container);
 			fActivePads.add(containerID);

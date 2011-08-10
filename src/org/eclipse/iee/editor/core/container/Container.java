@@ -14,51 +14,58 @@ import org.eclipse.swt.widgets.Composite;
 
 public class Container {
 
-	private String	  fContainerID;
-	private Position  fPosition;
-	private int 	  fLineNumber;
+	private String fContainerID;
+	private Position fPosition;
+	private int fLineNumber;
 	private Composite fComposite;
 	protected IDocument fDocument;
-	private boolean   fIsDisposed;
-	private boolean   fIsTextRegionReleaseRequested;
-	
+	private boolean fIsDisposed;
+	private boolean fIsTextRegionReleaseRequested;
+
 	protected PartitioningScanner fLineScanner;
 
 	private ControlListener fCompositeResizeListener;
-	
+
 	private StyledText fStyledText;
 	private ContainerManager fContainerManager;
-	
-    private static Queue<Container> fContainerDocumentAccessQueue =
-    	new ConcurrentLinkedQueue<Container>();
-	
-	
+
+	private static Queue<Container> fContainerDocumentAccessQueue = new ConcurrentLinkedQueue<Container>();
+
 	/**
 	 * Creates new container with @param containerID at @param position
+	 * 
 	 * @param position
 	 * @param containerID
 	 */
-	Container(Position position, String containerID, StyledText styledText, IDocument document, ContainerManager containerManager) {
+	Container(Position position, String containerID, StyledText styledText,
+			IDocument document, ContainerManager containerManager) {
 		fPosition = position;
 		fContainerID = containerID;
 		fIsDisposed = false;
 		fIsTextRegionReleaseRequested = false;
-		
+
 		fLineScanner = new PartitioningScanner();
 		fDocument = document;
-		
+
 		fStyledText = styledText;
 		fContainerManager = containerManager;
-		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
-		
+		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset,
+				fDocument);
+
 		fComposite = new Composite(fStyledText, SWT.NONE);
-		
-		initListeners();		
+
+		initListeners();
 		requestTextRegionUpdate();
 	}
-	
-	
-	private void initListeners() {		
+
+	public void recreateComposite() {
+		releaseListeners();
+		fComposite.dispose();
+		fComposite = new Composite(fStyledText, SWT.NONE);
+		setListeners();
+	}
+
+	private void initListeners() {
 		fCompositeResizeListener = new ControlListener() {
 
 			@Override
@@ -66,13 +73,18 @@ public class Container {
 				fStyledText.redraw();
 				fContainerManager.updateContainerPresentations();
 			}
-			
-			@Override public void controlMoved(ControlEvent e) {}
-		};		
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		};
+		setListeners();
+	}
+
+	private void setListeners() {
 		fComposite.addControlListener(fCompositeResizeListener);
 	}
-	
-	
+
 	private void releaseListeners() {
 		fComposite.removeControlListener(fCompositeResizeListener);
 	}
@@ -81,50 +93,48 @@ public class Container {
 		fContainerID = containerID;
 		requestTextRegionUpdate();
 	}
-	
+
 	public String getContainerID() {
 		return fContainerID;
 	}
-	
-	
+
 	public Position getPosition() {
 		return fPosition;
 	}
-	
-	
+
 	public Composite getComposite() {
 		return fComposite;
 	}
-	
-	public String getContainerManagerID() {	
-	 	return fContainerManager.getContainerManagerID();
- }
-	
+
+	public String getContainerManagerID() {
+		return fContainerManager.getContainerManagerID();
+	}
+
 	public boolean isDisposed() {
 		return fIsDisposed;
 	}
-	
+
 	public void requestDispose() {
 		requestTextRegionRelease();
-	}	
-	
+	}
+
 	protected boolean isTextRegionReleaseRequested() {
 		return fIsTextRegionReleaseRequested;
 	}
-	
-	
+
 	/**
 	 * Sets container's position.
+	 * 
 	 * @param offset
 	 * @param length
 	 */
 	void updatePosition(int offset, int length) {
 		fPosition.setOffset(offset);
 		fPosition.setLength(length);
-		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
+		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset,
+				fDocument);
 	}
-	
-	
+
 	/**
 	 * Disposes containers's SWT-composite.
 	 */
@@ -133,17 +143,16 @@ public class Container {
 		fComposite.dispose();
 		fIsDisposed = true;
 	}
-	
-	
+
 	/**
 	 * Sets container's SWT-composite visibility.
+	 * 
 	 * @param isVisiable
-	 */	
+	 */
 	void setVisible(boolean isVisible) {
 		fComposite.setVisible(isVisible);
 	}
-	
-	
+
 	/**
 	 * This function causes container's SWT-composite get into proper position.
 	 */
@@ -151,73 +160,68 @@ public class Container {
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
-		
+
 	}
 
-	
 	@Override
 	public String toString() {
 		return "[" + fContainerID + ", " + fPosition + "]";
 	}
 
-	
 	/* DataAccess */
-	
-	
+
 	/**
 	 * Generates initial text region
+	 * 
 	 * @param containerID
 	 * @return Generated text region
 	 */
 	static String getInitialTextRegion(String containerID) {
-    	return
-    		IConfiguration.EMBEDDED_REGION_BEGINS +
-			containerID +
-			IConfiguration.EMBEDDED_REGION_ENDS;
-    }
-	
-	
+		return IConfiguration.EMBEDDED_REGION_BEGINS + containerID
+				+ IConfiguration.EMBEDDED_REGION_ENDS;
+	}
+
 	/**
-	 * Parses @param textRegion and returns container's id 
+	 * Parses @param textRegion and returns container's id
+	 * 
 	 * @param textRegion
 	 * @return Container's id
 	 */
 	static String getContainerIDFromTextRegion(String textRegion) {
 		int from = IConfiguration.EMBEDDED_REGION_BEGINS.length();
 		int to = textRegion.indexOf(IConfiguration.EMBEDDED_REGION_ENDS);
-		
+
 		try {
 			return textRegion.substring(from, to);
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
 	}
-	
-	
+
 	/**
-	 * This function is called by ContainerManager when document modification is allowed.
+	 * This function is called by ContainerManager when document modification is
+	 * allowed.
+	 * 
 	 * @param document
 	 */
 	static void processNextDocumentAccessRequest(IDocument document) {
 		Container container = fContainerDocumentAccessQueue.poll();
 		if (container != null) {
-		   	if (container.isTextRegionReleaseRequested()) {
-		   		container.releaseTextRegion(document);
-		   	} else {
-		   		container.writeContentToTextRegion(document);
-		   	}
+			if (container.isTextRegionReleaseRequested()) {
+				container.releaseTextRegion(document);
+			} else {
+				container.writeContentToTextRegion(document);
+			}
 		}
 	}
-	
-	
+
 	/**
-	 *  Requests container's text region updating
-	 */	
+	 * Requests container's text region updating
+	 */
 	void requestTextRegionUpdate() {
 		fContainerDocumentAccessQueue.add(this);
 	}
-	
-	
+
 	/**
 	 * Requests container's text region release
 	 */
@@ -226,20 +230,20 @@ public class Container {
 		fContainerDocumentAccessQueue.add(this);
 	}
 
-	
 	/**
-	 *  This function is called by ContainerManager which puts Container data to Document 
+	 * This function is called by ContainerManager which puts Container data to
+	 * Document
 	 */
 	protected void writeContentToTextRegion(IDocument document) {
 		System.out.println("writeContentToTextRegion");
-		
+
 		int from = fPosition.getOffset()
-			+ IConfiguration.EMBEDDED_REGION_BEGINS.length();
-		
+				+ IConfiguration.EMBEDDED_REGION_BEGINS.length();
+
 		int length = fPosition.getLength()
-			- IConfiguration.EMBEDDED_REGION_BEGINS.length()
-			- IConfiguration.EMBEDDED_REGION_ENDS.length();
-				
+				- IConfiguration.EMBEDDED_REGION_BEGINS.length()
+				- IConfiguration.EMBEDDED_REGION_ENDS.length();
+
 		try {
 			document.replace(from, length, fContainerID);
 		} catch (BadLocationException e) {
@@ -247,10 +251,11 @@ public class Container {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
-	 * Removes container's text region from document. This function is called from ContainerManager
+	 * Removes container's text region from document. This function is called
+	 * from ContainerManager
+	 * 
 	 * @param document
 	 */
 	protected void releaseTextRegion(IDocument document) {
@@ -260,34 +265,31 @@ public class Container {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Get container's line number
-	 */	
-	public int getLineNumber()
-	{
+	 */
+	public int getLineNumber() {
 		return fLineNumber;
 	}
 
-	
-    /* Functions for comparator */
+	/* Functions for comparator */
 
-	
 	/**
-	 * Creates temporary container with position at @param offset, used for comparison
-	 * @return Temporary container at @param offset  
+	 * Creates temporary container with position at @param offset, used for
+	 * comparison
+	 * 
+	 * @return Temporary container at @param offset
 	 */
 	static Container atOffset(int offset) {
 		return new Container(new Position(offset, 0));
 	}
-	
-	
+
 	/**
 	 * Private constructor for temporary containers, used for comparison
 	 */
 	private Container(Position position) {
 		fPosition = position;
 	}
-	
-	
+
 }

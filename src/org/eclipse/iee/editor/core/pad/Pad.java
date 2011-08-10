@@ -19,7 +19,7 @@ public abstract class Pad {
 		fContainerID = id;
 	}
 
-	void setContainerID(String containerID) {
+	public void setContainerID(String containerID) {
 		fContainerID = containerID;
 	}
 
