@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.sample.math.FileStorage;
 import org.matheclipse.core.eval.EvalEngine;
 import org.matheclipse.core.eval.EvalUtilities;
 import org.matheclipse.core.eval.TeXUtilities;
@@ -31,10 +32,11 @@ public class MathPad extends Pad implements Serializable {
 	private String fExpression;
 	private boolean fIsTextVisible;
 	private boolean fIsFirstLaunch;
+	private transient static FileStorage fFileStorage;
 
 	public MathPad() {
 		super();
-		fImagePath = this.getContainerID() + ".jpg";
+		fImagePath = fFileStorage.getDirectoryPath() + this.getContainerID() + ".jpg";
 		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
 		fIsFirstLaunch = true;
@@ -193,11 +195,15 @@ public class MathPad extends Pad implements Serializable {
 
 	protected MathPad(String containerID) {
 		super(containerID);
-		fImagePath = containerID + ".jpg";
+		fImagePath = fFileStorage.getDirectoryPath() + containerID + ".jpg";
 		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
 		fIsFirstLaunch = true;
 		save();
+	}
+
+	public static void setStorage(FileStorage fStorage) {
+		MathPad.fFileStorage = fStorage;
 	}
 
 	@Override
@@ -239,40 +245,11 @@ public class MathPad extends Pad implements Serializable {
 	// Save&Load operations, use it for serialization
 
 	public void save() {
-		try {
-			FileOutputStream fos = new FileOutputStream(this.getContainerID()
-					+ ".bin");
-			ObjectOutputStream out = new ObjectOutputStream(fos);
-			out.writeObject(this);
-			out.close();
-			fos.close();
-		} catch (IOException i) {
-			i.printStackTrace();
-		}
-	}
-
-	public MathPad load() {
-		MathPad loadedPad = null;
-		try {
-			FileInputStream fis = new FileInputStream(this.getContainerID()
-					+ ".bin");
-			ObjectInputStream in = new ObjectInputStream(fis);
-			try {
-				loadedPad = (MathPad) in.readObject();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			in.close();
-			fis.close();
-		} catch (IOException i) {
-			i.printStackTrace();
-		}
-		return loadedPad;
+		MathPad.fFileStorage.saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		// TODO Auto-generated method stub
+		MathPad.fFileStorage.removeFile(getContainerID());
 	}
 }

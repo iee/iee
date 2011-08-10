@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.math;
 
+import org.eclipse.iee.sample.math.pad.MathPad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -19,6 +20,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	 * The constructor
 	 */
 	public Activator() {
+		MathPad.setStorage(new FileStorage("D:\\MathPads\\"));
 	}
 
 	/*
