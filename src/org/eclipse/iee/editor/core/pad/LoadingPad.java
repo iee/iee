@@ -52,4 +52,10 @@ public class LoadingPad extends Pad {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void unsave() {
+		// TODO Auto-generated method stub
+
+	}
 }

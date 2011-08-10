@@ -86,6 +86,10 @@ public class PadManager extends EventManager {
 				fPads.get(containerID).save();
 			}
 		}
+		/* Remove storages of all suspended pads */
+		for (String containerID : fSuspendedPads) {
+			fPads.get(containerID).unsave();
+		}
 	}
 
 	public Collection<Pad> selectPadsOfCategory(String category) {
@@ -113,12 +117,11 @@ public class PadManager extends EventManager {
 	public Object[] getTemporaryPads() {
 		return fTemporaryPads.toArray();
 	}
-	
+
 	/*
 	 * Gets pad using its id
 	 */
-	public Pad getPadById(String id)
-	{
+	public Pad getPadById(String id) {
 		return fPads.get(id);
 	}
 
@@ -146,7 +149,7 @@ public class PadManager extends EventManager {
 			fPads.remove(containerID);
 
 			container.recreateComposite();
-			
+
 			/* Adding pad */
 			pad.attachContainer(container);
 			fActivePads.add(containerID);

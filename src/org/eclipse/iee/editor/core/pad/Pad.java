@@ -80,6 +80,11 @@ public abstract class Pad {
 	public abstract void save();
 
 	/**
+	 * Remove pad's storage
+	 */
+	public abstract void unsave();
+
+	/**
 	 * Get type of Pad, type is useful for debug
 	 * 
 	 * @return
