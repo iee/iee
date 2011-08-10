@@ -85,6 +85,11 @@ public class PadManager extends EventManager {
 				fPads.get(containerID).save();
 			}
 		}
+		
+		/* Remove storages of all suspended pads */
+		for (String containerID : fSuspendedPads) {
+			fPads.get(containerID).unsave();
+		}
 	}
 	
 	public Collection<Pad> selectPadsOfCategory(String category) {

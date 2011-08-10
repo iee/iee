@@ -64,7 +64,6 @@ public class Container {
 		setListeners();
 	}
 	
-	
 	private void initListeners() {
 		fLineStyleListener = new LineStyleListener() {
 			@Override
