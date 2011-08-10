@@ -52,12 +52,12 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			Pad pad = (Pad) element;
+			//Pad pad = (Pad) element;
 			switch (columnIndex) {
 			case 0:
 				return (String) element;
 			case 1:
-				return pad.getType();
+				return fPadManager.getPadById((String) element).getType();
 			default:
 				return "unknown " + columnIndex;
 			}
