@@ -280,21 +280,21 @@ public class ContainerManager extends EventManager {
 						lineNumber).iterator();
 
 				// First cycle - looking for max ascent in containers
-				System.out
-						.println("Line offset:"
-								+ event.lineOffset
-								+ "########################################################################");
-				System.out
-						.println("Line number:"
-								+ lineNumber
-								+ "************************************************************************");
+//				System.out
+//						.println("Line offset:"
+//								+ event.lineOffset
+//								+ "########################################################################");
+//				System.out
+//						.println("Line number:"
+//								+ lineNumber
+//								+ "************************************************************************");
 				// clear, because container can be moved to another line or
 				// deleted
 				clearLineMaxAscents();
 				while (containerIterator2.hasNext()) {
 					Container c = (Container) containerIterator2.next();
-					System.out.println("PadSize:"
-							+ c.getComposite().getSize().y);
+					//System.out.println("PadSize:"
+					//		+ c.getComposite().getSize().y);
 					if (c.getComposite().getSize().y > getMaxContainerAscentByLine(lineNumber)) {
 						putMaxContainerAscentToMap(lineNumber, c.getComposite()
 								.getSize().y);
@@ -305,8 +305,8 @@ public class ContainerManager extends EventManager {
 				// Second cycle - Setting max ascent for styles
 				while (stylesIterator.hasNext()) {
 					StyleRange style = (StyleRange) stylesIterator.next();
-					System.out.println("MaxPadSize:"
-							+ getMaxContainerAscentByLine(lineNumber));
+					//System.out.println("MaxPadSize:"
+					//		+ getMaxContainerAscentByLine(lineNumber));
 					if (style.metrics != null)
 						style.metrics.ascent = getMaxContainerAscentByLine(lineNumber);
 					style.background = fStyledText.getBackground();

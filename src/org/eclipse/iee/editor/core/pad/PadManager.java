@@ -113,6 +113,14 @@ public class PadManager extends EventManager {
 	public Object[] getTemporaryPads() {
 		return fTemporaryPads.toArray();
 	}
+	
+	/*
+	 * Gets pad using its id
+	 */
+	public Pad getPadById(String id)
+	{
+		return fPads.get(id);
+	}
 
 	/**
 	 * Called when external plug-in needs to load pad that was created before.
