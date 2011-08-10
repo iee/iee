@@ -53,8 +53,25 @@ public class XmlFilesStorage {
 			e.printStackTrace();
 		}
 	}
+
+	public void loadAllFiles(File storageDirectory) {
+		System.out.println("loadAllFiles");		
+		for (String name : storageDirectory.list()) {
+			Pad pad = loadFromFile(name);
+			if (pad != null) {
+				fPadManager.loadPad(pad);
+			}
+		}
+	}
 	
-	ImagePad loadFromFile(String containerID) {
+	public void removeFile(String containerID) {
+		File file = new File(fDirectoryPath + containerID);
+		if (file.exists())  {
+			file.delete();
+		}
+	}
+	
+	protected ImagePad loadFromFile(String containerID) {
 		System.out.println("loadFromFile");
 		ImagePad pad = null;
 		try {
@@ -74,15 +91,5 @@ public class XmlFilesStorage {
 			e.printStackTrace();
 		}
 		return pad;
-	}
-	
-	void loadAllFiles(File storageDirectory) {
-		System.out.println("loadAllFiles");		
-		for (String name : storageDirectory.list()) {
-			Pad pad = loadFromFile(name);
-			if (pad != null) {
-				fPadManager.loadPad(pad);
-			}
-		}
 	}
 }

@@ -222,4 +222,10 @@ public class ImagePad extends Pad implements Serializable {
 	public void save() {
 		ImagePad.fXmlFileStorage.saveToFile(this);
 	}
+
+	@Override
+	public void unsave() {
+		ImagePad.fXmlFileStorage.removeFile(getContainerID());
+		
+	}
 }

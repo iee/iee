@@ -1,13 +1,14 @@
 package org.eclipse.iee.sample.image;
 
 import org.eclipse.iee.sample.image.pad.ImagePad;
+import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin implements IStartup {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.iee.sample.image";
@@ -47,6 +48,11 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
+	}
+
+	@Override
+	public void earlyStartup() {
+		// TODO Auto-generated method stub
 	}
 
 }
