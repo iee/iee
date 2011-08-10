@@ -271,4 +271,8 @@ public class MathPad extends Pad implements Serializable {
 		return loadedPad;
 	}
 
+	@Override
+	public void unsave() {
+		// TODO Auto-generated method stub
+	}
 }
