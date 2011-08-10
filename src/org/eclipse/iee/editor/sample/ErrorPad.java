@@ -12,11 +12,11 @@ public class ErrorPad extends Pad {
 	public ErrorPad() {
 		super();
 	}
-	
+
 	public ErrorPad(String containerID) {
 		super(containerID);
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
@@ -36,5 +36,11 @@ public class ErrorPad extends Pad {
 	@Override
 	public String getType() {
 		return "Error Pad";
+	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+
 	}
 }

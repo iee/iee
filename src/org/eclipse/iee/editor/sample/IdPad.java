@@ -12,17 +12,17 @@ public class IdPad extends Pad {
 	public IdPad() {
 		super();
 	}
-	
+
 	public IdPad(String containerID) {
 		super(containerID);
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
 
 		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
-				
+
 		label.setText(getContainerID());
 		label.setSize(200, 100);
 		label.setBackground(new Color(parent.getDisplay(), 100, 0, 0));
@@ -37,5 +37,11 @@ public class IdPad extends Pad {
 	@Override
 	public String getType() {
 		return "Id Pad";
+	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+
 	}
 }

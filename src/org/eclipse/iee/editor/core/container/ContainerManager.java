@@ -81,12 +81,6 @@ public class ContainerManager extends EventManager {
 		}
 	}
 
-	/*
-	 * public void RequestContainerRelease(String containerID) { Container
-	 * container = fID2ContainerMap.get(containerID);
-	 * Assert.isNotNull(container); container.requestTextRegionRelease(); }
-	 */
-
 	/* Functions for observers */
 
 	public void addContainerManagerListener(IContainerManagerListener listener) {
@@ -177,8 +171,6 @@ public class ContainerManager extends EventManager {
 	}
 
 	/* Document modification event processing */
-
-	// private boolean allowStyledTextModification;
 
 	protected void initDocumentListener() {
 
@@ -434,7 +426,8 @@ public class ContainerManager extends EventManager {
 
 				/* For debug */
 
-				 fireDebugNotification(new ContainerManagerEvent(null, fContainerManagerID));
+				fireDebugNotification(new ContainerManagerEvent(null,
+						fContainerManagerID));
 			}
 
 			private void onPartitioningChanged(DocumentEvent event,
@@ -462,7 +455,8 @@ public class ContainerManager extends EventManager {
 							// XXX remove container
 
 							container.dispose();
-							fireContainerRemoved(new ContainerManagerEvent(container, fContainerManagerID));
+							fireContainerRemoved(new ContainerManagerEvent(
+									container, fContainerManagerID));
 						}
 					}
 				}
@@ -491,7 +485,8 @@ public class ContainerManager extends EventManager {
 								containerID);
 
 						fContainers.add(container);
-						fireContainerCreated(new ContainerManagerEvent(container, fContainerManagerID));
+						fireContainerCreated(new ContainerManagerEvent(
+								container, fContainerManagerID));
 					}
 					offset += region.getLength();
 				}
