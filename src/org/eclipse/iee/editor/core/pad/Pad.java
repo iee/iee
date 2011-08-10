@@ -24,7 +24,7 @@ public abstract class Pad
 	}
 	
 	
-	void setContainerID(String containerID) {
+	public void setContainerID(String containerID) {
 		fContainerID = containerID;
 	}
 	
@@ -70,7 +70,7 @@ public abstract class Pad
 	{
 		Assert.isLegal(isContainerAttached(), "No container attached");
 		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
-		
+			
 		fContainer = null;
 	}
 	

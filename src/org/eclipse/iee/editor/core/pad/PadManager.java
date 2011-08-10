@@ -51,6 +51,10 @@ public class PadManager extends EventManager {
 	
 	/* Public interface */
 	
+	public Pad getPad(String containerID) {
+		return fPads.get(containerID);
+	}
+	
 	/**
 	 * Called by editor to make connection with it's ContainerManager
 	 * @param containerManager
@@ -135,6 +139,8 @@ public class PadManager extends EventManager {
 			temporary.detachContainer();
 			fTemporaryPads.remove(containerID);
 			fPads.remove(containerID);
+			
+			container.recreateComposite();
 			
 			/* Adding pad */
 			pad.attachContainer(container);

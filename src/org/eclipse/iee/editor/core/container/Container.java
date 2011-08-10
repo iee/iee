@@ -56,6 +56,14 @@ public class Container {
 		requestTextRegionUpdate();
 	}
 	
+	public void recreateComposite() {
+		releaseListeners();
+		fComposite.dispose();
+		
+		fComposite = new Composite(fStyledText, SWT.NONE);
+		setListeners();
+	}
+	
 	
 	private void initListeners() {
 		fLineStyleListener = new LineStyleListener() {
@@ -78,22 +86,23 @@ public class Container {
 				}
 			}
 		};
-		fStyledText.addLineStyleListener(fLineStyleListener);
-		
 		
 		fCompositeResizeListener = new ControlListener() {
-
 			@Override
 			public void controlResized(ControlEvent e) {
 				fStyledText.redraw();
 				fContainerManager.updateContainerPresentaions();
-			}
-			
+			}			
 			@Override public void controlMoved(ControlEvent e) {}
 		};		
-		fComposite.addControlListener(fCompositeResizeListener);
+
+		setListeners();
 	}
 	
+	private void setListeners() {
+		fStyledText.addLineStyleListener(fLineStyleListener);
+		fComposite.addControlListener(fCompositeResizeListener);	
+	}
 	
 	private void releaseListeners() {
 		fStyledText.removeLineStyleListener(fLineStyleListener);
