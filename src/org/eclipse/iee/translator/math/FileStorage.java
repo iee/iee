@@ -35,11 +35,10 @@ public class FileStorage {
 		}
 	}
 
-	public String getDirectoryPath()
-	{
+	public String getDirectoryPath() {
 		return fDirectoryPath;
 	}
-	
+
 	public void saveToFile(CompiledMathPad pad) {
 		System.out.println("saveToFile");
 		try {

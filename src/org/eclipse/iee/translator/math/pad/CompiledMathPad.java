@@ -2,6 +2,7 @@ package org.eclipse.iee.translator.math.pad;
 
 import java.io.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.iee.editor.core.pad.Pad;
@@ -9,10 +10,13 @@ import org.eclipse.iee.translator.math.FileStorage;
 
 public class CompiledMathPad extends Pad implements Serializable {
 
-		private transient static FileStorage fFileStorage;
+	private transient static FileStorage fFileStorage;
+
+	private String fText;
 
 	public CompiledMathPad() {
 		super();
+		fText = "";
 		save();
 	}
 
@@ -22,11 +26,14 @@ public class CompiledMathPad extends Pad implements Serializable {
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
-		
+		StyledText styledText = new StyledText(parent, SWT.NONE);
+		styledText.setText(fText);
+
 	}
 
 	protected CompiledMathPad(String containerID) {
 		super(containerID);
+		fText = "";
 		save();
 	}
 
@@ -37,7 +44,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 	@Override
 	public Pad copy() {
 		CompiledMathPad newPad = new CompiledMathPad();
-		newPad = this;
+		newPad.fText = this.fText;
 		return newPad;
 	}
 

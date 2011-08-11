@@ -13,30 +13,31 @@ import org.eclipse.ui.IEditorPart;
 public class AddCompiledMathPadActionDelegate implements IEditorActionDelegate {
 
 	Shell shell = null;
-	
+
 	SampleExtendedEditor fSampleExtendedEditor;
-	
+
 	@Override
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		
+
 		if (targetEditor instanceof SampleExtendedEditor) {
 			fSampleExtendedEditor = (SampleExtendedEditor) targetEditor;
-        }
+		}
 	}
 
 	@Override
 	public void run(IAction action) {
-		Shell[] shells = Display.getCurrent().getShells();        
+		Shell[] shells = Display.getCurrent().getShells();
 		if (shells.length > 0) {
-            shell = shells[0];
-        }
-        
+			shell = shells[0];
+		}
+
 		if (fSampleExtendedEditor == null) {
-            MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
-            return;
-        }
-		
-		fSampleExtendedEditor.createPad(new CompiledMathPad(), fSampleExtendedEditor.getCaretOffset());
+			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
+			return;
+		}
+
+		fSampleExtendedEditor.createPad(new CompiledMathPad(),
+				fSampleExtendedEditor.getCaretOffset());
 	}
 
 	@Override
