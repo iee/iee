@@ -41,7 +41,7 @@ public class Compiler {
 	    
 	    FileOutputStream file;
 		try {
-			file = new FileOutputStream(new File("D:\\CompiledMathPads\\RunnableMath.class"));
+			file = new FileOutputStream(new File("D:\\runtime-EclipseApplication\\Mole-j\\bytecode\\RunnableMath.class"));
 			file.write(fClassWriter.toByteArray());
 			file.close();
 		} catch (IOException e) {
@@ -56,7 +56,7 @@ public class Compiler {
 			Iterator<INode> statement = node.f0.elements();
 			
 			while (statement.hasNext()) {
-				mCurrentVisitor = fClassWriter.visitMethod(ACC_PUBLIC, "math" + mathExpressionCount, "()I", null, null);
+				mCurrentVisitor = fClassWriter.visitMethod(ACC_PUBLIC | ACC_STATIC, "math" + mathExpressionCount, "()I", null, null);
 				mCurrentVisitor.visitCode();
 				mCurrentVisitor.visitInsn(ICONST_0);
 				mCurrentVisitor.visitVarInsn(ISTORE, 1);

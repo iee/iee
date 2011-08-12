@@ -2,6 +2,8 @@ package org.eclipse.iee.translator.math.pad;
 
 import java.io.Serializable;
 
+import mole.Mole;
+
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.translator.math.FileStorage;
 import org.eclipse.swt.SWT;
@@ -46,9 +48,9 @@ public class CompiledMathPad extends Pad implements Serializable {
 				  
 				 */
 				
-				getContainer().writeAtContainerRegionTail(
-					"System.out.println(\"" + styledText.getText() + "\");"
-				);
+				Mole.translateMath(styledText.getText());
+				
+				getContainer().writeAtContainerRegionTail("System.out.println(Integer.toString(RunnableMath.math0()));");
 			}
 			
 		});		

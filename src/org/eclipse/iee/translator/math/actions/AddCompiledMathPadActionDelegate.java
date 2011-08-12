@@ -37,8 +37,6 @@ public class AddCompiledMathPadActionDelegate implements IEditorActionDelegate {
 			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
 			return;
 		}
-
-		Mole.translateMath("1+2;");
 		
 		fSampleExtendedEditor.createPad(new CompiledMathPad(),
 				fSampleExtendedEditor.getCaretOffset());
