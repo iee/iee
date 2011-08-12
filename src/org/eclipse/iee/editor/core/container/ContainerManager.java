@@ -65,7 +65,10 @@ public class ContainerManager extends EventManager {
 			e.printStackTrace();
 		}
     }
-  
+    
+    public IDocument getDocument() {
+    	return fDocument;
+    }  
     
     /* Functions for observers */
 
@@ -171,10 +174,10 @@ public class ContainerManager extends EventManager {
     	fStyledText.addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				if (getContainerHavingOffset(e.caretOffset) != null) {
-					int lineBeginOffset = fStyledText.getOffsetAtLine(fStyledText.getLineAtOffset(e.caretOffset));
-					fStyledText.setCaretOffset(lineBeginOffset);
-				}
+				//int begin = getBeginOfContainerRegion(e.caretOffset);
+				//if (begin != -1) {
+				//	fStyledText.setCaretOffset(begin);
+				//}
 			}    		
     	});
     	
@@ -376,6 +379,21 @@ public class ContainerManager extends EventManager {
     		return c;
     	}
     	return null;
+    }
+    
+    protected int getBeginOfContainerRegion(int offset) {
+		try {	    	
+	    	Container c = fContainers.lower(Container.atOffset(offset));
+			int	lineNumber = fDocument.getLineOfOffset(offset);
+	
+	    	if (c != null && fDocument.getLineOfOffset(c.getPosition().getOffset()) == lineNumber) {
+	    		return c.getPosition().getOffset();
+	    	}
+	    	
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+    	return -1;
     }
     
     protected Container createContainer(Position position, String containerID) {

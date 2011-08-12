@@ -71,7 +71,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	public void createPad(Pad pad, int location) {
 		fPadManager.insertPad(pad, location, fContainerManager);	
 	}
-	
+		
 	public int getCaretOffset() {
 		return getSourceViewer().getTextWidget().getCaretOffset();
 	}

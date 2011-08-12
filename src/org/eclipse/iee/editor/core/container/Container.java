@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.LineStyleEvent;
@@ -68,17 +69,23 @@ public class Container {
 		fLineStyleListener = new LineStyleListener() {
 			@Override
 			public void lineGetStyle(LineStyleEvent e) {
-				String containerID = getContainerIDFromTextRegion(e.lineText);				
+				int begin = e.lineText.indexOf(IConfiguration.EMBEDDED_REGION_BEGINS);
+				if (begin == -1) {
+					return;
+				}
+				
+				String containerID = getContainerIDFromTextRegion(e.lineText.substring(begin));				
 				if (containerID != null && containerID.equals(fContainerID)) {
 					StyleRange compositeStyle = new StyleRange();
-					compositeStyle.start = e.lineOffset;
+					compositeStyle.start = e.lineOffset + begin;
 					compositeStyle.length = 1;
 					compositeStyle.metrics = new GlyphMetrics(
-						fComposite.getSize().y, 0, fComposite.getSize().x);
+						//fComposite.getSize().y, 0, fComposite.getSize().x);
+						0 , fComposite.getSize().y, fComposite.getSize().x);
 					
 					StyleRange hiddenTextStyle = new StyleRange();
-					hiddenTextStyle.start = e.lineOffset + 1;
-					hiddenTextStyle.length = e.lineText.length() - 1;
+					hiddenTextStyle.start = e.lineOffset + begin + 1;
+					hiddenTextStyle.length = e.lineText.length() - begin - 1;
 					hiddenTextStyle.metrics = new GlyphMetrics(0, 0, 0);
 					
 					e.styles = new StyleRange[] { compositeStyle, hiddenTextStyle };
@@ -123,6 +130,28 @@ public class Container {
 	}
 	
 	
+	public void writeAtContainerRegionTail(String text) {
+		IDocument doc = fContainerManager.getDocument();
+		int tail = fPosition.getOffset() + fPosition.getLength();
+		
+		try {
+			IRegion region = doc.getLineInformation(doc.getLineOfOffset(tail));
+			int endOfLine = region.getOffset() + region.getLength();
+			
+			//if (endOfLine > tail) {
+			//	endOfLine -= 1; // without delimiter character
+			//}
+			
+			System.out.println("from: " + tail + " to: " + endOfLine);
+			
+			fContainerManager.getDocument().replace(tail, endOfLine - tail, text);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+		
 	public Composite getComposite() {
 		return fComposite;
 	}
