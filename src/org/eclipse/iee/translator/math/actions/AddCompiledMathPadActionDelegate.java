@@ -1,5 +1,7 @@
 package org.eclipse.iee.translator.math.actions;
 
+import mole.Mole;
+
 import org.eclipse.iee.editor.sample.SampleExtendedEditor;
 import org.eclipse.iee.translator.math.pad.CompiledMathPad;
 import org.eclipse.jface.action.IAction;
@@ -36,6 +38,8 @@ public class AddCompiledMathPadActionDelegate implements IEditorActionDelegate {
 			return;
 		}
 
+		Mole.translateMath("1+2;");
+		
 		fSampleExtendedEditor.createPad(new CompiledMathPad(),
 				fSampleExtendedEditor.getCaretOffset());
 	}
