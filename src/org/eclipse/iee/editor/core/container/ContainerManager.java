@@ -68,7 +68,7 @@ public class ContainerManager extends EventManager {
     
     public IDocument getDocument() {
     	return fDocument;
-    }  
+    }
     
     /* Functions for observers */
 
@@ -195,6 +195,7 @@ public class ContainerManager extends EventManager {
             
             @Override
             public void documentPartitioningChanged(DocumentPartitioningChangedEvent event) {
+                System.out.println("Partitioning changed: " + event.getChangedRegion(IConfiguration.PARTITIONING_ID));
             	fChangedPartitioningRegion = event.getChangedRegion(IConfiguration.PARTITIONING_ID);
             }
    
@@ -272,10 +273,10 @@ public class ContainerManager extends EventManager {
                 
                 fChangedPartitioningRegion = null;
                 
-                System.out.println("Iteration");
+                System.out.println("Iteration: " + event.getText());
                 
             	Container.processNextDocumentAccessRequest(fDocument);
-                updateContainerPresentaions();
+            	updateContainerPresentaions();
             	     	
                 /* For debug */
                 
@@ -308,7 +309,9 @@ public class ContainerManager extends EventManager {
 
                 /* Scanning for new containers */
 
-                int offset = beginRegionOffset;
+                
+                //int offset = beginRegionOffset;
+                int offset = Math.max(event.getOffset(), fChangedPartitioningRegion.getOffset());
                 while (offset < fChangedPartitioningRegion.getOffset() + fChangedPartitioningRegion.getLength()) {
                     ITypedRegion region = ((IDocumentExtension3) fDocument)
                         .getPartition(IConfiguration.PARTITIONING_ID, offset, false);
@@ -325,7 +328,7 @@ public class ContainerManager extends EventManager {
                         	new Position(region.getOffset(), region.getLength()),
                         	containerID);
                         
-                        fContainers.add(container);                        
+                        fContainers.add(container);
                         fireContainerCreated(new ContainerManagerEvent(container, fContainerManagerID));
                     }
                     offset += region.getLength();
