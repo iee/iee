@@ -157,7 +157,6 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	public void mouseUp(MouseEvent e) {
 		if (e.button == 1)
 			if (fIsResizing) {
-				// maybe unusefull
 				Point beforeResize = fComposite.getSize();
 				Rectangle beforeResizeBounds = fComposite.getBounds();
 				/*
@@ -169,16 +168,16 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 					Rectangle afterResizeBounds = null;
 					int newWidth = 0;
 					int newHeigth = 0;
-					if (fCanResize && fChangeY) {
+					if (fChangeX && fChangeY) {
 						// To prevent appearance of uninformative pad
-						if (e.x < 70) {
+						if (e.x < 70)
 							newWidth = 70;
-						} else if (e.y < 70) {
-							newHeigth = 70;
-						} else {
+						else
 							newWidth = e.x;
+						if (e.y < 70)
+							newHeigth = 70;
+						else
 							newHeigth = e.y;
-						}
 					}
 					if (fChangeX && !fChangeY) {
 						newHeigth = beforeResize.y;
@@ -204,9 +203,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 					fComposite.setSize(afterResize);
 					fComposite.setBounds(afterResizeBounds);
 					Image image = fLabel.getImage();
-					
-					final Image resizedImage = new Image(fComposite.getDisplay(),
-					image.getImageData().scaledTo(newWidth, newHeigth));
+
+					final Image resizedImage = new Image(
+							fComposite.getDisplay(), image.getImageData()
+									.scaledTo(newWidth, newHeigth));
 					fLabel.setImage(resizedImage);
 					fComposite.redraw();
 				}
