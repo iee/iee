@@ -72,10 +72,12 @@ public class Container {
 			public void controlResized(ControlEvent e) {
 				fStyledText.redraw();
 				fContainerManager.updateContainerPresentations();
+
 			}
 
 			@Override
 			public void controlMoved(ControlEvent e) {
+				fStyledText.redraw();
 			}
 		};
 		setListeners();

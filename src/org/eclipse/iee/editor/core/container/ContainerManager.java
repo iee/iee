@@ -464,7 +464,8 @@ public class ContainerManager extends EventManager {
 
 				/* Scanning for new containers */
 
-				int offset = beginRegionOffset;
+				//int offset = beginRegionOffset;
+				int offset = Math.max(event.getOffset(), fChangedPartitioningRegion.getOffset());
 				while (offset < fChangedPartitioningRegion.getOffset()
 						+ fChangedPartitioningRegion.getLength()) {
 					ITypedRegion region = ((IDocumentExtension3) fDocument)
