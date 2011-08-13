@@ -233,6 +233,7 @@ public class ContainerManager extends EventManager {
 						event.lineText.length());
 				int lineNumber = 0;
 				try {
+					fLineTracker.set(fDocument.get());
 					lineNumber = fLineTracker
 							.getLineNumberOfOffset(event.lineOffset) + 1;
 				} catch (BadLocationException e) {
