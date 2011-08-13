@@ -218,15 +218,11 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 						if (newHeigth < 70)
 							newHeigth = 70;
 					}
-					//Now the case is unreached
+					// Now the case is unreached
 					if (!fChangeWidth && !fChangeHeigth) {
 						newWidth = beforeResize.x;
 						newHeigth = beforeResize.y;
 					}
-					System.out.println("NewLocationX - "+ newLocationX);
-					System.out.println("NewLocationY - "+ newLocationY);
-					System.out.println("newWidth - "+ newWidth);
-					System.out.println("newHeigth - "+ newHeigth);
 					afterResize = new Point(newWidth, newHeigth);
 					afterResizeBounds = new Rectangle(newLocationX,
 							newLocationY, newWidth, newHeigth);
