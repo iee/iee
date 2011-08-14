@@ -1,0 +1,55 @@
+/*
+ * SWTGraph - a set of SWT Graphs and Charts
+ * Copyright (C) 2006  Felipe Santos Andrade
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * For more information, see http://swtgraph.sourceforge.net/license.php
+ * You can also contact author through lipeandrade@users.sourceforge.net
+ */
+
+package org.eclipse.iee.sample.graph.alien.elements;
+
+import org.eclipse.swt.graphics.Color;
+
+public class CartesianLabeledPoint extends CartesianPoint {
+	
+	private String label;
+	
+	private Color labelColor;
+	
+	public CartesianLabeledPoint(Float x, Float y) {
+		super(x, y);
+	}
+
+	public CartesianLabeledPoint(Float x, Float y, String label) {
+		super(x, y);
+		this.label = label;
+	}
+
+	
+	public String getLabel() {
+		return label;
+	}
+
+	public Color getLabelColor() {
+		return labelColor;
+	}
+
+	public void setLabelColor(Color labelColor) {
+		this.labelColor = labelColor;
+	}
+	
+}
