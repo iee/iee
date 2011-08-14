@@ -9,6 +9,7 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -40,52 +41,66 @@ public class GraphPad extends Pad implements Serializable {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		GridLayout layout = new GridLayout(13, false);
-		layout.marginHeight = 5;
-		layout.marginWidth = 5;
+		GridLayout layout = new GridLayout(14, false);
 		parent.setLayout(layout);
 
-		new Label(parent, SWT.NONE).setText("f(x) = ");
+		final Label titleLabel = new Label(parent, SWT.BOLD);
+		titleLabel
+				.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
+		titleLabel.setText("Sample Graph Plotter");
+
+		final Label functionLabel = new Label(parent, SWT.NONE);
+		functionLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
+				false));
+		functionLabel.setText("f(x) = ");
 
 		final Text function = new Text(parent, SWT.BORDER);
 		function.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		function.setText("");
 
-		new Label(parent, SWT.NONE).setText("# points: ");
+		new Label(parent, SWT.NONE).setText("#(points): ");
 
 		final Text points = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		points.setLayoutData(new GridData(50, SWT.DEFAULT));
+		points.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		points.setText("100");
 
-		new Label(parent, SWT.NONE).setText("from");
+		new Label(parent, SWT.NONE).setText("From");
 
 		final Text initialValue = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		final GridData gd_initialValue = new GridData(SWT.FILL, SWT.CENTER,
-				false, false);
-		gd_initialValue.widthHint = 50;
-		initialValue.setLayoutData(gd_initialValue);
+		initialValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false));
 		initialValue.setText("-100");
 
-		new Label(parent, SWT.NONE).setText("to");
+		new Label(parent, SWT.NONE).setText("To");
 
-		final Text finalValue = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		finalValue.setLayoutData(new GridData(50, SWT.DEFAULT));
+		final Text finalValue = new Text(parent, SWT.BORDER | SWT.LEFT);
+		finalValue
+				.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		finalValue.setText("100");
 
-		new Label(parent, SWT.NONE).setText("color");
+		new Label(parent, SWT.NONE).setText("Color");
 
 		final Combo color = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
-		color.setLayoutData(new GridData(50, SWT.DEFAULT));
-		color.setItems(new String[] { "red", "blue", "green", "pink", "yellow" });
+		color.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		color.setItems(new String[] { "Red", "Blue", "Green", "Pink", "Yellow" });
 		color.setText(color.getItem(0));
 		final int[] colorConstants = { SWT.COLOR_RED, SWT.COLOR_BLUE,
 				SWT.COLOR_GREEN, SWT.COLOR_MAGENTA, SWT.COLOR_YELLOW };
 
 		Button draw = new Button(parent, SWT.NONE);
-		draw.setText("plot graph");
+		draw.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		draw.setText("Plot graph");
+
+		Button center = new Button(parent, SWT.NONE);
+		center.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		center.setText("Center axis");
+
+		Button clear = new Button(parent, SWT.NONE);
+		clear.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		clear.setText("Clear");
 
 		final CartesianGraph graph = new CartesianGraph(parent, SWT.NONE);
-		graph.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 11,
+		graph.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 14,
 				100));
 
 		// ArrayList<CartesianPoint> curvePoints = new
@@ -99,23 +114,16 @@ public class GraphPad extends Pad implements Serializable {
 		// graph.addCurve(new GraphCurve(curvePoints));
 
 		Label hints = new Label(parent, SWT.CENTER);
-		hints.setText("use mousewhell to zoom / drag to move");
-		hints.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 6,
-				1));
+		hints.setText("Use mousewhell to zoom, drag to move");
+		hints.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		final Label zoomRate = new Label(parent, SWT.CENTER);
 		zoomRate.setText("100,00%");
-		zoomRate.setLayoutData(new GridData(100, SWT.DEFAULT));
+		zoomRate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		final Label mousePoint = new Label(parent, SWT.CENTER);
 		mousePoint.setText("(0.0, 0.0)");
 		mousePoint.setLayoutData(new GridData(150, SWT.DEFAULT));
-
-		Button center = new Button(parent, SWT.NONE);
-		center.setText("center axis");
-
-		Button clear = new Button(parent, SWT.NONE);
-		clear.setText("clear");
 
 		parent.pack();
 		// Listeners
