@@ -47,9 +47,9 @@ public class GraphPad extends Pad implements Serializable {
 
 		new Label(parent, SWT.NONE).setText("f(x) = ");
 
-		final Text fx = new Text(parent, SWT.BORDER);
-		fx.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fx.setText("x ^ 2 / 50 + x");
+		final Text function = new Text(parent, SWT.BORDER);
+		function.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		function.setText("");
 
 		new Label(parent, SWT.NONE).setText("# points: ");
 
@@ -99,7 +99,7 @@ public class GraphPad extends Pad implements Serializable {
 		// graph.addCurve(new GraphCurve(curvePoints));
 
 		Label hints = new Label(parent, SWT.CENTER);
-		hints.setText("use mousewhell [or +/- keys] to zoom / drag to move");
+		hints.setText("use mousewhell to zoom / drag to move");
 		hints.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 6,
 				1));
 
@@ -133,7 +133,7 @@ public class GraphPad extends Pad implements Serializable {
 				try {
 					jep.addVariable("x", 0);
 
-					node = jep.parse(fx.getText());
+					node = jep.parse(function.getText());
 
 					ArrayList<CartesianPoint> curvePoints = new ArrayList<CartesianPoint>();
 
@@ -165,7 +165,8 @@ public class GraphPad extends Pad implements Serializable {
 					graph.redraw();
 
 				} catch (ParseException e1) {
-					System.out.println("Invalid expression: " + fx.getText());
+					System.out.println("Invalid expression: "
+							+ function.getText());
 				}
 
 			}
