@@ -5,7 +5,19 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="org.eclipse.iee.sample.math.context"
+            id="org.eclipse.iee.sample.math.contextJava"
+            targetID="#CompilationUnitEditorContext">
+         <action
+               class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
+               id="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
+               label="Insert Math" 
+               icon="icons/math.jpg" 
+               menubarPath="additions"
+               tooltip="Insert Math">
+         </action>
+      </viewerContribution>
+	  <viewerContribution
+            id="org.eclipse.iee.sample.math.contextSample"
             targetID="#TextEditorContext">
          <action
                class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
@@ -21,7 +33,19 @@
 	<extension
     	point = "org.eclipse.ui.editorActions">
 		<editorContribution 
-        	id="org.eclipse.iee.sample.math.contribution" 
+        	id="org.eclipse.iee.sample.math.toolbarJava" 
+         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
+			<action id="org.eclipse.iee.sample.math.add" 
+	        	label="Add Math" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/math.jpg" 
+	            tooltip="Add Math" 
+	            class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.math.add"
+	        /> 
+    	</editorContribution>
+		<editorContribution 
+        	id="org.eclipse.iee.sample.math.toolbarSample" 
          	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
 			<action id="org.eclipse.iee.sample.math.add" 
 	        	label="Add Math" 
