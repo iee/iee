@@ -1,6 +1,6 @@
 package org.eclipse.iee.sample.calendar.actions;
 
-import org.eclipse.iee.editor.sample.SampleExtendedEditor;
+import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.calendar.pad.CalendarPad;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -13,30 +13,31 @@ import org.eclipse.ui.IEditorPart;
 public class AddCalendarPadActionDelegate implements IEditorActionDelegate {
 
 	Shell shell = null;
-	
-	SampleExtendedEditor fSampleExtendedEditor;
-	
+
+	IPadEditor fPadEditor;
+
 	@Override
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		
-		if (targetEditor instanceof SampleExtendedEditor) {
-			fSampleExtendedEditor = (SampleExtendedEditor) targetEditor;
-        }
+		try {
+			fPadEditor = (IPadEditor) targetEditor;
+		} catch (ClassCastException e) {
+			fPadEditor = null;
+		}
 	}
 
 	@Override
 	public void run(IAction action) {
-		Shell[] shells = Display.getCurrent().getShells();        
+		Shell[] shells = Display.getCurrent().getShells();
 		if (shells.length > 0) {
-            shell = shells[0];
-        }
-        
-		if (fSampleExtendedEditor == null) {
-            MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
-            return;
-        }
-		
-		fSampleExtendedEditor.createPad(new CalendarPad(), fSampleExtendedEditor.getCaretOffset());
+			shell = shells[0];
+		}
+
+		if (fPadEditor == null) {
+			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
+			return;
+		}
+
+		fPadEditor.createPad(new CalendarPad(), fPadEditor.getCaretOffset());
 	}
 
 	@Override
