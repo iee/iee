@@ -22,8 +22,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	private Composite fComposite;
 	private boolean fCanResize;
 	private boolean fIsResizing;
-	private boolean fChangeX;
-	private boolean fChangeY;
+	private boolean fChangeWidth;
+	private boolean fChangeHeigth;
+	private boolean fChangeLocationX;
+	private boolean fChangeLocationY;
 
 	public MouseEventManager(final Composite composite) {
 		fComposite = composite;
@@ -35,8 +37,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 		fIsCursorCanBeChanged = true;
 		fCanResize = false;
 		fIsResizing = false;
-		fChangeX = false;
-		fChangeY = false;
+		fChangeWidth = false;
+		fChangeHeigth = false;
+		fChangeLocationX = false;
+		fChangeLocationY = false;
 	}
 
 	@Override
@@ -48,8 +52,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	public void mouseExit(MouseEvent e) {
 		fComposite.setCursor(fArrowCursor);
 		fCanResize = false;
-		fChangeX = false;
-		fChangeY = false;
+		fChangeWidth = false;
+		fChangeHeigth = false;
+		fChangeLocationX = false;
+		fChangeLocationY = false;
 	}
 
 	@Override
@@ -65,8 +71,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorNWSE);
 					fCanResize = true;
-					fChangeX = false;
-					fChangeY = false;
+					fChangeWidth = true;
+					fChangeHeigth = true;
+					fChangeLocationX = true;
+					fChangeLocationY = true;
 				}
 			}
 
@@ -74,8 +82,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorNWSE);
 					fCanResize = true;
-					fChangeX = true;
-					fChangeY = true;
+					fChangeWidth = true;
+					fChangeHeigth = true;
+					fChangeLocationX = false;
+					fChangeLocationY = false;
 				}
 			}
 
@@ -83,8 +93,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorNESW);
 					fCanResize = true;
-					fChangeX = false;
-					fChangeY = false;
+					fChangeWidth = true;
+					fChangeHeigth = true;
+					fChangeLocationX = true;
+					fChangeLocationY = false;
 				}
 			}
 
@@ -92,8 +104,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorNESW);
 					fCanResize = true;
-					fChangeX = false;
-					fChangeY = false;
+					fChangeWidth = true;
+					fChangeHeigth = true;
+					fChangeLocationX = false;
+					fChangeLocationY = true;
 				}
 			}
 
@@ -101,8 +115,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorNS);
 					fCanResize = true;
-					fChangeX = false;
-					fChangeY = false;
+					fChangeWidth = false;
+					fChangeHeigth = true;
+					fChangeLocationX = false;
+					fChangeLocationY = true;
 				}
 			}
 
@@ -110,8 +126,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorNS);
 					fCanResize = true;
-					fChangeX = false;
-					fChangeY = true;
+					fChangeWidth = false;
+					fChangeHeigth = true;
+					fChangeLocationX = false;
+					fChangeLocationY = false;
 				}
 			}
 
@@ -119,8 +137,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorEW);
 					fCanResize = true;
-					fChangeX = false;
-					fChangeY = false;
+					fChangeWidth = true;
+					fChangeHeigth = false;
+					fChangeLocationX = true;
+					fChangeLocationY = false;
 				}
 			}
 
@@ -128,8 +148,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (fIsCursorCanBeChanged) {
 					fComposite.setCursor(fResizeCursorEW);
 					fCanResize = true;
-					fChangeX = true;
-					fChangeY = false;
+					fChangeWidth = true;
+					fChangeHeigth = false;
+					fChangeLocationX = false;
+					fChangeLocationY = false;
 				}
 			}
 		}
@@ -153,7 +175,6 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	public void mouseUp(MouseEvent e) {
 		if (e.button == 1)
 			if (fIsResizing) {
-				// maybe unusefull
 				Point beforeResize = fComposite.getSize();
 				Rectangle beforeResizeBounds = fComposite.getBounds();
 				/*
@@ -163,40 +184,44 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 				if (e.x > 0 && e.y > 0) {
 					Point afterResize = null;
 					Rectangle afterResizeBounds = null;
-					int newWidth = 0;
-					int newHeigth = 0;
-					if (fCanResize && fChangeY) {
+					int newWidth = e.x;
+					int newHeigth = e.y;
+					int newLocationX = beforeResizeBounds.x;
+					int newLocationY = beforeResizeBounds.y;
+					if (fChangeLocationX) {
+						newLocationX += e.x;
+						newWidth = beforeResize.x - e.x;
+					}
+					if (fChangeLocationY) {
+						newLocationY += e.y;
+						newHeigth = beforeResize.y - e.y;
+					}
+
+					if (fChangeWidth && fChangeHeigth) {
 						// To prevent appearance of uninformative pad
-						if (e.x < 70) {
+						if (newWidth < 70)
 							newWidth = 70;
-						} else if (e.y < 70) {
+						if (newHeigth < 70)
 							newHeigth = 70;
-						} else {
-							newWidth = e.x;
-							newHeigth = e.y;
-						}
 					}
-					if (fChangeX && !fChangeY) {
+					if (fChangeWidth && !fChangeHeigth) {
 						newHeigth = beforeResize.y;
-						if (e.x < 70)
+						if (newWidth < 70)
 							newWidth = 70;
-						else
-							newWidth = e.x;
 					}
-					if (!fChangeX && fChangeY) {
+					if (!fChangeWidth && fChangeHeigth) {
 						newWidth = beforeResize.x;
-						if (e.y < 70)
+						if (newHeigth < 70)
 							newHeigth = 70;
-						else
-							newHeigth = e.y;
 					}
-					if (!fChangeX && !fChangeY) {
+					// Now the case is unreached
+					if (!fChangeWidth && !fChangeHeigth) {
 						newWidth = beforeResize.x;
 						newHeigth = beforeResize.y;
 					}
 					afterResize = new Point(newWidth, newHeigth);
-					afterResizeBounds = new Rectangle(beforeResizeBounds.x,
-							beforeResizeBounds.y, newWidth, newHeigth);
+					afterResizeBounds = new Rectangle(newLocationX,
+							newLocationY, newWidth, newHeigth);
 					fComposite.setSize(afterResize);
 					fComposite.setBounds(afterResizeBounds);
 					fComposite.redraw();
