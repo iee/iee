@@ -1,32 +1,19 @@
 package org.eclipse.iee.sample.graph.pad;
 
+import java.awt.Font;
 import java.io.*;
-import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.graph.FileStorage;
-import org.eclipse.iee.sample.graph.alien.CartesianGraph;
-import org.eclipse.iee.sample.graph.alien.ICartesianGraphListener;
-import org.eclipse.iee.sample.graph.alien.elements.CartesianPoint;
-import org.nfunk.jep.JEP;
-import org.nfunk.jep.Node;
-import org.nfunk.jep.ParseException;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+import org.jfree.experimental.chart.swt.ChartComposite;
 
 public class GraphPad extends Pad implements Serializable {
 
@@ -41,178 +28,17 @@ public class GraphPad extends Pad implements Serializable {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		GridLayout layout = new GridLayout(14, false);
+		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
 		parent.setLayout(layout);
-
-		final Label titleLabel = new Label(parent, SWT.BOLD);
-		titleLabel
-				.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
-		titleLabel.setText("Sample Graph Plotter");
-
-		final Label functionLabel = new Label(parent, SWT.NONE);
-		functionLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
-				false));
-		functionLabel.setText("f(x) = ");
-
-		final Text function = new Text(parent, SWT.BORDER);
-		function.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		function.setText("");
-
-		new Label(parent, SWT.NONE).setText("#(points): ");
-
-		final Text points = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		points.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		points.setText("100");
-
-		new Label(parent, SWT.NONE).setText("From");
-
-		final Text initialValue = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		initialValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false));
-		initialValue.setText("-100");
-
-		new Label(parent, SWT.NONE).setText("To");
-
-		final Text finalValue = new Text(parent, SWT.BORDER | SWT.LEFT);
-		finalValue
-				.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		finalValue.setText("100");
-
-		new Label(parent, SWT.NONE).setText("Color");
-
-		final Combo color = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
-		color.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		color.setItems(new String[] { "Red", "Blue", "Green", "Pink", "Yellow" });
-		color.setText(color.getItem(0));
-		final int[] colorConstants = { SWT.COLOR_RED, SWT.COLOR_BLUE,
-				SWT.COLOR_GREEN, SWT.COLOR_MAGENTA, SWT.COLOR_YELLOW };
-
-		Button draw = new Button(parent, SWT.NONE);
-		draw.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		draw.setText("Plot graph");
-
-		Button center = new Button(parent, SWT.NONE);
-		center.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		center.setText("Center axis");
-
-		Button clear = new Button(parent, SWT.NONE);
-		clear.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		clear.setText("Clear");
-
-		final CartesianGraph graph = new CartesianGraph(parent, SWT.NONE);
-		graph.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 14,
-				100));
-
-		// ArrayList<CartesianPoint> curvePoints = new
-		// ArrayList<CartesianPoint>();
-		//
-		// curvePoints.add(new CartesianPoint(150f, 100f));
-		// curvePoints.add(new CartesianPoint(250f, 150f));
-		// curvePoints.add(new CartesianPoint(320f, 80f));
-		// curvePoints.add(new CartesianPoint(-50f, 80f));
-		//
-		// graph.addCurve(new GraphCurve(curvePoints));
-
-		Label hints = new Label(parent, SWT.CENTER);
-		hints.setText("Use mousewhell to zoom, drag to move");
-		hints.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		final Label zoomRate = new Label(parent, SWT.CENTER);
-		zoomRate.setText("100,00%");
-		zoomRate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		final Label mousePoint = new Label(parent, SWT.CENTER);
-		mousePoint.setText("(0.0, 0.0)");
-		mousePoint.setLayoutData(new GridData(150, SWT.DEFAULT));
-
-		parent.pack();
-		// Listeners
-
-		draw.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				JEP jep = new JEP();
-				jep.addStandardFunctions();
-				jep.addStandardConstants();
-
-				jep.setImplicitMul(true);
-
-				Node node;
-				try {
-					jep.addVariable("x", 0);
-
-					node = jep.parse(function.getText());
-
-					ArrayList<CartesianPoint> curvePoints = new ArrayList<CartesianPoint>();
-
-					Float init = Float.valueOf(initialValue.getText());
-					Float end = Float.valueOf(finalValue.getText());
-
-					Integer nValues = Integer.valueOf(points.getText());
-
-					Color selectedColor = Display.getDefault().getSystemColor(
-							colorConstants[color.getSelectionIndex()]);
-
-					float step = (end - init) / nValues;
-
-					for (float x = init; x < end; x += step) {
-						jep.setVarValue("x", x);
-
-						Object obj = jep.evaluate(node);
-						if (obj instanceof Double) {
-							Double y = (Double) obj;
-
-							CartesianPoint p = new CartesianPoint(x, y
-									.floatValue());
-							p.setPointColor(selectedColor);
-							curvePoints.add(p);
-						}
-					}
-
-					graph.addCurve(new GraphCurve(curvePoints));
-					graph.redraw();
-
-				} catch (ParseException e1) {
-					System.out.println("Invalid expression: "
-							+ function.getText());
-				}
-
-			}
-		});
-
-		clear.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				graph.getCurves().clear();
-				graph.redraw();
-			}
-		});
-
-		center.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				graph.centerOrigin();
-				graph.redraw();
-			}
-		});
-
-		graph.addMouseMoveListener(new MouseMoveListener() {
-			public void mouseMove(MouseEvent e) {
-				mousePoint.setText(graph.cartesianPoint(e.x, e.y).toString());
-			}
-		});
-
-		graph.addCartesianGraphListener(new ICartesianGraphListener() {
-			public void moved(Point offset) {
-
-			}
-
-			public void scaleChanged(float zoomRateX, float zoomRateY) {
-				zoomRate.setText(String.format("%.2f%%",
-						(zoomRateX + zoomRateY) / 2 * 100));
-			}
-		});
-
+		JFreeChart chart = createChart(createDataset());
+		final ChartComposite frame = new ChartComposite(parent, SWT.NONE, chart, true);
+		
+		MouseEventManager mouseManager = new MouseEventManager(parent);
+		parent.addMouseTrackListener(mouseManager);
+		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
 	}
 
 	protected GraphPad(String containerID) {
@@ -247,4 +73,47 @@ public class GraphPad extends Pad implements Serializable {
 	public void unsave() {
 		GraphPad.fFileStorage.removeFile(getContainerID());
 	}
+	
+	/**
+     * Creates a sample dataset.
+     * 
+     * @return A sample dataset.
+     */
+    private static PieDataset createDataset() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("One", new Double(43.2));
+        dataset.setValue("Two", new Double(10.0));
+        dataset.setValue("Three", new Double(27.5));
+        dataset.setValue("Four", new Double(17.5));
+        dataset.setValue("Five", new Double(11.0));
+        dataset.setValue("Six", new Double(19.4));
+        return dataset;        
+    }
+    
+    /**
+     * Creates a chart.
+     * 
+     * @param dataset  the dataset.
+     * 
+     * @return A chart.
+     */
+    private static JFreeChart createChart(PieDataset dataset) {
+        
+        JFreeChart chart = ChartFactory.createPieChart(
+            "Pie Chart Demo 1",  // chart title
+            dataset,             // data
+            true,               // include legend
+            true,
+            false
+        );
+
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setSectionOutlinesVisible(false);
+        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+        plot.setNoDataMessage("No data available");
+        plot.setCircular(false);
+        plot.setLabelGap(0.02);
+        return chart;
+        
+    }
 }
