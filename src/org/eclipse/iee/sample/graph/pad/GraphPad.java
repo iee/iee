@@ -7,6 +7,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -51,12 +53,15 @@ public class GraphPad extends Pad implements Serializable {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		FillLayout layout = new FillLayout(SWT.VERTICAL);
+		GridLayout layout = new GridLayout(1, false);
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
 
-		Group settings = new Group(parent, SWT.NO_TRIM);
+		Group settings = new Group(parent, SWT.NONE);
+		GridData settingsGridData = new GridData();
+		settingsGridData.horizontalAlignment = GridData.FILL;
+		settings.setData(settingsGridData);
 		FillLayout groupLayout = new FillLayout(SWT.HORIZONTAL);
 		settings.setLayout(groupLayout);
 
@@ -86,6 +91,9 @@ public class GraphPad extends Pad implements Serializable {
 		frame.setDisplayToolTips(false);
 		frame.setHorizontalAxisTrace(true);
 		frame.setVerticalAxisTrace(true);
+		GridData frameGridData = new GridData();
+		frameGridData.horizontalAlignment = GridData.FILL;
+		frame.setData(frameGridData);
 
 		// Listeners
 		draw.addSelectionListener(new SelectionAdapter() {
@@ -106,16 +114,7 @@ public class GraphPad extends Pad implements Serializable {
 		parent.addMouseTrackListener(mouseManager);
 		parent.addMouseMoveListener(mouseManager);
 		parent.addMouseListener(mouseManager);
-		
-		MouseEventManager mouseManager1 = new MouseEventManager(frame, true);
-		frame.addMouseTrackListener(mouseManager1);
-		frame.addMouseMoveListener(mouseManager1);
-		frame.addMouseListener(mouseManager1);
-		
-		MouseEventManager mouseManager2 = new MouseEventManager(settings, true);
-		settings.addMouseTrackListener(mouseManager2);
-		settings.addMouseMoveListener(mouseManager2);
-		settings.addMouseListener(mouseManager2);
+
 	}
 
 	protected GraphPad(String containerID) {

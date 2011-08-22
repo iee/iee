@@ -14,7 +14,6 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 		MouseTrackListener {
 
 	private boolean fIsChild;
-	
 	private Cursor fResizeCursorNS;
 	private Cursor fResizeCursorEW;
 	private Cursor fArrowCursor;
@@ -228,10 +227,11 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 					fComposite.setSize(afterResize);
 					fComposite.setBounds(afterResizeBounds);
 					fComposite.redraw();
-					if (fIsChild)
-					{
-						fComposite.getParent().redraw();
-					}
+					// if (fIsChild)
+					// {
+					// fComposite.getParent().pack();
+					// fComposite.getParent().redraw();
+					// }
 				}
 				fIsCursorCanBeChanged = true;
 				fIsResizing = false;
