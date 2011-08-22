@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 public class MouseEventManager implements MouseListener, MouseMoveListener,
 		MouseTrackListener {
 
+	private boolean fIsChild;
+	
 	private Cursor fResizeCursorNS;
 	private Cursor fResizeCursorEW;
 	private Cursor fArrowCursor;
@@ -27,8 +29,9 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 	private boolean fChangeLocationX;
 	private boolean fChangeLocationY;
 
-	public MouseEventManager(final Composite composite) {
+	public MouseEventManager(final Composite composite, boolean isChild) {
 		fComposite = composite;
+		fIsChild = isChild;
 		fResizeCursorNS = new Cursor(null, SWT.CURSOR_SIZENS);
 		fResizeCursorEW = new Cursor(null, SWT.CURSOR_SIZEWE);
 		fArrowCursor = new Cursor(null, SWT.CURSOR_ARROW);
@@ -225,6 +228,10 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 					fComposite.setSize(afterResize);
 					fComposite.setBounds(afterResizeBounds);
 					fComposite.redraw();
+					if (fIsChild)
+					{
+						fComposite.getParent().redraw();
+					}
 				}
 				fIsCursorCanBeChanged = true;
 				fIsResizing = false;
