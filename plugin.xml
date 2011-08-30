@@ -33,5 +33,20 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.iee.category.wizards"
+            name="IEE">
+      </category>
+      <wizard
+            category="org.eclipse.iee.category.wizards"
+            class="org.eclipse.iee.editor.monitoring.wizards.NewPadWizard"
+            icon="icons/iee_logo.png"
+            id="org.eclipse.iee.wizard.NewPad"
+            name="IEE Pad Project"
+            project="true">
+      </wizard>
+   </extension>
 
 </plugin>
