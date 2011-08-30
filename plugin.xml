@@ -42,11 +42,22 @@
       <wizard
             category="org.eclipse.iee.category.wizards"
             class="org.eclipse.iee.editor.monitoring.wizards.NewPadWizard"
+            hasPages="true"
             icon="icons/iee_logo.png"
             id="org.eclipse.iee.wizard.NewPad"
             name="IEE Pad Project"
             project="true">
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.pde.ui.templates">
+      <template
+            class="org.eclipse.iee.editor.monitoring.templates.PadTemplate"
+            contributingId="org.eclipse.iee.PadTemplate"
+            icon="icons/iee_logo.png"
+            id="org.eclipse.iee.PadTemplate"
+            name="IEE Pad template">
+      </template>
    </extension>
 
 </plugin>

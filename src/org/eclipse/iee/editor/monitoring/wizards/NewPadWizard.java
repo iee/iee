@@ -4,23 +4,34 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 public class NewPadWizard extends Wizard implements INewWizard {
 
+	private WizardNewProjectCreationPage _pageOne;
+
 	public NewPadWizard() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+	
+	@Override
+	public void addPages() {
+		super.addPages();
+		_pageOne = new WizardNewProjectCreationPage(
+				"IEE NewPad Plug-in Project Wizard");
+		_pageOne.setTitle("IEE NewPad Plug-in Project");
+		_pageOne.setDescription("Creates sample pad project.");
+
+		addPage(_pageOne);
+
 	}
 
 }
