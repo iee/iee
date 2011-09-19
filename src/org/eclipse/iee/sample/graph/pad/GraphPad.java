@@ -6,16 +6,12 @@ import java.io.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.graph.FileStorage;
 import org.jfree.chart.ChartFactory;
@@ -40,6 +36,7 @@ public class GraphPad extends Pad implements Serializable {
 	private double fDomainMax;
 	private int fDomainCardinality;
 	private boolean fIsAdvancedMode;
+	private boolean fIsActive;
 	private transient static FileStorage fFileStorage;
 
 	public GraphPad() {
@@ -50,6 +47,7 @@ public class GraphPad extends Pad implements Serializable {
 		fDomainMax = 0;
 		fDomainCardinality = 0;
 		fIsAdvancedMode = false;
+		fIsActive = false;
 		save();
 	}
 
@@ -81,43 +79,12 @@ public class GraphPad extends Pad implements Serializable {
 
 		Button draw = new Button(parent, SWT.NONE);
 		draw.setText("Plot graph");
-		
-		/*
-		Group settingsGroup = new Group(parent, SWT.Resize);
 
-		FillLayout groupLayout = new FillLayout(SWT.HORIZONTAL);
-		settingsGroup.setLayout(groupLayout);
-
-		final Label functionLabel = new Label(settingsGroup, SWT.NONE);
-		functionLabel.setText("f(x) = ");
-		final Text function = new Text(settingsGroup, SWT.BORDER);
-		function.setText("");
-
-		new Label(settingsGroup, SWT.NONE).setText("#(points): ");
-		final Text points = new Text(settingsGroup, SWT.BORDER | SWT.RIGHT);
-		points.setText("100");
-
-		new Label(settingsGroup, SWT.NONE).setText("From");
-		final Text initialValue = new Text(settingsGroup, SWT.BORDER | SWT.RIGHT);
-		initialValue.setText("-100");
-
-		new Label(settingsGroup, SWT.NONE).setText("To");
-		final Text finalValue = new Text(settingsGroup, SWT.BORDER | SWT.LEFT);
-		finalValue.setText("100");
-
-		Button draw = new Button(settingsGroup, SWT.NONE);
-		draw.setText("Plot graph");
-		*/
-		GridData gridData1 = new GridData();
-		gridData1.exclude = false;
-		gridData1.horizontalAlignment = SWT.CENTER;
-
-		gridData1.widthHint = 720;
-		gridData1.heightHint = 300;
-		gridData1.horizontalSpan = 9;
-		
-		gridData1.grabExcessHorizontalSpace = true;
-		gridData1.grabExcessVerticalSpace = true;
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData.exclude = false;
+		gridData.widthHint = 720;
+		gridData.heightHint = 300;
+		gridData.horizontalSpan = 9;
 		
 		JFreeChart chart = createChart();
 		final ChartComposite frame = new ChartComposite(parent, SWT.BORDER_DASH,
@@ -125,21 +92,14 @@ public class GraphPad extends Pad implements Serializable {
 		frame.setDisplayToolTips(false);
 		frame.setHorizontalAxisTrace(true);
 		frame.setVerticalAxisTrace(true);
-		frame.setLayoutData(gridData1);
-		
-		//GridData frameGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		//frame.setData(frameGridData);
+		frame.setLayoutData(gridData);
 		
 		// Listeners
 		draw.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				GridData gridData = new GridData();
-				
+				GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);				
 				gridData.exclude = false;
-				gridData.horizontalAlignment = SWT.CENTER;
-				gridData.grabExcessHorizontalSpace = true;
-				gridData.grabExcessVerticalSpace = true;
 				gridData.horizontalSpan = 9;
 				fFunction = function.getText();
 				fDomainMax = Double.valueOf(initialValue.getText());
@@ -179,6 +139,7 @@ public class GraphPad extends Pad implements Serializable {
 		newPad.fDomainMax = this.fDomainMax;
 		newPad.fDomainCardinality = this.fDomainCardinality;
 		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
+		newPad.fIsActive = false;
 		return newPad;
 	}
 

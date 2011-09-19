@@ -201,20 +201,20 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,
 
 					if (fChangeWidth && fChangeHeigth) {
 						// To prevent appearance of uninformative pad
-						if (newWidth < 70)
-							newWidth = 70;
-						if (newHeigth < 70)
-							newHeigth = 70;
+						if (newWidth < 420)
+							newWidth = 420;
+						if (newHeigth < 200)
+							newHeigth = 200;
 					}
 					if (fChangeWidth && !fChangeHeigth) {
 						newHeigth = beforeResize.y;
-						if (newWidth < 70)
-							newWidth = 70;
+						if (newWidth < 420)
+							newWidth = 420;
 					}
 					if (!fChangeWidth && fChangeHeigth) {
 						newWidth = beforeResize.x;
-						if (newHeigth < 70)
-							newHeigth = 70;
+						if (newHeigth < 200)
+							newHeigth = 200;
 					}
 					// Now the case is unreached
 					if (!fChangeWidth && !fChangeHeigth) {
