@@ -9,6 +9,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -53,52 +55,92 @@ public class GraphPad extends Pad implements Serializable {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		GridLayout layout = new GridLayout(1, false);
+		//GridLayout layout = new GridLayout(1, false);
+		GridLayout layout = new GridLayout(9,false);
+		layout.verticalSpacing = 5;
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
-
-		Group settings = new Group(parent, SWT.NONE);
-		GridData settingsGridData = new GridData();
-		settingsGridData.horizontalAlignment = GridData.FILL;
-		settings.setData(settingsGridData);
-		FillLayout groupLayout = new FillLayout(SWT.HORIZONTAL);
-		settings.setLayout(groupLayout);
-
-		final Label functionLabel = new Label(settings, SWT.NONE);
+		
+		final Label functionLabel = new Label(parent, SWT.NONE);
 		functionLabel.setText("f(x) = ");
-		final Text function = new Text(settings, SWT.BORDER);
+		final Text function = new Text(parent, SWT.BORDER);
 		function.setText("");
 
-		new Label(settings, SWT.NONE).setText("#(points): ");
-		final Text points = new Text(settings, SWT.BORDER | SWT.RIGHT);
+		new Label(parent, SWT.NONE).setText("#(points): ");
+		final Text points = new Text(parent, SWT.BORDER | SWT.RIGHT);
 		points.setText("100");
 
-		new Label(settings, SWT.NONE).setText("From");
-		final Text initialValue = new Text(settings, SWT.BORDER | SWT.RIGHT);
+		new Label(parent, SWT.NONE).setText("From");
+		final Text initialValue = new Text(parent, SWT.BORDER | SWT.RIGHT);
 		initialValue.setText("-100");
 
-		new Label(settings, SWT.NONE).setText("To");
-		final Text finalValue = new Text(settings, SWT.BORDER | SWT.LEFT);
+		new Label(parent, SWT.NONE).setText("To");
+		final Text finalValue = new Text(parent, SWT.BORDER | SWT.LEFT);
 		finalValue.setText("100");
 
-		Button draw = new Button(settings, SWT.NONE);
+		Button draw = new Button(parent, SWT.NONE);
 		draw.setText("Plot graph");
+		
+		/*
+		Group settingsGroup = new Group(parent, SWT.Resize);
 
+		FillLayout groupLayout = new FillLayout(SWT.HORIZONTAL);
+		settingsGroup.setLayout(groupLayout);
+
+		final Label functionLabel = new Label(settingsGroup, SWT.NONE);
+		functionLabel.setText("f(x) = ");
+		final Text function = new Text(settingsGroup, SWT.BORDER);
+		function.setText("");
+
+		new Label(settingsGroup, SWT.NONE).setText("#(points): ");
+		final Text points = new Text(settingsGroup, SWT.BORDER | SWT.RIGHT);
+		points.setText("100");
+
+		new Label(settingsGroup, SWT.NONE).setText("From");
+		final Text initialValue = new Text(settingsGroup, SWT.BORDER | SWT.RIGHT);
+		initialValue.setText("-100");
+
+		new Label(settingsGroup, SWT.NONE).setText("To");
+		final Text finalValue = new Text(settingsGroup, SWT.BORDER | SWT.LEFT);
+		finalValue.setText("100");
+
+		Button draw = new Button(settingsGroup, SWT.NONE);
+		draw.setText("Plot graph");
+		*/
+		GridData gridData1 = new GridData();
+		gridData1.exclude = false;
+		gridData1.horizontalAlignment = SWT.CENTER;
+
+		gridData1.widthHint = 720;
+		gridData1.heightHint = 300;
+		gridData1.horizontalSpan = 9;
+		
+		gridData1.grabExcessHorizontalSpace = true;
+		gridData1.grabExcessVerticalSpace = true;
+		
 		JFreeChart chart = createChart();
-		final ChartComposite frame = new ChartComposite(parent, SWT.NONE,
+		final ChartComposite frame = new ChartComposite(parent, SWT.BORDER_DASH,
 				chart, true);
 		frame.setDisplayToolTips(false);
 		frame.setHorizontalAxisTrace(true);
 		frame.setVerticalAxisTrace(true);
-		GridData frameGridData = new GridData();
-		frameGridData.horizontalAlignment = GridData.FILL;
-		frame.setData(frameGridData);
-
+		frame.setLayoutData(gridData1);
+		
+		//GridData frameGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		//frame.setData(frameGridData);
+		
 		// Listeners
 		draw.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				GridData gridData = new GridData();
+				
+				gridData.exclude = false;
+				gridData.horizontalAlignment = SWT.CENTER;
+				gridData.grabExcessHorizontalSpace = true;
+				gridData.grabExcessVerticalSpace = true;
+				gridData.horizontalSpan = 9;
 				fFunction = function.getText();
 				fDomainMax = Double.valueOf(initialValue.getText());
 				fDomainMin = Double.valueOf(finalValue.getText());
@@ -106,7 +148,8 @@ public class GraphPad extends Pad implements Serializable {
 				JFreeChart chart = createChart();
 				frame.setChart(chart);
 				frame.redraw();
-
+				frame.setLayoutData(gridData);	
+			
 			}
 		});
 
