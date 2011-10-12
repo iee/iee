@@ -1,7 +1,5 @@
 package org.eclipse.iee.translator.math.actions;
 
-import mole.Mole;
-
 import org.eclipse.iee.editor.sample.SampleExtendedEditor;
 import org.eclipse.iee.translator.math.pad.CompiledMathPad;
 import org.eclipse.jface.action.IAction;
