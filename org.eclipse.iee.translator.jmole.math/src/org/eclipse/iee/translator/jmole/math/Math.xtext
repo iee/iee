@@ -1,7 +1,7 @@
-grammar org.eclipse.iee.translator.Jmole.math.Math with org.eclipse.xtext.common.Terminals
+grammar org.eclipse.iee.translator.jmole.math.Math with org.eclipse.xtext.common.Terminals
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
-generate math "http://www.eclipse.org/iee/translator/Jmole/math/Math"
+generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 
 Module:
 	'module' name=ID
