@@ -7,9 +7,30 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess
 
+import org.eclipse.iee.translator.jmole.math.math
+
+import org.eclipse.xtext.xtend2.lib.StringConcatenation
+import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
+import org.eclipse.iee.translator.jmole.math.math.Expression
+
 class MathGenerator implements IGenerator {
 	
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-		//TODO implment me
+		
 	}
+	
+	def String generateText(Resource resource) {
+		var expressions = resource.allContentsIterable.filter(typeof(Expression));
+		return expressions.compile.toString();
+	}
+	
+	def compile(Iterable<Expression> expressions) '''
+		public class HelloWorld {
+			public static void main(String[] args) {
+				«FOR e:expressions»
+				System.out.println("Hello, «e.toString»!");
+				«ENDFOR»
+			}
+		}
+	'''
 }
