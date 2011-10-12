@@ -3,15 +3,9 @@ package org.eclipse.iee.translator.jmole.math.serializer;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.iee.translator.jmole.math.math.DeclaredParameter;
-import org.eclipse.iee.translator.jmole.math.math.Definition;
 import org.eclipse.iee.translator.jmole.math.math.Div;
-import org.eclipse.iee.translator.jmole.math.math.Evaluation;
-import org.eclipse.iee.translator.jmole.math.math.FunctionCall;
-import org.eclipse.iee.translator.jmole.math.math.Import;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Minus;
-import org.eclipse.iee.translator.jmole.math.math.Module;
 import org.eclipse.iee.translator.jmole.math.math.Multi;
 import org.eclipse.iee.translator.jmole.math.math.NumberLiteral;
 import org.eclipse.iee.translator.jmole.math.math.Plus;
@@ -55,21 +49,6 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	public void createSequence(EObject context, EObject semanticObject) {
 		if(semanticObject.eClass().getEPackage() == MathPackage.eINSTANCE) switch(semanticObject.eClass().getClassifierID()) {
-			case MathPackage.DECLARED_PARAMETER:
-				if(context == grammarAccess.getDeclaredParameterRule() ||
-				   context == grammarAccess.getAbstractDefinitionRule()) {
-					sequence_DeclaredParameter_DeclaredParameter(context, (DeclaredParameter) semanticObject); 
-					return; 
-				}
-				else break;
-			case MathPackage.DEFINITION:
-				if(context == grammarAccess.getStatementRule() ||
-				   context == grammarAccess.getDefinitionRule() ||
-				   context == grammarAccess.getAbstractDefinitionRule()) {
-					sequence_Definition_Definition(context, (Definition) semanticObject); 
-					return; 
-				}
-				else break;
 			case MathPackage.DIV:
 				if(context == grammarAccess.getExpressionRule() ||
 				   context == grammarAccess.getAdditionRule() ||
@@ -83,32 +62,6 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 					return; 
 				}
 				else break;
-			case MathPackage.EVALUATION:
-				if(context == grammarAccess.getStatementRule() ||
-				   context == grammarAccess.getEvaluationRule()) {
-					sequence_Evaluation_Evaluation(context, (Evaluation) semanticObject); 
-					return; 
-				}
-				else break;
-			case MathPackage.FUNCTION_CALL:
-				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getAdditionRule() ||
-				   context == grammarAccess.getAdditionAccess().getPlusLeftAction_1_0_0_0() ||
-				   context == grammarAccess.getAdditionAccess().getMinusLeftAction_1_0_1_0() ||
-				   context == grammarAccess.getMultiplicationRule() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiLeftAction_1_0_0_0() ||
-				   context == grammarAccess.getMultiplicationAccess().getDivLeftAction_1_0_1_0() ||
-				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_PrimaryExpression_FunctionCall(context, (FunctionCall) semanticObject); 
-					return; 
-				}
-				else break;
-			case MathPackage.IMPORT:
-				if(context == grammarAccess.getImportRule()) {
-					sequence_Import_Import(context, (Import) semanticObject); 
-					return; 
-				}
-				else break;
 			case MathPackage.MINUS:
 				if(context == grammarAccess.getExpressionRule() ||
 				   context == grammarAccess.getAdditionRule() ||
@@ -119,12 +72,6 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				   context == grammarAccess.getMultiplicationAccess().getDivLeftAction_1_0_1_0() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
 					sequence_Addition_Minus(context, (Minus) semanticObject); 
-					return; 
-				}
-				else break;
-			case MathPackage.MODULE:
-				if(context == grammarAccess.getModuleRule()) {
-					sequence_Module_Module(context, (Module) semanticObject); 
 					return; 
 				}
 				else break;
@@ -219,91 +166,6 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     name=ID
-	 *
-	 * Features:
-	 *    name[1, 1]
-	 */
-	protected void sequence_DeclaredParameter_DeclaredParameter(EObject context, DeclaredParameter semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.ABSTRACT_DEFINITION__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.ABSTRACT_DEFINITION__NAME));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getDeclaredParameterAccess().getNameIDTerminalRuleCall_0(), semanticObject.getName());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (name=ID (args+=DeclaredParameter args+=DeclaredParameter*)? expr=Expression)
-	 *
-	 * Features:
-	 *    name[1, 1]
-	 *    args[0, *]
-	 *    expr[1, 1]
-	 */
-	protected void sequence_Definition_Definition(EObject context, Definition semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     expression=Expression
-	 *
-	 * Features:
-	 *    expression[1, 1]
-	 */
-	protected void sequence_Evaluation_Evaluation(EObject context, Evaluation semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.EVALUATION__EXPRESSION) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.EVALUATION__EXPRESSION));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getEvaluationAccess().getExpressionExpressionParserRuleCall_0_0(), semanticObject.getExpression());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     importedNamespace=ImportName
-	 *
-	 * Features:
-	 *    importedNamespace[1, 1]
-	 */
-	protected void sequence_Import_Import(EObject context, Import semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.IMPORT__IMPORTED_NAMESPACE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.IMPORT__IMPORTED_NAMESPACE));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getImportAccess().getImportedNamespaceImportNameParserRuleCall_1_0(), semanticObject.getImportedNamespace());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (name=ID imports+=Import* statements+=Statement*)
-	 *
-	 * Features:
-	 *    name[1, 1]
-	 *    imports[0, *]
-	 *    statements[0, *]
-	 */
-	protected void sequence_Module_Module(EObject context, Module semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Constraint:
 	 *     (left=Multiplication_Div_1_0_1_0 right=PrimaryExpression)
 	 *
 	 * Features:
@@ -345,19 +207,6 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		feeder.accept(grammarAccess.getMultiplicationAccess().getMultiLeftAction_1_0_0_0(), semanticObject.getLeft());
 		feeder.accept(grammarAccess.getMultiplicationAccess().getRightPrimaryExpressionParserRuleCall_1_1_0(), semanticObject.getRight());
 		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (func=[AbstractDefinition|ID] (args+=Expression args+=Expression*)?)
-	 *
-	 * Features:
-	 *    func[1, 1]
-	 *    args[0, *]
-	 */
-	protected void sequence_PrimaryExpression_FunctionCall(EObject context, FunctionCall semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

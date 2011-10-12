@@ -26,69 +26,6 @@ public interface MathFactory extends EFactory
   MathFactory eINSTANCE = org.eclipse.iee.translator.jmole.math.math.impl.MathFactoryImpl.init();
 
   /**
-   * Returns a new object of class '<em>Module</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Module</em>'.
-   * @generated
-   */
-  Module createModule();
-
-  /**
-   * Returns a new object of class '<em>Import</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Import</em>'.
-   * @generated
-   */
-  Import createImport();
-
-  /**
-   * Returns a new object of class '<em>Statement</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Statement</em>'.
-   * @generated
-   */
-  Statement createStatement();
-
-  /**
-   * Returns a new object of class '<em>Definition</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Definition</em>'.
-   * @generated
-   */
-  Definition createDefinition();
-
-  /**
-   * Returns a new object of class '<em>Declared Parameter</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Declared Parameter</em>'.
-   * @generated
-   */
-  DeclaredParameter createDeclaredParameter();
-
-  /**
-   * Returns a new object of class '<em>Abstract Definition</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Abstract Definition</em>'.
-   * @generated
-   */
-  AbstractDefinition createAbstractDefinition();
-
-  /**
-   * Returns a new object of class '<em>Evaluation</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Evaluation</em>'.
-   * @generated
-   */
-  Evaluation createEvaluation();
-
-  /**
    * Returns a new object of class '<em>Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -141,15 +78,6 @@ public interface MathFactory extends EFactory
    * @generated
    */
   NumberLiteral createNumberLiteral();
-
-  /**
-   * Returns a new object of class '<em>Function Call</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Function Call</em>'.
-   * @generated
-   */
-  FunctionCall createFunctionCall();
 
   /**
    * Returns the package supported by this factory.

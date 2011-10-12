@@ -67,100 +67,15 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     switch (eClass.getClassifierID())
     {
-      case MathPackage.MODULE: return createModule();
-      case MathPackage.IMPORT: return createImport();
-      case MathPackage.STATEMENT: return createStatement();
-      case MathPackage.DEFINITION: return createDefinition();
-      case MathPackage.DECLARED_PARAMETER: return createDeclaredParameter();
-      case MathPackage.ABSTRACT_DEFINITION: return createAbstractDefinition();
-      case MathPackage.EVALUATION: return createEvaluation();
       case MathPackage.EXPRESSION: return createExpression();
       case MathPackage.PLUS: return createPlus();
       case MathPackage.MINUS: return createMinus();
       case MathPackage.MULTI: return createMulti();
       case MathPackage.DIV: return createDiv();
       case MathPackage.NUMBER_LITERAL: return createNumberLiteral();
-      case MathPackage.FUNCTION_CALL: return createFunctionCall();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Module createModule()
-  {
-    ModuleImpl module = new ModuleImpl();
-    return module;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Import createImport()
-  {
-    ImportImpl import_ = new ImportImpl();
-    return import_;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Statement createStatement()
-  {
-    StatementImpl statement = new StatementImpl();
-    return statement;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Definition createDefinition()
-  {
-    DefinitionImpl definition = new DefinitionImpl();
-    return definition;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public DeclaredParameter createDeclaredParameter()
-  {
-    DeclaredParameterImpl declaredParameter = new DeclaredParameterImpl();
-    return declaredParameter;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public AbstractDefinition createAbstractDefinition()
-  {
-    AbstractDefinitionImpl abstractDefinition = new AbstractDefinitionImpl();
-    return abstractDefinition;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Evaluation createEvaluation()
-  {
-    EvaluationImpl evaluation = new EvaluationImpl();
-    return evaluation;
   }
 
   /**
@@ -227,17 +142,6 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     NumberLiteralImpl numberLiteral = new NumberLiteralImpl();
     return numberLiteral;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public FunctionCall createFunctionCall()
-  {
-    FunctionCallImpl functionCall = new FunctionCallImpl();
-    return functionCall;
   }
 
   /**
