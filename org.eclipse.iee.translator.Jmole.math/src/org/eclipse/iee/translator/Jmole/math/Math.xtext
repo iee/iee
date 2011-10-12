@@ -1,9 +1,0 @@
-grammar org.eclipse.iee.translator.Jmole.math.Math with org.eclipse.xtext.common.Terminals
-
-generate math "http://www.eclipse.org/iee/translator/Jmole/math/Math"
-
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
