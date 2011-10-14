@@ -1,23 +1,26 @@
 grammar org.eclipse.iee.translator.jmole.math.Math with org.eclipse.xtext.common.Terminals
-
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 
+Formula:
+	expression=Expression;
+
 Expression:
-	Addition;
+	PrimaryExpression {Plus.left=current} '+' right=Expression |
+	PrimaryExpression {Mult.left=current} '*' right=Expression |
+	PrimaryExpression {Pow.base=current} '^' power=Expression |
+	PrimaryExpression;
+//	 Addition | Multiplication | Power;
 
-Addition returns Expression:
-	Multiplication (({Plus.left=current} '+' | {Minus.left=current} '-') right=Multiplication)*;
+//Addition returns Expression:
+	
 
-Multiplication returns Expression:
-	PrimaryExpression (({Multi.left=current} '*' | {Div.left=current} '/') right=PrimaryExpression)*;
+//Multiplication returns Expression:
+	
+
+//Power returns Expression:
+//	PrimaryExpression {Pow.base=current} '^' power=Expression;
 
 PrimaryExpression returns Expression:
 	'(' Expression ')' |
-	{NumberLiteral} value=NUMBER;
-
-terminal NUMBER returns ecore::EBigDecimal:
-	('0'..'9')* ('.' ('0'..'9')+)?;
-
-terminal INT returns ecore::EInt:
-	'this one has been deactivated';
+	{NumberLiteral} value='1';

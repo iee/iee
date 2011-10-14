@@ -67,15 +67,26 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     switch (eClass.getClassifierID())
     {
+      case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
       case MathPackage.PLUS: return createPlus();
-      case MathPackage.MINUS: return createMinus();
-      case MathPackage.MULTI: return createMulti();
-      case MathPackage.DIV: return createDiv();
+      case MathPackage.MULT: return createMult();
+      case MathPackage.POW: return createPow();
       case MathPackage.NUMBER_LITERAL: return createNumberLiteral();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Formula createFormula()
+  {
+    FormulaImpl formula = new FormulaImpl();
+    return formula;
   }
 
   /**
@@ -105,10 +116,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Minus createMinus()
+  public Mult createMult()
   {
-    MinusImpl minus = new MinusImpl();
-    return minus;
+    MultImpl mult = new MultImpl();
+    return mult;
   }
 
   /**
@@ -116,21 +127,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Multi createMulti()
+  public Pow createPow()
   {
-    MultiImpl multi = new MultiImpl();
-    return multi;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Div createDiv()
-  {
-    DivImpl div = new DivImpl();
-    return div;
+    PowImpl pow = new PowImpl();
+    return pow;
   }
 
   /**

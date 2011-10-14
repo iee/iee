@@ -26,6 +26,15 @@ public interface MathFactory extends EFactory
   MathFactory eINSTANCE = org.eclipse.iee.translator.jmole.math.math.impl.MathFactoryImpl.init();
 
   /**
+   * Returns a new object of class '<em>Formula</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Formula</em>'.
+   * @generated
+   */
+  Formula createFormula();
+
+  /**
    * Returns a new object of class '<em>Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -44,31 +53,22 @@ public interface MathFactory extends EFactory
   Plus createPlus();
 
   /**
-   * Returns a new object of class '<em>Minus</em>'.
+   * Returns a new object of class '<em>Mult</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Minus</em>'.
+   * @return a new object of class '<em>Mult</em>'.
    * @generated
    */
-  Minus createMinus();
+  Mult createMult();
 
   /**
-   * Returns a new object of class '<em>Multi</em>'.
+   * Returns a new object of class '<em>Pow</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Multi</em>'.
+   * @return a new object of class '<em>Pow</em>'.
    * @generated
    */
-  Multi createMulti();
-
-  /**
-   * Returns a new object of class '<em>Div</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Div</em>'.
-   * @generated
-   */
-  Div createDiv();
+  Pow createPow();
 
   /**
    * Returns a new object of class '<em>Number Literal</em>'.

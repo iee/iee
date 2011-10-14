@@ -11,26 +11,41 @@ import org.eclipse.iee.translator.jmole.math.math
 
 import org.eclipse.xtext.xtend2.lib.StringConcatenation
 import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
-import org.eclipse.iee.translator.jmole.math.math.Expression
+import org.eclipse.iee.translator.jmole.math.math.*
 
 class MathGenerator implements IGenerator {
 	
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-		
+
 	}
 	
 	def String generateText(Resource resource) {
-		var expressions = resource.allContentsIterable.filter(typeof(Expression));
-		return expressions.compile.toString();
+		var formulas = resource.allContentsIterable.filter(typeof(Formula));
+		
+		if (formulas.empty) {
+			return null;
+		}
+		
+		return formulas.head.compileFormula.toString();	
 	}
 	
-	def compile(Iterable<Expression> expressions) '''
-		public class HelloWorld {
-			public static void main(String[] args) {
-				«FOR e:expressions»
-				System.out.println("Hello, «e.toString»!");
-				«ENDFOR»
-			}
-		}
+	def compileFormula(Formula f) '''
+		«compileExpression(f.expression)»
+	'''
+	
+	def dispatch compileExpression(NumberLiteral n) '''
+		«n.getValue»
+	'''
+	
+	def dispatch compileExpression(Plus op) '''
+		«compileExpression(op.left)» PLUS «compileExpression(op.right)»
+	'''
+	
+	def dispatch compileExpression(Mult op) '''
+		«compileExpression(op.left)» MINUS «compileExpression(op.right)»
+	'''
+	
+	def dispatch compileExpression(Pow op) '''
+		«compileExpression(op.base)» POWER «compileExpression(op.power)»
 	'''
 }

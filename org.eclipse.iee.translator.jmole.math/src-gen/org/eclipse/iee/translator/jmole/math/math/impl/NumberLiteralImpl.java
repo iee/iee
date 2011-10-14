@@ -5,8 +5,6 @@
  */
 package org.eclipse.iee.translator.jmole.math.math.impl;
 
-import java.math.BigDecimal;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -39,7 +37,7 @@ public class NumberLiteralImpl extends ExpressionImpl implements NumberLiteral
    * @generated
    * @ordered
    */
-  protected static final BigDecimal VALUE_EDEFAULT = null;
+  protected static final String VALUE_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -49,7 +47,7 @@ public class NumberLiteralImpl extends ExpressionImpl implements NumberLiteral
    * @generated
    * @ordered
    */
-  protected BigDecimal value = VALUE_EDEFAULT;
+  protected String value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -77,7 +75,7 @@ public class NumberLiteralImpl extends ExpressionImpl implements NumberLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public BigDecimal getValue()
+  public String getValue()
   {
     return value;
   }
@@ -87,9 +85,9 @@ public class NumberLiteralImpl extends ExpressionImpl implements NumberLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(BigDecimal newValue)
+  public void setValue(String newValue)
   {
-    BigDecimal oldValue = value;
+    String oldValue = value;
     value = newValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.NUMBER_LITERAL__VALUE, oldValue, value));
@@ -122,7 +120,7 @@ public class NumberLiteralImpl extends ExpressionImpl implements NumberLiteral
     switch (featureID)
     {
       case MathPackage.NUMBER_LITERAL__VALUE:
-        setValue((BigDecimal)newValue);
+        setValue((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);

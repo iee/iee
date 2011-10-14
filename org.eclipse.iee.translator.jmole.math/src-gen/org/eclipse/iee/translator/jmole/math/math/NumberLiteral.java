@@ -5,7 +5,6 @@
  */
 package org.eclipse.iee.translator.jmole.math.math;
 
-import java.math.BigDecimal;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,12 +33,12 @@ public interface NumberLiteral extends Expression
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' attribute.
-   * @see #setValue(BigDecimal)
+   * @see #setValue(String)
    * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getNumberLiteral_Value()
    * @model
    * @generated
    */
-  BigDecimal getValue();
+  String getValue();
 
   /**
    * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.NumberLiteral#getValue <em>Value</em>}' attribute.
@@ -49,6 +48,6 @@ public interface NumberLiteral extends Expression
    * @see #getValue()
    * @generated
    */
-  void setValue(BigDecimal value);
+  void setValue(String value);
 
 } // NumberLiteral

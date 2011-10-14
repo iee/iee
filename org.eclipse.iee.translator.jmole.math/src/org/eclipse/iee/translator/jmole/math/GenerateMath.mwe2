@@ -50,9 +50,7 @@ Workflow {
 
             // The antlr parser generator fragment.
             fragment = parser.antlr.XtextAntlrGeneratorFragment {
-            //  options = {
-            //      backtrack = true
-            //  }
+            	options = { backtrack = true }
             }
 
             // java-based API for validation
@@ -77,7 +75,7 @@ Workflow {
             }
 
             // formatter API
-            fragment = formatting.FormatterFragment {}
+            //fragment = formatting.FormatterFragment {}
     
             // generates a more lightweight Antlr parser and lexer tailored for content assist
             //fragment = parser.antlr.XtextAntlrUiGeneratorFragment {}
@@ -98,12 +96,12 @@ Workflow {
             fragment = templates.CodetemplatesGeneratorFragment {}
 
             // rename refactoring
-            fragment = refactoring.RefactorElementNameFragment {}
+            //fragment = refactoring.RefactorElementNameFragment {}
 
             // provides a compare view
-            fragment = compare.CompareFragment {
-                 fileExtensions = file.extensions
-            }
+            //fragment = compare.CompareFragment {
+            //     fileExtensions = file.extensions
+            //}
 
         }
     }

@@ -95,6 +95,13 @@ public class MathSwitch<T>
   {
     switch (classifierID)
     {
+      case MathPackage.FORMULA:
+      {
+        Formula formula = (Formula)theEObject;
+        T result = caseFormula(formula);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case MathPackage.EXPRESSION:
       {
         Expression expression = (Expression)theEObject;
@@ -110,27 +117,19 @@ public class MathSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.MINUS:
+      case MathPackage.MULT:
       {
-        Minus minus = (Minus)theEObject;
-        T result = caseMinus(minus);
-        if (result == null) result = caseExpression(minus);
+        Mult mult = (Mult)theEObject;
+        T result = caseMult(mult);
+        if (result == null) result = caseExpression(mult);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.MULTI:
+      case MathPackage.POW:
       {
-        Multi multi = (Multi)theEObject;
-        T result = caseMulti(multi);
-        if (result == null) result = caseExpression(multi);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case MathPackage.DIV:
-      {
-        Div div = (Div)theEObject;
-        T result = caseDiv(div);
-        if (result == null) result = caseExpression(div);
+        Pow pow = (Pow)theEObject;
+        T result = casePow(pow);
+        if (result == null) result = caseExpression(pow);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -144,6 +143,22 @@ public class MathSwitch<T>
       }
       default: return defaultCase(theEObject);
     }
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Formula</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Formula</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFormula(Formula object)
+  {
+    return null;
   }
 
   /**
@@ -179,49 +194,33 @@ public class MathSwitch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Minus</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Mult</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Minus</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Mult</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMinus(Minus object)
+  public T caseMult(Mult object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Multi</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Pow</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Multi</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Pow</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMulti(Multi object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Div</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Div</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseDiv(Div object)
+  public T casePow(Pow object)
   {
     return null;
   }

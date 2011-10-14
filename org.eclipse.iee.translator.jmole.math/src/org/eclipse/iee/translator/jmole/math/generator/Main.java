@@ -60,7 +60,11 @@ public class Main {
 		
 		// configure and start the generator
 		fileAccess.setOutputPath("src-gen/");
-		generator.doGenerate(resource, fileAccess);
+		//generator.doGenerate(resource, fileAccess);
+		
+		System.out.println(
+			((MathGenerator)generator).generateText(resource)
+		);
 		
 		System.out.println("Code generation finished.");
 	}
