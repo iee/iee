@@ -7,7 +7,9 @@ Bundle-Activator: org.eclipse.iee.translator.math.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.iee.editor,
- org.eclipse.ui.editors
+ org.eclipse.ui.editors,
+ org.eclipse.iee.translator.jmole.math;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
+Import-Package: org.eclipse.iee.translator.jmole.math

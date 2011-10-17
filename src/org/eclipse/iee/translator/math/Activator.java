@@ -1,5 +1,6 @@
 package org.eclipse.iee.translator.math;
 
+import org.eclipse.iee.translator.jmole.math.generator.Mole;
 import org.eclipse.iee.translator.math.pad.CompiledMathPad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -16,11 +17,19 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	// The shared instance
 	private static Activator plugin;
 
+	private static Mole mole;
+	
 	/**
 	 * The constructor
 	 */
 	public Activator() {
 		CompiledMathPad.setStorage(new FileStorage("D:\\CompiledMathPads\\"));
+		
+		this.mole = Mole.create();
+	}
+	
+	public static Mole getMole() {
+		return mole;
 	}
 
 	/*

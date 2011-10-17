@@ -1,7 +1,10 @@
 package org.eclipse.iee.translator.math.pad;
 
 import java.io.Serializable;
+
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.translator.jmole.math.generator.Mole;
+import org.eclipse.iee.translator.math.Activator;
 import org.eclipse.iee.translator.math.FileStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -33,7 +36,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		styledText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				
+				//System.out.println(styledText.getText());
 				/*
 				  Use this code:				  
 				  
@@ -45,7 +48,8 @@ public class CompiledMathPad extends Pad implements Serializable {
 				  
 				 */
 				
-				//Mole.translateMath(styledText.getText());
+				String result = Activator.getMole().translateMath(styledText.getText());
+				getContainer().writeAtContainerRegionTail(result);
 				
 				//getContainer().writeAtContainerRegionTail("System.out.println(Integer.toString(RunnableMath.math0()));");
 			}
