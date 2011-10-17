@@ -44,25 +44,39 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightExpressionParserRuleCall_0_3_0 = (RuleCall)cRightAssignment_0_3.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final RuleCall cPrimaryExpressionParserRuleCall_1_0 = (RuleCall)cGroup_1.eContents().get(0);
-		private final Action cMultLeftAction_1_1 = (Action)cGroup_1.eContents().get(1);
-		private final Keyword cAsteriskKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
+		private final Action cMinusLeftAction_1_1 = (Action)cGroup_1.eContents().get(1);
+		private final Keyword cHyphenMinusKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cRightAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
 		private final RuleCall cRightExpressionParserRuleCall_1_3_0 = (RuleCall)cRightAssignment_1_3.eContents().get(0);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final RuleCall cPrimaryExpressionParserRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
-		private final Action cPowBaseAction_2_1 = (Action)cGroup_2.eContents().get(1);
-		private final Keyword cCircumflexAccentKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
-		private final Assignment cPowerAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
-		private final RuleCall cPowerExpressionParserRuleCall_2_3_0 = (RuleCall)cPowerAssignment_2_3.eContents().get(0);
-		private final RuleCall cPrimaryExpressionParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
+		private final Action cMultLeftAction_2_1 = (Action)cGroup_2.eContents().get(1);
+		private final Keyword cAsteriskKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
+		private final Assignment cRightAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
+		private final RuleCall cRightExpressionParserRuleCall_2_3_0 = (RuleCall)cRightAssignment_2_3.eContents().get(0);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final RuleCall cPrimaryExpressionParserRuleCall_3_0 = (RuleCall)cGroup_3.eContents().get(0);
+		private final Action cDivLeftAction_3_1 = (Action)cGroup_3.eContents().get(1);
+		private final Keyword cSolidusKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Assignment cRightAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
+		private final RuleCall cRightExpressionParserRuleCall_3_3_0 = (RuleCall)cRightAssignment_3_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
+		private final RuleCall cPrimaryExpressionParserRuleCall_4_0 = (RuleCall)cGroup_4.eContents().get(0);
+		private final Action cPowBaseAction_4_1 = (Action)cGroup_4.eContents().get(1);
+		private final Keyword cCircumflexAccentKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
+		private final Assignment cPowerAssignment_4_3 = (Assignment)cGroup_4.eContents().get(3);
+		private final RuleCall cPowerExpressionParserRuleCall_4_3_0 = (RuleCall)cPowerAssignment_4_3.eContents().get(0);
+		private final RuleCall cPrimaryExpressionParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
 		
 		//Expression:
-		//	PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Mult.left=current} "*"
-		//	right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression;
+		//	PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Minus.left=current} "-"
+		//	right=Expression | PrimaryExpression {Mult.left=current} "*" right=Expression | PrimaryExpression {Div.left=current}
+		//	"/" right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression;
 		public ParserRule getRule() { return rule; }
 
-		//PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Mult.left=current} "*" right=Expression
-		//| PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression
+		//PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Minus.left=current} "-" right=Expression
+		//| PrimaryExpression {Mult.left=current} "*" right=Expression | PrimaryExpression {Div.left=current} "/"
+		//right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//PrimaryExpression {Plus.left=current} "+" right=Expression
@@ -83,17 +97,17 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Expression
 		public RuleCall getRightExpressionParserRuleCall_0_3_0() { return cRightExpressionParserRuleCall_0_3_0; }
 
-		//PrimaryExpression {Mult.left=current} "*" right=Expression
+		//PrimaryExpression {Minus.left=current} "-" right=Expression
 		public Group getGroup_1() { return cGroup_1; }
 
 		//PrimaryExpression
 		public RuleCall getPrimaryExpressionParserRuleCall_1_0() { return cPrimaryExpressionParserRuleCall_1_0; }
 
-		//{Mult.left=current}
-		public Action getMultLeftAction_1_1() { return cMultLeftAction_1_1; }
+		//{Minus.left=current}
+		public Action getMinusLeftAction_1_1() { return cMinusLeftAction_1_1; }
 
-		//"*"
-		public Keyword getAsteriskKeyword_1_2() { return cAsteriskKeyword_1_2; }
+		//"-"
+		public Keyword getHyphenMinusKeyword_1_2() { return cHyphenMinusKeyword_1_2; }
 
 		//right=Expression
 		public Assignment getRightAssignment_1_3() { return cRightAssignment_1_3; }
@@ -101,26 +115,62 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Expression
 		public RuleCall getRightExpressionParserRuleCall_1_3_0() { return cRightExpressionParserRuleCall_1_3_0; }
 
-		//PrimaryExpression {Pow.base=current} "^" power=Expression
+		//PrimaryExpression {Mult.left=current} "*" right=Expression
 		public Group getGroup_2() { return cGroup_2; }
 
 		//PrimaryExpression
 		public RuleCall getPrimaryExpressionParserRuleCall_2_0() { return cPrimaryExpressionParserRuleCall_2_0; }
 
-		//{Pow.base=current}
-		public Action getPowBaseAction_2_1() { return cPowBaseAction_2_1; }
+		//{Mult.left=current}
+		public Action getMultLeftAction_2_1() { return cMultLeftAction_2_1; }
 
-		//"^"
-		public Keyword getCircumflexAccentKeyword_2_2() { return cCircumflexAccentKeyword_2_2; }
+		//"*"
+		public Keyword getAsteriskKeyword_2_2() { return cAsteriskKeyword_2_2; }
 
-		//power=Expression
-		public Assignment getPowerAssignment_2_3() { return cPowerAssignment_2_3; }
+		//right=Expression
+		public Assignment getRightAssignment_2_3() { return cRightAssignment_2_3; }
 
 		//Expression
-		public RuleCall getPowerExpressionParserRuleCall_2_3_0() { return cPowerExpressionParserRuleCall_2_3_0; }
+		public RuleCall getRightExpressionParserRuleCall_2_3_0() { return cRightExpressionParserRuleCall_2_3_0; }
+
+		//PrimaryExpression {Div.left=current} "/" right=Expression
+		public Group getGroup_3() { return cGroup_3; }
 
 		//PrimaryExpression
-		public RuleCall getPrimaryExpressionParserRuleCall_3() { return cPrimaryExpressionParserRuleCall_3; }
+		public RuleCall getPrimaryExpressionParserRuleCall_3_0() { return cPrimaryExpressionParserRuleCall_3_0; }
+
+		//{Div.left=current}
+		public Action getDivLeftAction_3_1() { return cDivLeftAction_3_1; }
+
+		//"/"
+		public Keyword getSolidusKeyword_3_2() { return cSolidusKeyword_3_2; }
+
+		//right=Expression
+		public Assignment getRightAssignment_3_3() { return cRightAssignment_3_3; }
+
+		//Expression
+		public RuleCall getRightExpressionParserRuleCall_3_3_0() { return cRightExpressionParserRuleCall_3_3_0; }
+
+		//PrimaryExpression {Pow.base=current} "^" power=Expression
+		public Group getGroup_4() { return cGroup_4; }
+
+		//PrimaryExpression
+		public RuleCall getPrimaryExpressionParserRuleCall_4_0() { return cPrimaryExpressionParserRuleCall_4_0; }
+
+		//{Pow.base=current}
+		public Action getPowBaseAction_4_1() { return cPowBaseAction_4_1; }
+
+		//"^"
+		public Keyword getCircumflexAccentKeyword_4_2() { return cCircumflexAccentKeyword_4_2; }
+
+		//power=Expression
+		public Assignment getPowerAssignment_4_3() { return cPowerAssignment_4_3; }
+
+		//Expression
+		public RuleCall getPowerExpressionParserRuleCall_4_3_0() { return cPowerExpressionParserRuleCall_4_3_0; }
+
+		//PrimaryExpression
+		public RuleCall getPrimaryExpressionParserRuleCall_5() { return cPrimaryExpressionParserRuleCall_5; }
 	}
 
 	public class PrimaryExpressionElements extends AbstractParserRuleElementFinder {
@@ -131,9 +181,13 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cExpressionParserRuleCall_0_1 = (RuleCall)cGroup_0.eContents().get(1);
 		private final Keyword cRightParenthesisKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Action cNumberLiteralAction_1_0 = (Action)cGroup_1.eContents().get(0);
-		private final Assignment cValueAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final Keyword cValue1Keyword_1_1_0 = (Keyword)cValueAssignment_1_1.eContents().get(0);
+		private final Action cVariableAction_1_0 = (Action)cGroup_1.eContents().get(0);
+		private final Assignment cNameAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_1_1_0 = (RuleCall)cNameAssignment_1_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final Action cNumberAction_2_0 = (Action)cGroup_2.eContents().get(0);
+		private final Assignment cValueAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cValueINTTerminalRuleCall_2_1_0 = (RuleCall)cValueAssignment_2_1.eContents().get(0);
 		
 		////	 Addition | Multiplication | Power;
 		////Addition returns Expression:
@@ -141,10 +195,10 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		////Power returns Expression:
 		////	PrimaryExpression {Pow.base=current} '^' power=Expression;
 		//PrimaryExpression returns Expression:
-		//	"(" Expression ")" | {NumberLiteral} value="1";
+		//	"(" Expression ")" | {Variable} name=ID | {Number} value=INT;
 		public ParserRule getRule() { return rule; }
 
-		//"(" Expression ")" | {NumberLiteral} value="1"
+		//"(" Expression ")" | {Variable} name=ID | {Number} value=INT
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//"(" Expression ")"
@@ -159,17 +213,29 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//")"
 		public Keyword getRightParenthesisKeyword_0_2() { return cRightParenthesisKeyword_0_2; }
 
-		//{NumberLiteral} value="1"
+		//{Variable} name=ID
 		public Group getGroup_1() { return cGroup_1; }
 
-		//{NumberLiteral}
-		public Action getNumberLiteralAction_1_0() { return cNumberLiteralAction_1_0; }
+		//{Variable}
+		public Action getVariableAction_1_0() { return cVariableAction_1_0; }
 
-		//value="1"
-		public Assignment getValueAssignment_1_1() { return cValueAssignment_1_1; }
+		//name=ID
+		public Assignment getNameAssignment_1_1() { return cNameAssignment_1_1; }
 
-		//"1"
-		public Keyword getValue1Keyword_1_1_0() { return cValue1Keyword_1_1_0; }
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_1_1_0() { return cNameIDTerminalRuleCall_1_1_0; }
+
+		//{Number} value=INT
+		public Group getGroup_2() { return cGroup_2; }
+
+		//{Number}
+		public Action getNumberAction_2_0() { return cNumberAction_2_0; }
+
+		//value=INT
+		public Assignment getValueAssignment_2_1() { return cValueAssignment_2_1; }
+
+		//INT
+		public RuleCall getValueINTTerminalRuleCall_2_1_0() { return cValueINTTerminalRuleCall_2_1_0; }
 	}
 	
 	
@@ -209,8 +275,9 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Expression:
-	//	PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Mult.left=current} "*"
-	//	right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression;
+	//	PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Minus.left=current} "-"
+	//	right=Expression | PrimaryExpression {Mult.left=current} "*" right=Expression | PrimaryExpression {Div.left=current}
+	//	"/" right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression;
 	public ExpressionElements getExpressionAccess() {
 		return (pExpression != null) ? pExpression : (pExpression = new ExpressionElements());
 	}
@@ -225,7 +292,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	////Power returns Expression:
 	////	PrimaryExpression {Pow.base=current} '^' power=Expression;
 	//PrimaryExpression returns Expression:
-	//	"(" Expression ")" | {NumberLiteral} value="1";
+	//	"(" Expression ")" | {Variable} name=ID | {Number} value=INT;
 	public PrimaryExpressionElements getPrimaryExpressionAccess() {
 		return (pPrimaryExpression != null) ? pPrimaryExpression : (pPrimaryExpression = new PrimaryExpressionElements());
 	}

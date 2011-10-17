@@ -17,16 +17,27 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Plus/left"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Plus/right"/>
     </genClasses>
+    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Minus">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Minus/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Minus/right"/>
+    </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Mult">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Mult/left"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Mult/right"/>
+    </genClasses>
+    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Div">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Div/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Div/right"/>
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Pow">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Pow/base"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Pow/power"/>
     </genClasses>
-    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//NumberLiteral">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//NumberLiteral/value"/>
+    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Variable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Variable/name"/>
+    </genClasses>
+    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Number">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Number/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

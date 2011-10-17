@@ -38,6 +38,5 @@ public class MathStandaloneSetupGenerated implements ISetup {
 		
 
 
-
 	}
 }

@@ -89,11 +89,6 @@ public abstract class AbstractMathRuntimeModule extends DefaultRuntimeModule {
 		return org.eclipse.xtext.parser.antlr.AntlrTokenDefProvider.class;
 	}
 
-	// contributed by org.eclipse.xtext.generator.validation.JavaValidatorFragment
-	@org.eclipse.xtext.service.SingletonBinding(eager=true)	public Class<? extends org.eclipse.iee.translator.jmole.math.validation.MathJavaValidator> bindMathJavaValidator() {
-		return org.eclipse.iee.translator.jmole.math.validation.MathJavaValidator.class;
-	}
-
 	// contributed by org.eclipse.xtext.generator.scoping.AbstractScopingFragment
 	public Class<? extends org.eclipse.xtext.scoping.IScopeProvider> bindIScopeProvider() {
 		return org.eclipse.iee.translator.jmole.math.scoping.MathScopeProvider.class;

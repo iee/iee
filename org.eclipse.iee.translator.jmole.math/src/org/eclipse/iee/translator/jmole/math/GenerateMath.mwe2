@@ -40,8 +40,8 @@ Workflow {
             // Serializer 2.0
             fragment = serializer.SerializerFragment {}
             
-            // the serialization component (1.0)
             // fragment = parseTreeConstructor.ParseTreeConstructorFragment {}
+            // the serialization component (1.0)
 
             // a custom ResourceFactory for use with EMF
             fragment = resourceFactory.ResourceFactoryFragment {
@@ -54,10 +54,10 @@ Workflow {
             }
 
             // java-based API for validation
-            fragment = validation.JavaValidatorFragment {
-                composedCheck = "org.eclipse.xtext.validation.ImportUriValidator"
-                composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
-            }
+            //fragment = validation.JavaValidatorFragment {
+            //    composedCheck = "org.eclipse.xtext.validation.ImportUriValidator"
+                //composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+            //}
 
             // scoping and exporting API
             // fragment = scoping.ImportURIScopingFragment {}

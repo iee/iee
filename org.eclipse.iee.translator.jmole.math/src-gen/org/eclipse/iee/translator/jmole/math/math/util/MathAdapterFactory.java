@@ -12,7 +12,15 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.iee.translator.jmole.math.math.*;
+import org.eclipse.iee.translator.jmole.math.math.Div;
+import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Formula;
+import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.Minus;
+import org.eclipse.iee.translator.jmole.math.math.Mult;
+import org.eclipse.iee.translator.jmole.math.math.Plus;
+import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
  * <!-- begin-user-doc -->
@@ -93,9 +101,19 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createPlusAdapter();
       }
       @Override
+      public Adapter caseMinus(Minus object)
+      {
+        return createMinusAdapter();
+      }
+      @Override
       public Adapter caseMult(Mult object)
       {
         return createMultAdapter();
+      }
+      @Override
+      public Adapter caseDiv(Div object)
+      {
+        return createDivAdapter();
       }
       @Override
       public Adapter casePow(Pow object)
@@ -103,9 +121,14 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createPowAdapter();
       }
       @Override
-      public Adapter caseNumberLiteral(NumberLiteral object)
+      public Adapter caseVariable(Variable object)
       {
-        return createNumberLiteralAdapter();
+        return createVariableAdapter();
+      }
+      @Override
+      public Adapter caseNumber(org.eclipse.iee.translator.jmole.math.math.Number object)
+      {
+        return createNumberAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -175,6 +198,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Minus <em>Minus</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Minus
+   * @generated
+   */
+  public Adapter createMinusAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Mult <em>Mult</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -185,6 +223,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMultAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Div <em>Div</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Div
+   * @generated
+   */
+  public Adapter createDivAdapter()
   {
     return null;
   }
@@ -205,16 +258,31 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.NumberLiteral <em>Number Literal</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Variable <em>Variable</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.NumberLiteral
+   * @see org.eclipse.iee.translator.jmole.math.math.Variable
    * @generated
    */
-  public Adapter createNumberLiteralAdapter()
+  public Adapter createVariableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Number <em>Number</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Number
+   * @generated
+   */
+  public Adapter createNumberAdapter()
   {
     return null;
   }

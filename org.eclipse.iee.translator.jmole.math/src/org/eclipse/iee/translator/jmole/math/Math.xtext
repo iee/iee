@@ -7,20 +7,13 @@ Formula:
 
 Expression:
 	PrimaryExpression {Plus.left=current} '+' right=Expression |
+	PrimaryExpression {Minus.left=current} '-' right=Expression |
 	PrimaryExpression {Mult.left=current} '*' right=Expression |
+	PrimaryExpression {Div.left=current} '/' right=Expression |
 	PrimaryExpression {Pow.base=current} '^' power=Expression |
 	PrimaryExpression;
-//	 Addition | Multiplication | Power;
-
-//Addition returns Expression:
-	
-
-//Multiplication returns Expression:
-	
-
-//Power returns Expression:
-//	PrimaryExpression {Pow.base=current} '^' power=Expression;
 
 PrimaryExpression returns Expression:
 	'(' Expression ')' |
-	{NumberLiteral} value='1';
+	{Variable} name=ID |
+	{Number} value=INT;

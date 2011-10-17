@@ -53,6 +53,15 @@ public interface MathFactory extends EFactory
   Plus createPlus();
 
   /**
+   * Returns a new object of class '<em>Minus</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Minus</em>'.
+   * @generated
+   */
+  Minus createMinus();
+
+  /**
    * Returns a new object of class '<em>Mult</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -60,6 +69,15 @@ public interface MathFactory extends EFactory
    * @generated
    */
   Mult createMult();
+
+  /**
+   * Returns a new object of class '<em>Div</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Div</em>'.
+   * @generated
+   */
+  Div createDiv();
 
   /**
    * Returns a new object of class '<em>Pow</em>'.
@@ -71,13 +89,22 @@ public interface MathFactory extends EFactory
   Pow createPow();
 
   /**
-   * Returns a new object of class '<em>Number Literal</em>'.
+   * Returns a new object of class '<em>Variable</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Number Literal</em>'.
+   * @return a new object of class '<em>Variable</em>'.
    * @generated
    */
-  NumberLiteral createNumberLiteral();
+  Variable createVariable();
+
+  /**
+   * Returns a new object of class '<em>Number</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Number</em>'.
+   * @generated
+   */
+  Number createNumber();
 
   /**
    * Returns the package supported by this factory.

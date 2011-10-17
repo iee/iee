@@ -36,10 +36,34 @@
           <elements xsi:type="xtext:RuleCall" rule="/0/@rules.2"/>
           <elements xsi:type="xtext:Action" feature="left" operator="=">
             <type metamodel="/0/@metamodelDeclarations.1">
+              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/jmole/math/Math#//Minus"/>
+            </type>
+          </elements>
+          <elements xsi:type="xtext:Keyword" value="-"/>
+          <elements xsi:type="xtext:Assignment" feature="right" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.1"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group">
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.2"/>
+          <elements xsi:type="xtext:Action" feature="left" operator="=">
+            <type metamodel="/0/@metamodelDeclarations.1">
               <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/jmole/math/Math#//Mult"/>
             </type>
           </elements>
           <elements xsi:type="xtext:Keyword" value="*"/>
+          <elements xsi:type="xtext:Assignment" feature="right" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.1"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group">
+          <elements xsi:type="xtext:RuleCall" rule="/0/@rules.2"/>
+          <elements xsi:type="xtext:Action" feature="left" operator="=">
+            <type metamodel="/0/@metamodelDeclarations.1">
+              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/jmole/math/Math#//Div"/>
+            </type>
+          </elements>
+          <elements xsi:type="xtext:Keyword" value="/"/>
           <elements xsi:type="xtext:Assignment" feature="right" operator="=">
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.1"/>
           </elements>
@@ -72,11 +96,21 @@
         <elements xsi:type="xtext:Group">
           <elements xsi:type="xtext:Action">
             <type metamodel="/0/@metamodelDeclarations.1">
-              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/jmole/math/Math#//NumberLiteral"/>
+              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/jmole/math/Math#//Variable"/>
+            </type>
+          </elements>
+          <elements xsi:type="xtext:Assignment" feature="name" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/1/@rules.0"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group">
+          <elements xsi:type="xtext:Action">
+            <type metamodel="/0/@metamodelDeclarations.1">
+              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/jmole/math/Math#//Number"/>
             </type>
           </elements>
           <elements xsi:type="xtext:Assignment" feature="value" operator="=">
-            <terminal xsi:type="xtext:Keyword" value="1"/>
+            <terminal xsi:type="xtext:RuleCall" rule="/1/@rules.1"/>
           </elements>
         </elements>
       </alternatives>

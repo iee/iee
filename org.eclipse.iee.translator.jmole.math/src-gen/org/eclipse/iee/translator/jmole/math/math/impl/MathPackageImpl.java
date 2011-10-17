@@ -12,14 +12,16 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.eclipse.iee.translator.jmole.math.math.Div;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.Minus;
 import org.eclipse.iee.translator.jmole.math.math.Mult;
-import org.eclipse.iee.translator.jmole.math.math.NumberLiteral;
 import org.eclipse.iee.translator.jmole.math.math.Plus;
 import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
  * <!-- begin-user-doc -->
@@ -55,7 +57,21 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass minusEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass multEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass divEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -69,7 +85,14 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass numberLiteralEClass = null;
+  private EClass variableEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass numberEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -199,6 +222,36 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getMinus()
+  {
+    return minusEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMinus_Left()
+  {
+    return (EReference)minusEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMinus_Right()
+  {
+    return (EReference)minusEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getMult()
   {
     return multEClass;
@@ -222,6 +275,36 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
   public EReference getMult_Right()
   {
     return (EReference)multEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDiv()
+  {
+    return divEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDiv_Left()
+  {
+    return (EReference)divEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDiv_Right()
+  {
+    return (EReference)divEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -259,9 +342,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getNumberLiteral()
+  public EClass getVariable()
   {
-    return numberLiteralEClass;
+    return variableEClass;
   }
 
   /**
@@ -269,9 +352,29 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getNumberLiteral_Value()
+  public EAttribute getVariable_Name()
   {
-    return (EAttribute)numberLiteralEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)variableEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getNumber()
+  {
+    return numberEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getNumber_Value()
+  {
+    return (EAttribute)numberEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -313,16 +416,27 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     createEReference(plusEClass, PLUS__LEFT);
     createEReference(plusEClass, PLUS__RIGHT);
 
+    minusEClass = createEClass(MINUS);
+    createEReference(minusEClass, MINUS__LEFT);
+    createEReference(minusEClass, MINUS__RIGHT);
+
     multEClass = createEClass(MULT);
     createEReference(multEClass, MULT__LEFT);
     createEReference(multEClass, MULT__RIGHT);
+
+    divEClass = createEClass(DIV);
+    createEReference(divEClass, DIV__LEFT);
+    createEReference(divEClass, DIV__RIGHT);
 
     powEClass = createEClass(POW);
     createEReference(powEClass, POW__BASE);
     createEReference(powEClass, POW__POWER);
 
-    numberLiteralEClass = createEClass(NUMBER_LITERAL);
-    createEAttribute(numberLiteralEClass, NUMBER_LITERAL__VALUE);
+    variableEClass = createEClass(VARIABLE);
+    createEAttribute(variableEClass, VARIABLE__NAME);
+
+    numberEClass = createEClass(NUMBER);
+    createEAttribute(numberEClass, NUMBER__VALUE);
   }
 
   /**
@@ -355,9 +469,12 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
 
     // Add supertypes to classes
     plusEClass.getESuperTypes().add(this.getExpression());
+    minusEClass.getESuperTypes().add(this.getExpression());
     multEClass.getESuperTypes().add(this.getExpression());
+    divEClass.getESuperTypes().add(this.getExpression());
     powEClass.getESuperTypes().add(this.getExpression());
-    numberLiteralEClass.getESuperTypes().add(this.getExpression());
+    variableEClass.getESuperTypes().add(this.getExpression());
+    numberEClass.getESuperTypes().add(this.getExpression());
 
     // Initialize classes and features; add operations and parameters
     initEClass(formulaEClass, Formula.class, "Formula", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -369,16 +486,27 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEReference(getPlus_Left(), this.getExpression(), null, "left", null, 0, 1, Plus.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPlus_Right(), this.getExpression(), null, "right", null, 0, 1, Plus.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(minusEClass, Minus.class, "Minus", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMinus_Left(), this.getExpression(), null, "left", null, 0, 1, Minus.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMinus_Right(), this.getExpression(), null, "right", null, 0, 1, Minus.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(multEClass, Mult.class, "Mult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMult_Left(), this.getExpression(), null, "left", null, 0, 1, Mult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMult_Right(), this.getExpression(), null, "right", null, 0, 1, Mult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(divEClass, Div.class, "Div", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDiv_Left(), this.getExpression(), null, "left", null, 0, 1, Div.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDiv_Right(), this.getExpression(), null, "right", null, 0, 1, Div.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(powEClass, Pow.class, "Pow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getPow_Base(), this.getExpression(), null, "base", null, 0, 1, Pow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPow_Power(), this.getExpression(), null, "power", null, 0, 1, Pow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(numberLiteralEClass, NumberLiteral.class, "NumberLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getNumberLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, NumberLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(variableEClass, Variable.class, "Variable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getVariable_Name(), ecorePackage.getEString(), "name", null, 0, 1, Variable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(numberEClass, org.eclipse.iee.translator.jmole.math.math.Number.class, "Number", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getNumber_Value(), ecorePackage.getEInt(), "value", null, 0, 1, org.eclipse.iee.translator.jmole.math.math.Number.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

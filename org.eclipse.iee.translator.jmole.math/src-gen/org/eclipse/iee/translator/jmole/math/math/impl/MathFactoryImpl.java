@@ -13,7 +13,16 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import org.eclipse.iee.translator.jmole.math.math.*;
+import org.eclipse.iee.translator.jmole.math.math.Div;
+import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Formula;
+import org.eclipse.iee.translator.jmole.math.math.MathFactory;
+import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.Minus;
+import org.eclipse.iee.translator.jmole.math.math.Mult;
+import org.eclipse.iee.translator.jmole.math.math.Plus;
+import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,9 +79,12 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
       case MathPackage.PLUS: return createPlus();
+      case MathPackage.MINUS: return createMinus();
       case MathPackage.MULT: return createMult();
+      case MathPackage.DIV: return createDiv();
       case MathPackage.POW: return createPow();
-      case MathPackage.NUMBER_LITERAL: return createNumberLiteral();
+      case MathPackage.VARIABLE: return createVariable();
+      case MathPackage.NUMBER: return createNumber();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -116,10 +128,32 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public Minus createMinus()
+  {
+    MinusImpl minus = new MinusImpl();
+    return minus;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Mult createMult()
   {
     MultImpl mult = new MultImpl();
     return mult;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Div createDiv()
+  {
+    DivImpl div = new DivImpl();
+    return div;
   }
 
   /**
@@ -138,10 +172,21 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public NumberLiteral createNumberLiteral()
+  public Variable createVariable()
   {
-    NumberLiteralImpl numberLiteral = new NumberLiteralImpl();
-    return numberLiteral;
+    VariableImpl variable = new VariableImpl();
+    return variable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public org.eclipse.iee.translator.jmole.math.math.Number createNumber()
+  {
+    NumberImpl number = new NumberImpl();
+    return number;
   }
 
   /**

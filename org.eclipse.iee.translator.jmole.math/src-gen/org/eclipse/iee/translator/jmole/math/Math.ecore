@@ -14,7 +14,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Minus" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Mult" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Div" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
@@ -26,7 +38,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="power" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Number" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>
