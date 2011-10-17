@@ -44,6 +44,7 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
+    _builder.append(";");
     _builder.newLineIfNotEmpty();
     return _builder;
   }

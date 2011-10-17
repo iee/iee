@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: org.eclipse.iee.translator.jmole.math
-Bundle-Vendor: My Company
+Bundle-Name: IEE JMole translator
 Bundle-Version: 1.0.0
 Bundle-SymbolicName: org.eclipse.iee.translator.jmole.math;singleton:=true
 Bundle-ActivationPolicy: lazy
@@ -23,11 +22,11 @@ Import-Package: org.apache.log4j,
  org.eclipse.xtext.xtend2.lib
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.eclipse.iee.translator.jmole.math,
- org.eclipse.iee.translator.jmole.math.services,
+ org.eclipse.iee.translator.jmole.math.generator,
  org.eclipse.iee.translator.jmole.math.math,
  org.eclipse.iee.translator.jmole.math.math.impl,
  org.eclipse.iee.translator.jmole.math.math.util,
- org.eclipse.iee.translator.jmole.math.serializer,
  org.eclipse.iee.translator.jmole.math.parser.antlr,
  org.eclipse.iee.translator.jmole.math.parser.antlr.internal,
- org.eclipse.iee.translator.jmole.math.validation
+ org.eclipse.iee.translator.jmole.math.serializer,
+ org.eclipse.iee.translator.jmole.math.services

@@ -30,7 +30,7 @@ class MathGenerator implements IGenerator {
 	}
 	
 	def compileFormula(Formula f) '''
-		«compileExpression(f.expression)»
+		«compileExpression(f.expression)»;
 	'''
 	
 	def dispatch compileExpression(Variable n) '''
