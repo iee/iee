@@ -37,17 +37,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				//System.out.println(styledText.getText());
-				/*
-				  Use this code:				  
-				  
-				  1) Create byte code 
-				  		Compiler.compile(getContainerID(), styledText.getText());
-				  
-				  2) Update editor 
-				  		getContainer().writeAtContainerRegionTail("Mole.eval(" + getContainerID() + ");");
-				  
-				 */
-				
+								
 				System.out.println("before translation");
 				try {
 					String result = Activator.getMole().translateMath(styledText.getText());
@@ -57,10 +47,14 @@ public class CompiledMathPad extends Pad implements Serializable {
 					e1.printStackTrace();
 				}
 
-				//getContainer().writeAtContainerRegionTail("System.out.println(Integer.toString(RunnableMath.math0()));");
 			}
 			
-		});		
+		});	
+		MouseEventManager mouseManager = new MouseEventManager(parent);
+		parent.addMouseTrackListener(mouseManager);
+		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
+		
 	}
 
 	protected CompiledMathPad(String containerID) {
