@@ -65,18 +65,18 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cPowBaseAction_4_1 = (Action)cGroup_4.eContents().get(1);
 		private final Keyword cCircumflexAccentKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		private final Assignment cPowerAssignment_4_3 = (Assignment)cGroup_4.eContents().get(3);
-		private final RuleCall cPowerExpressionParserRuleCall_4_3_0 = (RuleCall)cPowerAssignment_4_3.eContents().get(0);
+		private final RuleCall cPowerPrimaryExpressionParserRuleCall_4_3_0 = (RuleCall)cPowerAssignment_4_3.eContents().get(0);
 		private final RuleCall cPrimaryExpressionParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
 		
 		//Expression:
 		//	PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Minus.left=current} "-"
 		//	right=Expression | PrimaryExpression {Mult.left=current} "*" right=Expression | PrimaryExpression {Div.left=current}
-		//	"/" right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression;
+		//	"/" right=Expression | PrimaryExpression {Pow.base=current} "^" power=PrimaryExpression | PrimaryExpression;
 		public ParserRule getRule() { return rule; }
 
 		//PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Minus.left=current} "-" right=Expression
 		//| PrimaryExpression {Mult.left=current} "*" right=Expression | PrimaryExpression {Div.left=current} "/"
-		//right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression
+		//right=Expression | PrimaryExpression {Pow.base=current} "^" power=PrimaryExpression | PrimaryExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//PrimaryExpression {Plus.left=current} "+" right=Expression
@@ -151,7 +151,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Expression
 		public RuleCall getRightExpressionParserRuleCall_3_3_0() { return cRightExpressionParserRuleCall_3_3_0; }
 
-		//PrimaryExpression {Pow.base=current} "^" power=Expression
+		//PrimaryExpression {Pow.base=current} "^" power=PrimaryExpression
 		public Group getGroup_4() { return cGroup_4; }
 
 		//PrimaryExpression
@@ -163,11 +163,11 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//"^"
 		public Keyword getCircumflexAccentKeyword_4_2() { return cCircumflexAccentKeyword_4_2; }
 
-		//power=Expression
+		//power=PrimaryExpression
 		public Assignment getPowerAssignment_4_3() { return cPowerAssignment_4_3; }
 
-		//Expression
-		public RuleCall getPowerExpressionParserRuleCall_4_3_0() { return cPowerExpressionParserRuleCall_4_3_0; }
+		//PrimaryExpression
+		public RuleCall getPowerPrimaryExpressionParserRuleCall_4_3_0() { return cPowerPrimaryExpressionParserRuleCall_4_3_0; }
 
 		//PrimaryExpression
 		public RuleCall getPrimaryExpressionParserRuleCall_5() { return cPrimaryExpressionParserRuleCall_5; }
@@ -189,11 +189,6 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cValueAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
 		private final RuleCall cValueINTTerminalRuleCall_2_1_0 = (RuleCall)cValueAssignment_2_1.eContents().get(0);
 		
-		////	 Addition | Multiplication | Power;
-		////Addition returns Expression:
-		////Multiplication returns Expression:
-		////Power returns Expression:
-		////	PrimaryExpression {Pow.base=current} '^' power=Expression;
 		//PrimaryExpression returns Expression:
 		//	"(" Expression ")" | {Variable} name=ID | {Number} value=INT;
 		public ParserRule getRule() { return rule; }
@@ -277,7 +272,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	//Expression:
 	//	PrimaryExpression {Plus.left=current} "+" right=Expression | PrimaryExpression {Minus.left=current} "-"
 	//	right=Expression | PrimaryExpression {Mult.left=current} "*" right=Expression | PrimaryExpression {Div.left=current}
-	//	"/" right=Expression | PrimaryExpression {Pow.base=current} "^" power=Expression | PrimaryExpression;
+	//	"/" right=Expression | PrimaryExpression {Pow.base=current} "^" power=PrimaryExpression | PrimaryExpression;
 	public ExpressionElements getExpressionAccess() {
 		return (pExpression != null) ? pExpression : (pExpression = new ExpressionElements());
 	}
@@ -286,11 +281,6 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		return getExpressionAccess().getRule();
 	}
 
-	////	 Addition | Multiplication | Power;
-	////Addition returns Expression:
-	////Multiplication returns Expression:
-	////Power returns Expression:
-	////	PrimaryExpression {Pow.base=current} '^' power=Expression;
 	//PrimaryExpression returns Expression:
 	//	"(" Expression ")" | {Variable} name=ID | {Number} value=INT;
 	public PrimaryExpressionElements getPrimaryExpressionAccess() {

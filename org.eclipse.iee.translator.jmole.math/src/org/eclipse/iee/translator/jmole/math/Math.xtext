@@ -10,7 +10,7 @@ Expression:
 	PrimaryExpression {Minus.left=current} '-' right=Expression |
 	PrimaryExpression {Mult.left=current} '*' right=Expression |
 	PrimaryExpression {Div.left=current} '/' right=Expression |
-	PrimaryExpression {Pow.base=current} '^' power=Expression |
+	PrimaryExpression {Pow.base=current} '^' power=PrimaryExpression |
 	PrimaryExpression;
 
 PrimaryExpression returns Expression:

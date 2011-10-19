@@ -326,9 +326,9 @@ ruleExpression returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getExpressionAccess().getPowerExpressionParserRuleCall_4_3_0()); 
+	        newCompositeNode(grammarAccess.getExpressionAccess().getPowerPrimaryExpressionParserRuleCall_4_3_0()); 
 	    }
-		lv_power_19_0=ruleExpression		{
+		lv_power_19_0=rulePrimaryExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getExpressionRule());
 	        }
@@ -336,7 +336,7 @@ ruleExpression returns [EObject current=null]
        			$current, 
        			"power",
         		lv_power_19_0, 
-        		"Expression");
+        		"PrimaryExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 

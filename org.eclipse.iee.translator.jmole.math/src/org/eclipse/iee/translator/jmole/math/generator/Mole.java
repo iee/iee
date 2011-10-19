@@ -30,14 +30,14 @@ import com.google.inject.Provider;
 public class Mole {
 	
 	public static void main(String[] args) {
-		if (args.length==0) {
-			System.err.println("Aborting: no path to EMF resource provided!");
-			return;
-		}
+		//if (args.length==0) {
+		//	System.err.println("Aborting: no path to EMF resource provided!");
+		//	return;
+		//}
 		Injector injector = new org.eclipse.iee.translator.jmole.math.MathStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		Mole main = injector.getInstance(Mole.class);
 		//main.runGenerator(args[0]);
-		//System.out.println(main.translateMath("1 / (a + b)"));
+		System.out.println(main.translateMath("1 / (a + b)"));
 	}
 	
 	public static Mole create() {
@@ -63,19 +63,11 @@ public class Mole {
 		InputStream inputStream = new ByteArrayInputStream(input.getBytes());
 		ResourceSet set = resourceSetProvider.get();
 		Resource resource = set.getResource(URI.createURI("test.math"), true);
-		
+	
 		try {
 			resource.unload();
 			resource.load(inputStream, set.getLoadOptions());
-			
-			List<Issue> list = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-			if (!list.isEmpty()) {
-				for (Issue issue : list) {
-					System.err.println(issue);
-				}
-				return null;
-			}
-			
+				
 			return ((MathGenerator)generator).generateText(resource);
 			
 		} catch (IOException e) {

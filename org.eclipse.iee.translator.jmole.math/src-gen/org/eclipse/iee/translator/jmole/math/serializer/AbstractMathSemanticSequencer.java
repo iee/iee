@@ -53,91 +53,91 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		if(semanticObject.eClass().getEPackage() == MathPackage.eINSTANCE) switch(semanticObject.eClass().getClassifierID()) {
 			case MathPackage.DIV:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_Expression(context, (Div) semanticObject); 
+					sequence_Expression_Div(context, (Div) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.FORMULA:
 				if(context == grammarAccess.getFormulaRule()) {
-					sequence_Formula(context, (Formula) semanticObject); 
+					sequence_Formula_Formula(context, (Formula) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.MINUS:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_Expression(context, (Minus) semanticObject); 
+					sequence_Expression_Minus(context, (Minus) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.MULT:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_Expression(context, (Mult) semanticObject); 
+					sequence_Expression_Mult(context, (Mult) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.NUMBER:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_PrimaryExpression(context, (org.eclipse.iee.translator.jmole.math.math.Number) semanticObject); 
+					sequence_PrimaryExpression_Number(context, (org.eclipse.iee.translator.jmole.math.math.Number) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.PLUS:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_Expression(context, (Plus) semanticObject); 
+					sequence_Expression_Plus(context, (Plus) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.POW:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_Expression(context, (Pow) semanticObject); 
+					sequence_Expression_Pow(context, (Pow) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.VARIABLE:
 				if(context == grammarAccess.getExpressionRule() ||
-				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
+				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
 				   context == grammarAccess.getExpressionAccess().getMinusLeftAction_1_1() ||
 				   context == grammarAccess.getExpressionAccess().getMultLeftAction_2_1() ||
-				   context == grammarAccess.getExpressionAccess().getPlusLeftAction_0_1() ||
+				   context == grammarAccess.getExpressionAccess().getDivLeftAction_3_1() ||
 				   context == grammarAccess.getExpressionAccess().getPowBaseAction_4_1() ||
 				   context == grammarAccess.getPrimaryExpressionRule()) {
-					sequence_PrimaryExpression(context, (Variable) semanticObject); 
+					sequence_PrimaryExpression_Variable(context, (Variable) semanticObject); 
 					return; 
 				}
 				else break;
@@ -153,7 +153,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Expression(EObject context, Div semanticObject) {
+	protected void sequence_Expression_Div(EObject context, Div semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.DIV__LEFT) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.DIV__LEFT));
@@ -176,7 +176,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Expression(EObject context, Minus semanticObject) {
+	protected void sequence_Expression_Minus(EObject context, Minus semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.MINUS__LEFT) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.MINUS__LEFT));
@@ -199,7 +199,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Expression(EObject context, Mult semanticObject) {
+	protected void sequence_Expression_Mult(EObject context, Mult semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.MULT__LEFT) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.MULT__LEFT));
@@ -222,7 +222,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Expression(EObject context, Plus semanticObject) {
+	protected void sequence_Expression_Plus(EObject context, Plus semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.PLUS__LEFT) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.PLUS__LEFT));
@@ -239,13 +239,13 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (base=Expression_Pow_4_1 power=Expression)
+	 *     (base=Expression_Pow_4_1 power=PrimaryExpression)
 	 *
 	 * Features:
 	 *    base[1, 1]
 	 *    power[1, 1]
 	 */
-	protected void sequence_Expression(EObject context, Pow semanticObject) {
+	protected void sequence_Expression_Pow(EObject context, Pow semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.POW__BASE) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.POW__BASE));
@@ -255,7 +255,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
 		feeder.accept(grammarAccess.getExpressionAccess().getPowBaseAction_4_1(), semanticObject.getBase());
-		feeder.accept(grammarAccess.getExpressionAccess().getPowerExpressionParserRuleCall_4_3_0(), semanticObject.getPower());
+		feeder.accept(grammarAccess.getExpressionAccess().getPowerPrimaryExpressionParserRuleCall_4_3_0(), semanticObject.getPower());
 		feeder.finish();
 	}
 	
@@ -267,7 +267,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    expression[1, 1]
 	 */
-	protected void sequence_Formula(EObject context, Formula semanticObject) {
+	protected void sequence_Formula_Formula(EObject context, Formula semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION));
@@ -286,7 +286,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    value[1, 1]
 	 */
-	protected void sequence_PrimaryExpression(EObject context, org.eclipse.iee.translator.jmole.math.math.Number semanticObject) {
+	protected void sequence_PrimaryExpression_Number(EObject context, org.eclipse.iee.translator.jmole.math.math.Number semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.NUMBER__VALUE) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.NUMBER__VALUE));
@@ -305,7 +305,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    name[1, 1]
 	 */
-	protected void sequence_PrimaryExpression(EObject context, Variable semanticObject) {
+	protected void sequence_PrimaryExpression_Variable(EObject context, Variable semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.VARIABLE__NAME) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.VARIABLE__NAME));
