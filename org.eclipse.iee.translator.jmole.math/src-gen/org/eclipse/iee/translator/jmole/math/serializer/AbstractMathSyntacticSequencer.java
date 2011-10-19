@@ -15,14 +15,14 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected MathGrammarAccess grammarAccess;
-	protected AbstractElementAlias match_PrimaryExpression_LeftParenthesisKeyword_0_0_a;
-	protected AbstractElementAlias match_PrimaryExpression_LeftParenthesisKeyword_0_0_p;
+	protected AbstractElementAlias match_Primary_LeftParenthesisKeyword_2_0_a;
+	protected AbstractElementAlias match_Primary_LeftParenthesisKeyword_2_0_p;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (MathGrammarAccess) access;
-		match_PrimaryExpression_LeftParenthesisKeyword_0_0_a = new TokenAlias(true, true, grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_0());
-		match_PrimaryExpression_LeftParenthesisKeyword_0_0_p = new TokenAlias(false, true, grammarAccess.getPrimaryExpressionAccess().getLeftParenthesisKeyword_0_0());
+		match_Primary_LeftParenthesisKeyword_2_0_a = new TokenAlias(true, true, grammarAccess.getPrimaryAccess().getLeftParenthesisKeyword_2_0());
+		match_Primary_LeftParenthesisKeyword_2_0_p = new TokenAlias(false, true, grammarAccess.getPrimaryAccess().getLeftParenthesisKeyword_2_0());
 	}
 	
 	@Override
@@ -35,10 +35,10 @@ public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 	protected void emitUnassignedTokens(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
 		if (!transition.isSyntacticallyAmbiguous())
 			return;
-		if(match_PrimaryExpression_LeftParenthesisKeyword_0_0_a.equals(transition.getAmbiguousSyntax()))
-			emit_PrimaryExpression_LeftParenthesisKeyword_0_0_a(semanticObject, transition, fromNode, toNode);
-		else if(match_PrimaryExpression_LeftParenthesisKeyword_0_0_p.equals(transition.getAmbiguousSyntax()))
-			emit_PrimaryExpression_LeftParenthesisKeyword_0_0_p(semanticObject, transition, fromNode, toNode);
+		if(match_Primary_LeftParenthesisKeyword_2_0_a.equals(transition.getAmbiguousSyntax()))
+			emit_Primary_LeftParenthesisKeyword_2_0_a(semanticObject, transition, fromNode, toNode);
+		else if(match_Primary_LeftParenthesisKeyword_2_0_p.equals(transition.getAmbiguousSyntax()))
+			emit_Primary_LeftParenthesisKeyword_2_0_p(semanticObject, transition, fromNode, toNode);
 		else acceptNodes(transition, fromNode, toNode);
 	}
 
@@ -46,7 +46,7 @@ public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 	 * Syntax:
 	 *     '('*
 	 */
-	protected void emit_PrimaryExpression_LeftParenthesisKeyword_0_0_a(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
+	protected void emit_Primary_LeftParenthesisKeyword_2_0_a(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
 		acceptNodes(transition, fromNode, toNode);
 	}
 	
@@ -54,7 +54,7 @@ public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 	 * Syntax:
 	 *     '('+
 	 */
-	protected void emit_PrimaryExpression_LeftParenthesisKeyword_0_0_p(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
+	protected void emit_Primary_LeftParenthesisKeyword_2_0_p(EObject semanticObject, ISynTransition transition, INode fromNode, INode toNode) {
 		acceptNodes(transition, fromNode, toNode);
 	}
 	

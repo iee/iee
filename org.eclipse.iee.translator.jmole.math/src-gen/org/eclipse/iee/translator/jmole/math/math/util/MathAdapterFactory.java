@@ -12,14 +12,14 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.iee.translator.jmole.math.math.Div;
+import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.Minus;
-import org.eclipse.iee.translator.jmole.math.math.Mult;
-import org.eclipse.iee.translator.jmole.math.math.Plus;
-import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
@@ -96,29 +96,29 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createExpressionAdapter();
       }
       @Override
-      public Adapter casePlus(Plus object)
+      public Adapter caseAddition(Addition object)
       {
-        return createPlusAdapter();
+        return createAdditionAdapter();
       }
       @Override
-      public Adapter caseMinus(Minus object)
+      public Adapter caseSubtraction(Subtraction object)
       {
-        return createMinusAdapter();
+        return createSubtractionAdapter();
       }
       @Override
-      public Adapter caseMult(Mult object)
+      public Adapter caseMultiplication(Multiplication object)
       {
-        return createMultAdapter();
+        return createMultiplicationAdapter();
       }
       @Override
-      public Adapter caseDiv(Div object)
+      public Adapter caseDivision(Division object)
       {
-        return createDivAdapter();
+        return createDivisionAdapter();
       }
       @Override
-      public Adapter casePow(Pow object)
+      public Adapter casePower(Power object)
       {
-        return createPowAdapter();
+        return createPowerAdapter();
       }
       @Override
       public Adapter caseVariable(Variable object)
@@ -126,9 +126,9 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createVariableAdapter();
       }
       @Override
-      public Adapter caseNumber(org.eclipse.iee.translator.jmole.math.math.Number object)
+      public Adapter caseFloat(org.eclipse.iee.translator.jmole.math.math.Float object)
       {
-        return createNumberAdapter();
+        return createFloatAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -183,76 +183,76 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Plus <em>Plus</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Addition <em>Addition</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Plus
+   * @see org.eclipse.iee.translator.jmole.math.math.Addition
    * @generated
    */
-  public Adapter createPlusAdapter()
+  public Adapter createAdditionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Minus <em>Minus</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Subtraction <em>Subtraction</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Minus
+   * @see org.eclipse.iee.translator.jmole.math.math.Subtraction
    * @generated
    */
-  public Adapter createMinusAdapter()
+  public Adapter createSubtractionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Mult <em>Mult</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Multiplication <em>Multiplication</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Mult
+   * @see org.eclipse.iee.translator.jmole.math.math.Multiplication
    * @generated
    */
-  public Adapter createMultAdapter()
+  public Adapter createMultiplicationAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Div <em>Div</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Division <em>Division</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Div
+   * @see org.eclipse.iee.translator.jmole.math.math.Division
    * @generated
    */
-  public Adapter createDivAdapter()
+  public Adapter createDivisionAdapter()
   {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Pow <em>Pow</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Power <em>Power</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Pow
+   * @see org.eclipse.iee.translator.jmole.math.math.Power
    * @generated
    */
-  public Adapter createPowAdapter()
+  public Adapter createPowerAdapter()
   {
     return null;
   }
@@ -273,16 +273,16 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Number <em>Number</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Float <em>Float</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Number
+   * @see org.eclipse.iee.translator.jmole.math.math.Float
    * @generated
    */
-  public Adapter createNumberAdapter()
+  public Adapter createFloatAdapter()
   {
     return null;
   }

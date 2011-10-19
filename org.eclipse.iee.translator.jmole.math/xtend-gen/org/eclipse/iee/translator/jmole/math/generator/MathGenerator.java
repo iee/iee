@@ -2,14 +2,14 @@ package org.eclipse.iee.translator.jmole.math.generator;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.iee.translator.jmole.math.math.Div;
+import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
-import org.eclipse.iee.translator.jmole.math.math.Minus;
-import org.eclipse.iee.translator.jmole.math.math.Mult;
-import org.eclipse.iee.translator.jmole.math.math.Number;
-import org.eclipse.iee.translator.jmole.math.math.Plus;
-import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
@@ -56,14 +56,14 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Number n) {
+  protected StringConcatenation _compileExpression(final Float n) {
     StringConcatenation _builder = new StringConcatenation();
-    int _value = n.getValue();
+    String _value = n.getValue();
     _builder.append(_value, "");
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Plus op) {
+  protected StringConcatenation _compileExpression(final Addition op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
     Expression _left = op.getLeft();
@@ -77,7 +77,7 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Minus op) {
+  protected StringConcatenation _compileExpression(final Subtraction op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
     Expression _left = op.getLeft();
@@ -91,7 +91,7 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Mult op) {
+  protected StringConcatenation _compileExpression(final Multiplication op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
     Expression _left = op.getLeft();
@@ -105,7 +105,7 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Div op) {
+  protected StringConcatenation _compileExpression(final Division op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
     Expression _left = op.getLeft();
@@ -119,33 +119,33 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Pow op) {
+  protected StringConcatenation _compileExpression(final Power op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
-    Expression _base = op.getBase();
-    StringConcatenation _compileExpression = this.compileExpression(_base);
+    Expression _left = op.getLeft();
+    StringConcatenation _compileExpression = this.compileExpression(_left);
     _builder.append(_compileExpression, "");
     _builder.append(") ^ (");
-    Expression _power = op.getPower();
-    StringConcatenation _compileExpression_1 = this.compileExpression(_power);
+    Expression _right = op.getRight();
+    StringConcatenation _compileExpression_1 = this.compileExpression(_right);
     _builder.append(_compileExpression_1, "");
     _builder.append(")");
     return _builder;
   }
   
   public StringConcatenation compileExpression(final Expression op) {
-    if ((op instanceof Div)) {
-      return _compileExpression((Div)op);
-    } else if ((op instanceof Minus)) {
-      return _compileExpression((Minus)op);
-    } else if ((op instanceof Mult)) {
-      return _compileExpression((Mult)op);
-    } else if ((op instanceof Number)) {
-      return _compileExpression((Number)op);
-    } else if ((op instanceof Plus)) {
-      return _compileExpression((Plus)op);
-    } else if ((op instanceof Pow)) {
-      return _compileExpression((Pow)op);
+    if ((op instanceof Addition)) {
+      return _compileExpression((Addition)op);
+    } else if ((op instanceof Division)) {
+      return _compileExpression((Division)op);
+    } else if ((op instanceof Float)) {
+      return _compileExpression((Float)op);
+    } else if ((op instanceof Multiplication)) {
+      return _compileExpression((Multiplication)op);
+    } else if ((op instanceof Power)) {
+      return _compileExpression((Power)op);
+    } else if ((op instanceof Subtraction)) {
+      return _compileExpression((Subtraction)op);
     } else if ((op instanceof Variable)) {
       return _compileExpression((Variable)op);
     } else {

@@ -10,14 +10,14 @@ import java.util.List;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.iee.translator.jmole.math.math.Div;
+import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.Minus;
-import org.eclipse.iee.translator.jmole.math.math.Mult;
-import org.eclipse.iee.translator.jmole.math.math.Plus;
-import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
@@ -117,43 +117,43 @@ public class MathSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.PLUS:
+      case MathPackage.ADDITION:
       {
-        Plus plus = (Plus)theEObject;
-        T result = casePlus(plus);
-        if (result == null) result = caseExpression(plus);
+        Addition addition = (Addition)theEObject;
+        T result = caseAddition(addition);
+        if (result == null) result = caseExpression(addition);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.MINUS:
+      case MathPackage.SUBTRACTION:
       {
-        Minus minus = (Minus)theEObject;
-        T result = caseMinus(minus);
-        if (result == null) result = caseExpression(minus);
+        Subtraction subtraction = (Subtraction)theEObject;
+        T result = caseSubtraction(subtraction);
+        if (result == null) result = caseExpression(subtraction);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.MULT:
+      case MathPackage.MULTIPLICATION:
       {
-        Mult mult = (Mult)theEObject;
-        T result = caseMult(mult);
-        if (result == null) result = caseExpression(mult);
+        Multiplication multiplication = (Multiplication)theEObject;
+        T result = caseMultiplication(multiplication);
+        if (result == null) result = caseExpression(multiplication);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.DIV:
+      case MathPackage.DIVISION:
       {
-        Div div = (Div)theEObject;
-        T result = caseDiv(div);
-        if (result == null) result = caseExpression(div);
+        Division division = (Division)theEObject;
+        T result = caseDivision(division);
+        if (result == null) result = caseExpression(division);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.POW:
+      case MathPackage.POWER:
       {
-        Pow pow = (Pow)theEObject;
-        T result = casePow(pow);
-        if (result == null) result = caseExpression(pow);
+        Power power = (Power)theEObject;
+        T result = casePower(power);
+        if (result == null) result = caseExpression(power);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -165,11 +165,11 @@ public class MathSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.NUMBER:
+      case MathPackage.FLOAT:
       {
-        org.eclipse.iee.translator.jmole.math.math.Number number = (org.eclipse.iee.translator.jmole.math.math.Number)theEObject;
-        T result = caseNumber(number);
-        if (result == null) result = caseExpression(number);
+        org.eclipse.iee.translator.jmole.math.math.Float float_ = (org.eclipse.iee.translator.jmole.math.math.Float)theEObject;
+        T result = caseFloat(float_);
+        if (result == null) result = caseExpression(float_);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -210,81 +210,81 @@ public class MathSwitch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Plus</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Addition</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Plus</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Addition</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T casePlus(Plus object)
+  public T caseAddition(Addition object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Minus</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Subtraction</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Minus</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Subtraction</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMinus(Minus object)
+  public T caseSubtraction(Subtraction object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Mult</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Multiplication</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Mult</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Multiplication</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMult(Mult object)
+  public T caseMultiplication(Multiplication object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Div</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Division</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Div</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Division</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseDiv(Div object)
+  public T caseDivision(Division object)
   {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Pow</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Power</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Pow</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Power</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T casePow(Pow object)
+  public T casePower(Power object)
   {
     return null;
   }
@@ -306,17 +306,17 @@ public class MathSwitch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Number</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Float</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Number</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Float</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseNumber(org.eclipse.iee.translator.jmole.math.math.Number object)
+  public T caseFloat(org.eclipse.iee.translator.jmole.math.math.Float object)
   {
     return null;
   }

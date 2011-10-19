@@ -13,15 +13,15 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import org.eclipse.iee.translator.jmole.math.math.Div;
+import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.Minus;
-import org.eclipse.iee.translator.jmole.math.math.Mult;
-import org.eclipse.iee.translator.jmole.math.math.Plus;
-import org.eclipse.iee.translator.jmole.math.math.Pow;
+import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
@@ -78,13 +78,13 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
     {
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
-      case MathPackage.PLUS: return createPlus();
-      case MathPackage.MINUS: return createMinus();
-      case MathPackage.MULT: return createMult();
-      case MathPackage.DIV: return createDiv();
-      case MathPackage.POW: return createPow();
+      case MathPackage.ADDITION: return createAddition();
+      case MathPackage.SUBTRACTION: return createSubtraction();
+      case MathPackage.MULTIPLICATION: return createMultiplication();
+      case MathPackage.DIVISION: return createDivision();
+      case MathPackage.POWER: return createPower();
       case MathPackage.VARIABLE: return createVariable();
-      case MathPackage.NUMBER: return createNumber();
+      case MathPackage.FLOAT: return createFloat();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -117,10 +117,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Plus createPlus()
+  public Addition createAddition()
   {
-    PlusImpl plus = new PlusImpl();
-    return plus;
+    AdditionImpl addition = new AdditionImpl();
+    return addition;
   }
 
   /**
@@ -128,10 +128,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Minus createMinus()
+  public Subtraction createSubtraction()
   {
-    MinusImpl minus = new MinusImpl();
-    return minus;
+    SubtractionImpl subtraction = new SubtractionImpl();
+    return subtraction;
   }
 
   /**
@@ -139,10 +139,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Mult createMult()
+  public Multiplication createMultiplication()
   {
-    MultImpl mult = new MultImpl();
-    return mult;
+    MultiplicationImpl multiplication = new MultiplicationImpl();
+    return multiplication;
   }
 
   /**
@@ -150,10 +150,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Div createDiv()
+  public Division createDivision()
   {
-    DivImpl div = new DivImpl();
-    return div;
+    DivisionImpl division = new DivisionImpl();
+    return division;
   }
 
   /**
@@ -161,10 +161,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Pow createPow()
+  public Power createPower()
   {
-    PowImpl pow = new PowImpl();
-    return pow;
+    PowerImpl power = new PowerImpl();
+    return power;
   }
 
   /**
@@ -183,10 +183,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public org.eclipse.iee.translator.jmole.math.math.Number createNumber()
+  public org.eclipse.iee.translator.jmole.math.math.Float createFloat()
   {
-    NumberImpl number = new NumberImpl();
-    return number;
+    FloatImpl float_ = new FloatImpl();
+    return float_;
   }
 
   /**

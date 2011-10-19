@@ -2,18 +2,42 @@ grammar org.eclipse.iee.translator.jmole.math.Math with org.eclipse.xtext.common
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 
-Formula:
-	expression=Expression;
+//Formula:
+//	expression=Expression;
 
+Formula:
+	expression=Addition;
+
+Addition returns Expression:
+	Multiplication ({Addition.left=current} '+' right=Multiplication | {Subtraction.left=current} '-' right=Multiplication)*;
+
+Multiplication returns Expression:
+	Power ({Multiplication.left=current} '*' right=Power | {Division.left=current} '/' right=Power)*;
+
+Power returns Expression:
+	Primary ({Power.left=current} '^' right=Primary)?;
+
+Primary returns Expression:
+	{Variable} name=ID |
+	//{Number} value=INT |
+	{Float} value=Float |
+	'(' Addition ')';
+
+
+Float:
+	INT* ('.' INT+)?;
+
+/*
 Expression:
 	PrimaryExpression {Plus.left=current} '+' right=Expression |
 	PrimaryExpression {Minus.left=current} '-' right=Expression |
 	PrimaryExpression {Mult.left=current} '*' right=Expression |
 	PrimaryExpression {Div.left=current} '/' right=Expression |
-	PrimaryExpression {Pow.base=current} '^' power=PrimaryExpression |
+	PrimaryExpression {Pow.base=current} '^' power=Expression |
 	PrimaryExpression;
 
 PrimaryExpression returns Expression:
 	'(' Expression ')' |
 	{Variable} name=ID |
 	{Number} value=INT;
+*/

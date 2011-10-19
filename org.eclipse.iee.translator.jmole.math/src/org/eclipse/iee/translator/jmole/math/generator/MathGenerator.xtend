@@ -36,26 +36,24 @@ class MathGenerator implements IGenerator {
 	def dispatch compileExpression(Variable n) '''
 		«n.name»'''
 	
-	def dispatch compileExpression(Number n) '''
+	//def dispatch compileExpression(Number n) '''
+	//	«n.value»'''
+	
+	def dispatch compileExpression(Float n) '''
 		«n.value»'''
 	
-	def dispatch compileExpression(Plus op) '''
+	def dispatch compileExpression(Addition op) '''
 		(«compileExpression(op.left)») + («compileExpression(op.right)»)'''
-		//PLUS («compileExpression(op.left)», «compileExpression(op.right)»)'''
 	
-	def dispatch compileExpression(Minus op) '''
+	def dispatch compileExpression(Subtraction op) '''
 		(«compileExpression(op.left)») - («compileExpression(op.right)»)'''
-		//MINUS («compileExpression(op.left)», «compileExpression(op.right)»)'''
 	
-	def dispatch compileExpression(Mult op) '''
+	def dispatch compileExpression(Multiplication op) '''
 		(«compileExpression(op.left)») * («compileExpression(op.right)»)'''
-		//MULT («compileExpression(op.left)», «compileExpression(op.right)»)'''
 	
-	def dispatch compileExpression(Div op) '''
+	def dispatch compileExpression(Division op) '''
 		(«compileExpression(op.left)») / («compileExpression(op.right)»)'''
-		//DIV («compileExpression(op.left)», «compileExpression(op.right)»)'''
 	
-	def dispatch compileExpression(Pow op) '''
-		(«compileExpression(op.base)») ^ («compileExpression(op.power)»)'''
-		//POWER («compileExpression(op.base)» «compileExpression(op.power)»)'''
+	def dispatch compileExpression(Power op) '''
+		(«compileExpression(op.left)») ^ («compileExpression(op.right)»)'''
 }

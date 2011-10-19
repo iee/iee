@@ -44,49 +44,49 @@ public interface MathFactory extends EFactory
   Expression createExpression();
 
   /**
-   * Returns a new object of class '<em>Plus</em>'.
+   * Returns a new object of class '<em>Addition</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Plus</em>'.
+   * @return a new object of class '<em>Addition</em>'.
    * @generated
    */
-  Plus createPlus();
+  Addition createAddition();
 
   /**
-   * Returns a new object of class '<em>Minus</em>'.
+   * Returns a new object of class '<em>Subtraction</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Minus</em>'.
+   * @return a new object of class '<em>Subtraction</em>'.
    * @generated
    */
-  Minus createMinus();
+  Subtraction createSubtraction();
 
   /**
-   * Returns a new object of class '<em>Mult</em>'.
+   * Returns a new object of class '<em>Multiplication</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Mult</em>'.
+   * @return a new object of class '<em>Multiplication</em>'.
    * @generated
    */
-  Mult createMult();
+  Multiplication createMultiplication();
 
   /**
-   * Returns a new object of class '<em>Div</em>'.
+   * Returns a new object of class '<em>Division</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Div</em>'.
+   * @return a new object of class '<em>Division</em>'.
    * @generated
    */
-  Div createDiv();
+  Division createDivision();
 
   /**
-   * Returns a new object of class '<em>Pow</em>'.
+   * Returns a new object of class '<em>Power</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Pow</em>'.
+   * @return a new object of class '<em>Power</em>'.
    * @generated
    */
-  Pow createPow();
+  Power createPower();
 
   /**
    * Returns a new object of class '<em>Variable</em>'.
@@ -98,13 +98,13 @@ public interface MathFactory extends EFactory
   Variable createVariable();
 
   /**
-   * Returns a new object of class '<em>Number</em>'.
+   * Returns a new object of class '<em>Float</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Number</em>'.
+   * @return a new object of class '<em>Float</em>'.
    * @generated
    */
-  Number createNumber();
+  Float createFloat();
 
   /**
    * Returns the package supported by this factory.

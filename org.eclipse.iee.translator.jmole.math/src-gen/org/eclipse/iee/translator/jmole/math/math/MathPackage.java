@@ -107,14 +107,14 @@ public interface MathPackage extends EPackage
   int EXPRESSION_FEATURE_COUNT = 0;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PlusImpl <em>Plus</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.PlusImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPlus()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAddition()
    * @generated
    */
-  int PLUS = 2;
+  int ADDITION = 2;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -123,7 +123,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PLUS__LEFT = EXPRESSION_FEATURE_COUNT + 0;
+  int ADDITION__LEFT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -132,26 +132,26 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PLUS__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+  int ADDITION__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>Plus</em>' class.
+   * The number of structural features of the '<em>Addition</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PLUS_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+  int ADDITION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MinusImpl <em>Minus</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.SubtractionImpl <em>Subtraction</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MinusImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMinus()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.SubtractionImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getSubtraction()
    * @generated
    */
-  int MINUS = 3;
+  int SUBTRACTION = 3;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -160,7 +160,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MINUS__LEFT = EXPRESSION_FEATURE_COUNT + 0;
+  int SUBTRACTION__LEFT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -169,26 +169,26 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MINUS__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+  int SUBTRACTION__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>Minus</em>' class.
+   * The number of structural features of the '<em>Subtraction</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MINUS_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+  int SUBTRACTION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MultImpl <em>Mult</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MultiplicationImpl <em>Multiplication</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MultImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMult()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MultiplicationImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMultiplication()
    * @generated
    */
-  int MULT = 4;
+  int MULTIPLICATION = 4;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -197,7 +197,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MULT__LEFT = EXPRESSION_FEATURE_COUNT + 0;
+  int MULTIPLICATION__LEFT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -206,26 +206,26 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MULT__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+  int MULTIPLICATION__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>Mult</em>' class.
+   * The number of structural features of the '<em>Multiplication</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MULT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+  int MULTIPLICATION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.DivImpl <em>Div</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.DivisionImpl <em>Division</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.DivImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDiv()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.DivisionImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDivision()
    * @generated
    */
-  int DIV = 5;
+  int DIVISION = 5;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -234,7 +234,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIV__LEFT = EXPRESSION_FEATURE_COUNT + 0;
+  int DIVISION__LEFT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -243,53 +243,53 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIV__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+  int DIVISION__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>Div</em>' class.
+   * The number of structural features of the '<em>Division</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DIV_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+  int DIVISION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PowImpl <em>Pow</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl <em>Power</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.PowImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPow()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
    * @generated
    */
-  int POW = 6;
+  int POWER = 6;
 
   /**
-   * The feature id for the '<em><b>Base</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int POW__BASE = EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Power</b></em>' containment reference.
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int POW__POWER = EXPRESSION_FEATURE_COUNT + 1;
+  int POWER__LEFT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
-   * The number of structural features of the '<em>Pow</em>' class.
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int POW_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+  int POWER__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Power</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int POWER_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.VariableImpl <em>Variable</em>}' class.
@@ -320,14 +320,14 @@ public interface MathPackage extends EPackage
   int VARIABLE_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.NumberImpl <em>Number</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl <em>Float</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.NumberImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getNumber()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int NUMBER = 8;
+  int FLOAT = 8;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -336,16 +336,16 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int NUMBER__VALUE = EXPRESSION_FEATURE_COUNT + 0;
+  int FLOAT__VALUE = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
-   * The number of structural features of the '<em>Number</em>' class.
+   * The number of structural features of the '<em>Float</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int NUMBER_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+  int FLOAT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
 
   /**
@@ -380,164 +380,164 @@ public interface MathPackage extends EPackage
   EClass getExpression();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Plus <em>Plus</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Addition <em>Addition</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Plus</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Plus
+   * @return the meta object for class '<em>Addition</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Addition
    * @generated
    */
-  EClass getPlus();
+  EClass getAddition();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Plus#getLeft <em>Left</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Addition#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Plus#getLeft()
-   * @see #getPlus()
+   * @see org.eclipse.iee.translator.jmole.math.math.Addition#getLeft()
+   * @see #getAddition()
    * @generated
    */
-  EReference getPlus_Left();
+  EReference getAddition_Left();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Plus#getRight <em>Right</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Addition#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Plus#getRight()
-   * @see #getPlus()
+   * @see org.eclipse.iee.translator.jmole.math.math.Addition#getRight()
+   * @see #getAddition()
    * @generated
    */
-  EReference getPlus_Right();
+  EReference getAddition_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Minus <em>Minus</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Subtraction <em>Subtraction</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Minus</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Minus
+   * @return the meta object for class '<em>Subtraction</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Subtraction
    * @generated
    */
-  EClass getMinus();
+  EClass getSubtraction();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Minus#getLeft <em>Left</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Subtraction#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Minus#getLeft()
-   * @see #getMinus()
+   * @see org.eclipse.iee.translator.jmole.math.math.Subtraction#getLeft()
+   * @see #getSubtraction()
    * @generated
    */
-  EReference getMinus_Left();
+  EReference getSubtraction_Left();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Minus#getRight <em>Right</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Subtraction#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Minus#getRight()
-   * @see #getMinus()
+   * @see org.eclipse.iee.translator.jmole.math.math.Subtraction#getRight()
+   * @see #getSubtraction()
    * @generated
    */
-  EReference getMinus_Right();
+  EReference getSubtraction_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Mult <em>Mult</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Multiplication <em>Multiplication</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Mult</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Mult
+   * @return the meta object for class '<em>Multiplication</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Multiplication
    * @generated
    */
-  EClass getMult();
+  EClass getMultiplication();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Mult#getLeft <em>Left</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Multiplication#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Mult#getLeft()
-   * @see #getMult()
+   * @see org.eclipse.iee.translator.jmole.math.math.Multiplication#getLeft()
+   * @see #getMultiplication()
    * @generated
    */
-  EReference getMult_Left();
+  EReference getMultiplication_Left();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Mult#getRight <em>Right</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Multiplication#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Mult#getRight()
-   * @see #getMult()
+   * @see org.eclipse.iee.translator.jmole.math.math.Multiplication#getRight()
+   * @see #getMultiplication()
    * @generated
    */
-  EReference getMult_Right();
+  EReference getMultiplication_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Div <em>Div</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Division <em>Division</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Div</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Div
+   * @return the meta object for class '<em>Division</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Division
    * @generated
    */
-  EClass getDiv();
+  EClass getDivision();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Div#getLeft <em>Left</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Division#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Div#getLeft()
-   * @see #getDiv()
+   * @see org.eclipse.iee.translator.jmole.math.math.Division#getLeft()
+   * @see #getDivision()
    * @generated
    */
-  EReference getDiv_Left();
+  EReference getDivision_Left();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Div#getRight <em>Right</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Division#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Div#getRight()
-   * @see #getDiv()
+   * @see org.eclipse.iee.translator.jmole.math.math.Division#getRight()
+   * @see #getDivision()
    * @generated
    */
-  EReference getDiv_Right();
+  EReference getDivision_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Pow <em>Pow</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Power <em>Power</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Pow</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Pow
+   * @return the meta object for class '<em>Power</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Power
    * @generated
    */
-  EClass getPow();
+  EClass getPower();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Pow#getBase <em>Base</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Power#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Base</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Pow#getBase()
-   * @see #getPow()
+   * @return the meta object for the containment reference '<em>Left</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Power#getLeft()
+   * @see #getPower()
    * @generated
    */
-  EReference getPow_Base();
+  EReference getPower_Left();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Pow#getPower <em>Power</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Power#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Power</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Pow#getPower()
-   * @see #getPow()
+   * @return the meta object for the containment reference '<em>Right</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Power#getRight()
+   * @see #getPower()
    * @generated
    */
-  EReference getPow_Power();
+  EReference getPower_Right();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Variable <em>Variable</em>}'.
@@ -561,25 +561,25 @@ public interface MathPackage extends EPackage
   EAttribute getVariable_Name();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Number <em>Number</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Float <em>Float</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Number</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Number
+   * @return the meta object for class '<em>Float</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Float
    * @generated
    */
-  EClass getNumber();
+  EClass getFloat();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Number#getValue <em>Value</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Float#getValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Number#getValue()
-   * @see #getNumber()
+   * @see org.eclipse.iee.translator.jmole.math.math.Float#getValue()
+   * @see #getFloat()
    * @generated
    */
-  EAttribute getNumber_Value();
+  EAttribute getFloat_Value();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -633,14 +633,14 @@ public interface MathPackage extends EPackage
     EClass EXPRESSION = eINSTANCE.getExpression();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PlusImpl <em>Plus</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.PlusImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPlus()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAddition()
      * @generated
      */
-    EClass PLUS = eINSTANCE.getPlus();
+    EClass ADDITION = eINSTANCE.getAddition();
 
     /**
      * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
@@ -648,7 +648,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference PLUS__LEFT = eINSTANCE.getPlus_Left();
+    EReference ADDITION__LEFT = eINSTANCE.getAddition_Left();
 
     /**
      * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
@@ -656,17 +656,17 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference PLUS__RIGHT = eINSTANCE.getPlus_Right();
+    EReference ADDITION__RIGHT = eINSTANCE.getAddition_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MinusImpl <em>Minus</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.SubtractionImpl <em>Subtraction</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MinusImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMinus()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.SubtractionImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getSubtraction()
      * @generated
      */
-    EClass MINUS = eINSTANCE.getMinus();
+    EClass SUBTRACTION = eINSTANCE.getSubtraction();
 
     /**
      * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
@@ -674,7 +674,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MINUS__LEFT = eINSTANCE.getMinus_Left();
+    EReference SUBTRACTION__LEFT = eINSTANCE.getSubtraction_Left();
 
     /**
      * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
@@ -682,17 +682,17 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MINUS__RIGHT = eINSTANCE.getMinus_Right();
+    EReference SUBTRACTION__RIGHT = eINSTANCE.getSubtraction_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MultImpl <em>Mult</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MultiplicationImpl <em>Multiplication</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MultImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMult()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MultiplicationImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMultiplication()
      * @generated
      */
-    EClass MULT = eINSTANCE.getMult();
+    EClass MULTIPLICATION = eINSTANCE.getMultiplication();
 
     /**
      * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
@@ -700,7 +700,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MULT__LEFT = eINSTANCE.getMult_Left();
+    EReference MULTIPLICATION__LEFT = eINSTANCE.getMultiplication_Left();
 
     /**
      * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
@@ -708,17 +708,17 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MULT__RIGHT = eINSTANCE.getMult_Right();
+    EReference MULTIPLICATION__RIGHT = eINSTANCE.getMultiplication_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.DivImpl <em>Div</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.DivisionImpl <em>Division</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.DivImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDiv()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.DivisionImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDivision()
      * @generated
      */
-    EClass DIV = eINSTANCE.getDiv();
+    EClass DIVISION = eINSTANCE.getDivision();
 
     /**
      * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
@@ -726,7 +726,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference DIV__LEFT = eINSTANCE.getDiv_Left();
+    EReference DIVISION__LEFT = eINSTANCE.getDivision_Left();
 
     /**
      * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
@@ -734,33 +734,33 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference DIV__RIGHT = eINSTANCE.getDiv_Right();
+    EReference DIVISION__RIGHT = eINSTANCE.getDivision_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PowImpl <em>Pow</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl <em>Power</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.PowImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPow()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
      * @generated
      */
-    EClass POW = eINSTANCE.getPow();
+    EClass POWER = eINSTANCE.getPower();
 
     /**
-     * The meta object literal for the '<em><b>Base</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference POW__BASE = eINSTANCE.getPow_Base();
-
-    /**
-     * The meta object literal for the '<em><b>Power</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference POW__POWER = eINSTANCE.getPow_Power();
+    EReference POWER__LEFT = eINSTANCE.getPower_Left();
+
+    /**
+     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference POWER__RIGHT = eINSTANCE.getPower_Right();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.VariableImpl <em>Variable</em>}' class.
@@ -781,14 +781,14 @@ public interface MathPackage extends EPackage
     EAttribute VARIABLE__NAME = eINSTANCE.getVariable_Name();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.NumberImpl <em>Number</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl <em>Float</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.NumberImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getNumber()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
      * @generated
      */
-    EClass NUMBER = eINSTANCE.getNumber();
+    EClass FLOAT = eINSTANCE.getFloat();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -796,7 +796,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute NUMBER__VALUE = eINSTANCE.getNumber_Value();
+    EAttribute FLOAT__VALUE = eINSTANCE.getFloat_Value();
 
   }
 

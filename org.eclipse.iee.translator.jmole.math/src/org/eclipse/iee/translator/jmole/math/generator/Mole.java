@@ -37,7 +37,7 @@ public class Mole {
 		Injector injector = new org.eclipse.iee.translator.jmole.math.MathStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		Mole main = injector.getInstance(Mole.class);
 		//main.runGenerator(args[0]);
-		System.out.println(main.translateMath("1 / (a + b)"));
+		System.out.println(main.translateMath("1 / (a + b)-c+2.5-6+3.77"));
 	}
 	
 	public static Mole create() {
