@@ -59,6 +59,10 @@ public class ContainerManager extends EventManager {
 	public Object[] getElements() {
 		return fContainers.toArray();
 	}
+	
+	public IDocument getDocument() {
+    	return fDocument;
+    }
 
 	public String[] getContainerIDs() {
 		String[] containerIDs = new String[fContainers.size()];
@@ -212,7 +216,8 @@ public class ContainerManager extends EventManager {
 		fStyledText.addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				if (getContainerHavingOffset(e.caretOffset) != null) {
+				Container c = getContainerHavingOffset(e.caretOffset);
+				if (c != null) {
 					if (fDirection)
 						fStyledText.setCaretOffset(e.caretOffset + 1);
 					else
@@ -268,12 +273,36 @@ public class ContainerManager extends EventManager {
 						}
 					}
 					if (token == PartitioningScanner.PLAINTEXT_TOKEN) {
-						StyleRange plainTextStyle = new StyleRange(lineScanner
-								.getTokenOffset(),
-								lineScanner.getTokenLength(), fStyledText
-										.getForeground(), fStyledText
-										.getBackground());
-						styles.addElement(plainTextStyle);
+						Container c = getContainerHavingOffset(lineScanner
+								.getTokenOffset() - 1);
+						if (c == null)
+						{
+							StyleRange plainTextStyle = new StyleRange(lineScanner
+									.getTokenOffset(),
+									lineScanner.getTokenLength(), fStyledText
+											.getForeground(), fStyledText
+											.getBackground());
+						
+							styles.addElement(plainTextStyle);
+						}
+						else
+						{
+							
+							StyleRange hiddenContentStyle = new StyleRange();
+							hiddenContentStyle.start = lineScanner
+									.getTokenOffset();
+							hiddenContentStyle.length = c.getContainerHiddenContent().length();
+							hiddenContentStyle.metrics = new GlyphMetrics(0, 0, 0);
+							styles.addElement(hiddenContentStyle);
+							
+							StyleRange plainTextStyle = new StyleRange(lineScanner
+									.getTokenOffset() + c.getContainerHiddenContent().length() + 1,
+									lineScanner.getTokenLength(), fStyledText
+											.getForeground(), fStyledText
+											.getBackground());
+						
+							styles.addElement(plainTextStyle);
+						}
 					}
 				}
 
@@ -606,13 +635,15 @@ public class ContainerManager extends EventManager {
 	}
 
 	protected Container getContainerHavingOffset(int offset) {
+		if (offset < 0)
+			return null;
 		Container c = fContainers.lower(Container.atOffset(offset));
 		if (c != null && c.getPosition().includes(offset)) {
 			return c;
 		}
 		return null;
 	}
-
+	
 	protected Container createContainer(Position position, String containerID) {
 		return new Container(position, containerID, fStyledText, fDocument,
 				this);

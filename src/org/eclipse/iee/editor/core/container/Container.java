@@ -4,6 +4,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -15,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 public class Container {
 
 	private String fContainerID;
+	private String fContainerHiddenContent;
 	private Position fPosition;
 	private int fLineNumber;
 	private Composite fComposite;
@@ -41,6 +43,7 @@ public class Container {
 			IDocument document, ContainerManager containerManager) {
 		fPosition = position;
 		fContainerID = containerID;
+		fContainerHiddenContent = "";
 		fIsDisposed = false;
 		fIsTextRegionReleaseRequested = false;
 
@@ -98,6 +101,10 @@ public class Container {
 
 	public String getContainerID() {
 		return fContainerID;
+	}
+	
+	public String getContainerHiddenContent() {
+		return fContainerHiddenContent;
 	}
 
 	public Position getPosition() {
@@ -253,6 +260,23 @@ public class Container {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Writes custom text to tail of container 
+	 */
+	public void writeAtContainerRegionTail(String text) {
+		int tail = fPosition.getOffset() + fPosition.getLength();
+
+		try 
+		{
+			fContainerManager.getDocument().replace(tail , fContainerHiddenContent.length(), text);
+			fContainerHiddenContent = text;
+		} 
+		catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Removes container's text region from document. This function is called
@@ -262,7 +286,7 @@ public class Container {
 	 */
 	protected void releaseTextRegion(IDocument document) {
 		try {
-			document.replace(fPosition.getOffset(), fPosition.getLength(), "");
+			document.replace(fPosition.getOffset(), fPosition.getLength() + fContainerHiddenContent.length(), "");
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
