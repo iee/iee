@@ -269,8 +269,9 @@ public class Container {
 
 		try 
 		{
-			fContainerManager.getDocument().replace(tail , fContainerHiddenContent.length(), text);
+			int previousLength = fContainerHiddenContent.length();
 			fContainerHiddenContent = text;
+			fContainerManager.getDocument().replace(tail , previousLength, text);
 		} 
 		catch (BadLocationException e) {
 			// TODO Auto-generated catch block

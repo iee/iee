@@ -296,11 +296,11 @@ public class ContainerManager extends EventManager {
 							styles.addElement(hiddenContentStyle);
 							
 							StyleRange plainTextStyle = new StyleRange(lineScanner
-									.getTokenOffset() + c.getContainerHiddenContent().length() + 1,
-									lineScanner.getTokenLength(), fStyledText
+									.getTokenOffset() + c.getContainerHiddenContent().length(),
+									lineScanner.getTokenLength() - c.getContainerHiddenContent().length(), fStyledText
 											.getForeground(), fStyledText
 											.getBackground());
-						
+						    
 							styles.addElement(plainTextStyle);
 						}
 					}
