@@ -23,7 +23,9 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cExpressionAdditionParserRuleCall_0 = (RuleCall)cExpressionAssignment.eContents().get(0);
 		
 		////Formula:
+		//
 		////	expression=Expression;
+		//
 		//Formula:
 		//	expression=Addition;
 		public ParserRule getRule() { return rule; }
@@ -210,10 +212,12 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Primary returns Expression:
 		//	{Variable} name=ID | //{Number} value=INT |
+		//
 		//	{Float} value=Float | "(" Addition ")";
 		public ParserRule getRule() { return rule; }
 
 		//{Variable} name=ID | //{Number} value=INT |
+		//
 		//{Float} value=Float | "(" Addition ")"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
@@ -230,10 +234,12 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getNameIDTerminalRuleCall_0_1_0() { return cNameIDTerminalRuleCall_0_1_0; }
 
 		////{Number} value=INT |
+		//
 		//{Float} value=Float
 		public Group getGroup_1() { return cGroup_1; }
 
 		////{Number} value=INT |
+		//
 		//{Float}
 		public Action getFloatAction_1_0() { return cFloatAction_1_0; }
 
@@ -265,35 +271,61 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cINTTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
 		
 		/// *
+		//
 		//Expression:
+		//
 		//	PrimaryExpression {Plus.left=current} '+' right=Expression |
+		//
 		//	PrimaryExpression {Minus.left=current} '-' right=Expression |
+		//
 		//	PrimaryExpression {Mult.left=current} '*' right=Expression |
+		//
 		//	PrimaryExpression {Div.left=current} '/' right=Expression |
+		//
 		//	PrimaryExpression {Pow.base=current} '^' power=Expression |
+		//
 		//	PrimaryExpression;
 		//
+		//
+		//
 		//PrimaryExpression returns Expression:
+		//
 		//	'(' Expression ')' |
+		//
 		//	{Variable} name=ID |
+		//
 		//	{Number} value=INT;
+		//
 		// * / Float:
 		//	INT* ("." INT+)?;
 		public ParserRule getRule() { return rule; }
 
 		//INT* ("." INT+)? / *
+		//
 		//Expression:
+		//
 		//	PrimaryExpression {Plus.left=current} '+' right=Expression |
+		//
 		//	PrimaryExpression {Minus.left=current} '-' right=Expression |
+		//
 		//	PrimaryExpression {Mult.left=current} '*' right=Expression |
+		//
 		//	PrimaryExpression {Div.left=current} '/' right=Expression |
+		//
 		//	PrimaryExpression {Pow.base=current} '^' power=Expression |
+		//
 		//	PrimaryExpression;
 		//
+		//
+		//
 		//PrimaryExpression returns Expression:
+		//
 		//	'(' Expression ')' |
+		//
 		//	{Variable} name=ID |
+		//
 		//	{Number} value=INT;
+		//
 		// * /
 		public Group getGroup() { return cGroup; }
 
@@ -301,18 +333,31 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getINTTerminalRuleCall_0() { return cINTTerminalRuleCall_0; }
 
 		//("." INT+ / *
+		//
 		//Expression:
+		//
 		//	PrimaryExpression {Plus.left=current} '+' right=Expression |
+		//
 		//	PrimaryExpression {Minus.left=current} '-' right=Expression |
+		//
 		//	PrimaryExpression {Mult.left=current} '*' right=Expression |
+		//
 		//	PrimaryExpression {Div.left=current} '/' right=Expression |
+		//
 		//	PrimaryExpression {Pow.base=current} '^' power=Expression |
+		//
 		//	PrimaryExpression;
 		//
+		//
+		//
 		//PrimaryExpression returns Expression:
+		//
 		//	'(' Expression ')' |
+		//
 		//	{Variable} name=ID |
+		//
 		//	{Number} value=INT;
+		//
 		// * /)?
 		public Group getGroup_1() { return cGroup_1; }
 
@@ -353,7 +398,9 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	////Formula:
+	//
 	////	expression=Expression;
+	//
 	//Formula:
 	//	expression=Addition;
 	public FormulaElements getFormulaAccess() {
@@ -397,6 +444,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Primary returns Expression:
 	//	{Variable} name=ID | //{Number} value=INT |
+	//
 	//	{Float} value=Float | "(" Addition ")";
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
@@ -407,18 +455,31 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	/// *
+	//
 	//Expression:
+	//
 	//	PrimaryExpression {Plus.left=current} '+' right=Expression |
+	//
 	//	PrimaryExpression {Minus.left=current} '-' right=Expression |
+	//
 	//	PrimaryExpression {Mult.left=current} '*' right=Expression |
+	//
 	//	PrimaryExpression {Div.left=current} '/' right=Expression |
+	//
 	//	PrimaryExpression {Pow.base=current} '^' power=Expression |
+	//
 	//	PrimaryExpression;
 	//
+	//
+	//
 	//PrimaryExpression returns Expression:
+	//
 	//	'(' Expression ')' |
+	//
 	//	{Variable} name=ID |
+	//
 	//	{Number} value=INT;
+	//
 	// * / Float:
 	//	INT* ("." INT+)?;
 	public FloatElements getFloatAccess() {

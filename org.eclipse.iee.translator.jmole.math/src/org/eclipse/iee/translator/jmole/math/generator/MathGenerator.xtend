@@ -30,30 +30,30 @@ class MathGenerator implements IGenerator {
 	}
 	
 	def compileFormula(Formula f) '''
-		Â«compileExpression(f.expression)Â»;
+		«compileExpression(f.expression)»;
 	'''
 	
 	def dispatch compileExpression(Variable n) '''
-		Â«n.nameÂ»'''
+		«n.name»'''
 	
 	//def dispatch compileExpression(Number n) '''
-	//	Â«n.valueÂ»'''
+	//	«n.value»'''
 	
 	def dispatch compileExpression(Float n) '''
-		Â«n.valueÂ»'''
+		«n.value»'''
 	
 	def dispatch compileExpression(Addition op) '''
-		(Â«compileExpression(op.left)Â») + (Â«compileExpression(op.right)Â»)'''
+		(«compileExpression(op.left)») + («compileExpression(op.right)»)'''
 	
 	def dispatch compileExpression(Subtraction op) '''
-		(Â«compileExpression(op.left)Â») - (Â«compileExpression(op.right)Â»)'''
+		(«compileExpression(op.left)») - («compileExpression(op.right)»)'''
 	
 	def dispatch compileExpression(Multiplication op) '''
-		(Â«compileExpression(op.left)Â») * (Â«compileExpression(op.right)Â»)'''
+		(«compileExpression(op.left)») * («compileExpression(op.right)»)'''
 	
 	def dispatch compileExpression(Division op) '''
-		(Â«compileExpression(op.left)Â») / (Â«compileExpression(op.right)Â»)'''
+		(«compileExpression(op.left)») / («compileExpression(op.right)»)'''
 	
 	def dispatch compileExpression(Power op) '''
-		(Â«compileExpression(op.left)Â») ^ (Â«compileExpression(op.right)Â»)'''
+		(«compileExpression(op.left)») ^ («compileExpression(op.right)»)'''
 }

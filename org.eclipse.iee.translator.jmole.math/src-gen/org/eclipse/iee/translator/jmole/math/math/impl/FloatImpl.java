@@ -13,49 +13,48 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.Variable;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Variable</b></em>'.
+ * An implementation of the model object '<em><b>Float</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.VariableImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class VariableImpl extends ExpressionImpl implements Variable
+public class FloatImpl extends ExpressionImpl implements org.eclipse.iee.translator.jmole.math.math.Float
 {
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getValue()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
+  protected static final String VALUE_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getValue()
    * @generated
    * @ordered
    */
-  protected String name = NAME_EDEFAULT;
+  protected String value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected VariableImpl()
+  protected FloatImpl()
   {
     super();
   }
@@ -68,7 +67,7 @@ public class VariableImpl extends ExpressionImpl implements Variable
   @Override
   protected EClass eStaticClass()
   {
-    return MathPackage.Literals.VARIABLE;
+    return MathPackage.Literals.FLOAT;
   }
 
   /**
@@ -76,9 +75,9 @@ public class VariableImpl extends ExpressionImpl implements Variable
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  public String getValue()
   {
-    return name;
+    return value;
   }
 
   /**
@@ -86,12 +85,12 @@ public class VariableImpl extends ExpressionImpl implements Variable
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setName(String newName)
+  public void setValue(String newValue)
   {
-    String oldName = name;
-    name = newName;
+    String oldValue = value;
+    value = newValue;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.VARIABLE__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.FLOAT__VALUE, oldValue, value));
   }
 
   /**
@@ -104,8 +103,8 @@ public class VariableImpl extends ExpressionImpl implements Variable
   {
     switch (featureID)
     {
-      case MathPackage.VARIABLE__NAME:
-        return getName();
+      case MathPackage.FLOAT__VALUE:
+        return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -120,8 +119,8 @@ public class VariableImpl extends ExpressionImpl implements Variable
   {
     switch (featureID)
     {
-      case MathPackage.VARIABLE__NAME:
-        setName((String)newValue);
+      case MathPackage.FLOAT__VALUE:
+        setValue((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -137,8 +136,8 @@ public class VariableImpl extends ExpressionImpl implements Variable
   {
     switch (featureID)
     {
-      case MathPackage.VARIABLE__NAME:
-        setName(NAME_EDEFAULT);
+      case MathPackage.FLOAT__VALUE:
+        setValue(VALUE_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -154,8 +153,8 @@ public class VariableImpl extends ExpressionImpl implements Variable
   {
     switch (featureID)
     {
-      case MathPackage.VARIABLE__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case MathPackage.FLOAT__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
   }
@@ -171,10 +170,10 @@ public class VariableImpl extends ExpressionImpl implements Variable
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
+    result.append(" (value: ");
+    result.append(value);
     result.append(')');
     return result.toString();
   }
 
-} //VariableImpl
+} //FloatImpl
