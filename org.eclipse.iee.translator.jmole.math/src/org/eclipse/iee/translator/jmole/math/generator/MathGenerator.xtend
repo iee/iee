@@ -33,11 +33,12 @@ class MathGenerator implements IGenerator {
 		«compileExpression(f.expression)»;
 	'''
 	
+	def compileFunction(Function f) '''
+		«compileFormula(f.formula)»;
+	'''
+		
 	def dispatch compileExpression(Variable n) '''
 		«n.name»'''
-	
-	//def dispatch compileExpression(Number n) '''
-	//	«n.value»'''
 	
 	def dispatch compileExpression(Float n) '''
 		«n.value»'''

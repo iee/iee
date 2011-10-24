@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
+import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
@@ -96,6 +97,12 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 			case MathPackage.FORMULA:
 				if(context == grammarAccess.getFormulaRule()) {
 					sequence_Formula(context, (Formula) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.FUNCTION:
+				if(context == grammarAccess.getFunctionRule()) {
+					sequence_Function(context, (Function) semanticObject); 
 					return; 
 				}
 				else break;
@@ -207,19 +214,34 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     expression=Addition
+	 *     (expression=Addition | function=Function)
 	 *
 	 * Features:
-	 *    expression[1, 1]
+	 *    expression[0, 1]
+	 *         EXCLUDE_IF_SET function
+	 *    function[0, 1]
+	 *         EXCLUDE_IF_SET expression
 	 */
 	protected void sequence_Formula(EObject context, Formula semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     formula=Formula
+	 *
+	 * Features:
+	 *    formula[1, 1]
+	 */
+	protected void sequence_Function(EObject context, Function semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION));
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FUNCTION__FORMULA) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FUNCTION__FORMULA));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getFormulaAccess().getExpressionAdditionParserRuleCall_0(), semanticObject.getExpression());
+		feeder.accept(grammarAccess.getFunctionAccess().getFormulaFormulaParserRuleCall_2_0(), semanticObject.getFormula());
 		feeder.finish();
 	}
 	

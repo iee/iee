@@ -83,10 +83,10 @@ ruleFormula returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(
+((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFormulaAccess().getExpressionAdditionParserRuleCall_0()); 
+	        newCompositeNode(grammarAccess.getFormulaAccess().getExpressionAdditionParserRuleCall_0_0()); 
 	    }
 		lv_expression_0_0=ruleAddition		{
 	        if ($current==null) {
@@ -102,6 +102,25 @@ ruleFormula returns [EObject current=null]
 
 )
 )
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFormulaAccess().getFunctionFunctionParserRuleCall_1_0()); 
+	    }
+		lv_function_1_0=ruleFunction		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFormulaRule());
+	        }
+       		set(
+       			$current, 
+       			"function",
+        		lv_function_1_0, 
+        		"Function");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
 ;
 
 
@@ -495,8 +514,100 @@ ruleFloat returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
     { 
     newLeafNode(this_INT_2, grammarAccess.getFloatAccess().getINTTerminalRuleCall_1_1()); 
     }
-)+)?)
+)+((
+	kw='E' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getFloatAccess().getEKeyword_1_2_0_0()); 
+    }
+
+    |
+	kw='e' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getFloatAccess().getEKeyword_1_2_0_1()); 
+    }
+)(
+	kw='-' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getFloatAccess().getHyphenMinusKeyword_1_2_1()); 
+    }
+)?(    this_INT_6=RULE_INT    {
+		$current.merge(this_INT_6);
+    }
+
+    { 
+    newLeafNode(this_INT_6, grammarAccess.getFloatAccess().getINTTerminalRuleCall_1_2_2()); 
+    }
+)+)?)?)
     ;
+
+
+
+
+
+// Entry rule entryRuleFunction
+entryRuleFunction returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getFunctionRule()); }
+	 iv_ruleFunction=ruleFunction 
+	 { $current=$iv_ruleFunction.current; } 
+	 EOF 
+;
+
+// Rule Function
+ruleFunction returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((	otherlv_0='sin' 
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getFunctionAccess().getSinKeyword_0_0());
+    }
+
+    |	otherlv_1='cos' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getFunctionAccess().getCosKeyword_0_1());
+    }
+
+    |	otherlv_2='tan' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getFunctionAccess().getTanKeyword_0_2());
+    }
+
+    |	otherlv_3='log' 
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getFunctionAccess().getLogKeyword_0_3());
+    }
+)	otherlv_4='(' 
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getFunctionAccess().getLeftParenthesisKeyword_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFunctionAccess().getFormulaFormulaParserRuleCall_2_0()); 
+	    }
+		lv_formula_5_0=ruleFormula		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFunctionRule());
+	        }
+       		set(
+       			$current, 
+       			"formula",
+        		lv_formula_5_0, 
+        		"Formula");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_6=')' 
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getFunctionAccess().getRightParenthesisKeyword_3());
+    }
+)
+;
 
 
 

@@ -7,6 +7,7 @@ import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
+import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
@@ -45,6 +46,17 @@ public class MathGenerator implements IGenerator {
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
     _builder.append(";");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
+  public StringConcatenation compileFunction(final Function f) {
+    StringConcatenation _builder = new StringConcatenation();
+    Formula _formula = f.getFormula();
+    StringConcatenation _compileFormula = this.compileFormula(_formula);
+    _builder.append(_compileFormula, "");
+    _builder.append(";");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
