@@ -275,8 +275,8 @@ public class ContainerManager extends EventManager {
 					if (token == PartitioningScanner.PLAINTEXT_TOKEN) {
 						Container c = getContainerHavingOffset(lineScanner
 								.getTokenOffset() - 1);
-						if (c == null)
-						{
+						//if (c == null)
+						//{
 							StyleRange plainTextStyle = new StyleRange(lineScanner
 									.getTokenOffset(),
 									lineScanner.getTokenLength(), fStyledText
@@ -284,7 +284,7 @@ public class ContainerManager extends EventManager {
 											.getBackground());
 						
 							styles.addElement(plainTextStyle);
-						}
+						/*}
 						else
 						{
 							
@@ -302,7 +302,7 @@ public class ContainerManager extends EventManager {
 											.getBackground());
 						    
 							styles.addElement(plainTextStyle);
-						}
+						}*/
 					}
 				}
 
