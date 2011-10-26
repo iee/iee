@@ -98,11 +98,6 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createExpressionAdapter();
       }
       @Override
-      public Adapter caseFunction(Function object)
-      {
-        return createFunctionAdapter();
-      }
-      @Override
       public Adapter caseAddition(Addition object)
       {
         return createAdditionAdapter();
@@ -136,6 +131,11 @@ public class MathAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFloat(org.eclipse.iee.translator.jmole.math.math.Float object)
       {
         return createFloatAdapter();
+      }
+      @Override
+      public Adapter caseFunction(Function object)
+      {
+        return createFunctionAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -185,21 +185,6 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createExpressionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Function <em>Function</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Function
-   * @generated
-   */
-  public Adapter createFunctionAdapter()
   {
     return null;
   }
@@ -305,6 +290,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFloatAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Function <em>Function</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Function
+   * @generated
+   */
+  public Adapter createFunctionAdapter()
   {
     return null;
   }

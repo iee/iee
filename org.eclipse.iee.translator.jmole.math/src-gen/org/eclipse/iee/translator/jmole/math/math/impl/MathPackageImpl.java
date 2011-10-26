@@ -52,13 +52,6 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass functionEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass additionEClass = null;
 
   /**
@@ -102,6 +95,13 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * @generated
    */
   private EClass floatEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass functionEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -191,16 +191,6 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFormula_Function()
-  {
-    return (EReference)formulaEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getExpression()
   {
     return expressionEClass;
@@ -211,9 +201,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getFunction()
+  public EAttribute getExpression_Name()
   {
-    return functionEClass;
+    return (EAttribute)expressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -221,9 +211,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFunction_Formula()
+  public EReference getExpression_Formula()
   {
-    return (EReference)functionEClass.getEStructuralFeatures().get(0);
+    return (EReference)expressionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -391,16 +381,6 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getVariable_Name()
-  {
-    return (EAttribute)variableEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getFloat()
   {
     return floatEClass;
@@ -414,6 +394,26 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
   public EAttribute getFloat_Value()
   {
     return (EAttribute)floatEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFunction()
+  {
+    return functionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFunction_Function()
+  {
+    return (EReference)functionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -448,12 +448,10 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     // Create classes and their features
     formulaEClass = createEClass(FORMULA);
     createEReference(formulaEClass, FORMULA__EXPRESSION);
-    createEReference(formulaEClass, FORMULA__FUNCTION);
 
     expressionEClass = createEClass(EXPRESSION);
-
-    functionEClass = createEClass(FUNCTION);
-    createEReference(functionEClass, FUNCTION__FORMULA);
+    createEAttribute(expressionEClass, EXPRESSION__NAME);
+    createEReference(expressionEClass, EXPRESSION__FORMULA);
 
     additionEClass = createEClass(ADDITION);
     createEReference(additionEClass, ADDITION__LEFT);
@@ -476,10 +474,12 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     createEReference(powerEClass, POWER__RIGHT);
 
     variableEClass = createEClass(VARIABLE);
-    createEAttribute(variableEClass, VARIABLE__NAME);
 
     floatEClass = createEClass(FLOAT);
     createEAttribute(floatEClass, FLOAT__VALUE);
+
+    functionEClass = createEClass(FUNCTION);
+    createEReference(functionEClass, FUNCTION__FUNCTION);
   }
 
   /**
@@ -518,16 +518,15 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     powerEClass.getESuperTypes().add(this.getExpression());
     variableEClass.getESuperTypes().add(this.getExpression());
     floatEClass.getESuperTypes().add(this.getExpression());
+    functionEClass.getESuperTypes().add(this.getExpression());
 
     // Initialize classes and features; add operations and parameters
     initEClass(formulaEClass, Formula.class, "Formula", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFormula_Expression(), this.getExpression(), null, "expression", null, 0, 1, Formula.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFormula_Function(), this.getFunction(), null, "function", null, 0, 1, Formula.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-    initEClass(functionEClass, Function.class, "Function", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFunction_Formula(), this.getFormula(), null, "formula", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getExpression_Name(), ecorePackage.getEString(), "name", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExpression_Formula(), this.getFormula(), null, "formula", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(additionEClass, Addition.class, "Addition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAddition_Left(), this.getExpression(), null, "left", null, 0, 1, Addition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -550,10 +549,12 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEReference(getPower_Right(), this.getExpression(), null, "right", null, 0, 1, Power.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(variableEClass, Variable.class, "Variable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVariable_Name(), ecorePackage.getEString(), "name", null, 0, 1, Variable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(floatEClass, org.eclipse.iee.translator.jmole.math.math.Float.class, "Float", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFloat_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.eclipse.iee.translator.jmole.math.math.Float.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(functionEClass, Function.class, "Function", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFunction_Function(), this.getExpression(), null, "function", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

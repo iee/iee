@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
 import org.eclipse.iee.translator.jmole.math.math.Division;
+import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
@@ -80,6 +81,12 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 					return; 
 				}
 				else break;
+			case MathPackage.EXPRESSION:
+				if(context == grammarAccess.getFunctionRule()) {
+					sequence_Function(context, (Expression) semanticObject); 
+					return; 
+				}
+				else break;
 			case MathPackage.FLOAT:
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_0() ||
@@ -101,8 +108,16 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				}
 				else break;
 			case MathPackage.FUNCTION:
-				if(context == grammarAccess.getFunctionRule()) {
-					sequence_Function(context, (Function) semanticObject); 
+				if(context == grammarAccess.getAdditionRule() ||
+				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_0() ||
+				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_0() ||
+				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_0() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_0() ||
+				   context == grammarAccess.getPowerRule() ||
+				   context == grammarAccess.getPowerAccess().getPowerLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Primary(context, (Function) semanticObject); 
 					return; 
 				}
 				else break;
@@ -175,17 +190,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    right[1, 1]
 	 */
 	protected void sequence_Addition(EObject context, Addition semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.ADDITION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.ADDITION__LEFT));
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.ADDITION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.ADDITION__RIGHT));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getAdditionAccess().getRightMultiplicationParserRuleCall_1_0_2_0(), semanticObject.getRight());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -198,49 +203,47 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    right[1, 1]
 	 */
 	protected void sequence_Addition(EObject context, Subtraction semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.SUBTRACTION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.SUBTRACTION__LEFT));
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.SUBTRACTION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.SUBTRACTION__RIGHT));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getAdditionAccess().getRightMultiplicationParserRuleCall_1_1_2_0(), semanticObject.getRight());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Constraint:
-	 *     (expression=Addition | function=Function)
-	 *
-	 * Features:
-	 *    expression[0, 1]
-	 *         EXCLUDE_IF_SET function
-	 *    function[0, 1]
-	 *         EXCLUDE_IF_SET expression
-	 */
-	protected void sequence_Formula(EObject context, Formula semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     formula=Formula
+	 *     expression=Addition
 	 *
 	 * Features:
-	 *    formula[1, 1]
+	 *    expression[1, 1]
 	 */
-	protected void sequence_Function(EObject context, Function semanticObject) {
+	protected void sequence_Formula(EObject context, Formula semanticObject) {
 		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FUNCTION__FORMULA) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FUNCTION__FORMULA));
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION));
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFormulaAccess().getExpressionAdditionParserRuleCall_0(), semanticObject.getExpression());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (name=FUNC formula=Formula)
+	 *
+	 * Features:
+	 *    name[1, 1]
+	 *    formula[1, 1]
+	 */
+	protected void sequence_Function(EObject context, Expression semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.EXPRESSION__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.EXPRESSION__NAME));
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.EXPRESSION__FORMULA) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.EXPRESSION__FORMULA));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFunctionAccess().getNameFUNCTerminalRuleCall_0_0(), semanticObject.getName());
 		feeder.accept(grammarAccess.getFunctionAccess().getFormulaFormulaParserRuleCall_2_0(), semanticObject.getFormula());
 		feeder.finish();
 	}
@@ -255,17 +258,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    right[1, 1]
 	 */
 	protected void sequence_Multiplication(EObject context, Division semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.DIVISION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.DIVISION__LEFT));
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.DIVISION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.DIVISION__RIGHT));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getMultiplicationAccess().getRightPowerParserRuleCall_1_1_2_0(), semanticObject.getRight());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -278,17 +271,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    right[1, 1]
 	 */
 	protected void sequence_Multiplication(EObject context, Multiplication semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.MULTIPLICATION__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.MULTIPLICATION__LEFT));
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.MULTIPLICATION__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.MULTIPLICATION__RIGHT));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getMultiplicationAccess().getRightPowerParserRuleCall_1_0_2_0(), semanticObject.getRight());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -301,17 +284,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    right[1, 1]
 	 */
 	protected void sequence_Power(EObject context, Power semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.POWER__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.POWER__LEFT));
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.POWER__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.POWER__RIGHT));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getPowerAccess().getPowerLeftAction_1_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getPowerAccess().getRightPrimaryParserRuleCall_1_2_0(), semanticObject.getRight());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -323,14 +296,19 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    value[1, 1]
 	 */
 	protected void sequence_Primary(EObject context, org.eclipse.iee.translator.jmole.math.math.Float semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FLOAT__VALUE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FLOAT__VALUE));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getPrimaryAccess().getValueFloatParserRuleCall_1_1_0(), semanticObject.getValue());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     function=Function
+	 *
+	 * Features:
+	 *    function[1, 1]
+	 */
+	protected void sequence_Primary(EObject context, Function semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -342,13 +320,6 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    name[1, 1]
 	 */
 	protected void sequence_Primary(EObject context, Variable semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.VARIABLE__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.VARIABLE__NAME));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getPrimaryAccess().getNameIDTerminalRuleCall_0_1_0(), semanticObject.getName());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 }

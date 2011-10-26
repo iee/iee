@@ -6,8 +6,7 @@ generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 //	expression=Expression;
 
 Formula:
-	expression=Addition |
-	function = Function
+	expression=(Addition)
 	;
 
 Addition returns Expression:
@@ -21,15 +20,19 @@ Power returns Expression:
 
 Primary returns Expression:
 	{Variable} name=ID |
-	//{Number} value=INT |
 	{Float} value=Float |
+	{Function} function=Function |
 	'(' Addition ')';
 
 Float:
 	INT* ('.' INT+ ( ('E'|'e') ('-')? (INT)+ )?)?;
 
-Function:
-	('sin' | 'cos' | 'tan' | 'log') '(' formula = Formula ')' 
+Function returns Expression:
+	(name=FUNC) '(' formula=Formula ')'
+;
+
+terminal FUNC:
+	'sin' | 'cos' | 'tan' | 'log'
 ;
 
 /*

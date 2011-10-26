@@ -13,9 +13,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.iee.translator.jmole.math.math.Formula;
+import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 
@@ -26,23 +25,23 @@ import org.eclipse.iee.translator.jmole.math.math.MathPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl#getFormula <em>Formula</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl#getFunction <em>Function</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class FunctionImpl extends MinimalEObjectImpl.Container implements Function
+public class FunctionImpl extends ExpressionImpl implements Function
 {
   /**
-   * The cached value of the '{@link #getFormula() <em>Formula</em>}' containment reference.
+   * The cached value of the '{@link #getFunction() <em>Function</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFormula()
+   * @see #getFunction()
    * @generated
    * @ordered
    */
-  protected Formula formula;
+  protected Expression function;
 
   /**
    * <!-- begin-user-doc -->
@@ -70,9 +69,9 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
    * <!-- end-user-doc -->
    * @generated
    */
-  public Formula getFormula()
+  public Expression getFunction()
   {
-    return formula;
+    return function;
   }
 
   /**
@@ -80,13 +79,13 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFormula(Formula newFormula, NotificationChain msgs)
+  public NotificationChain basicSetFunction(Expression newFunction, NotificationChain msgs)
   {
-    Formula oldFormula = formula;
-    formula = newFormula;
+    Expression oldFunction = function;
+    function = newFunction;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION__FORMULA, oldFormula, newFormula);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION__FUNCTION, oldFunction, newFunction);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -97,20 +96,20 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFormula(Formula newFormula)
+  public void setFunction(Expression newFunction)
   {
-    if (newFormula != formula)
+    if (newFunction != function)
     {
       NotificationChain msgs = null;
-      if (formula != null)
-        msgs = ((InternalEObject)formula).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.FUNCTION__FORMULA, null, msgs);
-      if (newFormula != null)
-        msgs = ((InternalEObject)newFormula).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.FUNCTION__FORMULA, null, msgs);
-      msgs = basicSetFormula(newFormula, msgs);
+      if (function != null)
+        msgs = ((InternalEObject)function).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.FUNCTION__FUNCTION, null, msgs);
+      if (newFunction != null)
+        msgs = ((InternalEObject)newFunction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.FUNCTION__FUNCTION, null, msgs);
+      msgs = basicSetFunction(newFunction, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION__FORMULA, newFormula, newFormula));
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION__FUNCTION, newFunction, newFunction));
   }
 
   /**
@@ -123,8 +122,8 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION__FORMULA:
-        return basicSetFormula(null, msgs);
+      case MathPackage.FUNCTION__FUNCTION:
+        return basicSetFunction(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -139,8 +138,8 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION__FORMULA:
-        return getFormula();
+      case MathPackage.FUNCTION__FUNCTION:
+        return getFunction();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -155,8 +154,8 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION__FORMULA:
-        setFormula((Formula)newValue);
+      case MathPackage.FUNCTION__FUNCTION:
+        setFunction((Expression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -172,8 +171,8 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION__FORMULA:
-        setFormula((Formula)null);
+      case MathPackage.FUNCTION__FUNCTION:
+        setFunction((Expression)null);
         return;
     }
     super.eUnset(featureID);
@@ -189,8 +188,8 @@ public class FunctionImpl extends MinimalEObjectImpl.Container implements Functi
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION__FORMULA:
-        return formula != null;
+      case MathPackage.FUNCTION__FUNCTION:
+        return function != null;
     }
     return super.eIsSet(featureID);
   }

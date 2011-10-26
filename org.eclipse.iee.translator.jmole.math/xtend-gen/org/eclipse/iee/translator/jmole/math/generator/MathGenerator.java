@@ -15,6 +15,8 @@ import org.eclipse.iee.translator.jmole.math.math.Variable;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.ObjectExtensions;
+import org.eclipse.xtext.xbase.lib.StringExtensions;
 import org.eclipse.xtext.xtend2.lib.ResourceExtensions;
 import org.eclipse.xtext.xtend2.lib.StringConcatenation;
 
@@ -45,18 +47,34 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
-    _builder.append(";");
-    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
   public StringConcatenation compileFunction(final Function f) {
     StringConcatenation _builder = new StringConcatenation();
-    Formula _formula = f.getFormula();
-    StringConcatenation _compileFormula = this.compileFormula(_formula);
-    _builder.append(_compileFormula, "");
-    _builder.append(";");
-    _builder.newLineIfNotEmpty();
+    Expression _function = f.getFunction();
+    String _name = _function.getName();
+    String _substring = _name.substring(0, 1);
+    String _upperCase = _substring.toUpperCase();
+    Expression _function_1 = f.getFunction();
+    String _name_1 = _function_1.getName();
+    String _substring_1 = _name_1.substring(1);
+    String _lowerCase = _substring_1.toLowerCase();
+    String _operator_plus = StringExtensions.operator_plus(_upperCase, _lowerCase);
+    _builder.append(_operator_plus, "");
+    _builder.append("(");
+    {
+      Expression _function_2 = f.getFunction();
+      Formula _formula = _function_2.getFormula();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_formula, null);
+      if (_operator_notEquals) {
+        Expression _function_3 = f.getFunction();
+        Formula _formula_1 = _function_3.getFormula();
+        StringConcatenation _compileFormula = this.compileFormula(_formula_1);
+        _builder.append(_compileFormula, "");
+      }
+    }
+    _builder.append(")");
     return _builder;
   }
   
@@ -71,6 +89,13 @@ public class MathGenerator implements IGenerator {
     StringConcatenation _builder = new StringConcatenation();
     String _value = n.getValue();
     _builder.append(_value, "");
+    return _builder;
+  }
+  
+  protected StringConcatenation _compileExpression(final Function f) {
+    StringConcatenation _builder = new StringConcatenation();
+    StringConcatenation _compileFunction = this.compileFunction(f);
+    _builder.append(_compileFunction, "");
     return _builder;
   }
   
@@ -151,6 +176,8 @@ public class MathGenerator implements IGenerator {
       return _compileExpression((Division)op);
     } else if ((op instanceof Float)) {
       return _compileExpression((Float)op);
+    } else if ((op instanceof Function)) {
+      return _compileExpression((Function)op);
     } else if ((op instanceof Multiplication)) {
       return _compileExpression((Multiplication)op);
     } else if ((op instanceof Power)) {

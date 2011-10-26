@@ -80,22 +80,13 @@ public interface MathPackage extends EPackage
   int FORMULA__EXPRESSION = 0;
 
   /**
-   * The feature id for the '<em><b>Function</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FORMULA__FUNCTION = 1;
-
-  /**
    * The number of structural features of the '<em>Formula</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FORMULA_FEATURE_COUNT = 2;
+  int FORMULA_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExpressionImpl <em>Expression</em>}' class.
@@ -108,23 +99,13 @@ public interface MathPackage extends EPackage
   int EXPRESSION = 1;
 
   /**
-   * The number of structural features of the '<em>Expression</em>' class.
+   * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_FEATURE_COUNT = 0;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl <em>Function</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
-   * @generated
-   */
-  int FUNCTION = 2;
+  int EXPRESSION__NAME = 0;
 
   /**
    * The feature id for the '<em><b>Formula</b></em>' containment reference.
@@ -133,16 +114,16 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION__FORMULA = 0;
+  int EXPRESSION__FORMULA = 1;
 
   /**
-   * The number of structural features of the '<em>Function</em>' class.
+   * The number of structural features of the '<em>Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_FEATURE_COUNT = 1;
+  int EXPRESSION_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.
@@ -152,7 +133,25 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAddition()
    * @generated
    */
-  int ADDITION = 3;
+  int ADDITION = 2;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADDITION__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADDITION__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -189,7 +188,25 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getSubtraction()
    * @generated
    */
-  int SUBTRACTION = 4;
+  int SUBTRACTION = 3;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SUBTRACTION__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SUBTRACTION__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -226,7 +243,25 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMultiplication()
    * @generated
    */
-  int MULTIPLICATION = 5;
+  int MULTIPLICATION = 4;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLICATION__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLICATION__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -263,7 +298,25 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDivision()
    * @generated
    */
-  int DIVISION = 6;
+  int DIVISION = 5;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -300,7 +353,25 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
    * @generated
    */
-  int POWER = 7;
+  int POWER = 6;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int POWER__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int POWER__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -337,7 +408,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 8;
+  int VARIABLE = 7;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -346,7 +417,16 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE__NAME = EXPRESSION_FEATURE_COUNT + 0;
+  int VARIABLE__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The number of structural features of the '<em>Variable</em>' class.
@@ -355,7 +435,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+  int VARIABLE_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl <em>Float</em>}' class.
@@ -365,7 +445,25 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 9;
+  int FLOAT = 8;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FLOAT__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FLOAT__FORMULA = EXPRESSION__FORMULA;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -384,6 +482,52 @@ public interface MathPackage extends EPackage
    * @ordered
    */
   int FLOAT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl <em>Function</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
+   * @generated
+   */
+  int FUNCTION = 9;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION__FORMULA = EXPRESSION__FORMULA;
+
+  /**
+   * The feature id for the '<em><b>Function</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION__FUNCTION = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Function</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
 
   /**
@@ -408,17 +552,6 @@ public interface MathPackage extends EPackage
   EReference getFormula_Expression();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Formula#getFunction <em>Function</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Function</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Formula#getFunction()
-   * @see #getFormula()
-   * @generated
-   */
-  EReference getFormula_Function();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Expression <em>Expression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -429,25 +562,26 @@ public interface MathPackage extends EPackage
   EClass getExpression();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Function <em>Function</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Expression#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Function</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Function
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Expression#getName()
+   * @see #getExpression()
    * @generated
    */
-  EClass getFunction();
+  EAttribute getExpression_Name();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Function#getFormula <em>Formula</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Expression#getFormula <em>Formula</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Formula</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Function#getFormula()
-   * @see #getFunction()
+   * @see org.eclipse.iee.translator.jmole.math.math.Expression#getFormula()
+   * @see #getExpression()
    * @generated
    */
-  EReference getFunction_Formula();
+  EReference getExpression_Formula();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Addition <em>Addition</em>}'.
@@ -620,17 +754,6 @@ public interface MathPackage extends EPackage
   EClass getVariable();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Variable#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Variable#getName()
-   * @see #getVariable()
-   * @generated
-   */
-  EAttribute getVariable_Name();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Float <em>Float</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -650,6 +773,27 @@ public interface MathPackage extends EPackage
    * @generated
    */
   EAttribute getFloat_Value();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Function <em>Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Function</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Function
+   * @generated
+   */
+  EClass getFunction();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Function#getFunction <em>Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Function</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Function#getFunction()
+   * @see #getFunction()
+   * @generated
+   */
+  EReference getFunction_Function();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -693,14 +837,6 @@ public interface MathPackage extends EPackage
     EReference FORMULA__EXPRESSION = eINSTANCE.getFormula_Expression();
 
     /**
-     * The meta object literal for the '<em><b>Function</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FORMULA__FUNCTION = eINSTANCE.getFormula_Function();
-
-    /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExpressionImpl <em>Expression</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -711,14 +847,12 @@ public interface MathPackage extends EPackage
     EClass EXPRESSION = eINSTANCE.getExpression();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl <em>Function</em>}' class.
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
      * @generated
      */
-    EClass FUNCTION = eINSTANCE.getFunction();
+    EAttribute EXPRESSION__NAME = eINSTANCE.getExpression_Name();
 
     /**
      * The meta object literal for the '<em><b>Formula</b></em>' containment reference feature.
@@ -726,7 +860,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference FUNCTION__FORMULA = eINSTANCE.getFunction_Formula();
+    EReference EXPRESSION__FORMULA = eINSTANCE.getExpression_Formula();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.
@@ -869,14 +1003,6 @@ public interface MathPackage extends EPackage
     EClass VARIABLE = eINSTANCE.getVariable();
 
     /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VARIABLE__NAME = eINSTANCE.getVariable_Name();
-
-    /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FloatImpl <em>Float</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -893,6 +1019,24 @@ public interface MathPackage extends EPackage
      * @generated
      */
     EAttribute FLOAT__VALUE = eINSTANCE.getFloat_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl <em>Function</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.FunctionImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
+     * @generated
+     */
+    EClass FUNCTION = eINSTANCE.getFunction();
+
+    /**
+     * The meta object literal for the '<em><b>Function</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FUNCTION__FUNCTION = eINSTANCE.getFunction_Function();
 
   }
 

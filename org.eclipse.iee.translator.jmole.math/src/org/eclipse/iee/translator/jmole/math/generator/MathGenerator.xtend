@@ -29,12 +29,17 @@ class MathGenerator implements IGenerator {
 		return formulas.head.compileFormula.toString();	
 	}
 	
-	def compileFormula(Formula f) '''
-		«compileExpression(f.expression)»;
+	def compileFormula(Formula f) 
+	{
 	'''
+		«compileExpression(f.expression)»
+	'''
+	}
 	
 	def compileFunction(Function f) '''
-		«compileFormula(f.formula)»;
+		«f.function.name.substring(0,1).toUpperCase()+ 
+		f.function.name.substring(1).toLowerCase()»
+		(«IF f.function.formula != null»«compileFormula(f.function.formula)»«ENDIF»)
 	'''
 		
 	def dispatch compileExpression(Variable n) '''
@@ -42,6 +47,9 @@ class MathGenerator implements IGenerator {
 	
 	def dispatch compileExpression(Float n) '''
 		«n.value»'''
+		
+	def dispatch compileExpression(Function f) '''
+		«compileFunction(f)»'''
 	
 	def dispatch compileExpression(Addition op) '''
 		(«compileExpression(op.left)») + («compileExpression(op.right)»)'''

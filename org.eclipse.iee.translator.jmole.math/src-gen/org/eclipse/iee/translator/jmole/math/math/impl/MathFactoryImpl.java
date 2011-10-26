@@ -80,7 +80,6 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
     {
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
-      case MathPackage.FUNCTION: return createFunction();
       case MathPackage.ADDITION: return createAddition();
       case MathPackage.SUBTRACTION: return createSubtraction();
       case MathPackage.MULTIPLICATION: return createMultiplication();
@@ -88,6 +87,7 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.POWER: return createPower();
       case MathPackage.VARIABLE: return createVariable();
       case MathPackage.FLOAT: return createFloat();
+      case MathPackage.FUNCTION: return createFunction();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -113,17 +113,6 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     ExpressionImpl expression = new ExpressionImpl();
     return expression;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Function createFunction()
-  {
-    FunctionImpl function = new FunctionImpl();
-    return function;
   }
 
   /**
@@ -201,6 +190,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     FloatImpl float_ = new FloatImpl();
     return float_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Function createFunction()
+  {
+    FunctionImpl function = new FunctionImpl();
+    return function;
   }
 
   /**
