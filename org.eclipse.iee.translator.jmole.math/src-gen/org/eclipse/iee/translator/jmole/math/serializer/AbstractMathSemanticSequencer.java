@@ -8,9 +8,11 @@ import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
+import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 import org.eclipse.iee.translator.jmole.math.services.MathGrammarAccess;
@@ -121,6 +123,12 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 					return; 
 				}
 				else break;
+			case MathPackage.FUNCTION_DEFINITION:
+				if(context == grammarAccess.getFunctionDefinitionRule()) {
+					sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
+					return; 
+				}
+				else break;
 			case MathPackage.MULTIPLICATION:
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_0() ||
@@ -146,6 +154,12 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				   context == grammarAccess.getPowerAccess().getPowerLeftAction_1_0() ||
 				   context == grammarAccess.getPrimaryRule()) {
 					sequence_Power(context, (Power) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.STATEMENT:
+				if(context == grammarAccess.getStatementRule()) {
+					sequence_Statement(context, (Statement) semanticObject); 
 					return; 
 				}
 				else break;
@@ -228,7 +242,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (name=FUNC formula=Formula)
+	 *     (name=MATH_NAME (parameters+=MATH_NAME parameters+=MATH_NAME*)? formula=Formula)
+	 *
+	 * Features:
+	 *    name[1, 1]
+	 *    parameters[0, *]
+	 *    formula[1, 1]
+	 */
+	protected void sequence_FunctionDefinition(EObject context, FunctionDefinition semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (name=MATH_NAME formula=Formula)
 	 *
 	 * Features:
 	 *    name[1, 1]
@@ -243,7 +271,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getFunctionAccess().getNameFUNCTerminalRuleCall_0_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getFunctionAccess().getNameMATH_NAMETerminalRuleCall_0_0(), semanticObject.getName());
 		feeder.accept(grammarAccess.getFunctionAccess().getFormulaFormulaParserRuleCall_2_0(), semanticObject.getFormula());
 		feeder.finish();
 	}
@@ -320,6 +348,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    name[1, 1]
 	 */
 	protected void sequence_Primary(EObject context, Variable semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (functionDefenition=FunctionDefinition | formula=Formula)
+	 *
+	 * Features:
+	 *    functionDefenition[0, 1]
+	 *         EXCLUDE_IF_SET formula
+	 *    formula[0, 1]
+	 *         EXCLUDE_IF_SET functionDefenition
+	 */
+	protected void sequence_Statement(EObject context, Statement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 }

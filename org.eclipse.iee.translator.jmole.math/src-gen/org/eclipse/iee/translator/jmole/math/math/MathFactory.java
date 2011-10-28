@@ -27,6 +27,15 @@ public interface MathFactory extends EFactory
   MathFactory eINSTANCE = org.eclipse.iee.translator.jmole.math.math.impl.MathFactoryImpl.init();
 
   /**
+   * Returns a new object of class '<em>Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Statement</em>'.
+   * @generated
+   */
+  Statement createStatement();
+
+  /**
    * Returns a new object of class '<em>Formula</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -43,6 +52,15 @@ public interface MathFactory extends EFactory
    * @generated
    */
   Expression createExpression();
+
+  /**
+   * Returns a new object of class '<em>Function Definition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Function Definition</em>'.
+   * @generated
+   */
+  FunctionDefinition createFunctionDefinition();
 
   /**
    * Returns a new object of class '<em>Addition</em>'.

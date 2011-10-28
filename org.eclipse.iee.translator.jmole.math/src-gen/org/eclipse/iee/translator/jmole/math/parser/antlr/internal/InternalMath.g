@@ -50,7 +50,7 @@ import org.eclipse.iee.translator.jmole.math.services.MathGrammarAccess;
     
     @Override
     protected String getFirstRuleName() {
-    	return "Formula";	
+    	return "Statement";	
    	}
    	
    	@Override
@@ -65,6 +65,64 @@ import org.eclipse.iee.translator.jmole.math.services.MathGrammarAccess;
         appendSkippedTokens();
     } 
 }
+
+
+
+
+// Entry rule entryRuleStatement
+entryRuleStatement returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getStatementRule()); }
+	 iv_ruleStatement=ruleStatement 
+	 { $current=$iv_ruleStatement.current; } 
+	 EOF 
+;
+
+// Rule Statement
+ruleStatement returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getStatementAccess().getFunctionDefenitionFunctionDefinitionParserRuleCall_0_0()); 
+	    }
+		lv_functionDefenition_0_0=ruleFunctionDefinition		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"functionDefenition",
+        		lv_functionDefenition_0_0, 
+        		"FunctionDefinition");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getStatementAccess().getFormulaFormulaParserRuleCall_1_0()); 
+	    }
+		lv_formula_1_0=ruleFormula		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"formula",
+        		lv_formula_1_0, 
+        		"Formula");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
 
 
 
@@ -572,9 +630,9 @@ ruleFunction returns [EObject current=null]
     @after { leaveRule(); }:
 ((
 (
-		lv_name_0_0=RULE_FUNC
+		lv_name_0_0=RULE_MATH_NAME
 		{
-			newLeafNode(lv_name_0_0, grammarAccess.getFunctionAccess().getNameFUNCTerminalRuleCall_0_0()); 
+			newLeafNode(lv_name_0_0, grammarAccess.getFunctionAccess().getNameMATH_NAMETerminalRuleCall_0_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -584,7 +642,7 @@ ruleFunction returns [EObject current=null]
        			$current, 
        			"name",
         		lv_name_0_0, 
-        		"FUNC");
+        		"MATH_NAME");
 	    }
 
 )
@@ -621,7 +679,120 @@ ruleFunction returns [EObject current=null]
 
 
 
-RULE_FUNC : ('sin'|'cos'|'tan'|'log');
+// Entry rule entryRuleFunctionDefinition
+entryRuleFunctionDefinition returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getFunctionDefinitionRule()); }
+	 iv_ruleFunctionDefinition=ruleFunctionDefinition 
+	 { $current=$iv_ruleFunctionDefinition.current; } 
+	 EOF 
+;
+
+// Rule FunctionDefinition
+ruleFunctionDefinition returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		lv_name_0_0=RULE_MATH_NAME
+		{
+			newLeafNode(lv_name_0_0, grammarAccess.getFunctionDefinitionAccess().getNameMATH_NAMETerminalRuleCall_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFunctionDefinitionRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"name",
+        		lv_name_0_0, 
+        		"MATH_NAME");
+	    }
+
+)
+)	otherlv_1='(' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getFunctionDefinitionAccess().getLeftParenthesisKeyword_1());
+    }
+((
+(
+		lv_parameters_2_0=RULE_MATH_NAME
+		{
+			newLeafNode(lv_parameters_2_0, grammarAccess.getFunctionDefinitionAccess().getParametersMATH_NAMETerminalRuleCall_2_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFunctionDefinitionRule());
+	        }
+       		addWithLastConsumed(
+       			$current, 
+       			"parameters",
+        		lv_parameters_2_0, 
+        		"MATH_NAME");
+	    }
+
+)
+)(	otherlv_3=',' 
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getFunctionDefinitionAccess().getCommaKeyword_2_1_0());
+    }
+(
+(
+		lv_parameters_4_0=RULE_MATH_NAME
+		{
+			newLeafNode(lv_parameters_4_0, grammarAccess.getFunctionDefinitionAccess().getParametersMATH_NAMETerminalRuleCall_2_1_1_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFunctionDefinitionRule());
+	        }
+       		addWithLastConsumed(
+       			$current, 
+       			"parameters",
+        		lv_parameters_4_0, 
+        		"MATH_NAME");
+	    }
+
+)
+))*(	otherlv_5=',' 
+    {
+    	newLeafNode(otherlv_5, grammarAccess.getFunctionDefinitionAccess().getCommaKeyword_2_2());
+    }
+)?)?	otherlv_6=')' 
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getFunctionDefinitionAccess().getRightParenthesisKeyword_3());
+    }
+	otherlv_7='=' 
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getFunctionDefinitionAccess().getEqualsSignKeyword_4());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getFormulaFormulaParserRuleCall_5_0()); 
+	    }
+		lv_formula_8_0=ruleFormula		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFunctionDefinitionRule());
+	        }
+       		set(
+       			$current, 
+       			"formula",
+        		lv_formula_8_0, 
+        		"Formula");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
+
+
+
+
+RULE_MATH_NAME : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 
 RULE_ID : '^'? ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 

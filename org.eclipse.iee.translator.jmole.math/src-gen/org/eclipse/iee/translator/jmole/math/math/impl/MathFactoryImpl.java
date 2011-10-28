@@ -19,10 +19,12 @@ import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
+import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 
@@ -78,8 +80,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     switch (eClass.getClassifierID())
     {
+      case MathPackage.STATEMENT: return createStatement();
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
+      case MathPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
       case MathPackage.ADDITION: return createAddition();
       case MathPackage.SUBTRACTION: return createSubtraction();
       case MathPackage.MULTIPLICATION: return createMultiplication();
@@ -91,6 +95,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Statement createStatement()
+  {
+    StatementImpl statement = new StatementImpl();
+    return statement;
   }
 
   /**
@@ -113,6 +128,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     ExpressionImpl expression = new ExpressionImpl();
     return expression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FunctionDefinition createFunctionDefinition()
+  {
+    FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
+    return functionDefinition;
   }
 
   /**

@@ -17,12 +17,14 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected MathGrammarAccess grammarAccess;
+	protected AbstractElementAlias match_FunctionDefinition_CommaKeyword_2_2_q;
 	protected AbstractElementAlias match_Primary_LeftParenthesisKeyword_3_0_a;
 	protected AbstractElementAlias match_Primary_LeftParenthesisKeyword_3_0_p;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (MathGrammarAccess) access;
+		match_FunctionDefinition_CommaKeyword_2_2_q = new TokenAlias(true, false, grammarAccess.getFunctionDefinitionAccess().getCommaKeyword_2_2());
 		match_Primary_LeftParenthesisKeyword_3_0_a = new TokenAlias(true, true, grammarAccess.getPrimaryAccess().getLeftParenthesisKeyword_3_0());
 		match_Primary_LeftParenthesisKeyword_3_0_p = new TokenAlias(false, true, grammarAccess.getPrimaryAccess().getLeftParenthesisKeyword_3_0());
 	}
@@ -39,7 +41,9 @@ public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			if(match_Primary_LeftParenthesisKeyword_3_0_a.equals(syntax))
+			if(match_FunctionDefinition_CommaKeyword_2_2_q.equals(syntax))
+				emit_FunctionDefinition_CommaKeyword_2_2_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if(match_Primary_LeftParenthesisKeyword_3_0_a.equals(syntax))
 				emit_Primary_LeftParenthesisKeyword_3_0_a(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if(match_Primary_LeftParenthesisKeyword_3_0_p.equals(syntax))
 				emit_Primary_LeftParenthesisKeyword_3_0_p(semanticObject, getLastNavigableState(), syntaxNodes);
@@ -47,6 +51,14 @@ public class AbstractMathSyntacticSequencer extends AbstractSyntacticSequencer {
 		}
 	}
 
+	/**
+	 * Syntax:
+	 *     ','?
+	 */
+	protected void emit_FunctionDefinition_CommaKeyword_2_2_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
 	/**
 	 * Syntax:
 	 *     '('*

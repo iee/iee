@@ -25,7 +25,7 @@ public class MathParser extends org.eclipse.xtext.parser.antlr.AbstractAntlrPars
 	
 	@Override 
 	protected String getDefaultRuleName() {
-		return "Formula";
+		return "Statement";
 	}
 	
 	public MathGrammarAccess getGrammarAccess() {

@@ -1,5 +1,6 @@
 package org.eclipse.iee.translator.jmole.math.generator;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
@@ -8,8 +9,10 @@ import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
+import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
+import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 import org.eclipse.xtext.generator.IFileSystemAccess;
@@ -29,17 +32,79 @@ public class MathGenerator implements IGenerator {
   public String generateText(final Resource resource) {
     {
       Iterable<EObject> _allContentsIterable = ResourceExtensions.allContentsIterable(resource);
-      Iterable<Formula> _filter = IterableExtensions.<Formula>filter(_allContentsIterable, org.eclipse.iee.translator.jmole.math.math.Formula.class);
-      Iterable<Formula> formulas = _filter;
-      boolean _isEmpty = IterableExtensions.isEmpty(formulas);
+      Iterable<Statement> _filter = IterableExtensions.<Statement>filter(_allContentsIterable, org.eclipse.iee.translator.jmole.math.math.Statement.class);
+      Iterable<Statement> statements = _filter;
+      boolean _isEmpty = IterableExtensions.isEmpty(statements);
       if (_isEmpty) {
         return null;
       }
-      Formula _head = IterableExtensions.<Formula>head(formulas);
-      StringConcatenation _compileFormula = this.compileFormula(_head);
-      String _string = _compileFormula.toString();
+      Statement _head = IterableExtensions.<Statement>head(statements);
+      StringConcatenation _compileStatement = this.compileStatement(_head);
+      String _string = _compileStatement.toString();
       return _string;
     }
+  }
+  
+  public StringConcatenation compileStatement(final Statement s) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      FunctionDefinition _functionDefenition = s.getFunctionDefenition();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_functionDefenition, null);
+      if (_operator_notEquals) {
+        FunctionDefinition _functionDefenition_1 = s.getFunctionDefenition();
+        StringConcatenation _compileFunctionDefinition = this.compileFunctionDefinition(_functionDefenition_1);
+        _builder.append(_compileFunctionDefinition, "");
+      }
+    }
+    {
+      Formula _formula = s.getFormula();
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_formula, null);
+      if (_operator_notEquals_1) {
+        Formula _formula_1 = s.getFormula();
+        StringConcatenation _compileFormula = this.compileFormula(_formula_1);
+        _builder.append(_compileFormula, "");
+        _builder.append(";");
+      }
+    }
+    return _builder;
+  }
+  
+  public StringConcatenation compileFunctionDefinition(final FunctionDefinition funcDef) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("public Double ");
+    String _name = funcDef.getName();
+    _builder.append(_name, "");
+    _builder.append(" ( ");
+    {
+      EList<String> _parameters = funcDef.getParameters();
+      for(final String param : _parameters) {
+        _builder.append(param, "");
+        _builder.append(" ");
+        {
+          EList<String> _parameters_1 = funcDef.getParameters();
+          String _last = IterableExtensions.<String>last(_parameters_1);
+          boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_last, param);
+          if (_operator_notEquals) {
+            _builder.append(",");
+          }
+        }
+        _builder.append("\t\t");
+      }
+    }
+    _builder.append(") ");
+    _builder.append("{ ");
+    {
+      Formula _formula = funcDef.getFormula();
+      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_formula, null);
+      if (_operator_notEquals_1) {
+        _builder.append(" return ");
+        Formula _formula_1 = funcDef.getFormula();
+        StringConcatenation _compileFormula = this.compileFormula(_formula_1);
+        _builder.append(_compileFormula, "");
+      }
+    }
+    _builder.append(" }");
+    return _builder;
   }
   
   public StringConcatenation compileFormula(final Formula f) {

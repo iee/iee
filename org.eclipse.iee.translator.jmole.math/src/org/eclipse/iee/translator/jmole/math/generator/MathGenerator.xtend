@@ -20,13 +20,33 @@ class MathGenerator implements IGenerator {
 	}
 	
 	def String generateText(Resource resource) {
-		var formulas = resource.allContentsIterable.filter(typeof(Formula));
+		var statements = resource.allContentsIterable.filter(typeof(Statement));
 		
-		if (formulas.empty) {
+		if (statements.empty) {
 			return null;
 		}
 		
-		return formulas.head.compileFormula.toString();	
+		return statements.head.compileStatement.toString();	
+	}
+	
+	def compileStatement(Statement s)
+	{
+	'''
+		«IF s.functionDefenition != null»«compileFunctionDefinition(s.functionDefenition)»«ENDIF»
+		«IF s.formula != null»«compileFormula(s.formula)»;«ENDIF»
+	'''
+	}
+	
+	def compileFunctionDefinition(FunctionDefinition funcDef)
+	{
+	'''
+		public Double «funcDef.name» ( 
+		«FOR param:funcDef.parameters»
+		 «param» 
+		 «IF funcDef.parameters.last() != param»,«ENDIF»
+		«ENDFOR») 
+		{ «IF funcDef.formula != null» return «compileFormula(funcDef.formula)»«ENDIF» }
+	'''
 	}
 	
 	def compileFormula(Formula f) 

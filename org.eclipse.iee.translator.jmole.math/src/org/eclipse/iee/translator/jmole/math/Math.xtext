@@ -5,6 +5,11 @@ generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 //Formula:
 //	expression=Expression;
 
+Statement:
+	functionDefenition=FunctionDefinition |
+	formula=Formula
+;
+
 Formula:
 	expression=(Addition)
 	;
@@ -28,12 +33,15 @@ Float:
 	INT* ('.' INT+ ( ('E'|'e') ('-')? (INT)+ )?)?;
 
 Function returns Expression:
-	(name=FUNC) '(' formula=Formula ')'
+	(name=MATH_NAME) '(' formula=Formula ')'
 ;
 
-terminal FUNC:
-	'sin' | 'cos' | 'tan' | 'log'
+FunctionDefinition:
+	name=MATH_NAME '(' (parameters+=MATH_NAME (',' parameters+=MATH_NAME)* ','?)? ')' '=' formula=Formula
 ;
+
+terminal MATH_NAME returns ecore::EString:
+    ( 'a'..'z' | 'A'..'Z' | '_' ) ( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' )*;
 
 /*
 Expression:
