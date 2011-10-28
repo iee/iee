@@ -42,7 +42,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 				try {
 					String result = Activator.getMole().translateMath(styledText.getText());
 					System.out.println(result);
-					getContainer().writeAtContainerRegionTail(result.trim() + ";");
+					getContainer().writeAtContainerRegionTail(result.trim());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
