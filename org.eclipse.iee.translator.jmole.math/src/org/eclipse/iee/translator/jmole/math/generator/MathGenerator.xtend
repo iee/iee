@@ -45,10 +45,10 @@ class MathGenerator implements IGenerator {
 	'''
 		public Double «funcDef.function.name» ( 
 		«FOR param:funcDef.function.parameters»
-		 («IF param != null»«compileFormula(param)»«ENDIF»)
+		 («IF param != null»(double)«compileFormula(param)»«ENDIF»)
 		 «IF funcDef.function.parameters.last() != param»,«ENDIF»
 		«ENDFOR») 
-		{ «IF funcDef.formula != null» return «compileFormula(funcDef.formula)»«ENDIF» }
+		{ «IF funcDef.formula != null» return «compileFormula(funcDef.formula)»;«ENDIF» }
 	'''
 	}
 	
