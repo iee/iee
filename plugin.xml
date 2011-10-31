@@ -34,29 +34,27 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.iee.category.wizards"
-            name="IEE">
-      </category>
+         point="org.eclipse.pde.ui.pluginContent">
       <wizard
-            category="org.eclipse.iee.category.wizards"
-            class="org.eclipse.iee.editor.monitoring.wizards.NewPadWizard"
-            hasPages="true"
+            class="org.eclipse.iee.editor.monitoring.NewPadWizard"
             icon="icons/iee_logo.png"
-            id="org.eclipse.iee.wizard.NewPad"
-            name="IEE Pad Project"
-            project="true">
+            id="org.eclipse.iee.editor.monitoring.wizardNewPad"
+            java="true"
+            name="New Pad Wizard"
+            pureOSGi="false"
+            rcp="false"
+            requiresActivator="false"
+            ui-content="true">
       </wizard>
    </extension>
    <extension
          point="org.eclipse.pde.ui.templates">
       <template
-            class="org.eclipse.iee.editor.monitoring.templates.PadTemplate"
-            contributingId="org.eclipse.iee.PadTemplate"
+            class="org.eclipse.iee.editor.monitoring.TemplateSection1"
+            contributingId="org.eclipse.iee.editor.monitoring.templatePad"
             icon="icons/iee_logo.png"
-            id="org.eclipse.iee.PadTemplate"
-            name="IEE Pad template">
+            id="org.eclipse.iee.editor.monitoring.templatePad"
+            name="Pad Template">
       </template>
    </extension>
 
