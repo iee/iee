@@ -4,7 +4,9 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="math"
     nsURI="http://www.eclipse.org/iee/translator/jmole/math/Math" nsPrefix="math">
   <eClassifiers xsi:type="ecore:EClass" name="Statement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="functionDefenition" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//FunctionDefinition"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionDefinition" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//FunctionDefinition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matrixDefinition" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//MatrixDefinition"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="formula" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
         containment="true"/>
@@ -24,6 +26,15 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="formula" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatrixDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//MatrixRow"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatrixRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elements" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Addition" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"

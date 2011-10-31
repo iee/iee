@@ -22,6 +22,8 @@ import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
@@ -84,6 +86,8 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
       case MathPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
+      case MathPackage.MATRIX_DEFINITION: return createMatrixDefinition();
+      case MathPackage.MATRIX_ROW: return createMatrixRow();
       case MathPackage.ADDITION: return createAddition();
       case MathPackage.SUBTRACTION: return createSubtraction();
       case MathPackage.MULTIPLICATION: return createMultiplication();
@@ -139,6 +143,28 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
     return functionDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixDefinition createMatrixDefinition()
+  {
+    MatrixDefinitionImpl matrixDefinition = new MatrixDefinitionImpl();
+    return matrixDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixRow createMatrixRow()
+  {
+    MatrixRowImpl matrixRow = new MatrixRowImpl();
+    return matrixRow;
   }
 
   /**

@@ -63,6 +63,24 @@ public interface MathFactory extends EFactory
   FunctionDefinition createFunctionDefinition();
 
   /**
+   * Returns a new object of class '<em>Matrix Definition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Definition</em>'.
+   * @generated
+   */
+  MatrixDefinition createMatrixDefinition();
+
+  /**
+   * Returns a new object of class '<em>Matrix Row</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Row</em>'.
+   * @generated
+   */
+  MatrixRow createMatrixRow();
+
+  /**
    * Returns a new object of class '<em>Addition</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

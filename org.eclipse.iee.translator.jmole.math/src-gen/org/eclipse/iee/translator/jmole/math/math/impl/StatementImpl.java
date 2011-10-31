@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 
 /**
@@ -27,7 +28,8 @@ import org.eclipse.iee.translator.jmole.math.math.Statement;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFunctionDefenition <em>Function Defenition</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFunctionDefinition <em>Function Definition</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getMatrixDefinition <em>Matrix Definition</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFormula <em>Formula</em>}</li>
  * </ul>
  * </p>
@@ -37,14 +39,24 @@ import org.eclipse.iee.translator.jmole.math.math.Statement;
 public class StatementImpl extends MinimalEObjectImpl.Container implements Statement
 {
   /**
-   * The cached value of the '{@link #getFunctionDefenition() <em>Function Defenition</em>}' containment reference.
+   * The cached value of the '{@link #getFunctionDefinition() <em>Function Definition</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFunctionDefenition()
+   * @see #getFunctionDefinition()
    * @generated
    * @ordered
    */
-  protected FunctionDefinition functionDefenition;
+  protected FunctionDefinition functionDefinition;
+
+  /**
+   * The cached value of the '{@link #getMatrixDefinition() <em>Matrix Definition</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMatrixDefinition()
+   * @generated
+   * @ordered
+   */
+  protected MatrixDefinition matrixDefinition;
 
   /**
    * The cached value of the '{@link #getFormula() <em>Formula</em>}' containment reference.
@@ -82,9 +94,9 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
-  public FunctionDefinition getFunctionDefenition()
+  public FunctionDefinition getFunctionDefinition()
   {
-    return functionDefenition;
+    return functionDefinition;
   }
 
   /**
@@ -92,13 +104,13 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetFunctionDefenition(FunctionDefinition newFunctionDefenition, NotificationChain msgs)
+  public NotificationChain basicSetFunctionDefinition(FunctionDefinition newFunctionDefinition, NotificationChain msgs)
   {
-    FunctionDefinition oldFunctionDefenition = functionDefenition;
-    functionDefenition = newFunctionDefenition;
+    FunctionDefinition oldFunctionDefinition = functionDefinition;
+    functionDefinition = newFunctionDefinition;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__FUNCTION_DEFENITION, oldFunctionDefenition, newFunctionDefenition);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__FUNCTION_DEFINITION, oldFunctionDefinition, newFunctionDefinition);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -109,20 +121,68 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setFunctionDefenition(FunctionDefinition newFunctionDefenition)
+  public void setFunctionDefinition(FunctionDefinition newFunctionDefinition)
   {
-    if (newFunctionDefenition != functionDefenition)
+    if (newFunctionDefinition != functionDefinition)
     {
       NotificationChain msgs = null;
-      if (functionDefenition != null)
-        msgs = ((InternalEObject)functionDefenition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__FUNCTION_DEFENITION, null, msgs);
-      if (newFunctionDefenition != null)
-        msgs = ((InternalEObject)newFunctionDefenition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__FUNCTION_DEFENITION, null, msgs);
-      msgs = basicSetFunctionDefenition(newFunctionDefenition, msgs);
+      if (functionDefinition != null)
+        msgs = ((InternalEObject)functionDefinition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__FUNCTION_DEFINITION, null, msgs);
+      if (newFunctionDefinition != null)
+        msgs = ((InternalEObject)newFunctionDefinition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__FUNCTION_DEFINITION, null, msgs);
+      msgs = basicSetFunctionDefinition(newFunctionDefinition, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__FUNCTION_DEFENITION, newFunctionDefenition, newFunctionDefenition));
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__FUNCTION_DEFINITION, newFunctionDefinition, newFunctionDefinition));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixDefinition getMatrixDefinition()
+  {
+    return matrixDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetMatrixDefinition(MatrixDefinition newMatrixDefinition, NotificationChain msgs)
+  {
+    MatrixDefinition oldMatrixDefinition = matrixDefinition;
+    matrixDefinition = newMatrixDefinition;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_DEFINITION, oldMatrixDefinition, newMatrixDefinition);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMatrixDefinition(MatrixDefinition newMatrixDefinition)
+  {
+    if (newMatrixDefinition != matrixDefinition)
+    {
+      NotificationChain msgs = null;
+      if (matrixDefinition != null)
+        msgs = ((InternalEObject)matrixDefinition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_DEFINITION, null, msgs);
+      if (newMatrixDefinition != null)
+        msgs = ((InternalEObject)newMatrixDefinition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_DEFINITION, null, msgs);
+      msgs = basicSetMatrixDefinition(newMatrixDefinition, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_DEFINITION, newMatrixDefinition, newMatrixDefinition));
   }
 
   /**
@@ -183,8 +243,10 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
   {
     switch (featureID)
     {
-      case MathPackage.STATEMENT__FUNCTION_DEFENITION:
-        return basicSetFunctionDefenition(null, msgs);
+      case MathPackage.STATEMENT__FUNCTION_DEFINITION:
+        return basicSetFunctionDefinition(null, msgs);
+      case MathPackage.STATEMENT__MATRIX_DEFINITION:
+        return basicSetMatrixDefinition(null, msgs);
       case MathPackage.STATEMENT__FORMULA:
         return basicSetFormula(null, msgs);
     }
@@ -201,8 +263,10 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
   {
     switch (featureID)
     {
-      case MathPackage.STATEMENT__FUNCTION_DEFENITION:
-        return getFunctionDefenition();
+      case MathPackage.STATEMENT__FUNCTION_DEFINITION:
+        return getFunctionDefinition();
+      case MathPackage.STATEMENT__MATRIX_DEFINITION:
+        return getMatrixDefinition();
       case MathPackage.STATEMENT__FORMULA:
         return getFormula();
     }
@@ -219,8 +283,11 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
   {
     switch (featureID)
     {
-      case MathPackage.STATEMENT__FUNCTION_DEFENITION:
-        setFunctionDefenition((FunctionDefinition)newValue);
+      case MathPackage.STATEMENT__FUNCTION_DEFINITION:
+        setFunctionDefinition((FunctionDefinition)newValue);
+        return;
+      case MathPackage.STATEMENT__MATRIX_DEFINITION:
+        setMatrixDefinition((MatrixDefinition)newValue);
         return;
       case MathPackage.STATEMENT__FORMULA:
         setFormula((Formula)newValue);
@@ -239,8 +306,11 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
   {
     switch (featureID)
     {
-      case MathPackage.STATEMENT__FUNCTION_DEFENITION:
-        setFunctionDefenition((FunctionDefinition)null);
+      case MathPackage.STATEMENT__FUNCTION_DEFINITION:
+        setFunctionDefinition((FunctionDefinition)null);
+        return;
+      case MathPackage.STATEMENT__MATRIX_DEFINITION:
+        setMatrixDefinition((MatrixDefinition)null);
         return;
       case MathPackage.STATEMENT__FORMULA:
         setFormula((Formula)null);
@@ -259,8 +329,10 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
   {
     switch (featureID)
     {
-      case MathPackage.STATEMENT__FUNCTION_DEFENITION:
-        return functionDefenition != null;
+      case MathPackage.STATEMENT__FUNCTION_DEFINITION:
+        return functionDefinition != null;
+      case MathPackage.STATEMENT__MATRIX_DEFINITION:
+        return matrixDefinition != null;
       case MathPackage.STATEMENT__FORMULA:
         return formula != null;
     }

@@ -10,6 +10,8 @@ import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
@@ -48,14 +50,15 @@ public class MathGenerator implements IGenerator {
   public StringConcatenation compileStatement(final Statement s) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      FunctionDefinition _functionDefenition = s.getFunctionDefenition();
-      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_functionDefenition, null);
+      FunctionDefinition _functionDefinition = s.getFunctionDefinition();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_functionDefinition, null);
       if (_operator_notEquals) {
-        FunctionDefinition _functionDefenition_1 = s.getFunctionDefenition();
-        StringConcatenation _compileFunctionDefinition = this.compileFunctionDefinition(_functionDefenition_1);
+        FunctionDefinition _functionDefinition_1 = s.getFunctionDefinition();
+        StringConcatenation _compileFunctionDefinition = this.compileFunctionDefinition(_functionDefinition_1);
         _builder.append(_compileFunctionDefinition, "");
       }
     }
+
     {
       Formula _formula = s.getFormula();
       boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_formula, null);
@@ -66,6 +69,18 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
+
+    {
+      MatrixDefinition _matrixDefinition = s.getMatrixDefinition();
+      boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_matrixDefinition, null);
+      if (_operator_notEquals_2) {
+        MatrixDefinition _matrixDefinition_1 = s.getMatrixDefinition();
+        StringConcatenation _compileMatrixDefinition = this.compileMatrixDefinition(_matrixDefinition_1);
+        _builder.append(_compileMatrixDefinition, "");
+        _builder.append(";");
+      }
+    }
+
     return _builder;
   }
   
@@ -76,6 +91,7 @@ public class MathGenerator implements IGenerator {
     String _name = _function.getName();
     _builder.append(_name, "");
     _builder.append(" ( ");
+
     {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
@@ -89,6 +105,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
+
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -98,10 +115,12 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
+
         _builder.append("\t\t");
       }
     }
     _builder.append(") ");
+
     _builder.append("{ ");
     {
       Formula _formula = funcDef.getFormula();
@@ -114,6 +133,7 @@ public class MathGenerator implements IGenerator {
       }
     }
     _builder.append(" }");
+
     return _builder;
   }
   
@@ -122,6 +142,62 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
+
+    return _builder;
+  }
+  
+  public StringConcatenation compileMatrixDefinition(final MatrixDefinition m) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("Matrix ");
+    String _name = m.getName();
+    _builder.append(_name, "");
+    _builder.append(" = new Matrix(new double[][]");
+
+    _builder.append("{");
+    {
+      EList<MatrixRow> _rows = m.getRows();
+      for(final MatrixRow row : _rows) {
+        {
+          boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
+          if (_operator_notEquals) {
+            _builder.append("{");
+            {
+              EList<String> _elements = row.getElements();
+              for(final String element : _elements) {
+                {
+                  boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
+                  if (_operator_notEquals_1) {
+                    _builder.append(element, "");
+            
+                  }
+                }
+                {
+                  EList<String> _elements_1 = row.getElements();
+                  String _last = IterableExtensions.<String>last(_elements_1);
+                  boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_last, element);
+                  if (_operator_notEquals_2) {
+                    _builder.append(",");
+                  }
+                }
+                
+              }
+            }
+            _builder.append("}");
+          }
+        }
+        {
+          EList<MatrixRow> _rows_1 = m.getRows();
+          MatrixRow _last_1 = IterableExtensions.<MatrixRow>last(_rows_1);
+          boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_last_1, row);
+          if (_operator_notEquals_3) {
+            _builder.append(",");
+          }
+        }
+      
+      }
+    }
+
+    _builder.append("})");
     return _builder;
   }
   
@@ -137,6 +213,7 @@ public class MathGenerator implements IGenerator {
     String _lowerCase = _substring_1.toLowerCase();
     String _operator_plus = StringExtensions.operator_plus(_upperCase, _lowerCase);
     _builder.append(_operator_plus, "");
+
     {
       Expression _function_2 = f.getFunction();
       EList<Formula> _parameters = _function_2.getParameters();
@@ -150,6 +227,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
+ 
         {
           Expression _function_3 = f.getFunction();
           EList<Formula> _parameters_1 = _function_3.getParameters();
@@ -159,6 +237,7 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
+  
       }
     }
     return _builder;

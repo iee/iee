@@ -86,16 +86,16 @@ ruleStatement returns [EObject current=null]
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getStatementAccess().getFunctionDefenitionFunctionDefinitionParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getStatementAccess().getFunctionDefinitionFunctionDefinitionParserRuleCall_0_0()); 
 	    }
-		lv_functionDefenition_0_0=ruleFunctionDefinition		{
+		lv_functionDefinition_0_0=ruleFunctionDefinition		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getStatementRule());
 	        }
        		set(
        			$current, 
-       			"functionDefenition",
-        		lv_functionDefenition_0_0, 
+       			"functionDefinition",
+        		lv_functionDefinition_0_0, 
         		"FunctionDefinition");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -105,16 +105,35 @@ ruleStatement returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getStatementAccess().getFormulaFormulaParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getStatementAccess().getMatrixDefinitionMatrixDefinitionParserRuleCall_1_0()); 
 	    }
-		lv_formula_1_0=ruleFormula		{
+		lv_matrixDefinition_1_0=ruleMatrixDefinition		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"matrixDefinition",
+        		lv_matrixDefinition_1_0, 
+        		"MatrixDefinition");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getStatementAccess().getFormulaFormulaParserRuleCall_2_0()); 
+	    }
+		lv_formula_2_0=ruleFormula		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getStatementRule());
 	        }
        		set(
        			$current, 
        			"formula",
-        		lv_formula_1_0, 
+        		lv_formula_2_0, 
         		"Formula");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -760,6 +779,174 @@ ruleFunctionDefinition returns [EObject current=null]
 
 )
 ))
+;
+
+
+
+
+
+// Entry rule entryRuleMatrixDefinition
+entryRuleMatrixDefinition returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getMatrixDefinitionRule()); }
+	 iv_ruleMatrixDefinition=ruleMatrixDefinition 
+	 { $current=$iv_ruleMatrixDefinition.current; } 
+	 EOF 
+;
+
+// Rule MatrixDefinition
+ruleMatrixDefinition returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		lv_name_0_0=RULE_MATH_NAME
+		{
+			newLeafNode(lv_name_0_0, grammarAccess.getMatrixDefinitionAccess().getNameMATH_NAMETerminalRuleCall_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getMatrixDefinitionRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"name",
+        		lv_name_0_0, 
+        		"MATH_NAME");
+	    }
+
+)
+)	otherlv_1='=' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getMatrixDefinitionAccess().getEqualsSignKeyword_1());
+    }
+	otherlv_2='{' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getMatrixDefinitionAccess().getLeftCurlyBracketKeyword_2());
+    }
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getMatrixDefinitionAccess().getRowsMatrixRowParserRuleCall_3_0_0()); 
+	    }
+		lv_rows_3_0=ruleMatrixRow		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getMatrixDefinitionRule());
+	        }
+       		add(
+       			$current, 
+       			"rows",
+        		lv_rows_3_0, 
+        		"MatrixRow");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(	otherlv_4=',' 
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getMatrixDefinitionAccess().getCommaKeyword_3_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getMatrixDefinitionAccess().getRowsMatrixRowParserRuleCall_3_1_1_0()); 
+	    }
+		lv_rows_5_0=ruleMatrixRow		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getMatrixDefinitionRule());
+	        }
+       		add(
+       			$current, 
+       			"rows",
+        		lv_rows_5_0, 
+        		"MatrixRow");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*(	otherlv_6=',' 
+    {
+    	newLeafNode(otherlv_6, grammarAccess.getMatrixDefinitionAccess().getCommaKeyword_3_2());
+    }
+)?)?	otherlv_7='}' 
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getMatrixDefinitionAccess().getRightCurlyBracketKeyword_4());
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleMatrixRow
+entryRuleMatrixRow returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getMatrixRowRule()); }
+	 iv_ruleMatrixRow=ruleMatrixRow 
+	 { $current=$iv_ruleMatrixRow.current; } 
+	 EOF 
+;
+
+// Rule MatrixRow
+ruleMatrixRow returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(	otherlv_0='{' 
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getMatrixRowAccess().getLeftCurlyBracketKeyword_0());
+    }
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_0_0()); 
+	    }
+		lv_elements_1_0=ruleFloat		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getMatrixRowRule());
+	        }
+       		add(
+       			$current, 
+       			"elements",
+        		lv_elements_1_0, 
+        		"Float");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(	otherlv_2=',' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_1_1_0()); 
+	    }
+		lv_elements_3_0=ruleFloat		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getMatrixRowRule());
+	        }
+       		add(
+       			$current, 
+       			"elements",
+        		lv_elements_3_0, 
+        		"Float");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*(	otherlv_4=',' 
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_2());
+    }
+)?)?	otherlv_5='}' 
+    {
+    	newLeafNode(otherlv_5, grammarAccess.getMatrixRowAccess().getRightCurlyBracketKeyword_2());
+    }
+)
 ;
 
 

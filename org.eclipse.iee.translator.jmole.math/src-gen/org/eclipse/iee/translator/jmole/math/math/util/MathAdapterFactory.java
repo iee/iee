@@ -20,6 +20,8 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
@@ -108,6 +110,16 @@ public class MathAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFunctionDefinition(FunctionDefinition object)
       {
         return createFunctionDefinitionAdapter();
+      }
+      @Override
+      public Adapter caseMatrixDefinition(MatrixDefinition object)
+      {
+        return createMatrixDefinitionAdapter();
+      }
+      @Override
+      public Adapter caseMatrixRow(MatrixRow object)
+      {
+        return createMatrixRowAdapter();
       }
       @Override
       public Adapter caseAddition(Addition object)
@@ -227,6 +239,36 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFunctionDefinitionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixDefinition <em>Matrix Definition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixDefinition
+   * @generated
+   */
+  public Adapter createMatrixDefinitionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixRow <em>Matrix Row</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixRow
+   * @generated
+   */
+  public Adapter createMatrixRowAdapter()
   {
     return null;
   }

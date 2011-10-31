@@ -10,6 +10,8 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
@@ -126,6 +128,18 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 			case MathPackage.FUNCTION_DEFINITION:
 				if(context == grammarAccess.getFunctionDefinitionRule()) {
 					sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.MATRIX_DEFINITION:
+				if(context == grammarAccess.getMatrixDefinitionRule()) {
+					sequence_MatrixDefinition(context, (MatrixDefinition) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.MATRIX_ROW:
+				if(context == grammarAccess.getMatrixRowRule()) {
+					sequence_MatrixRow(context, (MatrixRow) semanticObject); 
 					return; 
 				}
 				else break;
@@ -278,6 +292,31 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
+	 *     (name=MATH_NAME (rows+=MatrixRow rows+=MatrixRow*)?)
+	 *
+	 * Features:
+	 *    name[1, 1]
+	 *    rows[0, *]
+	 */
+	protected void sequence_MatrixDefinition(EObject context, MatrixDefinition semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (elements+=Float elements+=Float*)?
+	 *
+	 * Features:
+	 *    elements[0, *]
+	 */
+	protected void sequence_MatrixRow(EObject context, MatrixRow semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     (left=Multiplication_Division_1_1_0 right=Power)
 	 *
 	 * Features:
@@ -353,13 +392,18 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (functionDefenition=FunctionDefinition | formula=Formula)
+	 *     (functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | formula=Formula)
 	 *
 	 * Features:
-	 *    functionDefenition[0, 1]
+	 *    functionDefinition[0, 1]
+	 *         EXCLUDE_IF_SET matrixDefinition
+	 *         EXCLUDE_IF_SET formula
+	 *    matrixDefinition[0, 1]
+	 *         EXCLUDE_IF_SET functionDefinition
 	 *         EXCLUDE_IF_SET formula
 	 *    formula[0, 1]
-	 *         EXCLUDE_IF_SET functionDefenition
+	 *         EXCLUDE_IF_SET functionDefinition
+	 *         EXCLUDE_IF_SET matrixDefinition
 	 */
 	protected void sequence_Statement(EObject context, Statement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

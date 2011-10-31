@@ -71,13 +71,22 @@ public interface MathPackage extends EPackage
   int STATEMENT = 0;
 
   /**
-   * The feature id for the '<em><b>Function Defenition</b></em>' containment reference.
+   * The feature id for the '<em><b>Function Definition</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__FUNCTION_DEFENITION = 0;
+  int STATEMENT__FUNCTION_DEFINITION = 0;
+
+  /**
+   * The feature id for the '<em><b>Matrix Definition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT__MATRIX_DEFINITION = 1;
 
   /**
    * The feature id for the '<em><b>Formula</b></em>' containment reference.
@@ -86,7 +95,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STATEMENT__FORMULA = 1;
+  int STATEMENT__FORMULA = 2;
 
   /**
    * The number of structural features of the '<em>Statement</em>' class.
@@ -95,7 +104,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STATEMENT_FEATURE_COUNT = 2;
+  int STATEMENT_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FormulaImpl <em>Formula</em>}' class.
@@ -200,6 +209,71 @@ public interface MathPackage extends EPackage
   int FUNCTION_DEFINITION_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixDefinitionImpl <em>Matrix Definition</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MatrixDefinitionImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMatrixDefinition()
+   * @generated
+   */
+  int MATRIX_DEFINITION = 4;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_DEFINITION__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_DEFINITION__ROWS = 1;
+
+  /**
+   * The number of structural features of the '<em>Matrix Definition</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_DEFINITION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixRowImpl <em>Matrix Row</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MatrixRowImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMatrixRow()
+   * @generated
+   */
+  int MATRIX_ROW = 5;
+
+  /**
+   * The feature id for the '<em><b>Elements</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ROW__ELEMENTS = 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix Row</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ROW_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -207,7 +281,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAddition()
    * @generated
    */
-  int ADDITION = 4;
+  int ADDITION = 6;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -262,7 +336,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getSubtraction()
    * @generated
    */
-  int SUBTRACTION = 5;
+  int SUBTRACTION = 7;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -317,7 +391,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMultiplication()
    * @generated
    */
-  int MULTIPLICATION = 6;
+  int MULTIPLICATION = 8;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -372,7 +446,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDivision()
    * @generated
    */
-  int DIVISION = 7;
+  int DIVISION = 9;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -427,7 +501,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
    * @generated
    */
-  int POWER = 8;
+  int POWER = 10;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -482,7 +556,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 9;
+  int VARIABLE = 11;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -519,7 +593,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 10;
+  int FLOAT = 12;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -565,7 +639,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 11;
+  int FUNCTION = 13;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -615,15 +689,26 @@ public interface MathPackage extends EPackage
   EClass getStatement();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getFunctionDefenition <em>Function Defenition</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getFunctionDefinition <em>Function Definition</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Function Defenition</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Statement#getFunctionDefenition()
+   * @return the meta object for the containment reference '<em>Function Definition</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Statement#getFunctionDefinition()
    * @see #getStatement()
    * @generated
    */
-  EReference getStatement_FunctionDefenition();
+  EReference getStatement_FunctionDefinition();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getMatrixDefinition <em>Matrix Definition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Matrix Definition</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Statement#getMatrixDefinition()
+   * @see #getStatement()
+   * @generated
+   */
+  EReference getStatement_MatrixDefinition();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getFormula <em>Formula</em>}'.
@@ -720,6 +805,59 @@ public interface MathPackage extends EPackage
    * @generated
    */
   EReference getFunctionDefinition_Formula();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixDefinition <em>Matrix Definition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Definition</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixDefinition
+   * @generated
+   */
+  EClass getMatrixDefinition();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.MatrixDefinition#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixDefinition#getName()
+   * @see #getMatrixDefinition()
+   * @generated
+   */
+  EAttribute getMatrixDefinition_Name();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.iee.translator.jmole.math.math.MatrixDefinition#getRows <em>Rows</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Rows</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixDefinition#getRows()
+   * @see #getMatrixDefinition()
+   * @generated
+   */
+  EReference getMatrixDefinition_Rows();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixRow <em>Matrix Row</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Row</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixRow
+   * @generated
+   */
+  EClass getMatrixRow();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.iee.translator.jmole.math.math.MatrixRow#getElements <em>Elements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Elements</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixRow#getElements()
+   * @see #getMatrixRow()
+   * @generated
+   */
+  EAttribute getMatrixRow_Elements();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Addition <em>Addition</em>}'.
@@ -967,12 +1105,20 @@ public interface MathPackage extends EPackage
     EClass STATEMENT = eINSTANCE.getStatement();
 
     /**
-     * The meta object literal for the '<em><b>Function Defenition</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Function Definition</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STATEMENT__FUNCTION_DEFENITION = eINSTANCE.getStatement_FunctionDefenition();
+    EReference STATEMENT__FUNCTION_DEFINITION = eINSTANCE.getStatement_FunctionDefinition();
+
+    /**
+     * The meta object literal for the '<em><b>Matrix Definition</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STATEMENT__MATRIX_DEFINITION = eINSTANCE.getStatement_MatrixDefinition();
 
     /**
      * The meta object literal for the '<em><b>Formula</b></em>' containment reference feature.
@@ -1051,6 +1197,50 @@ public interface MathPackage extends EPackage
      * @generated
      */
     EReference FUNCTION_DEFINITION__FORMULA = eINSTANCE.getFunctionDefinition_Formula();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixDefinitionImpl <em>Matrix Definition</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MatrixDefinitionImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMatrixDefinition()
+     * @generated
+     */
+    EClass MATRIX_DEFINITION = eINSTANCE.getMatrixDefinition();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_DEFINITION__NAME = eINSTANCE.getMatrixDefinition_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_DEFINITION__ROWS = eINSTANCE.getMatrixDefinition_Rows();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixRowImpl <em>Matrix Row</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MatrixRowImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMatrixRow()
+     * @generated
+     */
+    EClass MATRIX_ROW = eINSTANCE.getMatrixRow();
+
+    /**
+     * The meta object literal for the '<em><b>Elements</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_ROW__ELEMENTS = eINSTANCE.getMatrixRow_Elements();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.

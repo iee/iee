@@ -32,8 +32,9 @@ class MathGenerator implements IGenerator {
 	def compileStatement(Statement s)
 	{
 	'''
-		«IF s.functionDefenition != null»«compileFunctionDefinition(s.functionDefenition)»«ENDIF»
+		«IF s.functionDefinition != null»«compileFunctionDefinition(s.functionDefinition)»«ENDIF»
 		«IF s.formula != null»«compileFormula(s.formula)»;«ENDIF»
+		«IF s.matrixDefinition != null»«compileMatrixDefinition(s.matrixDefinition)»;«ENDIF»
 	'''
 	}
 	
@@ -56,6 +57,30 @@ class MathGenerator implements IGenerator {
 	'''
 	}
 	
+	def compileMatrixDefinition(MatrixDefinition m) 
+	{
+	'''
+		Matrix «m.name» = new Matrix(new double[][]
+		{
+		«FOR row:m.rows»
+		 «IF row != null»
+		 {
+	 		«FOR element:row.elements»
+			 «IF element != null»
+			 	«element»
+			 «ENDIF»
+			 «IF row.elements.last() != element»,«ENDIF»
+			«ENDFOR»
+		 }
+		 «ENDIF»
+		 «IF m.rows.last() != row»,«ENDIF»
+		«ENDFOR»
+		
+		
+		})
+	'''
+	}
+	
 	def compileFunction(Function f) '''
 		«f.function.name.substring(0,1).toUpperCase()+ 
 		f.function.name.substring(1).toLowerCase()»
@@ -64,7 +89,7 @@ class MathGenerator implements IGenerator {
 		 «IF f.function.parameters.last() != param»,«ENDIF»
 		«ENDFOR»
 	'''
-		
+			
 	def dispatch compileExpression(Variable n) '''
 		«n.name»'''
 	

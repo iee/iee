@@ -2,11 +2,9 @@ grammar org.eclipse.iee.translator.jmole.math.Math with org.eclipse.xtext.common
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 
-//Formula:
-//	expression=Expression;
-
 Statement:
-	functionDefenition=FunctionDefinition |
+	functionDefinition=FunctionDefinition |
+	matrixDefinition=MatrixDefinition |
 	formula=Formula
 ;
 
@@ -38,6 +36,14 @@ Function returns Expression:
 
 FunctionDefinition:
 	function=Function '=' formula=Formula
+;
+
+MatrixDefinition:
+	(name=MATH_NAME) '=' '{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}'
+;
+
+MatrixRow:
+	'{' (elements+=Float (',' elements+=Float)* ','?)?'}'
 ;
 
 terminal MATH_NAME returns ecore::EString:

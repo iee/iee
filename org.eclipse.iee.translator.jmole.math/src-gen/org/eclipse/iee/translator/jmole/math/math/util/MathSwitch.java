@@ -18,6 +18,8 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
 import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
@@ -112,6 +114,20 @@ public class MathSwitch<T> extends Switch<T>
       {
         FunctionDefinition functionDefinition = (FunctionDefinition)theEObject;
         T result = caseFunctionDefinition(functionDefinition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_DEFINITION:
+      {
+        MatrixDefinition matrixDefinition = (MatrixDefinition)theEObject;
+        T result = caseMatrixDefinition(matrixDefinition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_ROW:
+      {
+        MatrixRow matrixRow = (MatrixRow)theEObject;
+        T result = caseMatrixRow(matrixRow);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -243,6 +259,38 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFunctionDefinition(FunctionDefinition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Definition</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Definition</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixDefinition(MatrixDefinition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Row</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Row</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixRow(MatrixRow object)
   {
     return null;
   }
