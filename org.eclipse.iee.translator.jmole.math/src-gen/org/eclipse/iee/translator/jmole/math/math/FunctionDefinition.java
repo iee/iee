@@ -6,8 +6,6 @@
  */
 package org.eclipse.iee.translator.jmole.math.math;
 
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -18,8 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getFunction <em>Function</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getFormula <em>Formula</em>}</li>
  * </ul>
  * </p>
@@ -31,46 +28,30 @@ import org.eclipse.emf.ecore.EObject;
 public interface FunctionDefinition extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Name</b></em>' attribute.
+   * Returns the value of the '<em><b>Function</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
+   * If the meaning of the '<em>Function</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Name</em>' attribute.
-   * @see #setName(String)
-   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getFunctionDefinition_Name()
-   * @model
+   * @return the value of the '<em>Function</em>' containment reference.
+   * @see #setFunction(Expression)
+   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getFunctionDefinition_Function()
+   * @model containment="true"
    * @generated
    */
-  String getName();
+  Expression getFunction();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getName <em>Name</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getFunction <em>Function</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Name</em>' attribute.
-   * @see #getName()
+   * @param value the new value of the '<em>Function</em>' containment reference.
+   * @see #getFunction()
    * @generated
    */
-  void setName(String value);
-
-  /**
-   * Returns the value of the '<em><b>Parameters</b></em>' attribute list.
-   * The list contents are of type {@link java.lang.String}.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Parameters</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Parameters</em>' attribute list.
-   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getFunctionDefinition_Parameters()
-   * @model unique="false"
-   * @generated
-   */
-  EList<String> getParameters();
+  void setFunction(Expression value);
 
   /**
    * Returns the value of the '<em><b>Formula</b></em>' containment reference.

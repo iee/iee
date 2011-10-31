@@ -242,38 +242,37 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (name=MATH_NAME (parameters+=MATH_NAME parameters+=MATH_NAME*)? formula=Formula)
+	 *     (function=Function formula=Formula)
 	 *
 	 * Features:
-	 *    name[1, 1]
-	 *    parameters[0, *]
+	 *    function[1, 1]
 	 *    formula[1, 1]
 	 */
 	protected void sequence_FunctionDefinition(EObject context, FunctionDefinition semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FUNCTION_DEFINITION__FUNCTION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FUNCTION_DEFINITION__FUNCTION));
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FUNCTION_DEFINITION__FORMULA) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FUNCTION_DEFINITION__FORMULA));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFunctionDefinitionAccess().getFunctionFunctionParserRuleCall_0_0(), semanticObject.getFunction());
+		feeder.accept(grammarAccess.getFunctionDefinitionAccess().getFormulaFormulaParserRuleCall_2_0(), semanticObject.getFormula());
+		feeder.finish();
 	}
 	
 	
 	/**
 	 * Constraint:
-	 *     (name=MATH_NAME formula=Formula)
+	 *     (name=MATH_NAME (parameters+=Formula parameters+=Formula*)?)
 	 *
 	 * Features:
 	 *    name[1, 1]
-	 *    formula[1, 1]
+	 *    parameters[0, *]
 	 */
 	protected void sequence_Function(EObject context, Expression semanticObject) {
-		if(errorAcceptor != null) {
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.EXPRESSION__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.EXPRESSION__NAME));
-			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.EXPRESSION__FORMULA) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.EXPRESSION__FORMULA));
-		}
-		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
-		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getFunctionAccess().getNameMATH_NAMETerminalRuleCall_0_0(), semanticObject.getName());
-		feeder.accept(grammarAccess.getFunctionAccess().getFormulaFormulaParserRuleCall_2_0(), semanticObject.getFormula());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -342,7 +341,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     name=ID
+	 *     name=MATH_NAME
 	 *
 	 * Features:
 	 *    name[1, 1]

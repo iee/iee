@@ -6,12 +6,8 @@
  */
 package org.eclipse.iee.translator.jmole.math.math.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -19,8 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
-
+import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
@@ -32,8 +27,7 @@ import org.eclipse.iee.translator.jmole.math.math.MathPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionDefinitionImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionDefinitionImpl#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionDefinitionImpl#getFunction <em>Function</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionDefinitionImpl#getFormula <em>Formula</em>}</li>
  * </ul>
  * </p>
@@ -43,34 +37,14 @@ import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container implements FunctionDefinition
 {
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getFunction() <em>Function</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getFunction()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
-
-  /**
-   * The cached value of the '{@link #getParameters() <em>Parameters</em>}' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getParameters()
-   * @generated
-   * @ordered
-   */
-  protected EList<String> parameters;
+  protected Expression function;
 
   /**
    * The cached value of the '{@link #getFormula() <em>Formula</em>}' containment reference.
@@ -108,9 +82,9 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  public Expression getFunction()
   {
-    return name;
+    return function;
   }
 
   /**
@@ -118,12 +92,16 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setName(String newName)
+  public NotificationChain basicSetFunction(Expression newFunction, NotificationChain msgs)
   {
-    String oldName = name;
-    name = newName;
+    Expression oldFunction = function;
+    function = newFunction;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION_DEFINITION__NAME, oldName, name));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION_DEFINITION__FUNCTION, oldFunction, newFunction);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -131,13 +109,20 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getParameters()
+  public void setFunction(Expression newFunction)
   {
-    if (parameters == null)
+    if (newFunction != function)
     {
-      parameters = new EDataTypeEList<String>(String.class, this, MathPackage.FUNCTION_DEFINITION__PARAMETERS);
+      NotificationChain msgs = null;
+      if (function != null)
+        msgs = ((InternalEObject)function).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.FUNCTION_DEFINITION__FUNCTION, null, msgs);
+      if (newFunction != null)
+        msgs = ((InternalEObject)newFunction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.FUNCTION_DEFINITION__FUNCTION, null, msgs);
+      msgs = basicSetFunction(newFunction, msgs);
+      if (msgs != null) msgs.dispatch();
     }
-    return parameters;
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.FUNCTION_DEFINITION__FUNCTION, newFunction, newFunction));
   }
 
   /**
@@ -198,6 +183,8 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
+      case MathPackage.FUNCTION_DEFINITION__FUNCTION:
+        return basicSetFunction(null, msgs);
       case MathPackage.FUNCTION_DEFINITION__FORMULA:
         return basicSetFormula(null, msgs);
     }
@@ -214,10 +201,8 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION_DEFINITION__NAME:
-        return getName();
-      case MathPackage.FUNCTION_DEFINITION__PARAMETERS:
-        return getParameters();
+      case MathPackage.FUNCTION_DEFINITION__FUNCTION:
+        return getFunction();
       case MathPackage.FUNCTION_DEFINITION__FORMULA:
         return getFormula();
     }
@@ -229,18 +214,13 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION_DEFINITION__NAME:
-        setName((String)newValue);
-        return;
-      case MathPackage.FUNCTION_DEFINITION__PARAMETERS:
-        getParameters().clear();
-        getParameters().addAll((Collection<? extends String>)newValue);
+      case MathPackage.FUNCTION_DEFINITION__FUNCTION:
+        setFunction((Expression)newValue);
         return;
       case MathPackage.FUNCTION_DEFINITION__FORMULA:
         setFormula((Formula)newValue);
@@ -259,11 +239,8 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION_DEFINITION__NAME:
-        setName(NAME_EDEFAULT);
-        return;
-      case MathPackage.FUNCTION_DEFINITION__PARAMETERS:
-        getParameters().clear();
+      case MathPackage.FUNCTION_DEFINITION__FUNCTION:
+        setFunction((Expression)null);
         return;
       case MathPackage.FUNCTION_DEFINITION__FORMULA:
         setFormula((Formula)null);
@@ -282,33 +259,12 @@ public class FunctionDefinitionImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case MathPackage.FUNCTION_DEFINITION__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case MathPackage.FUNCTION_DEFINITION__PARAMETERS:
-        return parameters != null && !parameters.isEmpty();
+      case MathPackage.FUNCTION_DEFINITION__FUNCTION:
+        return function != null;
       case MathPackage.FUNCTION_DEFINITION__FORMULA:
         return formula != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(", parameters: ");
-    result.append(parameters);
-    result.append(')');
-    return result.toString();
   }
 
 } //FunctionDefinitionImpl

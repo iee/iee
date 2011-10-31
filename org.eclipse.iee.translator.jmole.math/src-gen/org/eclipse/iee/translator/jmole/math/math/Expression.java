@@ -6,6 +6,8 @@
  */
 package org.eclipse.iee.translator.jmole.math.math;
 
+import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -17,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Expression#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Expression#getFormula <em>Formula</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Expression#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,29 +56,19 @@ public interface Expression extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Formula</b></em>' containment reference.
+   * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.iee.translator.jmole.math.math.Formula}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Formula</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Parameters</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Formula</em>' containment reference.
-   * @see #setFormula(Formula)
-   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getExpression_Formula()
+   * @return the value of the '<em>Parameters</em>' containment reference list.
+   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getExpression_Parameters()
    * @model containment="true"
    * @generated
    */
-  Formula getFormula();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.Expression#getFormula <em>Formula</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Formula</em>' containment reference.
-   * @see #getFormula()
-   * @generated
-   */
-  void setFormula(Formula value);
+  EList<Formula> getParameters();
 
 } // Expression

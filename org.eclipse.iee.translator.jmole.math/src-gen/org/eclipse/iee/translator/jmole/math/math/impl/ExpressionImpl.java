@@ -6,14 +6,21 @@
  */
 package org.eclipse.iee.translator.jmole.math.math.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
@@ -27,7 +34,7 @@ import org.eclipse.iee.translator.jmole.math.math.MathPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.ExpressionImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.ExpressionImpl#getFormula <em>Formula</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.ExpressionImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
@@ -56,14 +63,14 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getFormula() <em>Formula</em>}' containment reference.
+   * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFormula()
+   * @see #getParameters()
    * @generated
    * @ordered
    */
-  protected Formula formula;
+  protected EList<Formula> parameters;
 
   /**
    * <!-- begin-user-doc -->
@@ -114,47 +121,13 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public Formula getFormula()
+  public EList<Formula> getParameters()
   {
-    return formula;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetFormula(Formula newFormula, NotificationChain msgs)
-  {
-    Formula oldFormula = formula;
-    formula = newFormula;
-    if (eNotificationRequired())
+    if (parameters == null)
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.EXPRESSION__FORMULA, oldFormula, newFormula);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
+      parameters = new EObjectContainmentEList<Formula>(Formula.class, this, MathPackage.EXPRESSION__PARAMETERS);
     }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setFormula(Formula newFormula)
-  {
-    if (newFormula != formula)
-    {
-      NotificationChain msgs = null;
-      if (formula != null)
-        msgs = ((InternalEObject)formula).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.EXPRESSION__FORMULA, null, msgs);
-      if (newFormula != null)
-        msgs = ((InternalEObject)newFormula).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.EXPRESSION__FORMULA, null, msgs);
-      msgs = basicSetFormula(newFormula, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.EXPRESSION__FORMULA, newFormula, newFormula));
+    return parameters;
   }
 
   /**
@@ -167,8 +140,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   {
     switch (featureID)
     {
-      case MathPackage.EXPRESSION__FORMULA:
-        return basicSetFormula(null, msgs);
+      case MathPackage.EXPRESSION__PARAMETERS:
+        return ((InternalEList<?>)getParameters()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -185,8 +158,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
     {
       case MathPackage.EXPRESSION__NAME:
         return getName();
-      case MathPackage.EXPRESSION__FORMULA:
-        return getFormula();
+      case MathPackage.EXPRESSION__PARAMETERS:
+        return getParameters();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -196,6 +169,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -204,8 +178,9 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
       case MathPackage.EXPRESSION__NAME:
         setName((String)newValue);
         return;
-      case MathPackage.EXPRESSION__FORMULA:
-        setFormula((Formula)newValue);
+      case MathPackage.EXPRESSION__PARAMETERS:
+        getParameters().clear();
+        getParameters().addAll((Collection<? extends Formula>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -224,8 +199,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
       case MathPackage.EXPRESSION__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case MathPackage.EXPRESSION__FORMULA:
-        setFormula((Formula)null);
+      case MathPackage.EXPRESSION__PARAMETERS:
+        getParameters().clear();
         return;
     }
     super.eUnset(featureID);
@@ -243,8 +218,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
     {
       case MathPackage.EXPRESSION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case MathPackage.EXPRESSION__FORMULA:
-        return formula != null;
+      case MathPackage.EXPRESSION__PARAMETERS:
+        return parameters != null && !parameters.isEmpty();
     }
     return super.eIsSet(featureID);
   }

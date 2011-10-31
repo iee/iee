@@ -145,13 +145,13 @@ public interface MathPackage extends EPackage
   int EXPRESSION__NAME = 0;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION__FORMULA = 1;
+  int EXPRESSION__PARAMETERS = 1;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -173,22 +173,13 @@ public interface MathPackage extends EPackage
   int FUNCTION_DEFINITION = 3;
 
   /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * The feature id for the '<em><b>Function</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__NAME = 0;
-
-  /**
-   * The feature id for the '<em><b>Parameters</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FUNCTION_DEFINITION__PARAMETERS = 1;
+  int FUNCTION_DEFINITION__FUNCTION = 0;
 
   /**
    * The feature id for the '<em><b>Formula</b></em>' containment reference.
@@ -197,7 +188,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION__FORMULA = 2;
+  int FUNCTION_DEFINITION__FORMULA = 1;
 
   /**
    * The number of structural features of the '<em>Function Definition</em>' class.
@@ -206,7 +197,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FUNCTION_DEFINITION_FEATURE_COUNT = 3;
+  int FUNCTION_DEFINITION_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AdditionImpl <em>Addition</em>}' class.
@@ -228,13 +219,13 @@ public interface MathPackage extends EPackage
   int ADDITION__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ADDITION__FORMULA = EXPRESSION__FORMULA;
+  int ADDITION__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -283,13 +274,13 @@ public interface MathPackage extends EPackage
   int SUBTRACTION__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SUBTRACTION__FORMULA = EXPRESSION__FORMULA;
+  int SUBTRACTION__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -338,13 +329,13 @@ public interface MathPackage extends EPackage
   int MULTIPLICATION__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MULTIPLICATION__FORMULA = EXPRESSION__FORMULA;
+  int MULTIPLICATION__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -393,13 +384,13 @@ public interface MathPackage extends EPackage
   int DIVISION__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DIVISION__FORMULA = EXPRESSION__FORMULA;
+  int DIVISION__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -448,13 +439,13 @@ public interface MathPackage extends EPackage
   int POWER__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int POWER__FORMULA = EXPRESSION__FORMULA;
+  int POWER__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -503,13 +494,13 @@ public interface MathPackage extends EPackage
   int VARIABLE__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE__FORMULA = EXPRESSION__FORMULA;
+  int VARIABLE__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The number of structural features of the '<em>Variable</em>' class.
@@ -540,13 +531,13 @@ public interface MathPackage extends EPackage
   int FLOAT__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FLOAT__FORMULA = EXPRESSION__FORMULA;
+  int FLOAT__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -586,13 +577,13 @@ public interface MathPackage extends EPackage
   int FUNCTION__NAME = EXPRESSION__NAME;
 
   /**
-   * The feature id for the '<em><b>Formula</b></em>' containment reference.
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION__FORMULA = EXPRESSION__FORMULA;
+  int FUNCTION__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Function</b></em>' containment reference.
@@ -688,15 +679,15 @@ public interface MathPackage extends EPackage
   EAttribute getExpression_Name();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Expression#getFormula <em>Formula</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.iee.translator.jmole.math.math.Expression#getParameters <em>Parameters</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Formula</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Expression#getFormula()
+   * @return the meta object for the containment reference list '<em>Parameters</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Expression#getParameters()
    * @see #getExpression()
    * @generated
    */
-  EReference getExpression_Formula();
+  EReference getExpression_Parameters();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition <em>Function Definition</em>}'.
@@ -709,26 +700,15 @@ public interface MathPackage extends EPackage
   EClass getFunctionDefinition();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getName <em>Name</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getFunction <em>Function</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getName()
+   * @return the meta object for the containment reference '<em>Function</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getFunction()
    * @see #getFunctionDefinition()
    * @generated
    */
-  EAttribute getFunctionDefinition_Name();
-
-  /**
-   * Returns the meta object for the attribute list '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getParameters <em>Parameters</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Parameters</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getParameters()
-   * @see #getFunctionDefinition()
-   * @generated
-   */
-  EAttribute getFunctionDefinition_Parameters();
+  EReference getFunctionDefinition_Function();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition#getFormula <em>Formula</em>}'.
@@ -1039,12 +1019,12 @@ public interface MathPackage extends EPackage
     EAttribute EXPRESSION__NAME = eINSTANCE.getExpression_Name();
 
     /**
-     * The meta object literal for the '<em><b>Formula</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EXPRESSION__FORMULA = eINSTANCE.getExpression_Formula();
+    EReference EXPRESSION__PARAMETERS = eINSTANCE.getExpression_Parameters();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FunctionDefinitionImpl <em>Function Definition</em>}' class.
@@ -1057,20 +1037,12 @@ public interface MathPackage extends EPackage
     EClass FUNCTION_DEFINITION = eINSTANCE.getFunctionDefinition();
 
     /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Function</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute FUNCTION_DEFINITION__NAME = eINSTANCE.getFunctionDefinition_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Parameters</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FUNCTION_DEFINITION__PARAMETERS = eINSTANCE.getFunctionDefinition_Parameters();
+    EReference FUNCTION_DEFINITION__FUNCTION = eINSTANCE.getFunctionDefinition_Function();
 
     /**
      * The meta object literal for the '<em><b>Formula</b></em>' containment reference feature.

@@ -72,19 +72,29 @@ public class MathGenerator implements IGenerator {
   public StringConcatenation compileFunctionDefinition(final FunctionDefinition funcDef) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("public Double ");
-    String _name = funcDef.getName();
+    Expression _function = funcDef.getFunction();
+    String _name = _function.getName();
     _builder.append(_name, "");
     _builder.append(" ( ");
     {
-      EList<String> _parameters = funcDef.getParameters();
-      for(final String param : _parameters) {
-        _builder.append(param, "");
-        _builder.append(" ");
+      Expression _function_1 = funcDef.getFunction();
+      EList<Formula> _parameters = _function_1.getParameters();
+      for(final Formula param : _parameters) {
+        _builder.append("(");
         {
-          EList<String> _parameters_1 = funcDef.getParameters();
-          String _last = IterableExtensions.<String>last(_parameters_1);
-          boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_last, param);
+          boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
+            StringConcatenation _compileFormula = this.compileFormula(param);
+            _builder.append(_compileFormula, "");
+          }
+        }
+        _builder.append(")");
+        {
+          Expression _function_2 = funcDef.getFunction();
+          EList<Formula> _parameters_1 = _function_2.getParameters();
+          Formula _last = IterableExtensions.<Formula>last(_parameters_1);
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_last, param);
+          if (_operator_notEquals_1) {
             _builder.append(",");
           }
         }
@@ -95,12 +105,12 @@ public class MathGenerator implements IGenerator {
     _builder.append("{ ");
     {
       Formula _formula = funcDef.getFormula();
-      boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_formula, null);
-      if (_operator_notEquals_1) {
+      boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_formula, null);
+      if (_operator_notEquals_2) {
         _builder.append(" return ");
         Formula _formula_1 = funcDef.getFormula();
-        StringConcatenation _compileFormula = this.compileFormula(_formula_1);
-        _builder.append(_compileFormula, "");
+        StringConcatenation _compileFormula_1 = this.compileFormula(_formula_1);
+        _builder.append(_compileFormula_1, "");
       }
     }
     _builder.append(" }");
@@ -127,19 +137,30 @@ public class MathGenerator implements IGenerator {
     String _lowerCase = _substring_1.toLowerCase();
     String _operator_plus = StringExtensions.operator_plus(_upperCase, _lowerCase);
     _builder.append(_operator_plus, "");
-    _builder.append("(");
     {
       Expression _function_2 = f.getFunction();
-      Formula _formula = _function_2.getFormula();
-      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_formula, null);
-      if (_operator_notEquals) {
-        Expression _function_3 = f.getFunction();
-        Formula _formula_1 = _function_3.getFormula();
-        StringConcatenation _compileFormula = this.compileFormula(_formula_1);
-        _builder.append(_compileFormula, "");
+      EList<Formula> _parameters = _function_2.getParameters();
+      for(final Formula param : _parameters) {
+        _builder.append("(");
+        {
+          boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
+          if (_operator_notEquals) {
+            StringConcatenation _compileFormula = this.compileFormula(param);
+            _builder.append(_compileFormula, "");
+          }
+        }
+        _builder.append(")");
+        {
+          Expression _function_3 = f.getFunction();
+          EList<Formula> _parameters_1 = _function_3.getParameters();
+          Formula _last = IterableExtensions.<Formula>last(_parameters_1);
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_last, param);
+          if (_operator_notEquals_1) {
+            _builder.append(",");
+          }
+        }
       }
     }
-    _builder.append(")");
     return _builder;
   }
   

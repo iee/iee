@@ -24,7 +24,7 @@ Power returns Expression:
 	Primary ({Power.left=current} '^' right=Primary)?;
 
 Primary returns Expression:
-	{Variable} name=ID |
+	{Variable} name=MATH_NAME |
 	{Float} value=Float |
 	{Function} function=Function |
 	'(' Addition ')';
@@ -33,27 +33,12 @@ Float:
 	INT* ('.' INT+ ( ('E'|'e') ('-')? (INT)+ )?)?;
 
 Function returns Expression:
-	(name=MATH_NAME) '(' formula=Formula ')'
+	(name=MATH_NAME) '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')'
 ;
 
 FunctionDefinition:
-	name=MATH_NAME '(' (parameters+=MATH_NAME (',' parameters+=MATH_NAME)* ','?)? ')' '=' formula=Formula
+	function=Function '=' formula=Formula
 ;
 
 terminal MATH_NAME returns ecore::EString:
     ( 'a'..'z' | 'A'..'Z' | '_' ) ( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' )*;
-
-/*
-Expression:
-	PrimaryExpression {Plus.left=current} '+' right=Expression |
-	PrimaryExpression {Minus.left=current} '-' right=Expression |
-	PrimaryExpression {Mult.left=current} '*' right=Expression |
-	PrimaryExpression {Div.left=current} '/' right=Expression |
-	PrimaryExpression {Pow.base=current} '^' power=Expression |
-	PrimaryExpression;
-
-PrimaryExpression returns Expression:
-	'(' Expression ')' |
-	{Variable} name=ID |
-	{Number} value=INT;
-*/

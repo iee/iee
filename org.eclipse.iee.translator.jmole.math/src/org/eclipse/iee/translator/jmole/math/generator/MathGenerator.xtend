@@ -40,10 +40,10 @@ class MathGenerator implements IGenerator {
 	def compileFunctionDefinition(FunctionDefinition funcDef)
 	{
 	'''
-		public Double «funcDef.name» ( 
-		«FOR param:funcDef.parameters»
-		 «param» 
-		 «IF funcDef.parameters.last() != param»,«ENDIF»
+		public Double «funcDef.function.name» ( 
+		«FOR param:funcDef.function.parameters»
+		 («IF param != null»«compileFormula(param)»«ENDIF»)
+		 «IF funcDef.function.parameters.last() != param»,«ENDIF»
 		«ENDFOR») 
 		{ «IF funcDef.formula != null» return «compileFormula(funcDef.formula)»«ENDIF» }
 	'''
@@ -59,7 +59,10 @@ class MathGenerator implements IGenerator {
 	def compileFunction(Function f) '''
 		«f.function.name.substring(0,1).toUpperCase()+ 
 		f.function.name.substring(1).toLowerCase()»
-		(«IF f.function.formula != null»«compileFormula(f.function.formula)»«ENDIF»)
+		«FOR param:f.function.parameters»
+		 («IF param != null»«compileFormula(param)»«ENDIF»)
+		 «IF f.function.parameters.last() != param»,«ENDIF»
+		«ENDFOR»
 	'''
 		
 	def dispatch compileExpression(Variable n) '''
