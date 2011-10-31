@@ -32,7 +32,6 @@ public class CompiledMathPad extends Pad implements Serializable {
 		parent.setLayout(layout);
 		final StyledText styledText = new StyledText(parent, SWT.NONE);
 		styledText.setText(fText);
-				
 		styledText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -44,7 +43,8 @@ public class CompiledMathPad extends Pad implements Serializable {
 					System.out.println(result);
 					getContainer().writeAtContainerRegionTail(result.trim());
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					getContainer().writeAtContainerRegionTail("");
+					//e1.printStackTrace();
 				}
 
 			}
