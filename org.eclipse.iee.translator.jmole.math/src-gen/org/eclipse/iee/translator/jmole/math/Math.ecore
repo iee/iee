@@ -8,7 +8,14 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="matrixDefinition" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//MatrixDefinition"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Assignment"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="formula" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Formula">

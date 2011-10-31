@@ -89,13 +89,22 @@ public interface MathPackage extends EPackage
   int STATEMENT__MATRIX_DEFINITION = 1;
 
   /**
+   * The feature id for the '<em><b>Assignment</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT__ASSIGNMENT = 2;
+
+  /**
    * The feature id for the '<em><b>Formula</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__FORMULA = 2;
+  int STATEMENT__FORMULA = 3;
 
   /**
    * The number of structural features of the '<em>Statement</em>' class.
@@ -104,7 +113,44 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STATEMENT_FEATURE_COUNT = 3;
+  int STATEMENT_FEATURE_COUNT = 4;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AssignmentImpl <em>Assignment</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.AssignmentImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAssignment()
+   * @generated
+   */
+  int ASSIGNMENT = 1;
+
+  /**
+   * The feature id for the '<em><b>Variable</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSIGNMENT__VARIABLE = 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSIGNMENT__VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>Assignment</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ASSIGNMENT_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FormulaImpl <em>Formula</em>}' class.
@@ -114,7 +160,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFormula()
    * @generated
    */
-  int FORMULA = 1;
+  int FORMULA = 2;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -142,7 +188,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 2;
+  int EXPRESSION = 3;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -179,7 +225,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunctionDefinition()
    * @generated
    */
-  int FUNCTION_DEFINITION = 3;
+  int FUNCTION_DEFINITION = 4;
 
   /**
    * The feature id for the '<em><b>Function</b></em>' containment reference.
@@ -216,7 +262,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMatrixDefinition()
    * @generated
    */
-  int MATRIX_DEFINITION = 4;
+  int MATRIX_DEFINITION = 5;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -253,7 +299,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMatrixRow()
    * @generated
    */
-  int MATRIX_ROW = 5;
+  int MATRIX_ROW = 6;
 
   /**
    * The feature id for the '<em><b>Elements</b></em>' attribute list.
@@ -281,7 +327,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAddition()
    * @generated
    */
-  int ADDITION = 6;
+  int ADDITION = 7;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -336,7 +382,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getSubtraction()
    * @generated
    */
-  int SUBTRACTION = 7;
+  int SUBTRACTION = 8;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -391,7 +437,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getMultiplication()
    * @generated
    */
-  int MULTIPLICATION = 8;
+  int MULTIPLICATION = 9;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -446,7 +492,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getDivision()
    * @generated
    */
-  int DIVISION = 9;
+  int DIVISION = 10;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -501,7 +547,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
    * @generated
    */
-  int POWER = 10;
+  int POWER = 11;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -556,7 +602,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 11;
+  int VARIABLE = 12;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -593,7 +639,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 12;
+  int FLOAT = 13;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -639,7 +685,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 13;
+  int FUNCTION = 14;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -711,6 +757,17 @@ public interface MathPackage extends EPackage
   EReference getStatement_MatrixDefinition();
 
   /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getAssignment <em>Assignment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Assignment</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Statement#getAssignment()
+   * @see #getStatement()
+   * @generated
+   */
+  EReference getStatement_Assignment();
+
+  /**
    * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getFormula <em>Formula</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -720,6 +777,38 @@ public interface MathPackage extends EPackage
    * @generated
    */
   EReference getStatement_Formula();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Assignment <em>Assignment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Assignment</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Assignment
+   * @generated
+   */
+  EClass getAssignment();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Assignment#getVariable <em>Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Variable</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Assignment#getVariable()
+   * @see #getAssignment()
+   * @generated
+   */
+  EAttribute getAssignment_Variable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Assignment#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Value</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Assignment#getValue()
+   * @see #getAssignment()
+   * @generated
+   */
+  EReference getAssignment_Value();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Formula <em>Formula</em>}'.
@@ -1121,12 +1210,46 @@ public interface MathPackage extends EPackage
     EReference STATEMENT__MATRIX_DEFINITION = eINSTANCE.getStatement_MatrixDefinition();
 
     /**
+     * The meta object literal for the '<em><b>Assignment</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STATEMENT__ASSIGNMENT = eINSTANCE.getStatement_Assignment();
+
+    /**
      * The meta object literal for the '<em><b>Formula</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference STATEMENT__FORMULA = eINSTANCE.getStatement_Formula();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.AssignmentImpl <em>Assignment</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.AssignmentImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getAssignment()
+     * @generated
+     */
+    EClass ASSIGNMENT = eINSTANCE.getAssignment();
+
+    /**
+     * The meta object literal for the '<em><b>Variable</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ASSIGNMENT__VARIABLE = eINSTANCE.getAssignment_Variable();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ASSIGNMENT__VALUE = eINSTANCE.getAssignment_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FormulaImpl <em>Formula</em>}' class.

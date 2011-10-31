@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Statement#getFunctionDefinition <em>Function Definition</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Statement#getMatrixDefinition <em>Matrix Definition</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Statement#getAssignment <em>Assignment</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Statement#getFormula <em>Formula</em>}</li>
  * </ul>
  * </p>
@@ -79,6 +80,32 @@ public interface Statement extends EObject
    * @generated
    */
   void setMatrixDefinition(MatrixDefinition value);
+
+  /**
+   * Returns the value of the '<em><b>Assignment</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Assignment</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Assignment</em>' containment reference.
+   * @see #setAssignment(Assignment)
+   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getStatement_Assignment()
+   * @model containment="true"
+   * @generated
+   */
+  Assignment getAssignment();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.Statement#getAssignment <em>Assignment</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Assignment</em>' containment reference.
+   * @see #getAssignment()
+   * @generated
+   */
+  void setAssignment(Assignment value);
 
   /**
    * Returns the value of the '<em><b>Formula</b></em>' containment reference.

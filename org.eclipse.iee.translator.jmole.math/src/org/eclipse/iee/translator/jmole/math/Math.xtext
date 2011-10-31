@@ -5,7 +5,12 @@ generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 Statement:
 	functionDefinition=FunctionDefinition |
 	matrixDefinition=MatrixDefinition |
+	assignment=Assignment |
 	formula=Formula
+;
+
+Assignment:
+	variable=MATH_NAME '=' value=Formula
 ;
 
 Formula:
@@ -28,7 +33,7 @@ Primary returns Expression:
 	'(' Addition ')';
 
 Float:
-	INT* ('.' INT+ ( ('E'|'e') ('-')? (INT)+ )?)?;
+	INT+ ('.' INT+ ( ('E'|'e') ('-')? (INT)+ )?)?;
 
 Function returns Expression:
 	(name=MATH_NAME) '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')'

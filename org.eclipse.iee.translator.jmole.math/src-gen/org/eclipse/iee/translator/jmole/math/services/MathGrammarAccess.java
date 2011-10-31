@@ -24,14 +24,16 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFunctionDefinitionFunctionDefinitionParserRuleCall_0_0 = (RuleCall)cFunctionDefinitionAssignment_0.eContents().get(0);
 		private final Assignment cMatrixDefinitionAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cMatrixDefinitionMatrixDefinitionParserRuleCall_1_0 = (RuleCall)cMatrixDefinitionAssignment_1.eContents().get(0);
-		private final Assignment cFormulaAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final RuleCall cFormulaFormulaParserRuleCall_2_0 = (RuleCall)cFormulaAssignment_2.eContents().get(0);
+		private final Assignment cAssignmentAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cAssignmentAssignmentParserRuleCall_2_0 = (RuleCall)cAssignmentAssignment_2.eContents().get(0);
+		private final Assignment cFormulaAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cFormulaFormulaParserRuleCall_3_0 = (RuleCall)cFormulaAssignment_3.eContents().get(0);
 		
 		//Statement:
-		//	functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | formula=Formula;
+		//	functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | assignment=Assignment | formula=Formula;
 		public ParserRule getRule() { return rule; }
 
-		//functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | formula=Formula
+		//functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | assignment=Assignment | formula=Formula
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//functionDefinition=FunctionDefinition
@@ -46,11 +48,49 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//MatrixDefinition
 		public RuleCall getMatrixDefinitionMatrixDefinitionParserRuleCall_1_0() { return cMatrixDefinitionMatrixDefinitionParserRuleCall_1_0; }
 
+		//assignment=Assignment
+		public Assignment getAssignmentAssignment_2() { return cAssignmentAssignment_2; }
+
+		//Assignment
+		public RuleCall getAssignmentAssignmentParserRuleCall_2_0() { return cAssignmentAssignmentParserRuleCall_2_0; }
+
 		//formula=Formula
-		public Assignment getFormulaAssignment_2() { return cFormulaAssignment_2; }
+		public Assignment getFormulaAssignment_3() { return cFormulaAssignment_3; }
 
 		//Formula
-		public RuleCall getFormulaFormulaParserRuleCall_2_0() { return cFormulaFormulaParserRuleCall_2_0; }
+		public RuleCall getFormulaFormulaParserRuleCall_3_0() { return cFormulaFormulaParserRuleCall_3_0; }
+	}
+
+	public class AssignmentElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Assignment");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cVariableAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cVariableMATH_NAMETerminalRuleCall_0_0 = (RuleCall)cVariableAssignment_0.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cValueFormulaParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
+		
+		//Assignment:
+		//	variable=MATH_NAME "=" value=Formula;
+		public ParserRule getRule() { return rule; }
+
+		//variable=MATH_NAME "=" value=Formula
+		public Group getGroup() { return cGroup; }
+
+		//variable=MATH_NAME
+		public Assignment getVariableAssignment_0() { return cVariableAssignment_0; }
+
+		//MATH_NAME
+		public RuleCall getVariableMATH_NAMETerminalRuleCall_0_0() { return cVariableMATH_NAMETerminalRuleCall_0_0; }
+
+		//"="
+		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
+
+		//value=Formula
+		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
+
+		//Formula
+		public RuleCall getValueFormulaParserRuleCall_2_0() { return cValueFormulaParserRuleCall_2_0; }
 	}
 
 	public class FormulaElements extends AbstractParserRuleElementFinder {
@@ -317,13 +357,13 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cINTTerminalRuleCall_1_2_2 = (RuleCall)cGroup_1_2.eContents().get(2);
 		
 		//Float:
-		//	INT* ("." INT+ (("E" | "e") "-"? INT+)?)?;
+		//	INT+ ("." INT+ (("E" | "e") "-"? INT+)?)?;
 		public ParserRule getRule() { return rule; }
 
-		//INT* ("." INT+ (("E" | "e") "-"? INT+)?)?
+		//INT+ ("." INT+ (("E" | "e") "-"? INT+)?)?
 		public Group getGroup() { return cGroup; }
 
-		//INT*
+		//INT+
 		public RuleCall getINTTerminalRuleCall_0() { return cINTTerminalRuleCall_0; }
 
 		//("." INT+ (("E" | "e") "-"? INT+)?)?
@@ -564,6 +604,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	
 	
 	private StatementElements pStatement;
+	private AssignmentElements pAssignment;
 	private FormulaElements pFormula;
 	private AdditionElements pAddition;
 	private MultiplicationElements pMultiplication;
@@ -598,13 +639,23 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Statement:
-	//	functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | formula=Formula;
+	//	functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | assignment=Assignment | formula=Formula;
 	public StatementElements getStatementAccess() {
 		return (pStatement != null) ? pStatement : (pStatement = new StatementElements());
 	}
 	
 	public ParserRule getStatementRule() {
 		return getStatementAccess().getRule();
+	}
+
+	//Assignment:
+	//	variable=MATH_NAME "=" value=Formula;
+	public AssignmentElements getAssignmentAccess() {
+		return (pAssignment != null) ? pAssignment : (pAssignment = new AssignmentElements());
+	}
+	
+	public ParserRule getAssignmentRule() {
+		return getAssignmentAccess().getRule();
 	}
 
 	//Formula:
@@ -659,7 +710,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Float:
-	//	INT* ("." INT+ (("E" | "e") "-"? INT+)?)?;
+	//	INT+ ("." INT+ (("E" | "e") "-"? INT+)?)?;
 	public FloatElements getFloatAccess() {
 		return (pFloat != null) ? pFloat : (pFloat = new FloatElements());
 	}

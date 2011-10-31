@@ -124,16 +124,96 @@ ruleStatement returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getStatementAccess().getFormulaFormulaParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getStatementAccess().getAssignmentAssignmentParserRuleCall_2_0()); 
 	    }
-		lv_formula_2_0=ruleFormula		{
+		lv_assignment_2_0=ruleAssignment		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"assignment",
+        		lv_assignment_2_0, 
+        		"Assignment");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getStatementAccess().getFormulaFormulaParserRuleCall_3_0()); 
+	    }
+		lv_formula_3_0=ruleFormula		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getStatementRule());
 	        }
        		set(
        			$current, 
        			"formula",
-        		lv_formula_2_0, 
+        		lv_formula_3_0, 
+        		"Formula");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleAssignment
+entryRuleAssignment returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getAssignmentRule()); }
+	 iv_ruleAssignment=ruleAssignment 
+	 { $current=$iv_ruleAssignment.current; } 
+	 EOF 
+;
+
+// Rule Assignment
+ruleAssignment returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		lv_variable_0_0=RULE_MATH_NAME
+		{
+			newLeafNode(lv_variable_0_0, grammarAccess.getAssignmentAccess().getVariableMATH_NAMETerminalRuleCall_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getAssignmentRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"variable",
+        		lv_variable_0_0, 
+        		"MATH_NAME");
+	    }
+
+)
+)	otherlv_1='=' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getAssignmentAccess().getEqualsSignKeyword_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getAssignmentAccess().getValueFormulaParserRuleCall_2_0()); 
+	    }
+		lv_value_2_0=ruleFormula		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getAssignmentRule());
+	        }
+       		set(
+       			$current, 
+       			"value",
+        		lv_value_2_0, 
         		"Formula");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -587,7 +667,7 @@ ruleFloat returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
     { 
     newLeafNode(this_INT_0, grammarAccess.getFloatAccess().getINTTerminalRuleCall_0()); 
     }
-)*(
+)+(
 	kw='.' 
     {
         $current.merge(kw);

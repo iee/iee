@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
@@ -83,6 +84,7 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
     switch (eClass.getClassifierID())
     {
       case MathPackage.STATEMENT: return createStatement();
+      case MathPackage.ASSIGNMENT: return createAssignment();
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
       case MathPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
@@ -110,6 +112,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     StatementImpl statement = new StatementImpl();
     return statement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Assignment createAssignment()
+  {
+    AssignmentImpl assignment = new AssignmentImpl();
+    return assignment;
   }
 
   /**

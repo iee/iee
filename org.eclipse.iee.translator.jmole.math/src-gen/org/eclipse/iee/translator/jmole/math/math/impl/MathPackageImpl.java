@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
@@ -43,6 +44,13 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * @generated
    */
   private EClass statementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass assignmentEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -233,9 +241,49 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStatement_Formula()
+  public EReference getStatement_Assignment()
   {
     return (EReference)statementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getStatement_Formula()
+  {
+    return (EReference)statementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAssignment()
+  {
+    return assignmentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAssignment_Variable()
+  {
+    return (EAttribute)assignmentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAssignment_Value()
+  {
+    return (EReference)assignmentEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -601,7 +649,12 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     statementEClass = createEClass(STATEMENT);
     createEReference(statementEClass, STATEMENT__FUNCTION_DEFINITION);
     createEReference(statementEClass, STATEMENT__MATRIX_DEFINITION);
+    createEReference(statementEClass, STATEMENT__ASSIGNMENT);
     createEReference(statementEClass, STATEMENT__FORMULA);
+
+    assignmentEClass = createEClass(ASSIGNMENT);
+    createEAttribute(assignmentEClass, ASSIGNMENT__VARIABLE);
+    createEReference(assignmentEClass, ASSIGNMENT__VALUE);
 
     formulaEClass = createEClass(FORMULA);
     createEReference(formulaEClass, FORMULA__EXPRESSION);
@@ -692,7 +745,12 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEClass(statementEClass, Statement.class, "Statement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getStatement_FunctionDefinition(), this.getFunctionDefinition(), null, "functionDefinition", null, 0, 1, Statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStatement_MatrixDefinition(), this.getMatrixDefinition(), null, "matrixDefinition", null, 0, 1, Statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStatement_Assignment(), this.getAssignment(), null, "assignment", null, 0, 1, Statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStatement_Formula(), this.getFormula(), null, "formula", null, 0, 1, Statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(assignmentEClass, Assignment.class, "Assignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAssignment_Variable(), ecorePackage.getEString(), "variable", null, 0, 1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAssignment_Value(), this.getFormula(), null, "value", null, 0, 1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(formulaEClass, Formula.class, "Formula", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFormula_Expression(), this.getExpression(), null, "expression", null, 0, 1, Formula.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

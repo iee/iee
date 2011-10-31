@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
@@ -68,6 +69,12 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				   context == grammarAccess.getPowerAccess().getPowerLeftAction_1_0() ||
 				   context == grammarAccess.getPrimaryRule()) {
 					sequence_Addition(context, (Addition) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.ASSIGNMENT:
+				if(context == grammarAccess.getAssignmentRule()) {
+					sequence_Assignment(context, (Assignment) semanticObject); 
 					return; 
 				}
 				else break;
@@ -237,6 +244,29 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
+	 *     (variable=MATH_NAME value=Formula)
+	 *
+	 * Features:
+	 *    variable[1, 1]
+	 *    value[1, 1]
+	 */
+	protected void sequence_Assignment(EObject context, Assignment semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.ASSIGNMENT__VARIABLE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.ASSIGNMENT__VARIABLE));
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.ASSIGNMENT__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.ASSIGNMENT__VALUE));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getAssignmentAccess().getVariableMATH_NAMETerminalRuleCall_0_0(), semanticObject.getVariable());
+		feeder.accept(grammarAccess.getAssignmentAccess().getValueFormulaParserRuleCall_2_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
 	 *     expression=Addition
 	 *
 	 * Features:
@@ -392,18 +422,25 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | formula=Formula)
+	 *     (functionDefinition=FunctionDefinition | matrixDefinition=MatrixDefinition | assignment=Assignment | formula=Formula)
 	 *
 	 * Features:
 	 *    functionDefinition[0, 1]
 	 *         EXCLUDE_IF_SET matrixDefinition
+	 *         EXCLUDE_IF_SET assignment
 	 *         EXCLUDE_IF_SET formula
 	 *    matrixDefinition[0, 1]
 	 *         EXCLUDE_IF_SET functionDefinition
+	 *         EXCLUDE_IF_SET assignment
+	 *         EXCLUDE_IF_SET formula
+	 *    assignment[0, 1]
+	 *         EXCLUDE_IF_SET functionDefinition
+	 *         EXCLUDE_IF_SET matrixDefinition
 	 *         EXCLUDE_IF_SET formula
 	 *    formula[0, 1]
 	 *         EXCLUDE_IF_SET functionDefinition
 	 *         EXCLUDE_IF_SET matrixDefinition
+	 *         EXCLUDE_IF_SET assignment
 	 */
 	protected void sequence_Statement(EObject context, Statement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

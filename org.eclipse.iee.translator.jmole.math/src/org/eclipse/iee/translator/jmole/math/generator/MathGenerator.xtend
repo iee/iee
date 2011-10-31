@@ -33,8 +33,10 @@ class MathGenerator implements IGenerator {
 	{
 	'''
 		«IF s.functionDefinition != null»«compileFunctionDefinition(s.functionDefinition)»«ENDIF»
-		«IF s.formula != null»«compileFormula(s.formula)»;«ENDIF»
 		«IF s.matrixDefinition != null»«compileMatrixDefinition(s.matrixDefinition)»;«ENDIF»
+		«IF s.assignment != null»«compileAssignment(s.assignment)»;«ENDIF»
+		«IF s.formula != null»«compileFormula(s.formula)»;«ENDIF»
+		
 	'''
 	}
 	
@@ -48,6 +50,13 @@ class MathGenerator implements IGenerator {
 		«ENDFOR») 
 		{ «IF funcDef.formula != null» return «compileFormula(funcDef.formula)»«ENDIF» }
 	'''
+	}
+	
+	def compileAssignment(Assignment a)
+	{
+	 '''
+	 	«a.variable» = «compileFormula(a.value)»
+	 '''
 	}
 	
 	def compileFormula(Formula f) 

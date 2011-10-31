@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
@@ -30,6 +31,7 @@ import org.eclipse.iee.translator.jmole.math.math.Statement;
  * <ul>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFunctionDefinition <em>Function Definition</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getMatrixDefinition <em>Matrix Definition</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getAssignment <em>Assignment</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFormula <em>Formula</em>}</li>
  * </ul>
  * </p>
@@ -57,6 +59,16 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * @ordered
    */
   protected MatrixDefinition matrixDefinition;
+
+  /**
+   * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAssignment()
+   * @generated
+   * @ordered
+   */
+  protected Assignment assignment;
 
   /**
    * The cached value of the '{@link #getFormula() <em>Formula</em>}' containment reference.
@@ -190,6 +202,54 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
+  public Assignment getAssignment()
+  {
+    return assignment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetAssignment(Assignment newAssignment, NotificationChain msgs)
+  {
+    Assignment oldAssignment = assignment;
+    assignment = newAssignment;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__ASSIGNMENT, oldAssignment, newAssignment);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setAssignment(Assignment newAssignment)
+  {
+    if (newAssignment != assignment)
+    {
+      NotificationChain msgs = null;
+      if (assignment != null)
+        msgs = ((InternalEObject)assignment).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__ASSIGNMENT, null, msgs);
+      if (newAssignment != null)
+        msgs = ((InternalEObject)newAssignment).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__ASSIGNMENT, null, msgs);
+      msgs = basicSetAssignment(newAssignment, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__ASSIGNMENT, newAssignment, newAssignment));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Formula getFormula()
   {
     return formula;
@@ -247,6 +307,8 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
         return basicSetFunctionDefinition(null, msgs);
       case MathPackage.STATEMENT__MATRIX_DEFINITION:
         return basicSetMatrixDefinition(null, msgs);
+      case MathPackage.STATEMENT__ASSIGNMENT:
+        return basicSetAssignment(null, msgs);
       case MathPackage.STATEMENT__FORMULA:
         return basicSetFormula(null, msgs);
     }
@@ -267,6 +329,8 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
         return getFunctionDefinition();
       case MathPackage.STATEMENT__MATRIX_DEFINITION:
         return getMatrixDefinition();
+      case MathPackage.STATEMENT__ASSIGNMENT:
+        return getAssignment();
       case MathPackage.STATEMENT__FORMULA:
         return getFormula();
     }
@@ -288,6 +352,9 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
         return;
       case MathPackage.STATEMENT__MATRIX_DEFINITION:
         setMatrixDefinition((MatrixDefinition)newValue);
+        return;
+      case MathPackage.STATEMENT__ASSIGNMENT:
+        setAssignment((Assignment)newValue);
         return;
       case MathPackage.STATEMENT__FORMULA:
         setFormula((Formula)newValue);
@@ -312,6 +379,9 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
       case MathPackage.STATEMENT__MATRIX_DEFINITION:
         setMatrixDefinition((MatrixDefinition)null);
         return;
+      case MathPackage.STATEMENT__ASSIGNMENT:
+        setAssignment((Assignment)null);
+        return;
       case MathPackage.STATEMENT__FORMULA:
         setFormula((Formula)null);
         return;
@@ -333,6 +403,8 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
         return functionDefinition != null;
       case MathPackage.STATEMENT__MATRIX_DEFINITION:
         return matrixDefinition != null;
+      case MathPackage.STATEMENT__ASSIGNMENT:
+        return assignment != null;
       case MathPackage.STATEMENT__FORMULA:
         return formula != null;
     }

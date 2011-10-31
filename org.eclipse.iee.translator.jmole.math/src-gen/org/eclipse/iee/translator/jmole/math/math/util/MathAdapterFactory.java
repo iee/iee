@@ -14,6 +14,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
@@ -95,6 +96,11 @@ public class MathAdapterFactory extends AdapterFactoryImpl
       public Adapter caseStatement(Statement object)
       {
         return createStatementAdapter();
+      }
+      @Override
+      public Adapter caseAssignment(Assignment object)
+      {
+        return createAssignmentAdapter();
       }
       @Override
       public Adapter caseFormula(Formula object)
@@ -194,6 +200,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Assignment <em>Assignment</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Assignment
+   * @generated
+   */
+  public Adapter createAssignmentAdapter()
   {
     return null;
   }
