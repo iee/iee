@@ -59,10 +59,10 @@ public class ContainerManager extends EventManager {
 	public Object[] getElements() {
 		return fContainers.toArray();
 	}
-	
+
 	public IDocument getDocument() {
-    	return fDocument;
-    }
+		return fDocument;
+	}
 
 	public String[] getContainerIDs() {
 		String[] containerIDs = new String[fContainers.size()];
@@ -216,11 +216,16 @@ public class ContainerManager extends EventManager {
 		fStyledText.addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				Container c = getContainerHavingOffset(e.caretOffset);
-				if (c != null) {
-					if (fDirection)
+				Container c = anotherGetContainerHavingOffset(e.caretOffset);
+				if (c != null
+						&& e.caretOffset > c.getPosition().getOffset()
+						&& e.caretOffset < c.getPosition().getOffset()
+								+ c.getPosition().getLength()
+								+ c.getContainerHiddenContent().length()) {
+					if (fDirection) {
+						// int len = c.getContainerHiddenContent().length();
 						fStyledText.setCaretOffset(e.caretOffset + 1);
-					else
+					} else
 						fStyledText.setCaretOffset(e.caretOffset - 1);
 				}
 
@@ -273,36 +278,43 @@ public class ContainerManager extends EventManager {
 						}
 					}
 					if (token == PartitioningScanner.PLAINTEXT_TOKEN) {
-						Container c = getContainerHavingOffset(lineScanner
-								.getTokenOffset() - 1);
-						//if (c == null)
-						//{
-							StyleRange plainTextStyle = new StyleRange(lineScanner
-									.getTokenOffset(),
-									lineScanner.getTokenLength(), fStyledText
+						Container c = getPreviousContainerAtLine(lineScanner
+								.getTokenOffset());
+						if (c == null
+								|| lineScanner.getTokenOffset() >= c
+										.getPosition().getOffset()
+										+ c.getPosition().getLength()
+										+ c.getContainerHiddenContent()
+												.length()) {
+							StyleRange plainTextStyle = new StyleRange(
+									lineScanner.getTokenOffset(), lineScanner
+											.getTokenLength(), fStyledText
 											.getForeground(), fStyledText
 											.getBackground());
-						
+
 							styles.addElement(plainTextStyle);
-						/*}
-						else
-						{
-							
+						} else {
 							StyleRange hiddenContentStyle = new StyleRange();
 							hiddenContentStyle.start = lineScanner
 									.getTokenOffset();
-							hiddenContentStyle.length = c.getContainerHiddenContent().length();
-							hiddenContentStyle.metrics = new GlyphMetrics(0, 0, 0);
+							hiddenContentStyle.length = c
+									.getContainerHiddenContent().length();
+							hiddenContentStyle.metrics = new GlyphMetrics(0, 0,
+									0);
 							styles.addElement(hiddenContentStyle);
-							
-							StyleRange plainTextStyle = new StyleRange(lineScanner
-									.getTokenOffset() + c.getContainerHiddenContent().length(),
-									lineScanner.getTokenLength() - c.getContainerHiddenContent().length(), fStyledText
-											.getForeground(), fStyledText
-											.getBackground());
-						    
-							styles.addElement(plainTextStyle);
-						}*/
+
+							/*
+							 * StyleRange plainTextStyle = new StyleRange(
+							 * lineScanner.getTokenOffset() +
+							 * c.getContainerHiddenContent() .length(),
+							 * lineScanner .getTokenLength() -
+							 * c.getContainerHiddenContent() .length(),
+							 * fStyledText .getForeground(), fStyledText
+							 * .getBackground());
+							 * 
+							 * styles.addElement(plainTextStyle);
+							 */
+						}
 					}
 				}
 
@@ -310,21 +322,23 @@ public class ContainerManager extends EventManager {
 						lineNumber).iterator();
 
 				// First cycle - looking for max ascent in containers
-//				System.out
-//						.println("Line offset:"
-//								+ event.lineOffset
-//								+ "########################################################################");
-//				System.out
-//						.println("Line number:"
-//								+ lineNumber
-//								+ "************************************************************************");
+				// System.out
+				// .println("Line offset:"
+				// + event.lineOffset
+				// +
+				// "########################################################################");
+				// System.out
+				// .println("Line number:"
+				// + lineNumber
+				// +
+				// "************************************************************************");
 				// clear, because container can be moved to another line or
 				// deleted
 				clearLineMaxAscents();
 				while (containerIterator2.hasNext()) {
 					Container c = (Container) containerIterator2.next();
-					//System.out.println("PadSize:"
-					//		+ c.getComposite().getSize().y);
+					// System.out.println("PadSize:"
+					// + c.getComposite().getSize().y);
 					if (c.getComposite().getSize().y > getMaxContainerAscentByLine(lineNumber)) {
 						putMaxContainerAscentToMap(lineNumber, c.getComposite()
 								.getSize().y);
@@ -335,8 +349,8 @@ public class ContainerManager extends EventManager {
 				// Second cycle - Setting max ascent for styles
 				while (stylesIterator.hasNext()) {
 					StyleRange style = (StyleRange) stylesIterator.next();
-					//System.out.println("MaxPadSize:"
-					//		+ getMaxContainerAscentByLine(lineNumber));
+					// System.out.println("MaxPadSize:"
+					// + getMaxContainerAscentByLine(lineNumber));
 					if (style.metrics != null)
 						style.metrics.ascent = getMaxContainerAscentByLine(lineNumber);
 					style.background = fStyledText.getBackground();
@@ -493,8 +507,9 @@ public class ContainerManager extends EventManager {
 
 				/* Scanning for new containers */
 
-				//int offset = beginRegionOffset;
-				int offset = Math.max(event.getOffset(), fChangedPartitioningRegion.getOffset());
+				// int offset = beginRegionOffset;
+				int offset = Math.max(event.getOffset(),
+						fChangedPartitioningRegion.getOffset());
 				while (offset < fChangedPartitioningRegion.getOffset()
 						+ fChangedPartitioningRegion.getLength()) {
 					ITypedRegion region = ((IDocumentExtension3) fDocument)
@@ -637,13 +652,48 @@ public class ContainerManager extends EventManager {
 	protected Container getContainerHavingOffset(int offset) {
 		if (offset < 0)
 			return null;
-		Container c = fContainers.lower(Container.atOffset(offset));
+		Container c = fContainers.floor(Container.atOffset(offset));
 		if (c != null && c.getPosition().includes(offset)) {
 			return c;
 		}
 		return null;
 	}
-	
+
+	protected Container anotherGetContainerHavingOffset(int offset) {
+		if (offset < 0)
+			return null;
+		Container c = fContainers.floor(Container.atOffset(offset));
+		if (c != null) {
+			return c;
+		}
+		return null;
+	}
+
+	// TODO: rewrite it using NavigableSet
+	protected Container getPreviousContainerAtLine(int offset) {
+		if (offset < 0)
+			return null;
+		ArrayList<Container> containersAtLine = getContainersAtLine(getLineNumberByOffset(
+				offset, fDocument));
+		Iterator<Container> iterator = containersAtLine.iterator();
+		int maxOffset = -1;
+		while (iterator.hasNext()) {
+			Container c = (Container) iterator.next();
+			int containerOffset = c.getPosition().getOffset();
+			if (containerOffset < offset && containerOffset > maxOffset)
+				maxOffset = c.getPosition().getOffset();
+		}
+		if (maxOffset == -1)
+			return null;
+
+		Container c = getContainerHavingOffset(maxOffset);
+		if (c != null) {
+			return c;
+		}
+		return null;
+
+	}
+
 	protected Container createContainer(Position position, String containerID) {
 		return new Container(position, containerID, fStyledText, fDocument,
 				this);

@@ -4,7 +4,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -102,7 +101,7 @@ public class Container {
 	public String getContainerID() {
 		return fContainerID;
 	}
-	
+
 	public String getContainerHiddenContent() {
 		return fContainerHiddenContent;
 	}
@@ -186,6 +185,7 @@ public class Container {
 	 * @return Generated text region
 	 */
 	static String getInitialTextRegion(String containerID) {
+		// TODO: maybe add hidden content
 		return IConfiguration.EMBEDDED_REGION_BEGINS + containerID
 				+ IConfiguration.EMBEDDED_REGION_ENDS;
 	}
@@ -255,25 +255,25 @@ public class Container {
 
 		try {
 			document.replace(from, length, fContainerID);
+			document.replace(fPosition.getOffset() + fPosition.getLength(),
+					fContainerHiddenContent.length(), fContainerHiddenContent);
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
-	 * Writes custom text to tail of container 
+	 * Writes custom text to tail of container
 	 */
 	public void writeAtContainerRegionTail(String text) {
 		int tail = fPosition.getOffset() + fPosition.getLength();
 
-		try 
-		{
+		try {
 			int previousLength = fContainerHiddenContent.length();
 			fContainerHiddenContent = text;
-			fContainerManager.getDocument().replace(tail , previousLength, text);
-		} 
-		catch (BadLocationException e) {
+			fContainerManager.getDocument().replace(tail, previousLength, text);
+		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -287,7 +287,8 @@ public class Container {
 	 */
 	protected void releaseTextRegion(IDocument document) {
 		try {
-			document.replace(fPosition.getOffset(), fPosition.getLength() + fContainerHiddenContent.length(), "");
+			document.replace(fPosition.getOffset(), fPosition.getLength()
+					+ fContainerHiddenContent.length(), "");
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
