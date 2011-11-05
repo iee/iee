@@ -70,7 +70,7 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
-  
+
     {
       Assignment _assignment = s.getAssignment();
       boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_assignment, null);
@@ -81,7 +81,6 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
- 
     {
       Formula _formula = s.getFormula();
       boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_formula, null);
@@ -92,7 +91,7 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
-   
+
 
     return _builder;
   }
@@ -119,7 +118,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-      
+
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -129,7 +128,7 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-    
+
         _builder.append("\t\t");
       }
     }
@@ -169,7 +168,7 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
-  
+
     return _builder;
   }
   
@@ -189,7 +188,7 @@ public class MathGenerator implements IGenerator {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
           if (_operator_notEquals) {
             _builder.append("{");
-  
+
             {
               EList<String> _elements = row.getElements();
               for(final String element : _elements) {
@@ -197,7 +196,7 @@ public class MathGenerator implements IGenerator {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
                     _builder.append(element, "");
-              
+         
                   }
                 }
                 {
@@ -208,11 +207,11 @@ public class MathGenerator implements IGenerator {
                     _builder.append(",");
                   }
                 }
-           
+   
               }
             }
             _builder.append("}");
-    
+
           }
         }
         {
@@ -223,11 +222,12 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-     
+ 
       }
     }
 
     _builder.append("})");
+
     return _builder;
   }
   
@@ -257,7 +257,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-       
+
         {
           Expression _function_3 = f.getFunction();
           EList<Formula> _parameters_1 = _function_3.getParameters();
