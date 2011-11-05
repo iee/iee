@@ -35,26 +35,27 @@ public class CompiledMathPad extends Pad implements Serializable {
 		styledText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				//System.out.println(styledText.getText());
-								
+				// System.out.println(styledText.getText());
+
 				System.out.println("before translation");
 				try {
-					String result = Activator.getMole().translateMath(styledText.getText());
+					String result = Activator.getMole().translateMath(
+							styledText.getText());
 					System.out.println(result);
 					getContainer().writeAtContainerRegionTail(result.trim());
 				} catch (Exception e1) {
 					getContainer().writeAtContainerRegionTail("");
-					//e1.printStackTrace();
+					// e1.printStackTrace();
 				}
 
 			}
-			
-		});	
+
+		});
 		MouseEventManager mouseManager = new MouseEventManager(parent);
 		parent.addMouseTrackListener(mouseManager);
 		parent.addMouseMoveListener(mouseManager);
 		parent.addMouseListener(mouseManager);
-		
+
 	}
 
 	protected CompiledMathPad(String containerID) {
