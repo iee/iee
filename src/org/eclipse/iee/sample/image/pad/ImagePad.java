@@ -34,11 +34,13 @@ public class ImagePad extends Pad implements Serializable {
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
 		fImagePath = null;
+		setType("Image Pad");
 	}
 
 	protected ImagePad(int currentState, String imagePath) {
 		fCurrentState = currentState;
 		fImagePath = imagePath;
+		setType("Image Pad");
 	}
 
 	@Override
@@ -211,11 +213,6 @@ public class ImagePad extends Pad implements Serializable {
 	@Override
 	public Pad copy() {
 		return new ImagePad(fCurrentState, fImagePath);
-	}
-
-	@Override
-	public String getType() {
-		return "Image Pad";
 	}
 
 	@Override
