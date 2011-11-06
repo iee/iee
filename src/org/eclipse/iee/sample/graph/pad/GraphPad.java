@@ -48,6 +48,7 @@ public class GraphPad extends Pad implements Serializable {
 		fDomainCardinality = 0;
 		fIsAdvancedMode = false;
 		fIsActive = false;
+		setType("Graph");
 		save();
 	}
 
@@ -141,11 +142,6 @@ public class GraphPad extends Pad implements Serializable {
 		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
 		newPad.fIsActive = false;
 		return newPad;
-	}
-
-	@Override
-	public String getType() {
-		return "Graph";
 	}
 
 	// Save&Load operations, use it for serialization
