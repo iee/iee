@@ -40,6 +40,7 @@ public class MathPad extends Pad implements Serializable {
 		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
 		fIsFirstLaunch = true;
+		setType("Math");
 		save();
 	}
 
@@ -235,11 +236,6 @@ public class MathPad extends Pad implements Serializable {
 		}
 
 		return newPad;
-	}
-
-	@Override
-	public String getType() {
-		return "Math";
 	}
 
 	// Save&Load operations, use it for serialization
