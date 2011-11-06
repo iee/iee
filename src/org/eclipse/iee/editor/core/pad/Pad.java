@@ -8,15 +8,17 @@ import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad {
 	private String fContainerID;
-	private String fPadType;
+	private String fType;
 	private Container fContainer;
 
 	public Pad() {
 		fContainerID = UUID.randomUUID().toString();
+		fType = "Unknown";
 	}
 
 	public Pad(String id) {
 		fContainerID = id;
+		fType = "Unknown";
 	}
 
 	public void setContainerID(String containerID) {
@@ -85,10 +87,19 @@ public abstract class Pad {
 	public abstract void unsave();
 
 	/**
-	 * Get type of Pad, type is useful for debug
-	 * 
-	 * @return
+	 * Getter for fType
 	 */
-	public abstract String getType();
+	public String getType()
+	{
+		return fType;
+	}
+	
+	/**
+	 * Setter for fType
+	 */
+	public void setType(String type)
+	{
+		fType = type;
+	}
 
 }
