@@ -21,6 +21,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 
 	public CompiledMathPad() {
 		super();
+		setType("CompiledMath");
 		fText = "";
 	}
 
@@ -71,11 +72,6 @@ public class CompiledMathPad extends Pad implements Serializable {
 		CompiledMathPad newPad = new CompiledMathPad();
 		newPad.fText = this.fText;
 		return newPad;
-	}
-
-	@Override
-	public String getType() {
-		return "CompiledMath";
 	}
 
 	// Save&Load operations, use it for serialization
