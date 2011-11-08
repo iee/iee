@@ -13,10 +13,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <category
-            name="IEE Pads Monitoring"
-            id="org.eclipse.iee.editor.monitoring">
-      </category>
       <view
             category="org.eclipse.iee.editor.monitoring"
             class="org.eclipse.iee.editor.monitoring.views.EditorContainersMonitoringView"
@@ -36,11 +32,11 @@
    <extension
          point="org.eclipse.pde.ui.pluginContent">
       <wizard
-            class="org.eclipse.iee.editor.monitoring.NewPadWizard"
+            class="org.eclipse.iee.editor.monitoring.wizards.NewPadWizard"
             icon="icons/iee_logo.png"
             id="org.eclipse.iee.editor.monitoring.wizardNewPad"
             java="true"
-            name="New Pad Wizard"
+            name="New Pad"
             pureOSGi="false"
             rcp="false"
             requiresActivator="false"
