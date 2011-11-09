@@ -16,11 +16,13 @@ import org.eclipse.pde.core.plugin.IPluginElement;
 import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginModelFactory;
 import org.eclipse.pde.core.plugin.IPluginReference;
+import org.eclipse.pde.internal.core.text.plugin.PluginExtensionNode;
 import org.eclipse.pde.internal.ui.IHelpContextIds;
 import org.eclipse.pde.ui.IFieldData;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
 import org.eclipse.pde.ui.templates.PluginReference;
 import org.eclipse.pde.ui.templates.TemplateOption;
+import org.eclipse.ui.internal.PluginActionContributionItem;
 
 public class PadTemplate extends OptionTemplateSection {
 
@@ -76,13 +78,15 @@ public class PadTemplate extends OptionTemplateSection {
 				"org.eclipse.ui.popupMenus", true);
 		IPluginElement sampleViewerContribution = factory
 				.createElement(menuExtension);
-
+		
+		sampleViewerContribution.setName("viewerContribution");
 		sampleViewerContribution.setAttribute("id",
 				getStringOption(KEY_PACKAGE_NAME) + ".contextSample");
 		sampleViewerContribution.setAttribute("targetID", "#TextEditorContext");
 
 		IPluginElement contextAddAction = factory
 				.createElement(sampleViewerContribution);
+		contextAddAction.setName("action");
 		contextAddAction.setAttribute("id", getStringOption(KEY_PACKAGE_NAME)
 				+ ".actions.Add" + getStringOption(KEY_PAD_NAME)
 				+ "ActionDelegate");
@@ -95,7 +99,8 @@ public class PadTemplate extends OptionTemplateSection {
 		// contextAddAction.setAttribute("icon", "");
 		contextAddAction.setAttribute("tooltip", "Insert "
 				+ getStringOption(KEY_PAD_NAME));
-		menuExtension.add(contextAddAction);
+		sampleViewerContribution.add(contextAddAction);
+		menuExtension.add(sampleViewerContribution);
 
 		plugin.add(menuExtension);
 
@@ -103,8 +108,8 @@ public class PadTemplate extends OptionTemplateSection {
 				"org.eclipse.ui.editorActions", true);
 
 		IPluginElement sampleEditorContribution = factory
-				.createElement(menuExtension);
-
+				.createElement(toolbarExtension);
+		sampleEditorContribution.setName("editorContribution");
 		sampleEditorContribution.setAttribute("id",
 				getStringOption(KEY_PACKAGE_NAME) + ".toolbarSample");
 		sampleEditorContribution.setAttribute("targetID",
@@ -112,9 +117,9 @@ public class PadTemplate extends OptionTemplateSection {
 
 		IPluginElement toolbarAddAction = factory
 				.createElement(sampleEditorContribution);
+		toolbarAddAction.setName("action");
 		toolbarAddAction.setAttribute("id", getStringOption(KEY_PACKAGE_NAME)
-				+ ".actions.Add" + getStringOption(KEY_PAD_NAME)
-				+ "ActionDelegate");
+				+ ".add");
 		toolbarAddAction.setAttribute("label", "Insert "
 				+ getStringOption(KEY_PAD_NAME));
 		toolbarAddAction.setAttribute("class",
@@ -124,7 +129,8 @@ public class PadTemplate extends OptionTemplateSection {
 		// contextAddAction.setAttribute("icon", "");
 		toolbarAddAction.setAttribute("tooltip", "Insert "
 				+ getStringOption(KEY_PAD_NAME));
-		toolbarExtension.add(toolbarAddAction);
+		sampleEditorContribution.add(toolbarAddAction);
+		toolbarExtension.add(sampleEditorContribution);
 
 		plugin.add(toolbarExtension);
 
