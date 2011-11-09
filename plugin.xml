@@ -46,7 +46,7 @@
    <extension
          point="org.eclipse.pde.ui.templates">
       <template
-            class="org.eclipse.iee.editor.monitoring.TemplateSection1"
+            class="org.eclipse.iee.editor.monitoring.templates.PadTemplate"
             contributingId="org.eclipse.iee.editor.monitoring.templatePad"
             icon="icons/iee_logo.png"
             id="org.eclipse.iee.editor.monitoring.templatePad"

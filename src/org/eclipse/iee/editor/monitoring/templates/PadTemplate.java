@@ -16,13 +16,10 @@ import org.eclipse.pde.core.plugin.IPluginElement;
 import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginModelFactory;
 import org.eclipse.pde.core.plugin.IPluginReference;
-import org.eclipse.pde.internal.core.text.plugin.PluginExtensionNode;
-import org.eclipse.pde.internal.ui.IHelpContextIds;
 import org.eclipse.pde.ui.IFieldData;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
 import org.eclipse.pde.ui.templates.PluginReference;
 import org.eclipse.pde.ui.templates.TemplateOption;
-import org.eclipse.ui.internal.PluginActionContributionItem;
 
 public class PadTemplate extends OptionTemplateSection {
 
@@ -41,7 +38,7 @@ public class PadTemplate extends OptionTemplateSection {
 	}
 
 	public void addPages(Wizard wizard) {
-		// WizardPage page = createPage(0, IHelpContextIds.TEMPLATE_INTRO);
+		//WizardPage page = createPage(0, IHelpContextIds.TEMPLATE_INTRO);
 		WizardPage page = createPage(0);
 		page.setTitle("Pad Template");
 		page.setDescription("Creates a new pad");
@@ -136,10 +133,6 @@ public class PadTemplate extends OptionTemplateSection {
 
 	}
 
-	public String getUsedExtensionPoint() {
-		return "org.eclipse.ui.views";
-	}
-
 	/**
 	 * The location of your plugin supplying the template content
 	 */
@@ -175,7 +168,7 @@ public class PadTemplate extends OptionTemplateSection {
 	}
 
 	public int getNumberOfWorkUnits() {
-		return super.getNumberOfWorkUnits() + 1;
+		return super.getNumberOfWorkUnits() + 2;
 	}
 
 	public String getStringOption(String name) {
@@ -206,6 +199,11 @@ public class PadTemplate extends OptionTemplateSection {
 
 	public String getLabel() {
 		return "New Pad";
+	}
+
+	@Override
+	public String getUsedExtensionPoint() {
+		return null;
 	}
 
 }

@@ -14,7 +14,7 @@ public class NewPadWizard extends NewPluginTemplateWizard {
         fData = data;
         setWindowTitle("New Pad");  
 	}
-	@Override
+
 	public ITemplateSection[] createTemplateSections() {
 		return new ITemplateSection[] {new PadTemplate()};
 	}
