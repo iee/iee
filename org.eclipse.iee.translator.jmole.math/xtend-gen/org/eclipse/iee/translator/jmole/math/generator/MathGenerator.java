@@ -8,6 +8,7 @@ import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
@@ -120,7 +121,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-   
+     
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -130,11 +131,9 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-    
       }
     }
     _builder.append(") ");
-
     _builder.append("{ ");
     {
       Formula _formula = funcDef.getFormula();
@@ -148,7 +147,6 @@ public class MathGenerator implements IGenerator {
       }
     }
     _builder.append(" }");
-
     return _builder;
   }
   
@@ -160,7 +158,6 @@ public class MathGenerator implements IGenerator {
     Formula _value = a.getValue();
     StringConcatenation _compileFormula = this.compileFormula(_value);
     _builder.append(_compileFormula, "");
-
     return _builder;
   }
   
@@ -169,7 +166,6 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
-
     return _builder;
   }
   
@@ -179,9 +175,7 @@ public class MathGenerator implements IGenerator {
     String _name = m.getName();
     _builder.append(_name, "");
     _builder.append(" = new Matrix(new double[][]");
- 
     _builder.append("{");
-
     {
       EList<MatrixRow> _rows = m.getRows();
       for(final MatrixRow row : _rows) {
@@ -189,7 +183,7 @@ public class MathGenerator implements IGenerator {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
           if (_operator_notEquals) {
             _builder.append("{");
-           
+       
             {
               EList<String> _elements = row.getElements();
               for(final String element : _elements) {
@@ -197,7 +191,7 @@ public class MathGenerator implements IGenerator {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
                     _builder.append(element, "");
-                 
+             
                   }
                 }
                 {
@@ -208,11 +202,11 @@ public class MathGenerator implements IGenerator {
                     _builder.append(",");
                   }
                 }
-         
+          
               }
             }
             _builder.append("}");
-     
+ 
           }
         }
         {
@@ -223,10 +217,10 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-     
+
       }
     }
-  
+
     _builder.append("})");
 
     return _builder;
@@ -258,7 +252,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-    
+
         {
           Expression _function_3 = f.getFunction();
           EList<Formula> _parameters_1 = _function_3.getParameters();
@@ -381,6 +375,22 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _compileExpression(final Factorial op) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      Expression _expression = op.getExpression();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_expression, null);
+      if (_operator_notEquals) {
+        _builder.append(" (");
+        Expression _expression_1 = op.getExpression();
+        StringConcatenation _compileExpression = this.compileExpression(_expression_1);
+        _builder.append(_compileExpression, "");
+        _builder.append(")! ");
+      }
+    }
+    return _builder;
+  }
+  
   protected StringConcatenation _compileExpression(final Exponent op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
@@ -402,6 +412,8 @@ public class MathGenerator implements IGenerator {
       return _compileExpression((Division)op);
     } else if ((op instanceof Exponent)) {
       return _compileExpression((Exponent)op);
+    } else if ((op instanceof Factorial)) {
+      return _compileExpression((Factorial)op);
     } else if ((op instanceof Float)) {
       return _compileExpression((Float)op);
     } else if ((op instanceof Function)) {

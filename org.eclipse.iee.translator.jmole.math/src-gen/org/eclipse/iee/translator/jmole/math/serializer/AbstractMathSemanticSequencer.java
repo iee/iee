@@ -8,6 +8,7 @@ import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
@@ -117,6 +118,22 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 			case MathPackage.EXPRESSION:
 				if(context == grammarAccess.getFunctionRule()) {
 					sequence_Function(context, (Expression) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.FACTORIAL:
+				if(context == grammarAccess.getAdditionRule() ||
+				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
+				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
+				   context == grammarAccess.getPrimaryRule() ||
+				   context == grammarAccess.getUnaryExpressionRule()) {
+					sequence_UnaryExpression(context, (Factorial) semanticObject); 
 					return; 
 				}
 				else break;
@@ -506,6 +523,18 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *         EXCLUDE_IF_SET assignment
 	 */
 	protected void sequence_Statement(EObject context, Statement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     expression=UnaryExpression
+	 *
+	 * Features:
+	 *    expression[1, 1]
+	 */
+	protected void sequence_UnaryExpression(EObject context, Factorial semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

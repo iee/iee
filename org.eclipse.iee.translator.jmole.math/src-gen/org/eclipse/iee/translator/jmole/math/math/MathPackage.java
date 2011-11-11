@@ -641,6 +641,52 @@ public interface MathPackage extends EPackage
   int INVERT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FactorialImpl <em>Factorial</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.FactorialImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFactorial()
+   * @generated
+   */
+  int FACTORIAL = 13;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FACTORIAL__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FACTORIAL__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FACTORIAL__EXPRESSION = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Factorial</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FACTORIAL_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl <em>Exponent</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -648,7 +694,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getExponent()
    * @generated
    */
-  int EXPONENT = 13;
+  int EXPONENT = 14;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -703,7 +749,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 14;
+  int VARIABLE = 15;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -740,7 +786,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 15;
+  int FLOAT = 16;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -786,7 +832,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 16;
+  int FUNCTION = 17;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1231,6 +1277,27 @@ public interface MathPackage extends EPackage
   EReference getInvert_Expression();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Factorial <em>Factorial</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Factorial</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Factorial
+   * @generated
+   */
+  EClass getFactorial();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Factorial#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Factorial#getExpression()
+   * @see #getFactorial()
+   * @generated
+   */
+  EReference getFactorial_Expression();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Exponent <em>Exponent</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1666,6 +1733,24 @@ public interface MathPackage extends EPackage
      * @generated
      */
     EReference INVERT__EXPRESSION = eINSTANCE.getInvert_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.FactorialImpl <em>Factorial</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.FactorialImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFactorial()
+     * @generated
+     */
+    EClass FACTORIAL = eINSTANCE.getFactorial();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FACTORIAL__EXPRESSION = eINSTANCE.getFactorial_Expression();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl <em>Exponent</em>}' class.

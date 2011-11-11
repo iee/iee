@@ -264,13 +264,19 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cInvertAction_1_1 = (Action)cGroup_1.eContents().get(1);
 		private final Assignment cExpressionAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
 		private final RuleCall cExpressionUnaryExpressionParserRuleCall_1_2_0 = (RuleCall)cExpressionAssignment_1_2.eContents().get(0);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final Keyword cLeftParenthesisKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Action cFactorialAction_2_1 = (Action)cGroup_2.eContents().get(1);
+		private final Assignment cExpressionAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
+		private final RuleCall cExpressionUnaryExpressionParserRuleCall_2_2_0 = (RuleCall)cExpressionAssignment_2_2.eContents().get(0);
+		private final Keyword cRightParenthesisExclamationMarkKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
 		
 		//// Unary operators: right associative, priority 2
 		//UnaryExpression returns Expression:
-		//	Exponent | "-" {Invert} expression=UnaryExpression;
+		//	Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!";
 		public ParserRule getRule() { return rule; }
 
-		//Exponent | "-" {Invert} expression=UnaryExpression
+		//Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//Exponent
@@ -290,6 +296,24 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 		//UnaryExpression
 		public RuleCall getExpressionUnaryExpressionParserRuleCall_1_2_0() { return cExpressionUnaryExpressionParserRuleCall_1_2_0; }
+
+		//"(" {Factorial} expression=UnaryExpression ")!"
+		public Group getGroup_2() { return cGroup_2; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_2_0() { return cLeftParenthesisKeyword_2_0; }
+
+		//{Factorial}
+		public Action getFactorialAction_2_1() { return cFactorialAction_2_1; }
+
+		//expression=UnaryExpression
+		public Assignment getExpressionAssignment_2_2() { return cExpressionAssignment_2_2; }
+
+		//UnaryExpression
+		public RuleCall getExpressionUnaryExpressionParserRuleCall_2_2_0() { return cExpressionUnaryExpressionParserRuleCall_2_2_0; }
+
+		//")!"
+		public Keyword getRightParenthesisExclamationMarkKeyword_2_3() { return cRightParenthesisExclamationMarkKeyword_2_3; }
 	}
 
 	public class ExponentElements extends AbstractParserRuleElementFinder {
@@ -758,7 +782,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// Unary operators: right associative, priority 2
 	//UnaryExpression returns Expression:
-	//	Exponent | "-" {Invert} expression=UnaryExpression;
+	//	Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!";
 	public UnaryExpressionElements getUnaryExpressionAccess() {
 		return (pUnaryExpression != null) ? pUnaryExpression : (pUnaryExpression = new UnaryExpressionElements());
 	}

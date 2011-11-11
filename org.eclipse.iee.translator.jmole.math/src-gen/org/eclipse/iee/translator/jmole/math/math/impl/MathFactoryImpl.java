@@ -19,6 +19,7 @@ import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
@@ -98,6 +99,7 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.DIVISION: return createDivision();
       case MathPackage.MODULO: return createModulo();
       case MathPackage.INVERT: return createInvert();
+      case MathPackage.FACTORIAL: return createFactorial();
       case MathPackage.EXPONENT: return createExponent();
       case MathPackage.VARIABLE: return createVariable();
       case MathPackage.FLOAT: return createFloat();
@@ -248,6 +250,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     InvertImpl invert = new InvertImpl();
     return invert;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Factorial createFactorial()
+  {
+    FactorialImpl factorial = new FactorialImpl();
+    return factorial;
   }
 
   /**

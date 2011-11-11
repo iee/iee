@@ -16,6 +16,7 @@ import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
@@ -186,6 +187,14 @@ public class MathSwitch<T> extends Switch<T>
         Invert invert = (Invert)theEObject;
         T result = caseInvert(invert);
         if (result == null) result = caseExpression(invert);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.FACTORIAL:
+      {
+        Factorial factorial = (Factorial)theEObject;
+        T result = caseFactorial(factorial);
+        if (result == null) result = caseExpression(factorial);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -429,6 +438,22 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseInvert(Invert object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Factorial</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Factorial</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFactorial(Factorial object)
   {
     return null;
   }

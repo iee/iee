@@ -124,7 +124,10 @@ class MathGenerator implements IGenerator {
 		(«compileExpression(op.left)») % («compileExpression(op.right)»)'''
 	
 	def dispatch compileExpression(Invert op) '''
-	«IF op.expression != null» (-(«compileExpression(op.expression)»)) «ENDIF»'''  
+	«IF op.expression != null» (-(«compileExpression(op.expression)»)) «ENDIF»''' 
+	
+	def dispatch compileExpression(Factorial op) '''
+	«IF op.expression != null» («compileExpression(op.expression)»)! «ENDIF»'''  
 	
 	def dispatch compileExpression(Exponent op) '''
 		(«compileExpression(op.left)») ^ («compileExpression(op.right)»)'''

@@ -547,7 +547,43 @@ ruleUnaryExpression returns [EObject current=null]
 	    }
 
 )
-)))
+))
+    |(	otherlv_4='(' 
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getUnaryExpressionAccess().getLeftParenthesisKeyword_2_0());
+    }
+(
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getUnaryExpressionAccess().getFactorialAction_2_1(),
+            $current);
+    }
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getUnaryExpressionAccess().getExpressionUnaryExpressionParserRuleCall_2_2_0()); 
+	    }
+		lv_expression_6_0=ruleUnaryExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getUnaryExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"expression",
+        		lv_expression_6_0, 
+        		"UnaryExpression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_7=')!' 
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getUnaryExpressionAccess().getRightParenthesisExclamationMarkKeyword_2_3());
+    }
+))
 ;
 
 

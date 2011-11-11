@@ -144,6 +144,15 @@ public interface MathFactory extends EFactory
   Invert createInvert();
 
   /**
+   * Returns a new object of class '<em>Factorial</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Factorial</em>'.
+   * @generated
+   */
+  Factorial createFactorial();
+
+  /**
    * Returns a new object of class '<em>Exponent</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

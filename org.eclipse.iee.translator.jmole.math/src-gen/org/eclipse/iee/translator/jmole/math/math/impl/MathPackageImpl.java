@@ -18,6 +18,7 @@ import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
+import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
@@ -130,6 +131,13 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * @generated
    */
   private EClass invertEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass factorialEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -607,6 +615,26 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getFactorial()
+  {
+    return factorialEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFactorial_Expression()
+  {
+    return (EReference)factorialEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getExponent()
   {
     return exponentEClass;
@@ -763,6 +791,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     invertEClass = createEClass(INVERT);
     createEReference(invertEClass, INVERT__EXPRESSION);
 
+    factorialEClass = createEClass(FACTORIAL);
+    createEReference(factorialEClass, FACTORIAL__EXPRESSION);
+
     exponentEClass = createEClass(EXPONENT);
     createEReference(exponentEClass, EXPONENT__LEFT);
     createEReference(exponentEClass, EXPONENT__RIGHT);
@@ -811,6 +842,7 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     divisionEClass.getESuperTypes().add(this.getExpression());
     moduloEClass.getESuperTypes().add(this.getExpression());
     invertEClass.getESuperTypes().add(this.getExpression());
+    factorialEClass.getESuperTypes().add(this.getExpression());
     exponentEClass.getESuperTypes().add(this.getExpression());
     variableEClass.getESuperTypes().add(this.getExpression());
     floatEClass.getESuperTypes().add(this.getExpression());
@@ -867,6 +899,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
 
     initEClass(invertEClass, Invert.class, "Invert", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInvert_Expression(), this.getExpression(), null, "expression", null, 0, 1, Invert.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(factorialEClass, Factorial.class, "Factorial", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFactorial_Expression(), this.getExpression(), null, "expression", null, 0, 1, Factorial.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(exponentEClass, Exponent.class, "Exponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getExponent_Left(), this.getExpression(), null, "left", null, 0, 1, Exponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
