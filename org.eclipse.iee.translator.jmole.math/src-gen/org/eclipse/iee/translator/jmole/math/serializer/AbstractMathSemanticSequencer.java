@@ -12,6 +12,7 @@ import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
@@ -178,6 +179,22 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 			case MathPackage.FUNCTION_DEFINITION:
 				if(context == grammarAccess.getFunctionDefinitionRule()) {
 					sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.INTERVAL:
+				if(context == grammarAccess.getAdditionRule() ||
+				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
+				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
+				   context == grammarAccess.getPrimaryRule() ||
+				   context == grammarAccess.getUnaryExpressionRule()) {
+					sequence_UnaryExpression(context, (Interval) semanticObject); 
 					return; 
 				}
 				else break;
@@ -535,6 +552,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    expression[1, 1]
 	 */
 	protected void sequence_UnaryExpression(EObject context, Factorial semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     ((openingBracket='[' | openingBracket='(') ceil=UnaryExpression floor=UnaryExpression (closingBracket=']' | closingBracket=')'))
+	 *
+	 * Features:
+	 *    openingBracket[0, 2]
+	 *    ceil[1, 1]
+	 *    floor[1, 1]
+	 *    closingBracket[0, 2]
+	 */
+	protected void sequence_UnaryExpression(EObject context, Interval semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

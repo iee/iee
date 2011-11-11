@@ -153,6 +153,15 @@ public interface MathFactory extends EFactory
   Factorial createFactorial();
 
   /**
+   * Returns a new object of class '<em>Interval</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Interval</em>'.
+   * @generated
+   */
+  Interval createInterval();
+
+  /**
    * Returns a new object of class '<em>Exponent</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

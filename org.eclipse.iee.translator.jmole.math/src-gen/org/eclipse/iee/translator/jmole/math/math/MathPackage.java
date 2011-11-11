@@ -687,6 +687,79 @@ public interface MathPackage extends EPackage
   int FACTORIAL_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.IntervalImpl <em>Interval</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.IntervalImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getInterval()
+   * @generated
+   */
+  int INTERVAL = 14;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Opening Bracket</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__OPENING_BRACKET = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Ceil</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__CEIL = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Floor</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__FLOOR = EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Closing Bracket</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL__CLOSING_BRACKET = EXPRESSION_FEATURE_COUNT + 3;
+
+  /**
+   * The number of structural features of the '<em>Interval</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTERVAL_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 4;
+
+  /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl <em>Exponent</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -694,7 +767,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getExponent()
    * @generated
    */
-  int EXPONENT = 14;
+  int EXPONENT = 15;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -749,7 +822,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 15;
+  int VARIABLE = 16;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -786,7 +859,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 16;
+  int FLOAT = 17;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -832,7 +905,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 17;
+  int FUNCTION = 18;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1298,6 +1371,60 @@ public interface MathPackage extends EPackage
   EReference getFactorial_Expression();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Interval <em>Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Interval</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Interval
+   * @generated
+   */
+  EClass getInterval();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Interval#getOpeningBracket <em>Opening Bracket</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Opening Bracket</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Interval#getOpeningBracket()
+   * @see #getInterval()
+   * @generated
+   */
+  EAttribute getInterval_OpeningBracket();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Interval#getCeil <em>Ceil</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ceil</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Interval#getCeil()
+   * @see #getInterval()
+   * @generated
+   */
+  EReference getInterval_Ceil();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Interval#getFloor <em>Floor</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Floor</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Interval#getFloor()
+   * @see #getInterval()
+   * @generated
+   */
+  EReference getInterval_Floor();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.jmole.math.math.Interval#getClosingBracket <em>Closing Bracket</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Closing Bracket</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Interval#getClosingBracket()
+   * @see #getInterval()
+   * @generated
+   */
+  EAttribute getInterval_ClosingBracket();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Exponent <em>Exponent</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1751,6 +1878,48 @@ public interface MathPackage extends EPackage
      * @generated
      */
     EReference FACTORIAL__EXPRESSION = eINSTANCE.getFactorial_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.IntervalImpl <em>Interval</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.IntervalImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getInterval()
+     * @generated
+     */
+    EClass INTERVAL = eINSTANCE.getInterval();
+
+    /**
+     * The meta object literal for the '<em><b>Opening Bracket</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTERVAL__OPENING_BRACKET = eINSTANCE.getInterval_OpeningBracket();
+
+    /**
+     * The meta object literal for the '<em><b>Ceil</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTERVAL__CEIL = eINSTANCE.getInterval_Ceil();
+
+    /**
+     * The meta object literal for the '<em><b>Floor</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTERVAL__FLOOR = eINSTANCE.getInterval_Floor();
+
+    /**
+     * The meta object literal for the '<em><b>Closing Bracket</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTERVAL__CLOSING_BRACKET = eINSTANCE.getInterval_ClosingBracket();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl <em>Exponent</em>}' class.

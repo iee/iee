@@ -13,6 +13,7 @@ import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
@@ -23,6 +24,7 @@ import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
+import org.eclipse.xtext.xbase.lib.BooleanExtensions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
@@ -106,7 +108,7 @@ public class MathGenerator implements IGenerator {
     String _name = _function.getName();
     _builder.append(_name, "");
     _builder.append(" ( ");
-
+    _builder.newLineIfNotEmpty();
     {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
@@ -121,7 +123,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-     
+        _builder.newLineIfNotEmpty();
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -131,9 +133,12 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t");
       }
     }
     _builder.append(") ");
+    _builder.newLineIfNotEmpty();
     _builder.append("{ ");
     {
       Formula _formula = funcDef.getFormula();
@@ -147,6 +152,7 @@ public class MathGenerator implements IGenerator {
       }
     }
     _builder.append(" }");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -158,6 +164,7 @@ public class MathGenerator implements IGenerator {
     Formula _value = a.getValue();
     StringConcatenation _compileFormula = this.compileFormula(_value);
     _builder.append(_compileFormula, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -166,6 +173,7 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -175,7 +183,9 @@ public class MathGenerator implements IGenerator {
     String _name = m.getName();
     _builder.append(_name, "");
     _builder.append(" = new Matrix(new double[][]");
+    _builder.newLineIfNotEmpty();
     _builder.append("{");
+    _builder.newLine();
     {
       EList<MatrixRow> _rows = m.getRows();
       for(final MatrixRow row : _rows) {
@@ -183,7 +193,7 @@ public class MathGenerator implements IGenerator {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
           if (_operator_notEquals) {
             _builder.append("{");
-       
+            _builder.newLine();
             {
               EList<String> _elements = row.getElements();
               for(final String element : _elements) {
@@ -191,7 +201,7 @@ public class MathGenerator implements IGenerator {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
                     _builder.append(element, "");
-             
+                    _builder.newLineIfNotEmpty();
                   }
                 }
                 {
@@ -202,11 +212,11 @@ public class MathGenerator implements IGenerator {
                     _builder.append(",");
                   }
                 }
-          
+                _builder.newLineIfNotEmpty();
               }
             }
             _builder.append("}");
- 
+            _builder.newLine();
           }
         }
         {
@@ -238,7 +248,7 @@ public class MathGenerator implements IGenerator {
     String _lowerCase = _substring_1.toLowerCase();
     String _operator_plus = StringExtensions.operator_plus(_upperCase, _lowerCase);
     _builder.append(_operator_plus, "");
-
+   
     {
       Expression _function_2 = f.getFunction();
       EList<Formula> _parameters = _function_2.getParameters();
@@ -252,7 +262,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-
+       
         {
           Expression _function_3 = f.getFunction();
           EList<Formula> _parameters_1 = _function_3.getParameters();
@@ -262,7 +272,7 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-
+   
       }
     }
     return _builder;
@@ -391,6 +401,38 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _compileExpression(final Interval op) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      boolean _operator_and = false;
+      Expression _ceil = op.getCeil();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_ceil, null);
+      if (!_operator_notEquals) {
+        _operator_and = false;
+      } else {
+        Expression _floor = op.getFloor();
+        boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_floor, null);
+        _operator_and = BooleanExtensions.operator_and(_operator_notEquals, _operator_notEquals_1);
+      }
+      if (_operator_and) {
+        String _openingBracket = op.getOpeningBracket();
+        _builder.append(_openingBracket, "");
+        _builder.append("(");
+        Expression _ceil_1 = op.getCeil();
+        StringConcatenation _compileExpression = this.compileExpression(_ceil_1);
+        _builder.append(_compileExpression, "");
+        _builder.append(")..(");
+        Expression _floor_1 = op.getFloor();
+        StringConcatenation _compileExpression_1 = this.compileExpression(_floor_1);
+        _builder.append(_compileExpression_1, "");
+        _builder.append(")");
+        String _closingBracket = op.getClosingBracket();
+        _builder.append(_closingBracket, "");
+      }
+    }
+    return _builder;
+  }
+  
   protected StringConcatenation _compileExpression(final Exponent op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
@@ -418,6 +460,8 @@ public class MathGenerator implements IGenerator {
       return _compileExpression((Float)op);
     } else if ((op instanceof Function)) {
       return _compileExpression((Function)op);
+    } else if ((op instanceof Interval)) {
+      return _compileExpression((Interval)op);
     } else if ((op instanceof Invert)) {
       return _compileExpression((Invert)op);
     } else if ((op instanceof Modulo)) {

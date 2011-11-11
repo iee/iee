@@ -270,13 +270,34 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExpressionAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
 		private final RuleCall cExpressionUnaryExpressionParserRuleCall_2_2_0 = (RuleCall)cExpressionAssignment_2_2.eContents().get(0);
 		private final Keyword cRightParenthesisExclamationMarkKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final Action cIntervalAction_3_0 = (Action)cGroup_3.eContents().get(0);
+		private final Assignment cOpeningBracketAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final Alternatives cOpeningBracketAlternatives_3_1_0 = (Alternatives)cOpeningBracketAssignment_3_1.eContents().get(0);
+		private final Keyword cOpeningBracketLeftSquareBracketKeyword_3_1_0_0 = (Keyword)cOpeningBracketAlternatives_3_1_0.eContents().get(0);
+		private final Keyword cOpeningBracketLeftParenthesisKeyword_3_1_0_1 = (Keyword)cOpeningBracketAlternatives_3_1_0.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
+		private final Assignment cCeilAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
+		private final RuleCall cCeilUnaryExpressionParserRuleCall_3_3_0 = (RuleCall)cCeilAssignment_3_3.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
+		private final Keyword cFullStopFullStopKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
+		private final Keyword cLeftParenthesisKeyword_3_6 = (Keyword)cGroup_3.eContents().get(6);
+		private final Assignment cFloorAssignment_3_7 = (Assignment)cGroup_3.eContents().get(7);
+		private final RuleCall cFloorUnaryExpressionParserRuleCall_3_7_0 = (RuleCall)cFloorAssignment_3_7.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3_8 = (Keyword)cGroup_3.eContents().get(8);
+		private final Assignment cClosingBracketAssignment_3_9 = (Assignment)cGroup_3.eContents().get(9);
+		private final Alternatives cClosingBracketAlternatives_3_9_0 = (Alternatives)cClosingBracketAssignment_3_9.eContents().get(0);
+		private final Keyword cClosingBracketRightSquareBracketKeyword_3_9_0_0 = (Keyword)cClosingBracketAlternatives_3_9_0.eContents().get(0);
+		private final Keyword cClosingBracketRightParenthesisKeyword_3_9_0_1 = (Keyword)cClosingBracketAlternatives_3_9_0.eContents().get(1);
 		
 		//// Unary operators: right associative, priority 2
 		//UnaryExpression returns Expression:
-		//	Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!";
+		//	Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!" | {Interval}
+		//	openingBracket=("[" | "(") "(" ceil=UnaryExpression ")" ".." "(" floor=UnaryExpression ")" closingBracket=("]" | ")");
 		public ParserRule getRule() { return rule; }
 
-		//Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!"
+		//Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!" | {Interval}
+		//openingBracket=("[" | "(") "(" ceil=UnaryExpression ")" ".." "(" floor=UnaryExpression ")" closingBracket=("]" | ")")
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//Exponent
@@ -314,6 +335,64 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 		//")!"
 		public Keyword getRightParenthesisExclamationMarkKeyword_2_3() { return cRightParenthesisExclamationMarkKeyword_2_3; }
+
+		//{Interval} openingBracket=("[" | "(") "(" ceil=UnaryExpression ")" ".." "(" floor=UnaryExpression ")"
+		//closingBracket=("]" | ")")
+		public Group getGroup_3() { return cGroup_3; }
+
+		//{Interval}
+		public Action getIntervalAction_3_0() { return cIntervalAction_3_0; }
+
+		//openingBracket=("[" | "(")
+		public Assignment getOpeningBracketAssignment_3_1() { return cOpeningBracketAssignment_3_1; }
+
+		//"[" | "("
+		public Alternatives getOpeningBracketAlternatives_3_1_0() { return cOpeningBracketAlternatives_3_1_0; }
+
+		//"["
+		public Keyword getOpeningBracketLeftSquareBracketKeyword_3_1_0_0() { return cOpeningBracketLeftSquareBracketKeyword_3_1_0_0; }
+
+		//"("
+		public Keyword getOpeningBracketLeftParenthesisKeyword_3_1_0_1() { return cOpeningBracketLeftParenthesisKeyword_3_1_0_1; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_3_2() { return cLeftParenthesisKeyword_3_2; }
+
+		//ceil=UnaryExpression
+		public Assignment getCeilAssignment_3_3() { return cCeilAssignment_3_3; }
+
+		//UnaryExpression
+		public RuleCall getCeilUnaryExpressionParserRuleCall_3_3_0() { return cCeilUnaryExpressionParserRuleCall_3_3_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_3_4() { return cRightParenthesisKeyword_3_4; }
+
+		//".."
+		public Keyword getFullStopFullStopKeyword_3_5() { return cFullStopFullStopKeyword_3_5; }
+
+		//"("
+		public Keyword getLeftParenthesisKeyword_3_6() { return cLeftParenthesisKeyword_3_6; }
+
+		//floor=UnaryExpression
+		public Assignment getFloorAssignment_3_7() { return cFloorAssignment_3_7; }
+
+		//UnaryExpression
+		public RuleCall getFloorUnaryExpressionParserRuleCall_3_7_0() { return cFloorUnaryExpressionParserRuleCall_3_7_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_3_8() { return cRightParenthesisKeyword_3_8; }
+
+		//closingBracket=("]" | ")")
+		public Assignment getClosingBracketAssignment_3_9() { return cClosingBracketAssignment_3_9; }
+
+		//"]" | ")"
+		public Alternatives getClosingBracketAlternatives_3_9_0() { return cClosingBracketAlternatives_3_9_0; }
+
+		//"]"
+		public Keyword getClosingBracketRightSquareBracketKeyword_3_9_0_0() { return cClosingBracketRightSquareBracketKeyword_3_9_0_0; }
+
+		//")"
+		public Keyword getClosingBracketRightParenthesisKeyword_3_9_0_1() { return cClosingBracketRightParenthesisKeyword_3_9_0_1; }
 	}
 
 	public class ExponentElements extends AbstractParserRuleElementFinder {
@@ -782,7 +861,8 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// Unary operators: right associative, priority 2
 	//UnaryExpression returns Expression:
-	//	Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!";
+	//	Exponent | "-" {Invert} expression=UnaryExpression | "(" {Factorial} expression=UnaryExpression ")!" | {Interval}
+	//	openingBracket=("[" | "(") "(" ceil=UnaryExpression ")" ".." "(" floor=UnaryExpression ")" closingBracket=("]" | ")");
 	public UnaryExpressionElements getUnaryExpressionAccess() {
 		return (pUnaryExpression != null) ? pUnaryExpression : (pUnaryExpression = new UnaryExpressionElements());
 	}

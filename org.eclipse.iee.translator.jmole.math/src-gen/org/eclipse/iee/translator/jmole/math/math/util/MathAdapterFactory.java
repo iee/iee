@@ -22,6 +22,7 @@ import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
@@ -164,6 +165,11 @@ public class MathAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFactorial(Factorial object)
       {
         return createFactorialAdapter();
+      }
+      @Override
+      public Adapter caseInterval(Interval object)
+      {
+        return createIntervalAdapter();
       }
       @Override
       public Adapter caseExponent(Exponent object)
@@ -413,6 +419,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFactorialAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Interval <em>Interval</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Interval
+   * @generated
+   */
+  public Adapter createIntervalAdapter()
   {
     return null;
   }

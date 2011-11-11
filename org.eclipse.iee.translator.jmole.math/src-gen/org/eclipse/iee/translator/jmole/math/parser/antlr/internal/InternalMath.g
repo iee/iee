@@ -583,7 +583,133 @@ ruleUnaryExpression returns [EObject current=null]
     {
     	newLeafNode(otherlv_7, grammarAccess.getUnaryExpressionAccess().getRightParenthesisExclamationMarkKeyword_2_3());
     }
-))
+)
+    |((
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getUnaryExpressionAccess().getIntervalAction_3_0(),
+            $current);
+    }
+)(
+(
+(
+		lv_openingBracket_9_1=	'[' 
+    {
+        newLeafNode(lv_openingBracket_9_1, grammarAccess.getUnaryExpressionAccess().getOpeningBracketLeftSquareBracketKeyword_3_1_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getUnaryExpressionRule());
+	        }
+       		setWithLastConsumed($current, "openingBracket", lv_openingBracket_9_1, null);
+	    }
+
+    |		lv_openingBracket_9_2=	'(' 
+    {
+        newLeafNode(lv_openingBracket_9_2, grammarAccess.getUnaryExpressionAccess().getOpeningBracketLeftParenthesisKeyword_3_1_0_1());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getUnaryExpressionRule());
+	        }
+       		setWithLastConsumed($current, "openingBracket", lv_openingBracket_9_2, null);
+	    }
+
+)
+
+)
+)	otherlv_10='(' 
+    {
+    	newLeafNode(otherlv_10, grammarAccess.getUnaryExpressionAccess().getLeftParenthesisKeyword_3_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getUnaryExpressionAccess().getCeilUnaryExpressionParserRuleCall_3_3_0()); 
+	    }
+		lv_ceil_11_0=ruleUnaryExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getUnaryExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"ceil",
+        		lv_ceil_11_0, 
+        		"UnaryExpression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_12=')' 
+    {
+    	newLeafNode(otherlv_12, grammarAccess.getUnaryExpressionAccess().getRightParenthesisKeyword_3_4());
+    }
+	otherlv_13='..' 
+    {
+    	newLeafNode(otherlv_13, grammarAccess.getUnaryExpressionAccess().getFullStopFullStopKeyword_3_5());
+    }
+	otherlv_14='(' 
+    {
+    	newLeafNode(otherlv_14, grammarAccess.getUnaryExpressionAccess().getLeftParenthesisKeyword_3_6());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getUnaryExpressionAccess().getFloorUnaryExpressionParserRuleCall_3_7_0()); 
+	    }
+		lv_floor_15_0=ruleUnaryExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getUnaryExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"floor",
+        		lv_floor_15_0, 
+        		"UnaryExpression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_16=')' 
+    {
+    	newLeafNode(otherlv_16, grammarAccess.getUnaryExpressionAccess().getRightParenthesisKeyword_3_8());
+    }
+(
+(
+(
+		lv_closingBracket_17_1=	']' 
+    {
+        newLeafNode(lv_closingBracket_17_1, grammarAccess.getUnaryExpressionAccess().getClosingBracketRightSquareBracketKeyword_3_9_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getUnaryExpressionRule());
+	        }
+       		setWithLastConsumed($current, "closingBracket", lv_closingBracket_17_1, null);
+	    }
+
+    |		lv_closingBracket_17_2=	')' 
+    {
+        newLeafNode(lv_closingBracket_17_2, grammarAccess.getUnaryExpressionAccess().getClosingBracketRightParenthesisKeyword_3_9_0_1());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getUnaryExpressionRule());
+	        }
+       		setWithLastConsumed($current, "closingBracket", lv_closingBracket_17_2, null);
+	    }
+
+)
+
+)
+)))
 ;
 
 

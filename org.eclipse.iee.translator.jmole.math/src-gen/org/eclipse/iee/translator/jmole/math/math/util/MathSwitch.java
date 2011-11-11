@@ -20,6 +20,7 @@ import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
@@ -195,6 +196,14 @@ public class MathSwitch<T> extends Switch<T>
         Factorial factorial = (Factorial)theEObject;
         T result = caseFactorial(factorial);
         if (result == null) result = caseExpression(factorial);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.INTERVAL:
+      {
+        Interval interval = (Interval)theEObject;
+        T result = caseInterval(interval);
+        if (result == null) result = caseExpression(interval);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -454,6 +463,22 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFactorial(Factorial object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Interval</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Interval</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseInterval(Interval object)
   {
     return null;
   }

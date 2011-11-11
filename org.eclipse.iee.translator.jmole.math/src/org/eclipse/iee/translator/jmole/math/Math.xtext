@@ -15,24 +15,24 @@ Assignment:
 Formula:
 	expression=(Addition);
 
-// addition/subtraction: left associative, priority 0
+	// addition/subtraction: left associative, priority 0
 Addition returns Expression:
-	Multiplication ('+' {Addition.left=current} right=Multiplication | '-' {Subtraction.left=current} 
+	Multiplication ('+' {Addition.left=current} right=Multiplication | '-' {Subtraction.left=current}
 	right=Multiplication)*;
 
-// multiplication/division, left associative, priority 1
+	// multiplication/division, left associative, priority 1
 Multiplication returns Expression:
-	UnaryExpression ('*' {Multiplication.left=current}  right=UnaryExpression | '/' {Division.left=current} 
+	UnaryExpression ('*' {Multiplication.left=current} right=UnaryExpression | '/' {Division.left=current}
 	right=UnaryExpression | '%' {Modulo.left=current} right=UnaryExpression)*;
 
-// Unary operators: right associative, priority 2
+	// Unary operators: right associative, priority 2
 UnaryExpression returns Expression:
 	Exponent |
 	('-' {Invert} expression=UnaryExpression) |
-	'(' {Factorial} expression=UnaryExpression ')!'
-;
+	'(' {Factorial} expression=UnaryExpression ')!'|
+	{Interval} openingBracket=('['|'(') '('ceil=UnaryExpression')' '..' '('floor=UnaryExpression')' closingBracket=(']'|')');
 
-// exponentiation: right associative, priority 3
+	// exponentiation: right associative, priority 3
 Exponent returns Expression:
 	Primary ({Exponent.left=current} '^' right=Primary)?;
 

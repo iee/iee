@@ -101,7 +101,7 @@ class MathGenerator implements IGenerator {
 			
 	def dispatch compileExpression(Variable n) '''
 		«n.name»'''
-	
+		
 	def dispatch compileExpression(Float n) '''
 		«n.value»'''
 		
@@ -128,6 +128,9 @@ class MathGenerator implements IGenerator {
 	
 	def dispatch compileExpression(Factorial op) '''
 	«IF op.expression != null» («compileExpression(op.expression)»)! «ENDIF»'''  
+	
+	def dispatch compileExpression(Interval op) '''
+	«IF op.ceil != null && op.floor != null»«op.openingBracket»(«compileExpression(op.ceil)»)..(«compileExpression(op.floor)»)«op.closingBracket»«ENDIF»'''  
 	
 	def dispatch compileExpression(Exponent op) '''
 		(«compileExpression(op.left)») ^ («compileExpression(op.right)»)'''
