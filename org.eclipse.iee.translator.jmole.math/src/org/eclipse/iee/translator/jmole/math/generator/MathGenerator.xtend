@@ -120,6 +120,12 @@ class MathGenerator implements IGenerator {
 	def dispatch compileExpression(Division op) '''
 		(«compileExpression(op.left)») / («compileExpression(op.right)»)'''
 	
-	def dispatch compileExpression(Power op) '''
+	def dispatch compileExpression(Modulo op) '''
+		(«compileExpression(op.left)») % («compileExpression(op.right)»)'''
+	
+	def dispatch compileExpression(Invert op) '''
+	«IF op.expression != null» (-(«compileExpression(op.expression)»)) «ENDIF»'''  
+	
+	def dispatch compileExpression(Exponent op) '''
 		(«compileExpression(op.left)») ^ («compileExpression(op.right)»)'''
 }

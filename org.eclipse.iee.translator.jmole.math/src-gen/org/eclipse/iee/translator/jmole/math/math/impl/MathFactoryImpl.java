@@ -17,16 +17,18 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
 import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
+import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
-import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
@@ -94,7 +96,9 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.SUBTRACTION: return createSubtraction();
       case MathPackage.MULTIPLICATION: return createMultiplication();
       case MathPackage.DIVISION: return createDivision();
-      case MathPackage.POWER: return createPower();
+      case MathPackage.MODULO: return createModulo();
+      case MathPackage.INVERT: return createInvert();
+      case MathPackage.EXPONENT: return createExponent();
       case MathPackage.VARIABLE: return createVariable();
       case MathPackage.FLOAT: return createFloat();
       case MathPackage.FUNCTION: return createFunction();
@@ -229,10 +233,32 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Power createPower()
+  public Modulo createModulo()
   {
-    PowerImpl power = new PowerImpl();
-    return power;
+    ModuloImpl modulo = new ModuloImpl();
+    return modulo;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Invert createInvert()
+  {
+    InvertImpl invert = new InvertImpl();
+    return invert;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Exponent createExponent()
+  {
+    ExponentImpl exponent = new ExponentImpl();
+    return exponent;
   }
 
   /**

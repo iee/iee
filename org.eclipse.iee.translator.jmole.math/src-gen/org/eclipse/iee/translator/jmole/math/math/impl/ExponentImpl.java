@@ -14,25 +14,25 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.Power;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Power</b></em>'.
+ * An implementation of the model object '<em><b>Exponent</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl#getLeft <em>Left</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl#getRight <em>Right</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl#getRight <em>Right</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class PowerImpl extends ExpressionImpl implements Power
+public class ExponentImpl extends ExpressionImpl implements Exponent
 {
   /**
    * The cached value of the '{@link #getLeft() <em>Left</em>}' containment reference.
@@ -59,7 +59,7 @@ public class PowerImpl extends ExpressionImpl implements Power
    * <!-- end-user-doc -->
    * @generated
    */
-  protected PowerImpl()
+  protected ExponentImpl()
   {
     super();
   }
@@ -72,7 +72,7 @@ public class PowerImpl extends ExpressionImpl implements Power
   @Override
   protected EClass eStaticClass()
   {
-    return MathPackage.Literals.POWER;
+    return MathPackage.Literals.EXPONENT;
   }
 
   /**
@@ -96,7 +96,7 @@ public class PowerImpl extends ExpressionImpl implements Power
     left = newLeft;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.POWER__LEFT, oldLeft, newLeft);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.EXPONENT__LEFT, oldLeft, newLeft);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -113,14 +113,14 @@ public class PowerImpl extends ExpressionImpl implements Power
     {
       NotificationChain msgs = null;
       if (left != null)
-        msgs = ((InternalEObject)left).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.POWER__LEFT, null, msgs);
+        msgs = ((InternalEObject)left).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.EXPONENT__LEFT, null, msgs);
       if (newLeft != null)
-        msgs = ((InternalEObject)newLeft).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.POWER__LEFT, null, msgs);
+        msgs = ((InternalEObject)newLeft).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.EXPONENT__LEFT, null, msgs);
       msgs = basicSetLeft(newLeft, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.POWER__LEFT, newLeft, newLeft));
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.EXPONENT__LEFT, newLeft, newLeft));
   }
 
   /**
@@ -144,7 +144,7 @@ public class PowerImpl extends ExpressionImpl implements Power
     right = newRight;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.POWER__RIGHT, oldRight, newRight);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.EXPONENT__RIGHT, oldRight, newRight);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -161,14 +161,14 @@ public class PowerImpl extends ExpressionImpl implements Power
     {
       NotificationChain msgs = null;
       if (right != null)
-        msgs = ((InternalEObject)right).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.POWER__RIGHT, null, msgs);
+        msgs = ((InternalEObject)right).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.EXPONENT__RIGHT, null, msgs);
       if (newRight != null)
-        msgs = ((InternalEObject)newRight).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.POWER__RIGHT, null, msgs);
+        msgs = ((InternalEObject)newRight).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.EXPONENT__RIGHT, null, msgs);
       msgs = basicSetRight(newRight, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.POWER__RIGHT, newRight, newRight));
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.EXPONENT__RIGHT, newRight, newRight));
   }
 
   /**
@@ -181,9 +181,9 @@ public class PowerImpl extends ExpressionImpl implements Power
   {
     switch (featureID)
     {
-      case MathPackage.POWER__LEFT:
+      case MathPackage.EXPONENT__LEFT:
         return basicSetLeft(null, msgs);
-      case MathPackage.POWER__RIGHT:
+      case MathPackage.EXPONENT__RIGHT:
         return basicSetRight(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -199,9 +199,9 @@ public class PowerImpl extends ExpressionImpl implements Power
   {
     switch (featureID)
     {
-      case MathPackage.POWER__LEFT:
+      case MathPackage.EXPONENT__LEFT:
         return getLeft();
-      case MathPackage.POWER__RIGHT:
+      case MathPackage.EXPONENT__RIGHT:
         return getRight();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -217,10 +217,10 @@ public class PowerImpl extends ExpressionImpl implements Power
   {
     switch (featureID)
     {
-      case MathPackage.POWER__LEFT:
+      case MathPackage.EXPONENT__LEFT:
         setLeft((Expression)newValue);
         return;
-      case MathPackage.POWER__RIGHT:
+      case MathPackage.EXPONENT__RIGHT:
         setRight((Expression)newValue);
         return;
     }
@@ -237,10 +237,10 @@ public class PowerImpl extends ExpressionImpl implements Power
   {
     switch (featureID)
     {
-      case MathPackage.POWER__LEFT:
+      case MathPackage.EXPONENT__LEFT:
         setLeft((Expression)null);
         return;
-      case MathPackage.POWER__RIGHT:
+      case MathPackage.EXPONENT__RIGHT:
         setRight((Expression)null);
         return;
     }
@@ -257,12 +257,12 @@ public class PowerImpl extends ExpressionImpl implements Power
   {
     switch (featureID)
     {
-      case MathPackage.POWER__LEFT:
+      case MathPackage.EXPONENT__LEFT:
         return left != null;
-      case MathPackage.POWER__RIGHT:
+      case MathPackage.EXPONENT__RIGHT:
         return right != null;
     }
     return super.eIsSet(featureID);
   }
 
-} //PowerImpl
+} //ExponentImpl

@@ -540,14 +540,14 @@ public interface MathPackage extends EPackage
   int DIVISION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl <em>Power</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ModuloImpl <em>Modulo</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl
-   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.ModuloImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getModulo()
    * @generated
    */
-  int POWER = 11;
+  int MODULO = 11;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -556,7 +556,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int POWER__NAME = EXPRESSION__NAME;
+  int MODULO__NAME = EXPRESSION__NAME;
 
   /**
    * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
@@ -565,7 +565,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int POWER__PARAMETERS = EXPRESSION__PARAMETERS;
+  int MODULO__PARAMETERS = EXPRESSION__PARAMETERS;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -574,7 +574,7 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int POWER__LEFT = EXPRESSION_FEATURE_COUNT + 0;
+  int MODULO__LEFT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -583,16 +583,117 @@ public interface MathPackage extends EPackage
    * @generated
    * @ordered
    */
-  int POWER__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+  int MODULO__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The number of structural features of the '<em>Power</em>' class.
+   * The number of structural features of the '<em>Modulo</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int POWER_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+  int MODULO_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.InvertImpl <em>Invert</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.InvertImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getInvert()
+   * @generated
+   */
+  int INVERT = 12;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INVERT__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INVERT__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INVERT__EXPRESSION = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Invert</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INVERT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl <em>Exponent</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl
+   * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getExponent()
+   * @generated
+   */
+  int EXPONENT = 13;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPONENT__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPONENT__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPONENT__LEFT = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPONENT__RIGHT = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Exponent</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPONENT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.VariableImpl <em>Variable</em>}' class.
@@ -602,7 +703,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 12;
+  int VARIABLE = 14;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -639,7 +740,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 13;
+  int FLOAT = 15;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -685,7 +786,7 @@ public interface MathPackage extends EPackage
    * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 14;
+  int FUNCTION = 16;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1077,36 +1178,89 @@ public interface MathPackage extends EPackage
   EReference getDivision_Right();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Power <em>Power</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Modulo <em>Modulo</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Power</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Power
+   * @return the meta object for class '<em>Modulo</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Modulo
    * @generated
    */
-  EClass getPower();
+  EClass getModulo();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Power#getLeft <em>Left</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Modulo#getLeft <em>Left</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Left</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Power#getLeft()
-   * @see #getPower()
+   * @see org.eclipse.iee.translator.jmole.math.math.Modulo#getLeft()
+   * @see #getModulo()
    * @generated
    */
-  EReference getPower_Left();
+  EReference getModulo_Left();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Power#getRight <em>Right</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Modulo#getRight <em>Right</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Right</em>'.
-   * @see org.eclipse.iee.translator.jmole.math.math.Power#getRight()
-   * @see #getPower()
+   * @see org.eclipse.iee.translator.jmole.math.math.Modulo#getRight()
+   * @see #getModulo()
    * @generated
    */
-  EReference getPower_Right();
+  EReference getModulo_Right();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Invert <em>Invert</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Invert</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Invert
+   * @generated
+   */
+  EClass getInvert();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Invert#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Invert#getExpression()
+   * @see #getInvert()
+   * @generated
+   */
+  EReference getInvert_Expression();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Exponent <em>Exponent</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Exponent</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Exponent
+   * @generated
+   */
+  EClass getExponent();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Exponent#getLeft <em>Left</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Left</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Exponent#getLeft()
+   * @see #getExponent()
+   * @generated
+   */
+  EReference getExponent_Left();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.jmole.math.math.Exponent#getRight <em>Right</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Right</em>'.
+   * @see org.eclipse.iee.translator.jmole.math.math.Exponent#getRight()
+   * @see #getExponent()
+   * @generated
+   */
+  EReference getExponent_Right();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.jmole.math.math.Variable <em>Variable</em>}'.
@@ -1470,14 +1624,14 @@ public interface MathPackage extends EPackage
     EReference DIVISION__RIGHT = eINSTANCE.getDivision_Right();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl <em>Power</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ModuloImpl <em>Modulo</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.PowerImpl
-     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getPower()
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.ModuloImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getModulo()
      * @generated
      */
-    EClass POWER = eINSTANCE.getPower();
+    EClass MODULO = eINSTANCE.getModulo();
 
     /**
      * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
@@ -1485,7 +1639,7 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference POWER__LEFT = eINSTANCE.getPower_Left();
+    EReference MODULO__LEFT = eINSTANCE.getModulo_Left();
 
     /**
      * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
@@ -1493,7 +1647,51 @@ public interface MathPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference POWER__RIGHT = eINSTANCE.getPower_Right();
+    EReference MODULO__RIGHT = eINSTANCE.getModulo_Right();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.InvertImpl <em>Invert</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.InvertImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getInvert()
+     * @generated
+     */
+    EClass INVERT = eINSTANCE.getInvert();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INVERT__EXPRESSION = eINSTANCE.getInvert_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl <em>Exponent</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.ExponentImpl
+     * @see org.eclipse.iee.translator.jmole.math.math.impl.MathPackageImpl#getExponent()
+     * @generated
+     */
+    EClass EXPONENT = eINSTANCE.getExponent();
+
+    /**
+     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EXPONENT__LEFT = eINSTANCE.getExponent_Left();
+
+    /**
+     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EXPONENT__RIGHT = eINSTANCE.getExponent_Right();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.jmole.math.math.impl.VariableImpl <em>Variable</em>}' class.

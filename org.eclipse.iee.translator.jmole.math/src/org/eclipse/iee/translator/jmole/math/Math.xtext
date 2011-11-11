@@ -1,4 +1,5 @@
 grammar org.eclipse.iee.translator.jmole.math.Math with org.eclipse.xtext.common.Terminals
+
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate math "http://www.eclipse.org/iee/translator/jmole/math/Math"
 
@@ -6,25 +7,32 @@ Statement:
 	functionDefinition=FunctionDefinition |
 	matrixDefinition=MatrixDefinition |
 	assignment=Assignment |
-	formula=Formula
-;
+	formula=Formula;
 
 Assignment:
-	variable=MATH_NAME '=' value=Formula
-;
+	variable=MATH_NAME '=' value=Formula;
 
 Formula:
-	expression=(Addition)
-	;
+	expression=(Addition);
 
+// addition/subtraction: left associative, priority 0
 Addition returns Expression:
-	Multiplication ({Addition.left=current} '+' right=Multiplication | {Subtraction.left=current} '-' right=Multiplication)*;
+	Multiplication ('+' {Addition.left=current} right=Multiplication | '-' {Subtraction.left=current} 
+	right=Multiplication)*;
 
+// multiplication/division, left associative, priority 1
 Multiplication returns Expression:
-	Power ({Multiplication.left=current} '*' right=Power | {Division.left=current} '/' right=Power)*;
+	UnaryExpression ('*' {Multiplication.left=current}  right=UnaryExpression | '/' {Division.left=current} 
+	right=UnaryExpression | '%' {Modulo.left=current} right=UnaryExpression)*;
 
-Power returns Expression:
-	Primary ({Power.left=current} '^' right=Primary)?;
+// Unary operators: right associative, priority 2
+UnaryExpression returns Expression:
+	Exponent |
+	('-' {Invert} expression=UnaryExpression);
+
+// exponentiation: right associative, priority 3
+Exponent returns Expression:
+	Primary ({Exponent.left=current} '^' right=Primary)?;
 
 Primary returns Expression:
 	{Variable} name=MATH_NAME |
@@ -33,23 +41,19 @@ Primary returns Expression:
 	'(' Addition ')';
 
 Float:
-	INT+ ('.' INT+ ( ('E'|'e') ('-')? (INT)+ )?)?;
+	INT+ ('.' INT+ (('E' | 'e') ('-')? (INT)+)?)?;
 
 Function returns Expression:
-	(name=MATH_NAME) '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')'
-;
+	(name=MATH_NAME) '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
 
 FunctionDefinition:
-	function=Function '=' formula=Formula
-;
+	function=Function '=' formula=Formula;
 
 MatrixDefinition:
-	(name=MATH_NAME) '=' '{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}'
-;
+	(name=MATH_NAME) '=' '{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}';
 
 MatrixRow:
-	'{' (elements+=Float (',' elements+=Float)* ','?)?'}'
-;
+	'{' (elements+=Float (',' elements+=Float)* ','?)? '}';
 
 terminal MATH_NAME returns ecore::EString:
-    ( 'a'..'z' | 'A'..'Z' | '_' ) ( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' )*;
+	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;

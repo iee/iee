@@ -14,15 +14,17 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
 import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
+import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
-import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
@@ -171,11 +173,27 @@ public class MathSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.POWER:
+      case MathPackage.MODULO:
       {
-        Power power = (Power)theEObject;
-        T result = casePower(power);
-        if (result == null) result = caseExpression(power);
+        Modulo modulo = (Modulo)theEObject;
+        T result = caseModulo(modulo);
+        if (result == null) result = caseExpression(modulo);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.INVERT:
+      {
+        Invert invert = (Invert)theEObject;
+        T result = caseInvert(invert);
+        if (result == null) result = caseExpression(invert);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.EXPONENT:
+      {
+        Exponent exponent = (Exponent)theEObject;
+        T result = caseExponent(exponent);
+        if (result == null) result = caseExpression(exponent);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -384,17 +402,49 @@ public class MathSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Power</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Modulo</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Power</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Modulo</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T casePower(Power object)
+  public T caseModulo(Modulo object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Invert</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Invert</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseInvert(Invert object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Exponent</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Exponent</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseExponent(Exponent object)
   {
     return null;
   }

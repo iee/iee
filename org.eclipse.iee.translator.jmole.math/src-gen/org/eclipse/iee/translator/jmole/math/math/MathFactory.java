@@ -126,13 +126,31 @@ public interface MathFactory extends EFactory
   Division createDivision();
 
   /**
-   * Returns a new object of class '<em>Power</em>'.
+   * Returns a new object of class '<em>Modulo</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Power</em>'.
+   * @return a new object of class '<em>Modulo</em>'.
    * @generated
    */
-  Power createPower();
+  Modulo createModulo();
+
+  /**
+   * Returns a new object of class '<em>Invert</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Invert</em>'.
+   * @generated
+   */
+  Invert createInvert();
+
+  /**
+   * Returns a new object of class '<em>Exponent</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Exponent</em>'.
+   * @generated
+   */
+  Exponent createExponent();
 
   /**
    * Returns a new object of class '<em>Variable</em>'.

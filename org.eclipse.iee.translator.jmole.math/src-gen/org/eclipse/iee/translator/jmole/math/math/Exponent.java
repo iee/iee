@@ -9,22 +9,22 @@ package org.eclipse.iee.translator.jmole.math.math;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Power</b></em>'.
+ * A representation of the model object '<em><b>Exponent</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Power#getLeft <em>Left</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Power#getRight <em>Right</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Exponent#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.Exponent#getRight <em>Right</em>}</li>
  * </ul>
  * </p>
  *
- * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getPower()
+ * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getExponent()
  * @model
  * @generated
  */
-public interface Power extends Expression
+public interface Exponent extends Expression
 {
   /**
    * Returns the value of the '<em><b>Left</b></em>' containment reference.
@@ -36,14 +36,14 @@ public interface Power extends Expression
    * <!-- end-user-doc -->
    * @return the value of the '<em>Left</em>' containment reference.
    * @see #setLeft(Expression)
-   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getPower_Left()
+   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getExponent_Left()
    * @model containment="true"
    * @generated
    */
   Expression getLeft();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.Power#getLeft <em>Left</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.Exponent#getLeft <em>Left</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Left</em>' containment reference.
@@ -62,14 +62,14 @@ public interface Power extends Expression
    * <!-- end-user-doc -->
    * @return the value of the '<em>Right</em>' containment reference.
    * @see #setRight(Expression)
-   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getPower_Right()
+   * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getExponent_Right()
    * @model containment="true"
    * @generated
    */
   Expression getRight();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.Power#getRight <em>Right</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.Exponent#getRight <em>Right</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Right</em>' containment reference.
@@ -78,4 +78,4 @@ public interface Power extends Expression
    */
   void setRight(Expression value);
 
-} // Power
+} // Exponent

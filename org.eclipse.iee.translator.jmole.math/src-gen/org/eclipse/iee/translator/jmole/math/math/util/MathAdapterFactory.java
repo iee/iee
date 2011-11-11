@@ -16,15 +16,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
 import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
+import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
-import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
@@ -148,9 +150,19 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createDivisionAdapter();
       }
       @Override
-      public Adapter casePower(Power object)
+      public Adapter caseModulo(Modulo object)
       {
-        return createPowerAdapter();
+        return createModuloAdapter();
+      }
+      @Override
+      public Adapter caseInvert(Invert object)
+      {
+        return createInvertAdapter();
+      }
+      @Override
+      public Adapter caseExponent(Exponent object)
+      {
+        return createExponentAdapter();
       }
       @Override
       public Adapter caseVariable(Variable object)
@@ -355,16 +367,46 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Power <em>Power</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Modulo <em>Modulo</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Power
+   * @see org.eclipse.iee.translator.jmole.math.math.Modulo
    * @generated
    */
-  public Adapter createPowerAdapter()
+  public Adapter createModuloAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Invert <em>Invert</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Invert
+   * @generated
+   */
+  public Adapter createInvertAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Exponent <em>Exponent</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.Exponent
+   * @generated
+   */
+  public Adapter createExponentAdapter()
   {
     return null;
   }

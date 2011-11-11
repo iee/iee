@@ -6,15 +6,17 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
 import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
+import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
 import org.eclipse.iee.translator.jmole.math.math.Float;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
-import org.eclipse.iee.translator.jmole.math.math.Power;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
@@ -81,6 +83,7 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
+
     {
       Formula _formula = s.getFormula();
       boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_formula, null);
@@ -91,7 +94,6 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
-
 
     return _builder;
   }
@@ -118,7 +120,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-
+   
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -128,8 +130,7 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-
-        _builder.append("\t\t");
+    
       }
     }
     _builder.append(") ");
@@ -178,7 +179,7 @@ public class MathGenerator implements IGenerator {
     String _name = m.getName();
     _builder.append(_name, "");
     _builder.append(" = new Matrix(new double[][]");
-
+ 
     _builder.append("{");
 
     {
@@ -188,7 +189,7 @@ public class MathGenerator implements IGenerator {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
           if (_operator_notEquals) {
             _builder.append("{");
-
+           
             {
               EList<String> _elements = row.getElements();
               for(final String element : _elements) {
@@ -196,7 +197,7 @@ public class MathGenerator implements IGenerator {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
                     _builder.append(element, "");
-         
+                 
                   }
                 }
                 {
@@ -207,11 +208,11 @@ public class MathGenerator implements IGenerator {
                     _builder.append(",");
                   }
                 }
-   
+         
               }
             }
             _builder.append("}");
-
+     
           }
         }
         {
@@ -222,10 +223,10 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
- 
+     
       }
     }
-
+  
     _builder.append("})");
 
     return _builder;
@@ -257,7 +258,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
-
+    
         {
           Expression _function_3 = f.getFunction();
           EList<Formula> _parameters_1 = _function_3.getParameters();
@@ -350,7 +351,37 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
-  protected StringConcatenation _compileExpression(final Power op) {
+  protected StringConcatenation _compileExpression(final Modulo op) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("(");
+    Expression _left = op.getLeft();
+    StringConcatenation _compileExpression = this.compileExpression(_left);
+    _builder.append(_compileExpression, "");
+    _builder.append(") % (");
+    Expression _right = op.getRight();
+    StringConcatenation _compileExpression_1 = this.compileExpression(_right);
+    _builder.append(_compileExpression_1, "");
+    _builder.append(")");
+    return _builder;
+  }
+  
+  protected StringConcatenation _compileExpression(final Invert op) {
+    StringConcatenation _builder = new StringConcatenation();
+    {
+      Expression _expression = op.getExpression();
+      boolean _operator_notEquals = ObjectExtensions.operator_notEquals(_expression, null);
+      if (_operator_notEquals) {
+        _builder.append(" (-(");
+        Expression _expression_1 = op.getExpression();
+        StringConcatenation _compileExpression = this.compileExpression(_expression_1);
+        _builder.append(_compileExpression, "");
+        _builder.append(")) ");
+      }
+    }
+    return _builder;
+  }
+  
+  protected StringConcatenation _compileExpression(final Exponent op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
     Expression _left = op.getLeft();
@@ -369,14 +400,18 @@ public class MathGenerator implements IGenerator {
       return _compileExpression((Addition)op);
     } else if ((op instanceof Division)) {
       return _compileExpression((Division)op);
+    } else if ((op instanceof Exponent)) {
+      return _compileExpression((Exponent)op);
     } else if ((op instanceof Float)) {
       return _compileExpression((Float)op);
     } else if ((op instanceof Function)) {
       return _compileExpression((Function)op);
+    } else if ((op instanceof Invert)) {
+      return _compileExpression((Invert)op);
+    } else if ((op instanceof Modulo)) {
+      return _compileExpression((Modulo)op);
     } else if ((op instanceof Multiplication)) {
       return _compileExpression((Multiplication)op);
-    } else if ((op instanceof Power)) {
-      return _compileExpression((Power)op);
     } else if ((op instanceof Subtraction)) {
       return _compileExpression((Subtraction)op);
     } else if ((op instanceof Variable)) {
