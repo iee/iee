@@ -3,7 +3,6 @@ package org.eclipse.iee.translator.math.pad;
 import java.io.Serializable;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.translator.jmole.math.generator.Mole;
 import org.eclipse.iee.translator.math.Activator;
 import org.eclipse.iee.translator.math.FileStorage;
 import org.eclipse.swt.SWT;
@@ -42,8 +41,11 @@ public class CompiledMathPad extends Pad implements Serializable {
 				try {
 					String result = Activator.getMole().translateMath(
 							styledText.getText());
-					System.out.println(result);
-					getContainer().writeAtContainerRegionTail(result.trim());
+					String hidden = result.trim();
+					if (hidden.matches(";"))
+						getContainer().writeAtContainerRegionTail("");
+					else
+						getContainer().writeAtContainerRegionTail(hidden);
 				} catch (Exception e1) {
 					getContainer().writeAtContainerRegionTail("");
 					// e1.printStackTrace();
