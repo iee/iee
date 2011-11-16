@@ -84,8 +84,6 @@ class MathGenerator implements IGenerator {
 		 «ENDIF»
 		 «IF m.rows.last() != row»,«ENDIF»
 		«ENDFOR»
-		
-		
 		})
 	'''
 	}
@@ -93,10 +91,10 @@ class MathGenerator implements IGenerator {
 	def compileFunction(Function f) '''
 		«f.function.name.substring(0,1).toUpperCase()+ 
 		f.function.name.substring(1).toLowerCase()»
-		«FOR param:f.function.parameters»
-		 («IF param != null»«compileFormula(param)»«ENDIF»)
+		(«FOR param:f.function.parameters»
+		 «IF param != null»«compileFormula(param)»«ENDIF»
 		 «IF f.function.parameters.last() != param»,«ENDIF»
-		«ENDFOR»
+		«ENDFOR»)
 	'''
 			
 	def dispatch compileExpression(Variable n) '''
