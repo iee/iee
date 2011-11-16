@@ -94,10 +94,10 @@ class MathGenerator implements IGenerator {
 	/*TODO: add function check */
 	def compileFunction(Function f) '''
 		\\«f.function.name.toLowerCase()»
-		«FOR param:f.function.parameters»
-		 («IF param != null»«compileFormula(param)»«ENDIF»)
+		(«FOR param:f.function.parameters»
+		 «IF param != null»«compileFormula(param)»«ENDIF»
 		 «IF f.function.parameters.last() != param»,«ENDIF»
-		«ENDFOR»
+		«ENDFOR»)
 	'''
 			
 	def dispatch compileExpression(Variable n) '''
