@@ -45,7 +45,7 @@ class MexGenerator implements IGenerator {
 	'''
 		«funcDef.function.name» ( 
 		«FOR param:funcDef.function.parameters»
-		 («IF param != null»«compileFormula(param)»«ENDIF»)
+		 «IF param != null»«compileFormula(param)»«ENDIF»
 		 «IF funcDef.function.parameters.last() != param»,«ENDIF»
 		«ENDFOR»)
 		«IF funcDef.formula != null»=«compileFormula(funcDef.formula)»«ENDIF»
@@ -75,16 +75,18 @@ class MexGenerator implements IGenerator {
 			c
 		«ENDFOR»	
 		}
+		«var j = 0»
 		«FOR row:m.rows»
 		 «IF row != null»
+		 	«var i = 0»
 	 		«FOR element:row.elements»
 			 «IF element != null»
 			 	«element»
 			 «ENDIF»
-			 «IF row.elements.last() != element»&«ENDIF»
+			 «IF (i = i + 1) != row.elements.size()»&«ENDIF»
 			«ENDFOR»
 		 «ENDIF»
-		 «IF m.rows.last() != row»\\«ENDIF»
+		 «IF (j = j + 1) != m.rows.size()»\\«ENDIF»
 		«ENDFOR»
 		\end{array}\right)$$
 	'''

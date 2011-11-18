@@ -25,6 +25,7 @@ import org.eclipse.iee.translator.molex.mex.mex.Variable;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.xbase.lib.BooleanExtensions;
+import org.eclipse.xtext.xbase.lib.IntegerExtensions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xtend2.lib.ResourceExtensions;
@@ -63,7 +64,7 @@ public class MexGenerator implements IGenerator {
         _builder.append(_compileFunctionDefinition, "");
       }
     }
-    _builder.newLineIfNotEmpty();
+
     {
       MatrixDefinition _matrixDefinition = s.getMatrixDefinition();
       boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_matrixDefinition, null);
@@ -73,7 +74,7 @@ public class MexGenerator implements IGenerator {
         _builder.append(_compileMatrixDefinition, "");
       }
     }
-    _builder.newLineIfNotEmpty();
+
     {
       Assignment _assignment = s.getAssignment();
       boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_assignment, null);
@@ -83,7 +84,7 @@ public class MexGenerator implements IGenerator {
         _builder.append(_compileAssignment, "");
       }
     }
-    _builder.newLineIfNotEmpty();
+
     {
       Formula _formula = s.getFormula();
       boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_formula, null);
@@ -93,8 +94,6 @@ public class MexGenerator implements IGenerator {
         _builder.append(_compileFormula, "");
       }
     }
-    _builder.newLineIfNotEmpty();
-    _builder.newLine();
     return _builder;
   }
   
@@ -104,12 +103,11 @@ public class MexGenerator implements IGenerator {
     String _name = _function.getName();
     _builder.append(_name, "");
     _builder.append(" ( ");
-    _builder.newLineIfNotEmpty();
+
     {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
       for(final Formula param : _parameters) {
-        _builder.append("(");
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
@@ -117,8 +115,7 @@ public class MexGenerator implements IGenerator {
             _builder.append(_compileFormula, "");
           }
         }
-        _builder.append(")");
-        _builder.newLineIfNotEmpty();
+   
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -128,12 +125,11 @@ public class MexGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t\t");
+
       }
     }
     _builder.append(")");
-    _builder.newLineIfNotEmpty();
+ 
     {
       Formula _formula = funcDef.getFormula();
       boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_formula, null);
@@ -144,7 +140,7 @@ public class MexGenerator implements IGenerator {
         _builder.append(_compileFormula_1, "");
       }
     }
-    _builder.newLineIfNotEmpty();
+
     return _builder;
   }
   
@@ -156,7 +152,7 @@ public class MexGenerator implements IGenerator {
     Formula _value = a.getValue();
     StringConcatenation _compileFormula = this.compileFormula(_value);
     _builder.append(_compileFormula, "");
-    _builder.newLineIfNotEmpty();
+
     return _builder;
   }
   
@@ -165,7 +161,6 @@ public class MexGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
-    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -174,24 +169,27 @@ public class MexGenerator implements IGenerator {
     String _name = m.getName();
     _builder.append(_name, "");
     _builder.append("=");
-    _builder.newLineIfNotEmpty();
     _builder.append("$$\\left(\\begin{array}{");
-    _builder.newLine();
+
     {
       EList<MatrixRow> _rows = m.getRows();
       for(final MatrixRow row : _rows) {
         _builder.append("c");
-        _builder.newLine();
+  
       }
     }
     _builder.append("}");
-    _builder.newLine();
+
+    int j = 0;
+
     {
       EList<MatrixRow> _rows_1 = m.getRows();
       for(final MatrixRow row_1 : _rows_1) {
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row_1, null);
           if (_operator_notEquals) {
+            int i = 0;
+  
             {
               EList<String> _elements = row_1.getElements();
               for(final String element : _elements) {
@@ -199,35 +197,38 @@ public class MexGenerator implements IGenerator {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
                     _builder.append(element, "");
-                    _builder.newLineIfNotEmpty();
+      
                   }
                 }
                 {
+                  int _operator_plus = IntegerExtensions.operator_plus(((Integer)i), ((Integer)1));
+                  int _i = i = _operator_plus;
                   EList<String> _elements_1 = row_1.getElements();
-                  String _last = IterableExtensions.<String>last(_elements_1);
-                  boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_last, element);
+                  int _size = _elements_1.size();
+                  boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(((Integer)_i), ((Integer)_size));
                   if (_operator_notEquals_2) {
                     _builder.append("&");
                   }
                 }
-                _builder.newLineIfNotEmpty();
+           
               }
             }
           }
         }
         {
+          int _operator_plus_1 = IntegerExtensions.operator_plus(((Integer)j), ((Integer)1));
+          int _j = j = _operator_plus_1;
           EList<MatrixRow> _rows_2 = m.getRows();
-          MatrixRow _last_1 = IterableExtensions.<MatrixRow>last(_rows_2);
-          boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_last_1, row_1);
+          int _size_1 = _rows_2.size();
+          boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(((Integer)_j), ((Integer)_size_1));
           if (_operator_notEquals_3) {
             _builder.append("\\\\");
           }
         }
-        _builder.newLineIfNotEmpty();
       }
     }
     _builder.append("\\end{array}\\right)$$");
-    _builder.newLine();
+
     return _builder;
   }
   
@@ -238,13 +239,13 @@ public class MexGenerator implements IGenerator {
     String _name = _function.getName();
     String _lowerCase = _name.toLowerCase();
     _builder.append(_lowerCase, "");
-    _builder.newLineIfNotEmpty();
+
     _builder.append("(");
     {
       Expression _function_1 = f.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
       for(final Formula param : _parameters) {
-        _builder.newLineIfNotEmpty();
+     
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
@@ -252,7 +253,7 @@ public class MexGenerator implements IGenerator {
             _builder.append(_compileFormula, "");
           }
         }
-        _builder.newLineIfNotEmpty();
+       
         {
           Expression _function_2 = f.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -262,12 +263,11 @@ public class MexGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t\t");
+
       }
     }
     _builder.append(")");
-    _builder.newLineIfNotEmpty();
+
     return _builder;
   }
   
