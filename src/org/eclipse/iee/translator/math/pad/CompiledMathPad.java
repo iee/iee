@@ -113,7 +113,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 						fLatexContent = hidden;
 						System.out.println(fLatexContent);
 						TeXFormula texFormula = new TeXFormula(fLatexContent);
-						texFormula.createJPEG(TeXConstants.STYLE_DISPLAY, 30,
+						texFormula.createJPEG(TeXConstants.STYLE_DISPLAY, 60,
 								fImagePath, Color.white, Color.black);
 					} catch (Exception e1) {
 						fLatexContent = "";
@@ -174,6 +174,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		fLatexContent = "";
 		fJavaContent = "";
 		fIsTextVisible = true;
+		fText = "";
 		save();
 	}
 
@@ -188,6 +189,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		newPad.fLatexContent = this.fLatexContent;
 		newPad.fJavaContent = this.fJavaContent;
 		newPad.fIsTextVisible = this.fIsTextVisible;
+		newPad.getContainer().setContainerHiddenContent(fJavaContent);
 		
 		File inputFile = new File(this.fImagePath);
 		File outputFile = new File(newPad.fImagePath);

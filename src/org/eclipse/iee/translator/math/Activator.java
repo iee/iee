@@ -1,7 +1,7 @@
 package org.eclipse.iee.translator.math;
 
 import org.eclipse.iee.translator.jmole.math.generator.Mole;
-import org.eclipse.iee.translator.molex.math.generator.TexMole;
+import org.eclipse.iee.translator.molex.mex.generator.Molex;
 import org.eclipse.iee.translator.math.pad.CompiledMathPad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -19,7 +19,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	private static Activator plugin;
 
 	private static Mole mole;
-	private static TexMole molex;
+	private static Molex molex;
 	
 	/**
 	 * The constructor
@@ -27,20 +27,16 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public Activator() {
 		CompiledMathPad.setStorage(new FileStorage("D:\\CompiledMathPads\\"));
 		
-		//mole = Mole.create();
-		//molex = TexMole.create();
-		//System.out.println("Activated");
+		mole = Mole.create();
+		molex = Molex.create();
+		System.out.println("Activated");
 	}
 	
 	public static Mole getMole() {
-		molex = null;
-		mole = Mole.create();
 		return mole;
 	}
 	
-	public static TexMole getMolex() {
-		mole = null;
-		molex = TexMole.create();
+	public static Molex getMolex() {
 		return molex;
 	}
 
