@@ -71,18 +71,20 @@ class MathGenerator implements IGenerator {
 	'''
 		Matrix «m.name» = new Matrix(new double[][]
 		{
+		«var j = 0»
 		«FOR row:m.rows»
 		 «IF row != null»
 		 {
+		 	«var i = 0»
 	 		«FOR element:row.elements»
 			 «IF element != null»
 			 	«element»
 			 «ENDIF»
-			 «IF row.elements.last() != element»,«ENDIF»
+			 «IF (i = i + 1) != row.elements.size()»,«ENDIF»
 			«ENDFOR»
 		 }
 		 «ENDIF»
-		 «IF m.rows.last() != row»,«ENDIF»
+		 «IF (j = j + 1) != m.rows.size()»,«ENDIF»
 		«ENDFOR»
 		})
 	'''
