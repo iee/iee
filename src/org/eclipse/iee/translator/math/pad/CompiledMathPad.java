@@ -55,7 +55,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
-		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
+		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL|SWT.BORDER);
 		sashForm.setLayout(new FillLayout());
 		final StyledText styledText = new StyledText(sashForm, SWT.NONE);
 		styledText.setText(fText);
