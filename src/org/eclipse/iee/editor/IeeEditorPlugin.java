@@ -16,11 +16,18 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static IeeEditorPlugin plugin;
 	
+	// Single instance of PadManager
+	private PadManager fPadManager;	
+	
 	/**
 	 * The constructor
 	 */
 	public IeeEditorPlugin() {
 		fPadManager = new PadManager();
+	}
+	
+	public PadManager getPadManager() {
+		return fPadManager;
 	}
 
 	/*
@@ -59,11 +66,5 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-	
-	private PadManager fPadManager;	
-	public PadManager getPadManager() {
-		System.out.println("getPadManager");
-		return fPadManager;
 	}
 }

@@ -4,13 +4,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.ContainerManagerEvent;
-import org.eclipse.iee.editor.core.container.IContainerManagerListener;
+import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
+import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
 public class SampleExtendedEditor extends TextEditor implements IPadEditor {
@@ -18,10 +19,10 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
 
-	private final PadManager fPadManager = IeeEditorPlugin.getDefault()
-			.getPadManager();
+	private final PadManager fPadManager =
+		IeeEditorPlugin.getDefault().getPadManager();
 
-	public void createPartControl(org.eclipse.swt.widgets.Composite parent) {
+	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
 		initIeeEditorCore();
@@ -47,8 +48,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 			public void containerRemoved(ContainerManagerEvent event) {
 			}
 		};
-		fContainerManager
-				.addContainerManagerListener(fContainerManagerListener);
+		fContainerManager.addContainerManagerListener(fContainerManagerListener);
 
 		fPadManager.registerContainerManager(fContainerManager);
 
@@ -62,7 +62,6 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 			document.replace(0, text.length(), "");
 			document.set(text);
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -70,8 +69,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	@Override
 	public void dispose() {
 		fPadManager.removeContainerManager(fContainerManager);
-		fContainerManager
-				.removeContainerManagerListener(fContainerManagerListener);
+		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManager = null;
 
 		super.dispose();

@@ -2,6 +2,9 @@ package org.eclipse.iee.editor.core.container;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.eclipse.iee.editor.core.container.partitioning.IConfiguration;
+import org.eclipse.iee.editor.core.container.partitioning.PartitioningScanner;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -51,8 +54,7 @@ public class Container {
 
 		fStyledText = styledText;
 		fContainerManager = containerManager;
-		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset,
-				fDocument);
+		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
 
 		fComposite = new Composite(fStyledText, SWT.NONE);
 
@@ -74,12 +76,12 @@ public class Container {
 			public void controlResized(ControlEvent e) {
 				fStyledText.redraw();
 				fContainerManager.updateContainerPresentations();
-
 			}
 
 			@Override
 			public void controlMoved(ControlEvent e) {
 				fStyledText.redraw();
+				// XXX fContainerManager.updateContainerPresentations();
 			}
 		};
 		setListeners();
@@ -139,8 +141,7 @@ public class Container {
 	void updatePosition(int offset, int length) {
 		fPosition.setOffset(offset);
 		fPosition.setLength(length);
-		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset,
-				fDocument);
+		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
 	}
 
 	/**
@@ -168,7 +169,6 @@ public class Container {
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
-
 	}
 
 	@Override
@@ -240,12 +240,9 @@ public class Container {
 	}
 
 	/**
-	 * This function is called by ContainerManager which puts Container data to
-	 * Document
+	 * This function is called by ContainerManager which puts Container data to Document
 	 */
 	protected void writeContentToTextRegion(IDocument document) {
-		System.out.println("writeContentToTextRegion");
-
 		int from = fPosition.getOffset()
 				+ IConfiguration.EMBEDDED_REGION_BEGINS.length();
 

@@ -1,5 +1,6 @@
-package org.eclipse.iee.editor.core.pad;
+package org.eclipse.iee.editor.core.pad.common;
 
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;

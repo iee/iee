@@ -1,5 +1,6 @@
-package org.eclipse.iee.editor.core.pad;
+package org.eclipse.iee.editor.core.pad.common;
 
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
@@ -8,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 
 public class LoadingPad extends Pad {
 
-	String fOriginalContainerID;
+	private String fOriginalContainerID;
 
 	public void setOriginalContainerID(String originalContainerID) {
 		fOriginalContainerID = originalContainerID;
@@ -49,13 +50,9 @@ public class LoadingPad extends Pad {
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void unsave() {
-		// TODO Auto-generated method stub
-
 	}
 }

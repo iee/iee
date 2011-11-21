@@ -1,4 +1,5 @@
-package org.eclipse.iee.editor.core.pad;
+package org.eclipse.iee.editor.core.pad.event;
+
 
 
 public interface IPadManagerListener {

@@ -10,40 +10,41 @@ import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.ContainerManagerEvent;
-import org.eclipse.iee.editor.core.container.IContainerManagerListener;
+import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
+import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
+import org.eclipse.iee.editor.core.pad.common.LoadingPad;
+import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
+import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 
 public class PadManager extends EventManager {
 
 	/* ContainerManagers */
 
-	// private Set<ContainerManager> fContainerManagers;
 	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
 
 	/* Pads */
 
+	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
+	
 	/** Pads which are visible by user (have attached container) */
-	// private Map<String, Pad> fActivePads = new TreeMap<String, Pad>();
-
+	private Set<String> fActivePads = new TreeSet<String>();
+	
 	/**
 	 * Pads which are stored in memory and temporarily not visible by user
 	 * (don't have attached container)
 	 */
-	// private Map<String, Pad> fSuspendedPads = new TreeMap<String, Pad>();
-
+	private Set<String> fSuspendedPads = new TreeSet<String>();
+	
 	/**
 	 * Temporary pads which are attached to existent container until
 	 * corresponding pad is loaded. This pads are intended to show some loading
 	 * animation or error message to user.
 	 */
-	// private Map<String, Pad> fTemporaryPads = new TreeMap<String, Pad>();
-
-	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
-	private Set<String> fActivePads = new TreeSet<String>();
-	private Set<String> fSuspendedPads = new TreeSet<String>();
 	private Set<String> fTemporaryPads = new TreeSet<String>();
 
+	/* Constructor */
+	
 	public PadManager() {
 		fContainerManagers = new TreeMap<String, ContainerManager>();
 		InitListener();
@@ -57,10 +58,10 @@ public class PadManager extends EventManager {
 	 * @param containerManager
 	 */
 	public void registerContainerManager(ContainerManager containerManager) {
-		System.out.println("registerContainerManager");
 		containerManager.addContainerManagerListener(fContainerManagerListener);
-		fContainerManagers.put(containerManager.getContainerManagerID(),
-				containerManager);
+		fContainerManagers.put(
+			containerManager.getContainerManagerID(),
+			containerManager);
 	}
 
 	/**
@@ -69,8 +70,7 @@ public class PadManager extends EventManager {
 	 * @param containerManager
 	 */
 	public void removeContainerManager(ContainerManager containerManager) {
-		containerManager
-				.removeContainerManagerListener(fContainerManagerListener);
+		containerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.remove(containerManager.getContainerManagerID());
 		for (String containerID : containerManager.getContainerIDs()) {
 			onContainerRemoved(containerID);
@@ -79,13 +79,15 @@ public class PadManager extends EventManager {
 	}
 
 	public void savePadsInEditor(String containerManagerID) {
-		String[] containerIDs = fContainerManagers.get(containerManagerID)
-				.getContainerIDs();
+		String[] containerIDs =
+			fContainerManagers.get(containerManagerID).getContainerIDs();
+		
 		for (String containerID : containerIDs) {
 			if (fActivePads.contains(containerID)) {
 				fPads.get(containerID).save();
 			}
 		}
+		
 		/* Remove storages of all suspended pads */
 		for (String containerID : fSuspendedPads) {
 			fPads.get(containerID).unsave();

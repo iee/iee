@@ -1,4 +1,5 @@
-package org.eclipse.iee.editor.core.container;
+package org.eclipse.iee.editor.core.container.event;
+
 
 
 public interface IContainerManagerListener {

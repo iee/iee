@@ -1,11 +1,13 @@
-package org.eclipse.iee.editor.core.container;
+package org.eclipse.iee.editor.core.container.event;
+
+import org.eclipse.iee.editor.core.container.Container;
 
 public class ContainerManagerEvent {
 
 	private Container fContainer;
 	private String fContainerManagerID;
 
-	ContainerManagerEvent(Container container, String containerManagerID) {
+	public ContainerManagerEvent(Container container, String containerManagerID) {
 		fContainer = container;
 		fContainerManagerID = containerManagerID;
 	}

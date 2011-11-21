@@ -10,6 +10,10 @@ import java.util.Vector;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
+import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
+import org.eclipse.iee.editor.core.container.partitioning.IConfiguration;
+import org.eclipse.iee.editor.core.container.partitioning.PartitioningScanner;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DefaultLineTracker;
@@ -21,6 +25,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.IDocumentPartitioningListener;
 import org.eclipse.jface.text.IDocumentPartitioningListenerExtension2;
+import org.eclipse.jface.text.ILineTracker;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
@@ -46,10 +51,10 @@ public class ContainerManager extends EventManager {
 	private final IDocument fDocument;
 	private final IDocumentPartitioner fDocumentPartitioner;
 	private final DefaultLineTracker fLineTracker;
+	private final StyledTextManager fStyledTextManager;
 
 	private final NavigableSet<Container> fContainers;
 	private final ContainerComparator fContainerComparator;
-	private Boolean fDirection;
 	private int fNumberOfLines;
 	// Max ascents for lines containing containers
 	private Map<Integer, Integer> fLineMaxAscents = new TreeMap<Integer, Integer>();
@@ -62,6 +67,10 @@ public class ContainerManager extends EventManager {
 
 	public IDocument getDocument() {
 		return fDocument;
+	}
+	
+	public ILineTracker getLineTracker() {
+		return fLineTracker;
 	}
 
 	public String[] getContainerIDs() {
@@ -80,7 +89,6 @@ public class ContainerManager extends EventManager {
 		try {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -128,7 +136,6 @@ public class ContainerManager extends EventManager {
 		fContainerComparator = new ContainerComparator();
 		fContainers = new TreeSet<Container>(fContainerComparator);
 		fDocument = document;
-		fDirection = false;
 
 		fDocumentPartitioner = new FastPartitioner(new PartitioningScanner(),
 				new String[] { IConfiguration.CONTENT_TYPE_EMBEDDED });
@@ -142,7 +149,8 @@ public class ContainerManager extends EventManager {
 		fNumberOfLines = fLineTracker.getNumberOfLines();
 
 		initDocumentListener();
-
+		
+		fStyledTextManager = new StyledTextManager(this, styledText);
 	}
 
 	public String getContainerManagerID() {
@@ -178,188 +186,7 @@ public class ContainerManager extends EventManager {
 
 	protected void initDocumentListener() {
 
-		fStyledText.addVerifyListener(new VerifyListener() {
-			@Override
-			public void verifyText(VerifyEvent e) {
-				/* Disallow modification within Container's text region */
-				if (getContainerHavingOffset(e.start) != null
-						|| getContainerHavingOffset(e.end) != null) {
-					e.doit = false;
-					return;
-				}
-				updateContainerVisibility(false);
-			}
-		});
-
-		fStyledText.addVerifyKeyListener(new VerifyKeyListener() {
-
-			@Override
-			public void verifyKey(VerifyEvent event) {
-				// TODO Auto-generated method stub
-				switch (event.keyCode) {
-				case SWT.ARROW_LEFT: {
-					fDirection = false;
-					break;
-				}
-				case SWT.ARROW_RIGHT: {
-					fDirection = true;
-					break;
-				}
-				}
-
-			}
-		});
-		/*
-		 * If caret is inside Container's text region, moving it to the
-		 * beginning of line
-		 */
-		fStyledText.addCaretListener(new CaretListener() {
-			@Override
-			public void caretMoved(CaretEvent e) {
-				Container c = anotherGetContainerHavingOffset(e.caretOffset);
-				if (c != null
-						&& e.caretOffset > c.getPosition().getOffset()
-						&& e.caretOffset < c.getPosition().getOffset()
-								+ c.getPosition().getLength()
-								+ c.getContainerHiddenContent().length()) {
-					if (fDirection) {
-						// int len = c.getContainerHiddenContent().length();
-						fStyledText.setCaretOffset(e.caretOffset + 1);
-					} else
-						fStyledText.setCaretOffset(e.caretOffset - 1);
-				}
-
-			}
-		});
-
-		fStyledText.addLineStyleListener(new LineStyleListener() {
-
-			@Override
-			public void lineGetStyle(LineStyleEvent event) {
-				// TODO Auto-generated method stub
-				Vector<StyleRange> styles = new Vector<StyleRange>();
-				PartitioningScanner lineScanner = new PartitioningScanner();
-				lineScanner.setRange(fDocument, event.lineOffset,
-						event.lineText.length());
-				int lineNumber = 0;
-				try {
-					fLineTracker.set(fDocument.get());
-					lineNumber = fLineTracker
-							.getLineNumberOfOffset(event.lineOffset) + 1;
-				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				Iterator<Container> containerIterator1 = getContainersAtLine(
-						lineNumber).iterator();
-				IToken token;
-				while (!(token = lineScanner.nextToken()).isEOF()) {
-					if (token == PartitioningScanner.EMBEDDED_TOKEN) {
-						if (containerIterator1.hasNext()) {
-							Container c = (Container) containerIterator1.next();
-							StyleRange compositeStyle = new StyleRange();
-							compositeStyle.start = lineScanner.getTokenOffset();
-							compositeStyle.length = 1;
-							// to save constant line ascent (should be max from
-							// all containers for a line)
-							compositeStyle.metrics = new GlyphMetrics(c
-									.getComposite().getSize().y, 0, c
-									.getComposite().getSize().x);
-							styles.addElement(compositeStyle);
-
-							StyleRange hiddenTextStyle = new StyleRange();
-							hiddenTextStyle.start = lineScanner
-									.getTokenOffset() + 1;
-							hiddenTextStyle.length = lineScanner
-									.getTokenLength();
-							hiddenTextStyle.metrics = new GlyphMetrics(0, 0, 0);
-							styles.addElement(hiddenTextStyle);
-						}
-					}
-					if (token == PartitioningScanner.PLAINTEXT_TOKEN) {
-						Container c = getPreviousContainerAtLine(lineScanner
-								.getTokenOffset());
-						if (c == null
-								|| lineScanner.getTokenOffset() >= c
-										.getPosition().getOffset()
-										+ c.getPosition().getLength()
-										+ c.getContainerHiddenContent()
-												.length()) {
-							StyleRange plainTextStyle = new StyleRange(
-									lineScanner.getTokenOffset(), lineScanner
-											.getTokenLength(), fStyledText
-											.getForeground(), fStyledText
-											.getBackground());
-
-							styles.addElement(plainTextStyle);
-						} else {
-							StyleRange hiddenContentStyle = new StyleRange();
-							hiddenContentStyle.start = lineScanner
-									.getTokenOffset();
-							hiddenContentStyle.length = c
-									.getContainerHiddenContent().length();
-							hiddenContentStyle.metrics = new GlyphMetrics(0, 0,
-									0);
-							styles.addElement(hiddenContentStyle);
-
-							/*
-							 * StyleRange plainTextStyle = new StyleRange(
-							 * lineScanner.getTokenOffset() +
-							 * c.getContainerHiddenContent() .length(),
-							 * lineScanner .getTokenLength() -
-							 * c.getContainerHiddenContent() .length(),
-							 * fStyledText .getForeground(), fStyledText
-							 * .getBackground());
-							 * 
-							 * styles.addElement(plainTextStyle);
-							 */
-						}
-					}
-				}
-
-				Iterator<Container> containerIterator2 = getContainersAtLine(
-						lineNumber).iterator();
-
-				// First cycle - looking for max ascent in containers
-				// System.out
-				// .println("Line offset:"
-				// + event.lineOffset
-				// +
-				// "########################################################################");
-				// System.out
-				// .println("Line number:"
-				// + lineNumber
-				// +
-				// "************************************************************************");
-				// clear, because container can be moved to another line or
-				// deleted
-				clearLineMaxAscents();
-				while (containerIterator2.hasNext()) {
-					Container c = (Container) containerIterator2.next();
-					// System.out.println("PadSize:"
-					// + c.getComposite().getSize().y);
-					if (c.getComposite().getSize().y > getMaxContainerAscentByLine(lineNumber)) {
-						putMaxContainerAscentToMap(lineNumber, c.getComposite()
-								.getSize().y);
-					}
-				}
-
-				Iterator<StyleRange> stylesIterator = styles.iterator();
-				// Second cycle - Setting max ascent for styles
-				while (stylesIterator.hasNext()) {
-					StyleRange style = (StyleRange) stylesIterator.next();
-					// System.out.println("MaxPadSize:"
-					// + getMaxContainerAscentByLine(lineNumber));
-					if (style.metrics != null)
-						style.metrics.ascent = getMaxContainerAscentByLine(lineNumber);
-					style.background = fStyledText.getBackground();
-				}
-
-				event.styles = new StyleRange[styles.size()];
-				styles.copyInto(event.styles);
-			}
-		});
+		
 
 		class DocumentListener implements IDocumentListener,
 				IDocumentPartitioningListener,
@@ -439,13 +266,10 @@ public class ContainerManager extends EventManager {
 						 */
 					}
 				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (BadPartitioningException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (RuntimeException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -470,8 +294,7 @@ public class ContainerManager extends EventManager {
 
 				/* For debug */
 
-				fireDebugNotification(new ContainerManagerEvent(null,
-						fContainerManagerID));
+				fireDebugNotification(new ContainerManagerEvent(null, fContainerManagerID));
 			}
 
 			private void onPartitioningChanged(DocumentEvent event,
@@ -496,7 +319,7 @@ public class ContainerManager extends EventManager {
 						Container container;
 						while ((container = removeSet.pollFirst()) != null) {
 
-							// XXX remove container
+							/* Removing container */
 
 							container.dispose();
 							fireContainerRemoved(new ContainerManagerEvent(
@@ -521,7 +344,7 @@ public class ContainerManager extends EventManager {
 						String containerTextRegion = fDocument.get(
 								region.getOffset(), region.getLength());
 
-						// XXX add container
+						/* Adding container */
 
 						String containerID = Container
 								.getContainerIDFromTextRegion(containerTextRegion);
@@ -545,12 +368,11 @@ public class ContainerManager extends EventManager {
 						.getPartition(IConfiguration.PARTITIONING_ID,
 								event.getOffset(), false);
 
-				Assert.isTrue(container.getPosition().getOffset() == region
-						.getOffset());
+				Assert.isTrue(
+					container.getPosition().getOffset() == region.getOffset());
 
-				// XXX update container
-				container
-						.updatePosition(region.getOffset(), region.getLength());
+				/* Updating container */
+				container.updatePosition(region.getOffset(), region.getLength());
 			}
 
 			private void moveUnmodifiedPads(int offset, int delta) {
@@ -565,9 +387,10 @@ public class ContainerManager extends EventManager {
 					Container container = it.next();
 					Position position = container.getPosition();
 
-					// XXX update container
-					container.updatePosition(position.getOffset() + delta,
-							position.getLength());
+					/* Updating container */
+					container.updatePosition(
+						position.getOffset() + delta,
+						position.getLength());
 				}
 			}
 
@@ -619,7 +442,6 @@ public class ContainerManager extends EventManager {
 		try {
 			return fLineTracker.getLineNumberOfOffset(offset) + 1;
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
@@ -698,4 +520,5 @@ public class ContainerManager extends EventManager {
 		return new Container(position, containerID, fStyledText, fDocument,
 				this);
 	}
+
 }

@@ -1,4 +1,4 @@
-package org.eclipse.iee.editor.core.container;
+package org.eclipse.iee.editor.core.container.partitioning;
 
 /**
  * This interface stores common properties.

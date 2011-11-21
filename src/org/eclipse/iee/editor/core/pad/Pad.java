@@ -16,8 +16,8 @@ public abstract class Pad {
 		fType = "Unknown";
 	}
 
-	public Pad(String id) {
-		fContainerID = id;
+	public Pad(String containerID) {
+		fContainerID = containerID;
 		fType = "Unknown";
 	}
 
@@ -46,10 +46,7 @@ public abstract class Pad {
 		Assert.isLegal(!isContainerAttached(),
 				"Another container is already attached");
 
-		if (!fContainerID.equals(container.getContainerID())) {
-			container.setContainerID(fContainerID);
-		}
-
+		container.setContainerID(fContainerID);
 		fContainer = container;
 		createPartControl(fContainer.getComposite());
 		fContainer.getComposite().pack();
