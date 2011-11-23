@@ -25,9 +25,9 @@ class StyledTextManager {
 	
 	private Boolean fDirection; 
 	
-	public StyledTextManager(ContainerManager containerManager, StyledText styledText) {
+	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
-		fStyledText = styledText;
+		fStyledText = containerManager.getStyledText();
 		
 		fDirection = false;
 		

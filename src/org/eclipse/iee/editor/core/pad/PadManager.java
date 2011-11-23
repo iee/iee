@@ -191,7 +191,7 @@ public class PadManager extends EventManager {
 	 */
 	public void deletePad(Pad pad, ContainerManager containerManager) {
 		if (pad.isContainerAttached()) {
-			pad.getContainer().requestDispose();
+			pad.getContainer().releaseTextRegion();
 		}
 	}
 

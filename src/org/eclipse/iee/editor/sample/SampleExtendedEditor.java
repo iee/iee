@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
+import org.eclipse.iee.editor.core.container.ContainerManagerConfig;
 import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
@@ -31,8 +32,15 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	public void initIeeEditorCore() {
 		StyledText styledText = getSourceViewer().getTextWidget();
 		IDocument document = getSourceViewer().getDocument();
+		
+		ContainerManagerConfig config = new ContainerManagerConfig();
 
-		fContainerManager = new ContainerManager(document, styledText);
+		//config.EMBEDDED_REGION_BEGIN = "/*<";
+		//config.EMBEDDED_REGION_END = ">*/";
+		//config.INNER_TEXT_BEGIN = "*/";
+		//config.INNER_TEXT_END = "/*";
+		
+		fContainerManager = new ContainerManager(config, document, styledText);
 
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override

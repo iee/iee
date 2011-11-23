@@ -6,14 +6,13 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.UUID;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
-import org.eclipse.iee.editor.core.container.partitioning.IConfiguration;
-import org.eclipse.iee.editor.core.container.partitioning.PartitioningScanner;
+import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DefaultLineTracker;
@@ -22,40 +21,33 @@ import org.eclipse.jface.text.DocumentPartitioningChangedEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.IDocumentPartitioningListener;
 import org.eclipse.jface.text.IDocumentPartitioningListenerExtension2;
 import org.eclipse.jface.text.ILineTracker;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.rules.FastPartitioner;
-import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CaretEvent;
-import org.eclipse.swt.custom.CaretListener;
-import org.eclipse.swt.custom.LineStyleEvent;
-import org.eclipse.swt.custom.LineStyleListener;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.VerifyKeyListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.graphics.GlyphMetrics;
-import java.util.UUID;
 
 public class ContainerManager extends EventManager {
 
-	private String fContainerManagerID;
+	private final String fContainerManagerID;
+	private final ContainerManagerConfig fConfig;
+	
+	private final StyledTextManager fStyledTextManager;
+	private final PartitioningManager fPartitioningManager;
+	private final DocumentAccess fDocumentAccess;
+
 	private final StyledText fStyledText;
 	private final IDocument fDocument;
-	private final IDocumentPartitioner fDocumentPartitioner;
 	private final DefaultLineTracker fLineTracker;
-	private final StyledTextManager fStyledTextManager;
 
 	private final NavigableSet<Container> fContainers;
-	private final ContainerComparator fContainerComparator;
+	
+	private static ContainerComparator fContainerComparator = new ContainerComparator();
+	
 	private int fNumberOfLines;
+	
 	// Max ascents for lines containing containers
 	private Map<Integer, Integer> fLineMaxAscents = new TreeMap<Integer, Integer>();
 
@@ -65,8 +57,20 @@ public class ContainerManager extends EventManager {
 		return fContainers.toArray();
 	}
 
+	public ContainerManagerConfig getConfig() {
+		return fConfig;
+	}
+	
+	public DocumentAccess getDocumentAccess() {
+		return fDocumentAccess;
+	}
+	
 	public IDocument getDocument() {
 		return fDocument;
+	}
+
+	public StyledText getStyledText() {
+		return fStyledText;
 	}
 	
 	public ILineTracker getLineTracker() {
@@ -83,8 +87,7 @@ public class ContainerManager extends EventManager {
 	}
 
 	public void RequestContainerAllocation(String containerID, int offset) {
-		String containerEmbeddedRegion = Container
-				.getInitialTextRegion(containerID);
+		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(containerID);
 
 		try {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
@@ -93,6 +96,7 @@ public class ContainerManager extends EventManager {
 		}
 	}
 
+	
 	/* Functions for observers */
 
 	public void addContainerManagerListener(IContainerManagerListener listener) {
@@ -100,8 +104,7 @@ public class ContainerManager extends EventManager {
 		addListenerObject(listener);
 	}
 
-	public void removeContainerManagerListener(
-			IContainerManagerListener listener) {
+	public void removeContainerManagerListener(IContainerManagerListener listener) {
 		Assert.isNotNull(listener);
 		removeListenerObject(listener);
 	}
@@ -129,28 +132,24 @@ public class ContainerManager extends EventManager {
 
 	/* Constructor */
 
-	public ContainerManager(IDocument document, StyledText styledText) {
+	public ContainerManager(ContainerManagerConfig config, IDocument document, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
-		fStyledText = styledText;
-
-		fContainerComparator = new ContainerComparator();
-		fContainers = new TreeSet<Container>(fContainerComparator);
+		
+		fConfig = config;
 		fDocument = document;
+		fStyledText = styledText;
+		
+		fContainers = new TreeSet<Container>(fContainerComparator);
 
-		fDocumentPartitioner = new FastPartitioner(new PartitioningScanner(),
-				new String[] { IConfiguration.CONTENT_TYPE_EMBEDDED });
-
-		((IDocumentExtension3) fDocument).setDocumentPartitioner(
-				IConfiguration.PARTITIONING_ID, fDocumentPartitioner);
-
-		fDocumentPartitioner.connect(fDocument);
 		fLineTracker = new DefaultLineTracker();
 		fLineTracker.set(fDocument.get());
 		fNumberOfLines = fLineTracker.getNumberOfLines();
 
-		initDocumentListener();
+		fStyledTextManager = new StyledTextManager(this);
+		fPartitioningManager = new PartitioningManager(this);
+		fDocumentAccess = new DocumentAccess(this);
 		
-		fStyledTextManager = new StyledTextManager(this, styledText);
+		initDocumentListener();
 	}
 
 	public String getContainerManagerID() {
@@ -160,13 +159,11 @@ public class ContainerManager extends EventManager {
 	/* Presentation update */
 
 	void updateContainerPresentations() {
-
 		Iterator<Container> it = fContainers.iterator();
 		while (it.hasNext()) {
 			Container container = it.next();
 			container.updatePresentation();
 		}
-
 	}
 
 	void updateContainerVisibility(boolean visibility) {
@@ -179,14 +176,11 @@ public class ContainerManager extends EventManager {
 				container.setVisible(true);
 			}
 		}
-
 	}
 
 	/* Document modification event processing */
 
 	protected void initDocumentListener() {
-
-		
 
 		class DocumentListener implements IDocumentListener,
 				IDocumentPartitioningListener,
@@ -201,7 +195,7 @@ public class ContainerManager extends EventManager {
 			public void documentPartitioningChanged(
 					DocumentPartitioningChangedEvent event) {
 				fChangedPartitioningRegion = event
-						.getChangedRegion(IConfiguration.PARTITIONING_ID);
+					.getChangedRegion(PartitioningManager.PARTITIONING_ID);
 			}
 
 			@Override
@@ -221,10 +215,9 @@ public class ContainerManager extends EventManager {
 						- event.getLength();
 
 				if (fChangedPartitioningRegion != null) {
-					unmodifiedOffset = Math.max(event.getOffset()
-							+ event.getText().length(),
-							fChangedPartitioningRegion.getOffset()
-									+ fChangedPartitioningRegion.getLength());
+					unmodifiedOffset = Math.max(
+							event.getOffset() + event.getText().length(),
+							fChangedPartitioningRegion.getOffset() + fChangedPartitioningRegion.getLength());
 					unmodifiedOffset -= movingDelta;
 				} else {
 					unmodifiedOffset = event.getOffset() + event.getLength();
@@ -250,8 +243,7 @@ public class ContainerManager extends EventManager {
 						onPartitioningChanged(event, unmodifiedOffset);
 
 					} else {
-						Container current = getContainerHavingOffset(event
-								.getOffset());
+						Container current = getContainerHavingOffset(event.getOffset());
 						if (current != null) {
 
 							/*
@@ -288,7 +280,7 @@ public class ContainerManager extends EventManager {
 
 				System.out.println("Iteration");
 
-				Container.processNextDocumentAccessRequest(fDocument);
+				fDocumentAccess.processNextDocumentAccessRequest();
 				updateContainerPresentations();
 				updateContainerVisibility(true);
 
@@ -303,18 +295,14 @@ public class ContainerManager extends EventManager {
 
 				/* Remove all elements within changed area */
 
-				int beginRegionOffset = Math.min(event.getOffset(),
-						fChangedPartitioningRegion.getOffset());
+				int beginRegionOffset = Math.min(event.getOffset(), fChangedPartitioningRegion.getOffset());
 
-				Container from = fContainers.ceiling(Container
-						.atOffset(beginRegionOffset));
-				Container to = fContainers.lower(Container
-						.atOffset(unmodifiedOffset));
+				Container from = fContainers.ceiling(Container.atOffset(beginRegionOffset));
+				Container to = fContainers.lower(Container.atOffset(unmodifiedOffset));
 
 				if (from != null && to != null
 						&& fContainerComparator.isNotDescending(from, to)) {
-					NavigableSet<Container> removeSet = fContainers.subSet(
-							from, true, to, true);
+					NavigableSet<Container> removeSet = fContainers.subSet(from, true, to, true);
 					if (removeSet != null) {
 						Container container;
 						while ((container = removeSet.pollFirst()) != null) {
@@ -330,28 +318,23 @@ public class ContainerManager extends EventManager {
 
 				/* Scanning for new containers */
 
-				// int offset = beginRegionOffset;
-				int offset = Math.max(event.getOffset(),
-						fChangedPartitioningRegion.getOffset());
-				while (offset < fChangedPartitioningRegion.getOffset()
-						+ fChangedPartitioningRegion.getLength()) {
+				int offset = Math.max(event.getOffset(), fChangedPartitioningRegion.getOffset());
+				while (offset < fChangedPartitioningRegion.getOffset() + fChangedPartitioningRegion.getLength()) {
 					ITypedRegion region = ((IDocumentExtension3) fDocument)
-							.getPartition(IConfiguration.PARTITIONING_ID,
-									offset, false);
+						.getPartition(PartitioningManager.PARTITIONING_ID, offset, false);
 
 					if (region.getType().equals(
-							IConfiguration.CONTENT_TYPE_EMBEDDED)) {
-						String containerTextRegion = fDocument.get(
-								region.getOffset(), region.getLength());
+						PartitioningManager.CONTENT_TYPE_EMBEDDED)) {
+						
+						String containerTextRegion = fDocument.get(region.getOffset(), region.getLength());
 
 						/* Adding container */
 
-						String containerID = Container
-								.getContainerIDFromTextRegion(containerTextRegion);
+						String containerID = fDocumentAccess.getContainerIDFromTextRegion(containerTextRegion);
 
-						Container container = createContainer(new Position(
-								region.getOffset(), region.getLength()),
-								containerID);
+						Container container = createContainer(
+							new Position(region.getOffset(), region.getLength()),
+							containerID);
 
 						fContainers.add(container);
 						fireContainerCreated(new ContainerManagerEvent(
@@ -365,8 +348,7 @@ public class ContainerManager extends EventManager {
 					DocumentEvent event) throws BadLocationException,
 					BadPartitioningException {
 				ITypedRegion region = ((IDocumentExtension3) fDocument)
-						.getPartition(IConfiguration.PARTITIONING_ID,
-								event.getOffset(), false);
+						.getPartition(PartitioningManager.PARTITIONING_ID, event.getOffset(), false);
 
 				Assert.isTrue(
 					container.getPosition().getOffset() == region.getOffset());
@@ -376,8 +358,7 @@ public class ContainerManager extends EventManager {
 			}
 
 			private void moveUnmodifiedPads(int offset, int delta) {
-				Container from = fContainers
-						.ceiling(Container.atOffset(offset));
+				Container from = fContainers.ceiling(Container.atOffset(offset));
 				if (from == null)
 					return;
 
@@ -410,9 +391,6 @@ public class ContainerManager extends EventManager {
 
 	/**
 	 * Get containers list at line
-	 * 
-	 * @param line
-	 *            line
 	 */
 	public ArrayList<Container> getContainersAtLine(int line) {
 		ArrayList<Container> containersAtLine = new ArrayList<Container>();
@@ -424,12 +402,8 @@ public class ContainerManager extends EventManager {
 
 		}
 		return containersAtLine;
-
 	}
 
-	/**
-	 * Get fDocument's line number
-	 */
 	public int getNumberOfLines() {
 		return fNumberOfLines;
 	}
@@ -495,8 +469,9 @@ public class ContainerManager extends EventManager {
 	protected Container getPreviousContainerAtLine(int offset) {
 		if (offset < 0)
 			return null;
-		ArrayList<Container> containersAtLine = getContainersAtLine(getLineNumberByOffset(
-				offset, fDocument));
+		ArrayList<Container> containersAtLine =
+			getContainersAtLine(getLineNumberByOffset(offset, fDocument));
+		
 		Iterator<Container> iterator = containersAtLine.iterator();
 		int maxOffset = -1;
 		while (iterator.hasNext()) {
@@ -517,8 +492,6 @@ public class ContainerManager extends EventManager {
 	}
 
 	protected Container createContainer(Position position, String containerID) {
-		return new Container(position, containerID, fStyledText, fDocument,
-				this);
+		return new Container(position, containerID,	this);
 	}
-
 }
