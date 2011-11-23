@@ -2,9 +2,9 @@ package org.eclipse.iee.editor.monitoring.views;
 
 
 import org.eclipse.iee.editor.IeeEditorPlugin;
-import org.eclipse.iee.editor.core.pad.IPadManagerListener;
+import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
+import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.editor.core.pad.PadManagerEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -163,7 +163,4 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 	public void setFocus() {
 		fActivePadsTableViewer.getControl().setFocus();
 	}
-
-
-
 }
