@@ -69,5 +69,11 @@
             project="true">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.iee.editor.monitoring.perspectives.EarlyStartup">
+      </startup>
+   </extension>
 
 </plugin>
