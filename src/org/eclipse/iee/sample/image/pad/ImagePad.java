@@ -7,6 +7,7 @@ import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
@@ -16,16 +17,16 @@ import org.eclipse.swt.widgets.Label;
 
 public class ImagePad extends Pad implements Serializable {
 
-	private transient static XmlFilesStorage fXmlFileStorage;		
+	private transient static XmlFilesStorage fXmlFileStorage;
 
 	public static void setStorage(XmlFilesStorage fStorage) {
 		ImagePad.fXmlFileStorage = fStorage;
 	}
-	
+
 	private transient static final int STATE_MENU = 0;
 	private transient static final int STATE_IMAGE = 1;
 	private transient static final int STATE_ERROR = 2;
-	
+
 	private static final long serialVersionUID = -5570698937452800023L;
 
 	private int fCurrentState;
@@ -80,6 +81,8 @@ public class ImagePad extends Pad implements Serializable {
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
+		// It is hint operation now
+		parent.setBackground(new Color(null, 255, 255, 255));
 
 		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
 		label.setText("This sample control is for inserting image into Eclipse editor");
@@ -152,6 +155,8 @@ public class ImagePad extends Pad implements Serializable {
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
+		// It is hint operation now
+		parent.setBackground(new Color(null, 255, 255, 255));
 		Label label = new Label(parent, SWT.NONE);
 		label.setImage(image);
 		parent.pack();
@@ -170,6 +175,8 @@ public class ImagePad extends Pad implements Serializable {
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
+		// It is hint operation now
+		parent.setBackground(new Color(null, 255, 255, 255));
 
 		final Label label = new Label(parent, SWT.NONE);
 		label.setText("Error occured");
@@ -223,6 +230,6 @@ public class ImagePad extends Pad implements Serializable {
 	@Override
 	public void unsave() {
 		ImagePad.fXmlFileStorage.removeFile(getContainerID());
-		
+
 	}
 }
