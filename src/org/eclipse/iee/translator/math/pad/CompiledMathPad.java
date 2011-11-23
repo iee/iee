@@ -1,6 +1,5 @@
 package org.eclipse.iee.translator.math.pad;
 
-import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -20,6 +19,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -55,7 +55,9 @@ public class CompiledMathPad extends Pad implements Serializable {
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
 		parent.setLayout(layout);
-		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL|SWT.BORDER);
+		// It is hint operation now
+		parent.setBackground(new Color(null, 255, 255, 255));
+		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL | SWT.BORDER);
 		sashForm.setLayout(new FillLayout());
 		final StyledText styledText = new StyledText(sashForm, SWT.NONE);
 		styledText.setText(fText);
@@ -76,6 +78,8 @@ public class CompiledMathPad extends Pad implements Serializable {
 			}
 		}
 		label.setToolTipText("Use DoubleClick for edit");
+		// It is hint operation now
+		label.setBackground(new Color(null, 255, 255, 255));
 		label.setVisible(!fIsTextVisible);
 
 		parent.pack();
@@ -114,7 +118,8 @@ public class CompiledMathPad extends Pad implements Serializable {
 						System.out.println(fLatexContent);
 						TeXFormula texFormula = new TeXFormula(fLatexContent);
 						texFormula.createJPEG(TeXConstants.STYLE_DISPLAY, 60,
-								fImagePath, Color.white, Color.black);
+								fImagePath, java.awt.Color.white,
+								java.awt.Color.black);
 					} catch (Exception e1) {
 						fLatexContent = "";
 						// e1.printStackTrace();
@@ -161,7 +166,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 			}
 		});
 
-		MouseEventManager mouseManager = new MouseEventManager(parent);
+		MouseEventManager mouseManager = new MouseEventManager(parent, label);
 		parent.addMouseTrackListener(mouseManager);
 		parent.addMouseMoveListener(mouseManager);
 		parent.addMouseListener(mouseManager);
@@ -190,7 +195,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		newPad.fJavaContent = this.fJavaContent;
 		newPad.fIsTextVisible = this.fIsTextVisible;
 		newPad.getContainer().setContainerHiddenContent(fJavaContent);
-		
+
 		File inputFile = new File(this.fImagePath);
 		File outputFile = new File(newPad.fImagePath);
 
@@ -212,7 +217,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return newPad;
 	}
 
