@@ -8,12 +8,25 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 
 public class DocumentAccess {
-
+	
+	/* Access actions IDs */
+	static final int WRITE = 0;
+	static final int RELEASE = 1;
+	
 	private ContainerManager fContainerManager;
 	private ContainerManagerConfig fConfig;
 	private IDocument fDocument;
 	
-	private Queue<Container> fContainerDocumentAccessQueue = new ConcurrentLinkedQueue<Container>();
+	public class AccessAction {
+		AccessAction(int actionID, Container container) {
+			this.actionID = actionID;
+			this.container = container;
+		}		
+		public final int actionID;
+		public final Container container;
+	};
+	
+	private Queue<AccessAction> fContainerDocumentAccessQueue = new ConcurrentLinkedQueue<AccessAction>();
 	
 	DocumentAccess(ContainerManager containerManager) {
 		fContainerManager = containerManager;
@@ -21,39 +34,32 @@ public class DocumentAccess {
 		fDocument = containerManager.getDocument();
 	}
 	
+	/**
+	 * Adds access action to queue;
+	 */
+	void requestAccessAction(int actionID, Container container) {
+		fContainerDocumentAccessQueue.add(new AccessAction(actionID, container));
+	}
 	
 	/**
 	 * This function is called by ContainerManager when document modification is
 	 * allowed.
-	 * 
-	 * @param document
 	 */
 	void processNextDocumentAccessRequest() {
-		Container container = fContainerDocumentAccessQueue.poll();
-		if (container != null) {
-			if (container.isTextRegionReleaseRequested()) {
-				releaseTextRegion(container);
-			} else {
-				writeContentToTextRegion(container);
-			}
+		AccessAction action = fContainerDocumentAccessQueue.poll();
+		Container container = action.container;
+		
+		switch (action.actionID) {
+		case WRITE:
+			writeContentToTextRegion(container);
+			break;
+		case RELEASE:
+			releaseTextRegion(container);			
+			break;
 		}
 	}
 	
-	/**
-	 * Requests container's text region updating
-	 */
-	void requestTextRegionUpdate(Container container) {
-		fContainerDocumentAccessQueue.add(container);
-	}
 	
-	/**
-	 * Requests container's text region release
-	 */
-	void requestTextRegionRelease(Container container) {
-		fContainerDocumentAccessQueue.add(container);
-	}
-
-
 	/* Format */
 
 	/**
@@ -61,7 +67,7 @@ public class DocumentAccess {
 	 */
 	protected void writeContentToTextRegion(Container container) {
 		Position position = container.getPosition();
-		String hiddenContent = container.getContainerHiddenContent();
+		String hiddenContent = "";
 		
 		int from = position.getOffset()
 			+ fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length();
@@ -73,7 +79,7 @@ public class DocumentAccess {
 		try {
 			fDocument.replace(from, length, container.getContainerID());
 			fDocument.replace(position.getOffset() + position.getLength(),
-					hiddenContent.length(), hiddenContent);
+				hiddenContent.length(), hiddenContent);
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +92,7 @@ public class DocumentAccess {
 	 */
 	protected void releaseTextRegion(Container container) {
 		Position position = container.getPosition();
-		String hiddenContent = container.getContainerHiddenContent();
+		String hiddenContent = "";
 
 		try {
 			fDocument.replace(position.getOffset(), position.getLength()
@@ -107,9 +113,6 @@ public class DocumentAccess {
 
 	/**
 	 * Parses @param textRegion and returns container's id
-	 * 
-	 * @param textRegion
-	 * @return Container's id
 	 */
 	String getContainerIDFromTextRegion(String textRegion) {		
 		int from = fConfig.EMBEDDED_REGION_BEGIN.length();

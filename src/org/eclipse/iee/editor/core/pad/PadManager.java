@@ -150,7 +150,7 @@ public class PadManager extends EventManager {
 			fTemporaryPads.remove(containerID);
 			fPads.remove(containerID);
 
-			container.recreateComposite();
+			container.reset();
 
 			/* Adding pad */
 			pad.attachContainer(container);
@@ -179,8 +179,7 @@ public class PadManager extends EventManager {
 				.getContainerManagerID()));
 		fSuspendedPads.add(pad.getContainerID());
 		fPads.put(pad.getContainerID(), pad);
-		containerManager.RequestContainerAllocation(pad.getContainerID(),
-				location);
+		containerManager.RequestContainerAllocation(pad.getContainerID(), location);
 	}
 
 	/**
@@ -191,7 +190,7 @@ public class PadManager extends EventManager {
 	 */
 	public void deletePad(Pad pad, ContainerManager containerManager) {
 		if (pad.isContainerAttached()) {
-			pad.getContainer().releaseTextRegion();
+			pad.getContainer().destroy();
 		}
 	}
 

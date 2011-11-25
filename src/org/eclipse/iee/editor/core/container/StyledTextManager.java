@@ -1,11 +1,13 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningScanner;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ILineTracker;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
@@ -23,44 +25,42 @@ class StyledTextManager {
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	
-	private Boolean fDirection; 
+	private Boolean fCaretMovesForward;
 	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fStyledText = containerManager.getStyledText();
 		
-		fDirection = false;
+		fCaretMovesForward = false;
 		
 		initListeners();
 	}
 	
 	protected void initListeners() {
 		
+		/* 1) Disallow modification within Container's text region */
 		fStyledText.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
-				/* Disallow modification within Container's text region */
 				if (fContainerManager.getContainerHavingOffset(e.start) != null ||
 					fContainerManager.getContainerHavingOffset(e.end) != null)
 				{
 					e.doit = false;
-					return;
-				}
-				fContainerManager.updateContainerVisibility(false);
+				} else {
+					fContainerManager.updateContainerVisibility(false);	
+				}	
 			}
 		});
 
 		fStyledText.addVerifyKeyListener(new VerifyKeyListener() {
-
 			@Override
 			public void verifyKey(VerifyEvent event) {
 				switch (event.keyCode) {
 				case SWT.ARROW_LEFT:
-					fDirection = false;
+					fCaretMovesForward = false;
 					break;
-					
 				case SWT.ARROW_RIGHT:
-					fDirection = true;
+					fCaretMovesForward = true;
 					break;
 				}
 			}
@@ -73,17 +73,14 @@ class StyledTextManager {
 		fStyledText.addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				Container c = fContainerManager.anotherGetContainerHavingOffset(e.caretOffset);
-				if (c != null
-					&& e.caretOffset > c.getPosition().getOffset()
-					&& e.caretOffset < c.getPosition().getOffset()
-						+ c.getPosition().getLength()
-						+ c.getContainerHiddenContent().length()) {
-					if (fDirection) {
-						// int len = c.getContainerHiddenContent().length();
-						fStyledText.setCaretOffset(e.caretOffset + 1);
-					} else
-						fStyledText.setCaretOffset(e.caretOffset - 1);
+				Container c = fContainerManager.getContainerHavingOffset(e.caretOffset);
+				if (c != null) {
+					Position p = c.getPosition();
+					if (fCaretMovesForward) {
+						fStyledText.setCaretOffset(p.getOffset() + p.getLength());
+					} else {
+						fStyledText.setCaretOffset(p.getOffset() - 1);
+					}
 				}
 			}
 		});
@@ -92,28 +89,32 @@ class StyledTextManager {
 
 			@Override
 			public void lineGetStyle(LineStyleEvent event) {
-				Vector<StyleRange> styles = new Vector<StyleRange>();
-				PartitioningScanner lineScanner = new PartitioningScanner();
-				lineScanner.setRange(
-					fContainerManager.getDocument(),
-					event.lineOffset,
-					event.lineText.length());
+				Collection<Container> containersAtLine =
+					fContainerManager.getContainersInLine(
+						event.lineOffset,
+						event.lineText.length());
 				
-				int lineNumber = 0;
-				try {
-					ILineTracker lineTracker = fContainerManager.getLineTracker();
-					lineTracker.set(fContainerManager.getDocument().get());
-					lineNumber = lineTracker.getLineNumberOfOffset(event.lineOffset) + 1;
-				} catch (BadLocationException e) {
-					e.printStackTrace();
+				if (containersAtLine.isEmpty()) {
+					return;
 				}
-
-				Iterator<Container> containerIterator1 =
-					fContainerManager.getContainersAtLine(lineNumber).iterator();
 				
-				IToken token;
-				while (!(token = lineScanner.nextToken()).isEOF()) {
-					if (token == PartitioningScanner.EMBEDDED_TOKEN) {
+				Iterator<Container> iterator = containersAtLine.iterator();
+
+				int maxHeight = 0;
+				while (iterator.hasNext()) {
+					Container c = iterator.next();
+					int compositeHeigth = c.getComposite().getSize().y;
+					if (maxHeight < compositeHeigth) {
+						maxHeight = compositeHeigth;
+					}
+				}
+				
+				iterator = containersAtLine.iterator();
+				while (iterator.hasNext()) {
+					Container c = iterator.next();
+				}
+				
+
 						if (containerIterator1.hasNext()) {
 							Container c = (Container) containerIterator1.next();
 							StyleRange compositeStyle = new StyleRange();
@@ -128,69 +129,14 @@ class StyledTextManager {
 							styles.addElement(compositeStyle);
 
 							StyleRange hiddenTextStyle = new StyleRange();
-							hiddenTextStyle.start = lineScanner
-									.getTokenOffset() + 1;
-							hiddenTextStyle.length = lineScanner
-									.getTokenLength();
+							hiddenTextStyle.start = lineScanner.getTokenOffset() + 1;
+							hiddenTextStyle.length = lineScanner.getTokenLength();
 							hiddenTextStyle.metrics = new GlyphMetrics(0, 0, 0);
 							styles.addElement(hiddenTextStyle);
-						}
-					}
-					if (token == PartitioningScanner.PLAINTEXT_TOKEN) {
-						Container c = fContainerManager.getPreviousContainerAtLine(lineScanner.getTokenOffset());
-						
-						if (c == null || lineScanner.getTokenOffset() >= 
-							c.getPosition().getOffset() +
-							c.getPosition().getLength() +
-							c.getContainerHiddenContent().length())
-						{
-							StyleRange plainTextStyle = new StyleRange(
-								lineScanner.getTokenOffset(),
-								lineScanner.getTokenLength(),
-								fStyledText.getForeground(),
-								fStyledText.getBackground());
 
-							styles.addElement(plainTextStyle);
-							
-						} else {
-							StyleRange hiddenContentStyle = new StyleRange();
-							hiddenContentStyle.start = lineScanner.getTokenOffset();
-							hiddenContentStyle.length = c.getContainerHiddenContent().length();
-							hiddenContentStyle.metrics = new GlyphMetrics(0, 0,	0);
-							
-							styles.addElement(hiddenContentStyle);
-
-							/*
-							 * StyleRange plainTextStyle = new StyleRange(
-							 * lineScanner.getTokenOffset() +
-							 * c.getContainerHiddenContent() .length(),
-							 * lineScanner .getTokenLength() -
-							 * c.getContainerHiddenContent() .length(),
-							 * fStyledText .getForeground(), fStyledText
-							 * .getBackground());
-							 * 
-							 * styles.addElement(plainTextStyle);
-							 */
-						}
-					}
-				}
 
 				Iterator<Container> containerIterator2 =
 					fContainerManager.getContainersAtLine(lineNumber).iterator();
-
-				// First cycle - looking for max ascent in containers
-				// System.out
-				// .println("Line offset:"
-				// + event.lineOffset
-				// +
-				// "########################################################################");
-				// System.out
-				// .println("Line number:"
-				// + lineNumber
-				// +
-				// "************************************************************************");
-				// clear, because container can be moved to another line or
-				// deleted
 				
 				fContainerManager.clearLineMaxAscents();
 				while (containerIterator2.hasNext()) {

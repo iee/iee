@@ -13,13 +13,8 @@ public class Container {
 
 	private String fContainerID;
 	
-	private String fContainerHiddenContent;
 	private Position fPosition;
-	private int fLineNumber;
 	private Composite fComposite;
-
-	private boolean fIsDisposed;
-	private boolean fIsTextRegionReleaseRequested;
 
 	private ControlListener fCompositeResizeListener;
 
@@ -28,97 +23,18 @@ public class Container {
 	protected IDocument fDocument;
 	private StyledText fStyledText;
 
-
-	/**
-	 * Creates new container with @param containerID at @param position
-	 * 
-	 * @param position
-	 * @param containerID
-	 */
-	Container(Position position, String containerID, ContainerManager containerManager) {
-		fPosition = position;
-		fContainerID = containerID;
-		fContainerHiddenContent = "";
-		fIsDisposed = false;
-		fIsTextRegionReleaseRequested = false;
-
-		fContainerManager = containerManager;
-		fDocumentAccess = containerManager.getDocumentAccess();
-		fDocument = containerManager.getDocument();
-		fStyledText = containerManager.getStyledText();
-
-		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
-
-		fComposite = new Composite(fStyledText, SWT.NONE);
-
-		initListeners();
-		updateTextRegion();
-	}
-
-	public void recreateComposite() {
-		releaseListeners();
-		fComposite.dispose();
-		fComposite = new Composite(fStyledText, SWT.NONE);
-		setListeners();
-	}
-
-	private void initListeners() {
-		fCompositeResizeListener = new ControlListener() {
-
-			@Override
-			public void controlResized(ControlEvent e) {
-				fStyledText.redraw();
-				fContainerManager.updateContainerPresentations();
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
-				fStyledText.redraw();
-				// XXX fContainerManager.updateContainerPresentations();
-			}
-		};
-		setListeners();
-	}
 	
-
-	void updateTextRegion() {
-		fDocumentAccess.requestTextRegionUpdate(this);
-	}
-	
-	public void releaseTextRegion() {
-		fIsTextRegionReleaseRequested = true;
-		fDocumentAccess.requestTextRegionUpdate(this);
-	}
-
-
 	/* Setters */
-	
-	private void setListeners() {
-		fComposite.addControlListener(fCompositeResizeListener);
-	}
-
-	private void releaseListeners() {
-		fComposite.removeControlListener(fCompositeResizeListener);
-	}
 
 	public void setContainerID(String containerID) {
 		fContainerID = containerID;
-		updateTextRegion();
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
 
-	
 	/* Getters */
 	
 	public String getContainerID() {
 		return fContainerID;
-	}
-
-	public int getLineNumber() {
-		return fLineNumber;
-	}
-	
-	public String getContainerHiddenContent() {
-		return fContainerHiddenContent;
 	}
 
 	public Position getPosition() {
@@ -132,46 +48,52 @@ public class Container {
 	public String getContainerManagerID() {
 		return fContainerManager.getContainerManagerID();
 	}
-
-	public boolean isDisposed() {
-		return fIsDisposed;
-	}
-
-
-	protected boolean isTextRegionReleaseRequested() {
-		return fIsTextRegionReleaseRequested;
-	}
+	
+	
+	/* FUNCTIONS USED IN PAD MANAGER: */
 
 	/**
+	 * Called when SWT-composite needs to be reloaded.
+	 */
+	public void reset() {
+		this.recreateComposite();
+	}
+	
+	/**
+	 * Request for container destruction. Called from PadManager.
+	 */
+	public void destroy() {
+		fDocumentAccess.requestAccessAction(DocumentAccess.RELEASE, this);
+	}
+	
+	/* FUNCTION USED IN CONTAINER MANAGER: */
+	
+	/**
+	 * Creates new container.
+	 */
+	Container(Position position, String containerID, ContainerManager containerManager) {
+		fPosition = position;
+		fContainerID = containerID;
+
+		fContainerManager = containerManager;
+		fDocumentAccess = containerManager.getDocumentAccess();
+		fDocument = containerManager.getDocument();
+		fStyledText = containerManager.getStyledText();
+
+		fComposite = new Composite(fStyledText, SWT.NONE);
+
+		initListeners();
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+	}
+	
+	/**
 	 * Sets container's position.
-	 * 
-	 * @param offset
-	 * @param length
 	 */
 	void updatePosition(int offset, int length) {
 		fPosition.setOffset(offset);
 		fPosition.setLength(length);
-		fLineNumber = fContainerManager.getLineNumberByOffset(fPosition.offset, fDocument);
 	}
-
-	/**
-	 * Disposes containers's SWT-composite.
-	 */
-	void dispose() {
-		releaseListeners();
-		fComposite.dispose();
-		fIsDisposed = true;
-	}
-
-	/**
-	 * Sets container's SWT-composite visibility.
-	 * 
-	 * @param isVisiable
-	 */
-	void setVisible(boolean isVisible) {
-		fComposite.setVisible(isVisible);
-	}
-
+	
 	/**
 	 * This function causes container's SWT-composite get into proper position.
 	 */
@@ -180,10 +102,56 @@ public class Container {
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
 	}
+	
+	/**
+	 * Sets container's SWT-composite visibility.
+	 */
+	void setVisible(boolean isVisible) {
+		fComposite.setVisible(isVisible);
+	}
 
-	@Override
-	public String toString() {
-		return "[" + fContainerID + ", " + fPosition + "]";
+	/**
+	 * Disposes containers's SWT-composite. Called from ContainerManager.
+	 */
+	void dispose() {
+		releaseListeners();
+		fComposite.dispose();
+	}
+
+	
+	/* INTERNAL FUNCTIONS: */
+	
+	private void initListeners() {
+		fCompositeResizeListener = new ControlListener() {
+
+			@Override
+			public void controlResized(ControlEvent e) {
+				fStyledText.redraw();
+				fContainerManager.updateContainerPresentations();
+			}
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+				fStyledText.redraw();
+				//fContainerManager.updateContainerPresentations();
+			}
+		};
+		setListeners();
+	}
+	
+	private void setListeners() {
+		fComposite.addControlListener(fCompositeResizeListener);
+	}
+
+	private void releaseListeners() {
+		fComposite.removeControlListener(fCompositeResizeListener);
+	}
+	
+	private void recreateComposite() {
+		releaseListeners();
+		fComposite.dispose();
+		fComposite = new Composite(fStyledText, SWT.NONE);
+		setListeners();
 	}
 
 	
@@ -204,5 +172,11 @@ public class Container {
 	 */
 	private Container(Position position) {
 		fPosition = position;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "[" + fContainerID + ", " + fPosition + "]";
 	}
 }

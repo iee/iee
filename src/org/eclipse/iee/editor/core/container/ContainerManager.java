@@ -1,10 +1,9 @@
 package org.eclipse.iee.editor.core.container;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NavigableSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -23,7 +22,6 @@ import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioningListener;
 import org.eclipse.jface.text.IDocumentPartitioningListenerExtension2;
-import org.eclipse.jface.text.ILineTracker;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
@@ -34,27 +32,30 @@ public class ContainerManager extends EventManager {
 	private final String fContainerManagerID;
 	private final ContainerManagerConfig fConfig;
 	
-	private final StyledTextManager fStyledTextManager;
-	private final PartitioningManager fPartitioningManager;
 	private final DocumentAccess fDocumentAccess;
-
+	
+	@SuppressWarnings("unused")
+	private final StyledTextManager fStyledTextManager;
+	
+	@SuppressWarnings("unused")
+	private final PartitioningManager fPartitioningManager;
+	
 	private final StyledText fStyledText;
 	private final IDocument fDocument;
-	private final DefaultLineTracker fLineTracker;
 
 	private final NavigableSet<Container> fContainers;
 	
 	private static ContainerComparator fContainerComparator = new ContainerComparator();
 	
-	private int fNumberOfLines;
 	
-	// Max ascents for lines containing containers
-	private Map<Integer, Integer> fLineMaxAscents = new TreeMap<Integer, Integer>();
-
-	/* Public interface */
+	/* Getters */
 
 	public Object[] getElements() {
 		return fContainers.toArray();
+	}
+	
+	public String getContainerManagerID() {
+		return fContainerManagerID;
 	}
 
 	public ContainerManagerConfig getConfig() {
@@ -72,10 +73,6 @@ public class ContainerManager extends EventManager {
 	public StyledText getStyledText() {
 		return fStyledText;
 	}
-	
-	public ILineTracker getLineTracker() {
-		return fLineTracker;
-	}
 
 	public String[] getContainerIDs() {
 		String[] containerIDs = new String[fContainers.size()];
@@ -86,6 +83,25 @@ public class ContainerManager extends EventManager {
 		return containerIDs;
 	}
 
+	
+	/* INTERFACE FUNCTIONS */
+	
+	public ContainerManager(ContainerManagerConfig config, IDocument document, StyledText styledText) {
+		fContainerManagerID = UUID.randomUUID().toString();
+		
+		fConfig = config;
+		fDocument = document;
+		fStyledText = styledText;
+		
+		fContainers = new TreeSet<Container>(fContainerComparator);
+
+		fStyledTextManager = new StyledTextManager(this);
+		fPartitioningManager = new PartitioningManager(this);
+		fDocumentAccess = new DocumentAccess(this);
+		
+		initDocumentListener();
+	}
+	
 	public void RequestContainerAllocation(String containerID, int offset) {
 		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(containerID);
 
@@ -95,9 +111,29 @@ public class ContainerManager extends EventManager {
 			e.printStackTrace();
 		}
 	}
+	
+	void updateContainerPresentations() {
+		Iterator<Container> it = fContainers.iterator();
+		while (it.hasNext()) {
+			Container container = it.next();
+			container.updatePresentation();
+		}
+	}
+
+	void updateContainerVisibility(boolean visibility) {
+		Iterator<Container> it = fContainers.iterator();
+		while (it.hasNext()) {
+			Container container = it.next();
+			if (!visibility) {
+				container.setVisible(false);
+			} else {
+				container.setVisible(true);
+			}
+		}
+	}
 
 	
-	/* Functions for observers */
+	/* FUNCTIONS FOR OBSERVERS */
 
 	public void addContainerManagerListener(IContainerManagerListener listener) {
 		Assert.isNotNull(listener);
@@ -130,55 +166,8 @@ public class ContainerManager extends EventManager {
 		}
 	}
 
-	/* Constructor */
 
-	public ContainerManager(ContainerManagerConfig config, IDocument document, StyledText styledText) {
-		fContainerManagerID = UUID.randomUUID().toString();
-		
-		fConfig = config;
-		fDocument = document;
-		fStyledText = styledText;
-		
-		fContainers = new TreeSet<Container>(fContainerComparator);
-
-		fLineTracker = new DefaultLineTracker();
-		fLineTracker.set(fDocument.get());
-		fNumberOfLines = fLineTracker.getNumberOfLines();
-
-		fStyledTextManager = new StyledTextManager(this);
-		fPartitioningManager = new PartitioningManager(this);
-		fDocumentAccess = new DocumentAccess(this);
-		
-		initDocumentListener();
-	}
-
-	public String getContainerManagerID() {
-		return fContainerManagerID;
-	}
-
-	/* Presentation update */
-
-	void updateContainerPresentations() {
-		Iterator<Container> it = fContainers.iterator();
-		while (it.hasNext()) {
-			Container container = it.next();
-			container.updatePresentation();
-		}
-	}
-
-	void updateContainerVisibility(boolean visibility) {
-		Iterator<Container> it = fContainers.iterator();
-		while (it.hasNext()) {
-			Container container = it.next();
-			if (!visibility) {
-				container.setVisible(false);
-			} else {
-				container.setVisible(true);
-			}
-		}
-	}
-
-	/* Document modification event processing */
+	/* DOCUMENT MODIFICATION EVENT PROCESSING */
 
 	protected void initDocumentListener() {
 
@@ -275,10 +264,6 @@ public class ContainerManager extends EventManager {
 				}
 
 				fChangedPartitioningRegion = null;
-				fLineTracker.set(fDocument.get());
-				fNumberOfLines = fLineTracker.getNumberOfLines();
-
-				System.out.println("Iteration");
 
 				fDocumentAccess.processNextDocumentAccessRequest();
 				updateContainerPresentations();
@@ -388,63 +373,8 @@ public class ContainerManager extends EventManager {
 		fDocument.addDocumentPartitioningListener(listener);
 		fDocument.addDocumentListener(listener);
 	}
-
-	/**
-	 * Get containers list at line
-	 */
-	public ArrayList<Container> getContainersAtLine(int line) {
-		ArrayList<Container> containersAtLine = new ArrayList<Container>();
-		Iterator<Container> iterator = fContainers.iterator();
-		while (iterator.hasNext()) {
-			Container c = (Container) iterator.next();
-			if (c.getLineNumber() == line)
-				containersAtLine.add(c);
-
-		}
-		return containersAtLine;
-	}
-
-	public int getNumberOfLines() {
-		return fNumberOfLines;
-	}
-
-	/**
-	 * Get line number in Document by offset
-	 */
-	public int getLineNumberByOffset(int offset, IDocument document) {
-		fLineTracker.set(document.get());
-		try {
-			return fLineTracker.getLineNumberOfOffset(offset) + 1;
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
-
-	/**
-	 * Get max container's ascent at line
-	 */
-	public int getMaxContainerAscentByLine(int line) {
-		if (fLineMaxAscents.containsKey(line))
-			return fLineMaxAscents.get(line);
-		else
-			return 0;
-	}
-
-	/**
-	 * Get max container's ascent at line
-	 */
-	public void putMaxContainerAscentToMap(int line, int ascent) {
-		fLineMaxAscents.put(line, ascent);
-	}
-
-	/**
-	 * Clears fLineMaxAscents
-	 */
-	public void clearLineMaxAscents() {
-		fLineMaxAscents.clear();
-	}
-
+	
+	
 	protected Container getContainerHavingOffset(int offset) {
 		if (offset < 0)
 			return null;
@@ -455,40 +385,15 @@ public class ContainerManager extends EventManager {
 		return null;
 	}
 
-	protected Container anotherGetContainerHavingOffset(int offset) {
-		if (offset < 0)
-			return null;
-		Container c = fContainers.floor(Container.atOffset(offset));
-		if (c != null) {
-			return c;
-		}
-		return null;
-	}
-
-	// TODO: rewrite it using NavigableSet
-	protected Container getPreviousContainerAtLine(int offset) {
-		if (offset < 0)
-			return null;
-		ArrayList<Container> containersAtLine =
-			getContainersAtLine(getLineNumberByOffset(offset, fDocument));
+	Collection<Container> getContainersInLine(int lineOffset, int lineLength) {
+				
+		NavigableSet<Container> containersInLine = fContainers.subSet(
+			Container.atOffset(lineOffset),
+			true,
+			Container.atOffset(lineOffset + lineLength),
+			false);
 		
-		Iterator<Container> iterator = containersAtLine.iterator();
-		int maxOffset = -1;
-		while (iterator.hasNext()) {
-			Container c = (Container) iterator.next();
-			int containerOffset = c.getPosition().getOffset();
-			if (containerOffset < offset && containerOffset > maxOffset)
-				maxOffset = c.getPosition().getOffset();
-		}
-		if (maxOffset == -1)
-			return null;
-
-		Container c = getContainerHavingOffset(maxOffset);
-		if (c != null) {
-			return c;
-		}
-		return null;
-
+		return containersInLine;	
 	}
 
 	protected Container createContainer(Position position, String containerID) {
