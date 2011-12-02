@@ -4,11 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.iee.editor.core.container.partitioning.PartitioningScanner;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.ILineTracker;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
@@ -36,6 +32,10 @@ class StyledTextManager {
 		initListeners();
 	}
 	
+	public void updateStyledText() {
+		fStyledText.update();
+	}
+	
 	protected void initListeners() {
 		
 		/* 1) Disallow modification within Container's text region */
@@ -48,7 +48,7 @@ class StyledTextManager {
 					e.doit = false;
 				} else {
 					fContainerManager.updateContainerVisibility(false);	
-				}	
+				}
 			}
 		});
 
@@ -57,9 +57,11 @@ class StyledTextManager {
 			public void verifyKey(VerifyEvent event) {
 				switch (event.keyCode) {
 				case SWT.ARROW_LEFT:
+				case SWT.ARROW_UP:
 					fCaretMovesForward = false;
 					break;
 				case SWT.ARROW_RIGHT:
+				case SWT.ARROW_DOWN:
 					fCaretMovesForward = true;
 					break;
 				}
@@ -76,10 +78,15 @@ class StyledTextManager {
 				Container c = fContainerManager.getContainerHavingOffset(e.caretOffset);
 				if (c != null) {
 					Position p = c.getPosition();
+					
+					if (e.caretOffset == p.getOffset() || e.caretOffset == p.getOffset() + p.getLength()) {
+						return;
+					}
+					
 					if (fCaretMovesForward) {
 						fStyledText.setCaretOffset(p.getOffset() + p.getLength());
 					} else {
-						fStyledText.setCaretOffset(p.getOffset() - 1);
+						fStyledText.setCaretOffset(p.getOffset());
 					}
 				}
 			}
@@ -89,6 +96,10 @@ class StyledTextManager {
 
 			@Override
 			public void lineGetStyle(LineStyleEvent event) {
+				System.out.println("lineGetStyle");
+				
+				Vector<StyleRange> styles = new Vector<StyleRange>();
+				
 				Collection<Container> containersAtLine =
 					fContainerManager.getContainersInLine(
 						event.lineOffset,
@@ -100,63 +111,41 @@ class StyledTextManager {
 				
 				Iterator<Container> iterator = containersAtLine.iterator();
 
+				/* Select max height in line */
 				int maxHeight = 0;
 				while (iterator.hasNext()) {
 					Container c = iterator.next();
 					int compositeHeigth = c.getComposite().getSize().y;
 					if (maxHeight < compositeHeigth) {
 						maxHeight = compositeHeigth;
-					}
+					}	
 				}
+				
+				int center = maxHeight / 2;
 				
 				iterator = containersAtLine.iterator();
 				while (iterator.hasNext()) {
 					Container c = iterator.next();
-				}
-				
+					Position p = c.getPosition();
 
-						if (containerIterator1.hasNext()) {
-							Container c = (Container) containerIterator1.next();
-							StyleRange compositeStyle = new StyleRange();
-							compositeStyle.start = lineScanner.getTokenOffset();
-							compositeStyle.length = 1;
-							// to save constant line ascent (should be max from
-							// all containers for a line)
-							compositeStyle.metrics = new GlyphMetrics(
-								c.getComposite().getSize().y,
-								0,
-								c.getComposite().getSize().x);
-							styles.addElement(compositeStyle);
+					/* First symbol is shaped by container's geometry */
+					StyleRange firstSymbol = new StyleRange();
+					firstSymbol.start = p.getOffset();
+					firstSymbol.length = 1;
+					firstSymbol.metrics = new GlyphMetrics(
+						c.getComposite().getSize().y,
+						0,
+						c.getComposite().getSize().x);
+					
+					styles.add(firstSymbol);
 
-							StyleRange hiddenTextStyle = new StyleRange();
-							hiddenTextStyle.start = lineScanner.getTokenOffset() + 1;
-							hiddenTextStyle.length = lineScanner.getTokenLength();
-							hiddenTextStyle.metrics = new GlyphMetrics(0, 0, 0);
-							styles.addElement(hiddenTextStyle);
-
-
-				Iterator<Container> containerIterator2 =
-					fContainerManager.getContainersAtLine(lineNumber).iterator();
-				
-				fContainerManager.clearLineMaxAscents();
-				while (containerIterator2.hasNext()) {
-					Container c = (Container) containerIterator2.next();
-					// System.out.println("PadSize:"
-					// + c.getComposite().getSize().y);
-					if (c.getComposite().getSize().y > fContainerManager.getMaxContainerAscentByLine(lineNumber)) {
-						fContainerManager.putMaxContainerAscentToMap(lineNumber, c.getComposite().getSize().y);
-					}
-				}
-
-				Iterator<StyleRange> stylesIterator = styles.iterator();
-				// Second cycle - Setting max ascent for styles
-				while (stylesIterator.hasNext()) {
-					StyleRange style = (StyleRange) stylesIterator.next();
-					// System.out.println("MaxPadSize:"
-					// + getMaxContainerAscentByLine(lineNumber));
-					if (style.metrics != null)
-						style.metrics.ascent = fContainerManager.getMaxContainerAscentByLine(lineNumber);
-					style.background = fStyledText.getBackground();
+					/* Other symbols in container's text region becomes invisible */
+					StyleRange hiddenText = new StyleRange();
+					hiddenText.start = p.getOffset() + 1;
+					hiddenText.length = p.getLength() - 1;
+					hiddenText.metrics = new GlyphMetrics(0, 0, 0);
+					
+					styles.addElement(hiddenText);
 				}
 
 				event.styles = new StyleRange[styles.size()];

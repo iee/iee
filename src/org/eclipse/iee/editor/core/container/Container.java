@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 public class Container {
 
 	private String fContainerID;
+	private String fTextContent;
 	
 	private Position fPosition;
 	private Composite fComposite;
@@ -30,11 +31,20 @@ public class Container {
 		fContainerID = containerID;
 		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
+	
+	public void setTextContent(String content) {
+		fTextContent = content;
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+	}
 
 	/* Getters */
 	
 	public String getContainerID() {
 		return fContainerID;
+	}
+	
+	public String getTextContent() {
+		return fTextContent;
 	}
 
 	public Position getPosition() {
@@ -83,13 +93,12 @@ public class Container {
 		fComposite = new Composite(fStyledText, SWT.NONE);
 
 		initListeners();
-		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
 	
 	/**
 	 * Sets container's position.
 	 */
-	void updatePosition(int offset, int length) {
+	void updatePosition(int offset, int length) {		
 		fPosition.setOffset(offset);
 		fPosition.setLength(length);
 	}
@@ -98,6 +107,8 @@ public class Container {
 	 * This function causes container's SWT-composite get into proper position.
 	 */
 	void updatePresentation() {
+		System.out.println("updatePresentation");
+		
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
@@ -133,7 +144,7 @@ public class Container {
 			@Override
 			public void controlMoved(ControlEvent e) {
 				fStyledText.redraw();
-				//fContainerManager.updateContainerPresentations();
+				fContainerManager.updateContainerPresentations();
 			}
 		};
 		setListeners();

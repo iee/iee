@@ -45,18 +45,24 @@ public class DocumentAccess {
 	 * This function is called by ContainerManager when document modification is
 	 * allowed.
 	 */
-	void processNextDocumentAccessRequest() {
-		AccessAction action = fContainerDocumentAccessQueue.poll();
-		Container container = action.container;
+	boolean processNextDocumentAccessRequest() {
+		System.out.println("processNextDocumentAccessRequest");
 		
+		AccessAction action = fContainerDocumentAccessQueue.poll();
+		if (action == null) {
+			return false;
+		}
+		
+		Container container = action.container;		
 		switch (action.actionID) {
 		case WRITE:
 			writeContentToTextRegion(container);
 			break;
 		case RELEASE:
-			releaseTextRegion(container);			
+			releaseTextRegion(container);
 			break;
 		}
+		return true;
 	}
 	
 	
@@ -67,21 +73,20 @@ public class DocumentAccess {
 	 */
 	protected void writeContentToTextRegion(Container container) {
 		Position position = container.getPosition();
-		String hiddenContent = "";
+		String containerID = container.getContainerID();
+		//String textContent = container.getTextContent();
 		
 		int from = position.getOffset()
 			+ fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length();
 
 		int length = position.getLength()
 			- fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length()
-			- fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length();
+			- fContainerManager.getConfig().EMBEDDED_REGION_END.length();
 
 		try {
-			fDocument.replace(from, length, container.getContainerID());
-			fDocument.replace(position.getOffset() + position.getLength(),
-				hiddenContent.length(), hiddenContent);
+			fDocument.replace(from, length, containerID);
+			
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -92,11 +97,8 @@ public class DocumentAccess {
 	 */
 	protected void releaseTextRegion(Container container) {
 		Position position = container.getPosition();
-		String hiddenContent = "";
-
 		try {
-			fDocument.replace(position.getOffset(), position.getLength()
-					+ hiddenContent.length(), "");
+			fDocument.replace(position.getOffset(), position.getLength(), "");
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

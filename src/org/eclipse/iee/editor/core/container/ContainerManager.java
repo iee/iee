@@ -1,6 +1,5 @@
 package org.eclipse.iee.editor.core.container;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NavigableSet;
@@ -14,7 +13,6 @@ import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
-import org.eclipse.jface.text.DefaultLineTracker;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.DocumentPartitioningChangedEvent;
 import org.eclipse.jface.text.IDocument;
@@ -113,6 +111,8 @@ public class ContainerManager extends EventManager {
 	}
 	
 	void updateContainerPresentations() {
+		System.out.println("updateContainerPresentations");
+		
 		Iterator<Container> it = fContainers.iterator();
 		while (it.hasNext()) {
 			Container container = it.next();
@@ -121,6 +121,8 @@ public class ContainerManager extends EventManager {
 	}
 
 	void updateContainerVisibility(boolean visibility) {
+		System.out.println("updateContainerVisibility");
+		
 		Iterator<Container> it = fContainers.iterator();
 		while (it.hasNext()) {
 			Container container = it.next();
@@ -265,13 +267,15 @@ public class ContainerManager extends EventManager {
 
 				fChangedPartitioningRegion = null;
 
-				fDocumentAccess.processNextDocumentAccessRequest();
-				updateContainerPresentations();
-				updateContainerVisibility(true);
+				if (!fDocumentAccess.processNextDocumentAccessRequest()) {
+					updateContainerPresentations();
+					updateContainerVisibility(true);
+					
+					System.out.println("End of iteration");
 
-				/* For debug */
-
-				fireDebugNotification(new ContainerManagerEvent(null, fContainerManagerID));
+					/* For debug */
+					fireDebugNotification(new ContainerManagerEvent(null, fContainerManagerID));
+				}
 			}
 
 			private void onPartitioningChanged(DocumentEvent event,
@@ -386,14 +390,13 @@ public class ContainerManager extends EventManager {
 	}
 
 	Collection<Container> getContainersInLine(int lineOffset, int lineLength) {
-				
 		NavigableSet<Container> containersInLine = fContainers.subSet(
 			Container.atOffset(lineOffset),
 			true,
 			Container.atOffset(lineOffset + lineLength),
 			false);
 		
-		return containersInLine;	
+		return containersInLine;
 	}
 
 	protected Container createContainer(Position position, String containerID) {
