@@ -87,7 +87,7 @@ public class DocumentAccess {
 			String[] lines = textContent.split("\n");
 			for (int i = 0; i < lines.length - 1; i++) {
 				payload = payload
-					.concat(lines[i])
+					.concat(lines[i].trim())
 					.concat(fConfig.INNER_TEXT_BR);
 			}
 			payload = payload

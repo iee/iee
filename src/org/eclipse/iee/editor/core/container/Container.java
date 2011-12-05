@@ -33,6 +33,7 @@ public class Container {
 	}
 	
 	public void setTextContent(String content) {
+		System.out.println("setTextContent");
 		fTextContent = content;
 		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}

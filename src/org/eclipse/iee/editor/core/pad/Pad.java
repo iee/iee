@@ -44,7 +44,7 @@ public abstract class Pad {
 	public void attachContainer(Container container) {
 		Assert.isNotNull(container);
 		Assert.isLegal(!isContainerAttached(),
-				"Another container is already attached");
+			"Another container is already attached");
 
 		container.setContainerID(fContainerID);
 		fContainer = container;
