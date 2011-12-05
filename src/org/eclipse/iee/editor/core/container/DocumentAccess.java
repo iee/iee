@@ -21,7 +21,7 @@ public class DocumentAccess {
 		AccessAction(int actionID, Container container) {
 			this.actionID = actionID;
 			this.container = container;
-		}		
+		}
 		public final int actionID;
 		public final Container container;
 	};
@@ -53,7 +53,7 @@ public class DocumentAccess {
 			return false;
 		}
 		
-		Container container = action.container;		
+		Container container = action.container;
 		switch (action.actionID) {
 		case WRITE:
 			writeContentToTextRegion(container);
@@ -74,7 +74,28 @@ public class DocumentAccess {
 	protected void writeContentToTextRegion(Container container) {
 		Position position = container.getPosition();
 		String containerID = container.getContainerID();
-		//String textContent = container.getTextContent();
+		String textContent = container.getTextContent();
+			
+		/* Container ID */
+		String payload = containerID;
+		
+		if (textContent != null && !textContent.isEmpty()) {
+			/* Payload if exists */
+			
+			payload = payload.concat(fConfig.INNER_TEXT_BEGIN);
+			
+			String[] lines = textContent.split("\n");
+			for (int i = 0; i < lines.length - 1; i++) {
+				payload = payload
+					.concat(lines[i])
+					.concat(fConfig.INNER_TEXT_BR);
+			}
+			payload = payload
+				.concat(lines[lines.length - 1])
+				.concat(fConfig.INNER_TEXT_END);
+		}
+		
+		/* Old bounds */
 		
 		int from = position.getOffset()
 			+ fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length();
@@ -84,7 +105,7 @@ public class DocumentAccess {
 			- fContainerManager.getConfig().EMBEDDED_REGION_END.length();
 
 		try {
-			fDocument.replace(from, length, containerID);
+			fDocument.replace(from, length, payload);
 			
 		} catch (BadLocationException e) {
 			e.printStackTrace();
@@ -119,8 +140,11 @@ public class DocumentAccess {
 	String getContainerIDFromTextRegion(String textRegion) {		
 		int from = fConfig.EMBEDDED_REGION_BEGIN.length();
 		
-		int to = textRegion.indexOf(fConfig.EMBEDDED_REGION_END);
-
+		int to = textRegion.indexOf(fConfig.INNER_TEXT_BEGIN); 
+		if (to == -1) {
+			to = textRegion.indexOf(fConfig.EMBEDDED_REGION_END);
+		}
+		
 		try {
 			return textRegion.substring(from, to);
 		} catch (IndexOutOfBoundsException e) {

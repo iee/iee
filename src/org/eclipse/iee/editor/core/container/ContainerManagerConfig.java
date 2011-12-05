@@ -10,7 +10,9 @@ public class ContainerManagerConfig {
 
 	public String EMBEDDED_REGION_END = ">*/";
 	
-	public String INNER_TEXT_BEGIN = "*/";
+	public String INNER_TEXT_BEGIN = "<*/";
 	
-	public String INNER_TEXT_END = "/*";
+	public String INNER_TEXT_END = "/*>";
+	
+	public String INNER_TEXT_BR = "/*br*/";
 }

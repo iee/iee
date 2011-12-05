@@ -42,13 +42,20 @@ class StyledTextManager {
 		fStyledText.addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
-				if (fContainerManager.getContainerHavingOffset(e.start) != null ||
-					fContainerManager.getContainerHavingOffset(e.end) != null)
+				Container atStart = fContainerManager.getContainerHavingOffset(e.start);
+				Container atEnd = fContainerManager.getContainerHavingOffset(e.end);		
+				
+				System.out.println(e.start + " " + e.end);
+								
+				/* Text replaced */
+				if ((atStart != null && e.start != atStart.getPosition().getOffset()) ||
+						(atEnd != null && e.end != atEnd.getPosition().getOffset()))
 				{
 					e.doit = false;
-				} else {
-					fContainerManager.updateContainerVisibility(false);	
+					return;
 				}
+
+				fContainerManager.updateContainerVisibility(false);
 			}
 		});
 
@@ -121,8 +128,6 @@ class StyledTextManager {
 					}	
 				}
 				
-				int center = maxHeight / 2;
-				
 				iterator = containersAtLine.iterator();
 				while (iterator.hasNext()) {
 					Container c = iterator.next();
@@ -133,8 +138,8 @@ class StyledTextManager {
 					firstSymbol.start = p.getOffset();
 					firstSymbol.length = 1;
 					firstSymbol.metrics = new GlyphMetrics(
-						c.getComposite().getSize().y,
 						0,
+						c.getComposite().getSize().y,
 						c.getComposite().getSize().x);
 					
 					styles.add(firstSymbol);
