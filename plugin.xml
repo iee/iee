@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Sample Editor with IEE pads"
+            icon="icons/iee_logo.png"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="org.eclipse.iee.editor.sample.SampleExtendedEditor"
+            id="org.eclipse.iee.editor.sample.SampleExtendedEditor">
+      </editor>
+   </extension>
+
+</plugin>

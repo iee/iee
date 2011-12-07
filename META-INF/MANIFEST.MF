@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: IEE extendable editor platform
+Bundle-SymbolicName: org.eclipse.iee.editor; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.iee.editor.IeeEditorPlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.ui.editors
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.eclipse.iee.editor,
+ org.eclipse.iee.editor.core.container,
+ org.eclipse.iee.editor.core.pad,
+ org.eclipse.iee.editor.core.pad.event,
+ org.eclipse.iee.editor.sample
