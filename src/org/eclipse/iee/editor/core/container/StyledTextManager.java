@@ -10,6 +10,8 @@ import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.LineStyleEvent;
 import org.eclipse.swt.custom.LineStyleListener;
+import org.eclipse.swt.custom.PaintObjectEvent;
+import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
@@ -142,6 +144,9 @@ class StyledTextManager {
 						c.getComposite().getSize().y,
 						c.getComposite().getSize().x);
 					
+					/* XXX setting data */
+					firstSymbol.data = c;
+					
 					styles.add(firstSymbol);
 
 					/* Other symbols in container's text region becomes invisible */
@@ -155,6 +160,15 @@ class StyledTextManager {
 
 				event.styles = new StyleRange[styles.size()];
 				styles.copyInto(event.styles);
+			}
+		});
+
+		fStyledText.addPaintObjectListener(new PaintObjectListener() {
+			public void paintObject(PaintObjectEvent e) {
+				if (e.style.data instanceof Container) {
+					Container c = (Container) e.style.data;
+					c.updatePresentation();
+				}
 			}
 		});
 	}

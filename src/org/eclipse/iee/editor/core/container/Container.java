@@ -138,14 +138,11 @@ public class Container {
 
 			@Override
 			public void controlResized(ControlEvent e) {
-				fStyledText.redraw();
-				fContainerManager.updateContainerPresentations();
+				fContainerManager.updateContainersPresentations();
 			}
 
 			@Override
 			public void controlMoved(ControlEvent e) {
-				fStyledText.redraw();
-				fContainerManager.updateContainerPresentations();
 			}
 		};
 		setListeners();

@@ -110,16 +110,20 @@ public class ContainerManager extends EventManager {
 		}
 	}
 	
-	void updateContainerPresentations() {
+	void updateContainersPresentations() {
 		System.out.println("updateContainerPresentations");
 		
+		/* Update styles */
+		fStyledText.redraw();
+		
+		/* Update positions */
 		Iterator<Container> it = fContainers.iterator();
 		while (it.hasNext()) {
 			Container container = it.next();
 			container.updatePresentation();
 		}
 	}
-
+	
 	void updateContainerVisibility(boolean visibility) {
 		System.out.println("updateContainerVisibility");
 		
@@ -268,7 +272,7 @@ public class ContainerManager extends EventManager {
 				fChangedPartitioningRegion = null;
 
 				if (!fDocumentAccess.processNextDocumentAccessRequest()) {
-					updateContainerPresentations();
+					updateContainersPresentations();
 					updateContainerVisibility(true);
 					
 					System.out.println("End of iteration");
