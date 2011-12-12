@@ -135,15 +135,20 @@ class StyledTextManager {
 					Container c = iterator.next();
 					Position p = c.getPosition();
 
+					int descent = // TODO: Quickly fix it!!!
+						(c.getComposite().getSize().y < 10)
+						? 0
+						: c.getComposite().getSize().y - 10;
+					
 					/* First symbol is shaped by container's geometry */
 					StyleRange firstSymbol = new StyleRange();
 					firstSymbol.start = p.getOffset();
 					firstSymbol.length = 1;
 					firstSymbol.metrics = new GlyphMetrics(
 						0,
-						c.getComposite().getSize().y,
+						descent,
 						c.getComposite().getSize().x);
-					
+
 					/* XXX setting data */
 					firstSymbol.data = c;
 					

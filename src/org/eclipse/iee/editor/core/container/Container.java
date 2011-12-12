@@ -14,7 +14,7 @@ public class Container {
 
 	private String fContainerID;
 	private String fTextContent;
-	
+
 	private Position fPosition;
 	private Composite fComposite;
 
@@ -25,14 +25,13 @@ public class Container {
 	protected IDocument fDocument;
 	private StyledText fStyledText;
 
-	
 	/* Setters */
 
 	public void setContainerID(String containerID) {
 		fContainerID = containerID;
 		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
-	
+
 	public void setTextContent(String content) {
 		System.out.println("setTextContent");
 		fTextContent = content;
@@ -40,11 +39,11 @@ public class Container {
 	}
 
 	/* Getters */
-	
+
 	public String getContainerID() {
 		return fContainerID;
 	}
-	
+
 	public String getTextContent() {
 		return fTextContent;
 	}
@@ -57,19 +56,19 @@ public class Container {
 		return fComposite;
 	}
 
-	public String getContainerManagerID() {
-		return fContainerManager.getContainerManagerID();
-	}
-	
 	public int getLineNumber() {
 		try {
-			return fDocument.getLineOfOffset(fPosition.getOffset());
+			return fDocument.getLineOfOffset(fPosition.offset);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 			return -1;
 		}
 	}
-	
+
+	public String getContainerManagerID() {
+		return fContainerManager.getContainerManagerID();
+	}
+		
 	/* FUNCTIONS USED IN PAD MANAGER: */
 
 	/**
@@ -78,20 +77,21 @@ public class Container {
 	public void reset() {
 		this.recreateComposite();
 	}
-	
+
 	/**
 	 * Request for container destruction. Called from PadManager.
 	 */
 	public void destroy() {
 		fDocumentAccess.requestAccessAction(DocumentAccess.RELEASE, this);
 	}
-	
+
 	/* FUNCTION USED IN CONTAINER MANAGER: */
-	
+
 	/**
 	 * Creates new container.
 	 */
-	Container(Position position, String containerID, ContainerManager containerManager) {
+	Container(Position position, String containerID,
+			ContainerManager containerManager) {
 		fPosition = position;
 		fContainerID = containerID;
 
@@ -104,26 +104,26 @@ public class Container {
 
 		initListeners();
 	}
-	
+
 	/**
 	 * Sets container's position.
 	 */
-	void updatePosition(int offset, int length) {		
+	void updatePosition(int offset, int length) {
 		fPosition.setOffset(offset);
 		fPosition.setLength(length);
 	}
-	
+
 	/**
 	 * This function causes container's SWT-composite get into proper position.
 	 */
 	void updatePresentation() {
 		System.out.println("updatePresentation");
-		
+
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
 	}
-	
+
 	/**
 	 * Sets container's SWT-composite visibility.
 	 */
@@ -139,9 +139,8 @@ public class Container {
 		fComposite.dispose();
 	}
 
-	
 	/* INTERNAL FUNCTIONS: */
-	
+
 	private void initListeners() {
 		fCompositeResizeListener = new ControlListener() {
 
@@ -156,7 +155,7 @@ public class Container {
 		};
 		setListeners();
 	}
-	
+
 	private void setListeners() {
 		fComposite.addControlListener(fCompositeResizeListener);
 	}
@@ -164,7 +163,7 @@ public class Container {
 	private void releaseListeners() {
 		fComposite.removeControlListener(fCompositeResizeListener);
 	}
-	
+
 	private void recreateComposite() {
 		releaseListeners();
 		fComposite.dispose();
@@ -172,7 +171,6 @@ public class Container {
 		setListeners();
 	}
 
-	
 	/* Functions for comparator */
 
 	/**
@@ -191,8 +189,7 @@ public class Container {
 	private Container(Position position) {
 		fPosition = position;
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return "[" + fContainerID + ", " + fPosition + "]";
