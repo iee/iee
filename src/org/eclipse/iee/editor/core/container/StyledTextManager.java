@@ -141,9 +141,9 @@ class StyledTextManager {
 					firstSymbol.length = 1;
 					firstSymbol.metrics = new GlyphMetrics(
 						0,
-						c.getComposite().getSize().y,
+						c.getComposite().getSize().y - 10, // TODO: Quickly fix it!!!
 						c.getComposite().getSize().x);
-					
+
 					/* XXX setting data */
 					firstSymbol.data = c;
 					
