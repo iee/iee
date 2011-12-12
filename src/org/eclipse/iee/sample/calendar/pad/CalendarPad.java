@@ -10,7 +10,7 @@ public class CalendarPad extends Pad {
 	
 	public CalendarPad() {
 		super();
-		setType("Calendar");
+		//setType("Calendar");
 	}
 	
 	@Override
@@ -41,6 +41,17 @@ public class CalendarPad extends Pad {
 	@Override
 	public void unsave() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onContainerAttached() {
+		// TODO Auto-generated method stub		
 	}
 }
 
