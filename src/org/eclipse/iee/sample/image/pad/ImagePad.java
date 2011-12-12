@@ -232,4 +232,9 @@ public class ImagePad extends Pad implements Serializable {
 		ImagePad.fXmlFileStorage.removeFile(getContainerID());
 
 	}
+
+	@Override
+	public void onContainerAttached() {
+		// TODO Auto-generated method stub
+	}
 }
