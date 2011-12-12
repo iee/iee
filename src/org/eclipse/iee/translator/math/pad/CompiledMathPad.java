@@ -98,14 +98,14 @@ public class CompiledMathPad extends Pad implements Serializable {
 						System.out.println(fJavaContent);
 						if (fJavaContent.matches(";")) {
 							fJavaContent = "";
-							getContainer().writeAtContainerRegionTail(
+							getContainer().setTextContent(
 									fJavaContent);
 						} else
-							getContainer().writeAtContainerRegionTail(
+							getContainer().setTextContent(
 									fJavaContent);
 					} catch (Exception e1) {
 						fJavaContent = "";
-						getContainer().writeAtContainerRegionTail(fJavaContent);
+						getContainer().setTextContent(fJavaContent);
 						// e1.printStackTrace();
 					}
 
@@ -194,7 +194,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		newPad.fLatexContent = this.fLatexContent;
 		newPad.fJavaContent = this.fJavaContent;
 		newPad.fIsTextVisible = this.fIsTextVisible;
-		newPad.getContainer().setContainerHiddenContent(fJavaContent);
+		//newPad.getContainer().setTextContent(fJavaContent);
 
 		File inputFile = new File(this.fImagePath);
 		File outputFile = new File(newPad.fImagePath);
@@ -230,5 +230,10 @@ public class CompiledMathPad extends Pad implements Serializable {
 	@Override
 	public void unsave() {
 		CompiledMathPad.fFileStorage.removeFile(getContainerID());
+	}
+
+	@Override
+	public void onContainerAttached() {
+		getContainer().setTextContent(fJavaContent);
 	}
 }
