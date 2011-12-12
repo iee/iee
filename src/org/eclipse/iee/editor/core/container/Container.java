@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
@@ -60,6 +61,14 @@ public class Container {
 		return fContainerManager.getContainerManagerID();
 	}
 	
+	public int getLineNumber() {
+		try {
+			return fDocument.getLineOfOffset(fPosition.getOffset());
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 	
 	/* FUNCTIONS USED IN PAD MANAGER: */
 

@@ -45,6 +45,8 @@ public class ContainerManager extends EventManager {
 	
 	private static ContainerComparator fContainerComparator = new ContainerComparator();
 	
+	private boolean fProcessingDocumentModification;
+	
 	
 	/* Getters */
 
@@ -96,6 +98,8 @@ public class ContainerManager extends EventManager {
 		fStyledTextManager = new StyledTextManager(this);
 		fPartitioningManager = new PartitioningManager(this);
 		fDocumentAccess = new DocumentAccess(this);
+		
+		fProcessingDocumentModification = false;
 		
 		initDocumentListener();
 	}
@@ -195,7 +199,9 @@ public class ContainerManager extends EventManager {
 
 			@Override
 			public void documentChanged(DocumentEvent event) {
-
+				
+				fProcessingDocumentModification = true;
+				
 				/*
 				 * All pads which placed after 'unmodifiedOffset' are considered
 				 * to be just moved without any other modifications.
@@ -274,6 +280,8 @@ public class ContainerManager extends EventManager {
 				if (!fDocumentAccess.processNextDocumentAccessRequest()) {
 					updateContainersPresentations();
 					updateContainerVisibility(true);
+					
+					fProcessingDocumentModification = false;
 					
 					System.out.println("End of iteration");
 
@@ -382,7 +390,10 @@ public class ContainerManager extends EventManager {
 		fDocument.addDocumentListener(listener);
 	}
 	
-	
+	public boolean isModificationAllowed() {
+		return !fProcessingDocumentModification;
+	}
+		
 	protected Container getContainerHavingOffset(int offset) {
 		if (offset < 0)
 			return null;

@@ -55,4 +55,8 @@ public class LoadingPad extends Pad {
 	@Override
 	public void unsave() {
 	}
+
+	@Override
+	public void onContainerAttached() {
+	}
 }

@@ -39,6 +39,9 @@ public class DocumentAccess {
 	 */
 	void requestAccessAction(int actionID, Container container) {
 		fContainerDocumentAccessQueue.add(new AccessAction(actionID, container));
+		if (fContainerManager.isModificationAllowed()) {
+			processNextDocumentAccessRequest();
+		}
 	}
 	
 	/**

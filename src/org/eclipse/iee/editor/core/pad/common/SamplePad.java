@@ -35,4 +35,10 @@ public class SamplePad extends Pad {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void onContainerAttached() {
+		// TODO Auto-generated method stub
+		
+	}
 }

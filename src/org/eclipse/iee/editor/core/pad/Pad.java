@@ -50,6 +50,8 @@ public abstract class Pad {
 		fContainer = container;
 		createPartControl(fContainer.getComposite());
 		fContainer.getComposite().pack();
+		
+		onContainerAttached();
 	}
 
 	public void detachContainer() {
@@ -82,6 +84,11 @@ public abstract class Pad {
 	 * Remove pad's storage
 	 */
 	public abstract void unsave();
+	
+	/**
+	 * Called when container is attached
+	 */
+	public abstract void onContainerAttached();
 
 	/**
 	 * Getter for fType
