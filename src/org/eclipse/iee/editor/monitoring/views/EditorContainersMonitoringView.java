@@ -63,7 +63,7 @@ public class EditorContainersMonitoringView extends ViewPart {
 				return String.format("%d", container.getPosition().getOffset());
 			
 			case 2:	
-				return "" /*+ container.getLineNumber()*/;
+				return "" + container.getLineNumber();
 				
 			default:
 				return "unknown " + columnIndex;
