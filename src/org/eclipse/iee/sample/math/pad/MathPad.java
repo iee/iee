@@ -248,4 +248,9 @@ public class MathPad extends Pad implements Serializable {
 	public void unsave() {
 		MathPad.fFileStorage.removeFile(getContainerID());
 	}
+
+	@Override
+	public void onContainerAttached() {
+		// TODO Auto-generated method stub
+	}
 }
