@@ -266,4 +266,10 @@ public class GraphPad extends Pad implements Serializable {
 		}
 		return dataset;
 	}
+
+	@Override
+	public void onContainerAttached() {
+		// TODO Auto-generated method stub
+		
+	}
 }
