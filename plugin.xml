@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            targetID="#TextEditorContext"
+            id="org.eclipse.iee.sample.matrix.contextSample">
+         <action
+               label="Insert Matrix"
+               tooltip="Insert Matrix"
+               class="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate"
+               menubarPath="additions"
+               id="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate">
+         </action>
+      </viewerContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor"
+            id="org.eclipse.iee.sample.matrix.toolbarSample">
+         <action
+               label="Insert Matrix"
+               tooltip="Insert Matrix"
+               class="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate"
+               toolbarPath="TextEditor"
+               id="org.eclipse.iee.sample.matrix.add">
+         </action>
+      </editorContribution>
+   </extension>
+
+</plugin>
