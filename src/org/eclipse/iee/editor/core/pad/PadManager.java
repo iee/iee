@@ -10,7 +10,7 @@ import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
+import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
@@ -200,7 +200,7 @@ public class PadManager extends EventManager {
 		fContainerManagerListener = new IContainerManagerListener() {
 
 			@Override
-			public void containerCreated(ContainerManagerEvent event) {
+			public void containerCreated(ContainerEvent event) {
 				Container container = event.getContainer();
 				String containerID = container.getContainerID();
 
@@ -255,13 +255,25 @@ public class PadManager extends EventManager {
 			}
 
 			@Override
-			public void containerRemoved(ContainerManagerEvent event) {
+			public void containerRemoved(ContainerEvent event) {
 				onContainerRemoved(event.getContainer().getContainerID());
 			}
 
 			@Override
-			public void debugNotification(ContainerManagerEvent event) {
+			public void debugNotification(ContainerEvent event) {
 				firePadManagerEvent(new PadManagerEvent());
+			}
+
+			@Override
+			public void containerSelected(ContainerEvent event) {
+				Pad selected = fPads.get(event.getContainer().getContainerID());
+				selected.setSelected(true);				
+			}
+
+			@Override
+			public void containerLostSelection(ContainerEvent event) {
+				Pad selected = fPads.get(event.getContainer().getContainerID());
+				selected.setSelected(false);
 			}
 		};
 	}

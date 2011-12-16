@@ -4,12 +4,21 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad {
+	
+	private static Color fColorSelected = new Color(null, 0, 0, 0);
+	private static Color fColorNotSelected = new Color(null, 255, 255, 255);
+	
 	private String fContainerID;
 	private String fType;
 	private Container fContainer;
+	
+	private Color fBorderColor = fColorNotSelected;
 
 	public Pad() {
 		fContainerID = UUID.randomUUID().toString();
@@ -40,6 +49,11 @@ public abstract class Pad {
 	public Container getContainer() {
 		return fContainer;
 	}
+	
+	public void setSelected(boolean isSelected) {
+		fBorderColor = (isSelected) ? fColorSelected : fColorNotSelected;
+		fContainer.getComposite().setBackground(fBorderColor);
+	}
 
 	public void attachContainer(Container container) {
 		Assert.isNotNull(container);
@@ -47,8 +61,21 @@ public abstract class Pad {
 			"Another container is already attached");
 
 		container.setContainerID(fContainerID);
-		fContainer = container;
-		createPartControl(fContainer.getComposite());
+		fContainer = container;		
+		Composite parent = fContainer.getComposite();
+		
+		/* Create Pad's border and content area */ 
+		FillLayout layout = new FillLayout();
+		layout.marginHeight = 2;
+		layout.marginWidth = 2;
+		parent.setLayout(layout);
+
+		parent.setBackground(fBorderColor);
+		
+		Composite content = new Composite(parent, SWT.NONE);
+		parent.pack();
+		
+		createPartControl(content);
 		fContainer.getComposite().pack();
 		
 		onContainerAttached();
@@ -57,7 +84,8 @@ public abstract class Pad {
 	public void detachContainer() {
 		Assert.isLegal(isContainerAttached(), "No container attached");
 		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
-
+		
+		fBorderColor = fColorNotSelected;
 		fContainer = null;
 	}
 

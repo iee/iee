@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
+import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
 import org.eclipse.jface.text.BadLocationException;
@@ -155,27 +155,46 @@ public class ContainerManager extends EventManager {
 		removeListenerObject(listener);
 	}
 
-	protected void fireContainerCreated(ContainerManagerEvent event) {
+	protected void fireContainerCreated(Container c) {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i]).containerCreated(event);
+			((IContainerManagerListener) listeners[i])
+				.containerCreated(new ContainerEvent(c, fContainerManagerID));
 		}
 	}
 
-	protected void fireContainerRemoved(ContainerManagerEvent event) {
+	protected void fireContainerRemoved(Container c) {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i]).containerRemoved(event);
+			((IContainerManagerListener) listeners[i])
+				.containerRemoved(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
+	
+	protected void fireContainerSelected(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerSelected(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
+	
+	protected void fireContainerLostSelection(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerLostSelection(new ContainerEvent(c, fContainerManagerID));
 		}
 	}
 
-	protected void fireDebugNotification(ContainerManagerEvent event) {
+	protected void fireDebugNotification() {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i]).debugNotification(event);
+			((IContainerManagerListener) listeners[i])
+				.debugNotification(new ContainerEvent(null, fContainerManagerID));
 		}
 	}
-
+	
 
 	/* DOCUMENT MODIFICATION EVENT PROCESSING */
 
@@ -286,7 +305,7 @@ public class ContainerManager extends EventManager {
 					System.out.println("End of iteration");
 
 					/* For debug */
-					fireDebugNotification(new ContainerManagerEvent(null, fContainerManagerID));
+					fireDebugNotification();
 				}
 			}
 
@@ -311,8 +330,7 @@ public class ContainerManager extends EventManager {
 							/* Removing container */
 
 							container.dispose();
-							fireContainerRemoved(new ContainerManagerEvent(
-									container, fContainerManagerID));
+							fireContainerRemoved(container);
 						}
 					}
 				}
@@ -338,8 +356,7 @@ public class ContainerManager extends EventManager {
 							containerID);
 
 						fContainers.add(container);
-						fireContainerCreated(new ContainerManagerEvent(
-								container, fContainerManagerID));
+						fireContainerCreated(container);
 					}
 					offset += region.getLength();
 				}

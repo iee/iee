@@ -24,12 +24,14 @@ class StyledTextManager {
 	private final ContainerManager fContainerManager;
 	
 	private Boolean fCaretMovesForward;
+	private Container fSelectedContainer; 
 	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fStyledText = containerManager.getStyledText();
 		
 		fCaretMovesForward = false;
+		fSelectedContainer = null;
 		
 		initListeners();
 	}
@@ -45,10 +47,10 @@ class StyledTextManager {
 			@Override
 			public void verifyText(VerifyEvent e) {
 				Container atStart = fContainerManager.getContainerHavingOffset(e.start);
-				Container atEnd = fContainerManager.getContainerHavingOffset(e.end);		
+				Container atEnd = fContainerManager.getContainerHavingOffset(e.end);
 				
 				System.out.println(e.start + " " + e.end);
-								
+				
 				/* Text replaced */
 				if ((atStart != null && e.start != atStart.getPosition().getOffset()) ||
 						(atEnd != null && e.end != atEnd.getPosition().getOffset()))
@@ -84,18 +86,28 @@ class StyledTextManager {
 		fStyledText.addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				Container c = fContainerManager.getContainerHavingOffset(e.caretOffset);
-				if (c != null) {
-					Position p = c.getPosition();
+				if (fSelectedContainer != null) {
+					fContainerManager.fireContainerLostSelection(fSelectedContainer);
+					fSelectedContainer = null;
+				}
+				
+				Container container = fContainerManager.getContainerHavingOffset(e.caretOffset);
+				if (container != null) {
+					Position position = container.getPosition();
 					
-					if (e.caretOffset == p.getOffset() || e.caretOffset == p.getOffset() + p.getLength()) {
-						return;
+					if (e.caretOffset != position.getOffset() && e.caretOffset != position.getOffset() + position.getLength()) {
+						/* Move caret to the Pad's border */
+						if (fCaretMovesForward) {
+							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
+						} else {
+							fStyledText.setCaretOffset(position.getOffset());
+						}
 					}
-					
-					if (fCaretMovesForward) {
-						fStyledText.setCaretOffset(p.getOffset() + p.getLength());
-					} else {
-						fStyledText.setCaretOffset(p.getOffset());
+	
+					if (e.caretOffset == position.getOffset()) {
+						/* Caret is at the left side of the Pad - selecting it */
+						fContainerManager.fireContainerSelected(container);
+						fSelectedContainer = container;
 					}
 				}
 			}
