@@ -5,7 +5,7 @@ import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.ContainerManagerConfig;
-import org.eclipse.iee.editor.core.container.event.ContainerManagerEvent;
+import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
@@ -45,16 +45,24 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
-			public void debugNotification(ContainerManagerEvent event) {
+			public void debugNotification(ContainerEvent event) {
 				firePropertyChange(PROP_CONTAINER_SET);
 			}
 
 			@Override
-			public void containerCreated(ContainerManagerEvent event) {
+			public void containerCreated(ContainerEvent event) {
 			}
 
 			@Override
-			public void containerRemoved(ContainerManagerEvent event) {
+			public void containerRemoved(ContainerEvent event) {
+			}
+
+			@Override
+			public void containerSelected(ContainerEvent event) {
+			}
+
+			@Override
+			public void containerLostSelection(ContainerEvent event) {				
 			}
 		};
 		fContainerManager.addContainerManagerListener(fContainerManagerListener);
