@@ -6,6 +6,8 @@ import org.eclipse.iee.editor.core.pad.Pad;
 
 public class $padName$ extends Pad {
 
+	private static final long serialVersionUID = 1L;
+	
 	public $padName$() {
 		super();
 	}
