@@ -4,8 +4,20 @@
 
    <extension
          point="org.eclipse.ui.popupMenus">
+         <viewerContribution
+            id="org.eclipse.iee.translator.math.contextJava"
+            targetID="#CompilationUnitEditorContext">
+         <action
+               class="org.eclipse.iee.translator.math.actions.AddCompiledMathPadActionDelegate"
+               id="org.eclipse.iee.translator.math.actions.AddCompiledMathPadActionDelegate"
+               label="Insert compiled Math expression" 
+               icon="icons/cmath.png" 
+               menubarPath="additions"
+               tooltip="Insert compiled Math expression">
+         </action>
+      </viewerContribution>
       <viewerContribution
-            id="org.eclipse.iee.translator.math.context"
+            id="org.eclipse.iee.translator.math.contextSample"
             targetID="#TextEditorContext">
          <action
                class="org.eclipse.iee.translator.math.actions.AddCompiledMathPadActionDelegate"
@@ -20,8 +32,20 @@
 
 	<extension
     	point = "org.eclipse.ui.editorActions">
+    	<editorContribution 
+        	id="org.eclipse.iee.translator.math.toolbarJava" 
+         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
+			<action id="org.eclipse.iee.translator.math.add" 
+	        	label="Add compiled Math expression" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/cmath.png"
+	            tooltip="Add compiled Math expression" 
+	            class="org.eclipse.iee.translator.math.actions.AddCompiledMathPadActionDelegate"
+	            definitionId="org.eclipse.iee.translator.math.add"
+	        /> 
+    	</editorContribution>
 		<editorContribution 
-        	id="org.eclipse.iee.translator.math.contribution" 
+        	id="org.eclipse.iee.translator.math.toolbarSample" 
          	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
 			<action id="org.eclipse.iee.translator.math.add" 
 	        	label="Add compiled Math expression" 

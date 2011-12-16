@@ -29,6 +29,11 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class CompiledMathPad extends Pad implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private transient static FileStorage fFileStorage;
 
 	private String fText;
@@ -98,11 +103,9 @@ public class CompiledMathPad extends Pad implements Serializable {
 						System.out.println(fJavaContent);
 						if (fJavaContent.matches(";")) {
 							fJavaContent = "";
-							getContainer().setTextContent(
-									fJavaContent);
+							getContainer().setTextContent(fJavaContent);
 						} else
-							getContainer().setTextContent(
-									fJavaContent);
+							getContainer().setTextContent(fJavaContent);
 					} catch (Exception e1) {
 						fJavaContent = "";
 						getContainer().setTextContent(fJavaContent);
@@ -194,7 +197,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 		newPad.fLatexContent = this.fLatexContent;
 		newPad.fJavaContent = this.fJavaContent;
 		newPad.fIsTextVisible = this.fIsTextVisible;
-		//newPad.getContainer().setTextContent(fJavaContent);
+		// newPad.getContainer().setTextContent(fJavaContent);
 
 		File inputFile = new File(this.fImagePath);
 		File outputFile = new File(newPad.fImagePath);

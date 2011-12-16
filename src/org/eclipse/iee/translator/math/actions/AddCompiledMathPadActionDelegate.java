@@ -1,6 +1,6 @@
 package org.eclipse.iee.translator.math.actions;
 
-import org.eclipse.iee.editor.sample.SampleExtendedEditor;
+import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.translator.math.pad.CompiledMathPad;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -14,13 +14,15 @@ public class AddCompiledMathPadActionDelegate implements IEditorActionDelegate {
 
 	Shell shell = null;
 
-	SampleExtendedEditor fSampleExtendedEditor;
+	IPadEditor fPadEditor;
 
 	@Override
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 
-		if (targetEditor instanceof SampleExtendedEditor) {
-			fSampleExtendedEditor = (SampleExtendedEditor) targetEditor;
+		try {
+			fPadEditor = (IPadEditor) targetEditor;
+		} catch (ClassCastException e) {
+			fPadEditor = null;
 		}
 	}
 
@@ -31,13 +33,13 @@ public class AddCompiledMathPadActionDelegate implements IEditorActionDelegate {
 			shell = shells[0];
 		}
 
-		if (fSampleExtendedEditor == null) {
+		if (fPadEditor == null) {
 			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
 			return;
 		}
-		
-		fSampleExtendedEditor.createPad(new CompiledMathPad(),
-				fSampleExtendedEditor.getCaretOffset());
+
+		fPadEditor
+				.createPad(new CompiledMathPad(), fPadEditor.getCaretOffset());
 	}
 
 	@Override
