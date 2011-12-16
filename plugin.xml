@@ -8,11 +8,12 @@
             targetID="#TextEditorContext"
             id="org.eclipse.iee.sample.matrix.contextSample">
          <action
-               label="Insert Matrix"
-               tooltip="Insert Matrix"
                class="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate"
+               icon="icons/matrix.png"
+               id="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate"
+               label="Insert Matrix"
                menubarPath="additions"
-               id="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate">
+               tooltip="Insert Matrix">
          </action>
       </viewerContribution>
    </extension>
@@ -22,11 +23,12 @@
             targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor"
             id="org.eclipse.iee.sample.matrix.toolbarSample">
          <action
-               label="Insert Matrix"
-               tooltip="Insert Matrix"
                class="org.eclipse.iee.sample.matrix.actions.AddMatrixActionDelegate"
+               icon="icons/matrix.png"
+               id="org.eclipse.iee.sample.matrix.add"
+               label="Insert Matrix"
                toolbarPath="TextEditor"
-               id="org.eclipse.iee.sample.matrix.add">
+               tooltip="Insert Matrix">
          </action>
       </editorContribution>
    </extension>

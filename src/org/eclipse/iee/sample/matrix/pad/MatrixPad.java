@@ -1,38 +1,51 @@
 package org.eclipse.iee.sample.matrix.pad;
 
+import java.io.Serializable;
+
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class MatrixPad extends Pad{
+import pl.netanel.swt.matrix.Matrix;
 
-	@Override
+public class MatrixPad extends Pad implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public MatrixPad()
+	{
+		super();	
+	}
+	
+	protected MatrixPad(String containerID) {
+		super(containerID);
+	}
+	
 	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
-		
+		 parent.setLayout(new FillLayout());
+		 Matrix<Integer, Integer> matrix = new Matrix<Integer, Integer>(parent, SWT.NONE);
+		 matrix.getAxisX().getBody().setCount(4);
+		 matrix.getAxisY().getBody().setCount(10);
 	}
 
 	@Override
 	public Pad copy() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MatrixPad();
 	}
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void unsave() {
-		// TODO Auto-generated method stub
-		
+	public void unsave() {		
 	}
 
 	@Override
-	public void onContainerAttached() {
-		// TODO Auto-generated method stub
-		
+	public void onContainerAttached() {		
 	}
 
 }
