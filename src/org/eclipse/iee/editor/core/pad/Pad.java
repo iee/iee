@@ -5,20 +5,19 @@ import java.util.UUID;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad {
 	
-	private static Color fColorSelected = new Color(null, 0, 0, 0);
-	private static Color fColorNotSelected = new Color(null, 255, 255, 255);
-	
 	private String fContainerID;
 	private String fType;
 	private Container fContainer;
 	
-	private Color fBorderColor = fColorNotSelected;
+	private Color fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 
 	public Pad() {
 		fContainerID = UUID.randomUUID().toString();
@@ -39,6 +38,9 @@ public abstract class Pad {
 	}
 
 	public String getContainerManagerID() {
+		if (fContainer == null) {
+			return null;
+		}
 		return fContainer.getContainerManagerID();
 	}
 
@@ -51,8 +53,12 @@ public abstract class Pad {
 	}
 	
 	public void setSelected(boolean isSelected) {
-		fBorderColor = (isSelected) ? fColorSelected : fColorNotSelected;
-		fContainer.getComposite().setBackground(fBorderColor);
+		fBorderColor = (isSelected)
+			? IPadConfiguration.BORDER_COLOR_SELECTED
+			: IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
+		if (fContainer != null) {
+			fContainer.getComposite().setBackground(fBorderColor);
+		}
 	}
 
 	public void attachContainer(Container container) {
@@ -62,21 +68,40 @@ public abstract class Pad {
 
 		container.setContainerID(fContainerID);
 		fContainer = container;		
-		Composite parent = fContainer.getComposite();
+		final Composite parent = fContainer.getComposite();
 		
 		/* Create Pad's border and content area */ 
 		FillLayout layout = new FillLayout();
-		layout.marginHeight = 2;
-		layout.marginWidth = 2;
+		layout.marginHeight = IPadConfiguration.BORDER_WIDTH;
+		layout.marginWidth = IPadConfiguration.BORDER_WIDTH;
 		parent.setLayout(layout);
 
 		parent.setBackground(fBorderColor);
 		
-		Composite content = new Composite(parent, SWT.NONE);
+		final Composite content = new Composite(parent, SWT.NONE);
 		parent.pack();
+				
+		content.addControlListener(new ControlListener() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				parent.setSize(
+					content.getSize().x + 2 * IPadConfiguration.BORDER_WIDTH,
+					content.getSize().y + 2 * IPadConfiguration.BORDER_WIDTH
+				);
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		});
 		
 		createPartControl(content);
 		fContainer.getComposite().pack();
+		
+		MouseEventManager mouseManager = new MouseEventManager(parent);
+		parent.addMouseTrackListener(mouseManager);
+		parent.addMouseMoveListener(mouseManager);
+		parent.addMouseListener(mouseManager);
 		
 		onContainerAttached();
 	}
@@ -85,7 +110,7 @@ public abstract class Pad {
 		Assert.isLegal(isContainerAttached(), "No container attached");
 		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
 		
-		fBorderColor = fColorNotSelected;
+		fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 		fContainer = null;
 	}
 

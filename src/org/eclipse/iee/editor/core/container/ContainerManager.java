@@ -36,6 +36,9 @@ public class ContainerManager extends EventManager {
 	private final StyledTextManager fStyledTextManager;
 	
 	@SuppressWarnings("unused")
+	private final UserInteractionManager fUserInteractionManager;
+	
+	@SuppressWarnings("unused")
 	private final PartitioningManager fPartitioningManager;
 	
 	private final StyledText fStyledText;
@@ -96,6 +99,7 @@ public class ContainerManager extends EventManager {
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
 		fStyledTextManager = new StyledTextManager(this);
+		fUserInteractionManager = new UserInteractionManager(this);
 		fPartitioningManager = new PartitioningManager(this);
 		fDocumentAccess = new DocumentAccess(this);
 		
@@ -299,8 +303,8 @@ public class ContainerManager extends EventManager {
 				if (!fDocumentAccess.processNextDocumentAccessRequest()) {
 					updateContainersPresentations();
 					updateContainerVisibility(true);
-					
 					fProcessingDocumentModification = false;
+					fUserInteractionManager.updateCaretSelection();
 					
 					System.out.println("End of iteration");
 

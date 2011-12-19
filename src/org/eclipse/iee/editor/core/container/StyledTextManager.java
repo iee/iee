@@ -5,33 +5,21 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.jface.text.Position;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CaretEvent;
-import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.LineStyleEvent;
 import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.PaintObjectEvent;
 import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.VerifyKeyListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
 
 class StyledTextManager {
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	
-	private Boolean fCaretMovesForward;
-	private Container fSelectedContainer; 
-	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fStyledText = containerManager.getStyledText();
-		
-		fCaretMovesForward = false;
-		fSelectedContainer = null;
 		
 		initListeners();
 	}
@@ -39,79 +27,8 @@ class StyledTextManager {
 	public void updateStyledText() {
 		fStyledText.update();
 	}
-	
+		
 	protected void initListeners() {
-		
-		/* 1) Disallow modification within Container's text region */
-		fStyledText.addVerifyListener(new VerifyListener() {
-			@Override
-			public void verifyText(VerifyEvent e) {
-				Container atStart = fContainerManager.getContainerHavingOffset(e.start);
-				Container atEnd = fContainerManager.getContainerHavingOffset(e.end);
-				
-				System.out.println(e.start + " " + e.end);
-				
-				/* Text replaced */
-				if ((atStart != null && e.start != atStart.getPosition().getOffset()) ||
-						(atEnd != null && e.end != atEnd.getPosition().getOffset()))
-				{
-					e.doit = false;
-					return;
-				}
-
-				fContainerManager.updateContainerVisibility(false);
-			}
-		});
-
-		fStyledText.addVerifyKeyListener(new VerifyKeyListener() {
-			@Override
-			public void verifyKey(VerifyEvent event) {
-				switch (event.keyCode) {
-				case SWT.ARROW_LEFT:
-				case SWT.ARROW_UP:
-					fCaretMovesForward = false;
-					break;
-				case SWT.ARROW_RIGHT:
-				case SWT.ARROW_DOWN:
-					fCaretMovesForward = true;
-					break;
-				}
-			}
-		});
-		
-		/*
-		 * If caret is inside Container's text region, moving it to the
-		 * beginning of line
-		 */
-		fStyledText.addCaretListener(new CaretListener() {
-			@Override
-			public void caretMoved(CaretEvent e) {
-				if (fSelectedContainer != null) {
-					fContainerManager.fireContainerLostSelection(fSelectedContainer);
-					fSelectedContainer = null;
-				}
-				
-				Container container = fContainerManager.getContainerHavingOffset(e.caretOffset);
-				if (container != null) {
-					Position position = container.getPosition();
-					
-					if (e.caretOffset != position.getOffset() && e.caretOffset != position.getOffset() + position.getLength()) {
-						/* Move caret to the Pad's border */
-						if (fCaretMovesForward) {
-							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
-						} else {
-							fStyledText.setCaretOffset(position.getOffset());
-						}
-					}
-	
-					if (e.caretOffset == position.getOffset()) {
-						/* Caret is at the left side of the Pad - selecting it */
-						fContainerManager.fireContainerSelected(container);
-						fSelectedContainer = container;
-					}
-				}
-			}
-		});
 
 		fStyledText.addLineStyleListener(new LineStyleListener() {
 
@@ -161,7 +78,7 @@ class StyledTextManager {
 						descent,
 						c.getComposite().getSize().x);
 
-					/* XXX setting data */
+					/* Setting data */
 					firstSymbol.data = c;
 					
 					styles.add(firstSymbol);
