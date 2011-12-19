@@ -1,5 +1,8 @@
 package org.eclipse.iee.sample.matrix;
 
+import org.eclipse.iee.sample.matrix.pad.MatrixPad;
+import org.eclipse.iee.translator.jmole.math.generator.Mole;
+import org.eclipse.iee.translator.molex.mex.generator.Molex;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -9,31 +12,37 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.iee.sample.matrix"; //$NON-NLS-1$
 
-	// The shared instance
 	private static Activator plugin;
+	
+	private static Mole mole;
+	private static Molex molex;
 	
 	/**
 	 * The constructor
 	 */
 	public Activator() {
+		MatrixPad.setStorage(new FileStorage("D:\\MatrixPads\\"));
+		
+		mole = Mole.create();
+		molex = Molex.create();
+		System.out.println("Activated");
+	}
+	
+	public static Mole getMole() {
+		return mole;
+	}
+	
+	public static Molex getMolex() {
+		return molex;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
