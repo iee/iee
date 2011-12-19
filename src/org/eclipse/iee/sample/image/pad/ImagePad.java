@@ -5,10 +5,13 @@ import java.io.Serializable;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -31,6 +34,7 @@ public class ImagePad extends Pad implements Serializable {
 
 	private int fCurrentState;
 	protected String fImagePath;
+	protected Image fOriginalImage = null;
 
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
@@ -78,8 +82,6 @@ public class ImagePad extends Pad implements Serializable {
 
 		/* Initialize controls */
 		FillLayout layout = new FillLayout(SWT.VERTICAL);
-		layout.marginHeight = 5;
-		layout.marginWidth = 5;
 		parent.setLayout(layout);
 		// It is hint operation now
 		parent.setBackground(new Color(null, 255, 255, 255));
@@ -98,12 +100,9 @@ public class ImagePad extends Pad implements Serializable {
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				FileDialog fileDialog = new FileDialog(parent.getShell(),
-						SWT.OPEN);
-				fileDialog.setFilterNames(new String[] { "Jpeg (*.jpg)",
-						"PNG (*.png)" });
-				fileDialog
-						.setFilterExtensions(new String[] { "*.jpg", "*.png" });
+				FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
+				fileDialog.setFilterNames(new String[] { "Jpeg (*.jpg)", "PNG (*.png)" });
+				fileDialog.setFilterExtensions(new String[] { "*.jpg", "*.png" });
 
 				String imagePath = fileDialog.open();
 				if (imagePath == null) {
@@ -134,12 +133,11 @@ public class ImagePad extends Pad implements Serializable {
 
 	}
 
-	protected void initImageView(Composite parent) {
+	protected void initImageView(final Composite parent) {
 		System.out.println("initImageView");
 
-		Image image = null;
 		try {
-			image = new Image(parent.getDisplay(), fImagePath);
+			fOriginalImage = new Image(parent.getDisplay(), fImagePath);
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -152,33 +150,39 @@ public class ImagePad extends Pad implements Serializable {
 
 		/* Initialize controls */
 		FillLayout layout = new FillLayout();
-		layout.marginHeight = 5;
-		layout.marginWidth = 5;
 		parent.setLayout(layout);
-		// It is hint operation now
-		parent.setBackground(new Color(null, 255, 255, 255));
-		Label label = new Label(parent, SWT.NONE);
-		label.setImage(image);
+		final Label label = new Label(parent, SWT.NONE);
+		label.setImage(fOriginalImage);
 		parent.pack();
 
-		MouseEventManager mouseManager = new MouseEventManager(parent, label);
-		parent.addMouseTrackListener(mouseManager);
-		parent.addMouseMoveListener(mouseManager);
-		parent.addMouseListener(mouseManager);
-
+		parent.addControlListener(new ControlListener() {
+			@Override
+			public void controlResized(ControlEvent e) {				
+				Point size = parent.getSize();
+				
+				final Image resizedImage = new Image(
+					parent.getDisplay(),
+					fOriginalImage.getImageData().scaledTo(size.x, size.y));
+				
+				label.setImage(resizedImage);
+				parent.redraw();
+			}
+			
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}			
+		});
 	}
 
 	protected void initErrorView(final Composite parent) {
 		System.out.println("initErrorView");
 
 		FillLayout layout = new FillLayout(SWT.VERTICAL);
-		layout.marginHeight = 5;
-		layout.marginWidth = 5;
 		parent.setLayout(layout);
 		// It is hint operation now
 		parent.setBackground(new Color(null, 255, 255, 255));
 
-		final Label label = new Label(parent, SWT.NONE);
+		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
 		label.setText("Error occured");
 
 		final Button button = new Button(parent, SWT.PUSH);
