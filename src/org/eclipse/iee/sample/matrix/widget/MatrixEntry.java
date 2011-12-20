@@ -6,6 +6,10 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,8 +45,13 @@ public class MatrixEntry extends Composite {
 		/*
 		 * Drawing
 		 */
-		this.setLayout(new FillLayout(SWT.HORIZONTAL));
-		this.setBounds(0, 0, 500, 500);
+		FillLayout entryLayout = new FillLayout(SWT.HORIZONTAL);
+		entryLayout.marginHeight = 1;
+		entryLayout.marginWidth = 1;
+		this.setLayout(entryLayout);
+		this.setSize(300, 300);
+		this.setBounds(0, 0, 300, 300);
+		this.setBackground(new Color(null, 255, 255, 255));
 
 		final SashForm sashForm = new SashForm(this, SWT.HORIZONTAL);
 		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -50,11 +59,46 @@ public class MatrixEntry extends Composite {
 		styledText.setVisible(true);
 		styledText.setText("TestTestTest");
 
-		final Label fFormulaImage = new Label(sashForm, SWT.RESIZE);
-		fFormulaImage.setVisible(false);
+		final Label formulaImage = new Label(sashForm, SWT.RESIZE);
+		formulaImage.setVisible(false);
 		
-		this.pack();
 		// Listeners
+		styledText.addMouseTrackListener(new MouseTrackListener() {
+			
+			@Override
+			public void mouseHover(MouseEvent e) {
+				setBackground(new Color(null, 0, 0, 0));
+			}
+			
+			@Override
+			public void mouseExit(MouseEvent e) {
+				setBackground(new Color(null, 255, 255, 255));
+			}
+			
+			@Override
+			public void mouseEnter(MouseEvent e) {	
+				setBackground(new Color(null, 0, 0, 0));
+			}
+		});
+		
+		formulaImage.addMouseTrackListener(new MouseTrackListener() {
+			
+			@Override
+			public void mouseHover(MouseEvent e) {
+				setBackground(new Color(null, 0, 0, 0));
+			}
+			
+			@Override
+			public void mouseExit(MouseEvent e) {
+				setBackground(new Color(null, 255, 255, 255));
+			}
+			
+			@Override
+			public void mouseEnter(MouseEvent e) {	
+				setBackground(new Color(null, 0, 0, 0));
+			}
+		});
+
 		styledText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -99,10 +143,10 @@ public class MatrixEntry extends Composite {
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
-					fFormulaImage.setImage(image);
-					fFormulaImage.setSize(image.getBounds().width,
+					formulaImage.setImage(image);
+					formulaImage.setSize(image.getBounds().width,
 							image.getBounds().height);
-					fFormulaImage.setVisible(true);
+					formulaImage.setVisible(true);
 					//parent.pack();
 				}
 			}
