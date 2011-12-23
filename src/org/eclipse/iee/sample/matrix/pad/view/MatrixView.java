@@ -1,25 +1,26 @@
-package org.eclipse.iee.sample.matrix.pad.widget;
+package org.eclipse.iee.sample.matrix.pad.view;
 
+import org.eclipse.iee.sample.matrix.pad.model.Matrix;
 import org.eclipse.iee.sample.matrix.pad.model.Model;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class MatrixWidget extends Composite {
+public class MatrixView extends Composite {
 
 	private Model fModel;
 	
 	private int fRowsNumber;
 	private int fColumnsNumber;
 	
-	private MatrixEntry[][] fEntries;
+	private ElementView[][] fElementViews;
 	private String fImagePath = "D:\\MatrixPads\\an_id";
 
-	public MatrixWidget(Composite parent, int style) {
+	public MatrixView(Composite parent, int style) {
 		super(parent, style);
 	}
 
-	public MatrixWidget(Composite parent, Model model) {
+	public MatrixView(Composite parent, Model model) {
 		super(parent, SWT.NONE);
 		
 		fModel = model;
@@ -30,14 +31,22 @@ public class MatrixWidget extends Composite {
 		GridLayout matrixLayout = new GridLayout(fColumnsNumber, true);
 		this.setLayout(matrixLayout);
 
-		fEntries = new MatrixEntry[fRowsNumber][fColumnsNumber];
-		initEntries(this, SWT.NONE);
+		fElementViews = new ElementView[fRowsNumber][fColumnsNumber];
+		createElementsViews();
+	}
+	
+	protected void fullReload() {
+		Matrix matrix = fModel.getMatrix();
+		fRowsNumber = matrix.getRowsNumber();
+		fColumnsNumber = matrix.getRowsNumber();
+		
+		// set widget size		
 	}
 
-	private void initEntries(Composite parent, int style) {
+	private void createElementsViews() {
 		for (int i = 0; i < fRowsNumber; i++) {
 			for (int j = 0; j < fColumnsNumber; j++) {
-				fEntries[i][j] = new MatrixEntry(parent, style, i, j, true, fImagePath + "_" + i + "_" + j + ".jpg");
+				fElementViews[i][j] = new ElementView(this, i, j, true, fImagePath + "_" + i + "_" + j + ".jpg");
 			}
 		}
 	}

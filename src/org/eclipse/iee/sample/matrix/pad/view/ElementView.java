@@ -1,4 +1,4 @@
-package org.eclipse.iee.sample.matrix.pad.widget;
+package org.eclipse.iee.sample.matrix.pad.view;
 
 import org.eclipse.iee.sample.matrix.Activator;
 import org.eclipse.swt.SWT;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 
-public class MatrixEntry extends Composite {
+public class ElementView extends Composite {
 
 	private String fText;
 	private String fLatexContent;
@@ -26,13 +26,13 @@ public class MatrixEntry extends Composite {
 	private int fRowIndex;
 	private int fColumnIndex;
 
-	public MatrixEntry(Composite parent, int style) {
+	public ElementView(Composite parent, int style) {
 		super(parent, style);
 	}
 
-	public MatrixEntry(final Composite parent, int style, int rowIndex,
+	public ElementView(final Composite parent, int rowIndex,
 			int columnIndex, boolean isTextVisible, String imagePath) {
-		super(parent, style);
+		super(parent, SWT.NONE);
 
 		fRowIndex = rowIndex;
 		fColumnIndex = columnIndex;
@@ -59,21 +59,8 @@ public class MatrixEntry extends Composite {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				if (!styledText.getText().contains("\n")) {
-					System.out.println("before translation to Java");
-					try {
-						fText = styledText.getText();
-						String resultJava = Activator.getMole().translateMath(
-								styledText.getText());
-						fJavaContent = resultJava.trim();
-						if (fJavaContent.matches(";")) {
-							fJavaContent = "";
-						}
-						System.out.println(fJavaContent);
-						
-					} catch (Exception e1) {
-						fJavaContent = "";
-						// e1.printStackTrace();
-					}
+					
+					//translate to java 
 
 					System.out.println("before translation to TeX");
 					try {

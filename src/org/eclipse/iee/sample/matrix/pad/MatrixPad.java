@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.matrix.FileStorage;
 import org.eclipse.iee.sample.matrix.pad.model.Model;
-import org.eclipse.iee.sample.matrix.pad.widget.MatrixWidget;
+import org.eclipse.iee.sample.matrix.pad.view.MatrixView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -33,7 +33,7 @@ public class MatrixPad extends Pad implements Serializable {
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		//Test
 
-		MatrixWidget matrix = new MatrixWidget(parent, new Model());
+		MatrixView matrix = new MatrixView(parent, new Model());
 	}
 
 	public static void setStorage(FileStorage fStorage) {
