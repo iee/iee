@@ -18,16 +18,28 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class FormulaRenderer {
 	
-	protected Display fDisplay;
+	protected static Display fDisplay;
 	
-	protected Map<String, Image> fCachedImages = new TreeMap<String, Image>();
+	protected static Map<String, Image> fCachedImages = new TreeMap<String, Image>();
 	
 	
-	public FormulaRenderer(Display display) {
+	public static void setDisplay(Display display) {
 		fDisplay = display;
 	}
 	
-	public Image getFormulaImage(String text) {
+	public static boolean isTextValid(String text) {
+		if (fCachedImages.containsKey(text)) {
+			return true;
+		}
+		
+		if (getFormulaImage(text) == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public static Image getFormulaImage(String text) {
 		Image cachedImage = fCachedImages.get(text);
 		if (cachedImage != null) {
 			return cachedImage;
@@ -59,7 +71,7 @@ public class FormulaRenderer {
 		}
 	}
 	
-	protected ImageData convertToSWT(BufferedImage bufferedImage) {
+	protected static ImageData convertToSWT(BufferedImage bufferedImage) {
 		if (bufferedImage.getColorModel() instanceof DirectColorModel) {	
 			DirectColorModel colorModel =
 				(DirectColorModel) bufferedImage.getColorModel();

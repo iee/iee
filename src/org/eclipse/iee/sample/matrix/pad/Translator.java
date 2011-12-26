@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.matrix.pad;
 
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.iee.sample.matrix.Activator;
@@ -7,18 +8,21 @@ import org.eclipse.iee.sample.matrix.pad.model.Matrix;
 
 public class Translator {
 	
-	protected TreeMap<String, String> fCachedItems;
+	protected static Map<String, String> fCachedItems = new TreeMap<String, String>();
 
-	public boolean validateElement(String text) {
+	public static boolean isTextValid(String text) {
 		if (fCachedItems.containsKey(text)) {
 			return true;
 		}
-
-		// XXX perform validation here
-		return true;
+		
+		if (translateElement(text) == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 		
-	public String translateMatrix(final Matrix matrix) {
+	public static String translateMatrix(final Matrix matrix) {
 
 		/* Array declaration */
 		
@@ -46,7 +50,7 @@ public class Translator {
 		return declaration + elements;
 	}
 	
-	public String translateElement(String text) {
+	public static String translateElement(String text) {
 		String cached = fCachedItems.get(text);
 		if (cached != null) {
 			return cached;
@@ -59,10 +63,10 @@ public class Translator {
 			String resultJava = Activator.getMole().translateMath(text);
 			translated = resultJava.trim();
 			if (translated.matches(";")) {
-				translated = "";
-			}			
+				translated = null;
+			}
 		} catch (Exception e) {
-			translated = "";
+			translated = null;
 			e.printStackTrace();
 		}		
 

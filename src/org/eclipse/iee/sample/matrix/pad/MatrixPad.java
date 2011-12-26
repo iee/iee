@@ -6,11 +6,10 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.matrix.FileStorage;
 import org.eclipse.iee.sample.matrix.pad.model.Model;
 import org.eclipse.iee.sample.matrix.pad.view.MatrixView;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class MatrixPad extends Pad implements Serializable {
 
@@ -32,6 +31,11 @@ public class MatrixPad extends Pad implements Serializable {
 	}
 
 	public void createPartControl(Composite parent) {
+		
+		FormulaRenderer.setDisplay(Display.getCurrent());
+		
+		
+		
 		//parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		GridLayout padLayout = new GridLayout(1, true);
 		parent.setLayout(padLayout);

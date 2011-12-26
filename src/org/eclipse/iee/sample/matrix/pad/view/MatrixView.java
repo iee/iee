@@ -48,7 +48,7 @@ public class MatrixView extends Composite {
 		GridData elemGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		for (int i = 0; i < fRowsNumber; i++) {
 			for (int j = 0; j < fColumnsNumber; j++) {
-				fElementViews[i][j] = new ElementView(this, i, j, true, fImagePath + "_" + i + "_" + j + ".jpg");
+				fElementViews[i][j] = new ElementView(this);
 				fElementViews[i][j].setLayoutData(elemGridData);
 			}
 		}
