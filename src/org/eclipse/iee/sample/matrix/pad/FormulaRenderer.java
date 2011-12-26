@@ -43,8 +43,8 @@ public class FormulaRenderer {
 					latex,
 					TeXConstants.STYLE_TEXT,
 					60,
-					java.awt.Color.white,
-					java.awt.Color.black);
+					java.awt.Color.black,
+					java.awt.Color.white);
 			
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
 			

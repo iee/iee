@@ -5,8 +5,13 @@ import org.eclipse.iee.sample.matrix.pad.FormulaRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -22,9 +27,9 @@ public class ElementView extends Composite {
 	private String fJavaContent;
 	private boolean fIsTextVisible;
 	private boolean fIsSelected;
-	
+
 	private FormulaRenderer fRenderer;
-	
+
 	private String fImagePath;
 	protected Image fElementImage = null;
 
@@ -35,9 +40,11 @@ public class ElementView extends Composite {
 		super(parent, style);
 	}
 
-	public ElementView(final Composite parent, int rowIndex,
-			int columnIndex, boolean isTextVisible, String imagePath) {
+	public ElementView(final Composite parent, int rowIndex, int columnIndex,
+			boolean isTextVisible, String imagePath) {
 		super(parent, SWT.NONE);
+
+		fRenderer = new FormulaRenderer(parent.getDisplay());
 
 		fRowIndex = rowIndex;
 		fColumnIndex = columnIndex;
@@ -47,7 +54,6 @@ public class ElementView extends Composite {
 		 * Drawing
 		 */
 		this.setLayout(new FillLayout(SWT.HORIZONTAL));
-		this.setBounds(0, 0, 500, 500);
 
 		final SashForm sashForm = new SashForm(this, SWT.HORIZONTAL);
 		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -55,18 +61,18 @@ public class ElementView extends Composite {
 		styledText.setVisible(true);
 		styledText.setText("TestTestTest");
 
-		final Label fFormulaImage = new Label(sashForm, SWT.RESIZE);
-		fFormulaImage.setImage(fElementImage);
-		fFormulaImage.setVisible(false);
-		
+		final Label label = new Label(sashForm, SWT.RESIZE);
+		label.setImage(fElementImage);
+		label.setVisible(false);
+
 		this.pack();
 		// Listeners
 		styledText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				if (!styledText.getText().contains("\n")) {
-					
-					//translate to java 
+
+					// translate to java
 
 					System.out.println("before translation to TeX");
 					try {
@@ -75,10 +81,7 @@ public class ElementView extends Composite {
 						String hidden = resultTex.trim();
 						fLatexContent = hidden;
 						System.out.println(fLatexContent);
-						TeXFormula texFormula = new TeXFormula(fLatexContent);
-						texFormula.createJPEG(TeXConstants.STYLE_DISPLAY, 60,
-								fImagePath, java.awt.Color.white,
-								java.awt.Color.black);
+
 					} catch (Exception e1) {
 						fLatexContent = "";
 						// e1.printStackTrace();
@@ -87,25 +90,67 @@ public class ElementView extends Composite {
 					styledText.setVisible(false);
 					fIsTextVisible = false;
 					try {
-						fElementImage = new Image(parent.getDisplay(), fImagePath);
+						fElementImage = fRenderer
+								.getFormulaImage(fLatexContent);
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
-					Point size = styledText.getSize();
-					
-					final Image resizedImage = new Image(
-							parent.getDisplay(),
-							fElementImage.getImageData().scaledTo(size.x, size.y));
-						
-					fFormulaImage.setImage(resizedImage);
-					parent.redraw();
-						
-					fFormulaImage.setVisible(true);
-					//parent.pack();
+					Point size = getSize();
+
+					final Image resizedImage = new Image(parent.getDisplay(),
+							fElementImage.getImageData().scaledTo(size.x,
+									size.y));
+
+					label.setImage(resizedImage);
+					label.setVisible(true);
+					redraw();
+					label.pack();
+					// pack();
 				}
 			}
 
 		});
+
+		this.addMouseTrackListener(new MouseTrackListener() {
+
+			@Override
+			public void mouseHover(MouseEvent e) {
+				setBackground(new Color(null, 0, 0, 0));
+			}
+
+			@Override
+			public void mouseExit(MouseEvent e) {
+				setBackground(new Color(null, 255, 255, 255));
+			}
+
+			@Override
+			public void mouseEnter(MouseEvent e) {
+				setBackground(new Color(null, 0, 0, 0));
+			}
+		});
+
+
+		this.addControlListener(new ControlListener() {
+
+			@Override
+			public void controlResized(ControlEvent e) {
+
+				if (fElementImage != null) {
+					Point size = getSize();
+					final Image resizedImage = new Image(parent.getDisplay(),
+							fElementImage.getImageData().scaledTo(size.x,
+									size.y));
+					label.setImage(resizedImage);
+					redraw();
+				}
+
+			}
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+			}
+		});
+
 	}
 
 	/*
