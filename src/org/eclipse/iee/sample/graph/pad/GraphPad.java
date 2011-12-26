@@ -114,11 +114,6 @@ public class GraphPad extends Pad implements Serializable {
 			}
 		});
 
-		MouseEventManager mouseManager = new MouseEventManager(parent, false);
-		parent.addMouseTrackListener(mouseManager);
-		parent.addMouseMoveListener(mouseManager);
-		parent.addMouseListener(mouseManager);
-
 	}
 
 	protected GraphPad(String containerID) {
