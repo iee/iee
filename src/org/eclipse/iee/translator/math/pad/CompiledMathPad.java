@@ -169,11 +169,6 @@ public class CompiledMathPad extends Pad implements Serializable {
 			}
 		});
 
-		MouseEventManager mouseManager = new MouseEventManager(parent, label);
-		parent.addMouseTrackListener(mouseManager);
-		parent.addMouseMoveListener(mouseManager);
-		parent.addMouseListener(mouseManager);
-
 	}
 
 	protected CompiledMathPad(String containerID) {
