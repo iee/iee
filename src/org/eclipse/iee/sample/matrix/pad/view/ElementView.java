@@ -1,12 +1,14 @@
 package org.eclipse.iee.sample.matrix.pad.view;
 
 import org.eclipse.iee.sample.matrix.Activator;
+import org.eclipse.iee.sample.matrix.pad.FormulaRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -21,7 +23,10 @@ public class ElementView extends Composite {
 	private boolean fIsTextVisible;
 	private boolean fIsSelected;
 	
+	private FormulaRenderer fRenderer;
+	
 	private String fImagePath;
+	protected Image fElementImage = null;
 
 	private int fRowIndex;
 	private int fColumnIndex;
@@ -51,6 +56,7 @@ public class ElementView extends Composite {
 		styledText.setText("TestTestTest");
 
 		final Label fFormulaImage = new Label(sashForm, SWT.RESIZE);
+		fFormulaImage.setImage(fElementImage);
 		fFormulaImage.setVisible(false);
 		
 		this.pack();
@@ -80,15 +86,20 @@ public class ElementView extends Composite {
 				} else {
 					styledText.setVisible(false);
 					fIsTextVisible = false;
-					Image image = null;
 					try {
-						image = new Image(parent.getDisplay(), fImagePath);
+						fElementImage = new Image(parent.getDisplay(), fImagePath);
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
-					fFormulaImage.setImage(image);
-					fFormulaImage.setSize(image.getBounds().width,
-							image.getBounds().height);
+					Point size = styledText.getSize();
+					
+					final Image resizedImage = new Image(
+							parent.getDisplay(),
+							fElementImage.getImageData().scaledTo(size.x, size.y));
+						
+					fFormulaImage.setImage(resizedImage);
+					parent.redraw();
+						
 					fFormulaImage.setVisible(true);
 					//parent.pack();
 				}

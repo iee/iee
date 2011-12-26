@@ -3,6 +3,7 @@ package org.eclipse.iee.sample.matrix.pad.view;
 import org.eclipse.iee.sample.matrix.pad.model.Matrix;
 import org.eclipse.iee.sample.matrix.pad.model.Model;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -44,9 +45,11 @@ public class MatrixView extends Composite {
 	}
 
 	private void createElementsViews() {
+		GridData elemGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		for (int i = 0; i < fRowsNumber; i++) {
 			for (int j = 0; j < fColumnsNumber; j++) {
 				fElementViews[i][j] = new ElementView(this, i, j, true, fImagePath + "_" + i + "_" + j + ".jpg");
+				fElementViews[i][j].setLayoutData(elemGridData);
 			}
 		}
 	}

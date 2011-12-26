@@ -8,6 +8,8 @@ import org.eclipse.iee.sample.matrix.pad.model.Model;
 import org.eclipse.iee.sample.matrix.pad.view.MatrixView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public class MatrixPad extends Pad implements Serializable {
@@ -30,10 +32,15 @@ public class MatrixPad extends Pad implements Serializable {
 	}
 
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
+		//parent.setLayout(new FillLayout(SWT.HORIZONTAL));
+		GridLayout padLayout = new GridLayout(1, true);
+		parent.setLayout(padLayout);
+		
 		//Test
 
 		MatrixView matrix = new MatrixView(parent, new Model());
+		GridData matrixGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		matrix.setLayoutData(matrixGridData);
 	}
 
 	public static void setStorage(FileStorage fStorage) {
