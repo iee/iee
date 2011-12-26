@@ -80,11 +80,6 @@ public class MathPad extends Pad implements Serializable {
 
 		// Listeners
 
-		MouseEventManager mouseManager = new MouseEventManager(parent);
-		parent.addMouseTrackListener(mouseManager);
-		parent.addMouseMoveListener(mouseManager);
-		parent.addMouseListener(mouseManager);
-
 		text.addModifyListener(new ModifyListener() {
 
 			@Override
