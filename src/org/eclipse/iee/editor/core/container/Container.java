@@ -68,6 +68,10 @@ public class Container {
 	public String getContainerManagerID() {
 		return fContainerManager.getContainerManagerID();
 	}
+	
+	public ContainerManager getContainerManager() {
+		return fContainerManager;
+	}
 		
 	/* FUNCTIONS USED IN PAD MANAGER: */
 
@@ -119,7 +123,9 @@ public class Container {
 	void updatePresentation() {
 		System.out.println("updatePresentation");
 
+		System.out.println(fPosition.getOffset());
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
+
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
 	}

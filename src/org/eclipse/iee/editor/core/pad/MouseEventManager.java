@@ -31,11 +31,6 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,	Mous
 	}
 
 	@Override
-	public void mouseEnter(MouseEvent e) {
-		fComposite.forceFocus();
-	}
-
-	@Override
 	public void mouseExit(MouseEvent e) {
 		fComposite.setCursor(fArrowCursor);
 		fCanResize = false;
@@ -43,9 +38,6 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,	Mous
 		fChangeHeigth = false;
 	}
 
-	@Override
-	public void mouseHover(MouseEvent e) {
-	}
 
 	@Override
 	public void mouseMove(MouseEvent e) {
@@ -78,10 +70,6 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,	Mous
 				}
 			}
 		}
-	}
-
-	@Override
-	public void mouseDoubleClick(MouseEvent e) {
 	}
 
 	@Override
@@ -153,5 +141,8 @@ public class MouseEventManager implements MouseListener, MouseMoveListener,	Mous
 			fCanResize = false;
 		}
 	}
-
+	
+	@Override public void mouseDoubleClick(MouseEvent e) {}
+	@Override public void mouseHover(MouseEvent e) {}
+	@Override public void mouseEnter(MouseEvent e) {}
 }

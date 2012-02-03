@@ -85,7 +85,10 @@ public class ContainerManager extends EventManager {
 		}
 		return containerIDs;
 	}
-
+	
+	public UserInteractionManager getUserInteractionManager() {
+		return fUserInteractionManager;
+	}
 	
 	/* INTERFACE FUNCTIONS */
 	
@@ -188,6 +191,14 @@ public class ContainerManager extends EventManager {
 		for (int i = 0; i < listeners.length; i++) {
 			((IContainerManagerListener) listeners[i])
 				.containerLostSelection(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
+	
+	protected void fireContainerActivated(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerActivated(new ContainerEvent(c, fContainerManagerID));
 		}
 	}
 

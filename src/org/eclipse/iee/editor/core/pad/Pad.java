@@ -51,7 +51,7 @@ public abstract class Pad {
 	public Container getContainer() {
 		return fContainer;
 	}
-	
+		
 	public void setSelected(boolean isSelected) {
 		fBorderColor = (isSelected)
 			? IPadConfiguration.BORDER_COLOR_SELECTED
@@ -59,6 +59,14 @@ public abstract class Pad {
 		if (fContainer != null) {
 			fContainer.getComposite().setBackground(fBorderColor);
 		}
+	}
+	
+	public void moveCaretToCurrentPad() {
+		int containerOffset = fContainer.getPosition().getOffset();
+		fContainer
+			.getContainerManager()
+			.getUserInteractionManager()
+			.moveCaretTo(containerOffset);
 	}
 
 	public void attachContainer(Container container) {
@@ -121,6 +129,8 @@ public abstract class Pad {
 	 */
 	public abstract void createPartControl(Composite parent);
 
+	public abstract void activate();
+	
 	/**
 	 * Copy pad with @param containerID
 	 * 

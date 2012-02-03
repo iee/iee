@@ -273,8 +273,13 @@ public class PadManager extends EventManager {
 			@Override
 			public void containerLostSelection(ContainerEvent event) {
 				Pad selected = fPads.get(event.getContainer().getContainerID());
-				
 				selected.setSelected(false);
+			}
+
+			@Override
+			public void containerActivated(ContainerEvent event) {
+				Pad pad = fPads.get(event.getContainer().getContainerID());
+				pad.activate();				
 			}
 		};
 	}

@@ -41,4 +41,9 @@ public class SamplePad extends Pad {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+	}
 }

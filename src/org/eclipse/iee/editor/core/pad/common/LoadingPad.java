@@ -59,4 +59,10 @@ public class LoadingPad extends Pad {
 	@Override
 	public void onContainerAttached() {
 	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
+	}
 }

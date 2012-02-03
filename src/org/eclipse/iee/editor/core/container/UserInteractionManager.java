@@ -6,6 +6,8 @@ import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 
@@ -24,6 +26,11 @@ public class UserInteractionManager {
 		fSelectedContainer = null;
 		
 		initListeners();
+	}
+	
+	public void moveCaretTo(int offset) {
+		fStyledText.setCaretOffset(offset);
+		fStyledText.forceFocus();
 	}
 	
 	public void updateCaretSelection() {
@@ -48,8 +55,8 @@ public class UserInteractionManager {
 		}
 	}
 		
-	protected void initListeners() {
 		
+	protected void initListeners() {
 		/* 1) Disallow modification within Container's text region */
 		fStyledText.addVerifyListener(new VerifyListener() {
 			@Override
@@ -85,6 +92,24 @@ public class UserInteractionManager {
 					break;
 				}
 			}
+		});
+		
+		/*
+		 * CTRL + ALT causes pad activation
+		 */
+		fStyledText.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if ((e.stateMask & SWT.CTRL) != 0 && e.keyCode == SWT.ALT) {
+					int caretOffset = fStyledText.getCaretOffset();
+					Container container = fContainerManager.getContainerHavingOffset(caretOffset);					
+					if (container != null && container.getPosition().getOffset() == caretOffset) {
+						fContainerManager.fireContainerActivated(container);
+					}
+				}
+			}
+			
+			@Override public void keyReleased(KeyEvent e) {}
 		});
 		
 		/*
