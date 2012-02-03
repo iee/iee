@@ -53,5 +53,11 @@ public class CalendarPad extends Pad {
 	public void onContainerAttached() {
 		// TODO Auto-generated method stub		
 	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
