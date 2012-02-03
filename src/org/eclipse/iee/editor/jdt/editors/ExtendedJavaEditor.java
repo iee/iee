@@ -64,6 +64,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 			@Override
 			public void containerLostSelection(ContainerEvent event) {				
 			}
+
+			@Override
+			public void containerActivated(ContainerEvent event) {
+			}
 		};
 		fContainerManager.addContainerManagerListener(fContainerManagerListener);
 
