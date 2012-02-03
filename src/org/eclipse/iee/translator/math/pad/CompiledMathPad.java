@@ -234,4 +234,10 @@ public class CompiledMathPad extends Pad implements Serializable {
 	public void onContainerAttached() {
 		getContainer().setTextContent(fJavaContent);
 	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
+	}
 }
