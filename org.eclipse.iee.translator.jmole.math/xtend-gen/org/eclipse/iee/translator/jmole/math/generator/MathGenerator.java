@@ -65,7 +65,7 @@ public class MathGenerator implements IGenerator {
         _builder.append(_compileFunctionDefinition, "");
       }
     }
-
+    _builder.newLineIfNotEmpty();
     {
       MatrixDefinition _matrixDefinition = s.getMatrixDefinition();
       boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_matrixDefinition, null);
@@ -76,7 +76,7 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
-
+    _builder.newLineIfNotEmpty();
     {
       Assignment _assignment = s.getAssignment();
       boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(_assignment, null);
@@ -87,7 +87,7 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
-
+    _builder.newLineIfNotEmpty();
     {
       Formula _formula = s.getFormula();
       boolean _operator_notEquals_3 = ObjectExtensions.operator_notEquals(_formula, null);
@@ -98,7 +98,8 @@ public class MathGenerator implements IGenerator {
         _builder.append(";");
       }
     }
-
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
     return _builder;
   }
   
@@ -109,6 +110,7 @@ public class MathGenerator implements IGenerator {
     String _name = _function.getName();
     _builder.append(_name, "");
     _builder.append(" ( ");
+    _builder.newLineIfNotEmpty();
     {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
@@ -123,6 +125,7 @@ public class MathGenerator implements IGenerator {
           }
         }
         _builder.append(")");
+        _builder.newLineIfNotEmpty();
         {
           Expression _function_2 = funcDef.getFunction();
           EList<Formula> _parameters_1 = _function_2.getParameters();
@@ -132,9 +135,12 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t");
       }
     }
     _builder.append(") ");
+    _builder.newLineIfNotEmpty();
     _builder.append("{ ");
     {
       Formula _formula = funcDef.getFormula();
@@ -148,6 +154,7 @@ public class MathGenerator implements IGenerator {
       }
     }
     _builder.append(" }");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -159,6 +166,7 @@ public class MathGenerator implements IGenerator {
     Formula _value = a.getValue();
     StringConcatenation _compileFormula = this.compileFormula(_value);
     _builder.append(_compileFormula, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -167,6 +175,7 @@ public class MathGenerator implements IGenerator {
     Expression _expression = f.getExpression();
     StringConcatenation _compileExpression = this.compileExpression(_expression);
     _builder.append(_compileExpression, "");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
@@ -176,11 +185,11 @@ public class MathGenerator implements IGenerator {
     String _name = m.getName();
     _builder.append(_name, "");
     _builder.append(" = new Matrix(new double[][]");
-
+    _builder.newLineIfNotEmpty();
     _builder.append("{");
-
+    _builder.newLine();
     int j = 0;
-
+    _builder.newLineIfNotEmpty();
     {
       EList<MatrixRow> _rows = m.getRows();
       for(final MatrixRow row : _rows) {
@@ -188,9 +197,10 @@ public class MathGenerator implements IGenerator {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
           if (_operator_notEquals) {
             _builder.append("{");
+            _builder.newLine();
             _builder.append("\t");
             int i = 0;
-     
+            _builder.newLineIfNotEmpty();
             {
               EList<String> _elements = row.getElements();
               for(final String element : _elements) {
@@ -198,7 +208,7 @@ public class MathGenerator implements IGenerator {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
                     _builder.append(element, "");
-                
+                    _builder.newLineIfNotEmpty();
                   }
                 }
                 {
@@ -211,11 +221,11 @@ public class MathGenerator implements IGenerator {
                     _builder.append(",");
                   }
                 }
-       
+                _builder.newLineIfNotEmpty();
               }
             }
             _builder.append("}");
-       
+            _builder.newLine();
           }
         }
         {
@@ -228,11 +238,11 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
- 
+        _builder.newLineIfNotEmpty();
       }
     }
     _builder.append("})");
-
+    _builder.newLine();
     return _builder;
   }
   
@@ -248,13 +258,13 @@ public class MathGenerator implements IGenerator {
     String _lowerCase = _substring_1.toLowerCase();
     String _operator_plus = StringExtensions.operator_plus(_upperCase, _lowerCase);
     _builder.append(_operator_plus, "");
-
+    _builder.newLineIfNotEmpty();
     _builder.append("(");
     {
       Expression _function_2 = f.getFunction();
       EList<Formula> _parameters = _function_2.getParameters();
       for(final Formula param : _parameters) {
-
+        _builder.newLineIfNotEmpty();
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
@@ -262,7 +272,7 @@ public class MathGenerator implements IGenerator {
             _builder.append(_compileFormula, "");
           }
         }
-   
+        _builder.newLineIfNotEmpty();
         {
           Expression _function_3 = f.getFunction();
           EList<Formula> _parameters_1 = _function_3.getParameters();
@@ -272,10 +282,12 @@ public class MathGenerator implements IGenerator {
             _builder.append(",");
           }
         }
-
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t");
       }
     }
     _builder.append(")");
+    _builder.newLineIfNotEmpty();
     return _builder;
   }
   
