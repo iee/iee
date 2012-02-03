@@ -5,27 +5,27 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="org.eclipse.iee.sample.math.contextJava"
+            id="org.eclipse.iee.sample.formula.contextJava"
             targetID="#CompilationUnitEditorContext">
          <action
-               class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
-               id="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
-               label="Insert Math" 
+               class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
+               id="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
+               label="Insert Formula" 
                icon="icons/math.jpg" 
                menubarPath="additions"
-               tooltip="Insert Math">
+               tooltip="Insert Formula">
          </action>
       </viewerContribution>
 	  <viewerContribution
-            id="org.eclipse.iee.sample.math.contextSample"
+            id="org.eclipse.iee.sample.formula.contextSample"
             targetID="#TextEditorContext">
          <action
-               class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
-               id="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
-               label="Insert Math" 
+               class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
+               id="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
+               label="Insert Formula" 
                icon="icons/math.jpg" 
                menubarPath="additions"
-               tooltip="Insert Math">
+               tooltip="Insert Formula">
          </action>
       </viewerContribution>
    </extension>
@@ -33,27 +33,27 @@
 	<extension
     	point = "org.eclipse.ui.editorActions">
 		<editorContribution 
-        	id="org.eclipse.iee.sample.math.toolbarJava" 
+        	id="org.eclipse.iee.sample.formula.toolbarJava" 
          	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
-			<action id="org.eclipse.iee.sample.math.add" 
-	        	label="Add Math" 
+			<action id="org.eclipse.iee.sample.formula.add" 
+	        	label="Add Formula" 
 	            toolbarPath="TextEditor" 
 	            icon="icons/math.jpg" 
-	            tooltip="Add Math" 
-	            class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.math.add"
+	            tooltip="Add Formula" 
+	            class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.formula.add"
 	        /> 
     	</editorContribution>
 		<editorContribution 
-        	id="org.eclipse.iee.sample.math.toolbarSample" 
+        	id="org.eclipse.iee.sample.formula.toolbarSample" 
          	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
-			<action id="org.eclipse.iee.sample.math.add" 
-	        	label="Add Math" 
+			<action id="org.eclipse.iee.sample.formula.add" 
+	        	label="Add Formula" 
 	            toolbarPath="TextEditor" 
 	            icon="icons/math.jpg" 
-	            tooltip="Add Math" 
-	            class="org.eclipse.iee.sample.math.actions.AddMathPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.math.add"
+	            tooltip="Add Formula" 
+	            class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.formula.add"
 	        /> 
     	</editorContribution>
 	</extension>

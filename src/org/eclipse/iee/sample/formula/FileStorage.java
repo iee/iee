@@ -1,4 +1,4 @@
-package org.eclipse.iee.sample.math;
+package org.eclipse.iee.sample.formula;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.sample.math.pad.MathPad;
+import org.eclipse.iee.sample.formula.pad.FormulaPad;
 
 public class FileStorage {
 
@@ -40,7 +40,7 @@ public class FileStorage {
 		return fDirectoryPath;
 	}
 	
-	public void saveToFile(MathPad pad) {
+	public void saveToFile(FormulaPad pad) {
 		System.out.println("saveToFile");
 		try {
 			FileOutputStream fos = new FileOutputStream(fDirectoryPath
@@ -71,15 +71,15 @@ public class FileStorage {
 		}
 	}
 
-	protected MathPad loadFromFile(String containerID) {
+	protected FormulaPad loadFromFile(String containerID) {
 		System.out.println("loadFromFile");
-		MathPad loadedPad = null;
+		FormulaPad loadedPad = null;
 		try {
 			FileInputStream fis = new FileInputStream(fDirectoryPath
 					+ containerID);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			try {
-				loadedPad = (MathPad) in.readObject();
+				loadedPad = (FormulaPad) in.readObject();
 				loadedPad.setContainerID(containerID);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

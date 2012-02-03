@@ -1,6 +1,6 @@
-package org.eclipse.iee.sample.math;
+package org.eclipse.iee.sample.formula;
 
-import org.eclipse.iee.sample.math.pad.MathPad;
+import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -14,7 +14,7 @@ import org.eclipse.iee.translator.molex.mex.generator.Molex;
 public class Activator extends AbstractUIPlugin implements IStartup {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.iee.sample.math"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.eclipse.iee.sample.formula"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
@@ -27,7 +27,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	 * The constructor
 	 */
 	public Activator() {
-		MathPad.setStorage(new FileStorage("D:\\MathPads\\"));
+		FormulaPad.setStorage(new FileStorage("D:\\MathPads\\"));
 
 		mole = Mole.create();
 		molex = Molex.create();

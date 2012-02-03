@@ -1,7 +1,7 @@
-package org.eclipse.iee.sample.math.actions;
+package org.eclipse.iee.sample.formula.actions;
 
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.sample.math.pad.MathPad;
+import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
-public class AddMathPadActionDelegate implements IEditorActionDelegate {
+public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 
 	Shell shell = null;
 
@@ -37,7 +37,7 @@ public class AddMathPadActionDelegate implements IEditorActionDelegate {
 			return;
 		}
 
-		fPadEditor.createPad(new MathPad(), fPadEditor.getCaretOffset());
+		fPadEditor.createPad(new FormulaPad(), fPadEditor.getCaretOffset());
 	}
 
 	@Override

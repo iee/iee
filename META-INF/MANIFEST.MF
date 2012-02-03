@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MathPad
-Bundle-SymbolicName: org.eclipse.iee.sample.math;singleton:=true
+Bundle-Name: FormulaPad
+Bundle-SymbolicName: org.eclipse.iee.sample.formula;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.eclipse.iee.sample.math.Activator
+Bundle-Activator: org.eclipse.iee.sample.formula.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.iee.editor,
