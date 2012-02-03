@@ -248,4 +248,10 @@ public class MathPad extends Pad implements Serializable {
 	public void onContainerAttached() {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
+	}
 }
