@@ -1,6 +1,5 @@
 package org.eclipse.iee.sample.output;
 
-import org.eclipse.iee.sample.output.console.ConsoleMessager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -15,18 +14,11 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-	
-	private ConsoleMessager fConsoleMessager;
-	
-	public static ConsoleMessager getConsoleMessager() {
-		return plugin.fConsoleMessager;
-	}
-	
+		
 	/**
 	 * The constructor
 	 */
 	public Activator() {
-		fConsoleMessager = new ConsoleMessager();
 	}
 
 	/*

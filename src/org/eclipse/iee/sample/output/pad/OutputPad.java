@@ -3,9 +3,10 @@ package org.eclipse.iee.sample.output.pad;
 import java.io.Serializable;
 
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
+import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
+import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.output.Activator;
-import org.eclipse.iee.sample.output.console.ConsoleMessageEvent;
-import org.eclipse.iee.sample.output.console.IConsoleMessageListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
@@ -40,11 +41,15 @@ public class OutputPad extends Pad implements Serializable {
 	}
 	
 	private void initLogic() {
-		Activator.getConsoleMessager().addConsoleMessageListener(new IConsoleMessageListener() {
+		ConsoleMessager.getInstance().addConsoleMessageListener(new IConsoleMessageListener() {
 			@Override
 			public void messageReceived(ConsoleMessageEvent e) {
-				System.out.println("Pad recieved message: " + e.getMessage());
-				fLabel.setText(e.getMessage());				
+				fLabel.setText(e.getMessage());
+			}
+
+			@Override
+			public String getRequesterID() {
+				return "OutputPad";
 			}
 		});
 	}
@@ -64,5 +69,11 @@ public class OutputPad extends Pad implements Serializable {
 
 	@Override
 	public void onContainerAttached() {
+	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
 	}
 }
