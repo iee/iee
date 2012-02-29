@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor;
 
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -17,17 +18,21 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	private static IeeEditorPlugin plugin;
 	
 	// Single instance of PadManager
-	private PadManager fPadManager;	
+	private static PadManager fPadManager;
+	private static IPadStorage fPadStorage;
 	
 	/**
 	 * The constructor
 	 */
 	public IeeEditorPlugin() {
-		fPadManager = new PadManager();
 	}
 	
-	public PadManager getPadManager() {
+	public static PadManager getPadManager() {
 		return fPadManager;
+	}
+	
+	public static IPadStorage getPadStorage() {
+		return fPadStorage;
 	}
 
 	/*
@@ -37,6 +42,8 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		fPadManager = new PadManager();
 	}
 
 	/*

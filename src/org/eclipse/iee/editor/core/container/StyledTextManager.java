@@ -33,9 +33,7 @@ class StyledTextManager {
 		fStyledText.addLineStyleListener(new LineStyleListener() {
 
 			@Override
-			public void lineGetStyle(LineStyleEvent event) {
-				System.out.println("lineGetStyle");
-				
+			public void lineGetStyle(LineStyleEvent event) {				
 				Vector<StyleRange> styles = new Vector<StyleRange>();
 				
 				Collection<Container> containersAtLine =

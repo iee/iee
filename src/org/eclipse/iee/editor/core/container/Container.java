@@ -33,7 +33,6 @@ public class Container {
 	}
 
 	public void setTextContent(String content) {
-		System.out.println("setTextContent");
 		fTextContent = content;
 		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
@@ -123,9 +122,7 @@ public class Container {
 	void updatePresentation() {
 		System.out.println("updatePresentation");
 
-		System.out.println(fPosition.getOffset());
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
-
 		Point gabarit = fComposite.getSize();
 		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
 	}

@@ -10,12 +10,35 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.eclipse.iee.editor,
- org.eclipse.iee.editor.core.container,
- org.eclipse.iee.editor.core.container.event,
- org.eclipse.iee.editor.core.pad,
- org.eclipse.iee.editor.core.pad.common,
+Bundle-ClassPath: lib/xstream-1.4.2.jar, .
+Export-Package: org.eclipse.iee.editor;
+  uses:="org.eclipse.jface.resource,
+   org.eclipse.iee.editor.core.storage,
+   org.eclipse.ui.plugin,
+   org.osgi.framework,
+   org.eclipse.iee.editor.core.pad",
+ org.eclipse.iee.editor.core.container;
+  uses:="org.eclipse.jface.text,
+   org.eclipse.core.commands.common,
+   org.eclipse.iee.editor.core.container.event,
+   org.eclipse.swt.custom,
+   org.eclipse.swt.widgets",
+ org.eclipse.iee.editor.core.container.event;uses:="org.eclipse.iee.editor.core.container",
+ org.eclipse.iee.editor.core.pad;
+  uses:="org.eclipse.core.commands.common,
+   org.eclipse.iee.editor.core.pad.event,
+   org.eclipse.iee.editor.core.container,
+   org.eclipse.swt.events,
+   org.eclipse.swt.graphics,
+   org.eclipse.swt.widgets",
+ org.eclipse.iee.editor.core.pad.common;uses:="org.eclipse.iee.editor.core.pad,org.eclipse.swt.widgets",
  org.eclipse.iee.editor.core.pad.event,
- org.eclipse.iee.editor.core.utils.console,
- org.eclipse.iee.editor.sample
+ org.eclipse.iee.editor.core.storage;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream,org.eclipse.iee.editor.core.pad",
+ org.eclipse.iee.editor.core.utils.console;uses:="org.eclipse.jface.text,org.eclipse.core.commands.common,org.eclipse.ui.console",
+ org.eclipse.iee.editor.sample;
+  uses:="org.eclipse.core.runtime,
+   org.eclipse.iee.editor,
+   org.eclipse.iee.editor.core.pad,
+   org.eclipse.swt.widgets,
+   org.eclipse.ui.editors.text"
 Import-Package: org.eclipse.ui.console

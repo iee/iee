@@ -63,9 +63,7 @@ public class UserInteractionManager {
 			public void verifyText(VerifyEvent e) {
 				Container atStart = fContainerManager.getContainerHavingOffset(e.start);
 				Container atEnd = fContainerManager.getContainerHavingOffset(e.end);
-				
-				System.out.println(e.start + " " + e.end);
-				
+
 				/* Text replaced */
 				if ((atStart != null && e.start != atStart.getPosition().getOffset()) ||
 						(atEnd != null && e.end != atEnd.getPosition().getOffset()))

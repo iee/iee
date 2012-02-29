@@ -1,6 +1,8 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -93,16 +95,30 @@ public class PadManager extends EventManager {
 			fPads.get(containerID).unsave();
 		}
 	}
-
+	
+	public List<Pad> selectPadsByType(String type) {
+		List<Pad> result = new ArrayList<Pad>();
+		for (String id : fActivePads) {
+			Pad pad = fPads.get(id);
+			if (pad.getType().equals(type)) {
+				result.add(pad);
+			}
+		}
+		return result;
+	}
+	
 	public Collection<Pad> selectPadsOfCategory(String category) {
+		
 		return null;
 	}
 
 	public Collection<Pad> selectPadsInContainerManager(String containerManager) {
+		
 		return null;
 	}
 
 	public Collection<Pad> selectPads(String containerManager, String category) {
+		
 		return null;
 	}
 
