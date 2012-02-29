@@ -71,7 +71,6 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public PadManager getPadManager() {
-		System.out.println("getPadManager");
 		return fPadManager;
 	}
 }
