@@ -1,6 +1,5 @@
 package org.eclipse.iee.sample.matrix;
 
-import org.eclipse.iee.sample.matrix.pad.MatrixPad;
 import org.eclipse.iee.translator.jmole.math.generator.Mole;
 import org.eclipse.iee.translator.molex.mex.generator.Molex;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -22,9 +21,7 @@ public class Activator extends AbstractUIPlugin {
 	/**
 	 * The constructor
 	 */
-	public Activator() {
-		MatrixPad.setStorage(new FileStorage("D:\\MatrixPads\\"));
-		
+	public Activator() {	
 		mole = Mole.create();
 		molex = Molex.create();
 		System.out.println("Activated");

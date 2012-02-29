@@ -27,25 +27,30 @@ public class Matrix implements Cloneable {
 		fRowsNumber = DEFAULT_ROWS;
 		fCollumnsNumber = DEFAULT_COLLUMNS;
 		fElements = new String[fRowsNumber][fCollumnsNumber];
+		setZeroes();
 	}
 	
 	public Matrix(int rows, int collumns) {
 		fRowsNumber = rows;
 		fCollumnsNumber = collumns;		
 		fElements = new String[fRowsNumber][fCollumnsNumber];
+		setZeroes();
 	}
 
 	public Matrix(Matrix another, int rows, int collumns) {	
 		fElements = new String[rows][collumns];
-		
-		for (int i = 0; i < rows; i++) {
-			Arrays.fill(fElements[i], DEFAULT_VALUE);
-		}
+		setZeroes();
 		
 		for (int i = 0; i < Math.min(rows, another.getRowsNumber()); i++) {
 			for (int j = 0; j < Math.min(collumns, another.getCollumnsNumber()); j++) {
 				fElements[i][j] = another.getElements()[i][j];
 			}
+		}
+	}
+	
+	public void setZeroes() {
+		for (int i = 0; i < fRowsNumber; i++) {
+			Arrays.fill(fElements[i], DEFAULT_VALUE);
 		}
 	}
 	
@@ -59,5 +64,18 @@ public class Matrix implements Cloneable {
 	
 	public Matrix mutate(int rows, int collumns) {
 		return new Matrix(this, rows, collumns);
+	}
+
+	@Override
+	public String toString() {
+		String result = "[\n";
+		for (String[] row : fElements) {
+			result += "\t";
+			for (String element : row) {
+				result += element + "\t";
+			}
+			result += "\n";
+		}
+		return result + "]\n";
 	}
 }

@@ -2,14 +2,13 @@ package org.eclipse.iee.sample.matrix.pad.model;
 
 import java.util.Stack;
 
-public class Model {	
+public class MatrixModel {	
 	protected Stack<Matrix> fPreviousStates;
 	protected Stack<Matrix> fFutureStates;
 	
 	/* Matrix represents the current state */
 	protected Matrix fMatrix = new Matrix();
-	
-	
+		
 	/* Setters. Cause state shifting */
 	
 	public void setMatrixElement(int row, int collumn, String value) {
@@ -21,7 +20,6 @@ public class Model {
 		saveState();
 		fMatrix = fMatrix.mutate(rows, collumns);
 	}
-	
 	
 	/* Getters */
 	
@@ -52,6 +50,7 @@ public class Model {
 		
 		fFutureStates.push(fMatrix);
 		fMatrix = fPreviousStates.pop();
+		
 		return true;
 	}
 	
@@ -62,6 +61,7 @@ public class Model {
 		
 		fPreviousStates.push(fMatrix);
 		fMatrix = fFutureStates.pop();
-		return false;
-	}	
+		
+		return true;
+	}
 }

@@ -1,58 +1,115 @@
 package org.eclipse.iee.sample.matrix.pad.view;
 
+import org.eclipse.iee.sample.matrix.pad.controller.Controller;
 import org.eclipse.iee.sample.matrix.pad.model.Matrix;
-import org.eclipse.iee.sample.matrix.pad.model.Model;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class MatrixView extends Composite {
+public class MatrixView {
 
-	private Model fModel;
+	private final int MAX_ROWS = 100;
+	private final int MAX_COLLUMNS = 100;
+	private ElementView[][] fElementViews = new ElementView[MAX_ROWS][MAX_COLLUMNS];
+
+	private int fRowsNumber = 0;
+	private int fColumnsNumber = 0;
 	
-	private int fRowsNumber;
-	private int fColumnsNumber;
-	
-	private ElementView[][] fElementViews;
-	private String fImagePath = "D:\\MatrixPads\\an_id";
+	private Controller fController;
+	private Composite fComposite;
+	private GridLayout fLayout;
 
-	public MatrixView(Composite parent, int style) {
-		super(parent, style);
-	}
-
-	public MatrixView(Composite parent, Model model) {
-		super(parent, SWT.NONE);
-		
-		fModel = model;
-		
-		fRowsNumber = model.getMatrix().getRowsNumber();
-		fColumnsNumber = model.getMatrix().getRowsNumber();
-		
-		GridLayout matrixLayout = new GridLayout(fColumnsNumber, true);
-		this.setLayout(matrixLayout);
-
-		fElementViews = new ElementView[fRowsNumber][fColumnsNumber];
-		createElementsViews();
+	public void setController(Controller controller) {
+		fController = controller;
 	}
 	
-	protected void fullReload() {
-		Matrix matrix = fModel.getMatrix();
-		fRowsNumber = matrix.getRowsNumber();
-		fColumnsNumber = matrix.getRowsNumber();
-		
-		// set widget size		
+	public MatrixView(Composite parent) {
+		createPartControl(parent);
 	}
+	
+	public void createPartControl(Composite parent) {
+		fComposite = new Composite(parent, SWT.NONE);
+		fLayout = new GridLayout(fColumnsNumber, true);
+		fComposite.setLayout(fLayout);
+	}
+	
+	public void updateMatrix(Matrix matrix) {
+		updateMatrixSize(
+			matrix.getRowsNumber(),
+			matrix.getCollumnsNumber());
 
-	private void createElementsViews() {
-		GridData elemGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		System.out.println(matrix.toString());
+		
 		for (int i = 0; i < fRowsNumber; i++) {
 			for (int j = 0; j < fColumnsNumber; j++) {
-				fElementViews[i][j] = new ElementView(this);
-				fElementViews[i][j].setLayoutData(elemGridData);
+				
+				String newExpression = matrix.getElements()[i][j];
+				ElementView elementView = fElementViews[i][j];
+				if (!elementView.getExpression().equals(newExpression)) {
+					elementView.setExression(newExpression);
+					//updateView element 
+				}
 			}
 		}
 	}
 	
-	
+	public void updateMatrixSize(int rows, int columns) {
+		if (rows < fRowsNumber) {
+			/* Remove rows */
+			for (int i = rows; i < fRowsNumber; i++) {
+				for (int j = 0; j < fColumnsNumber; j++) {
+					fElementViews[i][j].dispose();
+					fElementViews[i][j] = null;
+				}
+			}
+		} else if (rows > fRowsNumber) {
+			/* Add rows */
+			for (int i = fRowsNumber; i < rows; i++) {
+				for (int j = 0; j < columns; j++) {
+					fElementViews[i][j] = new ElementView(fController, i, j);
+					fElementViews[i][j].createPartControl(fComposite);
+				}
+			}
+		}
+		
+		if (columns < fColumnsNumber) {
+			/* Remove collumns */
+			for (int i = 0; i < fRowsNumber; i++) {
+				for (int j = columns; j < fColumnsNumber; j++) {
+					fElementViews[i][j].dispose();
+					fElementViews[i][j] = null;
+				}
+			}
+		} else if (columns > fColumnsNumber) {
+			/* Add columns */
+			for (int i = 0; i < rows; i++) {
+				for (int j = fColumnsNumber; j < columns; j++) {
+					fElementViews[i][j] = new ElementView(fController, i, j);
+					fElementViews[i][j].createPartControl(fComposite);
+				}
+			}
+		}
+		
+		fRowsNumber = rows;
+		fColumnsNumber = columns;
+		
+		
+		Button s = new Button(c, SWT.PUSH);
+	    s.setText("Special " + index[0]);
+	    index[0]++;
+	    Control[] children = c.getChildren();
+	    s.moveAbove(children[3]);
+	    shell.layout(new Control[] { s });
+		
+		fLayout.numColumns = fColumnsNumber;
+		fComposite.setLayout(fLayout);
+	}
+		
+	public void updateElementViews(int rows, int collumns) {
+		
+	}
+		
+	public void render() {
+		
+	}
 }
