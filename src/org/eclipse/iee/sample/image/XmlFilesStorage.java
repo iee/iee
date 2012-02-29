@@ -14,7 +14,7 @@ import org.eclipse.iee.sample.image.pad.ImagePad;
 
 public class XmlFilesStorage {
 	
-	private final PadManager fPadManager = IeeEditorPlugin.getDefault().getPadManager();
+	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
 	private String fDirectoryPath;
 	
 	XmlFilesStorage(String directoryPath) {

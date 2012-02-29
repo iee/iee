@@ -74,8 +74,6 @@ public class ImagePad extends Pad implements Serializable {
 	}
 
 	protected void initWelcomeView(final Composite parent) {
-		System.out.println("initWelcomeView");
-
 		/* Clear data */
 
 		fImagePath = null;
@@ -134,8 +132,6 @@ public class ImagePad extends Pad implements Serializable {
 	}
 
 	protected void initImageView(final Composite parent) {
-		System.out.println("initImageView");
-
 		try {
 			fOriginalImage = new Image(parent.getDisplay(), fImagePath);
 		} catch (Exception e) {
@@ -175,7 +171,6 @@ public class ImagePad extends Pad implements Serializable {
 	}
 
 	protected void initErrorView(final Composite parent) {
-		System.out.println("initErrorView");
 
 		FillLayout layout = new FillLayout(SWT.VERTICAL);
 		parent.setLayout(layout);
@@ -218,7 +213,6 @@ public class ImagePad extends Pad implements Serializable {
 			public void mouseUp(MouseEvent arg0) {
 			}
 		});
-
 	}
 
 	@Override
@@ -233,8 +227,7 @@ public class ImagePad extends Pad implements Serializable {
 
 	@Override
 	public void unsave() {
-		ImagePad.fXmlFileStorage.removeFile(getContainerID());
-
+		ImagePad.fXmlFileStorage.removeFile(getContainerID());	
 	}
 
 	@Override
