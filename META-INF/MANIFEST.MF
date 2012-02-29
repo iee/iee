@@ -3,14 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: FormulaPad
 Bundle-SymbolicName: org.eclipse.iee.sample.formula;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.eclipse.iee.sample.formula.Activator
+Bundle-Activator: org.eclipse.iee.sample.formula.FormulaPadManager
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.iee.editor,
- org.eclipse.ui.editors
+ org.eclipse.jface.text;bundle-version="3.7.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/Symja-0.0.13-SNAPSHOT.jar,
- .
 Import-Package: org.eclipse.iee.translator.jmole.math.generator,
  org.eclipse.iee.translator.molex.mex.generator
+Bundle-ClassPath: lib/jlatexmath-embedded-fop-0.9.6.jar,
+ .,
+ lib/xstream-1.4.2.jar
+Export-Package: org.eclipse.iee.sample.formula.pad

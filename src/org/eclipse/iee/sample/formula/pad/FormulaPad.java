@@ -1,6 +1,6 @@
 package org.eclipse.iee.sample.formula.pad;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,7 +8,8 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
 import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
-import org.eclipse.iee.sample.formula.FileStorage;
+import org.eclipse.iee.sample.formula.FormulaPadManager;
+import org.eclipse.iee.sample.formula.storage.FileStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -29,9 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class FormulaPad extends Pad implements Serializable {
-
-	private transient static FileStorage fFileStorage;
+public class FormulaPad extends Pad {
 	
 	private Composite fParent;
 	
@@ -42,7 +41,16 @@ public class FormulaPad extends Pad implements Serializable {
 	private Label fTempFormulaImageLabel;
 	
 	private boolean fIsInputValid;
+	
 	private String fExpression = "x = 123";
+	
+	public String getExpression() {
+		return fExpression;
+	}
+	
+	public void setExression(String expression) {
+		fExpression = expression;
+	}
 	
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
 	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
@@ -53,7 +61,7 @@ public class FormulaPad extends Pad implements Serializable {
 			System.out.println("Message received:" + e.getMessage());
 			updateLastResult(e.getMessage());
 		}
-		
+	
 		@Override
 		public String getRequesterID() {
 			return getContainerID();
@@ -64,7 +72,7 @@ public class FormulaPad extends Pad implements Serializable {
 		setType("Math");
 	}
 	
-	protected FormulaPad(String containerID) {
+	public FormulaPad(String containerID) {
 		super(containerID);
 		setType("Math");
 	}
@@ -117,6 +125,14 @@ public class FormulaPad extends Pad implements Serializable {
 	
 	public void processInput() {
 		if (fIsInputValid) {
+			if (!fInputText.getText().equals(fExpression)) {
+				/* Remove result images from following pads */
+				Collection<Pad> following = FormulaPadManager.getFollowingPads(this);
+				
+				for (Pad pad: following) {
+					((FormulaPad) pad).updateLastResult("");
+				}				
+			}
 			fExpression = fInputText.getText();
 		}
 		
@@ -133,23 +149,22 @@ public class FormulaPad extends Pad implements Serializable {
 	}
 	
 	public String generateOutputCode(String expresion) {
-	
-		System.out.println("Original: " + expresion);
-		
 		Pattern p = Pattern.compile("\\s*\\w+\\s*=.+");
 		Matcher m = p.matcher(expresion);
 		if (m.matches()) {
-			System.out.println("Match");
 			String variable = expresion.substring(0, expresion.indexOf('='));
 			variable = variable.trim();
 			return "System.out.println(\"" + getContainerID() + "\" + " + variable + ");";
 		} else {
-			System.out.println("Not match");
 			return "";
 		}
 	}
 	
 	public void updateLastResult(String result) {
+		if (result == "") {
+			fLastResultImageLabel.setImage(null);
+			return;
+		}
 		Image image = FormulaRenderer.getFormulaImage(result);
 		fLastResultImageLabel.setImage(image);
 	}
@@ -228,13 +243,8 @@ public class FormulaPad extends Pad implements Serializable {
 		parent.setLayout(layout);
 		SashForm sashForm = new SashForm(fParent, SWT.VERTICAL);
 		sashForm.setLayout(new GridLayout());
-		
-		SashForm tempForm = new SashForm(fParent, SWT.VERTICAL);
-		tempForm.setLayout(new GridLayout());
-		tempForm.setVisible(true);
-		
+				
 		/* First view */
-		
 		fFormulaImageLabel = new Label(sashForm, SWT.NONE | SWT.RESIZE);
 		GridData formulaImageGridData = new GridData();
 		formulaImageGridData.verticalAlignment = GridData.FILL;
@@ -243,7 +253,7 @@ public class FormulaPad extends Pad implements Serializable {
 		formulaImageGridData.grabExcessHorizontalSpace = true;
 		fFormulaImageLabel.setLayoutData(formulaImageGridData);
 		
-		fLastResultImageLabel = new Label(tempForm,  SWT.BORDER | SWT.RESIZE);
+		fLastResultImageLabel = new Label(sashForm,  SWT.BORDER | SWT.RESIZE);
 		GridData lastResultImageGridData = new GridData();
 		lastResultImageGridData.verticalAlignment = GridData.FILL;
 		lastResultImageGridData.grabExcessVerticalSpace = true;
@@ -273,10 +283,6 @@ public class FormulaPad extends Pad implements Serializable {
 		processInput();
 		toggleFormulaImage();
 	}
-
-	public static void setStorage(FileStorage fStorage) {
-		FormulaPad.fFileStorage = fStorage;
-	}
 	
 	@Override
 	public void activate() {
@@ -293,12 +299,14 @@ public class FormulaPad extends Pad implements Serializable {
 	// Save&Load operations, use it for serialization
 
 	public void save() {
-		//MathPad.fFileStorage.saveToFile(this);
+		System.out.println("Saving...");
+		FileStorage.getInstance().saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		//MathPad.fFileStorage.removeFile(getContainerID());
+		System.out.println("Unsaving...");
+		FileStorage.getInstance().removeFile(getContainerID());
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.eclipse.iee.sample.formula.actions;
 
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
+import org.eclipse.iee.sample.formula.storage.FileStorage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -38,6 +39,9 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 		}
 
 		fPadEditor.createPad(new FormulaPad(), fPadEditor.getCaretOffset());
+		
+		/* load saved pads */
+		FileStorage.getInstance();
 	}
 
 	@Override

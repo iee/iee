@@ -7,7 +7,7 @@ import java.awt.image.WritableRaster;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.iee.sample.formula.Activator;
+import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
@@ -47,7 +47,7 @@ public class FormulaRenderer {
 		
 		try {
 			/* Translating to Latex */
-			String latex = Activator.getMolex().translateMath(text).trim();
+			String latex = FormulaPadManager.getMolex().translateMath(text).trim();
 			
 			java.awt.Image awtImage =
 				TeXFormula.createBufferedImage(

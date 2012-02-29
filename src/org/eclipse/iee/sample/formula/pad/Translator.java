@@ -3,7 +3,7 @@ package org.eclipse.iee.sample.formula.pad;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.iee.sample.formula.Activator;
+import org.eclipse.iee.sample.formula.FormulaPadManager;
 
 public class Translator {
 	
@@ -31,7 +31,7 @@ public class Translator {
 		
 		String translated;
 		try {
-			String resultJava = Activator.getMole().translateMath(text);
+			String resultJava = FormulaPadManager.getMole().translateMath(text);
 			if (resultJava == null) {
 				return null;
 			}
