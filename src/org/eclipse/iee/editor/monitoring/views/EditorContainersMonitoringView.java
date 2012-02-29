@@ -92,7 +92,6 @@ public class EditorContainersMonitoringView extends ViewPart {
 		fWorkbenchPartListener = new IPartListener() {
 			@Override
 			public void partBroughtToTop(IWorkbenchPart part) {
-				System.out.println("partBroughtToTop");
 				if (part instanceof IEditorPart) {
 					if (part instanceof IPadEditor){
 						linkEditor(part);
@@ -104,7 +103,6 @@ public class EditorContainersMonitoringView extends ViewPart {
 
 			@Override
 			public void partClosed(IWorkbenchPart part) {
-				System.out.println("partClosed");
 				if (part == fCurrentPadEditor) {
 					unlinkEditor();
 				}
