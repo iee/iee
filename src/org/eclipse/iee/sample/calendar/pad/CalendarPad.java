@@ -10,7 +10,12 @@ public class CalendarPad extends Pad {
 	
 	public CalendarPad() {
 		super();
-		//setType("Calendar");
+		setType("Calendar");
+	}
+
+	protected CalendarPad(String containerID) {
+		super(containerID);
+		setType("Calendar");
 	}
 	
 	@Override
@@ -21,11 +26,6 @@ public class CalendarPad extends Pad {
 		DateTime calendar = new DateTime(parent, SWT.CALENDAR);
 	}
 
-	
-	protected CalendarPad(String containerID) {
-		super(containerID);
-	}
-	
 	
 	@Override
 	public Pad copy() {
