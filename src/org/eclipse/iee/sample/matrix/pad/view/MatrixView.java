@@ -3,7 +3,12 @@ package org.eclipse.iee.sample.matrix.pad.view;
 import org.eclipse.iee.sample.matrix.pad.controller.Controller;
 import org.eclipse.iee.sample.matrix.pad.model.Matrix;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 public class MatrixView {
@@ -17,37 +22,45 @@ public class MatrixView {
 	
 	private Controller fController;
 	private Composite fComposite;
-	private GridLayout fLayout;
 
 	public void setController(Controller controller) {
 		fController = controller;
 	}
 	
-	public MatrixView(Composite parent) {
-		createPartControl(parent);
-	}
-	
 	public void createPartControl(Composite parent) {
+		parent.setLayout(new GridLayout(1, true));
+		
+		/* Action buttons */
+		createTempButtons(parent);
+		
+		/* Matrix grid */
 		fComposite = new Composite(parent, SWT.NONE);
-		fLayout = new GridLayout(fColumnsNumber, true);
-		fComposite.setLayout(fLayout);
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		fComposite.setLayoutData(gridData);
+				
+		updateLayout();
 	}
 	
-	public void updateMatrix(Matrix matrix) {
+	public void updateLayout() {
+		fComposite.setLayout(new GridLayout(fColumnsNumber, true));
+		fComposite.pack();
+	}
+	
+	public void updateMatrix(Matrix matrix) {		
 		updateMatrixSize(
 			matrix.getRowsNumber(),
 			matrix.getCollumnsNumber());
-
+		
+		createElementsPartControls();
+		
 		System.out.println(matrix.toString());
 		
 		for (int i = 0; i < fRowsNumber; i++) {
 			for (int j = 0; j < fColumnsNumber; j++) {
-				
 				String newExpression = matrix.getElements()[i][j];
 				ElementView elementView = fElementViews[i][j];
 				if (!elementView.getExpression().equals(newExpression)) {
 					elementView.setExression(newExpression);
-					//updateView element 
 				}
 			}
 		}
@@ -67,7 +80,6 @@ public class MatrixView {
 			for (int i = fRowsNumber; i < rows; i++) {
 				for (int j = 0; j < columns; j++) {
 					fElementViews[i][j] = new ElementView(fController, i, j);
-					fElementViews[i][j].createPartControl(fComposite);
 				}
 			}
 		}
@@ -85,7 +97,6 @@ public class MatrixView {
 			for (int i = 0; i < rows; i++) {
 				for (int j = fColumnsNumber; j < columns; j++) {
 					fElementViews[i][j] = new ElementView(fController, i, j);
-					fElementViews[i][j].createPartControl(fComposite);
 				}
 			}
 		}
@@ -93,23 +104,88 @@ public class MatrixView {
 		fRowsNumber = rows;
 		fColumnsNumber = columns;
 		
-		
+/*
 		Button s = new Button(c, SWT.PUSH);
 	    s.setText("Special " + index[0]);
 	    index[0]++;
 	    Control[] children = c.getChildren();
 	    s.moveAbove(children[3]);
 	    shell.layout(new Control[] { s });
-		
-		fLayout.numColumns = fColumnsNumber;
-		fComposite.setLayout(fLayout);
+*/
+		updateLayout();
 	}
-		
-	public void updateElementViews(int rows, int collumns) {
-		
+	
+	public void createElementsPartControls() {
+		for(int i = 0; i < fRowsNumber; i++) {
+			for (int j = 0; j < fColumnsNumber; j++) {
+				ElementView view = fElementViews[i][j];
+				if (view.isDisposed()) {
+					fElementViews[i][j].createPartControl(fComposite);
+				}
+			}
+		}
 	}
-		
+	
 	public void render() {
 		
 	}
+	
+	public void createTempButtons(Composite parent) {
+		Composite sashForm = new SashForm(parent, SWT.HORIZONTAL);
+		
+		Button addRowButton = new Button(sashForm, SWT.PUSH);
+		addRowButton.setText("+row");
+		addRowButton.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				fController.addRow();
+		    }
+		    public void widgetDefaultSelected(SelectionEvent event) {}
+		});
+		
+		Button removeRowButton = new Button(sashForm, SWT.PUSH);
+		removeRowButton.setText("-row");
+		removeRowButton.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				fController.removeRow();
+		    }
+		    public void widgetDefaultSelected(SelectionEvent event) {}
+		});
+		
+		Button addColumnButton = new Button(sashForm, SWT.PUSH);
+		addColumnButton.setText("+col");
+		addColumnButton.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				fController.addCollumn();
+		    }
+		    public void widgetDefaultSelected(SelectionEvent event) {}
+		});
+		
+		Button removeColumnButton = new Button(sashForm, SWT.PUSH);
+		removeColumnButton.setText("-col");
+		removeColumnButton.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				fController.removeCollumn();
+		    }
+		    public void widgetDefaultSelected(SelectionEvent event) {}
+		});
+		
+		Button rollBackButton = new Button(sashForm, SWT.PUSH);
+		rollBackButton.setText("<-");
+		rollBackButton.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				fController.rollBack();
+		    }
+		    public void widgetDefaultSelected(SelectionEvent event) {}
+		});
+		
+		Button rollFrontButton = new Button(sashForm, SWT.PUSH);
+		rollFrontButton.setText("->");
+		rollFrontButton.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				fController.rollFront();
+		    }
+		    public void widgetDefaultSelected(SelectionEvent event) {}
+		});
+	}
 }
+

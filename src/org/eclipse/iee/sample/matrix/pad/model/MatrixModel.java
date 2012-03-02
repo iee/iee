@@ -3,8 +3,8 @@ package org.eclipse.iee.sample.matrix.pad.model;
 import java.util.Stack;
 
 public class MatrixModel {	
-	protected Stack<Matrix> fPreviousStates;
-	protected Stack<Matrix> fFutureStates;
+	protected Stack<Matrix> fPreviousStates = new Stack<Matrix>();
+	protected Stack<Matrix> fFutureStates = new Stack<Matrix>();
 	
 	/* Matrix represents the current state */
 	protected Matrix fMatrix = new Matrix();

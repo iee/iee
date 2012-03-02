@@ -66,7 +66,8 @@ public class FormulaRenderer {
 			return formulaImage;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("getFormulaImage() failed");
+			//e.printStackTrace();
 			return null;
 		}
 	}

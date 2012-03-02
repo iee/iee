@@ -16,16 +16,16 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class ElementView {
 	
+public class ElementView {
 	private Controller fController;
+	
 	private Composite fParent;
+	private Composite fComposite;
 	
 	
 	/* View variables */
@@ -175,33 +175,26 @@ public class ElementView {
 	public void createPartControl(final Composite parent) {		
 		fParent = parent;
 
-		SashForm sashForm = new SashForm(fParent, SWT.VERTICAL);
-		sashForm.setLayout(new GridLayout());
-				
-		/* First view */
+		fComposite =  new SashForm(parent, SWT.VERTICAL);
+		fComposite.setLayoutData(
+			new GridData(GridData.FILL, GridData.FILL, true, true));
 		
-		fFormulaImageLabel = new Label(sashForm, SWT.NONE | SWT.RESIZE);
-		GridData formulaImageGridData = new GridData();
-		formulaImageGridData.verticalAlignment = GridData.FILL;
-		formulaImageGridData.grabExcessVerticalSpace = true;
-		formulaImageGridData.horizontalAlignment = GridData.FILL;
-		formulaImageGridData.grabExcessHorizontalSpace = true;
-		fFormulaImageLabel.setLayoutData(formulaImageGridData);
+		/* First view */
+		fFormulaImageLabel = new Label(fComposite, SWT.NONE | SWT.RESIZE);
 				
 		/* Second view */
-		
-		fInputText = new StyledText(sashForm, SWT.SINGLE | SWT.RESIZE);
-		GridData inputTextGridData =  new GridData();
-		inputTextGridData.horizontalAlignment = GridData.FILL;
-		fInputText.setLayoutData(inputTextGridData);
-		fInputText.setSize(50, 100);
+		fInputText = new StyledText(fComposite, SWT.SINGLE | SWT.RESIZE);
 		
 		setListeners();
 		
 		toggleFormulaImage();
 	}
 	
+	public boolean isDisposed() {
+		return fComposite == null || fComposite.isDisposed();
+	}
+	
 	public void dispose() {
-		fParent.dispose();
+		fComposite.dispose();
 	}
 }

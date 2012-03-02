@@ -20,21 +20,26 @@ public class MatrixPad extends Pad implements Serializable {
 	
 	public MatrixPad() {
 		setType("Matrix");
+		init();
 	}
 
 	protected MatrixPad(String containerID) {
 		super(containerID);
 		setType("Matrix");
+		init();
+	}
+	
+	protected void init() {
+		FormulaRenderer.setDisplay(Display.getCurrent());
+		
+		fMatrixModel = new MatrixModel();
+		fMatrixView = new MatrixView();
+		fController = new Controller(this, fMatrixModel, fMatrixView);
+		fMatrixView.setController(fController);
 	}
 
 	public void createPartControl(Composite parent) {
-		FormulaRenderer.setDisplay(Display.getCurrent());
-		
-		/* Init components */
-		fMatrixModel = new MatrixModel();
-		fMatrixView = new MatrixView(parent);
-		fController = new Controller(this, fMatrixModel, fMatrixView);
-		fMatrixView.setController(fController);		
+		fMatrixView.createPartControl(parent);
 		fController.updateView();
 	}
 		

@@ -67,7 +67,8 @@ public class Translator {
 			}
 		} catch (Exception e) {
 			translated = null;
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("translateElement() failed");
 		}		
 
 		fCachedItems.put(text, translated);
