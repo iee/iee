@@ -34,6 +34,9 @@ public class FormulaPad extends Pad {
 	
 	private Composite fParent;
 	
+	private Composite fInputView;
+	private Composite fResultView;
+	
 	private Label fFormulaImageLabel;
 	private Label fLastResultImageLabel;
 	
@@ -79,13 +82,11 @@ public class FormulaPad extends Pad {
 		
 	public void toggleInputText() {
 		// OFF
-		fFormulaImageLabel.setVisible(false);
-		fLastResultImageLabel.setVisible(false);
+		fResultView.setVisible(false);
 		
 		// ON
 		fInputText.setText(fExpression);
-		fInputText.setVisible(true);
-		fTempFormulaImageLabel.setVisible(true);
+		fInputView.setVisible(true);
 		
 		fParent.pack();
 		
@@ -94,12 +95,10 @@ public class FormulaPad extends Pad {
 	
 	public void toggleFormulaImage() {
 		// OFF
-		fInputText.setVisible(false);
-		fTempFormulaImageLabel.setVisible(false);
+		fInputView.setVisible(false);
 		
 		// ON
-		fFormulaImageLabel.setVisible(true);
-		fLastResultImageLabel.setVisible(true);
+		fResultView.setVisible(true);
 		
 		fParent.pack();
 	}
@@ -163,10 +162,13 @@ public class FormulaPad extends Pad {
 	public void updateLastResult(String result) {
 		if (result == "") {
 			fLastResultImageLabel.setImage(null);
+			fParent.pack();
 			return;
 		}
-		Image image = FormulaRenderer.getFormulaImage(result);
+		
+		Image image = FormulaRenderer.getFormulaImage("=" + result);
 		fLastResultImageLabel.setImage(image);
+		fParent.pack();
 	}
 
 	public void setListeners() {
@@ -241,42 +243,39 @@ public class FormulaPad extends Pad {
 		
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		parent.setLayout(layout);
-		SashForm sashForm = new SashForm(fParent, SWT.VERTICAL);
-		sashForm.setLayout(new GridLayout());
-				
-		/* First view */
-		fFormulaImageLabel = new Label(sashForm, SWT.NONE | SWT.RESIZE);
-		GridData formulaImageGridData = new GridData();
-		formulaImageGridData.verticalAlignment = GridData.FILL;
-		formulaImageGridData.grabExcessVerticalSpace = true;
-		formulaImageGridData.horizontalAlignment = GridData.FILL;
-		formulaImageGridData.grabExcessHorizontalSpace = true;
-		fFormulaImageLabel.setLayoutData(formulaImageGridData);
 		
-		fLastResultImageLabel = new Label(sashForm,  SWT.BORDER | SWT.RESIZE);
-		GridData lastResultImageGridData = new GridData();
-		lastResultImageGridData.verticalAlignment = GridData.FILL;
-		lastResultImageGridData.grabExcessVerticalSpace = true;
-		lastResultImageGridData.horizontalAlignment = GridData.FILL;
-		lastResultImageGridData.grabExcessHorizontalSpace = true;
-		fLastResultImageLabel.setLayoutData(lastResultImageGridData);
+		SashForm sashForm = new SashForm(parent, SWT.FILL);
+		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		/* Second view */
+		/* Input View */
 		
-		fInputText = new StyledText(sashForm, SWT.SINGLE | SWT.RESIZE);
+		fInputView = new Composite(sashForm, SWT.NONE);
+		fInputView.setLayout(new GridLayout(1, true));
+		
+		fInputText = new StyledText(fInputView, SWT.SINGLE | SWT.NONE);
 		GridData inputTextGridData =  new GridData();
-		inputTextGridData.horizontalAlignment = GridData.FILL;
 		fInputText.setLayoutData(inputTextGridData);
 		fInputText.setSize(50, 100);
 		
-		fTempFormulaImageLabel = new Label(sashForm, SWT.NONE | SWT.RESIZE);
-		GridData tempLabelGridData = new GridData();
-		tempLabelGridData.verticalAlignment = GridData.FILL;
-		tempLabelGridData.grabExcessVerticalSpace = true;
-		tempLabelGridData.horizontalAlignment = GridData.FILL;
-		tempLabelGridData.grabExcessHorizontalSpace = true;
+		fTempFormulaImageLabel = new Label(fInputView, SWT.NONE);
+		GridData tempLabelGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		tempLabelGridData.horizontalSpan = 3;
 		fTempFormulaImageLabel.setLayoutData(tempLabelGridData);
 		
+		/* Result View */
+		
+		fResultView = new Composite(sashForm, SWT.NONE);
+		fResultView.setLayout(new GridLayout(2, false));
+		fResultView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		fFormulaImageLabel = new Label(fResultView, SWT.NONE);
+		GridData formulaImageGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		fFormulaImageLabel.setLayoutData(formulaImageGridData);
+		
+		fLastResultImageLabel = new Label(fResultView,  SWT.NONE);
+		GridData lastResultImageGridData = new GridData(SWT.LEFT, SWT.FILL, true, true);
+		fLastResultImageLabel.setLayoutData(lastResultImageGridData);
+				
 		setListeners();
 		
 		validateInput();

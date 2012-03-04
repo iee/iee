@@ -41,14 +41,22 @@ public class FormulaRenderer {
 	
 	public static Image getFormulaImage(String text) {
 		Image cachedImage = fCachedImages.get(text);
+		String latex = "";
 		if (cachedImage != null) {
 			return cachedImage;
 		}
 		
 		try {
 			/* Translating to Latex */
-			String latex = FormulaPadManager.getMolex().translateMath(text).trim();
-			
+			if (text.charAt(0) == '=')
+			{
+				latex = FormulaPadManager.getMolex().translateMath(text.substring(1)).trim();
+				latex = "=" + latex;
+			}
+			else 
+			{
+				latex = FormulaPadManager.getMolex().translateMath(text).trim();
+			}
 			java.awt.Image awtImage =
 				TeXFormula.createBufferedImage(
 					latex,
