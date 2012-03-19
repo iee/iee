@@ -57,6 +57,10 @@ public class ElementView {
 		return fExpression;
 	}
 	
+	public Composite getComposite() {
+		return fComposite;
+	}
+	
 	public void setExression(String expression) {
 		fExpression = expression;
 		toggleFormulaImage();

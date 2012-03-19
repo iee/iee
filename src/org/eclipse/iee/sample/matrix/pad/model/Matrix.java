@@ -30,22 +30,25 @@ public class Matrix implements Cloneable {
 		setZeroes();
 	}
 	
-	public Matrix(int rows, int collumns) {
-		fRowsNumber = rows;
-		fCollumnsNumber = collumns;		
-		fElements = new String[fRowsNumber][fCollumnsNumber];
-		setZeroes();
+	public Matrix(int rows, int columns) {
+		initElements(rows, columns);
 	}
 
-	public Matrix(Matrix another, int rows, int collumns) {	
-		fElements = new String[rows][collumns];
-		setZeroes();
+	public Matrix(Matrix another, int rows, int columns) {
+		initElements(rows, columns);
 		
 		for (int i = 0; i < Math.min(rows, another.getRowsNumber()); i++) {
-			for (int j = 0; j < Math.min(collumns, another.getCollumnsNumber()); j++) {
+			for (int j = 0; j < Math.min(columns, another.getCollumnsNumber()); j++) {
 				fElements[i][j] = another.getElements()[i][j];
 			}
 		}
+	}
+	
+	protected void initElements(int rows, int columns) {
+		fRowsNumber = rows;
+		fCollumnsNumber = columns;
+		fElements = new String[fRowsNumber][fCollumnsNumber];
+		setZeroes();
 	}
 	
 	public void setZeroes() {

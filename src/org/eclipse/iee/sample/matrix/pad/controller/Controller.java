@@ -24,6 +24,10 @@ public class Controller {
 	}
 	
 	public void addRow() {
+		if (!canAddRow()) {
+			return;
+		}
+		
 		fMatrixModel.setMatrixSize(
 			fMatrixModel.getMatrix().getRowsNumber() + 1,
 			fMatrixModel.getMatrix().getCollumnsNumber());
@@ -35,6 +39,10 @@ public class Controller {
 	}
 	
 	public void removeRow() {
+		if (!canRemoveRow()) {
+			return;
+		}
+		
 		fMatrixModel.setMatrixSize(
 			fMatrixModel.getMatrix().getRowsNumber() - 1,
 			fMatrixModel.getMatrix().getCollumnsNumber());
@@ -46,6 +54,10 @@ public class Controller {
 	}
 	
 	public void addCollumn() {
+		if (!canAddCollumn()) {
+			return;
+		}
+		
 		fMatrixModel.setMatrixSize(
 			fMatrixModel.getMatrix().getRowsNumber(),
 			fMatrixModel.getMatrix().getCollumnsNumber() + 1);
@@ -57,6 +69,10 @@ public class Controller {
 	}
 	
 	public void removeCollumn() {
+		if (!canRemoveCollumn()) {
+			return;
+		}
+		
 		fMatrixModel.setMatrixSize(
 			fMatrixModel.getMatrix().getRowsNumber(),
 			fMatrixModel.getMatrix().getCollumnsNumber() - 1);
