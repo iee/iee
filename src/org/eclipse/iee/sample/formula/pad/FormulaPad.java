@@ -45,8 +45,8 @@ public class FormulaPad extends Pad {
 	
 	private boolean fIsInputValid;
 	
-	private String fExpression = "x = 123";
-	
+	private String fExpression = "";
+		
 	public String getExpression() {
 		return fExpression;
 	}
@@ -278,9 +278,19 @@ public class FormulaPad extends Pad {
 				
 		setListeners();
 		
-		validateInput();
-		processInput();
-		toggleFormulaImage();
+		
+		
+		if (fExpression != "")
+		{
+			validateInput();
+			processInput();
+			toggleFormulaImage();
+		}
+		else
+		{
+			toggleInputText();
+		}
+		
 	}
 	
 	@Override
