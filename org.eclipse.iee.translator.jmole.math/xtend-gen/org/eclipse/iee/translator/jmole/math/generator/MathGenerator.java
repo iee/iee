@@ -28,7 +28,6 @@ import org.eclipse.xtext.xbase.lib.BooleanExtensions;
 import org.eclipse.xtext.xbase.lib.IntegerExtensions;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
 import org.eclipse.xtext.xtend2.lib.ResourceExtensions;
 import org.eclipse.xtext.xtend2.lib.StringConcatenation;
 
@@ -105,7 +104,7 @@ public class MathGenerator implements IGenerator {
   
   public StringConcatenation compileFunctionDefinition(final FunctionDefinition funcDef) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("public Double ");
+    _builder.append("public static double ");
     Expression _function = funcDef.getFunction();
     String _name = _function.getName();
     _builder.append(_name, "");
@@ -115,16 +114,14 @@ public class MathGenerator implements IGenerator {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
       for(final Formula param : _parameters) {
-        _builder.append("(");
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
-            _builder.append("(double)");
+            _builder.append("double ");
             StringConcatenation _compileFormula = this.compileFormula(param);
             _builder.append(_compileFormula, "");
           }
         }
-        _builder.append(")");
         _builder.newLineIfNotEmpty();
         {
           Expression _function_2 = funcDef.getFunction();
@@ -250,19 +247,12 @@ public class MathGenerator implements IGenerator {
     StringConcatenation _builder = new StringConcatenation();
     Expression _function = f.getFunction();
     String _name = _function.getName();
-    String _substring = _name.substring(0, 1);
-    String _upperCase = _substring.toUpperCase();
-    Expression _function_1 = f.getFunction();
-    String _name_1 = _function_1.getName();
-    String _substring_1 = _name_1.substring(1);
-    String _lowerCase = _substring_1.toLowerCase();
-    String _operator_plus = StringExtensions.operator_plus(_upperCase, _lowerCase);
-    _builder.append(_operator_plus, "");
+    _builder.append(_name, "");
     _builder.newLineIfNotEmpty();
     _builder.append("(");
     {
-      Expression _function_2 = f.getFunction();
-      EList<Formula> _parameters = _function_2.getParameters();
+      Expression _function_1 = f.getFunction();
+      EList<Formula> _parameters = _function_1.getParameters();
       for(final Formula param : _parameters) {
         _builder.newLineIfNotEmpty();
         {
@@ -274,8 +264,8 @@ public class MathGenerator implements IGenerator {
         }
         _builder.newLineIfNotEmpty();
         {
-          Expression _function_3 = f.getFunction();
-          EList<Formula> _parameters_1 = _function_3.getParameters();
+          Expression _function_2 = f.getFunction();
+          EList<Formula> _parameters_1 = _function_2.getParameters();
           Formula _last = IterableExtensions.<Formula>last(_parameters_1);
           boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_last, param);
           if (_operator_notEquals_1) {
