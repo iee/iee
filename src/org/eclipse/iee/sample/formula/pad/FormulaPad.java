@@ -216,12 +216,14 @@ public class FormulaPad extends Pad {
 					e.doit = false;
 					processInput();
 					moveCaretToCurrentPad();
-					toggleFormulaImage();
+					if (fExpression != "")
+						toggleFormulaImage();
 					break;
 					
 				case SWT.ESC:
 					moveCaretToCurrentPad();
-					toggleFormulaImage();
+					if (fExpression != "")
+						toggleFormulaImage();
 					break;
 				}
 			}
@@ -230,7 +232,8 @@ public class FormulaPad extends Pad {
 		fInputText.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				toggleFormulaImage();
+				if (fExpression != "")
+					toggleFormulaImage();
 			}
 			
 			@Override public void focusGained(FocusEvent e) {}
