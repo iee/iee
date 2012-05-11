@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Matrix
+Bundle-SymbolicName: org.eclipse.iee.sample.matrix; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.iee.sample.matrix.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.iee.editor;bundle-version="1.0.0",
+ org.eclipse.ui.editors;bundle-version="3.7.0",
+ org.eclipse.iee.translator.jmole.math;bundle-version="1.0.0",
+ org.eclipse.iee.translator.molex.mex;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: .,
+ lib/jlatexmath-embedded-fop-0.9.6.jar,
+ lib/xstream-1.4.2.jar
