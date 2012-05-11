@@ -9,6 +9,11 @@ import org.eclipse.swt.widgets.Label;
 
 public class LoadingPad extends Pad {
 
+	@Override
+	public String getType() {
+		return "Loading Pad";
+	}
+	
 	private String fOriginalContainerID;
 
 	public void setOriginalContainerID(String originalContainerID) {
@@ -22,9 +27,10 @@ public class LoadingPad extends Pad {
 	public LoadingPad() {
 		super();
 	}
-
+	
 	public LoadingPad(String containerID) {
-		super(containerID);
+		super();
+		setContainerID(containerID);
 	}
 
 	@Override
@@ -44,11 +50,6 @@ public class LoadingPad extends Pad {
 	}
 
 	@Override
-	public String getType() {
-		return "Loading Pad";
-	}
-
-	@Override
 	public void save() {
 	}
 
@@ -62,7 +63,5 @@ public class LoadingPad extends Pad {
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-		
 	}
 }

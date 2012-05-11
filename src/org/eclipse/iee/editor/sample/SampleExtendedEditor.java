@@ -90,6 +90,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	public void dispose() {
 		fPadManager.removeContainerManager(fContainerManager);
 		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
+		fContainerManager.dispose();
 		fContainerManager = null;
 
 		super.dispose();

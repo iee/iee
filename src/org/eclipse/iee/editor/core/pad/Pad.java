@@ -14,19 +14,12 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class Pad {
 	
 	private String fContainerID;
-	private String fType;
 	private Container fContainer;
 	
 	private Color fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 
 	public Pad() {
 		fContainerID = UUID.randomUUID().toString();
-		fType = "Unknown";
-	}
-
-	public Pad(String containerID) {
-		fContainerID = containerID;
-		fType = "Unknown";
 	}
 
 	public void setContainerID(String containerID) {
@@ -153,20 +146,5 @@ public abstract class Pad {
 	 */
 	public abstract void onContainerAttached();
 
-	/**
-	 * Getter for fType
-	 */
-	public String getType()
-	{
-		return fType;
-	}
-	
-	/**
-	 * Setter for fType
-	 */
-	public void setType(String type)
-	{
-		fType = type;
-	}
-
+	public abstract String getType();
 }

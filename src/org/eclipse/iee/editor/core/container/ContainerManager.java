@@ -1,7 +1,9 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -43,6 +45,8 @@ public class ContainerManager extends EventManager {
 	
 	private final StyledText fStyledText;
 	private final IDocument fDocument;
+	
+	private DocumentListener fDocumentListener;
 
 	private final NavigableSet<Container> fContainers;
 	
@@ -57,6 +61,10 @@ public class ContainerManager extends EventManager {
 		return fContainers.toArray();
 	}
 	
+	public List<Container> getContainers() {
+		return new ArrayList<Container>(fContainers);
+	}
+		
 	public String getContainerManagerID() {
 		return fContainerManagerID;
 	}
@@ -111,6 +119,10 @@ public class ContainerManager extends EventManager {
 		initDocumentListener();
 	}
 	
+	public void dispose() {
+		removeDocumentListener();
+	}
+	
 	public void RequestContainerAllocation(String containerID, int offset) {
 		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(containerID);
 
@@ -125,7 +137,8 @@ public class ContainerManager extends EventManager {
 		System.out.println("updateContainerPresentations");
 		
 		/* Update styles */
-		fStyledText.redraw();
+		fStyledTextManager.updateContainersStyles();
+		//fStyledText.redraw();
 		
 		/* Update positions */
 		Iterator<Container> it = fContainers.iterator();
@@ -213,213 +226,227 @@ public class ContainerManager extends EventManager {
 
 	/* DOCUMENT MODIFICATION EVENT PROCESSING */
 
-	protected void initDocumentListener() {
+	class DocumentListener implements IDocumentListener,
+			IDocumentPartitioningListener,
+			IDocumentPartitioningListenerExtension2 {
+		private IRegion fChangedPartitioningRegion;
 
-		class DocumentListener implements IDocumentListener,
-				IDocumentPartitioningListener,
-				IDocumentPartitioningListenerExtension2 {
-			private IRegion fChangedPartitioningRegion;
+		public DocumentListener() {
+			fChangedPartitioningRegion = null;
+		}
 
-			public DocumentListener() {
-				fChangedPartitioningRegion = null;
-			}
-
-			@Override
-			public void documentPartitioningChanged(
-					DocumentPartitioningChangedEvent event) {
-				fChangedPartitioningRegion = event
+		@Override
+		public void documentPartitioningChanged(
+				DocumentPartitioningChangedEvent event) {
+			fChangedPartitioningRegion = event
 					.getChangedRegion(PartitioningManager.PARTITIONING_ID);
+		}
+
+		@Override
+		public void documentChanged(DocumentEvent event) {
+
+			fProcessingDocumentModification = true;
+
+			/*
+			 * All pads which placed after 'unmodifiedOffset' are considered to
+			 * be just moved without any other modifications.
+			 * 
+			 * It's calculated according following equation 'unmodified offset'
+			 * = max('end of partitioning changed area', 'end of document
+			 * changed area') - 'moving_delta'
+			 */
+
+			int unmodifiedOffset;
+			final int movingDelta = event.getText().length()
+					- event.getLength();
+
+			if (fChangedPartitioningRegion != null) {
+				unmodifiedOffset = Math.max(event.getOffset()
+						+ event.getText().length(),
+						fChangedPartitioningRegion.getOffset()
+								+ fChangedPartitioningRegion.getLength());
+				unmodifiedOffset -= movingDelta;
+			} else {
+				unmodifiedOffset = event.getOffset() + event.getLength();
 			}
 
-			@Override
-			public void documentChanged(DocumentEvent event) {
-				
-				fProcessingDocumentModification = true;
-				
-				/*
-				 * All pads which placed after 'unmodifiedOffset' are considered
-				 * to be just moved without any other modifications.
-				 * 
-				 * It's calculated according following equation 'unmodified
-				 * offset' = max('end of partitioning changed area', 'end of
-				 * document changed area') - 'moving_delta'
-				 */
+			/*
+			 * Positive delta means that unmodified pads move forward. We have
+			 * to perform this action before any other modifications to avoid
+			 * collisions.
+			 */
 
-				int unmodifiedOffset;
-				final int movingDelta = event.getText().length()
-						- event.getLength();
+			if (movingDelta > 0) {
+				moveUnmodifiedPads(unmodifiedOffset, movingDelta);
+			}
 
+			try {
 				if (fChangedPartitioningRegion != null) {
-					unmodifiedOffset = Math.max(
-							event.getOffset() + event.getText().length(),
-							fChangedPartitioningRegion.getOffset() + fChangedPartitioningRegion.getLength());
-					unmodifiedOffset -= movingDelta;
+
+					/*
+					 * Case 1: Document partitioning is changed, so updating the
+					 * set of the pads
+					 */
+					onPartitioningChanged(event, unmodifiedOffset);
+
 				} else {
-					unmodifiedOffset = event.getOffset() + event.getLength();
-				}
-
-				/*
-				 * Positive delta means that unmodified pads move forward. We
-				 * have to perform this action before any other modifications to
-				 * avoid collisions.
-				 */
-
-				if (movingDelta > 0) {
-					moveUnmodifiedPads(unmodifiedOffset, movingDelta);
-				}
-
-				try {
-					if (fChangedPartitioningRegion != null) {
+					Container current = getContainerHavingOffset(event
+							.getOffset());
+					if (current != null) {
 
 						/*
-						 * Case 1: Document partitioning is changed, so updating
-						 * the set of the pads
+						 * Case 2: Changed text area is inside current pad's
+						 * area, updating it
 						 */
-						onPartitioningChanged(event, unmodifiedOffset);
-
-					} else {
-						Container current = getContainerHavingOffset(event.getOffset());
-						if (current != null) {
-
-							/*
-							 * Case 2: Changed text area is inside current pad's
-							 * area, updating it
-							 */
-							onChangesInsidePad(current, event);
-						}
-
-						/*
-						 * Case 3: No pad modified, do nothing.
-						 */
+						onChangesInsidePad(current, event);
 					}
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				} catch (BadPartitioningException e) {
-					e.printStackTrace();
-				} catch (RuntimeException e) {
-					e.printStackTrace();
+
+					/*
+					 * Case 3: No pad modified, do nothing.
+					 */
 				}
-
-				/*
-				 * If delta is negative, we move unmodified pads backward, but
-				 * after any other modifications are done.
-				 */
-
-				if (movingDelta < 0) {
-					moveUnmodifiedPads(unmodifiedOffset, movingDelta);
-				}
-
-				fChangedPartitioningRegion = null;
-
-				if (!fDocumentAccess.processNextDocumentAccessRequest()) {
-					updateContainersPresentations();
-					updateContainerVisibility(true);
-					fProcessingDocumentModification = false;
-					fUserInteractionManager.updateCaretSelection();
-					
-					System.out.println("End of iteration");
-
-					/* For debug */
-					fireDebugNotification();
-				}
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			} catch (BadPartitioningException e) {
+				e.printStackTrace();
+			} catch (RuntimeException e) {
+				e.printStackTrace();
 			}
 
-			private void onPartitioningChanged(DocumentEvent event,
-					int unmodifiedOffset) throws BadLocationException,
-					BadPartitioningException {
+			/*
+			 * If delta is negative, we move unmodified pads backward, but after
+			 * any other modifications are done.
+			 */
 
-				/* Remove all elements within changed area */
-
-				int beginRegionOffset = Math.min(event.getOffset(), fChangedPartitioningRegion.getOffset());
-
-				Container from = fContainers.ceiling(Container.atOffset(beginRegionOffset));
-				Container to = fContainers.lower(Container.atOffset(unmodifiedOffset));
-
-				if (from != null && to != null
-						&& fContainerComparator.isNotDescending(from, to)) {
-					NavigableSet<Container> removeSet = fContainers.subSet(from, true, to, true);
-					if (removeSet != null) {
-						Container container;
-						while ((container = removeSet.pollFirst()) != null) {
-
-							/* Removing container */
-
-							container.dispose();
-							fireContainerRemoved(container);
-						}
-					}
-				}
-
-				/* Scanning for new containers */
-
-				int offset = Math.max(event.getOffset(), fChangedPartitioningRegion.getOffset());
-				while (offset < fChangedPartitioningRegion.getOffset() + fChangedPartitioningRegion.getLength()) {
-					ITypedRegion region = ((IDocumentExtension3) fDocument)
-						.getPartition(PartitioningManager.PARTITIONING_ID, offset, false);
-
-					if (region.getType().equals(
-						PartitioningManager.CONTENT_TYPE_EMBEDDED)) {
-						
-						String containerTextRegion = fDocument.get(region.getOffset(), region.getLength());
-
-						/* Adding container */
-
-						String containerID = fDocumentAccess.getContainerIDFromTextRegion(containerTextRegion);
-
-						Container container = createContainer(
-							new Position(region.getOffset(), region.getLength()),
-							containerID);
-
-						fContainers.add(container);
-						fireContainerCreated(container);
-					}
-					offset += region.getLength();
-				}
+			if (movingDelta < 0) {
+				moveUnmodifiedPads(unmodifiedOffset, movingDelta);
 			}
 
-			private void onChangesInsidePad(Container container,
-					DocumentEvent event) throws BadLocationException,
-					BadPartitioningException {
-				ITypedRegion region = ((IDocumentExtension3) fDocument)
-						.getPartition(PartitioningManager.PARTITIONING_ID, event.getOffset(), false);
+			fChangedPartitioningRegion = null;
 
-				Assert.isTrue(
-					container.getPosition().getOffset() == region.getOffset());
+			if (!fDocumentAccess.processNextDocumentAccessRequest()) {
+				updateContainersPresentations();
+				updateContainerVisibility(true);
+				fProcessingDocumentModification = false;
+				fUserInteractionManager.updateCaretSelection();
 
-				/* Updating container */
-				container.updatePosition(region.getOffset(), region.getLength());
-			}
+				System.out.println("End of iteration");
 
-			private void moveUnmodifiedPads(int offset, int delta) {
-				Container from = fContainers.ceiling(Container.atOffset(offset));
-				if (from == null)
-					return;
-
-				NavigableSet<Container> tail = fContainers.tailSet(from, true);
-				Iterator<Container> it = tail.iterator();
-				while (it.hasNext()) {
-					Container container = it.next();
-					Position position = container.getPosition();
-
-					/* Updating container */
-					container.updatePosition(
-						position.getOffset() + delta,
-						position.getLength());
-				}
-			}
-
-			@Override
-			public void documentPartitioningChanged(IDocument document) {
-			}
-
-			@Override
-			public void documentAboutToBeChanged(DocumentEvent event) {
+				/* For debug */
+				fireDebugNotification();
 			}
 		}
 
-		DocumentListener listener = new DocumentListener();
-		fDocument.addDocumentPartitioningListener(listener);
-		fDocument.addDocumentListener(listener);
+		private void onPartitioningChanged(DocumentEvent event,
+				int unmodifiedOffset) throws BadLocationException,
+				BadPartitioningException {
+
+			/* Remove all elements within changed area */
+
+			int beginRegionOffset = Math.min(event.getOffset(),
+					fChangedPartitioningRegion.getOffset());
+
+			Container from = fContainers.ceiling(Container
+					.atOffset(beginRegionOffset));
+			Container to = fContainers.lower(Container
+					.atOffset(unmodifiedOffset));
+
+			if (from != null && to != null
+					&& fContainerComparator.isNotDescending(from, to)) {
+				NavigableSet<Container> removeSet = fContainers.subSet(from,
+						true, to, true);
+				if (removeSet != null) {
+					Container container;
+					while ((container = removeSet.pollFirst()) != null) {
+
+						/* Removing container */
+
+						container.dispose();
+						fireContainerRemoved(container);
+					}
+				}
+			}
+
+			/* Scanning for new containers */
+
+			int offset = Math.max(event.getOffset(),
+					fChangedPartitioningRegion.getOffset());
+			while (offset < fChangedPartitioningRegion.getOffset()
+					+ fChangedPartitioningRegion.getLength()) {
+				ITypedRegion region = ((IDocumentExtension3) fDocument)
+						.getPartition(PartitioningManager.PARTITIONING_ID,
+								offset, false);
+
+				if (region.getType().equals(
+						PartitioningManager.CONTENT_TYPE_EMBEDDED)) {
+
+					String containerTextRegion = fDocument.get(
+							region.getOffset(), region.getLength());
+
+					/* Adding container */
+
+					String containerID = fDocumentAccess
+							.getContainerIDFromTextRegion(containerTextRegion);
+
+					Container container = createContainer(
+							new Position(region.getOffset(), region.getLength()),
+							containerID);
+
+					fContainers.add(container);
+					fireContainerCreated(container);
+				}
+				offset += region.getLength();
+			}
+		}
+
+		private void onChangesInsidePad(Container container, DocumentEvent event)
+				throws BadLocationException, BadPartitioningException {
+			ITypedRegion region = ((IDocumentExtension3) fDocument)
+					.getPartition(PartitioningManager.PARTITIONING_ID,
+							event.getOffset(), false);
+
+			Assert.isTrue(container.getPosition().getOffset() == region
+					.getOffset());
+
+			/* Updating container */
+			container.updatePosition(region.getOffset(), region.getLength());
+		}
+
+		private void moveUnmodifiedPads(int offset, int delta) {
+			Container from = fContainers.ceiling(Container.atOffset(offset));
+			if (from == null)
+				return;
+
+			NavigableSet<Container> tail = fContainers.tailSet(from, true);
+			Iterator<Container> it = tail.iterator();
+			while (it.hasNext()) {
+				Container container = it.next();
+				Position position = container.getPosition();
+
+				/* Updating container */
+				container.updatePosition(position.getOffset() + delta,
+						position.getLength());
+			}
+		}
+
+		@Override
+		public void documentPartitioningChanged(IDocument document) {
+		}
+
+		@Override
+		public void documentAboutToBeChanged(DocumentEvent event) {
+		}
+	}
+	
+	protected void initDocumentListener() {
+		fDocumentListener = new DocumentListener();
+		fDocument.addDocumentPartitioningListener(fDocumentListener);
+		fDocument.addDocumentListener(fDocumentListener);
+	}
+	
+	protected void removeDocumentListener() {
+		fDocument.removeDocumentPartitioningListener(fDocumentListener);
+		fDocument.removeDocumentListener(fDocumentListener);
 	}
 	
 	public boolean isModificationAllowed() {
