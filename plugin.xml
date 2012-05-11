@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="JavaEditor with Pads"
+            extensions="java"
+            icon="icons/iee_logo.png"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor"
+            id="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">
+      </editor>
+   </extension>
+
+</plugin>
