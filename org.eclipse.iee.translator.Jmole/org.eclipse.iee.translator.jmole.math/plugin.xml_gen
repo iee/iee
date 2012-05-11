@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.eclipse.org/iee/translator/jmole/math/Math" 
+       class = "org.eclipse.iee.translator.jmole.math.math.MathPackage"
+       genModel = "org/eclipse/iee/translator/jmole/math/Math.genmodel" /> 
+	
+  </extension>
+
+
+
+</plugin>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="math"
+    nsURI="http://www.eclipse.org/iee/translator/jmole/math/Math" nsPrefix="math">
+  <eClassifiers xsi:type="ecore:EClass" name="Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionDefinition" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//FunctionDefinition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matrixDefinition" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//MatrixDefinition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Assignment"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formula" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Formula">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formula" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Formula"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatrixDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//MatrixRow"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatrixRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elements" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Addition" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Subtraction" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Multiplication" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Division" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Modulo" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Invert" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Factorial" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interval" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="openingBracket" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ceil" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="floor" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="closingBracket" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exponent" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Float" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/Math.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>
