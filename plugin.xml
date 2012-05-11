@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.iee.sample.graph.contextJava"
+            targetID="#CompilationUnitEditorContext">
+         <action
+               class="org.eclipse.iee.sample.graph.actions.AddGraphPadActionDelegate"
+               id="org.eclipse.iee.sample.graph.actions.AddGraphPadActionDelegate"
+               label="Insert Graph" 
+               icon="icons/plot.png" 
+               menubarPath="additions"
+               tooltip="Insert Graph">
+         </action>
+      </viewerContribution>
+	  <viewerContribution
+            id="org.eclipse.iee.sample.graph.contextSample"
+            targetID="#TextEditorContext">
+         <action
+               class="org.eclipse.iee.sample.graph.actions.AddGraphPadActionDelegate"
+               id="org.eclipse.iee.sample.graph.actions.AddGraphPadActionDelegate"
+               label="Insert Graph" 
+               icon="icons/plot.png" 
+               menubarPath="additions"
+               tooltip="Insert Graph">
+         </action>
+      </viewerContribution>
+   </extension>
+
+	<extension
+    	point = "org.eclipse.ui.editorActions">
+		<editorContribution 
+        	id="org.eclipse.iee.sample.graph.toolbarJava" 
+         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
+			<action id="org.eclipse.iee.sample.graph.add" 
+	        	label="Add Graph" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/plot.png" 
+	            tooltip="Add Graph" 
+	            class="org.eclipse.iee.sample.graph.actions.AddGraphPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.graph.add"
+	        /> 
+    	</editorContribution>
+		<editorContribution 
+        	id="org.eclipse.iee.sample.graph.toolbarSample" 
+         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+			<action id="org.eclipse.iee.sample.graph.add" 
+	        	label="Add Graph" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/plot.png" 
+	            tooltip="Add Graph" 
+	            class="org.eclipse.iee.sample.graph.actions.AddGraphPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.graph.add"
+	        /> 
+    	</editorContribution>
+	</extension>
+
+	
+</plugin>
