@@ -24,6 +24,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 	private final PadManager fPadManager =
 		IeeEditorPlugin.getDefault().getPadManager();
 
+	public ExtendedJavaEditor() {
+		super();
+	}
+	
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
@@ -89,8 +93,11 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 
 	@Override
 	public void dispose() {
+		System.out.println("ExtendedJavaEditor dispose() called");
+		
 		fPadManager.removeContainerManager(fContainerManager);
 		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
+		fContainerManager.dispose();
 		fContainerManager = null;
 
 		super.dispose();
