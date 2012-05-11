@@ -46,7 +46,6 @@ public class CompiledMathPad extends Pad implements Serializable {
 		super();
 		fImagePath = fFileStorage.getDirectoryPath() + this.getContainerID()
 				+ ".jpg";
-		setType("CompiledMath");
 		fText = "";
 		fIsTextVisible = true;
 		fLatexContent = "";
@@ -172,7 +171,7 @@ public class CompiledMathPad extends Pad implements Serializable {
 	}
 
 	protected CompiledMathPad(String containerID) {
-		super(containerID);
+		super();
 		fImagePath = fFileStorage.getDirectoryPath() + containerID + ".jpg";
 		fLatexContent = "";
 		fJavaContent = "";
@@ -239,5 +238,11 @@ public class CompiledMathPad extends Pad implements Serializable {
 	public void activate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

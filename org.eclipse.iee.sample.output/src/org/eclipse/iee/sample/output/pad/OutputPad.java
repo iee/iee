@@ -20,7 +20,6 @@ public class OutputPad extends Pad implements Serializable {
 	private Label fLabel;
 	
 	public OutputPad() {
-		setType("Output Pad");
 	}
 
 	@Override
@@ -75,5 +74,11 @@ public class OutputPad extends Pad implements Serializable {
 	public void activate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

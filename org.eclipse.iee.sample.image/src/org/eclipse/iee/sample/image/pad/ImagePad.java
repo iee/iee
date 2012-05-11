@@ -39,13 +39,11 @@ public class ImagePad extends Pad implements Serializable {
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
 		fImagePath = null;
-		setType("Image Pad");
 	}
 
 	protected ImagePad(int currentState, String imagePath) {
 		fCurrentState = currentState;
 		fImagePath = imagePath;
-		setType("Image Pad");
 	}
 
 	@Override
@@ -239,5 +237,11 @@ public class ImagePad extends Pad implements Serializable {
 	public void activate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

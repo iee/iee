@@ -109,7 +109,7 @@ public class MexGenerator implements IGenerator {
     {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
-      for(final Formula param : _parameters) {
+      for(Formula param : _parameters) {
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
@@ -178,7 +178,7 @@ public class MexGenerator implements IGenerator {
     _builder.newLine();
     {
       EList<MatrixRow> _rows = m.getRows();
-      for(final MatrixRow row : _rows) {
+      for(MatrixRow row : _rows) {
         _builder.append("c");
         _builder.newLine();
       }
@@ -189,7 +189,7 @@ public class MexGenerator implements IGenerator {
     _builder.newLineIfNotEmpty();
     {
       EList<MatrixRow> _rows_1 = m.getRows();
-      for(final MatrixRow row_1 : _rows_1) {
+      for(MatrixRow row_1 : _rows_1) {
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row_1, null);
           if (_operator_notEquals) {
@@ -197,7 +197,7 @@ public class MexGenerator implements IGenerator {
             _builder.newLineIfNotEmpty();
             {
               EList<String> _elements = row_1.getElements();
-              for(final String element : _elements) {
+              for(String element : _elements) {
                 {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
@@ -250,7 +250,7 @@ public class MexGenerator implements IGenerator {
     {
       Expression _function_1 = f.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
-      for(final Formula param : _parameters) {
+      for(Formula param : _parameters) {
         _builder.newLineIfNotEmpty();
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);

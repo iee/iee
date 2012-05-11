@@ -30,7 +30,6 @@ public class FormulaPadConverter implements Converter  {
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		//FormulaPad pad = new FormulaPad(reader.getAttribute("containerId"));
 		FormulaPad pad = new FormulaPad();
-		pad.setType(reader.getAttribute("type"));
 		pad.setExression(reader.getAttribute("expression"));
 		
 		System.out.println("Unmarshal: " + pad.getExpression());

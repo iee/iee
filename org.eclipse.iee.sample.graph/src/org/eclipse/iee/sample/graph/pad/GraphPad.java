@@ -48,7 +48,6 @@ public class GraphPad extends Pad implements Serializable {
 		fDomainCardinality = 0;
 		fIsAdvancedMode = false;
 		fIsActive = false;
-		setType("Graph");
 		save();
 	}
 
@@ -117,7 +116,7 @@ public class GraphPad extends Pad implements Serializable {
 	}
 
 	protected GraphPad(String containerID) {
-		super(containerID);
+		super();
 		fFunction = "";
 		save();
 	}
@@ -266,5 +265,17 @@ public class GraphPad extends Pad implements Serializable {
 	public void onContainerAttached() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void activate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

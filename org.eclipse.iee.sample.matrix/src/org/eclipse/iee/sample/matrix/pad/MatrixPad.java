@@ -19,13 +19,11 @@ public class MatrixPad extends Pad implements Serializable {
 	private Controller fController;
 	
 	public MatrixPad() {
-		setType("Matrix");
 		init();
 	}
 
 	protected MatrixPad(String containerID) {
-		super(containerID);
-		setType("Matrix");
+		super();
 		init();
 	}
 	
@@ -64,6 +62,12 @@ public class MatrixPad extends Pad implements Serializable {
 
 	@Override
 	public void activate() {
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
