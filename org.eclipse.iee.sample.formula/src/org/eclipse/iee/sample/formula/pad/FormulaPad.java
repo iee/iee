@@ -9,6 +9,7 @@ import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
 import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
+import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.storage.FileStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -31,30 +32,32 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 public class FormulaPad extends Pad {
-	
+
 	private Composite fParent;
-	
+
 	private Composite fInputView;
 	private Composite fResultView;
-	
+
 	private Label fFormulaImageLabel;
 	private Label fLastResultImageLabel;
-	
+
 	private StyledText fInputText;
-	private Label fTempFormulaImageLabel;
-	
+
+	private HoverShell fHoverShell;
+
 	private boolean fIsInputValid;
-	
+
 	private String fExpression = "";
-		
+	private String fLastValidText = "";
+
 	public String getExpression() {
 		return fExpression;
 	}
-	
+
 	public void setExression(String expression) {
 		fExpression = expression;
 	}
-	
+
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
 	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
 
@@ -64,40 +67,40 @@ public class FormulaPad extends Pad {
 			System.out.println("Message received:" + e.getMessage());
 			updateLastResult(e.getMessage());
 		}
-	
+
 		@Override
 		public String getRequesterID() {
 			return getContainerID();
 		}
 	};
-	
+
 	public FormulaPad() {
 	}
-	
+
 	public FormulaPad(String containerID) {
 		super();
 	}
-		
+
 	public void toggleInputText() {
 		// OFF
 		fResultView.setVisible(false);
-		
+
 		// ON
 		fInputText.setText(fExpression);
 		fInputView.setVisible(true);
-		
+
 		fParent.pack();
-		
+
 		fInputText.forceFocus();
 	}
-	
+
 	public void toggleFormulaImage() {
 		// OFF
 		fInputView.setVisible(false);
-		
+
 		// ON
 		fResultView.setVisible(true);
-		
+
 		fParent.pack();
 	}
 
@@ -105,73 +108,77 @@ public class FormulaPad extends Pad {
 		fIsInputValid = true;
 		fInputText.setBackground(INPUT_VALID_COLOR);
 	}
-	
+
 	public void setInputIsInvalid() {
 		fIsInputValid = false;
 		fInputText.setBackground(INPUT_INVALID_COLOR);
 	}
-	
+
 	public void validateInput() {
 		String text = fInputText.getText();
 		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
-			setInputIsValid();	
+			setInputIsValid();
+			fLastValidText = text;
 		} else {
 			setInputIsInvalid();
 		}
 	}
-	
+
 	public void processInput() {
 		if (fIsInputValid) {
 			if (!fInputText.getText().equals(fExpression)) {
 				/* Remove result images from following pads */
-				Collection<Pad> following = FormulaPadManager.getFollowingPads(this);
-				
-				for (Pad pad: following) {
+				Collection<Pad> following = FormulaPadManager
+						.getFollowingPads(this);
+
+				for (Pad pad : following) {
 					((FormulaPad) pad).updateLastResult("");
-				}				
+				}
 			}
 			fExpression = fInputText.getText();
 		}
-		
+
 		/* Set formula image */
 		Image image = FormulaRenderer.getFormulaImage(fExpression);
 		fFormulaImageLabel.setImage(image);
-		
+
 		/* Generate code */
 		String generated = Translator.translateElement(fExpression);
-		
+
 		/* Add result output */
 		generated += generateOutputCode(fExpression);
 		getContainer().setTextContent(generated);
 	}
-	
+
 	public String generateOutputCode(String expresion) {
 		Pattern p = Pattern.compile("\\s*\\w+\\s*=.+");
 		Matcher m = p.matcher(expresion);
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
 			variable = variable.trim();
-			return "System.out.println(\"" + getContainerID() + "\" + " + variable + ");";
+			return "System.out.println(\"" + getContainerID() + "\" + "
+					+ variable + ");";
 		} else {
 			return "";
 		}
 	}
-	
+
 	public void updateLastResult(String result) {
 		if (result == "") {
 			fLastResultImageLabel.setImage(null);
 			fParent.pack();
 			return;
 		}
-		
+
 		Image image = FormulaRenderer.getFormulaImage("=" + result);
 		fLastResultImageLabel.setImage(image);
 		fParent.pack();
 	}
 
 	public void setListeners() {
-		ConsoleMessager.getInstance().addConsoleMessageListener(fConsoleMessageListener);
-		
+		ConsoleMessager.getInstance().addConsoleMessageListener(
+				fConsoleMessageListener);
+
 		fFormulaImageLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -179,33 +186,36 @@ public class FormulaPad extends Pad {
 				toggleInputText();
 			}
 
-			@Override public void mouseDown(MouseEvent e) {	
+			@Override
+			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
 			}
-			
-			@Override public void mouseUp(MouseEvent e) {}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
 		});
-				
+
 		fInputText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				validateInput();
-				
-				if (fIsInputValid) {
-					// render temp image
-					Image image = FormulaRenderer.getFormulaImage(fInputText.getText());
-					fTempFormulaImageLabel.setImage(image);
-				} else {
-					fTempFormulaImageLabel.setImage(null);
-				}
-				
+				Image image = FormulaRenderer.getFormulaImage(fInputText
+						.getText());
+				if (image == null)
+					image = FormulaRenderer.getFormulaImage(fLastValidText);
+				if (fHoverShell != null)
+					fHoverShell.dispose();
+				fHoverShell = new HoverShell(fParent, image);
+
 				/* Resize fInputText */
-				Point size = fInputText.computeSize(SWT.DEFAULT, SWT.DEFAULT, false);
+				Point size = fInputText.computeSize(SWT.DEFAULT, SWT.DEFAULT,
+						false);
 				fInputText.setSize(size);
 				fParent.pack();
 			}
 		});
-						
+
 		fInputText.addVerifyKeyListener(new VerifyKeyListener() {
 			@Override
 			public void verifyKey(VerifyEvent e) {
@@ -216,84 +226,81 @@ public class FormulaPad extends Pad {
 					moveCaretToCurrentPad();
 					if (fExpression != "")
 						toggleFormulaImage();
+					fHoverShell.dispose();
 					break;
-					
+
 				case SWT.ESC:
 					moveCaretToCurrentPad();
 					if (fExpression != "")
 						toggleFormulaImage();
+					fHoverShell.dispose();
 					break;
 				}
 			}
 		});
-		
+
 		fInputText.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (fExpression != "")
 					toggleFormulaImage();
+				fHoverShell.dispose();
 			}
-			
-			@Override public void focusGained(FocusEvent e) {}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
 		});
 	}
 
 	@Override
-	public void createPartControl(final Composite parent) {		
+	public void createPartControl(final Composite parent) {
 		fParent = parent;
-		
+
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		parent.setLayout(layout);
-		
+
 		SashForm sashForm = new SashForm(parent, SWT.FILL);
 		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
-		
+
 		/* Input View */
-		
+
 		fInputView = new Composite(sashForm, SWT.NONE);
 		fInputView.setLayout(new GridLayout(1, true));
-		
+
 		fInputText = new StyledText(fInputView, SWT.SINGLE | SWT.NONE);
-		GridData inputTextGridData =  new GridData();
+		GridData inputTextGridData = new GridData();
 		fInputText.setLayoutData(inputTextGridData);
 		fInputText.setSize(50, 100);
-		
-		fTempFormulaImageLabel = new Label(fInputView, SWT.NONE);
-		GridData tempLabelGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		tempLabelGridData.horizontalSpan = 3;
-		fTempFormulaImageLabel.setLayoutData(tempLabelGridData);
-		
+
 		/* Result View */
-		
+
 		fResultView = new Composite(sashForm, SWT.NONE);
 		fResultView.setLayout(new GridLayout(2, false));
 		fResultView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
+
 		fFormulaImageLabel = new Label(fResultView, SWT.NONE);
-		GridData formulaImageGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		GridData formulaImageGridData = new GridData(SWT.FILL, SWT.FILL, true,
+				true);
 		fFormulaImageLabel.setLayoutData(formulaImageGridData);
-		
-		fLastResultImageLabel = new Label(fResultView,  SWT.NONE);
-		GridData lastResultImageGridData = new GridData(SWT.LEFT, SWT.FILL, true, true);
+
+		fLastResultImageLabel = new Label(fResultView, SWT.NONE);
+		GridData lastResultImageGridData = new GridData(SWT.LEFT, SWT.FILL,
+				true, true);
 		fLastResultImageLabel.setLayoutData(lastResultImageGridData);
-				
+
 		setListeners();
-		
-		
-		
-		if (fExpression != "")
-		{
+
+		if (fExpression != "") {
 			validateInput();
 			processInput();
 			toggleFormulaImage();
-		}
-		else
-		{
+		} else {
 			toggleInputText();
 		}
-		
+
 	}
-	
+
 	@Override
 	public void activate() {
 		toggleInputText();

@@ -36,6 +36,8 @@ public class ElementView {
 	private Label fFormulaImageLabel;
 	private StyledText fInputText;
 	
+	private HoverShell fHoverShell;
+	
 	
 	/* Model variables */
 	
@@ -43,6 +45,7 @@ public class ElementView {
 	private int fColumn;
 	
 	private String fExpression = "0";
+	private String fLastValidText = "0";
 	
 	
 	/* Logic functions */
@@ -61,7 +64,7 @@ public class ElementView {
 		return fComposite;
 	}
 	
-	public void setExression(String expression) {
+	public void setExpression(String expression) {
 		fExpression = expression;
 		toggleFormulaImage();
 	}
@@ -95,11 +98,21 @@ public class ElementView {
 		fInputText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (validateExpression(fInputText.getText())) {
+				String text = fInputText.getText(); 
+				if (validateExpression(text)) {
 					setInputIsValid();
+					fLastValidText = text;
 				} else {
 					setInputIsInvalid();
 				}
+				
+				Image image = FormulaRenderer.getFormulaImage(fInputText
+						.getText());
+				if (image == null)
+					image = FormulaRenderer.getFormulaImage(fLastValidText);
+				if (fHoverShell != null)
+					fHoverShell.dispose();
+				fHoverShell = new HoverShell(fComposite, image);
 				
 				resizeInputText();
 			}
@@ -114,11 +127,13 @@ public class ElementView {
 					fController.selectCurrentPad();
 					proccessUserInput();
 					toggleFormulaImage();
+					fHoverShell.dispose();
 					break;
 					
 				case SWT.ESC:
 					fController.selectCurrentPad();
 					toggleFormulaImage();
+					fHoverShell.dispose();
 					break;
 				}
 			}
@@ -128,6 +143,7 @@ public class ElementView {
 			@Override
 			public void focusLost(FocusEvent e) {
 				toggleFormulaImage();
+				fHoverShell.dispose();
 			}
 			
 			@Override public void focusGained(FocusEvent e) {}
@@ -180,9 +196,8 @@ public class ElementView {
 		fParent = parent;
 
 		fComposite =  new SashForm(parent, SWT.VERTICAL);
-		fComposite.setLayoutData(
-			new GridData(GridData.FILL, GridData.FILL, true, true));
-		
+		GridData elementLayoutData = new GridData(SWT.CENTER, SWT.FILL, true, true);
+		fComposite.setLayoutData(elementLayoutData);
 		/* First view */
 		fFormulaImageLabel = new Label(fComposite, SWT.NONE | SWT.RESIZE);
 				

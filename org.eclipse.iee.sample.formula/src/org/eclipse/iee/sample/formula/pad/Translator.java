@@ -44,6 +44,7 @@ public class Translator {
 			return null;
 		}
 		
+		System.out.println("java: " + translated);
 		fCachedItems.put(text, translated);
 		return translated;
 	}

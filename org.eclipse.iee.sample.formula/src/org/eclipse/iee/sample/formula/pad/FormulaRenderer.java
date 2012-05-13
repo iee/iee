@@ -57,11 +57,12 @@ public class FormulaRenderer {
 			{
 				latex = FormulaPadManager.getMolex().translateMath(text).trim();
 			}
+			System.out.println("latex: " + latex);
 			java.awt.Image awtImage =
 				TeXFormula.createBufferedImage(
 					latex,
 					TeXConstants.STYLE_TEXT,
-					60,
+					40,
 					java.awt.Color.black,
 					java.awt.Color.white);
 			
