@@ -8,7 +8,6 @@ package org.eclipse.iee.translator.jmole.math.math.impl;
 
 import java.util.Collection;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -16,52 +15,30 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Matrix Definition</b></em>'.
+ * An implementation of the model object '<em><b>Matrix</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixDefinitionImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixDefinitionImpl#getRows <em>Rows</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.MatrixImpl#getRows <em>Rows</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implements MatrixDefinition
+public class MatrixImpl extends MinimalEObjectImpl.Container implements Matrix
 {
-  /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
-
   /**
    * The cached value of the '{@link #getRows() <em>Rows</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -77,7 +54,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
-  protected MatrixDefinitionImpl()
+  protected MatrixImpl()
   {
     super();
   }
@@ -90,30 +67,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   @Override
   protected EClass eStaticClass()
   {
-    return MathPackage.Literals.MATRIX_DEFINITION;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setName(String newName)
-  {
-    String oldName = name;
-    name = newName;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.MATRIX_DEFINITION__NAME, oldName, name));
+    return MathPackage.Literals.MATRIX;
   }
 
   /**
@@ -125,7 +79,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   {
     if (rows == null)
     {
-      rows = new EObjectContainmentEList<MatrixRow>(MatrixRow.class, this, MathPackage.MATRIX_DEFINITION__ROWS);
+      rows = new EObjectContainmentEList<MatrixRow>(MatrixRow.class, this, MathPackage.MATRIX__ROWS);
     }
     return rows;
   }
@@ -140,7 +94,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   {
     switch (featureID)
     {
-      case MathPackage.MATRIX_DEFINITION__ROWS:
+      case MathPackage.MATRIX__ROWS:
         return ((InternalEList<?>)getRows()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -156,9 +110,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   {
     switch (featureID)
     {
-      case MathPackage.MATRIX_DEFINITION__NAME:
-        return getName();
-      case MathPackage.MATRIX_DEFINITION__ROWS:
+      case MathPackage.MATRIX__ROWS:
         return getRows();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -175,10 +127,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   {
     switch (featureID)
     {
-      case MathPackage.MATRIX_DEFINITION__NAME:
-        setName((String)newValue);
-        return;
-      case MathPackage.MATRIX_DEFINITION__ROWS:
+      case MathPackage.MATRIX__ROWS:
         getRows().clear();
         getRows().addAll((Collection<? extends MatrixRow>)newValue);
         return;
@@ -196,10 +145,7 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   {
     switch (featureID)
     {
-      case MathPackage.MATRIX_DEFINITION__NAME:
-        setName(NAME_EDEFAULT);
-        return;
-      case MathPackage.MATRIX_DEFINITION__ROWS:
+      case MathPackage.MATRIX__ROWS:
         getRows().clear();
         return;
     }
@@ -216,29 +162,10 @@ public class MatrixDefinitionImpl extends MinimalEObjectImpl.Container implement
   {
     switch (featureID)
     {
-      case MathPackage.MATRIX_DEFINITION__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case MathPackage.MATRIX_DEFINITION__ROWS:
+      case MathPackage.MATRIX__ROWS:
         return rows != null && !rows.isEmpty();
     }
     return super.eIsSet(featureID);
   }
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(')');
-    return result.toString();
-  }
-
-} //MatrixDefinitionImpl
+} //MatrixImpl

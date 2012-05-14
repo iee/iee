@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
-import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -20,16 +19,26 @@ import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
-import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Matrix;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAssignment;
+import org.eclipse.iee.translator.jmole.math.math.MatrixElement;
+import org.eclipse.iee.translator.jmole.math.math.MatrixExpression;
+import org.eclipse.iee.translator.jmole.math.math.MatrixFormula;
+import org.eclipse.iee.translator.jmole.math.math.MatrixMultiplication;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.MatrixSubtraction;
+import org.eclipse.iee.translator.jmole.math.math.MatrixVariable;
 import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.NewMatrix;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
+import org.eclipse.iee.translator.jmole.math.math.TransposeMatrix;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
+import org.eclipse.iee.translator.jmole.math.math.VariableAssignment;
 
 /**
  * <!-- begin-user-doc -->
@@ -101,10 +110,10 @@ public class MathSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.ASSIGNMENT:
+      case MathPackage.VARIABLE_ASSIGNMENT:
       {
-        Assignment assignment = (Assignment)theEObject;
-        T result = caseAssignment(assignment);
+        VariableAssignment variableAssignment = (VariableAssignment)theEObject;
+        T result = caseVariableAssignment(variableAssignment);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -122,17 +131,10 @@ public class MathSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.FUNCTION_DEFINITION:
+      case MathPackage.MATRIX:
       {
-        FunctionDefinition functionDefinition = (FunctionDefinition)theEObject;
-        T result = caseFunctionDefinition(functionDefinition);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case MathPackage.MATRIX_DEFINITION:
-      {
-        MatrixDefinition matrixDefinition = (MatrixDefinition)theEObject;
-        T result = caseMatrixDefinition(matrixDefinition);
+        Matrix matrix = (Matrix)theEObject;
+        T result = caseMatrix(matrix);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -140,6 +142,34 @@ public class MathSwitch<T> extends Switch<T>
       {
         MatrixRow matrixRow = (MatrixRow)theEObject;
         T result = caseMatrixRow(matrixRow);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_ASSIGNMENT:
+      {
+        MatrixAssignment matrixAssignment = (MatrixAssignment)theEObject;
+        T result = caseMatrixAssignment(matrixAssignment);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_FORMULA:
+      {
+        MatrixFormula matrixFormula = (MatrixFormula)theEObject;
+        T result = caseMatrixFormula(matrixFormula);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_EXPRESSION:
+      {
+        MatrixExpression matrixExpression = (MatrixExpression)theEObject;
+        T result = caseMatrixExpression(matrixExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.FUNCTION_DEFINITION:
+      {
+        FunctionDefinition functionDefinition = (FunctionDefinition)theEObject;
+        T result = caseFunctionDefinition(functionDefinition);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -199,14 +229,6 @@ public class MathSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MathPackage.INTERVAL:
-      {
-        Interval interval = (Interval)theEObject;
-        T result = caseInterval(interval);
-        if (result == null) result = caseExpression(interval);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case MathPackage.EXPONENT:
       {
         Exponent exponent = (Exponent)theEObject;
@@ -231,11 +253,67 @@ public class MathSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case MathPackage.MATRIX_ELEMENT:
+      {
+        MatrixElement matrixElement = (MatrixElement)theEObject;
+        T result = caseMatrixElement(matrixElement);
+        if (result == null) result = caseExpression(matrixElement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case MathPackage.FUNCTION:
       {
         Function function = (Function)theEObject;
         T result = caseFunction(function);
         if (result == null) result = caseExpression(function);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_ADDITION:
+      {
+        MatrixAddition matrixAddition = (MatrixAddition)theEObject;
+        T result = caseMatrixAddition(matrixAddition);
+        if (result == null) result = caseMatrixExpression(matrixAddition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_SUBTRACTION:
+      {
+        MatrixSubtraction matrixSubtraction = (MatrixSubtraction)theEObject;
+        T result = caseMatrixSubtraction(matrixSubtraction);
+        if (result == null) result = caseMatrixExpression(matrixSubtraction);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_MULTIPLICATION:
+      {
+        MatrixMultiplication matrixMultiplication = (MatrixMultiplication)theEObject;
+        T result = caseMatrixMultiplication(matrixMultiplication);
+        if (result == null) result = caseMatrixExpression(matrixMultiplication);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.NEW_MATRIX:
+      {
+        NewMatrix newMatrix = (NewMatrix)theEObject;
+        T result = caseNewMatrix(newMatrix);
+        if (result == null) result = caseMatrixExpression(newMatrix);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.TRANSPOSE_MATRIX:
+      {
+        TransposeMatrix transposeMatrix = (TransposeMatrix)theEObject;
+        T result = caseTransposeMatrix(transposeMatrix);
+        if (result == null) result = caseMatrixExpression(transposeMatrix);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATRIX_VARIABLE:
+      {
+        MatrixVariable matrixVariable = (MatrixVariable)theEObject;
+        T result = caseMatrixVariable(matrixVariable);
+        if (result == null) result = caseMatrixExpression(matrixVariable);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -260,17 +338,17 @@ public class MathSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Assignment</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Variable Assignment</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Assignment</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Variable Assignment</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseAssignment(Assignment object)
+  public T caseVariableAssignment(VariableAssignment object)
   {
     return null;
   }
@@ -308,33 +386,17 @@ public class MathSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Function Definition</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Matrix</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Function Definition</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Matrix</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseFunctionDefinition(FunctionDefinition object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Matrix Definition</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Matrix Definition</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseMatrixDefinition(MatrixDefinition object)
+  public T caseMatrix(Matrix object)
   {
     return null;
   }
@@ -351,6 +413,70 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseMatrixRow(MatrixRow object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Assignment</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Assignment</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixAssignment(MatrixAssignment object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Formula</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Formula</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixFormula(MatrixFormula object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Expression</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Expression</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixExpression(MatrixExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Function Definition</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Function Definition</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFunctionDefinition(FunctionDefinition object)
   {
     return null;
   }
@@ -468,22 +594,6 @@ public class MathSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Interval</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Interval</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseInterval(Interval object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Exponent</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -532,6 +642,22 @@ public class MathSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Element</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Element</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixElement(MatrixElement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Function</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -543,6 +669,102 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFunction(Function object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Addition</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Addition</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixAddition(MatrixAddition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Subtraction</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Subtraction</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixSubtraction(MatrixSubtraction object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Multiplication</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Multiplication</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixMultiplication(MatrixMultiplication object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>New Matrix</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>New Matrix</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseNewMatrix(NewMatrix object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Transpose Matrix</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Transpose Matrix</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTransposeMatrix(TransposeMatrix object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Matrix Variable</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Matrix Variable</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMatrixVariable(MatrixVariable object)
   {
     return null;
   }

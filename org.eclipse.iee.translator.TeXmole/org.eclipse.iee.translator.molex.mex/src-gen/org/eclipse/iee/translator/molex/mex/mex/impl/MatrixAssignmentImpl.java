@@ -4,7 +4,7 @@
  *
 
  */
-package org.eclipse.iee.translator.jmole.math.math.impl;
+package org.eclipse.iee.translator.molex.mex.mex.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -15,25 +15,25 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.iee.translator.jmole.math.math.Assignment;
-import org.eclipse.iee.translator.jmole.math.math.Formula;
-import org.eclipse.iee.translator.jmole.math.math.MathPackage;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixFormula;
+import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Assignment</b></em>'.
+ * An implementation of the model object '<em><b>Matrix Assignment</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.AssignmentImpl#getVariable <em>Variable</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.AssignmentImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl#getVariable <em>Variable</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assignment
+public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implements MatrixAssignment
 {
   /**
    * The default value of the '{@link #getVariable() <em>Variable</em>}' attribute.
@@ -63,14 +63,14 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
    * @generated
    * @ordered
    */
-  protected Formula value;
+  protected MatrixFormula value;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected AssignmentImpl()
+  protected MatrixAssignmentImpl()
   {
     super();
   }
@@ -83,7 +83,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   @Override
   protected EClass eStaticClass()
   {
-    return MathPackage.Literals.ASSIGNMENT;
+    return MexPackage.Literals.MATRIX_ASSIGNMENT;
   }
 
   /**
@@ -106,7 +106,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
     String oldVariable = variable;
     variable = newVariable;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.ASSIGNMENT__VARIABLE, oldVariable, variable));
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ASSIGNMENT__VARIABLE, oldVariable, variable));
   }
 
   /**
@@ -114,7 +114,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
    * <!-- end-user-doc -->
    * @generated
    */
-  public Formula getValue()
+  public MatrixFormula getValue()
   {
     return value;
   }
@@ -124,13 +124,13 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetValue(Formula newValue, NotificationChain msgs)
+  public NotificationChain basicSetValue(MatrixFormula newValue, NotificationChain msgs)
   {
-    Formula oldValue = value;
+    MatrixFormula oldValue = value;
     value = newValue;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.ASSIGNMENT__VALUE, oldValue, newValue);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ASSIGNMENT__VALUE, oldValue, newValue);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -141,20 +141,20 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(Formula newValue)
+  public void setValue(MatrixFormula newValue)
   {
     if (newValue != value)
     {
       NotificationChain msgs = null;
       if (value != null)
-        msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.ASSIGNMENT__VALUE, null, msgs);
+        msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ASSIGNMENT__VALUE, null, msgs);
       if (newValue != null)
-        msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.ASSIGNMENT__VALUE, null, msgs);
+        msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ASSIGNMENT__VALUE, null, msgs);
       msgs = basicSetValue(newValue, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.ASSIGNMENT__VALUE, newValue, newValue));
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ASSIGNMENT__VALUE, newValue, newValue));
   }
 
   /**
@@ -167,7 +167,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MathPackage.ASSIGNMENT__VALUE:
+      case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         return basicSetValue(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -183,9 +183,9 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MathPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
         return getVariable();
-      case MathPackage.ASSIGNMENT__VALUE:
+      case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -201,11 +201,11 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MathPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
         setVariable((String)newValue);
         return;
-      case MathPackage.ASSIGNMENT__VALUE:
-        setValue((Formula)newValue);
+      case MexPackage.MATRIX_ASSIGNMENT__VALUE:
+        setValue((MatrixFormula)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -221,11 +221,11 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MathPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
         setVariable(VARIABLE_EDEFAULT);
         return;
-      case MathPackage.ASSIGNMENT__VALUE:
-        setValue((Formula)null);
+      case MexPackage.MATRIX_ASSIGNMENT__VALUE:
+        setValue((MatrixFormula)null);
         return;
     }
     super.eUnset(featureID);
@@ -241,9 +241,9 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MathPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
         return VARIABLE_EDEFAULT == null ? variable != null : !VARIABLE_EDEFAULT.equals(variable);
-      case MathPackage.ASSIGNMENT__VALUE:
+      case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         return value != null;
     }
     return super.eIsSet(featureID);
@@ -266,4 +266,4 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
     return result.toString();
   }
 
-} //AssignmentImpl
+} //MatrixAssignmentImpl

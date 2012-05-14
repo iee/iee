@@ -31,12 +31,12 @@ class MathGenerator implements IGenerator {
 	
 	def compileStatement(Statement s)
 	{
-	'''
+	'''	
 		«IF s.functionDefinition != null»«compileFunctionDefinition(s.functionDefinition)»«ENDIF»
-		«IF s.matrixDefinition != null»«compileMatrixDefinition(s.matrixDefinition)»;«ENDIF»
-		«IF s.assignment != null»«compileAssignment(s.assignment)»;«ENDIF»
+		«IF s.variableAssignment != null»«compileVariableAssignment(s.variableAssignment)»;«ENDIF»
+		«IF s.matrixAssignment != null»«compileMatrixAssignment(s.matrixAssignment)»;«ENDIF»
 		«IF s.formula != null»«compileFormula(s.formula)»;«ENDIF»
-		
+		«IF s.matrixFormula != null»«compileMatrixFormula(s.matrixFormula)»;«ENDIF»
 	'''
 	}
 	
@@ -52,7 +52,7 @@ class MathGenerator implements IGenerator {
 	'''
 	}
 	
-	def compileAssignment(Assignment a)
+	def compileVariableAssignment(VariableAssignment a)
 	{
 	 '''
 	 	«a.variable» = «compileFormula(a.value)»
@@ -66,28 +66,18 @@ class MathGenerator implements IGenerator {
 	'''
 	}
 	
-	def compileMatrixDefinition(MatrixDefinition m) 
+	def compileMatrixFormula(MatrixFormula f) 
 	{
 	'''
-		Matrix «m.name» = new Matrix(new double[][]
-		{
-		«var j = 0»
-		«FOR row:m.rows»
-		 «IF row != null»
-		 {
-		 	«var i = 0»
-	 		«FOR element:row.elements»
-			 «IF element != null»
-			 	«element»
-			 «ENDIF»
-			 «IF (i = i + 1) != row.elements.size()»,«ENDIF»
-			«ENDFOR»
-		 }
-		 «ENDIF»
-		 «IF (j = j + 1) != m.rows.size()»,«ENDIF»
-		«ENDFOR»
-		})
+		«compileMatrixExpression(f.expression)»
 	'''
+	}
+	
+	def compileMatrixAssignment(MatrixAssignment a)
+	{
+	 '''
+	 	«a.variable» = «compileMatrixFormula(a.value)»
+	 '''
 	}
 	
 	def compileFunction(Function f) '''
@@ -97,12 +87,17 @@ class MathGenerator implements IGenerator {
 		 «IF f.function.parameters.last() != param»,«ENDIF»
 		«ENDFOR»)
 	'''
-			
+	
+	//Expressions
+		
 	def dispatch compileExpression(Variable n) '''
 		«n.name»'''
 		
 	def dispatch compileExpression(Float n) '''
 		«n.value»'''
+		
+	def dispatch compileExpression(MatrixElement e) '''
+		«e.element».get(«e.row»,«e.column»)'''	
 		
 	def dispatch compileExpression(Function f) '''
 		«compileFunction(f)»'''
@@ -128,9 +123,44 @@ class MathGenerator implements IGenerator {
 	def dispatch compileExpression(Factorial op) '''
 	«IF op.expression != null» («compileExpression(op.expression)»)! «ENDIF»'''  
 	
-	def dispatch compileExpression(Interval op) '''
-	«IF op.ceil != null && op.floor != null»«op.openingBracket»(«compileExpression(op.ceil)»)..(«compileExpression(op.floor)»)«op.closingBracket»«ENDIF»'''  
-	
 	def dispatch compileExpression(Exponent op) '''
-		(«compileExpression(op.left)») ^ («compileExpression(op.right)»)'''
+		Math.pow((«compileExpression(op.left)»),(«compileExpression(op.right)»))'''
+	
+	//Matrix Expressions
+	def dispatch compileMatrixExpression(MatrixVariable n) '''
+		«n.name»'''
+		
+	def dispatch compileMatrixExpression(NewMatrix m) '''
+		new Matrix(new double[][]
+		{
+		«var j = 0»
+		«FOR row:m.matrix.rows»
+		 «IF row != null»
+		 {
+		 	«var i = 0»
+	 		«FOR element:row.elements»
+			 «IF element != null»
+			 	«element»
+			 «ENDIF»
+			 «IF (i = i + 1) != row.elements.size()»,«ENDIF»
+			«ENDFOR»
+		 }
+		 «ENDIF»
+		 «IF (j = j + 1) != m.matrix.rows.size()»,«ENDIF»
+		«ENDFOR»
+		})'''	
+	
+	def dispatch compileMatrixExpression(TransposeMatrix n) '''
+		«n.name».transpose()'''		
+		
+	def dispatch compileMatrixExpression(MatrixAddition op) '''
+		«compileMatrixExpression(op.left)».plus(«compileMatrixExpression(op.right)»)'''
+	
+	def dispatch compileMatrixExpression(MatrixSubtraction op) '''
+		«compileMatrixExpression(op.left)».minus(«compileMatrixExpression(op.right)»)'''
+	
+	def dispatch compileMatrixExpression(MatrixMultiplication op) '''
+		«IF op.rightMatrix != null»«compileMatrixExpression(op.left)».times(«compileMatrixExpression(op.rightMatrix)»)«ENDIF»
+		«IF op.rightScalar != null»«compileMatrixExpression(op.left)».times(«compileFormula(op.rightScalar)»)«ENDIF»'''
+	 	
 }

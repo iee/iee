@@ -15,25 +15,25 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.iee.translator.molex.mex.mex.Assignment;
 import org.eclipse.iee.translator.molex.mex.mex.Formula;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
+import org.eclipse.iee.translator.molex.mex.mex.VariableAssignment;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Assignment</b></em>'.
+ * An implementation of the model object '<em><b>Variable Assignment</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.AssignmentImpl#getVariable <em>Variable</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.AssignmentImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.VariableAssignmentImpl#getVariable <em>Variable</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.VariableAssignmentImpl#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assignment
+public class VariableAssignmentImpl extends MinimalEObjectImpl.Container implements VariableAssignment
 {
   /**
    * The default value of the '{@link #getVariable() <em>Variable</em>}' attribute.
@@ -70,7 +70,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
    * <!-- end-user-doc -->
    * @generated
    */
-  protected AssignmentImpl()
+  protected VariableAssignmentImpl()
   {
     super();
   }
@@ -83,7 +83,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   @Override
   protected EClass eStaticClass()
   {
-    return MexPackage.Literals.ASSIGNMENT;
+    return MexPackage.Literals.VARIABLE_ASSIGNMENT;
   }
 
   /**
@@ -106,7 +106,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
     String oldVariable = variable;
     variable = newVariable;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.ASSIGNMENT__VARIABLE, oldVariable, variable));
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.VARIABLE_ASSIGNMENT__VARIABLE, oldVariable, variable));
   }
 
   /**
@@ -130,7 +130,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
     value = newValue;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.ASSIGNMENT__VALUE, oldValue, newValue);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.VARIABLE_ASSIGNMENT__VALUE, oldValue, newValue);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -147,14 +147,14 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
     {
       NotificationChain msgs = null;
       if (value != null)
-        msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.ASSIGNMENT__VALUE, null, msgs);
+        msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.VARIABLE_ASSIGNMENT__VALUE, null, msgs);
       if (newValue != null)
-        msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.ASSIGNMENT__VALUE, null, msgs);
+        msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.VARIABLE_ASSIGNMENT__VALUE, null, msgs);
       msgs = basicSetValue(newValue, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.ASSIGNMENT__VALUE, newValue, newValue));
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.VARIABLE_ASSIGNMENT__VALUE, newValue, newValue));
   }
 
   /**
@@ -167,7 +167,7 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MexPackage.ASSIGNMENT__VALUE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VALUE:
         return basicSetValue(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -183,9 +183,9 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MexPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VARIABLE:
         return getVariable();
-      case MexPackage.ASSIGNMENT__VALUE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VALUE:
         return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -201,10 +201,10 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MexPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VARIABLE:
         setVariable((String)newValue);
         return;
-      case MexPackage.ASSIGNMENT__VALUE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VALUE:
         setValue((Formula)newValue);
         return;
     }
@@ -221,10 +221,10 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MexPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VARIABLE:
         setVariable(VARIABLE_EDEFAULT);
         return;
-      case MexPackage.ASSIGNMENT__VALUE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VALUE:
         setValue((Formula)null);
         return;
     }
@@ -241,9 +241,9 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
   {
     switch (featureID)
     {
-      case MexPackage.ASSIGNMENT__VARIABLE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VARIABLE:
         return VARIABLE_EDEFAULT == null ? variable != null : !VARIABLE_EDEFAULT.equals(variable);
-      case MexPackage.ASSIGNMENT__VALUE:
+      case MexPackage.VARIABLE_ASSIGNMENT__VALUE:
         return value != null;
     }
     return super.eIsSet(featureID);
@@ -266,4 +266,4 @@ public class AssignmentImpl extends MinimalEObjectImpl.Container implements Assi
     return result.toString();
   }
 
-} //AssignmentImpl
+} //VariableAssignmentImpl

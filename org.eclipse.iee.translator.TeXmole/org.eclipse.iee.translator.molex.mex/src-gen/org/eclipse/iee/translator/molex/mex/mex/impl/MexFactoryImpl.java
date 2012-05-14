@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.iee.translator.molex.mex.mex.Addition;
-import org.eclipse.iee.translator.molex.mex.mex.Assignment;
 import org.eclipse.iee.translator.molex.mex.mex.Division;
 import org.eclipse.iee.translator.molex.mex.mex.Exponent;
 import org.eclipse.iee.translator.molex.mex.mex.Expression;
@@ -23,17 +22,29 @@ import org.eclipse.iee.translator.molex.mex.mex.Factorial;
 import org.eclipse.iee.translator.molex.mex.mex.Formula;
 import org.eclipse.iee.translator.molex.mex.mex.Function;
 import org.eclipse.iee.translator.molex.mex.mex.FunctionDefinition;
-import org.eclipse.iee.translator.molex.mex.mex.Interval;
+import org.eclipse.iee.translator.molex.mex.mex.InBrackets;
 import org.eclipse.iee.translator.molex.mex.mex.Invert;
-import org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition;
+import org.eclipse.iee.translator.molex.mex.mex.Matrix;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixAddition;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixElement;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixExpression;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixFormula;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixInBrackets;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixRow;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction;
+import org.eclipse.iee.translator.molex.mex.mex.MatrixVariable;
 import org.eclipse.iee.translator.molex.mex.mex.MexFactory;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 import org.eclipse.iee.translator.molex.mex.mex.Modulo;
 import org.eclipse.iee.translator.molex.mex.mex.Multiplication;
+import org.eclipse.iee.translator.molex.mex.mex.NewMatrix;
 import org.eclipse.iee.translator.molex.mex.mex.Statement;
 import org.eclipse.iee.translator.molex.mex.mex.Subtraction;
+import org.eclipse.iee.translator.molex.mex.mex.TransposeMatrix;
 import org.eclipse.iee.translator.molex.mex.mex.Variable;
+import org.eclipse.iee.translator.molex.mex.mex.VariableAssignment;
 
 /**
  * <!-- begin-user-doc -->
@@ -88,12 +99,15 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
     switch (eClass.getClassifierID())
     {
       case MexPackage.STATEMENT: return createStatement();
-      case MexPackage.ASSIGNMENT: return createAssignment();
+      case MexPackage.VARIABLE_ASSIGNMENT: return createVariableAssignment();
       case MexPackage.FORMULA: return createFormula();
       case MexPackage.EXPRESSION: return createExpression();
-      case MexPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
-      case MexPackage.MATRIX_DEFINITION: return createMatrixDefinition();
+      case MexPackage.MATRIX: return createMatrix();
       case MexPackage.MATRIX_ROW: return createMatrixRow();
+      case MexPackage.MATRIX_ASSIGNMENT: return createMatrixAssignment();
+      case MexPackage.MATRIX_FORMULA: return createMatrixFormula();
+      case MexPackage.MATRIX_EXPRESSION: return createMatrixExpression();
+      case MexPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
       case MexPackage.ADDITION: return createAddition();
       case MexPackage.SUBTRACTION: return createSubtraction();
       case MexPackage.MULTIPLICATION: return createMultiplication();
@@ -101,11 +115,19 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
       case MexPackage.MODULO: return createModulo();
       case MexPackage.INVERT: return createInvert();
       case MexPackage.FACTORIAL: return createFactorial();
-      case MexPackage.INTERVAL: return createInterval();
       case MexPackage.EXPONENT: return createExponent();
       case MexPackage.VARIABLE: return createVariable();
       case MexPackage.FLOAT: return createFloat();
       case MexPackage.FUNCTION: return createFunction();
+      case MexPackage.MATRIX_ELEMENT: return createMatrixElement();
+      case MexPackage.IN_BRACKETS: return createInBrackets();
+      case MexPackage.MATRIX_ADDITION: return createMatrixAddition();
+      case MexPackage.MATRIX_SUBTRACTION: return createMatrixSubtraction();
+      case MexPackage.MATRIX_MULTIPLICATION: return createMatrixMultiplication();
+      case MexPackage.NEW_MATRIX: return createNewMatrix();
+      case MexPackage.TRANSPOSE_MATRIX: return createTransposeMatrix();
+      case MexPackage.MATRIX_VARIABLE: return createMatrixVariable();
+      case MexPackage.MATRIX_IN_BRACKETS: return createMatrixInBrackets();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -127,10 +149,10 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Assignment createAssignment()
+  public VariableAssignment createVariableAssignment()
   {
-    AssignmentImpl assignment = new AssignmentImpl();
-    return assignment;
+    VariableAssignmentImpl variableAssignment = new VariableAssignmentImpl();
+    return variableAssignment;
   }
 
   /**
@@ -160,21 +182,10 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public FunctionDefinition createFunctionDefinition()
+  public Matrix createMatrix()
   {
-    FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
-    return functionDefinition;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MatrixDefinition createMatrixDefinition()
-  {
-    MatrixDefinitionImpl matrixDefinition = new MatrixDefinitionImpl();
-    return matrixDefinition;
+    MatrixImpl matrix = new MatrixImpl();
+    return matrix;
   }
 
   /**
@@ -186,6 +197,50 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
   {
     MatrixRowImpl matrixRow = new MatrixRowImpl();
     return matrixRow;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixAssignment createMatrixAssignment()
+  {
+    MatrixAssignmentImpl matrixAssignment = new MatrixAssignmentImpl();
+    return matrixAssignment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixFormula createMatrixFormula()
+  {
+    MatrixFormulaImpl matrixFormula = new MatrixFormulaImpl();
+    return matrixFormula;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixExpression createMatrixExpression()
+  {
+    MatrixExpressionImpl matrixExpression = new MatrixExpressionImpl();
+    return matrixExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FunctionDefinition createFunctionDefinition()
+  {
+    FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
+    return functionDefinition;
   }
 
   /**
@@ -270,17 +325,6 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Interval createInterval()
-  {
-    IntervalImpl interval = new IntervalImpl();
-    return interval;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public Exponent createExponent()
   {
     ExponentImpl exponent = new ExponentImpl();
@@ -318,6 +362,105 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
   {
     FunctionImpl function = new FunctionImpl();
     return function;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixElement createMatrixElement()
+  {
+    MatrixElementImpl matrixElement = new MatrixElementImpl();
+    return matrixElement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public InBrackets createInBrackets()
+  {
+    InBracketsImpl inBrackets = new InBracketsImpl();
+    return inBrackets;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixAddition createMatrixAddition()
+  {
+    MatrixAdditionImpl matrixAddition = new MatrixAdditionImpl();
+    return matrixAddition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixSubtraction createMatrixSubtraction()
+  {
+    MatrixSubtractionImpl matrixSubtraction = new MatrixSubtractionImpl();
+    return matrixSubtraction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixMultiplication createMatrixMultiplication()
+  {
+    MatrixMultiplicationImpl matrixMultiplication = new MatrixMultiplicationImpl();
+    return matrixMultiplication;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NewMatrix createNewMatrix()
+  {
+    NewMatrixImpl newMatrix = new NewMatrixImpl();
+    return newMatrix;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TransposeMatrix createTransposeMatrix()
+  {
+    TransposeMatrixImpl transposeMatrix = new TransposeMatrixImpl();
+    return transposeMatrix;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixVariable createMatrixVariable()
+  {
+    MatrixVariableImpl matrixVariable = new MatrixVariableImpl();
+    return matrixVariable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixInBrackets createMatrixInBrackets()
+  {
+    MatrixInBracketsImpl matrixInBrackets = new MatrixInBracketsImpl();
+    return matrixInBrackets;
   }
 
   /**

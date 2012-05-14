@@ -5,16 +5,20 @@ generate mex "http://www.eclipse.org/iee/translator/molex/mex/Mex"
 
 Statement:
 	functionDefinition=FunctionDefinition |
-	matrixDefinition=MatrixDefinition |
-	assignment=Assignment |
-	formula=Formula;
+	variableAssignment=VariableAssignment |
+	formula=Formula |
+	matrixAssignment=MatrixAssignment |
+	matrixFormula=MatrixFormula;
 
-Assignment:
+VariableAssignment:
 	variable=MATH_NAME '=' value=Formula;
 
 Formula:
 	expression=(Addition);
 
+AdditionInBrackets returns Expression:
+	'(' addition=Addition ')'
+;
 	// addition/subtraction: left associative, priority 0
 Addition returns Expression:
 	Multiplication ('+' {Addition.left=current} right=Multiplication | '-' {Subtraction.left=current}
@@ -28,10 +32,9 @@ Multiplication returns Expression:
 	// Unary operators: right associative, priority 2
 UnaryExpression returns Expression:
 	Exponent |
-	('-' {Invert} expression=UnaryExpression) |
-	'(' {Factorial} expression=UnaryExpression ')!'|
-	{Interval} openingBracket=('['|'(') '('ceil=UnaryExpression')' '..' '('floor=UnaryExpression')' closingBracket=(']'|')');
-
+	'(-' {Invert} expression=UnaryExpression')' |
+	'(' {Factorial} expression=UnaryExpression ')!';
+	
 	// exponentiation: right associative, priority 3
 Exponent returns Expression:
 	Primary ({Exponent.left=current} '^' right=Primary)?;
@@ -40,22 +43,49 @@ Primary returns Expression:
 	{Variable} name=MATH_NAME |
 	{Float} value=Float |
 	{Function} function=Function |
-	'(' Addition ')';
+	{MatrixElement} element=MATH_NAME '[' row=INT ']' '[' column=INT ']' | 
+	{InBrackets} inBrackets=AdditionInBrackets;
+
+Matrix:
+	'{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}';
+	
+MatrixRow:
+	'{' (elements+=Float (',' elements+=Float)* ','?)? '}';
+
+MatrixAssignment:
+	'[' variable=MATH_NAME ']' '=' value=MatrixFormula;
+
+MatrixFormula:
+	expression=MatrixAddition;
+
+MatrixAdditionInBrackets returns MatrixExpression:
+	'(' addition=MatrixAddition ')'
+;
+
+MatrixAddition returns MatrixExpression:
+	MatrixMultiplication ('+' {MatrixAddition.left=current} right=MatrixMultiplication | '-' {MatrixSubtraction.left=current}
+	right=MatrixMultiplication)*;
+	
+MatrixMultiplication returns MatrixExpression:
+	PrimaryMatrix ('*' {MatrixMultiplication.left=current} rightMatrix=PrimaryMatrix |
+				   '*' {MatrixMultiplication.left=current} rightScalar=Formula
+	)*;
+	
+PrimaryMatrix returns MatrixExpression:
+	{NewMatrix} matrix=Matrix |
+	{TransposeMatrix} '[' name=MATH_NAME ']^T'|
+	{MatrixVariable} '[' name=MATH_NAME ']' |
+	'(' MatrixAddition ')' |
+	{MatrixInBrackets} inBrackets=MatrixAdditionInBrackets;
 
 Float:
 	INT+ ('.' INT+ (('E' | 'e') ('-')? (INT)+)?)?;
 
 Function returns Expression:
-	(name=MATH_NAME) '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
+	name=MATH_NAME '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
 
 FunctionDefinition:
 	function=Function '=' formula=Formula;
-
-MatrixDefinition:
-	(name=MATH_NAME) '=' '{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}';
-
-MatrixRow:
-	'{' (elements+=Float (',' elements+=Float)* ','?)? '}';
-
+	
 terminal MATH_NAME returns ecore::EString:
 	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;

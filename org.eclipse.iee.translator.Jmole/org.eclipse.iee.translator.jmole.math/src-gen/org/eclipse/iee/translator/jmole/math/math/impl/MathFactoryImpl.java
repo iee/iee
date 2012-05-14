@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
-import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -23,17 +22,27 @@ import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
-import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Matrix;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAssignment;
+import org.eclipse.iee.translator.jmole.math.math.MatrixElement;
+import org.eclipse.iee.translator.jmole.math.math.MatrixExpression;
+import org.eclipse.iee.translator.jmole.math.math.MatrixFormula;
+import org.eclipse.iee.translator.jmole.math.math.MatrixMultiplication;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.MatrixSubtraction;
+import org.eclipse.iee.translator.jmole.math.math.MatrixVariable;
 import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.NewMatrix;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
+import org.eclipse.iee.translator.jmole.math.math.TransposeMatrix;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
+import org.eclipse.iee.translator.jmole.math.math.VariableAssignment;
 
 /**
  * <!-- begin-user-doc -->
@@ -88,12 +97,15 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
     switch (eClass.getClassifierID())
     {
       case MathPackage.STATEMENT: return createStatement();
-      case MathPackage.ASSIGNMENT: return createAssignment();
+      case MathPackage.VARIABLE_ASSIGNMENT: return createVariableAssignment();
       case MathPackage.FORMULA: return createFormula();
       case MathPackage.EXPRESSION: return createExpression();
-      case MathPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
-      case MathPackage.MATRIX_DEFINITION: return createMatrixDefinition();
+      case MathPackage.MATRIX: return createMatrix();
       case MathPackage.MATRIX_ROW: return createMatrixRow();
+      case MathPackage.MATRIX_ASSIGNMENT: return createMatrixAssignment();
+      case MathPackage.MATRIX_FORMULA: return createMatrixFormula();
+      case MathPackage.MATRIX_EXPRESSION: return createMatrixExpression();
+      case MathPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
       case MathPackage.ADDITION: return createAddition();
       case MathPackage.SUBTRACTION: return createSubtraction();
       case MathPackage.MULTIPLICATION: return createMultiplication();
@@ -101,11 +113,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.MODULO: return createModulo();
       case MathPackage.INVERT: return createInvert();
       case MathPackage.FACTORIAL: return createFactorial();
-      case MathPackage.INTERVAL: return createInterval();
       case MathPackage.EXPONENT: return createExponent();
       case MathPackage.VARIABLE: return createVariable();
       case MathPackage.FLOAT: return createFloat();
+      case MathPackage.MATRIX_ELEMENT: return createMatrixElement();
       case MathPackage.FUNCTION: return createFunction();
+      case MathPackage.MATRIX_ADDITION: return createMatrixAddition();
+      case MathPackage.MATRIX_SUBTRACTION: return createMatrixSubtraction();
+      case MathPackage.MATRIX_MULTIPLICATION: return createMatrixMultiplication();
+      case MathPackage.NEW_MATRIX: return createNewMatrix();
+      case MathPackage.TRANSPOSE_MATRIX: return createTransposeMatrix();
+      case MathPackage.MATRIX_VARIABLE: return createMatrixVariable();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -127,10 +145,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Assignment createAssignment()
+  public VariableAssignment createVariableAssignment()
   {
-    AssignmentImpl assignment = new AssignmentImpl();
-    return assignment;
+    VariableAssignmentImpl variableAssignment = new VariableAssignmentImpl();
+    return variableAssignment;
   }
 
   /**
@@ -160,21 +178,10 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public FunctionDefinition createFunctionDefinition()
+  public Matrix createMatrix()
   {
-    FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
-    return functionDefinition;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public MatrixDefinition createMatrixDefinition()
-  {
-    MatrixDefinitionImpl matrixDefinition = new MatrixDefinitionImpl();
-    return matrixDefinition;
+    MatrixImpl matrix = new MatrixImpl();
+    return matrix;
   }
 
   /**
@@ -186,6 +193,50 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     MatrixRowImpl matrixRow = new MatrixRowImpl();
     return matrixRow;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixAssignment createMatrixAssignment()
+  {
+    MatrixAssignmentImpl matrixAssignment = new MatrixAssignmentImpl();
+    return matrixAssignment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixFormula createMatrixFormula()
+  {
+    MatrixFormulaImpl matrixFormula = new MatrixFormulaImpl();
+    return matrixFormula;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixExpression createMatrixExpression()
+  {
+    MatrixExpressionImpl matrixExpression = new MatrixExpressionImpl();
+    return matrixExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FunctionDefinition createFunctionDefinition()
+  {
+    FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
+    return functionDefinition;
   }
 
   /**
@@ -270,17 +321,6 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Interval createInterval()
-  {
-    IntervalImpl interval = new IntervalImpl();
-    return interval;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public Exponent createExponent()
   {
     ExponentImpl exponent = new ExponentImpl();
@@ -314,10 +354,87 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public MatrixElement createMatrixElement()
+  {
+    MatrixElementImpl matrixElement = new MatrixElementImpl();
+    return matrixElement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Function createFunction()
   {
     FunctionImpl function = new FunctionImpl();
     return function;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixAddition createMatrixAddition()
+  {
+    MatrixAdditionImpl matrixAddition = new MatrixAdditionImpl();
+    return matrixAddition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixSubtraction createMatrixSubtraction()
+  {
+    MatrixSubtractionImpl matrixSubtraction = new MatrixSubtractionImpl();
+    return matrixSubtraction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixMultiplication createMatrixMultiplication()
+  {
+    MatrixMultiplicationImpl matrixMultiplication = new MatrixMultiplicationImpl();
+    return matrixMultiplication;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NewMatrix createNewMatrix()
+  {
+    NewMatrixImpl newMatrix = new NewMatrixImpl();
+    return newMatrix;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TransposeMatrix createTransposeMatrix()
+  {
+    TransposeMatrixImpl transposeMatrix = new TransposeMatrixImpl();
+    return transposeMatrix;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixVariable createMatrixVariable()
+  {
+    MatrixVariableImpl matrixVariable = new MatrixVariableImpl();
+    return matrixVariable;
   }
 
   /**

@@ -80,22 +80,13 @@ public interface MexPackage extends EPackage
   int STATEMENT__FUNCTION_DEFINITION = 0;
 
   /**
-   * The feature id for the '<em><b>Matrix Definition</b></em>' containment reference.
+   * The feature id for the '<em><b>Variable Assignment</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STATEMENT__MATRIX_DEFINITION = 1;
-
-  /**
-   * The feature id for the '<em><b>Assignment</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int STATEMENT__ASSIGNMENT = 2;
+  int STATEMENT__VARIABLE_ASSIGNMENT = 1;
 
   /**
    * The feature id for the '<em><b>Formula</b></em>' containment reference.
@@ -104,7 +95,25 @@ public interface MexPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STATEMENT__FORMULA = 3;
+  int STATEMENT__FORMULA = 2;
+
+  /**
+   * The feature id for the '<em><b>Matrix Assignment</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT__MATRIX_ASSIGNMENT = 3;
+
+  /**
+   * The feature id for the '<em><b>Matrix Formula</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STATEMENT__MATRIX_FORMULA = 4;
 
   /**
    * The number of structural features of the '<em>Statement</em>' class.
@@ -113,17 +122,17 @@ public interface MexPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STATEMENT_FEATURE_COUNT = 4;
+  int STATEMENT_FEATURE_COUNT = 5;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.AssignmentImpl <em>Assignment</em>}' class.
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.VariableAssignmentImpl <em>Variable Assignment</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.AssignmentImpl
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getAssignment()
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.VariableAssignmentImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getVariableAssignment()
    * @generated
    */
-  int ASSIGNMENT = 1;
+  int VARIABLE_ASSIGNMENT = 1;
 
   /**
    * The feature id for the '<em><b>Variable</b></em>' attribute.
@@ -132,7 +141,7 @@ public interface MexPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ASSIGNMENT__VARIABLE = 0;
+  int VARIABLE_ASSIGNMENT__VARIABLE = 0;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' containment reference.
@@ -141,16 +150,16 @@ public interface MexPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ASSIGNMENT__VALUE = 1;
+  int VARIABLE_ASSIGNMENT__VALUE = 1;
 
   /**
-   * The number of structural features of the '<em>Assignment</em>' class.
+   * The number of structural features of the '<em>Variable Assignment</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ASSIGNMENT_FEATURE_COUNT = 2;
+  int VARIABLE_ASSIGNMENT_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.FormulaImpl <em>Formula</em>}' class.
@@ -191,13 +200,22 @@ public interface MexPackage extends EPackage
   int EXPRESSION = 3;
 
   /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPRESSION__ADDITION = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION__NAME = 0;
+  int EXPRESSION__NAME = 1;
 
   /**
    * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
@@ -206,7 +224,7 @@ public interface MexPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EXPRESSION__PARAMETERS = 1;
+  int EXPRESSION__PARAMETERS = 2;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -215,7 +233,156 @@ public interface MexPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EXPRESSION_FEATURE_COUNT = 2;
+  int EXPRESSION_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixImpl <em>Matrix</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrix()
+   * @generated
+   */
+  int MATRIX = 4;
+
+  /**
+   * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX__ROWS = 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl <em>Matrix Row</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixRow()
+   * @generated
+   */
+  int MATRIX_ROW = 5;
+
+  /**
+   * The feature id for the '<em><b>Elements</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ROW__ELEMENTS = 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix Row</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ROW_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl <em>Matrix Assignment</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixAssignment()
+   * @generated
+   */
+  int MATRIX_ASSIGNMENT = 6;
+
+  /**
+   * The feature id for the '<em><b>Variable</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ASSIGNMENT__VARIABLE = 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ASSIGNMENT__VALUE = 1;
+
+  /**
+   * The number of structural features of the '<em>Matrix Assignment</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ASSIGNMENT_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixFormulaImpl <em>Matrix Formula</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixFormulaImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixFormula()
+   * @generated
+   */
+  int MATRIX_FORMULA = 7;
+
+  /**
+   * The feature id for the '<em><b>Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_FORMULA__EXPRESSION = 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix Formula</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_FORMULA_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixExpressionImpl <em>Matrix Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixExpressionImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixExpression()
+   * @generated
+   */
+  int MATRIX_EXPRESSION = 8;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_EXPRESSION__ADDITION = 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix Expression</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_EXPRESSION_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.FunctionDefinitionImpl <em>Function Definition</em>}' class.
@@ -225,7 +392,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getFunctionDefinition()
    * @generated
    */
-  int FUNCTION_DEFINITION = 4;
+  int FUNCTION_DEFINITION = 9;
 
   /**
    * The feature id for the '<em><b>Function</b></em>' containment reference.
@@ -255,71 +422,6 @@ public interface MexPackage extends EPackage
   int FUNCTION_DEFINITION_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixDefinitionImpl <em>Matrix Definition</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixDefinitionImpl
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixDefinition()
-   * @generated
-   */
-  int MATRIX_DEFINITION = 5;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATRIX_DEFINITION__NAME = 0;
-
-  /**
-   * The feature id for the '<em><b>Rows</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATRIX_DEFINITION__ROWS = 1;
-
-  /**
-   * The number of structural features of the '<em>Matrix Definition</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATRIX_DEFINITION_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl <em>Matrix Row</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixRow()
-   * @generated
-   */
-  int MATRIX_ROW = 6;
-
-  /**
-   * The feature id for the '<em><b>Elements</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATRIX_ROW__ELEMENTS = 0;
-
-  /**
-   * The number of structural features of the '<em>Matrix Row</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int MATRIX_ROW_FEATURE_COUNT = 1;
-
-  /**
    * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.AdditionImpl <em>Addition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -327,7 +429,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getAddition()
    * @generated
    */
-  int ADDITION = 7;
+  int ADDITION = 10;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ADDITION__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -382,7 +493,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getSubtraction()
    * @generated
    */
-  int SUBTRACTION = 8;
+  int SUBTRACTION = 11;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SUBTRACTION__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -437,7 +557,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMultiplication()
    * @generated
    */
-  int MULTIPLICATION = 9;
+  int MULTIPLICATION = 12;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MULTIPLICATION__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -492,7 +621,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getDivision()
    * @generated
    */
-  int DIVISION = 10;
+  int DIVISION = 13;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIVISION__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -547,7 +685,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getModulo()
    * @generated
    */
-  int MODULO = 11;
+  int MODULO = 14;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MODULO__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -602,7 +749,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getInvert()
    * @generated
    */
-  int INVERT = 12;
+  int INVERT = 15;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INVERT__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -648,7 +804,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getFactorial()
    * @generated
    */
-  int FACTORIAL = 13;
+  int FACTORIAL = 16;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FACTORIAL__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -687,79 +852,6 @@ public interface MexPackage extends EPackage
   int FACTORIAL_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.IntervalImpl <em>Interval</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.IntervalImpl
-   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getInterval()
-   * @generated
-   */
-  int INTERVAL = 14;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL__NAME = EXPRESSION__NAME;
-
-  /**
-   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL__PARAMETERS = EXPRESSION__PARAMETERS;
-
-  /**
-   * The feature id for the '<em><b>Opening Bracket</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL__OPENING_BRACKET = EXPRESSION_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Ceil</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL__CEIL = EXPRESSION_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Floor</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL__FLOOR = EXPRESSION_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Closing Bracket</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL__CLOSING_BRACKET = EXPRESSION_FEATURE_COUNT + 3;
-
-  /**
-   * The number of structural features of the '<em>Interval</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INTERVAL_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 4;
-
-  /**
    * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.ExponentImpl <em>Exponent</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -767,7 +859,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getExponent()
    * @generated
    */
-  int EXPONENT = 15;
+  int EXPONENT = 17;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EXPONENT__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -822,7 +923,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getVariable()
    * @generated
    */
-  int VARIABLE = 16;
+  int VARIABLE = 18;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -859,7 +969,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getFloat()
    * @generated
    */
-  int FLOAT = 17;
+  int FLOAT = 19;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FLOAT__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -905,7 +1024,16 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getFunction()
    * @generated
    */
-  int FUNCTION = 18;
+  int FUNCTION = 20;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FUNCTION__ADDITION = EXPRESSION__ADDITION;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -943,6 +1071,429 @@ public interface MexPackage extends EPackage
    */
   int FUNCTION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixElementImpl <em>Matrix Element</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixElementImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixElement()
+   * @generated
+   */
+  int MATRIX_ELEMENT = 21;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT__ADDITION = EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Element</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT__ELEMENT = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Row</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT__ROW = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Column</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT__COLUMN = EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Matrix Element</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ELEMENT_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.InBracketsImpl <em>In Brackets</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.InBracketsImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getInBrackets()
+   * @generated
+   */
+  int IN_BRACKETS = 22;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IN_BRACKETS__ADDITION = EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IN_BRACKETS__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IN_BRACKETS__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>In Brackets</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IN_BRACKETS__IN_BRACKETS = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>In Brackets</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IN_BRACKETS_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAdditionImpl <em>Matrix Addition</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAdditionImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixAddition()
+   * @generated
+   */
+  int MATRIX_ADDITION = 23;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ADDITION__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ADDITION__LEFT = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ADDITION__RIGHT = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Matrix Addition</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_ADDITION_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixSubtractionImpl <em>Matrix Subtraction</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixSubtractionImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixSubtraction()
+   * @generated
+   */
+  int MATRIX_SUBTRACTION = 24;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_SUBTRACTION__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_SUBTRACTION__LEFT = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Right</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_SUBTRACTION__RIGHT = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Matrix Subtraction</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_SUBTRACTION_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixMultiplicationImpl <em>Matrix Multiplication</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixMultiplicationImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixMultiplication()
+   * @generated
+   */
+  int MATRIX_MULTIPLICATION = 25;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_MULTIPLICATION__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Left</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_MULTIPLICATION__LEFT = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Right Matrix</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_MULTIPLICATION__RIGHT_MATRIX = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Right Scalar</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_MULTIPLICATION__RIGHT_SCALAR = MATRIX_EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Matrix Multiplication</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_MULTIPLICATION_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.NewMatrixImpl <em>New Matrix</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.NewMatrixImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getNewMatrix()
+   * @generated
+   */
+  int NEW_MATRIX = 26;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int NEW_MATRIX__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Matrix</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int NEW_MATRIX__MATRIX = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>New Matrix</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int NEW_MATRIX_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.TransposeMatrixImpl <em>Transpose Matrix</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.TransposeMatrixImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getTransposeMatrix()
+   * @generated
+   */
+  int TRANSPOSE_MATRIX = 27;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TRANSPOSE_MATRIX__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TRANSPOSE_MATRIX__NAME = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Transpose Matrix</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TRANSPOSE_MATRIX_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixVariableImpl <em>Matrix Variable</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixVariableImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixVariable()
+   * @generated
+   */
+  int MATRIX_VARIABLE = 28;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_VARIABLE__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_VARIABLE__NAME = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix Variable</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_VARIABLE_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixInBracketsImpl <em>Matrix In Brackets</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixInBracketsImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixInBrackets()
+   * @generated
+   */
+  int MATRIX_IN_BRACKETS = 29;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_IN_BRACKETS__ADDITION = MATRIX_EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>In Brackets</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_IN_BRACKETS__IN_BRACKETS = MATRIX_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Matrix In Brackets</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATRIX_IN_BRACKETS_FEATURE_COUNT = MATRIX_EXPRESSION_FEATURE_COUNT + 1;
+
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Statement <em>Statement</em>}'.
@@ -966,26 +1517,15 @@ public interface MexPackage extends EPackage
   EReference getStatement_FunctionDefinition();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Statement#getMatrixDefinition <em>Matrix Definition</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Statement#getVariableAssignment <em>Variable Assignment</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Matrix Definition</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Statement#getMatrixDefinition()
+   * @return the meta object for the containment reference '<em>Variable Assignment</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.Statement#getVariableAssignment()
    * @see #getStatement()
    * @generated
    */
-  EReference getStatement_MatrixDefinition();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Statement#getAssignment <em>Assignment</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Assignment</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Statement#getAssignment()
-   * @see #getStatement()
-   * @generated
-   */
-  EReference getStatement_Assignment();
+  EReference getStatement_VariableAssignment();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Statement#getFormula <em>Formula</em>}'.
@@ -999,36 +1539,58 @@ public interface MexPackage extends EPackage
   EReference getStatement_Formula();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Assignment <em>Assignment</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Statement#getMatrixAssignment <em>Matrix Assignment</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Assignment</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Assignment
+   * @return the meta object for the containment reference '<em>Matrix Assignment</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.Statement#getMatrixAssignment()
+   * @see #getStatement()
    * @generated
    */
-  EClass getAssignment();
+  EReference getStatement_MatrixAssignment();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.Assignment#getVariable <em>Variable</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Statement#getMatrixFormula <em>Matrix Formula</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Matrix Formula</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.Statement#getMatrixFormula()
+   * @see #getStatement()
+   * @generated
+   */
+  EReference getStatement_MatrixFormula();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.VariableAssignment <em>Variable Assignment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Variable Assignment</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.VariableAssignment
+   * @generated
+   */
+  EClass getVariableAssignment();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.VariableAssignment#getVariable <em>Variable</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Variable</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Assignment#getVariable()
-   * @see #getAssignment()
+   * @see org.eclipse.iee.translator.molex.mex.mex.VariableAssignment#getVariable()
+   * @see #getVariableAssignment()
    * @generated
    */
-  EAttribute getAssignment_Variable();
+  EAttribute getVariableAssignment_Variable();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Assignment#getValue <em>Value</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.VariableAssignment#getValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Value</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Assignment#getValue()
-   * @see #getAssignment()
+   * @see org.eclipse.iee.translator.molex.mex.mex.VariableAssignment#getValue()
+   * @see #getVariableAssignment()
    * @generated
    */
-  EReference getAssignment_Value();
+  EReference getVariableAssignment_Value();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Formula <em>Formula</em>}'.
@@ -1062,6 +1624,17 @@ public interface MexPackage extends EPackage
   EClass getExpression();
 
   /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Expression#getAddition <em>Addition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Addition</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.Expression#getAddition()
+   * @see #getExpression()
+   * @generated
+   */
+  EReference getExpression_Addition();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.Expression#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1082,6 +1655,122 @@ public interface MexPackage extends EPackage
    * @generated
    */
   EReference getExpression_Parameters();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Matrix <em>Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.Matrix
+   * @generated
+   */
+  EClass getMatrix();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.iee.translator.molex.mex.mex.Matrix#getRows <em>Rows</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Rows</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.Matrix#getRows()
+   * @see #getMatrix()
+   * @generated
+   */
+  EReference getMatrix_Rows();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixRow <em>Matrix Row</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Row</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixRow
+   * @generated
+   */
+  EClass getMatrixRow();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements <em>Elements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Elements</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements()
+   * @see #getMatrixRow()
+   * @generated
+   */
+  EAttribute getMatrixRow_Elements();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment <em>Matrix Assignment</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Assignment</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment
+   * @generated
+   */
+  EClass getMatrixAssignment();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getVariable <em>Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Variable</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getVariable()
+   * @see #getMatrixAssignment()
+   * @generated
+   */
+  EAttribute getMatrixAssignment_Variable();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Value</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getValue()
+   * @see #getMatrixAssignment()
+   * @generated
+   */
+  EReference getMatrixAssignment_Value();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixFormula <em>Matrix Formula</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Formula</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixFormula
+   * @generated
+   */
+  EClass getMatrixFormula();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixFormula#getExpression <em>Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expression</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixFormula#getExpression()
+   * @see #getMatrixFormula()
+   * @generated
+   */
+  EReference getMatrixFormula_Expression();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixExpression <em>Matrix Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Expression</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixExpression
+   * @generated
+   */
+  EClass getMatrixExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixExpression#getAddition <em>Addition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Addition</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixExpression#getAddition()
+   * @see #getMatrixExpression()
+   * @generated
+   */
+  EReference getMatrixExpression_Addition();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.FunctionDefinition <em>Function Definition</em>}'.
@@ -1114,59 +1803,6 @@ public interface MexPackage extends EPackage
    * @generated
    */
   EReference getFunctionDefinition_Formula();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition <em>Matrix Definition</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Matrix Definition</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition
-   * @generated
-   */
-  EClass getMatrixDefinition();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition#getName()
-   * @see #getMatrixDefinition()
-   * @generated
-   */
-  EAttribute getMatrixDefinition_Name();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition#getRows <em>Rows</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Rows</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixDefinition#getRows()
-   * @see #getMatrixDefinition()
-   * @generated
-   */
-  EReference getMatrixDefinition_Rows();
-
-  /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixRow <em>Matrix Row</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Matrix Row</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixRow
-   * @generated
-   */
-  EClass getMatrixRow();
-
-  /**
-   * Returns the meta object for the attribute list '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements <em>Elements</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Elements</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements()
-   * @see #getMatrixRow()
-   * @generated
-   */
-  EAttribute getMatrixRow_Elements();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Addition <em>Addition</em>}'.
@@ -1371,60 +2007,6 @@ public interface MexPackage extends EPackage
   EReference getFactorial_Expression();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Interval <em>Interval</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Interval</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Interval
-   * @generated
-   */
-  EClass getInterval();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.Interval#getOpeningBracket <em>Opening Bracket</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Opening Bracket</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Interval#getOpeningBracket()
-   * @see #getInterval()
-   * @generated
-   */
-  EAttribute getInterval_OpeningBracket();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Interval#getCeil <em>Ceil</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Ceil</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Interval#getCeil()
-   * @see #getInterval()
-   * @generated
-   */
-  EReference getInterval_Ceil();
-
-  /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.Interval#getFloor <em>Floor</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Floor</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Interval#getFloor()
-   * @see #getInterval()
-   * @generated
-   */
-  EReference getInterval_Floor();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.Interval#getClosingBracket <em>Closing Bracket</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Closing Bracket</em>'.
-   * @see org.eclipse.iee.translator.molex.mex.mex.Interval#getClosingBracket()
-   * @see #getInterval()
-   * @generated
-   */
-  EAttribute getInterval_ClosingBracket();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.Exponent <em>Exponent</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1509,6 +2091,261 @@ public interface MexPackage extends EPackage
   EReference getFunction_Function();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement <em>Matrix Element</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Element</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixElement
+   * @generated
+   */
+  EClass getMatrixElement();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getElement <em>Element</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Element</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getElement()
+   * @see #getMatrixElement()
+   * @generated
+   */
+  EAttribute getMatrixElement_Element();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getRow <em>Row</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Row</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getRow()
+   * @see #getMatrixElement()
+   * @generated
+   */
+  EAttribute getMatrixElement_Row();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getColumn <em>Column</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Column</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getColumn()
+   * @see #getMatrixElement()
+   * @generated
+   */
+  EAttribute getMatrixElement_Column();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.InBrackets <em>In Brackets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>In Brackets</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.InBrackets
+   * @generated
+   */
+  EClass getInBrackets();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.InBrackets#getInBrackets <em>In Brackets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>In Brackets</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.InBrackets#getInBrackets()
+   * @see #getInBrackets()
+   * @generated
+   */
+  EReference getInBrackets_InBrackets();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAddition <em>Matrix Addition</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Addition</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixAddition
+   * @generated
+   */
+  EClass getMatrixAddition();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAddition#getLeft <em>Left</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Left</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixAddition#getLeft()
+   * @see #getMatrixAddition()
+   * @generated
+   */
+  EReference getMatrixAddition_Left();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAddition#getRight <em>Right</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Right</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixAddition#getRight()
+   * @see #getMatrixAddition()
+   * @generated
+   */
+  EReference getMatrixAddition_Right();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction <em>Matrix Subtraction</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Subtraction</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction
+   * @generated
+   */
+  EClass getMatrixSubtraction();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction#getLeft <em>Left</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Left</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction#getLeft()
+   * @see #getMatrixSubtraction()
+   * @generated
+   */
+  EReference getMatrixSubtraction_Left();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction#getRight <em>Right</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Right</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixSubtraction#getRight()
+   * @see #getMatrixSubtraction()
+   * @generated
+   */
+  EReference getMatrixSubtraction_Right();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication <em>Matrix Multiplication</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Multiplication</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication
+   * @generated
+   */
+  EClass getMatrixMultiplication();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication#getLeft <em>Left</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Left</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication#getLeft()
+   * @see #getMatrixMultiplication()
+   * @generated
+   */
+  EReference getMatrixMultiplication_Left();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication#getRightMatrix <em>Right Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Right Matrix</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication#getRightMatrix()
+   * @see #getMatrixMultiplication()
+   * @generated
+   */
+  EReference getMatrixMultiplication_RightMatrix();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication#getRightScalar <em>Right Scalar</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Right Scalar</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixMultiplication#getRightScalar()
+   * @see #getMatrixMultiplication()
+   * @generated
+   */
+  EReference getMatrixMultiplication_RightScalar();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.NewMatrix <em>New Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>New Matrix</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.NewMatrix
+   * @generated
+   */
+  EClass getNewMatrix();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.NewMatrix#getMatrix <em>Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Matrix</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.NewMatrix#getMatrix()
+   * @see #getNewMatrix()
+   * @generated
+   */
+  EReference getNewMatrix_Matrix();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.TransposeMatrix <em>Transpose Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Transpose Matrix</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.TransposeMatrix
+   * @generated
+   */
+  EClass getTransposeMatrix();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.TransposeMatrix#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.TransposeMatrix#getName()
+   * @see #getTransposeMatrix()
+   * @generated
+   */
+  EAttribute getTransposeMatrix_Name();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixVariable <em>Matrix Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix Variable</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixVariable
+   * @generated
+   */
+  EClass getMatrixVariable();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixVariable#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixVariable#getName()
+   * @see #getMatrixVariable()
+   * @generated
+   */
+  EAttribute getMatrixVariable_Name();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixInBrackets <em>Matrix In Brackets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Matrix In Brackets</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixInBrackets
+   * @generated
+   */
+  EClass getMatrixInBrackets();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixInBrackets#getInBrackets <em>In Brackets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>In Brackets</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MatrixInBrackets#getInBrackets()
+   * @see #getMatrixInBrackets()
+   * @generated
+   */
+  EReference getMatrixInBrackets_InBrackets();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1550,20 +2387,12 @@ public interface MexPackage extends EPackage
     EReference STATEMENT__FUNCTION_DEFINITION = eINSTANCE.getStatement_FunctionDefinition();
 
     /**
-     * The meta object literal for the '<em><b>Matrix Definition</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Variable Assignment</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference STATEMENT__MATRIX_DEFINITION = eINSTANCE.getStatement_MatrixDefinition();
-
-    /**
-     * The meta object literal for the '<em><b>Assignment</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference STATEMENT__ASSIGNMENT = eINSTANCE.getStatement_Assignment();
+    EReference STATEMENT__VARIABLE_ASSIGNMENT = eINSTANCE.getStatement_VariableAssignment();
 
     /**
      * The meta object literal for the '<em><b>Formula</b></em>' containment reference feature.
@@ -1574,14 +2403,30 @@ public interface MexPackage extends EPackage
     EReference STATEMENT__FORMULA = eINSTANCE.getStatement_Formula();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.AssignmentImpl <em>Assignment</em>}' class.
+     * The meta object literal for the '<em><b>Matrix Assignment</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.AssignmentImpl
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getAssignment()
      * @generated
      */
-    EClass ASSIGNMENT = eINSTANCE.getAssignment();
+    EReference STATEMENT__MATRIX_ASSIGNMENT = eINSTANCE.getStatement_MatrixAssignment();
+
+    /**
+     * The meta object literal for the '<em><b>Matrix Formula</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STATEMENT__MATRIX_FORMULA = eINSTANCE.getStatement_MatrixFormula();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.VariableAssignmentImpl <em>Variable Assignment</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.VariableAssignmentImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getVariableAssignment()
+     * @generated
+     */
+    EClass VARIABLE_ASSIGNMENT = eINSTANCE.getVariableAssignment();
 
     /**
      * The meta object literal for the '<em><b>Variable</b></em>' attribute feature.
@@ -1589,7 +2434,7 @@ public interface MexPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ASSIGNMENT__VARIABLE = eINSTANCE.getAssignment_Variable();
+    EAttribute VARIABLE_ASSIGNMENT__VARIABLE = eINSTANCE.getVariableAssignment_Variable();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
@@ -1597,7 +2442,7 @@ public interface MexPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ASSIGNMENT__VALUE = eINSTANCE.getAssignment_Value();
+    EReference VARIABLE_ASSIGNMENT__VALUE = eINSTANCE.getVariableAssignment_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.FormulaImpl <em>Formula</em>}' class.
@@ -1628,6 +2473,14 @@ public interface MexPackage extends EPackage
     EClass EXPRESSION = eINSTANCE.getExpression();
 
     /**
+     * The meta object literal for the '<em><b>Addition</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EXPRESSION__ADDITION = eINSTANCE.getExpression_Addition();
+
+    /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1642,6 +2495,104 @@ public interface MexPackage extends EPackage
      * @generated
      */
     EReference EXPRESSION__PARAMETERS = eINSTANCE.getExpression_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixImpl <em>Matrix</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrix()
+     * @generated
+     */
+    EClass MATRIX = eINSTANCE.getMatrix();
+
+    /**
+     * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX__ROWS = eINSTANCE.getMatrix_Rows();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl <em>Matrix Row</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixRow()
+     * @generated
+     */
+    EClass MATRIX_ROW = eINSTANCE.getMatrixRow();
+
+    /**
+     * The meta object literal for the '<em><b>Elements</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_ROW__ELEMENTS = eINSTANCE.getMatrixRow_Elements();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl <em>Matrix Assignment</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixAssignment()
+     * @generated
+     */
+    EClass MATRIX_ASSIGNMENT = eINSTANCE.getMatrixAssignment();
+
+    /**
+     * The meta object literal for the '<em><b>Variable</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_ASSIGNMENT__VARIABLE = eINSTANCE.getMatrixAssignment_Variable();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_ASSIGNMENT__VALUE = eINSTANCE.getMatrixAssignment_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixFormulaImpl <em>Matrix Formula</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixFormulaImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixFormula()
+     * @generated
+     */
+    EClass MATRIX_FORMULA = eINSTANCE.getMatrixFormula();
+
+    /**
+     * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_FORMULA__EXPRESSION = eINSTANCE.getMatrixFormula_Expression();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixExpressionImpl <em>Matrix Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixExpressionImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixExpression()
+     * @generated
+     */
+    EClass MATRIX_EXPRESSION = eINSTANCE.getMatrixExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Addition</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_EXPRESSION__ADDITION = eINSTANCE.getMatrixExpression_Addition();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.FunctionDefinitionImpl <em>Function Definition</em>}' class.
@@ -1668,50 +2619,6 @@ public interface MexPackage extends EPackage
      * @generated
      */
     EReference FUNCTION_DEFINITION__FORMULA = eINSTANCE.getFunctionDefinition_Formula();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixDefinitionImpl <em>Matrix Definition</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixDefinitionImpl
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixDefinition()
-     * @generated
-     */
-    EClass MATRIX_DEFINITION = eINSTANCE.getMatrixDefinition();
-
-    /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MATRIX_DEFINITION__NAME = eINSTANCE.getMatrixDefinition_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference MATRIX_DEFINITION__ROWS = eINSTANCE.getMatrixDefinition_Rows();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl <em>Matrix Row</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixRowImpl
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixRow()
-     * @generated
-     */
-    EClass MATRIX_ROW = eINSTANCE.getMatrixRow();
-
-    /**
-     * The meta object literal for the '<em><b>Elements</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute MATRIX_ROW__ELEMENTS = eINSTANCE.getMatrixRow_Elements();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.AdditionImpl <em>Addition</em>}' class.
@@ -1880,48 +2787,6 @@ public interface MexPackage extends EPackage
     EReference FACTORIAL__EXPRESSION = eINSTANCE.getFactorial_Expression();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.IntervalImpl <em>Interval</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.IntervalImpl
-     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getInterval()
-     * @generated
-     */
-    EClass INTERVAL = eINSTANCE.getInterval();
-
-    /**
-     * The meta object literal for the '<em><b>Opening Bracket</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INTERVAL__OPENING_BRACKET = eINSTANCE.getInterval_OpeningBracket();
-
-    /**
-     * The meta object literal for the '<em><b>Ceil</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference INTERVAL__CEIL = eINSTANCE.getInterval_Ceil();
-
-    /**
-     * The meta object literal for the '<em><b>Floor</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference INTERVAL__FLOOR = eINSTANCE.getInterval_Floor();
-
-    /**
-     * The meta object literal for the '<em><b>Closing Bracket</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INTERVAL__CLOSING_BRACKET = eINSTANCE.getInterval_ClosingBracket();
-
-    /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.ExponentImpl <em>Exponent</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1992,6 +2857,216 @@ public interface MexPackage extends EPackage
      * @generated
      */
     EReference FUNCTION__FUNCTION = eINSTANCE.getFunction_Function();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixElementImpl <em>Matrix Element</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixElementImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixElement()
+     * @generated
+     */
+    EClass MATRIX_ELEMENT = eINSTANCE.getMatrixElement();
+
+    /**
+     * The meta object literal for the '<em><b>Element</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_ELEMENT__ELEMENT = eINSTANCE.getMatrixElement_Element();
+
+    /**
+     * The meta object literal for the '<em><b>Row</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_ELEMENT__ROW = eINSTANCE.getMatrixElement_Row();
+
+    /**
+     * The meta object literal for the '<em><b>Column</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_ELEMENT__COLUMN = eINSTANCE.getMatrixElement_Column();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.InBracketsImpl <em>In Brackets</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.InBracketsImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getInBrackets()
+     * @generated
+     */
+    EClass IN_BRACKETS = eINSTANCE.getInBrackets();
+
+    /**
+     * The meta object literal for the '<em><b>In Brackets</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference IN_BRACKETS__IN_BRACKETS = eINSTANCE.getInBrackets_InBrackets();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAdditionImpl <em>Matrix Addition</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAdditionImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixAddition()
+     * @generated
+     */
+    EClass MATRIX_ADDITION = eINSTANCE.getMatrixAddition();
+
+    /**
+     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_ADDITION__LEFT = eINSTANCE.getMatrixAddition_Left();
+
+    /**
+     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_ADDITION__RIGHT = eINSTANCE.getMatrixAddition_Right();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixSubtractionImpl <em>Matrix Subtraction</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixSubtractionImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixSubtraction()
+     * @generated
+     */
+    EClass MATRIX_SUBTRACTION = eINSTANCE.getMatrixSubtraction();
+
+    /**
+     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_SUBTRACTION__LEFT = eINSTANCE.getMatrixSubtraction_Left();
+
+    /**
+     * The meta object literal for the '<em><b>Right</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_SUBTRACTION__RIGHT = eINSTANCE.getMatrixSubtraction_Right();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixMultiplicationImpl <em>Matrix Multiplication</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixMultiplicationImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixMultiplication()
+     * @generated
+     */
+    EClass MATRIX_MULTIPLICATION = eINSTANCE.getMatrixMultiplication();
+
+    /**
+     * The meta object literal for the '<em><b>Left</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_MULTIPLICATION__LEFT = eINSTANCE.getMatrixMultiplication_Left();
+
+    /**
+     * The meta object literal for the '<em><b>Right Matrix</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_MULTIPLICATION__RIGHT_MATRIX = eINSTANCE.getMatrixMultiplication_RightMatrix();
+
+    /**
+     * The meta object literal for the '<em><b>Right Scalar</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_MULTIPLICATION__RIGHT_SCALAR = eINSTANCE.getMatrixMultiplication_RightScalar();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.NewMatrixImpl <em>New Matrix</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.NewMatrixImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getNewMatrix()
+     * @generated
+     */
+    EClass NEW_MATRIX = eINSTANCE.getNewMatrix();
+
+    /**
+     * The meta object literal for the '<em><b>Matrix</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference NEW_MATRIX__MATRIX = eINSTANCE.getNewMatrix_Matrix();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.TransposeMatrixImpl <em>Transpose Matrix</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.TransposeMatrixImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getTransposeMatrix()
+     * @generated
+     */
+    EClass TRANSPOSE_MATRIX = eINSTANCE.getTransposeMatrix();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TRANSPOSE_MATRIX__NAME = eINSTANCE.getTransposeMatrix_Name();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixVariableImpl <em>Matrix Variable</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixVariableImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixVariable()
+     * @generated
+     */
+    EClass MATRIX_VARIABLE = eINSTANCE.getMatrixVariable();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATRIX_VARIABLE__NAME = eINSTANCE.getMatrixVariable_Name();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixInBracketsImpl <em>Matrix In Brackets</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MatrixInBracketsImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixInBrackets()
+     * @generated
+     */
+    EClass MATRIX_IN_BRACKETS = eINSTANCE.getMatrixInBrackets();
+
+    /**
+     * The meta object literal for the '<em><b>In Brackets</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MATRIX_IN_BRACKETS__IN_BRACKETS = eINSTANCE.getMatrixInBrackets_InBrackets();
 
   }
 

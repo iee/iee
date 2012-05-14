@@ -14,7 +14,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
-import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -22,16 +21,26 @@ import org.eclipse.iee.translator.jmole.math.math.Factorial;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
-import org.eclipse.iee.translator.jmole.math.math.Interval;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.Matrix;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAssignment;
+import org.eclipse.iee.translator.jmole.math.math.MatrixElement;
+import org.eclipse.iee.translator.jmole.math.math.MatrixExpression;
+import org.eclipse.iee.translator.jmole.math.math.MatrixFormula;
+import org.eclipse.iee.translator.jmole.math.math.MatrixMultiplication;
 import org.eclipse.iee.translator.jmole.math.math.MatrixRow;
+import org.eclipse.iee.translator.jmole.math.math.MatrixSubtraction;
+import org.eclipse.iee.translator.jmole.math.math.MatrixVariable;
 import org.eclipse.iee.translator.jmole.math.math.Modulo;
 import org.eclipse.iee.translator.jmole.math.math.Multiplication;
+import org.eclipse.iee.translator.jmole.math.math.NewMatrix;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
 import org.eclipse.iee.translator.jmole.math.math.Subtraction;
+import org.eclipse.iee.translator.jmole.math.math.TransposeMatrix;
 import org.eclipse.iee.translator.jmole.math.math.Variable;
+import org.eclipse.iee.translator.jmole.math.math.VariableAssignment;
 
 /**
  * <!-- begin-user-doc -->
@@ -102,9 +111,9 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createStatementAdapter();
       }
       @Override
-      public Adapter caseAssignment(Assignment object)
+      public Adapter caseVariableAssignment(VariableAssignment object)
       {
-        return createAssignmentAdapter();
+        return createVariableAssignmentAdapter();
       }
       @Override
       public Adapter caseFormula(Formula object)
@@ -117,19 +126,34 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createExpressionAdapter();
       }
       @Override
-      public Adapter caseFunctionDefinition(FunctionDefinition object)
+      public Adapter caseMatrix(Matrix object)
       {
-        return createFunctionDefinitionAdapter();
-      }
-      @Override
-      public Adapter caseMatrixDefinition(MatrixDefinition object)
-      {
-        return createMatrixDefinitionAdapter();
+        return createMatrixAdapter();
       }
       @Override
       public Adapter caseMatrixRow(MatrixRow object)
       {
         return createMatrixRowAdapter();
+      }
+      @Override
+      public Adapter caseMatrixAssignment(MatrixAssignment object)
+      {
+        return createMatrixAssignmentAdapter();
+      }
+      @Override
+      public Adapter caseMatrixFormula(MatrixFormula object)
+      {
+        return createMatrixFormulaAdapter();
+      }
+      @Override
+      public Adapter caseMatrixExpression(MatrixExpression object)
+      {
+        return createMatrixExpressionAdapter();
+      }
+      @Override
+      public Adapter caseFunctionDefinition(FunctionDefinition object)
+      {
+        return createFunctionDefinitionAdapter();
       }
       @Override
       public Adapter caseAddition(Addition object)
@@ -167,11 +191,6 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createFactorialAdapter();
       }
       @Override
-      public Adapter caseInterval(Interval object)
-      {
-        return createIntervalAdapter();
-      }
-      @Override
       public Adapter caseExponent(Exponent object)
       {
         return createExponentAdapter();
@@ -187,9 +206,44 @@ public class MathAdapterFactory extends AdapterFactoryImpl
         return createFloatAdapter();
       }
       @Override
+      public Adapter caseMatrixElement(MatrixElement object)
+      {
+        return createMatrixElementAdapter();
+      }
+      @Override
       public Adapter caseFunction(Function object)
       {
         return createFunctionAdapter();
+      }
+      @Override
+      public Adapter caseMatrixAddition(MatrixAddition object)
+      {
+        return createMatrixAdditionAdapter();
+      }
+      @Override
+      public Adapter caseMatrixSubtraction(MatrixSubtraction object)
+      {
+        return createMatrixSubtractionAdapter();
+      }
+      @Override
+      public Adapter caseMatrixMultiplication(MatrixMultiplication object)
+      {
+        return createMatrixMultiplicationAdapter();
+      }
+      @Override
+      public Adapter caseNewMatrix(NewMatrix object)
+      {
+        return createNewMatrixAdapter();
+      }
+      @Override
+      public Adapter caseTransposeMatrix(TransposeMatrix object)
+      {
+        return createTransposeMatrixAdapter();
+      }
+      @Override
+      public Adapter caseMatrixVariable(MatrixVariable object)
+      {
+        return createMatrixVariableAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -229,16 +283,16 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Assignment <em>Assignment</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.VariableAssignment <em>Variable Assignment</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Assignment
+   * @see org.eclipse.iee.translator.jmole.math.math.VariableAssignment
    * @generated
    */
-  public Adapter createAssignmentAdapter()
+  public Adapter createVariableAssignmentAdapter()
   {
     return null;
   }
@@ -274,31 +328,16 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition <em>Function Definition</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Matrix <em>Matrix</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.FunctionDefinition
+   * @see org.eclipse.iee.translator.jmole.math.math.Matrix
    * @generated
    */
-  public Adapter createFunctionDefinitionAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixDefinition <em>Matrix Definition</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.MatrixDefinition
-   * @generated
-   */
-  public Adapter createMatrixDefinitionAdapter()
+  public Adapter createMatrixAdapter()
   {
     return null;
   }
@@ -314,6 +353,66 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMatrixRowAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixAssignment <em>Matrix Assignment</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixAssignment
+   * @generated
+   */
+  public Adapter createMatrixAssignmentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixFormula <em>Matrix Formula</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixFormula
+   * @generated
+   */
+  public Adapter createMatrixFormulaAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixExpression <em>Matrix Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixExpression
+   * @generated
+   */
+  public Adapter createMatrixExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.FunctionDefinition <em>Function Definition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.FunctionDefinition
+   * @generated
+   */
+  public Adapter createFunctionDefinitionAdapter()
   {
     return null;
   }
@@ -424,21 +523,6 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Interval <em>Interval</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.iee.translator.jmole.math.math.Interval
-   * @generated
-   */
-  public Adapter createIntervalAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Exponent <em>Exponent</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -484,6 +568,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement <em>Matrix Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixElement
+   * @generated
+   */
+  public Adapter createMatrixElementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.Function <em>Function</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -494,6 +593,96 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFunctionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixAddition <em>Matrix Addition</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixAddition
+   * @generated
+   */
+  public Adapter createMatrixAdditionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixSubtraction <em>Matrix Subtraction</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixSubtraction
+   * @generated
+   */
+  public Adapter createMatrixSubtractionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixMultiplication <em>Matrix Multiplication</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixMultiplication
+   * @generated
+   */
+  public Adapter createMatrixMultiplicationAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.NewMatrix <em>New Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.NewMatrix
+   * @generated
+   */
+  public Adapter createNewMatrixAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.TransposeMatrix <em>Transpose Matrix</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.TransposeMatrix
+   * @generated
+   */
+  public Adapter createTransposeMatrixAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MatrixVariable <em>Matrix Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MatrixVariable
+   * @generated
+   */
+  public Adapter createMatrixVariableAdapter()
   {
     return null;
   }

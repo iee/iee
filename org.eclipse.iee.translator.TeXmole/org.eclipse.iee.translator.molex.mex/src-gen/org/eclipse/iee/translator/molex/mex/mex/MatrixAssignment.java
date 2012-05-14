@@ -10,22 +10,22 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Assignment</b></em>'.
+ * A representation of the model object '<em><b>Matrix Assignment</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.Assignment#getVariable <em>Variable</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.Assignment#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getVariable <em>Variable</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
- * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getAssignment()
+ * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getMatrixAssignment()
  * @model
  * @generated
  */
-public interface Assignment extends EObject
+public interface MatrixAssignment extends EObject
 {
   /**
    * Returns the value of the '<em><b>Variable</b></em>' attribute.
@@ -37,14 +37,14 @@ public interface Assignment extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Variable</em>' attribute.
    * @see #setVariable(String)
-   * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getAssignment_Variable()
+   * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getMatrixAssignment_Variable()
    * @model
    * @generated
    */
   String getVariable();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.Assignment#getVariable <em>Variable</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getVariable <em>Variable</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Variable</em>' attribute.
@@ -62,21 +62,21 @@ public interface Assignment extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' containment reference.
-   * @see #setValue(Formula)
-   * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getAssignment_Value()
+   * @see #setValue(MatrixFormula)
+   * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getMatrixAssignment_Value()
    * @model containment="true"
    * @generated
    */
-  Formula getValue();
+  MatrixFormula getValue();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.Assignment#getValue <em>Value</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment#getValue <em>Value</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Value</em>' containment reference.
    * @see #getValue()
    * @generated
    */
-  void setValue(Formula value);
+  void setValue(MatrixFormula value);
 
-} // Assignment
+} // MatrixAssignment

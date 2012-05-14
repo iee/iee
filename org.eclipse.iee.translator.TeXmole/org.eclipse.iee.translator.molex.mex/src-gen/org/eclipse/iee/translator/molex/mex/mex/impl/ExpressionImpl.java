@@ -33,6 +33,7 @@ import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.ExpressionImpl#getAddition <em>Addition</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.ExpressionImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.impl.ExpressionImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
@@ -42,6 +43,16 @@ import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
  */
 public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expression
 {
+  /**
+   * The cached value of the '{@link #getAddition() <em>Addition</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAddition()
+   * @generated
+   * @ordered
+   */
+  protected Expression addition;
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -98,6 +109,54 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  public Expression getAddition()
+  {
+    return addition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetAddition(Expression newAddition, NotificationChain msgs)
+  {
+    Expression oldAddition = addition;
+    addition = newAddition;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.EXPRESSION__ADDITION, oldAddition, newAddition);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setAddition(Expression newAddition)
+  {
+    if (newAddition != addition)
+    {
+      NotificationChain msgs = null;
+      if (addition != null)
+        msgs = ((InternalEObject)addition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.EXPRESSION__ADDITION, null, msgs);
+      if (newAddition != null)
+        msgs = ((InternalEObject)newAddition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.EXPRESSION__ADDITION, null, msgs);
+      msgs = basicSetAddition(newAddition, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.EXPRESSION__ADDITION, newAddition, newAddition));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getName()
   {
     return name;
@@ -140,6 +199,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   {
     switch (featureID)
     {
+      case MexPackage.EXPRESSION__ADDITION:
+        return basicSetAddition(null, msgs);
       case MexPackage.EXPRESSION__PARAMETERS:
         return ((InternalEList<?>)getParameters()).basicRemove(otherEnd, msgs);
     }
@@ -156,6 +217,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   {
     switch (featureID)
     {
+      case MexPackage.EXPRESSION__ADDITION:
+        return getAddition();
       case MexPackage.EXPRESSION__NAME:
         return getName();
       case MexPackage.EXPRESSION__PARAMETERS:
@@ -175,6 +238,9 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   {
     switch (featureID)
     {
+      case MexPackage.EXPRESSION__ADDITION:
+        setAddition((Expression)newValue);
+        return;
       case MexPackage.EXPRESSION__NAME:
         setName((String)newValue);
         return;
@@ -196,6 +262,9 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   {
     switch (featureID)
     {
+      case MexPackage.EXPRESSION__ADDITION:
+        setAddition((Expression)null);
+        return;
       case MexPackage.EXPRESSION__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -216,6 +285,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   {
     switch (featureID)
     {
+      case MexPackage.EXPRESSION__ADDITION:
+        return addition != null;
       case MexPackage.EXPRESSION__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case MexPackage.EXPRESSION__PARAMETERS:

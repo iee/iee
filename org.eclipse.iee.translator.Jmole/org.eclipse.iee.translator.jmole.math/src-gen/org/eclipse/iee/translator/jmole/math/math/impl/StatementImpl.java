@@ -15,12 +15,13 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.iee.translator.jmole.math.math.Assignment;
 import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
-import org.eclipse.iee.translator.jmole.math.math.MatrixDefinition;
+import org.eclipse.iee.translator.jmole.math.math.MatrixAssignment;
+import org.eclipse.iee.translator.jmole.math.math.MatrixFormula;
 import org.eclipse.iee.translator.jmole.math.math.Statement;
+import org.eclipse.iee.translator.jmole.math.math.VariableAssignment;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,9 +31,10 @@ import org.eclipse.iee.translator.jmole.math.math.Statement;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFunctionDefinition <em>Function Definition</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getMatrixDefinition <em>Matrix Definition</em>}</li>
- *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getAssignment <em>Assignment</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getVariableAssignment <em>Variable Assignment</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getFormula <em>Formula</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getMatrixAssignment <em>Matrix Assignment</em>}</li>
+ *   <li>{@link org.eclipse.iee.translator.jmole.math.math.impl.StatementImpl#getMatrixFormula <em>Matrix Formula</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,24 +53,14 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
   protected FunctionDefinition functionDefinition;
 
   /**
-   * The cached value of the '{@link #getMatrixDefinition() <em>Matrix Definition</em>}' containment reference.
+   * The cached value of the '{@link #getVariableAssignment() <em>Variable Assignment</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMatrixDefinition()
+   * @see #getVariableAssignment()
    * @generated
    * @ordered
    */
-  protected MatrixDefinition matrixDefinition;
-
-  /**
-   * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getAssignment()
-   * @generated
-   * @ordered
-   */
-  protected Assignment assignment;
+  protected VariableAssignment variableAssignment;
 
   /**
    * The cached value of the '{@link #getFormula() <em>Formula</em>}' containment reference.
@@ -79,6 +71,26 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * @ordered
    */
   protected Formula formula;
+
+  /**
+   * The cached value of the '{@link #getMatrixAssignment() <em>Matrix Assignment</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMatrixAssignment()
+   * @generated
+   * @ordered
+   */
+  protected MatrixAssignment matrixAssignment;
+
+  /**
+   * The cached value of the '{@link #getMatrixFormula() <em>Matrix Formula</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMatrixFormula()
+   * @generated
+   * @ordered
+   */
+  protected MatrixFormula matrixFormula;
 
   /**
    * <!-- begin-user-doc -->
@@ -154,9 +166,9 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
-  public MatrixDefinition getMatrixDefinition()
+  public VariableAssignment getVariableAssignment()
   {
-    return matrixDefinition;
+    return variableAssignment;
   }
 
   /**
@@ -164,13 +176,13 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetMatrixDefinition(MatrixDefinition newMatrixDefinition, NotificationChain msgs)
+  public NotificationChain basicSetVariableAssignment(VariableAssignment newVariableAssignment, NotificationChain msgs)
   {
-    MatrixDefinition oldMatrixDefinition = matrixDefinition;
-    matrixDefinition = newMatrixDefinition;
+    VariableAssignment oldVariableAssignment = variableAssignment;
+    variableAssignment = newVariableAssignment;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_DEFINITION, oldMatrixDefinition, newMatrixDefinition);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__VARIABLE_ASSIGNMENT, oldVariableAssignment, newVariableAssignment);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -181,68 +193,20 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setMatrixDefinition(MatrixDefinition newMatrixDefinition)
+  public void setVariableAssignment(VariableAssignment newVariableAssignment)
   {
-    if (newMatrixDefinition != matrixDefinition)
+    if (newVariableAssignment != variableAssignment)
     {
       NotificationChain msgs = null;
-      if (matrixDefinition != null)
-        msgs = ((InternalEObject)matrixDefinition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_DEFINITION, null, msgs);
-      if (newMatrixDefinition != null)
-        msgs = ((InternalEObject)newMatrixDefinition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_DEFINITION, null, msgs);
-      msgs = basicSetMatrixDefinition(newMatrixDefinition, msgs);
+      if (variableAssignment != null)
+        msgs = ((InternalEObject)variableAssignment).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__VARIABLE_ASSIGNMENT, null, msgs);
+      if (newVariableAssignment != null)
+        msgs = ((InternalEObject)newVariableAssignment).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__VARIABLE_ASSIGNMENT, null, msgs);
+      msgs = basicSetVariableAssignment(newVariableAssignment, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_DEFINITION, newMatrixDefinition, newMatrixDefinition));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Assignment getAssignment()
-  {
-    return assignment;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetAssignment(Assignment newAssignment, NotificationChain msgs)
-  {
-    Assignment oldAssignment = assignment;
-    assignment = newAssignment;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__ASSIGNMENT, oldAssignment, newAssignment);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setAssignment(Assignment newAssignment)
-  {
-    if (newAssignment != assignment)
-    {
-      NotificationChain msgs = null;
-      if (assignment != null)
-        msgs = ((InternalEObject)assignment).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__ASSIGNMENT, null, msgs);
-      if (newAssignment != null)
-        msgs = ((InternalEObject)newAssignment).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__ASSIGNMENT, null, msgs);
-      msgs = basicSetAssignment(newAssignment, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__ASSIGNMENT, newAssignment, newAssignment));
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__VARIABLE_ASSIGNMENT, newVariableAssignment, newVariableAssignment));
   }
 
   /**
@@ -298,6 +262,102 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
    * <!-- end-user-doc -->
    * @generated
    */
+  public MatrixAssignment getMatrixAssignment()
+  {
+    return matrixAssignment;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetMatrixAssignment(MatrixAssignment newMatrixAssignment, NotificationChain msgs)
+  {
+    MatrixAssignment oldMatrixAssignment = matrixAssignment;
+    matrixAssignment = newMatrixAssignment;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_ASSIGNMENT, oldMatrixAssignment, newMatrixAssignment);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMatrixAssignment(MatrixAssignment newMatrixAssignment)
+  {
+    if (newMatrixAssignment != matrixAssignment)
+    {
+      NotificationChain msgs = null;
+      if (matrixAssignment != null)
+        msgs = ((InternalEObject)matrixAssignment).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_ASSIGNMENT, null, msgs);
+      if (newMatrixAssignment != null)
+        msgs = ((InternalEObject)newMatrixAssignment).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_ASSIGNMENT, null, msgs);
+      msgs = basicSetMatrixAssignment(newMatrixAssignment, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_ASSIGNMENT, newMatrixAssignment, newMatrixAssignment));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MatrixFormula getMatrixFormula()
+  {
+    return matrixFormula;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetMatrixFormula(MatrixFormula newMatrixFormula, NotificationChain msgs)
+  {
+    MatrixFormula oldMatrixFormula = matrixFormula;
+    matrixFormula = newMatrixFormula;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_FORMULA, oldMatrixFormula, newMatrixFormula);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMatrixFormula(MatrixFormula newMatrixFormula)
+  {
+    if (newMatrixFormula != matrixFormula)
+    {
+      NotificationChain msgs = null;
+      if (matrixFormula != null)
+        msgs = ((InternalEObject)matrixFormula).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_FORMULA, null, msgs);
+      if (newMatrixFormula != null)
+        msgs = ((InternalEObject)newMatrixFormula).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.STATEMENT__MATRIX_FORMULA, null, msgs);
+      msgs = basicSetMatrixFormula(newMatrixFormula, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.STATEMENT__MATRIX_FORMULA, newMatrixFormula, newMatrixFormula));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -305,12 +365,14 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
     {
       case MathPackage.STATEMENT__FUNCTION_DEFINITION:
         return basicSetFunctionDefinition(null, msgs);
-      case MathPackage.STATEMENT__MATRIX_DEFINITION:
-        return basicSetMatrixDefinition(null, msgs);
-      case MathPackage.STATEMENT__ASSIGNMENT:
-        return basicSetAssignment(null, msgs);
+      case MathPackage.STATEMENT__VARIABLE_ASSIGNMENT:
+        return basicSetVariableAssignment(null, msgs);
       case MathPackage.STATEMENT__FORMULA:
         return basicSetFormula(null, msgs);
+      case MathPackage.STATEMENT__MATRIX_ASSIGNMENT:
+        return basicSetMatrixAssignment(null, msgs);
+      case MathPackage.STATEMENT__MATRIX_FORMULA:
+        return basicSetMatrixFormula(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -327,12 +389,14 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
     {
       case MathPackage.STATEMENT__FUNCTION_DEFINITION:
         return getFunctionDefinition();
-      case MathPackage.STATEMENT__MATRIX_DEFINITION:
-        return getMatrixDefinition();
-      case MathPackage.STATEMENT__ASSIGNMENT:
-        return getAssignment();
+      case MathPackage.STATEMENT__VARIABLE_ASSIGNMENT:
+        return getVariableAssignment();
       case MathPackage.STATEMENT__FORMULA:
         return getFormula();
+      case MathPackage.STATEMENT__MATRIX_ASSIGNMENT:
+        return getMatrixAssignment();
+      case MathPackage.STATEMENT__MATRIX_FORMULA:
+        return getMatrixFormula();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -350,14 +414,17 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
       case MathPackage.STATEMENT__FUNCTION_DEFINITION:
         setFunctionDefinition((FunctionDefinition)newValue);
         return;
-      case MathPackage.STATEMENT__MATRIX_DEFINITION:
-        setMatrixDefinition((MatrixDefinition)newValue);
-        return;
-      case MathPackage.STATEMENT__ASSIGNMENT:
-        setAssignment((Assignment)newValue);
+      case MathPackage.STATEMENT__VARIABLE_ASSIGNMENT:
+        setVariableAssignment((VariableAssignment)newValue);
         return;
       case MathPackage.STATEMENT__FORMULA:
         setFormula((Formula)newValue);
+        return;
+      case MathPackage.STATEMENT__MATRIX_ASSIGNMENT:
+        setMatrixAssignment((MatrixAssignment)newValue);
+        return;
+      case MathPackage.STATEMENT__MATRIX_FORMULA:
+        setMatrixFormula((MatrixFormula)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -376,14 +443,17 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
       case MathPackage.STATEMENT__FUNCTION_DEFINITION:
         setFunctionDefinition((FunctionDefinition)null);
         return;
-      case MathPackage.STATEMENT__MATRIX_DEFINITION:
-        setMatrixDefinition((MatrixDefinition)null);
-        return;
-      case MathPackage.STATEMENT__ASSIGNMENT:
-        setAssignment((Assignment)null);
+      case MathPackage.STATEMENT__VARIABLE_ASSIGNMENT:
+        setVariableAssignment((VariableAssignment)null);
         return;
       case MathPackage.STATEMENT__FORMULA:
         setFormula((Formula)null);
+        return;
+      case MathPackage.STATEMENT__MATRIX_ASSIGNMENT:
+        setMatrixAssignment((MatrixAssignment)null);
+        return;
+      case MathPackage.STATEMENT__MATRIX_FORMULA:
+        setMatrixFormula((MatrixFormula)null);
         return;
     }
     super.eUnset(featureID);
@@ -401,12 +471,14 @@ public class StatementImpl extends MinimalEObjectImpl.Container implements State
     {
       case MathPackage.STATEMENT__FUNCTION_DEFINITION:
         return functionDefinition != null;
-      case MathPackage.STATEMENT__MATRIX_DEFINITION:
-        return matrixDefinition != null;
-      case MathPackage.STATEMENT__ASSIGNMENT:
-        return assignment != null;
+      case MathPackage.STATEMENT__VARIABLE_ASSIGNMENT:
+        return variableAssignment != null;
       case MathPackage.STATEMENT__FORMULA:
         return formula != null;
+      case MathPackage.STATEMENT__MATRIX_ASSIGNMENT:
+        return matrixAssignment != null;
+      case MathPackage.STATEMENT__MATRIX_FORMULA:
+        return matrixFormula != null;
     }
     return super.eIsSet(featureID);
   }

@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.Expression#getAddition <em>Addition</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.Expression#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.iee.translator.molex.mex.mex.Expression#getParameters <em>Parameters</em>}</li>
  * </ul>
@@ -29,6 +30,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Expression extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Addition</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Addition</em>' containment reference.
+   * @see #setAddition(Expression)
+   * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getExpression_Addition()
+   * @model containment="true"
+   * @generated
+   */
+  Expression getAddition();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.Expression#getAddition <em>Addition</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Addition</em>' containment reference.
+   * @see #getAddition()
+   * @generated
+   */
+  void setAddition(Expression value);
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->

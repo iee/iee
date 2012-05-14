@@ -36,13 +36,13 @@ public interface MexFactory extends EFactory
   Statement createStatement();
 
   /**
-   * Returns a new object of class '<em>Assignment</em>'.
+   * Returns a new object of class '<em>Variable Assignment</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Assignment</em>'.
+   * @return a new object of class '<em>Variable Assignment</em>'.
    * @generated
    */
-  Assignment createAssignment();
+  VariableAssignment createVariableAssignment();
 
   /**
    * Returns a new object of class '<em>Formula</em>'.
@@ -63,22 +63,13 @@ public interface MexFactory extends EFactory
   Expression createExpression();
 
   /**
-   * Returns a new object of class '<em>Function Definition</em>'.
+   * Returns a new object of class '<em>Matrix</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Function Definition</em>'.
+   * @return a new object of class '<em>Matrix</em>'.
    * @generated
    */
-  FunctionDefinition createFunctionDefinition();
-
-  /**
-   * Returns a new object of class '<em>Matrix Definition</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Matrix Definition</em>'.
-   * @generated
-   */
-  MatrixDefinition createMatrixDefinition();
+  Matrix createMatrix();
 
   /**
    * Returns a new object of class '<em>Matrix Row</em>'.
@@ -88,6 +79,42 @@ public interface MexFactory extends EFactory
    * @generated
    */
   MatrixRow createMatrixRow();
+
+  /**
+   * Returns a new object of class '<em>Matrix Assignment</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Assignment</em>'.
+   * @generated
+   */
+  MatrixAssignment createMatrixAssignment();
+
+  /**
+   * Returns a new object of class '<em>Matrix Formula</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Formula</em>'.
+   * @generated
+   */
+  MatrixFormula createMatrixFormula();
+
+  /**
+   * Returns a new object of class '<em>Matrix Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Expression</em>'.
+   * @generated
+   */
+  MatrixExpression createMatrixExpression();
+
+  /**
+   * Returns a new object of class '<em>Function Definition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Function Definition</em>'.
+   * @generated
+   */
+  FunctionDefinition createFunctionDefinition();
 
   /**
    * Returns a new object of class '<em>Addition</em>'.
@@ -153,15 +180,6 @@ public interface MexFactory extends EFactory
   Factorial createFactorial();
 
   /**
-   * Returns a new object of class '<em>Interval</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Interval</em>'.
-   * @generated
-   */
-  Interval createInterval();
-
-  /**
    * Returns a new object of class '<em>Exponent</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -196,6 +214,87 @@ public interface MexFactory extends EFactory
    * @generated
    */
   Function createFunction();
+
+  /**
+   * Returns a new object of class '<em>Matrix Element</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Element</em>'.
+   * @generated
+   */
+  MatrixElement createMatrixElement();
+
+  /**
+   * Returns a new object of class '<em>In Brackets</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>In Brackets</em>'.
+   * @generated
+   */
+  InBrackets createInBrackets();
+
+  /**
+   * Returns a new object of class '<em>Matrix Addition</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Addition</em>'.
+   * @generated
+   */
+  MatrixAddition createMatrixAddition();
+
+  /**
+   * Returns a new object of class '<em>Matrix Subtraction</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Subtraction</em>'.
+   * @generated
+   */
+  MatrixSubtraction createMatrixSubtraction();
+
+  /**
+   * Returns a new object of class '<em>Matrix Multiplication</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Multiplication</em>'.
+   * @generated
+   */
+  MatrixMultiplication createMatrixMultiplication();
+
+  /**
+   * Returns a new object of class '<em>New Matrix</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>New Matrix</em>'.
+   * @generated
+   */
+  NewMatrix createNewMatrix();
+
+  /**
+   * Returns a new object of class '<em>Transpose Matrix</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Transpose Matrix</em>'.
+   * @generated
+   */
+  TransposeMatrix createTransposeMatrix();
+
+  /**
+   * Returns a new object of class '<em>Matrix Variable</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix Variable</em>'.
+   * @generated
+   */
+  MatrixVariable createMatrixVariable();
+
+  /**
+   * Returns a new object of class '<em>Matrix In Brackets</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Matrix In Brackets</em>'.
+   * @generated
+   */
+  MatrixInBrackets createMatrixInBrackets();
 
   /**
    * Returns the package supported by this factory.
