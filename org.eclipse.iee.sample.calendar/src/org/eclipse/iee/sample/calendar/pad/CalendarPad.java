@@ -10,12 +10,10 @@ public class CalendarPad extends Pad {
 	
 	public CalendarPad() {
 		super();
-		setType("Calendar");
 	}
 
 	protected CalendarPad(String containerID) {
-		super(containerID);
-		setType("Calendar");
+		super();
 	}
 	
 	@Override

@@ -66,21 +66,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Addition(context, (Addition) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Addition_Addition(context, (Addition) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.ASSIGNMENT:
 				if(context == grammarAccess.getAssignmentRule()) {
-					sequence_Assignment(context, (Assignment) semanticObject); 
+					sequence_Assignment_Assignment(context, (Assignment) semanticObject); 
 					return; 
 				}
 				else break;
@@ -88,15 +88,15 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Multiplication(context, (Division) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Multiplication_Division(context, (Division) semanticObject); 
 					return; 
 				}
 				else break;
@@ -104,21 +104,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Exponent(context, (Exponent) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Exponent_Exponent(context, (Exponent) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.EXPRESSION:
 				if(context == grammarAccess.getFunctionRule()) {
-					sequence_Function(context, (Expression) semanticObject); 
+					sequence_Function_Expression(context, (Expression) semanticObject); 
 					return; 
 				}
 				else break;
@@ -126,15 +126,15 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_UnaryExpression(context, (Factorial) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_UnaryExpression_Factorial(context, (Factorial) semanticObject); 
 					return; 
 				}
 				else break;
@@ -142,21 +142,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Primary(context, (org.eclipse.iee.translator.jmole.math.math.Float) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Primary_Float(context, (org.eclipse.iee.translator.jmole.math.math.Float) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.FORMULA:
 				if(context == grammarAccess.getFormulaRule()) {
-					sequence_Formula(context, (Formula) semanticObject); 
+					sequence_Formula_Formula(context, (Formula) semanticObject); 
 					return; 
 				}
 				else break;
@@ -164,21 +164,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Primary(context, (Function) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Primary_Function(context, (Function) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.FUNCTION_DEFINITION:
 				if(context == grammarAccess.getFunctionDefinitionRule()) {
-					sequence_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
+					sequence_FunctionDefinition_FunctionDefinition(context, (FunctionDefinition) semanticObject); 
 					return; 
 				}
 				else break;
@@ -186,15 +186,15 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_UnaryExpression(context, (Interval) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_UnaryExpression_Interval(context, (Interval) semanticObject); 
 					return; 
 				}
 				else break;
@@ -202,27 +202,27 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_UnaryExpression(context, (Invert) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_UnaryExpression_Invert(context, (Invert) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.MATRIX_DEFINITION:
 				if(context == grammarAccess.getMatrixDefinitionRule()) {
-					sequence_MatrixDefinition(context, (MatrixDefinition) semanticObject); 
+					sequence_MatrixDefinition_MatrixDefinition(context, (MatrixDefinition) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.MATRIX_ROW:
 				if(context == grammarAccess.getMatrixRowRule()) {
-					sequence_MatrixRow(context, (MatrixRow) semanticObject); 
+					sequence_MatrixRow_MatrixRow(context, (MatrixRow) semanticObject); 
 					return; 
 				}
 				else break;
@@ -230,15 +230,15 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Multiplication(context, (Modulo) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Multiplication_Modulo(context, (Modulo) semanticObject); 
 					return; 
 				}
 				else break;
@@ -246,21 +246,21 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Multiplication(context, (Multiplication) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Multiplication_Multiplication(context, (Multiplication) semanticObject); 
 					return; 
 				}
 				else break;
 			case MathPackage.STATEMENT:
 				if(context == grammarAccess.getStatementRule()) {
-					sequence_Statement(context, (Statement) semanticObject); 
+					sequence_Statement_Statement(context, (Statement) semanticObject); 
 					return; 
 				}
 				else break;
@@ -268,15 +268,15 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Addition(context, (Subtraction) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Addition_Subtraction(context, (Subtraction) semanticObject); 
 					return; 
 				}
 				else break;
@@ -284,15 +284,15 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				if(context == grammarAccess.getAdditionRule() ||
 				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
 				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
-				   context == grammarAccess.getExponentRule() ||
-				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
 				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
 				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
-				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
-				   context == grammarAccess.getPrimaryRule() ||
-				   context == grammarAccess.getUnaryExpressionRule()) {
-					sequence_Primary(context, (Variable) semanticObject); 
+				   context == grammarAccess.getUnaryExpressionRule() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getPrimaryRule()) {
+					sequence_Primary_Variable(context, (Variable) semanticObject); 
 					return; 
 				}
 				else break;
@@ -308,7 +308,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Addition(EObject context, Addition semanticObject) {
+	protected void sequence_Addition_Addition(EObject context, Addition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -321,7 +321,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Addition(EObject context, Subtraction semanticObject) {
+	protected void sequence_Addition_Subtraction(EObject context, Subtraction semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -334,7 +334,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    variable[1, 1]
 	 *    value[1, 1]
 	 */
-	protected void sequence_Assignment(EObject context, Assignment semanticObject) {
+	protected void sequence_Assignment_Assignment(EObject context, Assignment semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.ASSIGNMENT__VARIABLE) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.ASSIGNMENT__VARIABLE));
@@ -357,7 +357,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Exponent(EObject context, Exponent semanticObject) {
+	protected void sequence_Exponent_Exponent(EObject context, Exponent semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -369,7 +369,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    expression[1, 1]
 	 */
-	protected void sequence_Formula(EObject context, Formula semanticObject) {
+	protected void sequence_Formula_Formula(EObject context, Formula semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FORMULA__EXPRESSION));
@@ -389,7 +389,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    function[1, 1]
 	 *    formula[1, 1]
 	 */
-	protected void sequence_FunctionDefinition(EObject context, FunctionDefinition semanticObject) {
+	protected void sequence_FunctionDefinition_FunctionDefinition(EObject context, FunctionDefinition semanticObject) {
 		if(errorAcceptor != null) {
 			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.FUNCTION_DEFINITION__FUNCTION) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.FUNCTION_DEFINITION__FUNCTION));
@@ -412,7 +412,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    name[1, 1]
 	 *    parameters[0, *]
 	 */
-	protected void sequence_Function(EObject context, Expression semanticObject) {
+	protected void sequence_Function_Expression(EObject context, Expression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -425,7 +425,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    name[1, 1]
 	 *    rows[0, *]
 	 */
-	protected void sequence_MatrixDefinition(EObject context, MatrixDefinition semanticObject) {
+	protected void sequence_MatrixDefinition_MatrixDefinition(EObject context, MatrixDefinition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -437,7 +437,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    elements[0, *]
 	 */
-	protected void sequence_MatrixRow(EObject context, MatrixRow semanticObject) {
+	protected void sequence_MatrixRow_MatrixRow(EObject context, MatrixRow semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -450,7 +450,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Multiplication(EObject context, Division semanticObject) {
+	protected void sequence_Multiplication_Division(EObject context, Division semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -463,7 +463,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Multiplication(EObject context, Modulo semanticObject) {
+	protected void sequence_Multiplication_Modulo(EObject context, Modulo semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -476,7 +476,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    left[1, 1]
 	 *    right[1, 1]
 	 */
-	protected void sequence_Multiplication(EObject context, Multiplication semanticObject) {
+	protected void sequence_Multiplication_Multiplication(EObject context, Multiplication semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -488,7 +488,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    value[1, 1]
 	 */
-	protected void sequence_Primary(EObject context, org.eclipse.iee.translator.jmole.math.math.Float semanticObject) {
+	protected void sequence_Primary_Float(EObject context, org.eclipse.iee.translator.jmole.math.math.Float semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -500,7 +500,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    function[1, 1]
 	 */
-	protected void sequence_Primary(EObject context, Function semanticObject) {
+	protected void sequence_Primary_Function(EObject context, Function semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -512,7 +512,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    name[1, 1]
 	 */
-	protected void sequence_Primary(EObject context, Variable semanticObject) {
+	protected void sequence_Primary_Variable(EObject context, Variable semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -539,7 +539,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *         EXCLUDE_IF_SET matrixDefinition
 	 *         EXCLUDE_IF_SET assignment
 	 */
-	protected void sequence_Statement(EObject context, Statement semanticObject) {
+	protected void sequence_Statement_Statement(EObject context, Statement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -551,7 +551,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    expression[1, 1]
 	 */
-	protected void sequence_UnaryExpression(EObject context, Factorial semanticObject) {
+	protected void sequence_UnaryExpression_Factorial(EObject context, Factorial semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -566,7 +566,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 *    floor[1, 1]
 	 *    closingBracket[0, 2]
 	 */
-	protected void sequence_UnaryExpression(EObject context, Interval semanticObject) {
+	protected void sequence_UnaryExpression_Interval(EObject context, Interval semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -578,7 +578,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 * Features:
 	 *    expression[1, 1]
 	 */
-	protected void sequence_UnaryExpression(EObject context, Invert semanticObject) {
+	protected void sequence_UnaryExpression_Invert(EObject context, Invert semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 }

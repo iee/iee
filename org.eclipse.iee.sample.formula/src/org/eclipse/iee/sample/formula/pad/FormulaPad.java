@@ -72,12 +72,10 @@ public class FormulaPad extends Pad {
 	};
 	
 	public FormulaPad() {
-		setType("Math");
 	}
 	
 	public FormulaPad(String containerID) {
-		super(containerID);
-		setType("Math");
+		super();
 	}
 		
 	public void toggleInputText() {
@@ -323,5 +321,11 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void onContainerAttached() {
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

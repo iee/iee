@@ -1,10 +1,14 @@
 package org.eclipse.iee.editor.core.container;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import org.eclipse.jface.text.Position;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.PaintObjectEvent;
 import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
@@ -29,7 +33,7 @@ class StyledTextManager {
 	/**
 	 * Using LineStyleListener disables default syntax highlighting in JDT,
 	 * but this function can possibly help.
-	 */
+	 */	
 	public void updateContainersStyles() {	
 		List<List<Container>> containersByLines =
 			splitContainersByLines(fContainerManager.getContainers());
@@ -131,7 +135,7 @@ class StyledTextManager {
 			}
 		});
 		
-		/*
+		
 		fStyledText.addLineStyleListener(new LineStyleListener() {
 
 			@Override
@@ -196,6 +200,6 @@ class StyledTextManager {
 				styles.copyInto(event.styles);
 			}
 		});
-		*/
+
 	}
 }

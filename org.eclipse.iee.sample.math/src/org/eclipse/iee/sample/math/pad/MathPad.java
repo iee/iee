@@ -40,7 +40,6 @@ public class MathPad extends Pad implements Serializable {
 		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
 		fIsFirstLaunch = true;
-		setType("Math");
 		save();
 	}
 
@@ -190,7 +189,7 @@ public class MathPad extends Pad implements Serializable {
 	}
 
 	protected MathPad(String containerID) {
-		super(containerID);
+		super();
 		fImagePath = fFileStorage.getDirectoryPath() + containerID + ".jpg";
 		fExpression = "Use DoubleClick for calculation\n\n\n";
 		fIsTextVisible = true;
@@ -253,5 +252,11 @@ public class MathPad extends Pad implements Serializable {
 	public void activate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
