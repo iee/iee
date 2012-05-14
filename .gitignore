@@ -1,3 +1,4 @@
-bin/*
+bin/
 org.eclipse.iee.translator.jmole.math/bin/*
+
 org.eclipse.iee.translator.molex.mex/bin/*
