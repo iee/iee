@@ -53,7 +53,12 @@ public class FormulaRenderer {
 				latex = FormulaPadManager.getMolex().translateMath(text.substring(1)).trim();
 				latex = "=" + latex;
 			}
-			else 
+			else if (text.charAt(text.length() - 1) == '=')
+			{
+				latex = FormulaPadManager.getMolex().translateMath(text.substring(0, text.length() - 1)).trim();
+				latex = latex + "=";
+			}
+			else  
 			{
 				latex = FormulaPadManager.getMolex().translateMath(text).trim();
 			}

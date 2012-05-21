@@ -46,16 +46,18 @@ public class FormulaPad extends Pad {
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
+	public boolean fHasOutput;
 
-	private String fExpression = "";
+	private String fOriginalExpression = "";
+	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
 
 	public String getExpression() {
-		return fExpression;
+		return fTranslatingExpression;
 	}
 
 	public void setExression(String expression) {
-		fExpression = expression;
+		fTranslatingExpression = expression;
 	}
 
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
@@ -86,7 +88,7 @@ public class FormulaPad extends Pad {
 		fResultView.setVisible(false);
 
 		// ON
-		fInputText.setText(fExpression);
+		fInputText.setText(fOriginalExpression);
 		fInputView.setVisible(true);
 
 		fParent.pack();
@@ -116,6 +118,8 @@ public class FormulaPad extends Pad {
 
 	public void validateInput() {
 		String text = fInputText.getText();
+		fOriginalExpression = text;
+			
 		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
 			setInputIsValid();
 			fLastValidText = text;
@@ -123,10 +127,24 @@ public class FormulaPad extends Pad {
 			setInputIsInvalid();
 		}
 	}
+	
+	public String getTextWithoutEquality(String input)
+	{
+		String output = input;
+		
+		char lastSymbol = output.charAt(output.length() - 1);
+		if (lastSymbol == '=' && output.length() > 1)
+		{
+			output = output.substring(0, output.length() - 1);
+			fHasOutput = true;
+		}
+		
+		return output;
+	}
 
 	public void processInput() {
 		if (fIsInputValid) {
-			if (!fInputText.getText().equals(fExpression)) {
+			if (!fInputText.getText().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
 				Collection<Pad> following = FormulaPadManager
 						.getFollowingPads(this);
@@ -135,18 +153,19 @@ public class FormulaPad extends Pad {
 					((FormulaPad) pad).updateLastResult("");
 				}
 			}
-			fExpression = fInputText.getText();
+			fTranslatingExpression = fInputText.getText();
 		}
 
 		/* Set formula image */
-		Image image = FormulaRenderer.getFormulaImage(fExpression);
+		Image image = FormulaRenderer.getFormulaImage(fTranslatingExpression);
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */
-		String generated = Translator.translateElement(fExpression);
+		String generated = Translator.translateElement(fTranslatingExpression);
 
 		/* Add result output */
-		generated += generateOutputCode(fExpression);
+		if (fTranslatingExpression.charAt(fTranslatingExpression.length() - 1) == '=')
+			generated += generateOutputCode(fTranslatingExpression);
 		getContainer().setTextContent(generated);
 	}
 
@@ -199,20 +218,23 @@ public class FormulaPad extends Pad {
 		fInputText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				validateInput();
-				Image image = FormulaRenderer.getFormulaImage(fInputText
-						.getText());
-				if (image == null)
-					image = FormulaRenderer.getFormulaImage(fLastValidText);
-				if (fHoverShell != null)
-					fHoverShell.dispose();
-				fHoverShell = new HoverShell(fParent, image);
-
-				/* Resize fInputText */
-				Point size = fInputText.computeSize(SWT.DEFAULT, SWT.DEFAULT,
-						false);
-				fInputText.setSize(size);
-				fParent.pack();
+				if (fInputText.getText() != "")
+				{
+					validateInput();
+					Image image = FormulaRenderer.getFormulaImage(fInputText
+							.getText());
+					if (image == null)
+						image = FormulaRenderer.getFormulaImage(fLastValidText);
+					if (fHoverShell != null)
+						fHoverShell.dispose();
+					fHoverShell = new HoverShell(fParent, image);
+	
+					/* Resize fInputText */
+					Point size = fInputText.computeSize(SWT.DEFAULT, SWT.DEFAULT,
+							false);
+					fInputText.setSize(size);
+					fParent.pack();
+				}
 			}
 		});
 
@@ -224,14 +246,14 @@ public class FormulaPad extends Pad {
 					e.doit = false;
 					processInput();
 					moveCaretToCurrentPad();
-					if (fExpression != "")
+					if (fTranslatingExpression != "")
 						toggleFormulaImage();
 					fHoverShell.dispose();
 					break;
 
 				case SWT.ESC:
 					moveCaretToCurrentPad();
-					if (fExpression != "")
+					if (fTranslatingExpression != "")
 						toggleFormulaImage();
 					fHoverShell.dispose();
 					break;
@@ -242,7 +264,7 @@ public class FormulaPad extends Pad {
 		fInputText.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (fExpression != "")
+				if (fTranslatingExpression != "")
 					toggleFormulaImage();
 				fHoverShell.dispose();
 			}
@@ -291,7 +313,7 @@ public class FormulaPad extends Pad {
 
 		setListeners();
 
-		if (fExpression != "") {
+		if (fTranslatingExpression != "" && fInputText.getText() != "") {
 			validateInput();
 			processInput();
 			toggleFormulaImage();
@@ -309,7 +331,7 @@ public class FormulaPad extends Pad {
 	@Override
 	public Pad copy() {
 		FormulaPad newPad = new FormulaPad();
-		newPad.fExpression = this.fExpression;
+		newPad.fTranslatingExpression = this.fTranslatingExpression;
 		return newPad;
 	}
 
