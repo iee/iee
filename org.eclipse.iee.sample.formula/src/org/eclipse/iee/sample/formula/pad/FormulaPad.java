@@ -159,7 +159,7 @@ public class FormulaPad extends Pad {
 		/* Set formula image */
 		Image image = FormulaRenderer.getFormulaImage(fTranslatingExpression);
 		fFormulaImageLabel.setImage(image);
-
+ 
 		/* Generate code */
 		String generated = Translator.translateElement(fTranslatingExpression);
 
@@ -175,8 +175,16 @@ public class FormulaPad extends Pad {
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
 			variable = variable.trim();
-			return "System.out.println(\"" + getContainerID() + "\" + "
-					+ variable + ");";
+			if (variable.charAt(0) != '[')
+			{
+				return "System.out.println(\"" + getContainerID() + "\" + "
+						+ variable + ");";
+			}
+			else
+			{
+				variable = variable.substring(1, variable.length() - 1);
+				return "System.out.print(\"" + getContainerID() + "\" + " + ");"+ variable + ".print(0,3);";
+			}
 		} else {
 			return "";
 		}
