@@ -46,7 +46,6 @@ public class FormulaPad extends Pad {
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
-	public boolean fHasOutput;
 
 	private String fOriginalExpression = "";
 	private String fTranslatingExpression = "";
@@ -127,20 +126,6 @@ public class FormulaPad extends Pad {
 			setInputIsInvalid();
 		}
 	}
-	
-	public String getTextWithoutEquality(String input)
-	{
-		String output = input;
-		
-		char lastSymbol = output.charAt(output.length() - 1);
-		if (lastSymbol == '=' && output.length() > 1)
-		{
-			output = output.substring(0, output.length() - 1);
-			fHasOutput = true;
-		}
-		
-		return output;
-	}
 
 	public void processInput() {
 		if (fIsInputValid) {
@@ -197,7 +182,7 @@ public class FormulaPad extends Pad {
 			return;
 		}
 
-		Image image = FormulaRenderer.getFormulaImage("=" + result);
+		Image image = FormulaRenderer.getFormulaImage(result);
 		fLastResultImageLabel.setImage(image);
 		fParent.pack();
 	}
@@ -347,13 +332,13 @@ public class FormulaPad extends Pad {
 
 	public void save() {
 		System.out.println("Saving...");
-		FileStorage.getInstance().saveToFile(this);
+		//FileStorage.getInstance().saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
 		System.out.println("Unsaving...");
-		FileStorage.getInstance().removeFile(getContainerID());
+		//FileStorage.getInstance().removeFile(getContainerID());
 	}
 
 	@Override
@@ -362,7 +347,6 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Formula";
 	}
 }
