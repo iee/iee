@@ -155,7 +155,7 @@ public class FormulaPad extends Pad {
 	}
 
 	public String generateOutputCode(String expresion) {
-		Pattern p = Pattern.compile("\\s*\\w+\\s*=.+");
+		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.+");
 		Matcher m = p.matcher(expresion);
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
@@ -168,7 +168,31 @@ public class FormulaPad extends Pad {
 			else
 			{
 				variable = variable.substring(1, variable.length() - 1);
-				return "System.out.print(\"" + getContainerID() + "\" + " + ");"+ variable + ".print(0,3);";
+				String output = "";
+				
+				//TODO: extend Matrix class or change i, j
+				
+				output += "int i=0, j=0; String matrix = \"{\";";
+				
+				output += "for(i = 0; i < " + variable +".getRowDimension(); i++){" +
+							"matrix += \"{\";" +
+							"for(j = 0; j < " + variable +".getColumnDimension(); j++)";
+								output += "{";
+								output += "matrix += " + variable + ".get(i,j);";
+								output += "if (j !=" + variable + ".getColumnDimension() - 1)";
+									output += "matrix += \",\";";
+								output += "else matrix += \"}\";";	
+								output += "}";
+								output += "if (i !=" + variable + ".getRowDimension() - 1)";
+								output += "matrix += \",\";";
+								output += "}";
+				
+				output += "matrix += \"}\";";
+				
+				output += "System.out.print(\"" + getContainerID() + "\" + " + "matrix);";
+				
+				return output;
+						
 			}
 		} else {
 			return "";
@@ -248,7 +272,8 @@ public class FormulaPad extends Pad {
 					moveCaretToCurrentPad();
 					if (fTranslatingExpression != "")
 						toggleFormulaImage();
-					fHoverShell.dispose();
+					if (fHoverShell != null)
+						fHoverShell.dispose();
 					break;
 				}
 			}
@@ -259,7 +284,8 @@ public class FormulaPad extends Pad {
 			public void focusLost(FocusEvent e) {
 				if (fTranslatingExpression != "")
 					toggleFormulaImage();
-				fHoverShell.dispose();
+				if (fHoverShell != null)
+					fHoverShell.dispose();
 			}
 
 			@Override
