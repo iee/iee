@@ -15,14 +15,15 @@ public class HoverShell {
 	public HoverShell(Composite parent, Image image) {
 		
 		fShell = new Shell(SWT.TOOL | SWT.RESIZE);
+		fShell.setVisible(false);
 		Point pt = parent.toDisplay(1, 1);
 		fShell.setLocation(pt.x + 10, pt.y +30);
-		fShell.setSize(100, 100);
+		fShell.setSize(0, 0);
 		fShell.setLayout(new FillLayout());
 		fLabel = new Label(fShell, SWT.NONE);
 		setImage(image);
-		fShell.setVisible(true);
 		pack();
+		
 	}
 
 	public void dispose() {
@@ -36,6 +37,7 @@ public class HoverShell {
 
 	public void pack() {
 		fShell.pack();
+		fShell.setVisible(true);
 	}
 	
 	public void setVisible(boolean visibility) {
