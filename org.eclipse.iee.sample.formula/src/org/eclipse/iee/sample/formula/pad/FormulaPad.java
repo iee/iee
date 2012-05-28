@@ -10,18 +10,18 @@ import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
 import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
-import org.eclipse.iee.sample.formula.storage.FileStorage;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.ITextListener;
+import org.eclipse.jface.text.TextEvent;
+import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -41,7 +41,8 @@ public class FormulaPad extends Pad {
 	private Label fFormulaImageLabel;
 	private Label fLastResultImageLabel;
 
-	private StyledText fInputText;
+	private TextViewer fViewer;
+	private Document fDocument;
 
 	private HoverShell fHoverShell;
 
@@ -87,12 +88,12 @@ public class FormulaPad extends Pad {
 		fResultView.setVisible(false);
 
 		// ON
-		fInputText.setText(fOriginalExpression);
+		fDocument.set(fOriginalExpression);
 		fInputView.setVisible(true);
 
 		fParent.pack();
 
-		fInputText.forceFocus();
+		fViewer.getControl().forceFocus();
 	}
 
 	public void toggleFormulaImage() {
@@ -107,16 +108,18 @@ public class FormulaPad extends Pad {
 
 	public void setInputIsValid() {
 		fIsInputValid = true;
-		fInputText.setBackground(INPUT_VALID_COLOR);
+		//TODO: check
+		fViewer.getControl().setBackground(INPUT_VALID_COLOR);
 	}
 
 	public void setInputIsInvalid() {
 		fIsInputValid = false;
-		fInputText.setBackground(INPUT_INVALID_COLOR);
+		//TODO: check
+		fViewer.getControl().setBackground(INPUT_INVALID_COLOR);
 	}
 
 	public void validateInput() {
-		String text = fInputText.getText();
+		String text = fDocument.get();
 		fOriginalExpression = text;
 			
 		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
@@ -129,7 +132,7 @@ public class FormulaPad extends Pad {
 
 	public void processInput() {
 		if (fIsInputValid) {
-			if (!fInputText.getText().equals(fTranslatingExpression)) {
+			if (!fDocument.get().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
 				Collection<Pad> following = FormulaPadManager
 						.getFollowingPads(this);
@@ -138,7 +141,7 @@ public class FormulaPad extends Pad {
 					((FormulaPad) pad).updateLastResult("");
 				}
 			}
-			fTranslatingExpression = fInputText.getText();
+			fTranslatingExpression = fDocument.get();
 		}
 
 		/* Set formula image */
@@ -170,7 +173,7 @@ public class FormulaPad extends Pad {
 				variable = variable.substring(1, variable.length() - 1);
 				String output = "";
 				
-				//TODO: extend Matrix class or change i, j
+				//TODO: extend Matrix class or change i, j and matrix
 				
 				output += "int i=0, j=0; String matrix = \"{\";";
 				
@@ -231,15 +234,30 @@ public class FormulaPad extends Pad {
 			public void mouseUp(MouseEvent e) {
 			}
 		});
-
-		fInputText.addModifyListener(new ModifyListener() {
+		
+		fViewer.getControl().addFocusListener(new FocusListener() {
+			
 			@Override
-			public void modifyText(ModifyEvent e) {
-				if (fInputText.getText() != "")
+			public void focusLost(FocusEvent e) {
+				if (fTranslatingExpression != "")
+					toggleFormulaImage();
+				if (fHoverShell != null)
+					fHoverShell.dispose();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
+		
+		fViewer.addTextListener(new ITextListener() {
+			
+			@Override
+			public void textChanged(TextEvent event) {
+				if (fDocument.get() != "")
 				{
 					validateInput();
-					Image image = FormulaRenderer.getFormulaImage(fInputText
-							.getText());
+					Image image = FormulaRenderer.getFormulaImage(fDocument.get());
 					if (image == null)
 						image = FormulaRenderer.getFormulaImage(fLastValidText);
 					if (fHoverShell != null)
@@ -247,17 +265,16 @@ public class FormulaPad extends Pad {
 					fHoverShell = new HoverShell(fParent, image);
 	
 					/* Resize fInputText */
-					Point size = fInputText.computeSize(SWT.DEFAULT, SWT.DEFAULT,
+					Point size = fViewer.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT,
 							false);
-					fInputText.setSize(size);
+					fViewer.getControl().setSize(size);
 					fParent.pack();
 				}
 			}
 		});
-
-		fInputText.addVerifyKeyListener(new VerifyKeyListener() {
-			@Override
-			public void verifyKey(VerifyEvent e) {
+		
+		fViewer.getControl().addKeyListener(new KeyAdapter() {
+		      public void keyPressed(KeyEvent e) {
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;
@@ -275,23 +292,10 @@ public class FormulaPad extends Pad {
 					if (fHoverShell != null)
 						fHoverShell.dispose();
 					break;
-				}
-			}
-		});
-
-		fInputText.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (fTranslatingExpression != "")
-					toggleFormulaImage();
-				if (fHoverShell != null)
-					fHoverShell.dispose();
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-		});
+		        }
+		      }
+		    });
+		
 	}
 
 	@Override
@@ -305,15 +309,15 @@ public class FormulaPad extends Pad {
 		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		/* Input View */
-
+		
 		fInputView = new Composite(sashForm, SWT.NONE);
 		fInputView.setLayout(new GridLayout(1, true));
-
-		fInputText = new StyledText(fInputView, SWT.SINGLE | SWT.NONE);
-		GridData inputTextGridData = new GridData();
-		fInputText.setLayoutData(inputTextGridData);
-		fInputText.setSize(50, 100);
-
+		
+		fViewer = new TextViewer(fInputView, SWT.SINGLE);
+		fViewer.getControl().setSize(50, 100);
+		fDocument = new Document();
+		fViewer.setDocument(fDocument);
+		
 		/* Result View */
 
 		fResultView = new Composite(sashForm, SWT.NONE);
@@ -332,7 +336,7 @@ public class FormulaPad extends Pad {
 
 		setListeners();
 
-		if (fTranslatingExpression != "" && fInputText.getText() != "") {
+		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
 			processInput();
 			toggleFormulaImage();
