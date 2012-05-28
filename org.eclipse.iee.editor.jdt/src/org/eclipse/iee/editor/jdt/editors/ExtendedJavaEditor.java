@@ -9,9 +9,17 @@ import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
+import org.eclipse.jdt.internal.ui.javaeditor.JavaSourceViewer;
+import org.eclipse.jdt.ui.PreferenceConstants;
+import org.eclipse.jdt.ui.text.IJavaPartitions;
+import org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration;
+import org.eclipse.jdt.ui.text.JavaTextTools;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 
@@ -33,9 +41,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 
 		initIeeEditorCore();
 	};
-
+	
 	public void initIeeEditorCore() {
-		StyledText styledText = getSourceViewer().getTextWidget();
 		IDocument document = getSourceViewer().getDocument();
 		
 		ContainerManagerConfig config = new ContainerManagerConfig();
@@ -45,7 +52,11 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 		//config.INNER_TEXT_BEGIN = "*/";
 		//config.INNER_TEXT_END = "/*";
 		
-		fContainerManager = new ContainerManager(config, document, styledText);
+		fContainerManager = new ContainerManager(
+			config,
+			document,
+			getSourceViewer(),
+			getSourceViewer().getTextWidget());
 
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
