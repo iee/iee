@@ -50,17 +50,17 @@ public class FormulaRenderer {
 			/* Translating to Latex */
 			if (text.charAt(0) == '=')
 			{
-				latex = FormulaPadManager.getMolex().translateMath(text.substring(1)).trim();
+				latex = FormulaPadManager.getMolex().translateMath(text.substring(1)).trim().replace("\n\r", "");
 				latex = "=" + latex;
 			}
 			else if (text.charAt(text.length() - 1) == '=')
 			{
-				latex = FormulaPadManager.getMolex().translateMath(text.substring(0, text.length() - 1)).trim();
+				latex = FormulaPadManager.getMolex().translateMath(text.substring(0, text.length() - 1)).trim().replace("\n\r", "");
 				latex = latex + "=";
 			}
 			else  
 			{
-				latex = FormulaPadManager.getMolex().translateMath(text).trim();
+				latex = FormulaPadManager.getMolex().translateMath(text).trim().replace("\n\r", "");
 			}
 			System.out.println("latex: " + latex);
 			java.awt.Image awtImage =

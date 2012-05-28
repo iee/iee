@@ -131,7 +131,7 @@ public class MathGenerator implements IGenerator {
     {
       Expression _function_1 = funcDef.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
-      for(final Formula param : _parameters) {
+      for(Formula param : _parameters) {
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
           if (_operator_notEquals) {
@@ -225,7 +225,7 @@ public class MathGenerator implements IGenerator {
     {
       Expression _function_1 = f.getFunction();
       EList<Formula> _parameters = _function_1.getParameters();
-      for(final Formula param : _parameters) {
+      for(Formula param : _parameters) {
         _builder.newLineIfNotEmpty();
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
@@ -422,7 +422,7 @@ public class MathGenerator implements IGenerator {
     {
       Matrix _matrix = m.getMatrix();
       EList<MatrixRow> _rows = _matrix.getRows();
-      for(final MatrixRow row : _rows) {
+      for(MatrixRow row : _rows) {
         {
           boolean _operator_notEquals = ObjectExtensions.operator_notEquals(row, null);
           if (_operator_notEquals) {
@@ -433,7 +433,7 @@ public class MathGenerator implements IGenerator {
             _builder.newLineIfNotEmpty();
             {
               EList<String> _elements = row.getElements();
-              for(final String element : _elements) {
+              for(String element : _elements) {
                 {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {

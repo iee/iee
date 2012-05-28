@@ -136,6 +136,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightMultiplicationParserRuleCall_1_1_2_0 = (RuleCall)cRightAssignment_1_1_2.eContents().get(0);
 		
 		//// addition/subtraction: left associative, priority 0
+		//
 		//Addition returns Expression:
 		//	Multiplication ("+" {Addition.left=current} right=Multiplication | "-" {Subtraction.left=current}
 		//	right=Multiplication)*;
@@ -203,6 +204,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightUnaryExpressionParserRuleCall_1_2_2_0 = (RuleCall)cRightAssignment_1_2_2.eContents().get(0);
 		
 		//// multiplication/division, left associative, priority 1
+		//
 		//Multiplication returns Expression:
 		//	UnaryExpression ("*" {Multiplication.left=current} right=UnaryExpression | "/" {Division.left=current}
 		//	right=UnaryExpression | "%" {Modulo.left=current} right=UnaryExpression)*;
@@ -283,6 +285,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisExclamationMarkKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
 		
 		//// Unary operators: right associative, priority 2
+		//
 		//UnaryExpression returns Expression:
 		//	Exponent | "(-" {Invert} expression=UnaryExpression ")" | "(" {Factorial} expression=UnaryExpression ")!";
 		public ParserRule getRule() { return rule; }
@@ -341,6 +344,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightPrimaryParserRuleCall_1_2_0 = (RuleCall)cRightAssignment_1_2.eContents().get(0);
 		
 		//// exponentiation: right associative, priority 3
+		//
 		//Exponent returns Expression:
 		//	Primary ({Exponent.left=current} "^" right=Primary)?;
 		public ParserRule getRule() { return rule; }
@@ -1091,6 +1095,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// addition/subtraction: left associative, priority 0
+	//
 	//Addition returns Expression:
 	//	Multiplication ("+" {Addition.left=current} right=Multiplication | "-" {Subtraction.left=current}
 	//	right=Multiplication)*;
@@ -1103,6 +1108,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// multiplication/division, left associative, priority 1
+	//
 	//Multiplication returns Expression:
 	//	UnaryExpression ("*" {Multiplication.left=current} right=UnaryExpression | "/" {Division.left=current}
 	//	right=UnaryExpression | "%" {Modulo.left=current} right=UnaryExpression)*;
@@ -1115,6 +1121,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// Unary operators: right associative, priority 2
+	//
 	//UnaryExpression returns Expression:
 	//	Exponent | "(-" {Invert} expression=UnaryExpression ")" | "(" {Factorial} expression=UnaryExpression ")!";
 	public UnaryExpressionElements getUnaryExpressionAccess() {
@@ -1126,6 +1133,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// exponentiation: right associative, priority 3
+	//
 	//Exponent returns Expression:
 	//	Primary ({Exponent.left=current} "^" right=Primary)?;
 	public ExponentElements getExponentAccess() {
