@@ -1,6 +1,8 @@
 package org.eclipse.iee.sample.formula.pad;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,11 +11,14 @@ import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
 import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
+import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
+import org.eclipse.jface.text.DefaultUndoManager;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusEvent;
@@ -42,6 +47,7 @@ public class FormulaPad extends Pad {
 	private Label fLastResultImageLabel;
 
 	private TextViewer fViewer;
+	private TextViewerSupport fViewerSupport;
 	private Document fDocument;
 
 	private HoverShell fHoverShell;
@@ -51,7 +57,7 @@ public class FormulaPad extends Pad {
 	private String fOriginalExpression = "";
 	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
-
+	
 	public String getExpression() {
 		return fTranslatingExpression;
 	}
@@ -108,13 +114,11 @@ public class FormulaPad extends Pad {
 
 	public void setInputIsValid() {
 		fIsInputValid = true;
-		//TODO: check
 		fViewer.getControl().setBackground(INPUT_VALID_COLOR);
 	}
 
 	public void setInputIsInvalid() {
 		fIsInputValid = false;
-		//TODO: check
 		fViewer.getControl().setBackground(INPUT_INVALID_COLOR);
 	}
 
@@ -317,6 +321,12 @@ public class FormulaPad extends Pad {
 		fViewer.getControl().setSize(50, 100);
 		fDocument = new Document();
 		fViewer.setDocument(fDocument);
+		
+		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25); 
+		fViewer.setUndoManager(defaultUndoManager); 
+		defaultUndoManager.connect(fViewer); 
+		
+		fViewerSupport = new TextViewerSupport(fViewer);
 		
 		/* Result View */
 
