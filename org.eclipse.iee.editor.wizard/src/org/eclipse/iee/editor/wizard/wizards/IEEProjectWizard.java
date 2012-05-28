@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.wizard.wizards;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -69,9 +70,9 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 
 	public void addPages() {
 		wizardPage = new WizardNewProjectCreationPage(
-				"NewExampleComSiteProject");
-		wizardPage.setDescription("Create a new Example.com Site Project.");
-		wizardPage.setTitle("New Example.com Site Project");
+				"GeneralIEEProject");
+		wizardPage.setDescription("Create a new IEE Project.");
+		wizardPage.setTitle("New IEE Project");
 		addPage(wizardPage);
 	}
 
@@ -175,14 +176,8 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 						element.getSystemLibraryPath(), null, null));
 			}
 
-			IPath jamaEntry = new Path(getClass().getClassLoader()
-					.getResource(".").getPath()
-					+ "lib/jama-1.0.2.jar");
 
-			entries.add(JavaCore.newLibraryEntry(jamaEntry, null, null));
-			// add libs to project class path
-			javaProject.setRawClasspath(
-					entries.toArray(new IClasspathEntry[entries.size()]), null);
+
 
 			/* Add the src folder */
 			final IFolder srcFolder = proj.getFolder(new Path("src"));
@@ -197,11 +192,18 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			libFolder.create(false, true, monitor);
 			
 			InputStream input = IEEProjectWizard.class.getResourceAsStream("templates/Jama-1.0.2.jar");
-			
+			final IFile file = proj.getFile("lib/Jama-1.0.2.jar");
 			/* Add an java file */
 			addFileToProject(proj, new Path("lib/Jama-1.0.2.jar"),
 					input, monitor);
-
+			
+			IPath jamaEntry = new Path(file.getLocation().toString());
+			
+			entries.add(JavaCore.newLibraryEntry(jamaEntry, null, null));
+			// add libs to project class path
+			javaProject.setRawClasspath(
+					entries.toArray(new IClasspathEntry[entries.size()]), null);
+			
 			/*
 			 * Add the images folder
 			 */
