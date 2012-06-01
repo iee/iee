@@ -25,6 +25,8 @@ import org.eclipse.jface.text.IDocumentPartitioningListenerExtension2;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.custom.StyledText;
 
 public class ContainerManager extends EventManager {
@@ -43,6 +45,7 @@ public class ContainerManager extends EventManager {
 	@SuppressWarnings("unused")
 	private final PartitioningManager fPartitioningManager;
 	
+	private final ISourceViewer fSourceViewer;
 	private final StyledText fStyledText;
 	private final IDocument fDocument;
 	
@@ -84,6 +87,10 @@ public class ContainerManager extends EventManager {
 	public StyledText getStyledText() {
 		return fStyledText;
 	}
+	
+	public ISourceViewer getSourceViewer() {
+		return fSourceViewer;
+	}
 
 	public String[] getContainerIDs() {
 		String[] containerIDs = new String[fContainers.size()];
@@ -100,12 +107,13 @@ public class ContainerManager extends EventManager {
 	
 	/* INTERFACE FUNCTIONS */
 	
-	public ContainerManager(ContainerManagerConfig config, IDocument document, StyledText styledText) {
+	public ContainerManager(ContainerManagerConfig config, IDocument document, ISourceViewer sourceViewer, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
 		
 		fConfig = config;
 		fDocument = document;
 		fStyledText = styledText;
+		fSourceViewer = sourceViewer;
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
@@ -136,9 +144,7 @@ public class ContainerManager extends EventManager {
 	void updateContainersPresentations() {
 		System.out.println("updateContainerPresentations");
 		
-		/* Update styles */
-		fStyledTextManager.updateContainersStyles();
-		//fStyledText.redraw();
+		fStyledTextManager.updatePresentation();
 		
 		/* Update positions */
 		Iterator<Container> it = fContainers.iterator();

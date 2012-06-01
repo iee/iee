@@ -1,6 +1,7 @@
-
 bin/*
 org.eclipse.iee.translator.jmole.math/bin/*
+
 org.eclipse.iee.translator.molex.mex/bin/*
-*.class
+
 org.eclipse.iee.editor.wizard/bin/*
+*.class
