@@ -2267,10 +2267,10 @@ public class MexGenerator implements IGenerator {
     String _element_40 = e.getElement();
     _builder.append(_element_40, "");
     _builder.append("_{");
-    int _row = e.getRow();
+    String _row = e.getRow();
     _builder.append(_row, "");
     _builder.append(",");
-    int _column = e.getColumn();
+    String _column = e.getColumn();
     _builder.append(_column, "");
     _builder.append("}");
     return _builder;
@@ -2402,8 +2402,328 @@ public class MexGenerator implements IGenerator {
   
   protected StringConcatenation _compileMatrixExpression(final MatrixVariable n) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = n.getName();
-    _builder.append(_name, "");
+    {
+      boolean _operator_or = false;
+      boolean _operator_or_1 = false;
+      boolean _operator_or_2 = false;
+      boolean _operator_or_3 = false;
+      boolean _operator_or_4 = false;
+      boolean _operator_or_5 = false;
+      boolean _operator_or_6 = false;
+      boolean _operator_or_7 = false;
+      boolean _operator_or_8 = false;
+      boolean _operator_or_9 = false;
+      boolean _operator_or_10 = false;
+      boolean _operator_or_11 = false;
+      boolean _operator_or_12 = false;
+      boolean _operator_or_13 = false;
+      boolean _operator_or_14 = false;
+      boolean _operator_or_15 = false;
+      boolean _operator_or_16 = false;
+      boolean _operator_or_17 = false;
+      boolean _operator_or_18 = false;
+      boolean _operator_or_19 = false;
+      boolean _operator_or_20 = false;
+      boolean _operator_or_21 = false;
+      boolean _operator_or_22 = false;
+      boolean _operator_or_23 = false;
+      boolean _operator_or_24 = false;
+      boolean _operator_or_25 = false;
+      boolean _operator_or_26 = false;
+      boolean _operator_or_27 = false;
+      boolean _operator_or_28 = false;
+      boolean _operator_or_29 = false;
+      boolean _operator_or_30 = false;
+      boolean _operator_or_31 = false;
+      boolean _operator_or_32 = false;
+      boolean _operator_or_33 = false;
+      boolean _operator_or_34 = false;
+      boolean _operator_or_35 = false;
+      boolean _operator_or_36 = false;
+      boolean _operator_or_37 = false;
+      boolean _operator_or_38 = false;
+      String _name = n.getName();
+      boolean _operator_equals = ObjectExtensions.operator_equals(_name, "alpha");
+      if (_operator_equals) {
+        _operator_or_38 = true;
+      } else {
+        String _name_1 = n.getName();
+        boolean _operator_equals_1 = ObjectExtensions.operator_equals(_name_1, "beta");
+        _operator_or_38 = BooleanExtensions.operator_or(_operator_equals, _operator_equals_1);
+      }
+      if (_operator_or_38) {
+        _operator_or_37 = true;
+      } else {
+        String _name_2 = n.getName();
+        boolean _operator_equals_2 = ObjectExtensions.operator_equals(_name_2, "gamma");
+        _operator_or_37 = BooleanExtensions.operator_or(_operator_or_38, _operator_equals_2);
+      }
+      if (_operator_or_37) {
+        _operator_or_36 = true;
+      } else {
+        String _name_3 = n.getName();
+        boolean _operator_equals_3 = ObjectExtensions.operator_equals(_name_3, "delta");
+        _operator_or_36 = BooleanExtensions.operator_or(_operator_or_37, _operator_equals_3);
+      }
+      if (_operator_or_36) {
+        _operator_or_35 = true;
+      } else {
+        String _name_4 = n.getName();
+        boolean _operator_equals_4 = ObjectExtensions.operator_equals(_name_4, "epsilon");
+        _operator_or_35 = BooleanExtensions.operator_or(_operator_or_36, _operator_equals_4);
+      }
+      if (_operator_or_35) {
+        _operator_or_34 = true;
+      } else {
+        String _name_5 = n.getName();
+        boolean _operator_equals_5 = ObjectExtensions.operator_equals(_name_5, "varepsilon");
+        _operator_or_34 = BooleanExtensions.operator_or(_operator_or_35, _operator_equals_5);
+      }
+      if (_operator_or_34) {
+        _operator_or_33 = true;
+      } else {
+        String _name_6 = n.getName();
+        boolean _operator_equals_6 = ObjectExtensions.operator_equals(_name_6, "zeta");
+        _operator_or_33 = BooleanExtensions.operator_or(_operator_or_34, _operator_equals_6);
+      }
+      if (_operator_or_33) {
+        _operator_or_32 = true;
+      } else {
+        String _name_7 = n.getName();
+        boolean _operator_equals_7 = ObjectExtensions.operator_equals(_name_7, "eta");
+        _operator_or_32 = BooleanExtensions.operator_or(_operator_or_33, _operator_equals_7);
+      }
+      if (_operator_or_32) {
+        _operator_or_31 = true;
+      } else {
+        String _name_8 = n.getName();
+        boolean _operator_equals_8 = ObjectExtensions.operator_equals(_name_8, "theta");
+        _operator_or_31 = BooleanExtensions.operator_or(_operator_or_32, _operator_equals_8);
+      }
+      if (_operator_or_31) {
+        _operator_or_30 = true;
+      } else {
+        String _name_9 = n.getName();
+        boolean _operator_equals_9 = ObjectExtensions.operator_equals(_name_9, "vartheta");
+        _operator_or_30 = BooleanExtensions.operator_or(_operator_or_31, _operator_equals_9);
+      }
+      if (_operator_or_30) {
+        _operator_or_29 = true;
+      } else {
+        String _name_10 = n.getName();
+        boolean _operator_equals_10 = ObjectExtensions.operator_equals(_name_10, "gamma");
+        _operator_or_29 = BooleanExtensions.operator_or(_operator_or_30, _operator_equals_10);
+      }
+      if (_operator_or_29) {
+        _operator_or_28 = true;
+      } else {
+        String _name_11 = n.getName();
+        boolean _operator_equals_11 = ObjectExtensions.operator_equals(_name_11, "kappa");
+        _operator_or_28 = BooleanExtensions.operator_or(_operator_or_29, _operator_equals_11);
+      }
+      if (_operator_or_28) {
+        _operator_or_27 = true;
+      } else {
+        String _name_12 = n.getName();
+        boolean _operator_equals_12 = ObjectExtensions.operator_equals(_name_12, "lambda");
+        _operator_or_27 = BooleanExtensions.operator_or(_operator_or_28, _operator_equals_12);
+      }
+      if (_operator_or_27) {
+        _operator_or_26 = true;
+      } else {
+        String _name_13 = n.getName();
+        boolean _operator_equals_13 = ObjectExtensions.operator_equals(_name_13, "mu");
+        _operator_or_26 = BooleanExtensions.operator_or(_operator_or_27, _operator_equals_13);
+      }
+      if (_operator_or_26) {
+        _operator_or_25 = true;
+      } else {
+        String _name_14 = n.getName();
+        boolean _operator_equals_14 = ObjectExtensions.operator_equals(_name_14, "nu");
+        _operator_or_25 = BooleanExtensions.operator_or(_operator_or_26, _operator_equals_14);
+      }
+      if (_operator_or_25) {
+        _operator_or_24 = true;
+      } else {
+        String _name_15 = n.getName();
+        boolean _operator_equals_15 = ObjectExtensions.operator_equals(_name_15, "xi");
+        _operator_or_24 = BooleanExtensions.operator_or(_operator_or_25, _operator_equals_15);
+      }
+      if (_operator_or_24) {
+        _operator_or_23 = true;
+      } else {
+        String _name_16 = n.getName();
+        boolean _operator_equals_16 = ObjectExtensions.operator_equals(_name_16, "pi");
+        _operator_or_23 = BooleanExtensions.operator_or(_operator_or_24, _operator_equals_16);
+      }
+      if (_operator_or_23) {
+        _operator_or_22 = true;
+      } else {
+        String _name_17 = n.getName();
+        boolean _operator_equals_17 = ObjectExtensions.operator_equals(_name_17, "varpi");
+        _operator_or_22 = BooleanExtensions.operator_or(_operator_or_23, _operator_equals_17);
+      }
+      if (_operator_or_22) {
+        _operator_or_21 = true;
+      } else {
+        String _name_18 = n.getName();
+        boolean _operator_equals_18 = ObjectExtensions.operator_equals(_name_18, "rho");
+        _operator_or_21 = BooleanExtensions.operator_or(_operator_or_22, _operator_equals_18);
+      }
+      if (_operator_or_21) {
+        _operator_or_20 = true;
+      } else {
+        String _name_19 = n.getName();
+        boolean _operator_equals_19 = ObjectExtensions.operator_equals(_name_19, "varrho");
+        _operator_or_20 = BooleanExtensions.operator_or(_operator_or_21, _operator_equals_19);
+      }
+      if (_operator_or_20) {
+        _operator_or_19 = true;
+      } else {
+        String _name_20 = n.getName();
+        boolean _operator_equals_20 = ObjectExtensions.operator_equals(_name_20, "sigma");
+        _operator_or_19 = BooleanExtensions.operator_or(_operator_or_20, _operator_equals_20);
+      }
+      if (_operator_or_19) {
+        _operator_or_18 = true;
+      } else {
+        String _name_21 = n.getName();
+        boolean _operator_equals_21 = ObjectExtensions.operator_equals(_name_21, "varsigma");
+        _operator_or_18 = BooleanExtensions.operator_or(_operator_or_19, _operator_equals_21);
+      }
+      if (_operator_or_18) {
+        _operator_or_17 = true;
+      } else {
+        String _name_22 = n.getName();
+        boolean _operator_equals_22 = ObjectExtensions.operator_equals(_name_22, "tau");
+        _operator_or_17 = BooleanExtensions.operator_or(_operator_or_18, _operator_equals_22);
+      }
+      if (_operator_or_17) {
+        _operator_or_16 = true;
+      } else {
+        String _name_23 = n.getName();
+        boolean _operator_equals_23 = ObjectExtensions.operator_equals(_name_23, "upsilon");
+        _operator_or_16 = BooleanExtensions.operator_or(_operator_or_17, _operator_equals_23);
+      }
+      if (_operator_or_16) {
+        _operator_or_15 = true;
+      } else {
+        String _name_24 = n.getName();
+        boolean _operator_equals_24 = ObjectExtensions.operator_equals(_name_24, "phi");
+        _operator_or_15 = BooleanExtensions.operator_or(_operator_or_16, _operator_equals_24);
+      }
+      if (_operator_or_15) {
+        _operator_or_14 = true;
+      } else {
+        String _name_25 = n.getName();
+        boolean _operator_equals_25 = ObjectExtensions.operator_equals(_name_25, "varphi");
+        _operator_or_14 = BooleanExtensions.operator_or(_operator_or_15, _operator_equals_25);
+      }
+      if (_operator_or_14) {
+        _operator_or_13 = true;
+      } else {
+        String _name_26 = n.getName();
+        boolean _operator_equals_26 = ObjectExtensions.operator_equals(_name_26, "chi");
+        _operator_or_13 = BooleanExtensions.operator_or(_operator_or_14, _operator_equals_26);
+      }
+      if (_operator_or_13) {
+        _operator_or_12 = true;
+      } else {
+        String _name_27 = n.getName();
+        boolean _operator_equals_27 = ObjectExtensions.operator_equals(_name_27, "psi");
+        _operator_or_12 = BooleanExtensions.operator_or(_operator_or_13, _operator_equals_27);
+      }
+      if (_operator_or_12) {
+        _operator_or_11 = true;
+      } else {
+        String _name_28 = n.getName();
+        boolean _operator_equals_28 = ObjectExtensions.operator_equals(_name_28, "omega");
+        _operator_or_11 = BooleanExtensions.operator_or(_operator_or_12, _operator_equals_28);
+      }
+      if (_operator_or_11) {
+        _operator_or_10 = true;
+      } else {
+        String _name_29 = n.getName();
+        boolean _operator_equals_29 = ObjectExtensions.operator_equals(_name_29, "Gamma");
+        _operator_or_10 = BooleanExtensions.operator_or(_operator_or_11, _operator_equals_29);
+      }
+      if (_operator_or_10) {
+        _operator_or_9 = true;
+      } else {
+        String _name_30 = n.getName();
+        boolean _operator_equals_30 = ObjectExtensions.operator_equals(_name_30, "Delta");
+        _operator_or_9 = BooleanExtensions.operator_or(_operator_or_10, _operator_equals_30);
+      }
+      if (_operator_or_9) {
+        _operator_or_8 = true;
+      } else {
+        String _name_31 = n.getName();
+        boolean _operator_equals_31 = ObjectExtensions.operator_equals(_name_31, "Theta");
+        _operator_or_8 = BooleanExtensions.operator_or(_operator_or_9, _operator_equals_31);
+      }
+      if (_operator_or_8) {
+        _operator_or_7 = true;
+      } else {
+        String _name_32 = n.getName();
+        boolean _operator_equals_32 = ObjectExtensions.operator_equals(_name_32, "Lambda");
+        _operator_or_7 = BooleanExtensions.operator_or(_operator_or_8, _operator_equals_32);
+      }
+      if (_operator_or_7) {
+        _operator_or_6 = true;
+      } else {
+        String _name_33 = n.getName();
+        boolean _operator_equals_33 = ObjectExtensions.operator_equals(_name_33, "Xi");
+        _operator_or_6 = BooleanExtensions.operator_or(_operator_or_7, _operator_equals_33);
+      }
+      if (_operator_or_6) {
+        _operator_or_5 = true;
+      } else {
+        String _name_34 = n.getName();
+        boolean _operator_equals_34 = ObjectExtensions.operator_equals(_name_34, "Pi");
+        _operator_or_5 = BooleanExtensions.operator_or(_operator_or_6, _operator_equals_34);
+      }
+      if (_operator_or_5) {
+        _operator_or_4 = true;
+      } else {
+        String _name_35 = n.getName();
+        boolean _operator_equals_35 = ObjectExtensions.operator_equals(_name_35, "Sigma");
+        _operator_or_4 = BooleanExtensions.operator_or(_operator_or_5, _operator_equals_35);
+      }
+      if (_operator_or_4) {
+        _operator_or_3 = true;
+      } else {
+        String _name_36 = n.getName();
+        boolean _operator_equals_36 = ObjectExtensions.operator_equals(_name_36, "Upsilon");
+        _operator_or_3 = BooleanExtensions.operator_or(_operator_or_4, _operator_equals_36);
+      }
+      if (_operator_or_3) {
+        _operator_or_2 = true;
+      } else {
+        String _name_37 = n.getName();
+        boolean _operator_equals_37 = ObjectExtensions.operator_equals(_name_37, "Phi");
+        _operator_or_2 = BooleanExtensions.operator_or(_operator_or_3, _operator_equals_37);
+      }
+      if (_operator_or_2) {
+        _operator_or_1 = true;
+      } else {
+        String _name_38 = n.getName();
+        boolean _operator_equals_38 = ObjectExtensions.operator_equals(_name_38, "Psi");
+        _operator_or_1 = BooleanExtensions.operator_or(_operator_or_2, _operator_equals_38);
+      }
+      if (_operator_or_1) {
+        _operator_or = true;
+      } else {
+        String _name_39 = n.getName();
+        boolean _operator_equals_39 = ObjectExtensions.operator_equals(_name_39, "Omega");
+        _operator_or = BooleanExtensions.operator_or(_operator_or_1, _operator_equals_39);
+      }
+      if (_operator_or) {
+        _builder.append("\\");
+        _builder.newLine();
+      }
+    }
+    String _name_40 = n.getName();
+    _builder.append(_name_40, "");
     return _builder;
   }
   
@@ -2478,8 +2798,328 @@ public class MexGenerator implements IGenerator {
   
   protected StringConcatenation _compileMatrixExpression(final TransposeMatrix n) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = n.getName();
-    _builder.append(_name, "");
+    {
+      boolean _operator_or = false;
+      boolean _operator_or_1 = false;
+      boolean _operator_or_2 = false;
+      boolean _operator_or_3 = false;
+      boolean _operator_or_4 = false;
+      boolean _operator_or_5 = false;
+      boolean _operator_or_6 = false;
+      boolean _operator_or_7 = false;
+      boolean _operator_or_8 = false;
+      boolean _operator_or_9 = false;
+      boolean _operator_or_10 = false;
+      boolean _operator_or_11 = false;
+      boolean _operator_or_12 = false;
+      boolean _operator_or_13 = false;
+      boolean _operator_or_14 = false;
+      boolean _operator_or_15 = false;
+      boolean _operator_or_16 = false;
+      boolean _operator_or_17 = false;
+      boolean _operator_or_18 = false;
+      boolean _operator_or_19 = false;
+      boolean _operator_or_20 = false;
+      boolean _operator_or_21 = false;
+      boolean _operator_or_22 = false;
+      boolean _operator_or_23 = false;
+      boolean _operator_or_24 = false;
+      boolean _operator_or_25 = false;
+      boolean _operator_or_26 = false;
+      boolean _operator_or_27 = false;
+      boolean _operator_or_28 = false;
+      boolean _operator_or_29 = false;
+      boolean _operator_or_30 = false;
+      boolean _operator_or_31 = false;
+      boolean _operator_or_32 = false;
+      boolean _operator_or_33 = false;
+      boolean _operator_or_34 = false;
+      boolean _operator_or_35 = false;
+      boolean _operator_or_36 = false;
+      boolean _operator_or_37 = false;
+      boolean _operator_or_38 = false;
+      String _name = n.getName();
+      boolean _operator_equals = ObjectExtensions.operator_equals(_name, "alpha");
+      if (_operator_equals) {
+        _operator_or_38 = true;
+      } else {
+        String _name_1 = n.getName();
+        boolean _operator_equals_1 = ObjectExtensions.operator_equals(_name_1, "beta");
+        _operator_or_38 = BooleanExtensions.operator_or(_operator_equals, _operator_equals_1);
+      }
+      if (_operator_or_38) {
+        _operator_or_37 = true;
+      } else {
+        String _name_2 = n.getName();
+        boolean _operator_equals_2 = ObjectExtensions.operator_equals(_name_2, "gamma");
+        _operator_or_37 = BooleanExtensions.operator_or(_operator_or_38, _operator_equals_2);
+      }
+      if (_operator_or_37) {
+        _operator_or_36 = true;
+      } else {
+        String _name_3 = n.getName();
+        boolean _operator_equals_3 = ObjectExtensions.operator_equals(_name_3, "delta");
+        _operator_or_36 = BooleanExtensions.operator_or(_operator_or_37, _operator_equals_3);
+      }
+      if (_operator_or_36) {
+        _operator_or_35 = true;
+      } else {
+        String _name_4 = n.getName();
+        boolean _operator_equals_4 = ObjectExtensions.operator_equals(_name_4, "epsilon");
+        _operator_or_35 = BooleanExtensions.operator_or(_operator_or_36, _operator_equals_4);
+      }
+      if (_operator_or_35) {
+        _operator_or_34 = true;
+      } else {
+        String _name_5 = n.getName();
+        boolean _operator_equals_5 = ObjectExtensions.operator_equals(_name_5, "varepsilon");
+        _operator_or_34 = BooleanExtensions.operator_or(_operator_or_35, _operator_equals_5);
+      }
+      if (_operator_or_34) {
+        _operator_or_33 = true;
+      } else {
+        String _name_6 = n.getName();
+        boolean _operator_equals_6 = ObjectExtensions.operator_equals(_name_6, "zeta");
+        _operator_or_33 = BooleanExtensions.operator_or(_operator_or_34, _operator_equals_6);
+      }
+      if (_operator_or_33) {
+        _operator_or_32 = true;
+      } else {
+        String _name_7 = n.getName();
+        boolean _operator_equals_7 = ObjectExtensions.operator_equals(_name_7, "eta");
+        _operator_or_32 = BooleanExtensions.operator_or(_operator_or_33, _operator_equals_7);
+      }
+      if (_operator_or_32) {
+        _operator_or_31 = true;
+      } else {
+        String _name_8 = n.getName();
+        boolean _operator_equals_8 = ObjectExtensions.operator_equals(_name_8, "theta");
+        _operator_or_31 = BooleanExtensions.operator_or(_operator_or_32, _operator_equals_8);
+      }
+      if (_operator_or_31) {
+        _operator_or_30 = true;
+      } else {
+        String _name_9 = n.getName();
+        boolean _operator_equals_9 = ObjectExtensions.operator_equals(_name_9, "vartheta");
+        _operator_or_30 = BooleanExtensions.operator_or(_operator_or_31, _operator_equals_9);
+      }
+      if (_operator_or_30) {
+        _operator_or_29 = true;
+      } else {
+        String _name_10 = n.getName();
+        boolean _operator_equals_10 = ObjectExtensions.operator_equals(_name_10, "gamma");
+        _operator_or_29 = BooleanExtensions.operator_or(_operator_or_30, _operator_equals_10);
+      }
+      if (_operator_or_29) {
+        _operator_or_28 = true;
+      } else {
+        String _name_11 = n.getName();
+        boolean _operator_equals_11 = ObjectExtensions.operator_equals(_name_11, "kappa");
+        _operator_or_28 = BooleanExtensions.operator_or(_operator_or_29, _operator_equals_11);
+      }
+      if (_operator_or_28) {
+        _operator_or_27 = true;
+      } else {
+        String _name_12 = n.getName();
+        boolean _operator_equals_12 = ObjectExtensions.operator_equals(_name_12, "lambda");
+        _operator_or_27 = BooleanExtensions.operator_or(_operator_or_28, _operator_equals_12);
+      }
+      if (_operator_or_27) {
+        _operator_or_26 = true;
+      } else {
+        String _name_13 = n.getName();
+        boolean _operator_equals_13 = ObjectExtensions.operator_equals(_name_13, "mu");
+        _operator_or_26 = BooleanExtensions.operator_or(_operator_or_27, _operator_equals_13);
+      }
+      if (_operator_or_26) {
+        _operator_or_25 = true;
+      } else {
+        String _name_14 = n.getName();
+        boolean _operator_equals_14 = ObjectExtensions.operator_equals(_name_14, "nu");
+        _operator_or_25 = BooleanExtensions.operator_or(_operator_or_26, _operator_equals_14);
+      }
+      if (_operator_or_25) {
+        _operator_or_24 = true;
+      } else {
+        String _name_15 = n.getName();
+        boolean _operator_equals_15 = ObjectExtensions.operator_equals(_name_15, "xi");
+        _operator_or_24 = BooleanExtensions.operator_or(_operator_or_25, _operator_equals_15);
+      }
+      if (_operator_or_24) {
+        _operator_or_23 = true;
+      } else {
+        String _name_16 = n.getName();
+        boolean _operator_equals_16 = ObjectExtensions.operator_equals(_name_16, "pi");
+        _operator_or_23 = BooleanExtensions.operator_or(_operator_or_24, _operator_equals_16);
+      }
+      if (_operator_or_23) {
+        _operator_or_22 = true;
+      } else {
+        String _name_17 = n.getName();
+        boolean _operator_equals_17 = ObjectExtensions.operator_equals(_name_17, "varpi");
+        _operator_or_22 = BooleanExtensions.operator_or(_operator_or_23, _operator_equals_17);
+      }
+      if (_operator_or_22) {
+        _operator_or_21 = true;
+      } else {
+        String _name_18 = n.getName();
+        boolean _operator_equals_18 = ObjectExtensions.operator_equals(_name_18, "rho");
+        _operator_or_21 = BooleanExtensions.operator_or(_operator_or_22, _operator_equals_18);
+      }
+      if (_operator_or_21) {
+        _operator_or_20 = true;
+      } else {
+        String _name_19 = n.getName();
+        boolean _operator_equals_19 = ObjectExtensions.operator_equals(_name_19, "varrho");
+        _operator_or_20 = BooleanExtensions.operator_or(_operator_or_21, _operator_equals_19);
+      }
+      if (_operator_or_20) {
+        _operator_or_19 = true;
+      } else {
+        String _name_20 = n.getName();
+        boolean _operator_equals_20 = ObjectExtensions.operator_equals(_name_20, "sigma");
+        _operator_or_19 = BooleanExtensions.operator_or(_operator_or_20, _operator_equals_20);
+      }
+      if (_operator_or_19) {
+        _operator_or_18 = true;
+      } else {
+        String _name_21 = n.getName();
+        boolean _operator_equals_21 = ObjectExtensions.operator_equals(_name_21, "varsigma");
+        _operator_or_18 = BooleanExtensions.operator_or(_operator_or_19, _operator_equals_21);
+      }
+      if (_operator_or_18) {
+        _operator_or_17 = true;
+      } else {
+        String _name_22 = n.getName();
+        boolean _operator_equals_22 = ObjectExtensions.operator_equals(_name_22, "tau");
+        _operator_or_17 = BooleanExtensions.operator_or(_operator_or_18, _operator_equals_22);
+      }
+      if (_operator_or_17) {
+        _operator_or_16 = true;
+      } else {
+        String _name_23 = n.getName();
+        boolean _operator_equals_23 = ObjectExtensions.operator_equals(_name_23, "upsilon");
+        _operator_or_16 = BooleanExtensions.operator_or(_operator_or_17, _operator_equals_23);
+      }
+      if (_operator_or_16) {
+        _operator_or_15 = true;
+      } else {
+        String _name_24 = n.getName();
+        boolean _operator_equals_24 = ObjectExtensions.operator_equals(_name_24, "phi");
+        _operator_or_15 = BooleanExtensions.operator_or(_operator_or_16, _operator_equals_24);
+      }
+      if (_operator_or_15) {
+        _operator_or_14 = true;
+      } else {
+        String _name_25 = n.getName();
+        boolean _operator_equals_25 = ObjectExtensions.operator_equals(_name_25, "varphi");
+        _operator_or_14 = BooleanExtensions.operator_or(_operator_or_15, _operator_equals_25);
+      }
+      if (_operator_or_14) {
+        _operator_or_13 = true;
+      } else {
+        String _name_26 = n.getName();
+        boolean _operator_equals_26 = ObjectExtensions.operator_equals(_name_26, "chi");
+        _operator_or_13 = BooleanExtensions.operator_or(_operator_or_14, _operator_equals_26);
+      }
+      if (_operator_or_13) {
+        _operator_or_12 = true;
+      } else {
+        String _name_27 = n.getName();
+        boolean _operator_equals_27 = ObjectExtensions.operator_equals(_name_27, "psi");
+        _operator_or_12 = BooleanExtensions.operator_or(_operator_or_13, _operator_equals_27);
+      }
+      if (_operator_or_12) {
+        _operator_or_11 = true;
+      } else {
+        String _name_28 = n.getName();
+        boolean _operator_equals_28 = ObjectExtensions.operator_equals(_name_28, "omega");
+        _operator_or_11 = BooleanExtensions.operator_or(_operator_or_12, _operator_equals_28);
+      }
+      if (_operator_or_11) {
+        _operator_or_10 = true;
+      } else {
+        String _name_29 = n.getName();
+        boolean _operator_equals_29 = ObjectExtensions.operator_equals(_name_29, "Gamma");
+        _operator_or_10 = BooleanExtensions.operator_or(_operator_or_11, _operator_equals_29);
+      }
+      if (_operator_or_10) {
+        _operator_or_9 = true;
+      } else {
+        String _name_30 = n.getName();
+        boolean _operator_equals_30 = ObjectExtensions.operator_equals(_name_30, "Delta");
+        _operator_or_9 = BooleanExtensions.operator_or(_operator_or_10, _operator_equals_30);
+      }
+      if (_operator_or_9) {
+        _operator_or_8 = true;
+      } else {
+        String _name_31 = n.getName();
+        boolean _operator_equals_31 = ObjectExtensions.operator_equals(_name_31, "Theta");
+        _operator_or_8 = BooleanExtensions.operator_or(_operator_or_9, _operator_equals_31);
+      }
+      if (_operator_or_8) {
+        _operator_or_7 = true;
+      } else {
+        String _name_32 = n.getName();
+        boolean _operator_equals_32 = ObjectExtensions.operator_equals(_name_32, "Lambda");
+        _operator_or_7 = BooleanExtensions.operator_or(_operator_or_8, _operator_equals_32);
+      }
+      if (_operator_or_7) {
+        _operator_or_6 = true;
+      } else {
+        String _name_33 = n.getName();
+        boolean _operator_equals_33 = ObjectExtensions.operator_equals(_name_33, "Xi");
+        _operator_or_6 = BooleanExtensions.operator_or(_operator_or_7, _operator_equals_33);
+      }
+      if (_operator_or_6) {
+        _operator_or_5 = true;
+      } else {
+        String _name_34 = n.getName();
+        boolean _operator_equals_34 = ObjectExtensions.operator_equals(_name_34, "Pi");
+        _operator_or_5 = BooleanExtensions.operator_or(_operator_or_6, _operator_equals_34);
+      }
+      if (_operator_or_5) {
+        _operator_or_4 = true;
+      } else {
+        String _name_35 = n.getName();
+        boolean _operator_equals_35 = ObjectExtensions.operator_equals(_name_35, "Sigma");
+        _operator_or_4 = BooleanExtensions.operator_or(_operator_or_5, _operator_equals_35);
+      }
+      if (_operator_or_4) {
+        _operator_or_3 = true;
+      } else {
+        String _name_36 = n.getName();
+        boolean _operator_equals_36 = ObjectExtensions.operator_equals(_name_36, "Upsilon");
+        _operator_or_3 = BooleanExtensions.operator_or(_operator_or_4, _operator_equals_36);
+      }
+      if (_operator_or_3) {
+        _operator_or_2 = true;
+      } else {
+        String _name_37 = n.getName();
+        boolean _operator_equals_37 = ObjectExtensions.operator_equals(_name_37, "Phi");
+        _operator_or_2 = BooleanExtensions.operator_or(_operator_or_3, _operator_equals_37);
+      }
+      if (_operator_or_2) {
+        _operator_or_1 = true;
+      } else {
+        String _name_38 = n.getName();
+        boolean _operator_equals_38 = ObjectExtensions.operator_equals(_name_38, "Psi");
+        _operator_or_1 = BooleanExtensions.operator_or(_operator_or_2, _operator_equals_38);
+      }
+      if (_operator_or_1) {
+        _operator_or = true;
+      } else {
+        String _name_39 = n.getName();
+        boolean _operator_equals_39 = ObjectExtensions.operator_equals(_name_39, "Omega");
+        _operator_or = BooleanExtensions.operator_or(_operator_or_1, _operator_equals_39);
+      }
+      if (_operator_or) {
+        _builder.append("\\");
+        _builder.newLine();
+      }
+    }
+    String _name_40 = n.getName();
+    _builder.append(_name_40, "");
     _builder.append("^T");
     return _builder;
   }

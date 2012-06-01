@@ -388,11 +388,11 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementMATH_NAMETerminalRuleCall_2_1_0 = (RuleCall)cElementAssignment_2_1.eContents().get(0);
 		private final Keyword cLeftSquareBracketKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		private final Assignment cRowAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
-		private final RuleCall cRowINTTerminalRuleCall_2_3_0 = (RuleCall)cRowAssignment_2_3.eContents().get(0);
+		private final RuleCall cRowFloatParserRuleCall_2_3_0 = (RuleCall)cRowAssignment_2_3.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_2_4 = (Keyword)cGroup_2.eContents().get(4);
 		private final Keyword cLeftSquareBracketKeyword_2_5 = (Keyword)cGroup_2.eContents().get(5);
 		private final Assignment cColumnAssignment_2_6 = (Assignment)cGroup_2.eContents().get(6);
-		private final RuleCall cColumnINTTerminalRuleCall_2_6_0 = (RuleCall)cColumnAssignment_2_6.eContents().get(0);
+		private final RuleCall cColumnFloatParserRuleCall_2_6_0 = (RuleCall)cColumnAssignment_2_6.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_2_7 = (Keyword)cGroup_2.eContents().get(7);
 		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
 		private final Action cFunctionAction_3_0 = (Action)cGroup_3.eContents().get(0);
@@ -404,12 +404,12 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		
 		//Primary returns Expression:
-		//	{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=INT "]" "[" column=INT "]"
-		//	| {Function} function=Function | "(" Addition ")";
+		//	{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float
+		//	"]" | {Function} function=Function | "(" Addition ")";
 		public ParserRule getRule() { return rule; }
 
-		//{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=INT "]" "[" column=INT "]" |
-		//{Function} function=Function | "(" Addition ")"
+		//{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float
+		//"]" | {Function} function=Function | "(" Addition ")"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{Variable} name=MATH_NAME
@@ -436,7 +436,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Float
 		public RuleCall getValueFloatParserRuleCall_1_1_0() { return cValueFloatParserRuleCall_1_1_0; }
 
-		//{MatrixElement} element=MATH_NAME "[" row=INT "]" "[" column=INT "]"
+		//{MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float "]"
 		public Group getGroup_2() { return cGroup_2; }
 
 		//{MatrixElement}
@@ -451,11 +451,11 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//"["
 		public Keyword getLeftSquareBracketKeyword_2_2() { return cLeftSquareBracketKeyword_2_2; }
 
-		//row=INT
+		//row=Float
 		public Assignment getRowAssignment_2_3() { return cRowAssignment_2_3; }
 
-		//INT
-		public RuleCall getRowINTTerminalRuleCall_2_3_0() { return cRowINTTerminalRuleCall_2_3_0; }
+		//Float
+		public RuleCall getRowFloatParserRuleCall_2_3_0() { return cRowFloatParserRuleCall_2_3_0; }
 
 		//"]"
 		public Keyword getRightSquareBracketKeyword_2_4() { return cRightSquareBracketKeyword_2_4; }
@@ -463,11 +463,11 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//"["
 		public Keyword getLeftSquareBracketKeyword_2_5() { return cLeftSquareBracketKeyword_2_5; }
 
-		//column=INT
+		//column=Float
 		public Assignment getColumnAssignment_2_6() { return cColumnAssignment_2_6; }
 
-		//INT
-		public RuleCall getColumnINTTerminalRuleCall_2_6_0() { return cColumnINTTerminalRuleCall_2_6_0; }
+		//Float
+		public RuleCall getColumnFloatParserRuleCall_2_6_0() { return cColumnFloatParserRuleCall_2_6_0; }
 
 		//"]"
 		public Keyword getRightSquareBracketKeyword_2_7() { return cRightSquareBracketKeyword_2_7; }
@@ -1145,8 +1145,8 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Primary returns Expression:
-	//	{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=INT "]" "[" column=INT "]"
-	//	| {Function} function=Function | "(" Addition ")";
+	//	{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float
+	//	"]" | {Function} function=Function | "(" Addition ")";
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
 	}

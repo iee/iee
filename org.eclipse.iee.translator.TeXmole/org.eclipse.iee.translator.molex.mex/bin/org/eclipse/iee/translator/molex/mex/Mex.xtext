@@ -43,7 +43,7 @@ Primary returns Expression:
 	{Variable} name=MATH_NAME |
 	{Float} value=Float |
 	{Function} function=Function |
-	{MatrixElement} element=MATH_NAME '[' row=INT ']' '[' column=INT ']' | 
+	{MatrixElement} element=MATH_NAME '[' row=Float ']' '[' column=Float ']' | 
 	{InBrackets} inBrackets=AdditionInBrackets;
 
 Matrix:

@@ -113,8 +113,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatrixElement" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="element" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InBrackets" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inBrackets" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression"

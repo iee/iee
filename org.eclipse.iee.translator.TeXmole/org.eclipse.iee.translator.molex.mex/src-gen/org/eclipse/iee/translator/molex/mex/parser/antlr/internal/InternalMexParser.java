@@ -1920,21 +1920,23 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePrimary"
-    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:737:1: rulePrimary returns [EObject current=null] : ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) ;
+    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:737:1: rulePrimary returns [EObject current=null] : ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) ;
     public final EObject rulePrimary() throws RecognitionException {
         EObject current = null;
 
         Token lv_name_1_0=null;
         Token lv_element_7_0=null;
         Token otherlv_8=null;
-        Token lv_row_9_0=null;
         Token otherlv_10=null;
         Token otherlv_11=null;
-        Token lv_column_12_0=null;
         Token otherlv_13=null;
         AntlrDatatypeRuleToken lv_value_3_0 = null;
 
         EObject lv_function_5_0 = null;
+
+        AntlrDatatypeRuleToken lv_row_9_0 = null;
+
+        AntlrDatatypeRuleToken lv_column_12_0 = null;
 
         EObject lv_inBrackets_15_0 = null;
 
@@ -1942,10 +1944,10 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:740:28: ( ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) )
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:740:28: ( ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
             {
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= RULE_MATH_NAME ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
             int alt6=5;
             switch ( input.LA(1) ) {
             case RULE_MATH_NAME:
@@ -2195,10 +2197,10 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']' )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']' )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:7: () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= RULE_INT ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= RULE_INT ) ) otherlv_13= ']'
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:7: () ( (lv_element_7_0= RULE_MATH_NAME ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']'
                     {
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:7: ()
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:826:2: 
@@ -2254,28 +2256,33 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_8, grammarAccess.getPrimaryAccess().getLeftSquareBracketKeyword_3_2());
                           
                     }
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:856:1: ( (lv_row_9_0= RULE_INT ) )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= RULE_INT )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:856:1: ( (lv_row_9_0= ruleFloat ) )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= ruleFloat )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= RULE_INT )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:858:3: lv_row_9_0= RULE_INT
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= ruleFloat )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:858:3: lv_row_9_0= ruleFloat
                     {
-                    lv_row_9_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_rulePrimary1653); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
-
-                      			newLeafNode(lv_row_9_0, grammarAccess.getPrimaryAccess().getRowINTTerminalRuleCall_3_3_0()); 
-                      		
+                       
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getRowFloatParserRuleCall_3_3_0()); 
+                      	    
                     }
+                    pushFollow(FOLLOW_ruleFloat_in_rulePrimary1657);
+                    lv_row_9_0=ruleFloat();
+
+                    state._fsp--;
+                    if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       	        if (current==null) {
-                      	            current = createModelElement(grammarAccess.getPrimaryRule());
+                      	            current = createModelElementForParent(grammarAccess.getPrimaryRule());
                       	        }
-                             		setWithLastConsumed(
+                             		set(
                              			current, 
                              			"row",
                               		lv_row_9_0, 
-                              		"INT");
+                              		"Float");
+                      	        afterParserOrEnumRuleCall();
                       	    
                     }
 
@@ -2284,40 +2291,45 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_10=(Token)match(input,24,FOLLOW_24_in_rulePrimary1670); if (state.failed) return current;
+                    otherlv_10=(Token)match(input,24,FOLLOW_24_in_rulePrimary1669); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_10, grammarAccess.getPrimaryAccess().getRightSquareBracketKeyword_3_4());
                           
                     }
-                    otherlv_11=(Token)match(input,23,FOLLOW_23_in_rulePrimary1682); if (state.failed) return current;
+                    otherlv_11=(Token)match(input,23,FOLLOW_23_in_rulePrimary1681); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_11, grammarAccess.getPrimaryAccess().getLeftSquareBracketKeyword_3_5());
                           
                     }
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:882:1: ( (lv_column_12_0= RULE_INT ) )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= RULE_INT )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:882:1: ( (lv_column_12_0= ruleFloat ) )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= ruleFloat )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= RULE_INT )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:884:3: lv_column_12_0= RULE_INT
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= ruleFloat )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:884:3: lv_column_12_0= ruleFloat
                     {
-                    lv_column_12_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_rulePrimary1699); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
-
-                      			newLeafNode(lv_column_12_0, grammarAccess.getPrimaryAccess().getColumnINTTerminalRuleCall_3_6_0()); 
-                      		
+                       
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getColumnFloatParserRuleCall_3_6_0()); 
+                      	    
                     }
+                    pushFollow(FOLLOW_ruleFloat_in_rulePrimary1702);
+                    lv_column_12_0=ruleFloat();
+
+                    state._fsp--;
+                    if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       	        if (current==null) {
-                      	            current = createModelElement(grammarAccess.getPrimaryRule());
+                      	            current = createModelElementForParent(grammarAccess.getPrimaryRule());
                       	        }
-                             		setWithLastConsumed(
+                             		set(
                              			current, 
                              			"column",
                               		lv_column_12_0, 
-                              		"INT");
+                              		"Float");
+                      	        afterParserOrEnumRuleCall();
                       	    
                     }
 
@@ -2326,7 +2338,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_13=(Token)match(input,24,FOLLOW_24_in_rulePrimary1716); if (state.failed) return current;
+                    otherlv_13=(Token)match(input,24,FOLLOW_24_in_rulePrimary1714); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_13, grammarAccess.getPrimaryAccess().getRightSquareBracketKeyword_3_7());
@@ -2373,7 +2385,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       	        newCompositeNode(grammarAccess.getPrimaryAccess().getInBracketsAdditionInBracketsParserRuleCall_4_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleAdditionInBrackets_in_rulePrimary1757);
+                    pushFollow(FOLLOW_ruleAdditionInBrackets_in_rulePrimary1755);
                     lv_inBrackets_15_0=ruleAdditionInBrackets();
 
                     state._fsp--;
@@ -2440,7 +2452,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrix_in_entryRuleMatrix1794);
+            pushFollow(FOLLOW_ruleMatrix_in_entryRuleMatrix1792);
             iv_ruleMatrix=ruleMatrix();
 
             state._fsp--;
@@ -2448,7 +2460,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrix; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrix1804); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrix1802); if (state.failed) return current;
 
             }
 
@@ -2488,7 +2500,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:953:1: (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:953:3: otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
             {
-            otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrix1841); if (state.failed) return current;
+            otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrix1839); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixAccess().getLeftCurlyBracketKeyword_0());
@@ -2516,7 +2528,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       	        newCompositeNode(grammarAccess.getMatrixAccess().getRowsMatrixRowParserRuleCall_1_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1863);
+                    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1861);
                     lv_rows_1_0=ruleMatrixRow();
 
                     state._fsp--;
@@ -2561,7 +2573,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	case 1 :
                     	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:975:4: otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1876); if (state.failed) return current;
+                    	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1874); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_2, grammarAccess.getMatrixAccess().getCommaKeyword_1_1_0());
@@ -2578,7 +2590,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	      	        newCompositeNode(grammarAccess.getMatrixAccess().getRowsMatrixRowParserRuleCall_1_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1897);
+                    	    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1895);
                     	    lv_rows_3_0=ruleMatrixRow();
 
                     	    state._fsp--;
@@ -2622,7 +2634,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                         case 1 :
                             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:997:6: otherlv_4= ','
                             {
-                            otherlv_4=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1912); if (state.failed) return current;
+                            otherlv_4=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1910); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                   	newLeafNode(otherlv_4, grammarAccess.getMatrixAccess().getCommaKeyword_1_2());
@@ -2640,7 +2652,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleMatrix1928); if (state.failed) return current;
+            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleMatrix1926); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_5, grammarAccess.getMatrixAccess().getRightCurlyBracketKeyword_2());
@@ -2683,7 +2695,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixRowRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1964);
+            pushFollow(FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1962);
             iv_ruleMatrixRow=ruleMatrixRow();
 
             state._fsp--;
@@ -2691,7 +2703,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixRow; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixRow1974); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixRow1972); if (state.failed) return current;
 
             }
 
@@ -2731,7 +2743,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:3: otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
             {
-            otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrixRow2011); if (state.failed) return current;
+            otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrixRow2009); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixRowAccess().getLeftCurlyBracketKeyword_0());
@@ -2759,7 +2771,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFloat_in_ruleMatrixRow2033);
+                    pushFollow(FOLLOW_ruleFloat_in_ruleMatrixRow2031);
                     lv_elements_1_0=ruleFloat();
 
                     state._fsp--;
@@ -2804,7 +2816,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	case 1 :
                     	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1048:4: otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow2046); if (state.failed) return current;
+                    	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow2044); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_2, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_1_0());
@@ -2821,7 +2833,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	      	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleFloat_in_ruleMatrixRow2067);
+                    	    pushFollow(FOLLOW_ruleFloat_in_ruleMatrixRow2065);
                     	    lv_elements_3_0=ruleFloat();
 
                     	    state._fsp--;
@@ -2865,7 +2877,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                         case 1 :
                             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1070:6: otherlv_4= ','
                             {
-                            otherlv_4=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow2082); if (state.failed) return current;
+                            otherlv_4=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow2080); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                   	newLeafNode(otherlv_4, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_2());
@@ -2883,7 +2895,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleMatrixRow2098); if (state.failed) return current;
+            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleMatrixRow2096); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_5, grammarAccess.getMatrixRowAccess().getRightCurlyBracketKeyword_2());
@@ -2926,7 +2938,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixAssignmentRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2134);
+            pushFollow(FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2132);
             iv_ruleMatrixAssignment=ruleMatrixAssignment();
 
             state._fsp--;
@@ -2934,7 +2946,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixAssignment; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAssignment2144); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAssignment2142); if (state.failed) return current;
 
             }
 
@@ -2972,7 +2984,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1099:1: (otherlv_0= '[' ( (lv_variable_1_0= RULE_MATH_NAME ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) )
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1099:3: otherlv_0= '[' ( (lv_variable_1_0= RULE_MATH_NAME ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) )
             {
-            otherlv_0=(Token)match(input,23,FOLLOW_23_in_ruleMatrixAssignment2181); if (state.failed) return current;
+            otherlv_0=(Token)match(input,23,FOLLOW_23_in_ruleMatrixAssignment2179); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixAssignmentAccess().getLeftSquareBracketKeyword_0());
@@ -2984,7 +2996,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1104:1: (lv_variable_1_0= RULE_MATH_NAME )
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1105:3: lv_variable_1_0= RULE_MATH_NAME
             {
-            lv_variable_1_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_ruleMatrixAssignment2198); if (state.failed) return current;
+            lv_variable_1_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_ruleMatrixAssignment2196); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_variable_1_0, grammarAccess.getMatrixAssignmentAccess().getVariableMATH_NAMETerminalRuleCall_1_0()); 
@@ -3008,13 +3020,13 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,24,FOLLOW_24_in_ruleMatrixAssignment2215); if (state.failed) return current;
+            otherlv_2=(Token)match(input,24,FOLLOW_24_in_ruleMatrixAssignment2213); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_2, grammarAccess.getMatrixAssignmentAccess().getRightSquareBracketKeyword_2());
                   
             }
-            otherlv_3=(Token)match(input,12,FOLLOW_12_in_ruleMatrixAssignment2227); if (state.failed) return current;
+            otherlv_3=(Token)match(input,12,FOLLOW_12_in_ruleMatrixAssignment2225); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_3, grammarAccess.getMatrixAssignmentAccess().getEqualsSignKeyword_3());
@@ -3031,7 +3043,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
               	        newCompositeNode(grammarAccess.getMatrixAssignmentAccess().getValueMatrixFormulaParserRuleCall_4_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2248);
+            pushFollow(FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2246);
             lv_value_4_0=ruleMatrixFormula();
 
             state._fsp--;
@@ -3092,7 +3104,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixFormulaRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2284);
+            pushFollow(FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2282);
             iv_ruleMatrixFormula=ruleMatrixFormula();
 
             state._fsp--;
@@ -3100,7 +3112,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixFormula; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixFormula2294); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixFormula2292); if (state.failed) return current;
 
             }
 
@@ -3142,7 +3154,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
               	        newCompositeNode(grammarAccess.getMatrixFormulaAccess().getExpressionMatrixAdditionParserRuleCall_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2339);
+            pushFollow(FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2337);
             lv_expression_0_0=ruleMatrixAddition();
 
             state._fsp--;
@@ -3200,7 +3212,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixAdditionInBracketsRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixAdditionInBrackets_in_entryRuleMatrixAdditionInBrackets2374);
+            pushFollow(FOLLOW_ruleMatrixAdditionInBrackets_in_entryRuleMatrixAdditionInBrackets2372);
             iv_ruleMatrixAdditionInBrackets=ruleMatrixAdditionInBrackets();
 
             state._fsp--;
@@ -3208,7 +3220,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixAdditionInBrackets; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAdditionInBrackets2384); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAdditionInBrackets2382); if (state.failed) return current;
 
             }
 
@@ -3244,7 +3256,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1207:1: (otherlv_0= '(' ( (lv_addition_1_0= ruleMatrixAddition ) ) otherlv_2= ')' )
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1207:3: otherlv_0= '(' ( (lv_addition_1_0= ruleMatrixAddition ) ) otherlv_2= ')'
             {
-            otherlv_0=(Token)match(input,13,FOLLOW_13_in_ruleMatrixAdditionInBrackets2421); if (state.failed) return current;
+            otherlv_0=(Token)match(input,13,FOLLOW_13_in_ruleMatrixAdditionInBrackets2419); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixAdditionInBracketsAccess().getLeftParenthesisKeyword_0());
@@ -3261,7 +3273,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
               	        newCompositeNode(grammarAccess.getMatrixAdditionInBracketsAccess().getAdditionMatrixAdditionParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMatrixAddition_in_ruleMatrixAdditionInBrackets2442);
+            pushFollow(FOLLOW_ruleMatrixAddition_in_ruleMatrixAdditionInBrackets2440);
             lv_addition_1_0=ruleMatrixAddition();
 
             state._fsp--;
@@ -3285,7 +3297,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,14,FOLLOW_14_in_ruleMatrixAdditionInBrackets2454); if (state.failed) return current;
+            otherlv_2=(Token)match(input,14,FOLLOW_14_in_ruleMatrixAdditionInBrackets2452); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_2, grammarAccess.getMatrixAdditionInBracketsAccess().getRightParenthesisKeyword_2());
@@ -3328,7 +3340,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixAdditionRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2490);
+            pushFollow(FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2488);
             iv_ruleMatrixAddition=ruleMatrixAddition();
 
             state._fsp--;
@@ -3336,7 +3348,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixAddition; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAddition2500); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAddition2498); if (state.failed) return current;
 
             }
 
@@ -3386,7 +3398,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       newCompositeNode(grammarAccess.getMatrixAdditionAccess().getMatrixMultiplicationParserRuleCall_0()); 
                   
             }
-            pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2550);
+            pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2548);
             this_MatrixMultiplication_0=ruleMatrixMultiplication();
 
             state._fsp--;
@@ -3418,7 +3430,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1266:2: (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) )
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1266:4: otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) )
             	    {
-            	    otherlv_1=(Token)match(input,15,FOLLOW_15_in_ruleMatrixAddition2563); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,15,FOLLOW_15_in_ruleMatrixAddition2561); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_1, grammarAccess.getMatrixAdditionAccess().getPlusSignKeyword_1_0_0());
@@ -3453,7 +3465,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	      	        newCompositeNode(grammarAccess.getMatrixAdditionAccess().getRightMatrixMultiplicationParserRuleCall_1_0_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2596);
+            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2594);
             	    lv_right_3_0=ruleMatrixMultiplication();
 
             	    state._fsp--;
@@ -3489,7 +3501,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1298:6: (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) )
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1298:8: otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) )
             	    {
-            	    otherlv_4=(Token)match(input,16,FOLLOW_16_in_ruleMatrixAddition2616); if (state.failed) return current;
+            	    otherlv_4=(Token)match(input,16,FOLLOW_16_in_ruleMatrixAddition2614); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_4, grammarAccess.getMatrixAdditionAccess().getHyphenMinusKeyword_1_1_0());
@@ -3524,7 +3536,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	      	        newCompositeNode(grammarAccess.getMatrixAdditionAccess().getRightMatrixMultiplicationParserRuleCall_1_1_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2649);
+            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2647);
             	    lv_right_6_0=ruleMatrixMultiplication();
 
             	    state._fsp--;
@@ -3597,7 +3609,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixMultiplicationRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2688);
+            pushFollow(FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2686);
             iv_ruleMatrixMultiplication=ruleMatrixMultiplication();
 
             state._fsp--;
@@ -3605,7 +3617,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixMultiplication; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixMultiplication2698); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixMultiplication2696); if (state.failed) return current;
 
             }
 
@@ -3655,7 +3667,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getPrimaryMatrixParserRuleCall_0()); 
                   
             }
-            pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2748);
+            pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2746);
             this_PrimaryMatrix_0=rulePrimaryMatrix();
 
             state._fsp--;
@@ -3693,7 +3705,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1362:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1362:4: otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
             	    {
-            	    otherlv_1=(Token)match(input,17,FOLLOW_17_in_ruleMatrixMultiplication2761); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,17,FOLLOW_17_in_ruleMatrixMultiplication2759); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_1, grammarAccess.getMatrixMultiplicationAccess().getAsteriskKeyword_1_0_0());
@@ -3728,7 +3740,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	      	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightMatrixPrimaryMatrixParserRuleCall_1_0_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2794);
+            	    pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2792);
             	    lv_rightMatrix_3_0=rulePrimaryMatrix();
 
             	    state._fsp--;
@@ -3764,7 +3776,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1394:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1394:8: otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) )
             	    {
-            	    otherlv_4=(Token)match(input,17,FOLLOW_17_in_ruleMatrixMultiplication2814); if (state.failed) return current;
+            	    otherlv_4=(Token)match(input,17,FOLLOW_17_in_ruleMatrixMultiplication2812); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_4, grammarAccess.getMatrixMultiplicationAccess().getAsteriskKeyword_1_1_0());
@@ -3799,7 +3811,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	      	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightScalarFormulaParserRuleCall_1_1_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixMultiplication2847);
+            	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixMultiplication2845);
             	    lv_rightScalar_6_0=ruleFormula();
 
             	    state._fsp--;
@@ -3872,7 +3884,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getPrimaryMatrixRule()); 
             }
-            pushFollow(FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2886);
+            pushFollow(FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2884);
             iv_rulePrimaryMatrix=rulePrimaryMatrix();
 
             state._fsp--;
@@ -3880,7 +3892,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_rulePrimaryMatrix; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRulePrimaryMatrix2896); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRulePrimaryMatrix2894); if (state.failed) return current;
 
             }
 
@@ -4013,7 +4025,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       	        newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getMatrixMatrixParserRuleCall_0_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMatrix_in_rulePrimaryMatrix2955);
+                    pushFollow(FOLLOW_ruleMatrix_in_rulePrimaryMatrix2953);
                     lv_matrix_1_0=ruleMatrix();
 
                     state._fsp--;
@@ -4067,7 +4079,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_3=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix2987); if (state.failed) return current;
+                    otherlv_3=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix2985); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_3, grammarAccess.getPrimaryMatrixAccess().getLeftSquareBracketKeyword_1_1());
@@ -4079,7 +4091,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1488:1: (lv_name_4_0= RULE_MATH_NAME )
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1489:3: lv_name_4_0= RULE_MATH_NAME
                     {
-                    lv_name_4_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3004); if (state.failed) return current;
+                    lv_name_4_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3002); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       			newLeafNode(lv_name_4_0, grammarAccess.getPrimaryMatrixAccess().getNameMATH_NAMETerminalRuleCall_1_2_0()); 
@@ -4103,7 +4115,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_5=(Token)match(input,28,FOLLOW_28_in_rulePrimaryMatrix3021); if (state.failed) return current;
+                    otherlv_5=(Token)match(input,28,FOLLOW_28_in_rulePrimaryMatrix3019); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_5, grammarAccess.getPrimaryMatrixAccess().getTKeyword_1_3());
@@ -4139,7 +4151,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_7=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix3053); if (state.failed) return current;
+                    otherlv_7=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix3051); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_7, grammarAccess.getPrimaryMatrixAccess().getLeftSquareBracketKeyword_2_1());
@@ -4151,7 +4163,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1524:1: (lv_name_8_0= RULE_MATH_NAME )
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1525:3: lv_name_8_0= RULE_MATH_NAME
                     {
-                    lv_name_8_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3070); if (state.failed) return current;
+                    lv_name_8_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3068); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       			newLeafNode(lv_name_8_0, grammarAccess.getPrimaryMatrixAccess().getNameMATH_NAMETerminalRuleCall_2_2_0()); 
@@ -4175,7 +4187,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_9=(Token)match(input,24,FOLLOW_24_in_rulePrimaryMatrix3087); if (state.failed) return current;
+                    otherlv_9=(Token)match(input,24,FOLLOW_24_in_rulePrimaryMatrix3085); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_9, grammarAccess.getPrimaryMatrixAccess().getRightSquareBracketKeyword_2_3());
@@ -4193,7 +4205,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1546:6: (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' )
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1546:8: otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')'
                     {
-                    otherlv_10=(Token)match(input,13,FOLLOW_13_in_rulePrimaryMatrix3107); if (state.failed) return current;
+                    otherlv_10=(Token)match(input,13,FOLLOW_13_in_rulePrimaryMatrix3105); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_10, grammarAccess.getPrimaryMatrixAccess().getLeftParenthesisKeyword_3_0());
@@ -4209,7 +4221,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                               newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getMatrixAdditionParserRuleCall_3_1()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix3132);
+                    pushFollow(FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix3130);
                     this_MatrixAddition_11=ruleMatrixAddition();
 
                     state._fsp--;
@@ -4220,7 +4232,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                               afterParserOrEnumRuleCall();
                           
                     }
-                    otherlv_12=(Token)match(input,14,FOLLOW_14_in_rulePrimaryMatrix3143); if (state.failed) return current;
+                    otherlv_12=(Token)match(input,14,FOLLOW_14_in_rulePrimaryMatrix3141); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_12, grammarAccess.getPrimaryMatrixAccess().getRightParenthesisKeyword_3_2());
@@ -4267,7 +4279,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       	        newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getInBracketsMatrixAdditionInBracketsParserRuleCall_4_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMatrixAdditionInBrackets_in_rulePrimaryMatrix3184);
+                    pushFollow(FOLLOW_ruleMatrixAdditionInBrackets_in_rulePrimaryMatrix3182);
                     lv_inBrackets_14_0=ruleMatrixAdditionInBrackets();
 
                     state._fsp--;
@@ -4334,7 +4346,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFloatRule()); 
             }
-            pushFollow(FOLLOW_ruleFloat_in_entryRuleFloat3222);
+            pushFollow(FOLLOW_ruleFloat_in_entryRuleFloat3220);
             iv_ruleFloat=ruleFloat();
 
             state._fsp--;
@@ -4342,7 +4354,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleFloat.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFloat3233); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFloat3231); if (state.failed) return current;
 
             }
 
@@ -4394,7 +4406,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             	case 1 :
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1615:7: this_INT_0= RULE_INT
             	    {
-            	    this_INT_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3274); if (state.failed) return current;
+            	    this_INT_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3272); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      		current.merge(this_INT_0);
@@ -4430,7 +4442,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                 case 1 :
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1623:2: kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )?
                     {
-                    kw=(Token)match(input,29,FOLLOW_29_in_ruleFloat3295); if (state.failed) return current;
+                    kw=(Token)match(input,29,FOLLOW_29_in_ruleFloat3293); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
@@ -4453,7 +4465,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	case 1 :
                     	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1628:6: this_INT_2= RULE_INT
                     	    {
-                    	    this_INT_2=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3311); if (state.failed) return current;
+                    	    this_INT_2=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3309); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	      		current.merge(this_INT_2);
@@ -4510,7 +4522,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                                 case 1 :
                                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1636:2: kw= 'E'
                                     {
-                                    kw=(Token)match(input,30,FOLLOW_30_in_ruleFloat3333); if (state.failed) return current;
+                                    kw=(Token)match(input,30,FOLLOW_30_in_ruleFloat3331); if (state.failed) return current;
                                     if ( state.backtracking==0 ) {
 
                                               current.merge(kw);
@@ -4523,7 +4535,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                                 case 2 :
                                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1643:2: kw= 'e'
                                     {
-                                    kw=(Token)match(input,31,FOLLOW_31_in_ruleFloat3352); if (state.failed) return current;
+                                    kw=(Token)match(input,31,FOLLOW_31_in_ruleFloat3350); if (state.failed) return current;
                                     if ( state.backtracking==0 ) {
 
                                               current.merge(kw);
@@ -4547,7 +4559,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                                 case 1 :
                                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1649:2: kw= '-'
                                     {
-                                    kw=(Token)match(input,16,FOLLOW_16_in_ruleFloat3367); if (state.failed) return current;
+                                    kw=(Token)match(input,16,FOLLOW_16_in_ruleFloat3365); if (state.failed) return current;
                                     if ( state.backtracking==0 ) {
 
                                               current.merge(kw);
@@ -4576,7 +4588,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                             	case 1 :
                             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1654:8: this_INT_6= RULE_INT
                             	    {
-                            	    this_INT_6=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3385); if (state.failed) return current;
+                            	    this_INT_6=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3383); if (state.failed) return current;
                             	    if ( state.backtracking==0 ) {
 
                             	      		current.merge(this_INT_6);
@@ -4650,7 +4662,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFunctionRule()); 
             }
-            pushFollow(FOLLOW_ruleFunction_in_entryRuleFunction3436);
+            pushFollow(FOLLOW_ruleFunction_in_entryRuleFunction3434);
             iv_ruleFunction=ruleFunction();
 
             state._fsp--;
@@ -4658,7 +4670,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleFunction; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFunction3446); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFunction3444); if (state.failed) return current;
 
             }
 
@@ -4705,7 +4717,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1683:1: (lv_name_0_0= RULE_MATH_NAME )
             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1684:3: lv_name_0_0= RULE_MATH_NAME
             {
-            lv_name_0_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_ruleFunction3488); if (state.failed) return current;
+            lv_name_0_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_ruleFunction3486); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_name_0_0, grammarAccess.getFunctionAccess().getNameMATH_NAMETerminalRuleCall_0_0()); 
@@ -4729,7 +4741,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,13,FOLLOW_13_in_ruleFunction3505); if (state.failed) return current;
+            otherlv_1=(Token)match(input,13,FOLLOW_13_in_ruleFunction3503); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getFunctionAccess().getLeftParenthesisKeyword_1());
@@ -4757,7 +4769,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                       	        newCompositeNode(grammarAccess.getFunctionAccess().getParametersFormulaParserRuleCall_2_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3527);
+                    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3525);
                     lv_parameters_2_0=ruleFormula();
 
                     state._fsp--;
@@ -4802,7 +4814,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	case 1 :
                     	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1722:4: otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,26,FOLLOW_26_in_ruleFunction3540); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,26,FOLLOW_26_in_ruleFunction3538); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_3, grammarAccess.getFunctionAccess().getCommaKeyword_2_1_0());
@@ -4819,7 +4831,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	      	        newCompositeNode(grammarAccess.getFunctionAccess().getParametersFormulaParserRuleCall_2_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3561);
+                    	    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3559);
                     	    lv_parameters_4_0=ruleFormula();
 
                     	    state._fsp--;
@@ -4863,7 +4875,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                         case 1 :
                             // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1744:6: otherlv_5= ','
                             {
-                            otherlv_5=(Token)match(input,26,FOLLOW_26_in_ruleFunction3576); if (state.failed) return current;
+                            otherlv_5=(Token)match(input,26,FOLLOW_26_in_ruleFunction3574); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                   	newLeafNode(otherlv_5, grammarAccess.getFunctionAccess().getCommaKeyword_2_2());
@@ -4881,7 +4893,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_6=(Token)match(input,14,FOLLOW_14_in_ruleFunction3592); if (state.failed) return current;
+            otherlv_6=(Token)match(input,14,FOLLOW_14_in_ruleFunction3590); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_6, grammarAccess.getFunctionAccess().getRightParenthesisKeyword_3());
@@ -4924,7 +4936,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFunctionDefinitionRule()); 
             }
-            pushFollow(FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3628);
+            pushFollow(FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3626);
             iv_ruleFunctionDefinition=ruleFunctionDefinition();
 
             state._fsp--;
@@ -4932,7 +4944,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleFunctionDefinition; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFunctionDefinition3638); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFunctionDefinition3636); if (state.failed) return current;
 
             }
 
@@ -4980,7 +4992,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
               	        newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getFunctionFunctionParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleFunction_in_ruleFunctionDefinition3684);
+            pushFollow(FOLLOW_ruleFunction_in_ruleFunctionDefinition3682);
             lv_function_0_0=ruleFunction();
 
             state._fsp--;
@@ -5004,7 +5016,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,12,FOLLOW_12_in_ruleFunctionDefinition3696); if (state.failed) return current;
+            otherlv_1=(Token)match(input,12,FOLLOW_12_in_ruleFunctionDefinition3694); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getFunctionDefinitionAccess().getEqualsSignKeyword_1());
@@ -5021,7 +5033,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
               	        newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getFormulaFormulaParserRuleCall_2_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleFormula_in_ruleFunctionDefinition3717);
+            pushFollow(FOLLOW_ruleFormula_in_ruleFunctionDefinition3715);
             lv_formula_2_0=ruleFormula();
 
             state._fsp--;
@@ -5403,7 +5415,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1362:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1362:4: otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
         {
-        otherlv_1=(Token)match(input,17,FOLLOW_17_in_synpred25_InternalMex2761); if (state.failed) return ;
+        otherlv_1=(Token)match(input,17,FOLLOW_17_in_synpred25_InternalMex2759); if (state.failed) return ;
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1366:1: ()
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1367:2: 
         {
@@ -5426,7 +5438,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
           	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightMatrixPrimaryMatrixParserRuleCall_1_0_2_0()); 
           	    
         }
-        pushFollow(FOLLOW_rulePrimaryMatrix_in_synpred25_InternalMex2794);
+        pushFollow(FOLLOW_rulePrimaryMatrix_in_synpred25_InternalMex2792);
         lv_rightMatrix_3_0=rulePrimaryMatrix();
 
         state._fsp--;
@@ -5457,7 +5469,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1394:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1394:8: otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) )
         {
-        otherlv_4=(Token)match(input,17,FOLLOW_17_in_synpred26_InternalMex2814); if (state.failed) return ;
+        otherlv_4=(Token)match(input,17,FOLLOW_17_in_synpred26_InternalMex2812); if (state.failed) return ;
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1398:1: ()
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1399:2: 
         {
@@ -5480,7 +5492,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
           	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightScalarFormulaParserRuleCall_1_1_2_0()); 
           	    
         }
-        pushFollow(FOLLOW_ruleFormula_in_synpred26_InternalMex2847);
+        pushFollow(FOLLOW_ruleFormula_in_synpred26_InternalMex2845);
         lv_rightScalar_6_0=ruleFormula();
 
         state._fsp--;
@@ -5522,21 +5534,21 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
         }
 
-        otherlv_3=(Token)match(input,23,FOLLOW_23_in_synpred28_InternalMex2987); if (state.failed) return ;
+        otherlv_3=(Token)match(input,23,FOLLOW_23_in_synpred28_InternalMex2985); if (state.failed) return ;
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1487:1: ( (lv_name_4_0= RULE_MATH_NAME ) )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1488:1: (lv_name_4_0= RULE_MATH_NAME )
         {
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1488:1: (lv_name_4_0= RULE_MATH_NAME )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1489:3: lv_name_4_0= RULE_MATH_NAME
         {
-        lv_name_4_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_synpred28_InternalMex3004); if (state.failed) return ;
+        lv_name_4_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_synpred28_InternalMex3002); if (state.failed) return ;
 
         }
 
 
         }
 
-        otherlv_5=(Token)match(input,28,FOLLOW_28_in_synpred28_InternalMex3021); if (state.failed) return ;
+        otherlv_5=(Token)match(input,28,FOLLOW_28_in_synpred28_InternalMex3019); if (state.failed) return ;
 
         }
 
@@ -5568,21 +5580,21 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
         }
 
-        otherlv_7=(Token)match(input,23,FOLLOW_23_in_synpred29_InternalMex3053); if (state.failed) return ;
+        otherlv_7=(Token)match(input,23,FOLLOW_23_in_synpred29_InternalMex3051); if (state.failed) return ;
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1523:1: ( (lv_name_8_0= RULE_MATH_NAME ) )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1524:1: (lv_name_8_0= RULE_MATH_NAME )
         {
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1524:1: (lv_name_8_0= RULE_MATH_NAME )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1525:3: lv_name_8_0= RULE_MATH_NAME
         {
-        lv_name_8_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_synpred29_InternalMex3070); if (state.failed) return ;
+        lv_name_8_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_synpred29_InternalMex3068); if (state.failed) return ;
 
         }
 
 
         }
 
-        otherlv_9=(Token)match(input,24,FOLLOW_24_in_synpred29_InternalMex3087); if (state.failed) return ;
+        otherlv_9=(Token)match(input,24,FOLLOW_24_in_synpred29_InternalMex3085); if (state.failed) return ;
 
         }
 
@@ -5604,13 +5616,13 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1546:6: (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' )
         // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1546:8: otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')'
         {
-        otherlv_10=(Token)match(input,13,FOLLOW_13_in_synpred30_InternalMex3107); if (state.failed) return ;
-        pushFollow(FOLLOW_ruleMatrixAddition_in_synpred30_InternalMex3132);
+        otherlv_10=(Token)match(input,13,FOLLOW_13_in_synpred30_InternalMex3105); if (state.failed) return ;
+        pushFollow(FOLLOW_ruleMatrixAddition_in_synpred30_InternalMex3130);
         this_MatrixAddition_11=ruleMatrixAddition();
 
         state._fsp--;
         if (state.failed) return ;
-        otherlv_12=(Token)match(input,14,FOLLOW_14_in_synpred30_InternalMex3143); if (state.failed) return ;
+        otherlv_12=(Token)match(input,14,FOLLOW_14_in_synpred30_InternalMex3141); if (state.failed) return ;
 
         }
 
@@ -6066,93 +6078,93 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleFunction_in_rulePrimary1582 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_RULE_MATH_NAME_in_rulePrimary1619 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_23_in_rulePrimary1636 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_RULE_INT_in_rulePrimary1653 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_rulePrimary1670 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_23_in_rulePrimary1682 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_RULE_INT_in_rulePrimary1699 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_rulePrimary1716 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditionInBrackets_in_rulePrimary1757 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrix_in_entryRuleMatrix1794 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrix1804 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_ruleMatrix1841 = new BitSet(new long[]{0x000000000A000000L});
-    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1863 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrix1876 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1897 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrix1912 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_ruleMatrix1928 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1964 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixRow1974 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_ruleMatrixRow2011 = new BitSet(new long[]{0x0000000008000020L});
-    public static final BitSet FOLLOW_ruleFloat_in_ruleMatrixRow2033 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrixRow2046 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_ruleFloat_in_ruleMatrixRow2067 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrixRow2082 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_ruleMatrixRow2098 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2134 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAssignment2144 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_ruleMatrixAssignment2181 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_ruleMatrixAssignment2198 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_ruleMatrixAssignment2215 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_ruleMatrixAssignment2227 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2248 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2284 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixFormula2294 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2339 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAdditionInBrackets_in_entryRuleMatrixAdditionInBrackets2374 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAdditionInBrackets2384 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_13_in_ruleMatrixAdditionInBrackets2421 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_ruleMatrixAdditionInBrackets2442 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleMatrixAdditionInBrackets2454 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2490 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAddition2500 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2550 = new BitSet(new long[]{0x0000000000018002L});
-    public static final BitSet FOLLOW_15_in_ruleMatrixAddition2563 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2596 = new BitSet(new long[]{0x0000000000018002L});
-    public static final BitSet FOLLOW_16_in_ruleMatrixAddition2616 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2649 = new BitSet(new long[]{0x0000000000018002L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2688 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixMultiplication2698 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2748 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_17_in_ruleMatrixMultiplication2761 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2794 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_17_in_ruleMatrixMultiplication2814 = new BitSet(new long[]{0x0000000000102030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixMultiplication2847 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2886 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRulePrimaryMatrix2896 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrix_in_rulePrimaryMatrix2955 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix2987 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3004 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_rulePrimaryMatrix3021 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix3053 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3070 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_rulePrimaryMatrix3087 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_13_in_rulePrimaryMatrix3107 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix3132 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_rulePrimaryMatrix3143 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAdditionInBrackets_in_rulePrimaryMatrix3184 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFloat_in_entryRuleFloat3222 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFloat3233 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3274 = new BitSet(new long[]{0x0000000020000022L});
-    public static final BitSet FOLLOW_29_in_ruleFloat3295 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3311 = new BitSet(new long[]{0x00000000C0000022L});
-    public static final BitSet FOLLOW_30_in_ruleFloat3333 = new BitSet(new long[]{0x0000000000010020L});
-    public static final BitSet FOLLOW_31_in_ruleFloat3352 = new BitSet(new long[]{0x0000000000010020L});
-    public static final BitSet FOLLOW_16_in_ruleFloat3367 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3385 = new BitSet(new long[]{0x0000000000000022L});
-    public static final BitSet FOLLOW_ruleFunction_in_entryRuleFunction3436 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFunction3446 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_ruleFunction3488 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_13_in_ruleFunction3505 = new BitSet(new long[]{0x0000000000106030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3527 = new BitSet(new long[]{0x0000000004004000L});
-    public static final BitSet FOLLOW_26_in_ruleFunction3540 = new BitSet(new long[]{0x0000000000102030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3561 = new BitSet(new long[]{0x0000000004004000L});
-    public static final BitSet FOLLOW_26_in_ruleFunction3576 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_ruleFunction3592 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3628 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFunctionDefinition3638 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFunction_in_ruleFunctionDefinition3684 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_ruleFunctionDefinition3696 = new BitSet(new long[]{0x0000000000102030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleFunctionDefinition3717 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFloat_in_rulePrimary1657 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_rulePrimary1669 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_23_in_rulePrimary1681 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleFloat_in_rulePrimary1702 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_rulePrimary1714 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAdditionInBrackets_in_rulePrimary1755 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrix_in_entryRuleMatrix1792 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrix1802 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_25_in_ruleMatrix1839 = new BitSet(new long[]{0x000000000A000000L});
+    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1861 = new BitSet(new long[]{0x000000000C000000L});
+    public static final BitSet FOLLOW_26_in_ruleMatrix1874 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1895 = new BitSet(new long[]{0x000000000C000000L});
+    public static final BitSet FOLLOW_26_in_ruleMatrix1910 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_27_in_ruleMatrix1926 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1962 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixRow1972 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_25_in_ruleMatrixRow2009 = new BitSet(new long[]{0x0000000008000020L});
+    public static final BitSet FOLLOW_ruleFloat_in_ruleMatrixRow2031 = new BitSet(new long[]{0x000000000C000000L});
+    public static final BitSet FOLLOW_26_in_ruleMatrixRow2044 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleFloat_in_ruleMatrixRow2065 = new BitSet(new long[]{0x000000000C000000L});
+    public static final BitSet FOLLOW_26_in_ruleMatrixRow2080 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_27_in_ruleMatrixRow2096 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2132 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAssignment2142 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_ruleMatrixAssignment2179 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_ruleMatrixAssignment2196 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_ruleMatrixAssignment2213 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_ruleMatrixAssignment2225 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2246 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2282 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixFormula2292 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2337 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAdditionInBrackets_in_entryRuleMatrixAdditionInBrackets2372 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAdditionInBrackets2382 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_13_in_ruleMatrixAdditionInBrackets2419 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_ruleMatrixAdditionInBrackets2440 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_ruleMatrixAdditionInBrackets2452 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2488 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAddition2498 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2548 = new BitSet(new long[]{0x0000000000018002L});
+    public static final BitSet FOLLOW_15_in_ruleMatrixAddition2561 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2594 = new BitSet(new long[]{0x0000000000018002L});
+    public static final BitSet FOLLOW_16_in_ruleMatrixAddition2614 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2647 = new BitSet(new long[]{0x0000000000018002L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2686 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixMultiplication2696 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2746 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_ruleMatrixMultiplication2759 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2792 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_ruleMatrixMultiplication2812 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixMultiplication2845 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2884 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRulePrimaryMatrix2894 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrix_in_rulePrimaryMatrix2953 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix2985 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3002 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_28_in_rulePrimaryMatrix3019 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix3051 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_rulePrimaryMatrix3068 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_rulePrimaryMatrix3085 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_13_in_rulePrimaryMatrix3105 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix3130 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_rulePrimaryMatrix3141 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAdditionInBrackets_in_rulePrimaryMatrix3182 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFloat_in_entryRuleFloat3220 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFloat3231 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3272 = new BitSet(new long[]{0x0000000020000022L});
+    public static final BitSet FOLLOW_29_in_ruleFloat3293 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3309 = new BitSet(new long[]{0x00000000C0000022L});
+    public static final BitSet FOLLOW_30_in_ruleFloat3331 = new BitSet(new long[]{0x0000000000010020L});
+    public static final BitSet FOLLOW_31_in_ruleFloat3350 = new BitSet(new long[]{0x0000000000010020L});
+    public static final BitSet FOLLOW_16_in_ruleFloat3365 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3383 = new BitSet(new long[]{0x0000000000000022L});
+    public static final BitSet FOLLOW_ruleFunction_in_entryRuleFunction3434 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFunction3444 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_ruleFunction3486 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_13_in_ruleFunction3503 = new BitSet(new long[]{0x0000000000106030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3525 = new BitSet(new long[]{0x0000000004004000L});
+    public static final BitSet FOLLOW_26_in_ruleFunction3538 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3559 = new BitSet(new long[]{0x0000000004004000L});
+    public static final BitSet FOLLOW_26_in_ruleFunction3574 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_ruleFunction3590 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3626 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFunctionDefinition3636 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFunction_in_ruleFunctionDefinition3682 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_ruleFunctionDefinition3694 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleFunctionDefinition3715 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFunctionDefinition_in_synpred1_InternalMex137 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleVariableAssignment_in_synpred2_InternalMex164 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFormula_in_synpred3_InternalMex191 = new BitSet(new long[]{0x0000000000000002L});
@@ -6164,18 +6176,18 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_17_in_synpred7_InternalMex884 = new BitSet(new long[]{0x0000000000102030L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_synpred7_InternalMex917 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExponent_in_synpred10_InternalMex1122 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_synpred25_InternalMex2761 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_synpred25_InternalMex2794 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_synpred26_InternalMex2814 = new BitSet(new long[]{0x0000000000102030L});
-    public static final BitSet FOLLOW_ruleFormula_in_synpred26_InternalMex2847 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_synpred28_InternalMex2987 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_synpred28_InternalMex3004 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_synpred28_InternalMex3021 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_synpred29_InternalMex3053 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_synpred29_InternalMex3070 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_synpred29_InternalMex3087 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_13_in_synpred30_InternalMex3107 = new BitSet(new long[]{0x0000000002802000L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_synpred30_InternalMex3132 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_14_in_synpred30_InternalMex3143 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_synpred25_InternalMex2759 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_synpred25_InternalMex2792 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_synpred26_InternalMex2812 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_synpred26_InternalMex2845 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_synpred28_InternalMex2985 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_synpred28_InternalMex3002 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_28_in_synpred28_InternalMex3019 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_synpred29_InternalMex3051 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_synpred29_InternalMex3068 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_synpred29_InternalMex3085 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_13_in_synpred30_InternalMex3105 = new BitSet(new long[]{0x0000000002802000L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_synpred30_InternalMex3130 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_14_in_synpred30_InternalMex3141 = new BitSet(new long[]{0x0000000000000002L});
 
 }

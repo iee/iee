@@ -420,11 +420,11 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementMATH_NAMETerminalRuleCall_3_1_0 = (RuleCall)cElementAssignment_3_1.eContents().get(0);
 		private final Keyword cLeftSquareBracketKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
 		private final Assignment cRowAssignment_3_3 = (Assignment)cGroup_3.eContents().get(3);
-		private final RuleCall cRowINTTerminalRuleCall_3_3_0 = (RuleCall)cRowAssignment_3_3.eContents().get(0);
+		private final RuleCall cRowFloatParserRuleCall_3_3_0 = (RuleCall)cRowAssignment_3_3.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_3_4 = (Keyword)cGroup_3.eContents().get(4);
 		private final Keyword cLeftSquareBracketKeyword_3_5 = (Keyword)cGroup_3.eContents().get(5);
 		private final Assignment cColumnAssignment_3_6 = (Assignment)cGroup_3.eContents().get(6);
-		private final RuleCall cColumnINTTerminalRuleCall_3_6_0 = (RuleCall)cColumnAssignment_3_6.eContents().get(0);
+		private final RuleCall cColumnFloatParserRuleCall_3_6_0 = (RuleCall)cColumnAssignment_3_6.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_3_7 = (Keyword)cGroup_3.eContents().get(7);
 		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
 		private final Action cInBracketsAction_4_0 = (Action)cGroup_4.eContents().get(0);
@@ -433,11 +433,11 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Primary returns Expression:
 		//	{Variable} name=MATH_NAME | {Float} value=Float | {Function} function=Function | {MatrixElement} element=MATH_NAME "["
-		//	row=INT "]" "[" column=INT "]" | {InBrackets} inBrackets=AdditionInBrackets;
+		//	row=Float "]" "[" column=Float "]" | {InBrackets} inBrackets=AdditionInBrackets;
 		public ParserRule getRule() { return rule; }
 
 		//{Variable} name=MATH_NAME | {Float} value=Float | {Function} function=Function | {MatrixElement} element=MATH_NAME "["
-		//row=INT "]" "[" column=INT "]" | {InBrackets} inBrackets=AdditionInBrackets
+		//row=Float "]" "[" column=Float "]" | {InBrackets} inBrackets=AdditionInBrackets
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{Variable} name=MATH_NAME
@@ -476,7 +476,7 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 		//Function
 		public RuleCall getFunctionFunctionParserRuleCall_2_1_0() { return cFunctionFunctionParserRuleCall_2_1_0; }
 
-		//{MatrixElement} element=MATH_NAME "[" row=INT "]" "[" column=INT "]"
+		//{MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float "]"
 		public Group getGroup_3() { return cGroup_3; }
 
 		//{MatrixElement}
@@ -491,11 +491,11 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 		//"["
 		public Keyword getLeftSquareBracketKeyword_3_2() { return cLeftSquareBracketKeyword_3_2; }
 
-		//row=INT
+		//row=Float
 		public Assignment getRowAssignment_3_3() { return cRowAssignment_3_3; }
 
-		//INT
-		public RuleCall getRowINTTerminalRuleCall_3_3_0() { return cRowINTTerminalRuleCall_3_3_0; }
+		//Float
+		public RuleCall getRowFloatParserRuleCall_3_3_0() { return cRowFloatParserRuleCall_3_3_0; }
 
 		//"]"
 		public Keyword getRightSquareBracketKeyword_3_4() { return cRightSquareBracketKeyword_3_4; }
@@ -503,11 +503,11 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 		//"["
 		public Keyword getLeftSquareBracketKeyword_3_5() { return cLeftSquareBracketKeyword_3_5; }
 
-		//column=INT
+		//column=Float
 		public Assignment getColumnAssignment_3_6() { return cColumnAssignment_3_6; }
 
-		//INT
-		public RuleCall getColumnINTTerminalRuleCall_3_6_0() { return cColumnINTTerminalRuleCall_3_6_0; }
+		//Float
+		public RuleCall getColumnFloatParserRuleCall_3_6_0() { return cColumnFloatParserRuleCall_3_6_0; }
 
 		//"]"
 		public Keyword getRightSquareBracketKeyword_3_7() { return cRightSquareBracketKeyword_3_7; }
@@ -1230,7 +1230,7 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Primary returns Expression:
 	//	{Variable} name=MATH_NAME | {Float} value=Float | {Function} function=Function | {MatrixElement} element=MATH_NAME "["
-	//	row=INT "]" "[" column=INT "]" | {InBrackets} inBrackets=AdditionInBrackets;
+	//	row=Float "]" "[" column=Float "]" | {InBrackets} inBrackets=AdditionInBrackets;
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
 	}

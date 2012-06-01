@@ -62,12 +62,12 @@ public interface MatrixElement extends Expression
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Row</em>' attribute.
-   * @see #setRow(int)
+   * @see #setRow(String)
    * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getMatrixElement_Row()
    * @model
    * @generated
    */
-  int getRow();
+  String getRow();
 
   /**
    * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getRow <em>Row</em>}' attribute.
@@ -77,7 +77,7 @@ public interface MatrixElement extends Expression
    * @see #getRow()
    * @generated
    */
-  void setRow(int value);
+  void setRow(String value);
 
   /**
    * Returns the value of the '<em><b>Column</b></em>' attribute.
@@ -88,12 +88,12 @@ public interface MatrixElement extends Expression
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Column</em>' attribute.
-   * @see #setColumn(int)
+   * @see #setColumn(String)
    * @see org.eclipse.iee.translator.molex.mex.mex.MexPackage#getMatrixElement_Column()
    * @model
    * @generated
    */
-  int getColumn();
+  String getColumn();
 
   /**
    * Sets the value of the '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getColumn <em>Column</em>}' attribute.
@@ -103,6 +103,6 @@ public interface MatrixElement extends Expression
    * @see #getColumn()
    * @generated
    */
-  void setColumn(int value);
+  void setColumn(String value);
 
 } // MatrixElement

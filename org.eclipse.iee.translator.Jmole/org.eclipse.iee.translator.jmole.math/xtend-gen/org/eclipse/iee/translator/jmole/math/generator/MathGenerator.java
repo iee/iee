@@ -272,10 +272,10 @@ public class MathGenerator implements IGenerator {
     String _element = e.getElement();
     _builder.append(_element, "");
     _builder.append(".get(");
-    int _row = e.getRow();
+    String _row = e.getRow();
     _builder.append(_row, "");
     _builder.append(",");
-    int _column = e.getColumn();
+    String _column = e.getColumn();
     _builder.append(_column, "");
     _builder.append(")");
     return _builder;

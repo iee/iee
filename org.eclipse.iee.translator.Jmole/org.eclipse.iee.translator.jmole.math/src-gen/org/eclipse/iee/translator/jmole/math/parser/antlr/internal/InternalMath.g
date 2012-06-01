@@ -780,19 +780,19 @@ rulePrimary returns [EObject current=null]
     }
 (
 (
-		lv_row_7_0=RULE_INT
-		{
-			newLeafNode(lv_row_7_0, grammarAccess.getPrimaryAccess().getRowINTTerminalRuleCall_2_3_0()); 
-		}
-		{
+		{ 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getRowFloatParserRuleCall_2_3_0()); 
+	    }
+		lv_row_7_0=ruleFloat		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getPrimaryRule());
+	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
        			"row",
         		lv_row_7_0, 
-        		"INT");
+        		"Float");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )
@@ -806,19 +806,19 @@ rulePrimary returns [EObject current=null]
     }
 (
 (
-		lv_column_10_0=RULE_INT
-		{
-			newLeafNode(lv_column_10_0, grammarAccess.getPrimaryAccess().getColumnINTTerminalRuleCall_2_6_0()); 
-		}
-		{
+		{ 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getColumnFloatParserRuleCall_2_6_0()); 
+	    }
+		lv_column_10_0=ruleFloat		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getPrimaryRule());
+	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
        			"column",
         		lv_column_10_0, 
-        		"INT");
+        		"Float");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )

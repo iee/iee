@@ -60,7 +60,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * @generated
    * @ordered
    */
-  protected static final int ROW_EDEFAULT = 0;
+  protected static final String ROW_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getRow() <em>Row</em>}' attribute.
@@ -70,7 +70,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * @generated
    * @ordered
    */
-  protected int row = ROW_EDEFAULT;
+  protected String row = ROW_EDEFAULT;
 
   /**
    * The default value of the '{@link #getColumn() <em>Column</em>}' attribute.
@@ -80,7 +80,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * @generated
    * @ordered
    */
-  protected static final int COLUMN_EDEFAULT = 0;
+  protected static final String COLUMN_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getColumn() <em>Column</em>}' attribute.
@@ -90,7 +90,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * @generated
    * @ordered
    */
-  protected int column = COLUMN_EDEFAULT;
+  protected String column = COLUMN_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -141,7 +141,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getRow()
+  public String getRow()
   {
     return row;
   }
@@ -151,9 +151,9 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRow(int newRow)
+  public void setRow(String newRow)
   {
-    int oldRow = row;
+    String oldRow = row;
     row = newRow;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__ROW, oldRow, row));
@@ -164,7 +164,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public int getColumn()
+  public String getColumn()
   {
     return column;
   }
@@ -174,9 +174,9 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setColumn(int newColumn)
+  public void setColumn(String newColumn)
   {
-    int oldColumn = column;
+    String oldColumn = column;
     column = newColumn;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__COLUMN, oldColumn, column));
@@ -216,10 +216,10 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
         setElement((String)newValue);
         return;
       case MexPackage.MATRIX_ELEMENT__ROW:
-        setRow((Integer)newValue);
+        setRow((String)newValue);
         return;
       case MexPackage.MATRIX_ELEMENT__COLUMN:
-        setColumn((Integer)newValue);
+        setColumn((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -261,9 +261,9 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
       case MexPackage.MATRIX_ELEMENT__ELEMENT:
         return ELEMENT_EDEFAULT == null ? element != null : !ELEMENT_EDEFAULT.equals(element);
       case MexPackage.MATRIX_ELEMENT__ROW:
-        return row != ROW_EDEFAULT;
+        return ROW_EDEFAULT == null ? row != null : !ROW_EDEFAULT.equals(row);
       case MexPackage.MATRIX_ELEMENT__COLUMN:
-        return column != COLUMN_EDEFAULT;
+        return COLUMN_EDEFAULT == null ? column != null : !COLUMN_EDEFAULT.equals(column);
     }
     return super.eIsSet(featureID);
   }

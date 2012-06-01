@@ -228,6 +228,22 @@ class MexGenerator implements IGenerator {
 	
 	//Matrix Expressions
 	def dispatch compileMatrixExpression(MatrixVariable n) '''
+		«IF n.name == "alpha" || n.name == "beta" || n.name == "gamma" ||
+		    n.name == "delta" || n.name == "epsilon" || n.name == "varepsilon" ||
+		    n.name == "zeta" || n.name == "eta" || n.name == "theta" ||
+		    n.name == "vartheta" || n.name == "gamma" || n.name == "kappa" ||
+			n.name == "lambda" || n.name == "mu" || n.name == "nu" || 
+			n.name == "xi" || n.name == "pi" || n.name == "varpi" || 
+			n.name == "rho" || n.name == "varrho" || n.name == "sigma" ||
+			n.name == "varsigma" || n.name == "tau" || n.name == "upsilon" ||
+			n.name == "phi" || n.name == "varphi" || n.name == "chi" || 
+			n.name == "psi" || n.name == "omega" || n.name == "Gamma" ||
+			n.name == "Delta" || n.name == "Theta" || n.name == "Lambda" ||
+			n.name == "Xi" || n.name == "Pi" || n.name == "Sigma" || 
+			n.name == "Upsilon" || n.name == "Phi" || n.name == "Psi" || 
+			n.name == "Omega"»
+			\
+		«ENDIF»
 		«n.name»'''	
 	
 	def dispatch compileMatrixExpression(NewMatrix m) '''
@@ -253,6 +269,22 @@ class MexGenerator implements IGenerator {
 		'''	
 		
 	def dispatch compileMatrixExpression(TransposeMatrix n) '''
+		«IF n.name == "alpha" || n.name == "beta" || n.name == "gamma" ||
+		    n.name == "delta" || n.name == "epsilon" || n.name == "varepsilon" ||
+		    n.name == "zeta" || n.name == "eta" || n.name == "theta" ||
+		    n.name == "vartheta" || n.name == "gamma" || n.name == "kappa" ||
+			n.name == "lambda" || n.name == "mu" || n.name == "nu" || 
+			n.name == "xi" || n.name == "pi" || n.name == "varpi" || 
+			n.name == "rho" || n.name == "varrho" || n.name == "sigma" ||
+			n.name == "varsigma" || n.name == "tau" || n.name == "upsilon" ||
+			n.name == "phi" || n.name == "varphi" || n.name == "chi" || 
+			n.name == "psi" || n.name == "omega" || n.name == "Gamma" ||
+			n.name == "Delta" || n.name == "Theta" || n.name == "Lambda" ||
+			n.name == "Xi" || n.name == "Pi" || n.name == "Sigma" || 
+			n.name == "Upsilon" || n.name == "Phi" || n.name == "Psi" || 
+			n.name == "Omega"»
+			\
+		«ENDIF»
 		«n.name»^T'''	
 		
 	def dispatch compileMatrixExpression(MatrixInBrackets op) '''
