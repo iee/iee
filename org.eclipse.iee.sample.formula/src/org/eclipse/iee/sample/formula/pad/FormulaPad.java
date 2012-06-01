@@ -1,8 +1,6 @@
 package org.eclipse.iee.sample.formula.pad;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +11,6 @@ import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
-import org.eclipse.jface.text.DefaultUndoManager;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
