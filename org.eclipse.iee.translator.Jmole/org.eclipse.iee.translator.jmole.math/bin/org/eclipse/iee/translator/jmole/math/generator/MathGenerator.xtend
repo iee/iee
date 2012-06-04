@@ -43,7 +43,7 @@ class MathGenerator implements IGenerator {
 	def compileFunctionDefinition(FunctionDefinition funcDef)
 	{
 	'''
-		public static double «funcDef.function.name» ( 
+		public static double «compileName(funcDef.function.name)» ( 
 		«FOR param:funcDef.function.parameters»
 		 «IF param != null»double «compileFormula(param)»«ENDIF»
 		 «IF funcDef.function.parameters.last() != param»,«ENDIF»
@@ -52,10 +52,18 @@ class MathGenerator implements IGenerator {
 	'''
 	}
 	
+	def compileName(MathName name)
+	{
+	'''
+		«var temp = name.mathName»
+		«temp.replaceAll("\\{", "").replaceAll("\\}", "")»
+	'''
+	}
+	
 	def compileVariableAssignment(VariableAssignment a)
 	{
 	 '''
-	 	«a.variable» = «compileFormula(a.value)»
+	 	«compileName(a.variable)» = «compileFormula(a.value)»
 	 '''
 	}
 	
@@ -76,12 +84,12 @@ class MathGenerator implements IGenerator {
 	def compileMatrixAssignment(MatrixAssignment a)
 	{
 	 '''
-	 	«a.variable» = «compileMatrixFormula(a.value)»
+	 	«compileName(a.variable)» = «compileMatrixFormula(a.value)»
 	 '''
 	}
 	
 	def compileFunction(Function f) '''
-		«f.function.name»
+		«compileName(f.function.name)»
 		(«FOR param:f.function.parameters»
 		 «IF param != null»«compileFormula(param)»«ENDIF»
 		 «IF f.function.parameters.last() != param»,«ENDIF»
@@ -91,13 +99,13 @@ class MathGenerator implements IGenerator {
 	//Expressions
 		
 	def dispatch compileExpression(Variable n) '''
-		«n.name»'''
+		«compileName(n.name)»'''
 		
 	def dispatch compileExpression(Float n) '''
 		«n.value»'''
 		
 	def dispatch compileExpression(MatrixElement e) '''
-		«e.element».get(«e.row»,«e.column»)'''	
+		«compileName(e.element)».get(«e.row»,«e.column»)'''	
 		
 	def dispatch compileExpression(Function f) '''
 		«compileFunction(f)»'''
@@ -128,7 +136,7 @@ class MathGenerator implements IGenerator {
 	
 	//Matrix Expressions
 	def dispatch compileMatrixExpression(MatrixVariable n) '''
-		«n.name»'''
+		«compileName(n.name)»'''
 		
 	def dispatch compileMatrixExpression(NewMatrix m) '''
 		new Matrix(new double[][]
@@ -151,7 +159,7 @@ class MathGenerator implements IGenerator {
 		})'''	
 	
 	def dispatch compileMatrixExpression(TransposeMatrix n) '''
-		«n.name».transpose()'''		
+		«compileName(n.name)».transpose()'''		
 		
 	def dispatch compileMatrixExpression(MatrixAddition op) '''
 		«compileMatrixExpression(op.left)».plus(«compileMatrixExpression(op.right)»)'''

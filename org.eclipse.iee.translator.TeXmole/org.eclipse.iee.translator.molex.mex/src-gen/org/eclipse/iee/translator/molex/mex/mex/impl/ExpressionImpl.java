@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.iee.translator.molex.mex.mex.Expression;
 import org.eclipse.iee.translator.molex.mex.mex.Formula;
+import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 
 /**
@@ -54,24 +55,14 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   protected Expression addition;
 
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getName()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
+  protected MathName name;
 
   /**
    * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
@@ -157,7 +148,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  public MathName getName()
   {
     return name;
   }
@@ -167,12 +158,37 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setName(String newName)
+  public NotificationChain basicSetName(MathName newName, NotificationChain msgs)
   {
-    String oldName = name;
+    MathName oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.EXPRESSION__NAME, oldName, name));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.EXPRESSION__NAME, oldName, newName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(MathName newName)
+  {
+    if (newName != name)
+    {
+      NotificationChain msgs = null;
+      if (name != null)
+        msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.EXPRESSION__NAME, null, msgs);
+      if (newName != null)
+        msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.EXPRESSION__NAME, null, msgs);
+      msgs = basicSetName(newName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.EXPRESSION__NAME, newName, newName));
   }
 
   /**
@@ -201,6 +217,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
     {
       case MexPackage.EXPRESSION__ADDITION:
         return basicSetAddition(null, msgs);
+      case MexPackage.EXPRESSION__NAME:
+        return basicSetName(null, msgs);
       case MexPackage.EXPRESSION__PARAMETERS:
         return ((InternalEList<?>)getParameters()).basicRemove(otherEnd, msgs);
     }
@@ -242,7 +260,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         setAddition((Expression)newValue);
         return;
       case MexPackage.EXPRESSION__NAME:
-        setName((String)newValue);
+        setName((MathName)newValue);
         return;
       case MexPackage.EXPRESSION__PARAMETERS:
         getParameters().clear();
@@ -266,7 +284,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         setAddition((Expression)null);
         return;
       case MexPackage.EXPRESSION__NAME:
-        setName(NAME_EDEFAULT);
+        setName((MathName)null);
         return;
       case MexPackage.EXPRESSION__PARAMETERS:
         getParameters().clear();
@@ -288,28 +306,11 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
       case MexPackage.EXPRESSION__ADDITION:
         return addition != null;
       case MexPackage.EXPRESSION__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+        return name != null;
       case MexPackage.EXPRESSION__PARAMETERS:
         return parameters != null && !parameters.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(')');
-    return result.toString();
   }
 
 } //ExpressionImpl

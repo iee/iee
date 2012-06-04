@@ -11,7 +11,7 @@ Statement:
 	matrixFormula=MatrixFormula;
 
 VariableAssignment:
-	variable=MATH_NAME '=' value=Formula;
+	variable=MathName '=' value=Formula;
 
 Formula:
 	expression=(Addition);
@@ -37,9 +37,9 @@ Exponent returns Expression:
 	Primary ({Exponent.left=current} '^' right=Primary)?;
 
 Primary returns Expression:
-	{Variable} name=MATH_NAME |
+	{Variable} name=MathName |
 	{Float} value=Float |
-	{MatrixElement} element=MATH_NAME '[' row=Float ']' '[' column=Float ']' | 
+	{MatrixElement} element=MathName '[' row=Float ']' '[' column=Float ']' | 
 	{Function} function=Function |
 	'(' Addition ')';
 
@@ -50,7 +50,7 @@ MatrixRow:
 	'{' (elements+=Float (',' elements+=Float)* ','?)? '}';
 
 MatrixAssignment:
-	'[' variable=MATH_NAME ']' '=' value=MatrixFormula;
+	'[' variable=MathName ']' '=' value=MatrixFormula;
 
 MatrixFormula:
 	expression=MatrixAddition;
@@ -66,18 +66,22 @@ MatrixMultiplication returns MatrixExpression:
 	
 PrimaryMatrix returns MatrixExpression:
 	{NewMatrix} matrix=Matrix |
-	{TransposeMatrix} '[' name=MATH_NAME ']^T'|
-	{MatrixVariable} '[' name=MATH_NAME ']' |
+	{TransposeMatrix} '[' name=MathName ']^T'|
+	{MatrixVariable} '[' name=MathName ']' |
 	'(' MatrixAddition ')';
 
 Float:
 	INT+ ('.' INT+ (('E' | 'e') ('-')? (INT)+)?)?;
 
 Function returns Expression:
-	name=MATH_NAME '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
+	name=MathName '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
 
 FunctionDefinition:
 	function=Function '=' formula=Formula;
+
+MathName: 
+	mathName = MATH_NAME
+;
 	
 terminal MATH_NAME returns ecore::EString:
-	('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+	('a'..'z' | 'A'..'Z') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '{' | '}')*;

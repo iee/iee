@@ -21,6 +21,7 @@ import org.eclipse.iee.translator.molex.mex.mex.Function;
 import org.eclipse.iee.translator.molex.mex.mex.FunctionDefinition;
 import org.eclipse.iee.translator.molex.mex.mex.InBrackets;
 import org.eclipse.iee.translator.molex.mex.mex.Invert;
+import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.Matrix;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAddition;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment;
@@ -172,6 +173,13 @@ public class MexSwitch<T> extends Switch<T>
       {
         FunctionDefinition functionDefinition = (FunctionDefinition)theEObject;
         T result = caseFunctionDefinition(functionDefinition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MexPackage.MATH_NAME:
+      {
+        MathName mathName = (MathName)theEObject;
+        T result = caseMathName(mathName);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -495,6 +503,22 @@ public class MexSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFunctionDefinition(FunctionDefinition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Math Name</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Math Name</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMathName(MathName object)
   {
     return null;
   }

@@ -7,11 +7,14 @@
 package org.eclipse.iee.translator.molex.mex.mex.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixVariable;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 
@@ -31,24 +34,14 @@ import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 public class MatrixVariableImpl extends MatrixExpressionImpl implements MatrixVariable
 {
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getName()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
+  protected MathName name;
 
   /**
    * <!-- begin-user-doc -->
@@ -76,7 +69,7 @@ public class MatrixVariableImpl extends MatrixExpressionImpl implements MatrixVa
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  public MathName getName()
   {
     return name;
   }
@@ -86,12 +79,53 @@ public class MatrixVariableImpl extends MatrixExpressionImpl implements MatrixVa
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setName(String newName)
+  public NotificationChain basicSetName(MathName newName, NotificationChain msgs)
   {
-    String oldName = name;
+    MathName oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_VARIABLE__NAME, oldName, name));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_VARIABLE__NAME, oldName, newName);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(MathName newName)
+  {
+    if (newName != name)
+    {
+      NotificationChain msgs = null;
+      if (name != null)
+        msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_VARIABLE__NAME, null, msgs);
+      if (newName != null)
+        msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_VARIABLE__NAME, null, msgs);
+      msgs = basicSetName(newName, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_VARIABLE__NAME, newName, newName));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case MexPackage.MATRIX_VARIABLE__NAME:
+        return basicSetName(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -121,7 +155,7 @@ public class MatrixVariableImpl extends MatrixExpressionImpl implements MatrixVa
     switch (featureID)
     {
       case MexPackage.MATRIX_VARIABLE__NAME:
-        setName((String)newValue);
+        setName((MathName)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -138,7 +172,7 @@ public class MatrixVariableImpl extends MatrixExpressionImpl implements MatrixVa
     switch (featureID)
     {
       case MexPackage.MATRIX_VARIABLE__NAME:
-        setName(NAME_EDEFAULT);
+        setName((MathName)null);
         return;
     }
     super.eUnset(featureID);
@@ -155,26 +189,9 @@ public class MatrixVariableImpl extends MatrixExpressionImpl implements MatrixVa
     switch (featureID)
     {
       case MexPackage.MATRIX_VARIABLE__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+        return name != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(')');
-    return result.toString();
   }
 
 } //MatrixVariableImpl
