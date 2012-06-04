@@ -22,6 +22,7 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
@@ -154,6 +155,11 @@ public class MathAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFunctionDefinition(FunctionDefinition object)
       {
         return createFunctionDefinitionAdapter();
+      }
+      @Override
+      public Adapter caseMathName(MathName object)
+      {
+        return createMathNameAdapter();
       }
       @Override
       public Adapter caseAddition(Addition object)
@@ -413,6 +419,21 @@ public class MathAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFunctionDefinitionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.jmole.math.math.MathName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.jmole.math.math.MathName
+   * @generated
+   */
+  public Adapter createMathNameAdapter()
   {
     return null;
   }

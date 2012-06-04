@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixFormula;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
@@ -36,24 +37,14 @@ import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implements MatrixAssignment
 {
   /**
-   * The default value of the '{@link #getVariable() <em>Variable</em>}' attribute.
+   * The cached value of the '{@link #getVariable() <em>Variable</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getVariable()
    * @generated
    * @ordered
    */
-  protected static final String VARIABLE_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getVariable() <em>Variable</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getVariable()
-   * @generated
-   * @ordered
-   */
-  protected String variable = VARIABLE_EDEFAULT;
+  protected MathName variable;
 
   /**
    * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
@@ -91,7 +82,7 @@ public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getVariable()
+  public MathName getVariable()
   {
     return variable;
   }
@@ -101,12 +92,37 @@ public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setVariable(String newVariable)
+  public NotificationChain basicSetVariable(MathName newVariable, NotificationChain msgs)
   {
-    String oldVariable = variable;
+    MathName oldVariable = variable;
     variable = newVariable;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ASSIGNMENT__VARIABLE, oldVariable, variable));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ASSIGNMENT__VARIABLE, oldVariable, newVariable);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setVariable(MathName newVariable)
+  {
+    if (newVariable != variable)
+    {
+      NotificationChain msgs = null;
+      if (variable != null)
+        msgs = ((InternalEObject)variable).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ASSIGNMENT__VARIABLE, null, msgs);
+      if (newVariable != null)
+        msgs = ((InternalEObject)newVariable).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ASSIGNMENT__VARIABLE, null, msgs);
+      msgs = basicSetVariable(newVariable, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ASSIGNMENT__VARIABLE, newVariable, newVariable));
   }
 
   /**
@@ -167,6 +183,8 @@ public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implement
   {
     switch (featureID)
     {
+      case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
+        return basicSetVariable(null, msgs);
       case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         return basicSetValue(null, msgs);
     }
@@ -202,7 +220,7 @@ public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implement
     switch (featureID)
     {
       case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
-        setVariable((String)newValue);
+        setVariable((MathName)newValue);
         return;
       case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         setValue((MatrixFormula)newValue);
@@ -222,7 +240,7 @@ public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implement
     switch (featureID)
     {
       case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
-        setVariable(VARIABLE_EDEFAULT);
+        setVariable((MathName)null);
         return;
       case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         setValue((MatrixFormula)null);
@@ -242,28 +260,11 @@ public class MatrixAssignmentImpl extends MinimalEObjectImpl.Container implement
     switch (featureID)
     {
       case MexPackage.MATRIX_ASSIGNMENT__VARIABLE:
-        return VARIABLE_EDEFAULT == null ? variable != null : !VARIABLE_EDEFAULT.equals(variable);
+        return variable != null;
       case MexPackage.MATRIX_ASSIGNMENT__VALUE:
         return value != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (variable: ");
-    result.append(variable);
-    result.append(')');
-    return result.toString();
   }
 
 } //MatrixAssignmentImpl

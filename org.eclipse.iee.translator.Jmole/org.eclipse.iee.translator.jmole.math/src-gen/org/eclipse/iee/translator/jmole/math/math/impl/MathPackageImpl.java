@@ -23,6 +23,7 @@ import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
@@ -120,6 +121,13 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * @generated
    */
   private EClass functionDefinitionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass mathNameEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -385,9 +393,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getVariableAssignment_Variable()
+  public EReference getVariableAssignment_Variable()
   {
-    return (EAttribute)variableAssignmentEClass.getEStructuralFeatures().get(0);
+    return (EReference)variableAssignmentEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -435,9 +443,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getExpression_Name()
+  public EReference getExpression_Name()
   {
-    return (EAttribute)expressionEClass.getEStructuralFeatures().get(0);
+    return (EReference)expressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -505,9 +513,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMatrixAssignment_Variable()
+  public EReference getMatrixAssignment_Variable()
   {
-    return (EAttribute)matrixAssignmentEClass.getEStructuralFeatures().get(0);
+    return (EReference)matrixAssignmentEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -578,6 +586,26 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
   public EReference getFunctionDefinition_Formula()
   {
     return (EReference)functionDefinitionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getMathName()
+  {
+    return mathNameEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMathName_MathName()
+  {
+    return (EAttribute)mathNameEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -845,9 +873,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMatrixElement_Element()
+  public EReference getMatrixElement_Element()
   {
-    return (EAttribute)matrixElementEClass.getEStructuralFeatures().get(0);
+    return (EReference)matrixElementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1025,9 +1053,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getTransposeMatrix_Name()
+  public EReference getTransposeMatrix_Name()
   {
-    return (EAttribute)transposeMatrixEClass.getEStructuralFeatures().get(0);
+    return (EReference)transposeMatrixEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1045,9 +1073,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMatrixVariable_Name()
+  public EReference getMatrixVariable_Name()
   {
-    return (EAttribute)matrixVariableEClass.getEStructuralFeatures().get(0);
+    return (EReference)matrixVariableEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1088,14 +1116,14 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     createEReference(statementEClass, STATEMENT__MATRIX_FORMULA);
 
     variableAssignmentEClass = createEClass(VARIABLE_ASSIGNMENT);
-    createEAttribute(variableAssignmentEClass, VARIABLE_ASSIGNMENT__VARIABLE);
+    createEReference(variableAssignmentEClass, VARIABLE_ASSIGNMENT__VARIABLE);
     createEReference(variableAssignmentEClass, VARIABLE_ASSIGNMENT__VALUE);
 
     formulaEClass = createEClass(FORMULA);
     createEReference(formulaEClass, FORMULA__EXPRESSION);
 
     expressionEClass = createEClass(EXPRESSION);
-    createEAttribute(expressionEClass, EXPRESSION__NAME);
+    createEReference(expressionEClass, EXPRESSION__NAME);
     createEReference(expressionEClass, EXPRESSION__PARAMETERS);
 
     matrixEClass = createEClass(MATRIX);
@@ -1105,7 +1133,7 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     createEAttribute(matrixRowEClass, MATRIX_ROW__ELEMENTS);
 
     matrixAssignmentEClass = createEClass(MATRIX_ASSIGNMENT);
-    createEAttribute(matrixAssignmentEClass, MATRIX_ASSIGNMENT__VARIABLE);
+    createEReference(matrixAssignmentEClass, MATRIX_ASSIGNMENT__VARIABLE);
     createEReference(matrixAssignmentEClass, MATRIX_ASSIGNMENT__VALUE);
 
     matrixFormulaEClass = createEClass(MATRIX_FORMULA);
@@ -1116,6 +1144,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     functionDefinitionEClass = createEClass(FUNCTION_DEFINITION);
     createEReference(functionDefinitionEClass, FUNCTION_DEFINITION__FUNCTION);
     createEReference(functionDefinitionEClass, FUNCTION_DEFINITION__FORMULA);
+
+    mathNameEClass = createEClass(MATH_NAME);
+    createEAttribute(mathNameEClass, MATH_NAME__MATH_NAME);
 
     additionEClass = createEClass(ADDITION);
     createEReference(additionEClass, ADDITION__LEFT);
@@ -1153,7 +1184,7 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     createEAttribute(floatEClass, FLOAT__VALUE);
 
     matrixElementEClass = createEClass(MATRIX_ELEMENT);
-    createEAttribute(matrixElementEClass, MATRIX_ELEMENT__ELEMENT);
+    createEReference(matrixElementEClass, MATRIX_ELEMENT__ELEMENT);
     createEAttribute(matrixElementEClass, MATRIX_ELEMENT__ROW);
     createEAttribute(matrixElementEClass, MATRIX_ELEMENT__COLUMN);
 
@@ -1177,10 +1208,10 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     createEReference(newMatrixEClass, NEW_MATRIX__MATRIX);
 
     transposeMatrixEClass = createEClass(TRANSPOSE_MATRIX);
-    createEAttribute(transposeMatrixEClass, TRANSPOSE_MATRIX__NAME);
+    createEReference(transposeMatrixEClass, TRANSPOSE_MATRIX__NAME);
 
     matrixVariableEClass = createEClass(MATRIX_VARIABLE);
-    createEAttribute(matrixVariableEClass, MATRIX_VARIABLE__NAME);
+    createEReference(matrixVariableEClass, MATRIX_VARIABLE__NAME);
   }
 
   /**
@@ -1240,14 +1271,14 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEReference(getStatement_MatrixFormula(), this.getMatrixFormula(), null, "matrixFormula", null, 0, 1, Statement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(variableAssignmentEClass, VariableAssignment.class, "VariableAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVariableAssignment_Variable(), ecorePackage.getEString(), "variable", null, 0, 1, VariableAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getVariableAssignment_Variable(), this.getMathName(), null, "variable", null, 0, 1, VariableAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVariableAssignment_Value(), this.getFormula(), null, "value", null, 0, 1, VariableAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(formulaEClass, Formula.class, "Formula", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFormula_Expression(), this.getExpression(), null, "expression", null, 0, 1, Formula.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getExpression_Name(), ecorePackage.getEString(), "name", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExpression_Name(), this.getMathName(), null, "name", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpression_Parameters(), this.getFormula(), null, "parameters", null, 0, -1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixEClass, Matrix.class, "Matrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1257,7 +1288,7 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEAttribute(getMatrixRow_Elements(), ecorePackage.getEString(), "elements", null, 0, -1, MatrixRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixAssignmentEClass, MatrixAssignment.class, "MatrixAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMatrixAssignment_Variable(), ecorePackage.getEString(), "variable", null, 0, 1, MatrixAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMatrixAssignment_Variable(), this.getMathName(), null, "variable", null, 0, 1, MatrixAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMatrixAssignment_Value(), this.getMatrixFormula(), null, "value", null, 0, 1, MatrixAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixFormulaEClass, MatrixFormula.class, "MatrixFormula", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1268,6 +1299,9 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEClass(functionDefinitionEClass, FunctionDefinition.class, "FunctionDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFunctionDefinition_Function(), this.getExpression(), null, "function", null, 0, 1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFunctionDefinition_Formula(), this.getFormula(), null, "formula", null, 0, 1, FunctionDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(mathNameEClass, MathName.class, "MathName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getMathName_MathName(), ecorePackage.getEString(), "mathName", null, 0, 1, MathName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(additionEClass, Addition.class, "Addition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAddition_Left(), this.getExpression(), null, "left", null, 0, 1, Addition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1305,7 +1339,7 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEAttribute(getFloat_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.eclipse.iee.translator.jmole.math.math.Float.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixElementEClass, MatrixElement.class, "MatrixElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMatrixElement_Element(), ecorePackage.getEString(), "element", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMatrixElement_Element(), this.getMathName(), null, "element", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMatrixElement_Row(), ecorePackage.getEString(), "row", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMatrixElement_Column(), ecorePackage.getEString(), "column", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1329,10 +1363,10 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     initEReference(getNewMatrix_Matrix(), this.getMatrix(), null, "matrix", null, 0, 1, NewMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(transposeMatrixEClass, TransposeMatrix.class, "TransposeMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTransposeMatrix_Name(), ecorePackage.getEString(), "name", null, 0, 1, TransposeMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTransposeMatrix_Name(), this.getMathName(), null, "name", null, 0, 1, TransposeMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixVariableEClass, MatrixVariable.class, "MatrixVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMatrixVariable_Name(), ecorePackage.getEString(), "name", null, 0, 1, MatrixVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMatrixVariable_Name(), this.getMathName(), null, "name", null, 0, 1, MatrixVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

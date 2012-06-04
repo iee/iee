@@ -7,11 +7,14 @@
 package org.eclipse.iee.translator.jmole.math.math.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.MatrixElement;
 
@@ -33,24 +36,14 @@ import org.eclipse.iee.translator.jmole.math.math.MatrixElement;
 public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
 {
   /**
-   * The default value of the '{@link #getElement() <em>Element</em>}' attribute.
+   * The cached value of the '{@link #getElement() <em>Element</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getElement()
    * @generated
    * @ordered
    */
-  protected static final String ELEMENT_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getElement() <em>Element</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getElement()
-   * @generated
-   * @ordered
-   */
-  protected String element = ELEMENT_EDEFAULT;
+  protected MathName element;
 
   /**
    * The default value of the '{@link #getRow() <em>Row</em>}' attribute.
@@ -118,7 +111,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getElement()
+  public MathName getElement()
   {
     return element;
   }
@@ -128,12 +121,37 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setElement(String newElement)
+  public NotificationChain basicSetElement(MathName newElement, NotificationChain msgs)
   {
-    String oldElement = element;
+    MathName oldElement = element;
     element = newElement;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.MATRIX_ELEMENT__ELEMENT, oldElement, element));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MathPackage.MATRIX_ELEMENT__ELEMENT, oldElement, newElement);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setElement(MathName newElement)
+  {
+    if (newElement != element)
+    {
+      NotificationChain msgs = null;
+      if (element != null)
+        msgs = ((InternalEObject)element).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MathPackage.MATRIX_ELEMENT__ELEMENT, null, msgs);
+      if (newElement != null)
+        msgs = ((InternalEObject)newElement).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MathPackage.MATRIX_ELEMENT__ELEMENT, null, msgs);
+      msgs = basicSetElement(newElement, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.MATRIX_ELEMENT__ELEMENT, newElement, newElement));
   }
 
   /**
@@ -188,6 +206,22 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * @generated
    */
   @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case MathPackage.MATRIX_ELEMENT__ELEMENT:
+        return basicSetElement(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -213,7 +247,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
     switch (featureID)
     {
       case MathPackage.MATRIX_ELEMENT__ELEMENT:
-        setElement((String)newValue);
+        setElement((MathName)newValue);
         return;
       case MathPackage.MATRIX_ELEMENT__ROW:
         setRow((String)newValue);
@@ -236,7 +270,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
     switch (featureID)
     {
       case MathPackage.MATRIX_ELEMENT__ELEMENT:
-        setElement(ELEMENT_EDEFAULT);
+        setElement((MathName)null);
         return;
       case MathPackage.MATRIX_ELEMENT__ROW:
         setRow(ROW_EDEFAULT);
@@ -259,7 +293,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
     switch (featureID)
     {
       case MathPackage.MATRIX_ELEMENT__ELEMENT:
-        return ELEMENT_EDEFAULT == null ? element != null : !ELEMENT_EDEFAULT.equals(element);
+        return element != null;
       case MathPackage.MATRIX_ELEMENT__ROW:
         return ROW_EDEFAULT == null ? row != null : !ROW_EDEFAULT.equals(row);
       case MathPackage.MATRIX_ELEMENT__COLUMN:
@@ -279,9 +313,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (element: ");
-    result.append(element);
-    result.append(", row: ");
+    result.append(" (row: ");
     result.append(row);
     result.append(", column: ");
     result.append(column);

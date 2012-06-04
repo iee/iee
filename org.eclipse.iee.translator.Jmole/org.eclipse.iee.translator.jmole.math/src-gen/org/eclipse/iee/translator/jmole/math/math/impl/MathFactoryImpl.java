@@ -24,6 +24,7 @@ import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
 import org.eclipse.iee.translator.jmole.math.math.MathFactory;
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
@@ -106,6 +107,7 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.MATRIX_FORMULA: return createMatrixFormula();
       case MathPackage.MATRIX_EXPRESSION: return createMatrixExpression();
       case MathPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
+      case MathPackage.MATH_NAME: return createMathName();
       case MathPackage.ADDITION: return createAddition();
       case MathPackage.SUBTRACTION: return createSubtraction();
       case MathPackage.MULTIPLICATION: return createMultiplication();
@@ -237,6 +239,17 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
     return functionDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MathName createMathName()
+  {
+    MathNameImpl mathName = new MathNameImpl();
+    return mathName;
   }
 
   /**

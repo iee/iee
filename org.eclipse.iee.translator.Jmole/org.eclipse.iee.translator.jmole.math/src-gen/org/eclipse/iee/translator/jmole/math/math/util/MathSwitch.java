@@ -20,6 +20,7 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
@@ -170,6 +171,13 @@ public class MathSwitch<T> extends Switch<T>
       {
         FunctionDefinition functionDefinition = (FunctionDefinition)theEObject;
         T result = caseFunctionDefinition(functionDefinition);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.MATH_NAME:
+      {
+        MathName mathName = (MathName)theEObject;
+        T result = caseMathName(mathName);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -477,6 +485,22 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFunctionDefinition(FunctionDefinition object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Name</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Name</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMathName(MathName object)
   {
     return null;
   }

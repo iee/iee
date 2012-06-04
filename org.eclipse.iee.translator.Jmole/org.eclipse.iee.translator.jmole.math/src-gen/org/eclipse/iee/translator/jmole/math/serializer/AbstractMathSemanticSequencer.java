@@ -12,6 +12,7 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.MathPackage;
 import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
@@ -197,6 +198,12 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				   context == grammarAccess.getPrimaryRule() ||
 				   context == grammarAccess.getUnaryExpressionRule()) {
 					sequence_UnaryExpression(context, (Invert) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.MATH_NAME:
+				if(context == grammarAccess.getMathNameRule()) {
+					sequence_MathName(context, (MathName) semanticObject); 
 					return; 
 				}
 				else break;
@@ -475,7 +482,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (name=MATH_NAME (parameters+=Formula parameters+=Formula*)?)
+	 *     (name=MathName (parameters+=Formula parameters+=Formula*)?)
 	 *
 	 * Features:
 	 *    name[1, 1]
@@ -483,6 +490,25 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	 */
 	protected void sequence_Function(EObject context, Expression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     mathName=MATH_NAME
+	 *
+	 * Features:
+	 *    mathName[1, 1]
+	 */
+	protected void sequence_MathName(EObject context, MathName semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, MathPackage.Literals.MATH_NAME__MATH_NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MathPackage.Literals.MATH_NAME__MATH_NAME));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getMathNameAccess().getMathNameMATH_NAMETerminalRuleCall_0(), semanticObject.getMathName());
+		feeder.finish();
 	}
 	
 	
@@ -534,7 +560,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (variable=MATH_NAME value=MatrixFormula)
+	 *     (variable=MathName value=MatrixFormula)
 	 *
 	 * Features:
 	 *    variable[1, 1]
@@ -549,7 +575,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getMatrixAssignmentAccess().getVariableMATH_NAMETerminalRuleCall_1_0(), semanticObject.getVariable());
+		feeder.accept(grammarAccess.getMatrixAssignmentAccess().getVariableMathNameParserRuleCall_1_0(), semanticObject.getVariable());
 		feeder.accept(grammarAccess.getMatrixAssignmentAccess().getValueMatrixFormulaParserRuleCall_4_0(), semanticObject.getValue());
 		feeder.finish();
 	}
@@ -664,7 +690,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     name=MATH_NAME
+	 *     name=MathName
 	 *
 	 * Features:
 	 *    name[1, 1]
@@ -676,7 +702,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getPrimaryMatrixAccess().getNameMATH_NAMETerminalRuleCall_2_2_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getPrimaryMatrixAccess().getNameMathNameParserRuleCall_2_2_0(), semanticObject.getName());
 		feeder.finish();
 	}
 	
@@ -702,7 +728,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     name=MATH_NAME
+	 *     name=MathName
 	 *
 	 * Features:
 	 *    name[1, 1]
@@ -714,7 +740,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getPrimaryMatrixAccess().getNameMATH_NAMETerminalRuleCall_1_2_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getPrimaryMatrixAccess().getNameMathNameParserRuleCall_1_2_0(), semanticObject.getName());
 		feeder.finish();
 	}
 	
@@ -745,7 +771,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (element=MATH_NAME row=Float column=Float)
+	 *     (element=MathName row=Float column=Float)
 	 *
 	 * Features:
 	 *    element[1, 1]
@@ -759,7 +785,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     name=MATH_NAME
+	 *     name=MathName
 	 *
 	 * Features:
 	 *    name[1, 1]
@@ -837,7 +863,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (variable=MATH_NAME value=Formula)
+	 *     (variable=MathName value=Formula)
 	 *
 	 * Features:
 	 *    variable[1, 1]
@@ -852,7 +878,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		}
 		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
-		feeder.accept(grammarAccess.getVariableAssignmentAccess().getVariableMATH_NAMETerminalRuleCall_0_0(), semanticObject.getVariable());
+		feeder.accept(grammarAccess.getVariableAssignmentAccess().getVariableMathNameParserRuleCall_0_0(), semanticObject.getVariable());
 		feeder.accept(grammarAccess.getVariableAssignmentAccess().getValueFormulaParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
 	}

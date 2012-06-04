@@ -28,30 +28,30 @@ package org.eclipse.iee.translator.jmole.math.math;
 public interface MatrixElement extends Expression
 {
   /**
-   * Returns the value of the '<em><b>Element</b></em>' attribute.
+   * Returns the value of the '<em><b>Element</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Element</em>' attribute isn't clear,
+   * If the meaning of the '<em>Element</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Element</em>' attribute.
-   * @see #setElement(String)
+   * @return the value of the '<em>Element</em>' containment reference.
+   * @see #setElement(MathName)
    * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getMatrixElement_Element()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getElement();
+  MathName getElement();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement#getElement <em>Element</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement#getElement <em>Element</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Element</em>' attribute.
+   * @param value the new value of the '<em>Element</em>' containment reference.
    * @see #getElement()
    * @generated
    */
-  void setElement(String value);
+  void setElement(MathName value);
 
   /**
    * Returns the value of the '<em><b>Row</b></em>' attribute.

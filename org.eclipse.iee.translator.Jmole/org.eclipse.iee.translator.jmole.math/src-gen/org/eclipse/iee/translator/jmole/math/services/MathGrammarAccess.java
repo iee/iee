@@ -75,23 +75,23 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "VariableAssignment");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cVariableAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cVariableMATH_NAMETerminalRuleCall_0_0 = (RuleCall)cVariableAssignment_0.eContents().get(0);
+		private final RuleCall cVariableMathNameParserRuleCall_0_0 = (RuleCall)cVariableAssignment_0.eContents().get(0);
 		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cValueFormulaParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
 		
 		//VariableAssignment:
-		//	variable=MATH_NAME "=" value=Formula;
+		//	variable=MathName "=" value=Formula;
 		public ParserRule getRule() { return rule; }
 
-		//variable=MATH_NAME "=" value=Formula
+		//variable=MathName "=" value=Formula
 		public Group getGroup() { return cGroup; }
 
-		//variable=MATH_NAME
+		//variable=MathName
 		public Assignment getVariableAssignment_0() { return cVariableAssignment_0; }
 
-		//MATH_NAME
-		public RuleCall getVariableMATH_NAMETerminalRuleCall_0_0() { return cVariableMATH_NAMETerminalRuleCall_0_0; }
+		//MathName
+		public RuleCall getVariableMathNameParserRuleCall_0_0() { return cVariableMathNameParserRuleCall_0_0; }
 
 		//"="
 		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
@@ -377,7 +377,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
 		private final Action cVariableAction_0_0 = (Action)cGroup_0.eContents().get(0);
 		private final Assignment cNameAssignment_0_1 = (Assignment)cGroup_0.eContents().get(1);
-		private final RuleCall cNameMATH_NAMETerminalRuleCall_0_1_0 = (RuleCall)cNameAssignment_0_1.eContents().get(0);
+		private final RuleCall cNameMathNameParserRuleCall_0_1_0 = (RuleCall)cNameAssignment_0_1.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Action cFloatAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Assignment cValueAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
@@ -385,7 +385,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final Action cMatrixElementAction_2_0 = (Action)cGroup_2.eContents().get(0);
 		private final Assignment cElementAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cElementMATH_NAMETerminalRuleCall_2_1_0 = (RuleCall)cElementAssignment_2_1.eContents().get(0);
+		private final RuleCall cElementMathNameParserRuleCall_2_1_0 = (RuleCall)cElementAssignment_2_1.eContents().get(0);
 		private final Keyword cLeftSquareBracketKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		private final Assignment cRowAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
 		private final RuleCall cRowFloatParserRuleCall_2_3_0 = (RuleCall)cRowAssignment_2_3.eContents().get(0);
@@ -404,25 +404,25 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		
 		//Primary returns Expression:
-		//	{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float
+		//	{Variable} name=MathName | {Float} value=Float | {MatrixElement} element=MathName "[" row=Float "]" "[" column=Float
 		//	"]" | {Function} function=Function | "(" Addition ")";
 		public ParserRule getRule() { return rule; }
 
-		//{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float
-		//"]" | {Function} function=Function | "(" Addition ")"
+		//{Variable} name=MathName | {Float} value=Float | {MatrixElement} element=MathName "[" row=Float "]" "[" column=Float "]"
+		//| {Function} function=Function | "(" Addition ")"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//{Variable} name=MATH_NAME
+		//{Variable} name=MathName
 		public Group getGroup_0() { return cGroup_0; }
 
 		//{Variable}
 		public Action getVariableAction_0_0() { return cVariableAction_0_0; }
 
-		//name=MATH_NAME
+		//name=MathName
 		public Assignment getNameAssignment_0_1() { return cNameAssignment_0_1; }
 
-		//MATH_NAME
-		public RuleCall getNameMATH_NAMETerminalRuleCall_0_1_0() { return cNameMATH_NAMETerminalRuleCall_0_1_0; }
+		//MathName
+		public RuleCall getNameMathNameParserRuleCall_0_1_0() { return cNameMathNameParserRuleCall_0_1_0; }
 
 		//{Float} value=Float
 		public Group getGroup_1() { return cGroup_1; }
@@ -436,17 +436,17 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Float
 		public RuleCall getValueFloatParserRuleCall_1_1_0() { return cValueFloatParserRuleCall_1_1_0; }
 
-		//{MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float "]"
+		//{MatrixElement} element=MathName "[" row=Float "]" "[" column=Float "]"
 		public Group getGroup_2() { return cGroup_2; }
 
 		//{MatrixElement}
 		public Action getMatrixElementAction_2_0() { return cMatrixElementAction_2_0; }
 
-		//element=MATH_NAME
+		//element=MathName
 		public Assignment getElementAssignment_2_1() { return cElementAssignment_2_1; }
 
-		//MATH_NAME
-		public RuleCall getElementMATH_NAMETerminalRuleCall_2_1_0() { return cElementMATH_NAMETerminalRuleCall_2_1_0; }
+		//MathName
+		public RuleCall getElementMathNameParserRuleCall_2_1_0() { return cElementMathNameParserRuleCall_2_1_0; }
 
 		//"["
 		public Keyword getLeftSquareBracketKeyword_2_2() { return cLeftSquareBracketKeyword_2_2; }
@@ -606,27 +606,27 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cLeftSquareBracketKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cVariableAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cVariableMATH_NAMETerminalRuleCall_1_0 = (RuleCall)cVariableAssignment_1.eContents().get(0);
+		private final RuleCall cVariableMathNameParserRuleCall_1_0 = (RuleCall)cVariableAssignment_1.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Keyword cEqualsSignKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		private final Assignment cValueAssignment_4 = (Assignment)cGroup.eContents().get(4);
 		private final RuleCall cValueMatrixFormulaParserRuleCall_4_0 = (RuleCall)cValueAssignment_4.eContents().get(0);
 		
 		//MatrixAssignment:
-		//	"[" variable=MATH_NAME "]" "=" value=MatrixFormula;
+		//	"[" variable=MathName "]" "=" value=MatrixFormula;
 		public ParserRule getRule() { return rule; }
 
-		//"[" variable=MATH_NAME "]" "=" value=MatrixFormula
+		//"[" variable=MathName "]" "=" value=MatrixFormula
 		public Group getGroup() { return cGroup; }
 
 		//"["
 		public Keyword getLeftSquareBracketKeyword_0() { return cLeftSquareBracketKeyword_0; }
 
-		//variable=MATH_NAME
+		//variable=MathName
 		public Assignment getVariableAssignment_1() { return cVariableAssignment_1; }
 
-		//MATH_NAME
-		public RuleCall getVariableMATH_NAMETerminalRuleCall_1_0() { return cVariableMATH_NAMETerminalRuleCall_1_0; }
+		//MathName
+		public RuleCall getVariableMathNameParserRuleCall_1_0() { return cVariableMathNameParserRuleCall_1_0; }
 
 		//"]"
 		public Keyword getRightSquareBracketKeyword_2() { return cRightSquareBracketKeyword_2; }
@@ -794,13 +794,13 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cTransposeMatrixAction_1_0 = (Action)cGroup_1.eContents().get(0);
 		private final Keyword cLeftSquareBracketKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		private final Assignment cNameAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
-		private final RuleCall cNameMATH_NAMETerminalRuleCall_1_2_0 = (RuleCall)cNameAssignment_1_2.eContents().get(0);
+		private final RuleCall cNameMathNameParserRuleCall_1_2_0 = (RuleCall)cNameAssignment_1_2.eContents().get(0);
 		private final Keyword cTKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final Action cMatrixVariableAction_2_0 = (Action)cGroup_2.eContents().get(0);
 		private final Keyword cLeftSquareBracketKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
 		private final Assignment cNameAssignment_2_2 = (Assignment)cGroup_2.eContents().get(2);
-		private final RuleCall cNameMATH_NAMETerminalRuleCall_2_2_0 = (RuleCall)cNameAssignment_2_2.eContents().get(0);
+		private final RuleCall cNameMathNameParserRuleCall_2_2_0 = (RuleCall)cNameAssignment_2_2.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
 		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
 		private final Keyword cLeftParenthesisKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
@@ -808,11 +808,11 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_3_2 = (Keyword)cGroup_3.eContents().get(2);
 		
 		//PrimaryMatrix returns MatrixExpression:
-		//	{NewMatrix} matrix=Matrix | {TransposeMatrix} "[" name=MATH_NAME "]^T" | {MatrixVariable} "[" name=MATH_NAME "]" | "("
+		//	{NewMatrix} matrix=Matrix | {TransposeMatrix} "[" name=MathName "]^T" | {MatrixVariable} "[" name=MathName "]" | "("
 		//	MatrixAddition ")";
 		public ParserRule getRule() { return rule; }
 
-		//{NewMatrix} matrix=Matrix | {TransposeMatrix} "[" name=MATH_NAME "]^T" | {MatrixVariable} "[" name=MATH_NAME "]" | "("
+		//{NewMatrix} matrix=Matrix | {TransposeMatrix} "[" name=MathName "]^T" | {MatrixVariable} "[" name=MathName "]" | "("
 		//MatrixAddition ")"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
@@ -828,7 +828,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Matrix
 		public RuleCall getMatrixMatrixParserRuleCall_0_1_0() { return cMatrixMatrixParserRuleCall_0_1_0; }
 
-		//{TransposeMatrix} "[" name=MATH_NAME "]^T"
+		//{TransposeMatrix} "[" name=MathName "]^T"
 		public Group getGroup_1() { return cGroup_1; }
 
 		//{TransposeMatrix}
@@ -837,16 +837,16 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//"["
 		public Keyword getLeftSquareBracketKeyword_1_1() { return cLeftSquareBracketKeyword_1_1; }
 
-		//name=MATH_NAME
+		//name=MathName
 		public Assignment getNameAssignment_1_2() { return cNameAssignment_1_2; }
 
-		//MATH_NAME
-		public RuleCall getNameMATH_NAMETerminalRuleCall_1_2_0() { return cNameMATH_NAMETerminalRuleCall_1_2_0; }
+		//MathName
+		public RuleCall getNameMathNameParserRuleCall_1_2_0() { return cNameMathNameParserRuleCall_1_2_0; }
 
 		//"]^T"
 		public Keyword getTKeyword_1_3() { return cTKeyword_1_3; }
 
-		//{MatrixVariable} "[" name=MATH_NAME "]"
+		//{MatrixVariable} "[" name=MathName "]"
 		public Group getGroup_2() { return cGroup_2; }
 
 		//{MatrixVariable}
@@ -855,11 +855,11 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//"["
 		public Keyword getLeftSquareBracketKeyword_2_1() { return cLeftSquareBracketKeyword_2_1; }
 
-		//name=MATH_NAME
+		//name=MathName
 		public Assignment getNameAssignment_2_2() { return cNameAssignment_2_2; }
 
-		//MATH_NAME
-		public RuleCall getNameMATH_NAMETerminalRuleCall_2_2_0() { return cNameMATH_NAMETerminalRuleCall_2_2_0; }
+		//MathName
+		public RuleCall getNameMathNameParserRuleCall_2_2_0() { return cNameMathNameParserRuleCall_2_2_0; }
 
 		//"]"
 		public Keyword getRightSquareBracketKeyword_2_3() { return cRightSquareBracketKeyword_2_3; }
@@ -933,7 +933,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Function");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cNameMATH_NAMETerminalRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
+		private final RuleCall cNameMathNameParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
 		private final Assignment cParametersAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
@@ -946,17 +946,17 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//Function returns Expression:
-		//	name=MATH_NAME "(" (parameters+=Formula ("," parameters+=Formula)* ","?)? ")";
+		//	name=MathName "(" (parameters+=Formula ("," parameters+=Formula)* ","?)? ")";
 		public ParserRule getRule() { return rule; }
 
-		//name=MATH_NAME "(" (parameters+=Formula ("," parameters+=Formula)* ","?)? ")"
+		//name=MathName "(" (parameters+=Formula ("," parameters+=Formula)* ","?)? ")"
 		public Group getGroup() { return cGroup; }
 
-		//name=MATH_NAME
+		//name=MathName
 		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 
-		//MATH_NAME
-		public RuleCall getNameMATH_NAMETerminalRuleCall_0_0() { return cNameMATH_NAMETerminalRuleCall_0_0; }
+		//MathName
+		public RuleCall getNameMathNameParserRuleCall_0_0() { return cNameMathNameParserRuleCall_0_0; }
 
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
@@ -1020,6 +1020,22 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Formula
 		public RuleCall getFormulaFormulaParserRuleCall_2_0() { return cFormulaFormulaParserRuleCall_2_0; }
 	}
+
+	public class MathNameElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "MathName");
+		private final Assignment cMathNameAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cMathNameMATH_NAMETerminalRuleCall_0 = (RuleCall)cMathNameAssignment.eContents().get(0);
+		
+		//MathName:
+		//	mathName=MATH_NAME;
+		public ParserRule getRule() { return rule; }
+
+		//mathName=MATH_NAME
+		public Assignment getMathNameAssignment() { return cMathNameAssignment; }
+
+		//MATH_NAME
+		public RuleCall getMathNameMATH_NAMETerminalRuleCall_0() { return cMathNameMATH_NAMETerminalRuleCall_0; }
+	}
 	
 	
 	private StatementElements pStatement;
@@ -1040,6 +1056,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	private FloatElements pFloat;
 	private FunctionElements pFunction;
 	private FunctionDefinitionElements pFunctionDefinition;
+	private MathNameElements pMathName;
 	private TerminalRule tMATH_NAME;
 	
 	private final GrammarProvider grammarProvider;
@@ -1075,7 +1092,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VariableAssignment:
-	//	variable=MATH_NAME "=" value=Formula;
+	//	variable=MathName "=" value=Formula;
 	public VariableAssignmentElements getVariableAssignmentAccess() {
 		return (pVariableAssignment != null) ? pVariableAssignment : (pVariableAssignment = new VariableAssignmentElements());
 	}
@@ -1145,7 +1162,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Primary returns Expression:
-	//	{Variable} name=MATH_NAME | {Float} value=Float | {MatrixElement} element=MATH_NAME "[" row=Float "]" "[" column=Float
+	//	{Variable} name=MathName | {Float} value=Float | {MatrixElement} element=MathName "[" row=Float "]" "[" column=Float
 	//	"]" | {Function} function=Function | "(" Addition ")";
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
@@ -1176,7 +1193,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MatrixAssignment:
-	//	"[" variable=MATH_NAME "]" "=" value=MatrixFormula;
+	//	"[" variable=MathName "]" "=" value=MatrixFormula;
 	public MatrixAssignmentElements getMatrixAssignmentAccess() {
 		return (pMatrixAssignment != null) ? pMatrixAssignment : (pMatrixAssignment = new MatrixAssignmentElements());
 	}
@@ -1218,7 +1235,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//PrimaryMatrix returns MatrixExpression:
-	//	{NewMatrix} matrix=Matrix | {TransposeMatrix} "[" name=MATH_NAME "]^T" | {MatrixVariable} "[" name=MATH_NAME "]" | "("
+	//	{NewMatrix} matrix=Matrix | {TransposeMatrix} "[" name=MathName "]^T" | {MatrixVariable} "[" name=MathName "]" | "("
 	//	MatrixAddition ")";
 	public PrimaryMatrixElements getPrimaryMatrixAccess() {
 		return (pPrimaryMatrix != null) ? pPrimaryMatrix : (pPrimaryMatrix = new PrimaryMatrixElements());
@@ -1239,7 +1256,7 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Function returns Expression:
-	//	name=MATH_NAME "(" (parameters+=Formula ("," parameters+=Formula)* ","?)? ")";
+	//	name=MathName "(" (parameters+=Formula ("," parameters+=Formula)* ","?)? ")";
 	public FunctionElements getFunctionAccess() {
 		return (pFunction != null) ? pFunction : (pFunction = new FunctionElements());
 	}
@@ -1258,8 +1275,18 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		return getFunctionDefinitionAccess().getRule();
 	}
 
+	//MathName:
+	//	mathName=MATH_NAME;
+	public MathNameElements getMathNameAccess() {
+		return (pMathName != null) ? pMathName : (pMathName = new MathNameElements());
+	}
+	
+	public ParserRule getMathNameRule() {
+		return getMathNameAccess().getRule();
+	}
+
 	//terminal MATH_NAME:
-	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")*;
+	//	("a".."z" | "A".."Z") ("a".."z" | "A".."Z" | "_" | "0".."9" | "{" | "}")*;
 	public TerminalRule getMATH_NAMERule() {
 		return (tMATH_NAME != null) ? tMATH_NAME : (tMATH_NAME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "MATH_NAME"));
 	} 

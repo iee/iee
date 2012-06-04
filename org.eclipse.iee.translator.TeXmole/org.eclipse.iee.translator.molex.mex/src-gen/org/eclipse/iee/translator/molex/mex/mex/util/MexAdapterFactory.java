@@ -23,6 +23,7 @@ import org.eclipse.iee.translator.molex.mex.mex.Function;
 import org.eclipse.iee.translator.molex.mex.mex.FunctionDefinition;
 import org.eclipse.iee.translator.molex.mex.mex.InBrackets;
 import org.eclipse.iee.translator.molex.mex.mex.Invert;
+import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.Matrix;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAddition;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment;
@@ -156,6 +157,11 @@ public class MexAdapterFactory extends AdapterFactoryImpl
       public Adapter caseFunctionDefinition(FunctionDefinition object)
       {
         return createFunctionDefinitionAdapter();
+      }
+      @Override
+      public Adapter caseMathName(MathName object)
+      {
+        return createMathNameAdapter();
       }
       @Override
       public Adapter caseAddition(Addition object)
@@ -425,6 +431,21 @@ public class MexAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createFunctionDefinitionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.molex.mex.mex.MathName <em>Math Name</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.molex.mex.mex.MathName
+   * @generated
+   */
+  public Adapter createMathNameAdapter()
   {
     return null;
   }

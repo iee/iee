@@ -24,6 +24,7 @@ import org.eclipse.iee.translator.molex.mex.mex.Function;
 import org.eclipse.iee.translator.molex.mex.mex.FunctionDefinition;
 import org.eclipse.iee.translator.molex.mex.mex.InBrackets;
 import org.eclipse.iee.translator.molex.mex.mex.Invert;
+import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.Matrix;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAddition;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment;
@@ -108,6 +109,7 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
       case MexPackage.MATRIX_FORMULA: return createMatrixFormula();
       case MexPackage.MATRIX_EXPRESSION: return createMatrixExpression();
       case MexPackage.FUNCTION_DEFINITION: return createFunctionDefinition();
+      case MexPackage.MATH_NAME: return createMathName();
       case MexPackage.ADDITION: return createAddition();
       case MexPackage.SUBTRACTION: return createSubtraction();
       case MexPackage.MULTIPLICATION: return createMultiplication();
@@ -241,6 +243,17 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
   {
     FunctionDefinitionImpl functionDefinition = new FunctionDefinitionImpl();
     return functionDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MathName createMathName()
+  {
+    MathNameImpl mathName = new MathNameImpl();
+    return mathName;
   }
 
   /**

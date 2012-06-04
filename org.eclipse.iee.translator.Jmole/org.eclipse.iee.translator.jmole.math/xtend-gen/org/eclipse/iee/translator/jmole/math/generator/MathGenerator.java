@@ -13,6 +13,7 @@ import org.eclipse.iee.translator.jmole.math.math.Formula;
 import org.eclipse.iee.translator.jmole.math.math.Function;
 import org.eclipse.iee.translator.jmole.math.math.FunctionDefinition;
 import org.eclipse.iee.translator.jmole.math.math.Invert;
+import org.eclipse.iee.translator.jmole.math.math.MathName;
 import org.eclipse.iee.translator.jmole.math.math.Matrix;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAddition;
 import org.eclipse.iee.translator.jmole.math.math.MatrixAssignment;
@@ -124,8 +125,9 @@ public class MathGenerator implements IGenerator {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("public static double ");
     Expression _function = funcDef.getFunction();
-    String _name = _function.getName();
-    _builder.append(_name, "");
+    MathName _name = _function.getName();
+    StringConcatenation _compileName = this.compileName(_name);
+    _builder.append(_compileName, "");
     _builder.append(" ( ");
     _builder.newLineIfNotEmpty();
     {
@@ -173,10 +175,23 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
+  public StringConcatenation compileName(final MathName name) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _mathName = name.getMathName();
+    String temp = _mathName;
+    _builder.newLineIfNotEmpty();
+    String _replaceAll = temp.replaceAll("\\{", "");
+    String _replaceAll_1 = _replaceAll.replaceAll("\\}", "");
+    _builder.append(_replaceAll_1, "");
+    _builder.newLineIfNotEmpty();
+    return _builder;
+  }
+  
   public StringConcatenation compileVariableAssignment(final VariableAssignment a) {
     StringConcatenation _builder = new StringConcatenation();
-    String _variable = a.getVariable();
-    _builder.append(_variable, "");
+    MathName _variable = a.getVariable();
+    StringConcatenation _compileName = this.compileName(_variable);
+    _builder.append(_compileName, "");
     _builder.append(" = ");
     Formula _value = a.getValue();
     StringConcatenation _compileFormula = this.compileFormula(_value);
@@ -205,8 +220,9 @@ public class MathGenerator implements IGenerator {
   
   public StringConcatenation compileMatrixAssignment(final MatrixAssignment a) {
     StringConcatenation _builder = new StringConcatenation();
-    String _variable = a.getVariable();
-    _builder.append(_variable, "");
+    MathName _variable = a.getVariable();
+    StringConcatenation _compileName = this.compileName(_variable);
+    _builder.append(_compileName, "");
     _builder.append(" = ");
     MatrixFormula _value = a.getValue();
     StringConcatenation _compileMatrixFormula = this.compileMatrixFormula(_value);
@@ -218,8 +234,9 @@ public class MathGenerator implements IGenerator {
   public StringConcatenation compileFunction(final Function f) {
     StringConcatenation _builder = new StringConcatenation();
     Expression _function = f.getFunction();
-    String _name = _function.getName();
-    _builder.append(_name, "");
+    MathName _name = _function.getName();
+    StringConcatenation _compileName = this.compileName(_name);
+    _builder.append(_compileName, "");
     _builder.newLineIfNotEmpty();
     _builder.append("(");
     {
@@ -255,8 +272,9 @@ public class MathGenerator implements IGenerator {
   
   protected StringConcatenation _compileExpression(final Variable n) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = n.getName();
-    _builder.append(_name, "");
+    MathName _name = n.getName();
+    StringConcatenation _compileName = this.compileName(_name);
+    _builder.append(_compileName, "");
     return _builder;
   }
   
@@ -269,8 +287,9 @@ public class MathGenerator implements IGenerator {
   
   protected StringConcatenation _compileExpression(final MatrixElement e) {
     StringConcatenation _builder = new StringConcatenation();
-    String _element = e.getElement();
-    _builder.append(_element, "");
+    MathName _element = e.getElement();
+    StringConcatenation _compileName = this.compileName(_element);
+    _builder.append(_compileName, "");
     _builder.append(".get(");
     String _row = e.getRow();
     _builder.append(_row, "");
@@ -406,8 +425,9 @@ public class MathGenerator implements IGenerator {
   
   protected StringConcatenation _compileMatrixExpression(final MatrixVariable n) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = n.getName();
-    _builder.append(_name, "");
+    MathName _name = n.getName();
+    StringConcatenation _compileName = this.compileName(_name);
+    _builder.append(_compileName, "");
     return _builder;
   }
   
@@ -478,8 +498,9 @@ public class MathGenerator implements IGenerator {
   
   protected StringConcatenation _compileMatrixExpression(final TransposeMatrix n) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = n.getName();
-    _builder.append(_name, "");
+    MathName _name = n.getName();
+    StringConcatenation _compileName = this.compileName(_name);
+    _builder.append(_compileName, "");
     _builder.append(".transpose()");
     return _builder;
   }
