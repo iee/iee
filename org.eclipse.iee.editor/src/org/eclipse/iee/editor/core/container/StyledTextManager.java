@@ -15,10 +15,19 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.GlyphMetrics;
 
+
 class StyledTextManager {
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
+	
+	private enum State {
+		READY,
+		STYLES_UPDATE_REQUESTED,
+		TEXT_PRESENTATION_UPDATE_INITIATED,
+		STYLES_UPDATED,
+	}	
+	State fState = State.READY; 
 	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
@@ -27,40 +36,85 @@ class StyledTextManager {
 		
 		initListeners();
 	}
-	
-	public void updatePresentation() {
-		//fSourceViewer.invalidateTextPresentation();
+		
+	public void updateStyles(boolean doInitiateTextPresentationUpdate) {
+		
+		assert(fState == State.READY);
+		System.out.println("READY/updateStyles()");
+
+		fState = State.STYLES_UPDATE_REQUESTED;
+			
+		if (doInitiateTextPresentationUpdate) {
+			fStyledText.redraw();
+		}
 	}
 	
 	protected void initListeners() {
-		/* Moving StyledText's controls */		
+		
 		fStyledText.addPaintObjectListener(new PaintObjectListener() {
 			public void paintObject(PaintObjectEvent e) {
-				if (e.style.data instanceof Container) {
-					System.out.println("paintObject()");
-					Container c = (Container) e.style.data;
-					c.updatePresentation();
+				
+				switch (fState) {
+				
+				case STYLES_UPDATE_REQUESTED:
+					/* If we are here, TextPresentationListener have not been executed yet, so trying to do this */
+					System.out.println("STYLES_UPDATE_REQUESTED/paintObject(): invalidating text presentation");
+					
+					fState = State.TEXT_PRESENTATION_UPDATE_INITIATED; 
+					fSourceViewer.invalidateTextPresentation();
+					break;
+					
+				case STYLES_UPDATED:
+					System.out.println("STYLES_UPDATED/paintObject(): reconcile containers's positions");
+					for (Container c : fContainerManager.getContainers()) {
+						c.updatePresentation();
+					}
+					fState = State.READY;				
+					break;
+					
+				case READY:
+				default:
+					return;
+				
 				}
 			}
 		});
 		
-		/* Setting style ranges */
 		((ITextViewerExtension4) fSourceViewer).addTextPresentationListener(new ITextPresentationListener() {			
 			@Override
 			public void applyTextPresentation(TextPresentation textPresentation) {
 				
-				System.out.println("applyTextPresentation()");
+				if (fState == State.STYLES_UPDATE_REQUESTED) {
+					System.out.println("STYLES_UPDATE_REQUESTED/applyTextPresentation(): applying styles to text presentation");
+					
+					//printTextPresentationStyleRanges(textPresentation);					
+					textPresentation.mergeStyleRanges(getContainersStyleRanges());
+					
+					//fState = State.STYLES_UPDATED;
+				}
 				
-				//textPresentation.replaceStyleRanges(getContainersStyleRanges());
-				textPresentation.mergeStyleRanges(getContainersStyleRanges());
+				if (fState == State.TEXT_PRESENTATION_UPDATE_INITIATED) {
+					System.out.println("TEXT_PRESENTATION_UPDATE_INITIATED/applyTextPresentation(): applying styles to text presentation");
+
+					//printTextPresentationStyleRanges(textPresentation);					
+					textPresentation.mergeStyleRanges(getContainersStyleRanges());
+					fState = State.STYLES_UPDATED;
+				}
 			}
 		});
-	}
 		
+	}
 	
-	/**
-	 * Gets style ranges 
-	 */
+	protected void printTextPresentationStyleRanges(TextPresentation tp) {
+		System.out.println("\n== TextPresentation== ");
+		Iterator it = tp.getAllStyleRangeIterator();
+		while (it.hasNext()) {
+			StyleRange styleRange = (StyleRange) it.next();
+			System.out.println(styleRange);
+		}
+		System.out.println("\n");
+	}
+	
 	protected StyleRange[] getContainersStyleRanges() {	
 		
 		List<StyleRange> styleRanges = new ArrayList<StyleRange>();
@@ -106,50 +160,6 @@ class StyledTextManager {
 		styles.add(hiddenText);
 		
 		return styles;
-	}	
-	
-
-
-	
-	/**
-	 * Not used now
-	 */
-	protected int getMaxContainerHeightInLine(List<Container> containersInLine) {
-		Iterator<Container> iterator = containersInLine.iterator();
-		int maxHeight = 0;
-		while (iterator.hasNext()) {
-			Container c = iterator.next();
-			int compositeHeigth = c.getComposite().getSize().y;
-			if (maxHeight < compositeHeigth) {
-				maxHeight = compositeHeigth;
-			}
-		}
-		return maxHeight;
 	}
 	
-	/**
-	 * Not used now, may work with bugs 
-	 */
-	protected List<List<Container>> splitContainersByLines(List<Container> containers) {
-		List<List<Container>> containersByLines =
-			new ArrayList<List<Container>>();
-		
-		List<Container> currentLineContainers = new ArrayList<Container>();
-		int currentLineNumber = 0; 
-		
-		for (Container c : containers) {
-			if (currentLineNumber < c.getLineNumber()) {
-				/* Moving to the next line */
-				currentLineNumber = c.getLineNumber();
-				
-				if (!currentLineContainers.isEmpty()) {
-					containersByLines.add(currentLineContainers);
-					currentLineContainers.clear();
-				}
-			}
-			currentLineContainers.add(c);
-		}
-		containersByLines.add(currentLineContainers);		
-		return containersByLines;
-	}
 }

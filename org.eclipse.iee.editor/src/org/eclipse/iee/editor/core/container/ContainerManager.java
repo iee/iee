@@ -26,27 +26,27 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.custom.StyledText;
 
 public class ContainerManager extends EventManager {
 
 	private final String fContainerManagerID;
+	
 	private final ContainerManagerConfig fConfig;
 	
 	private final DocumentAccess fDocumentAccess;
 	
-	@SuppressWarnings("unused")
 	private final StyledTextManager fStyledTextManager;
 	
-	@SuppressWarnings("unused")
 	private final UserInteractionManager fUserInteractionManager;
 	
 	@SuppressWarnings("unused")
 	private final PartitioningManager fPartitioningManager;
 	
 	private final ISourceViewer fSourceViewer;
+	
 	private final StyledText fStyledText;
+	
 	private final IDocument fDocument;
 	
 	private DocumentListener fDocumentListener;
@@ -54,18 +54,42 @@ public class ContainerManager extends EventManager {
 	private final NavigableSet<Container> fContainers;
 	
 	private static ContainerComparator fContainerComparator = new ContainerComparator();
+
+	private enum State {
+		READY,
+		DOCUMENT_CHANGES_HANDLING
+	}
+	State fState = State.READY;
 	
-	private boolean fProcessingDocumentModification;
 	
 	
 	/* Getters */
 
+	
 	public Object[] getElements() {
 		return fContainers.toArray();
 	}
-	
+		
 	public List<Container> getContainers() {
 		return new ArrayList<Container>(fContainers);
+	}
+	
+	public String[] getContainerIDs() {
+		String[] containerIDs = new String[fContainers.size()];
+		int i = 0;
+		for (Container container : fContainers) {
+			containerIDs[i++] = container.getContainerID();
+		}
+		return containerIDs;
+	}
+	
+	public Collection<Container> getContainersInLine(int lineOffset, int lineLength) {
+		NavigableSet<Container> containersInLine = fContainers.subSet(
+			Container.atOffset(lineOffset),
+			true,
+			Container.atOffset(lineOffset + lineLength),
+			false);		
+		return containersInLine;
 	}
 		
 	public String getContainerManagerID() {
@@ -91,21 +115,15 @@ public class ContainerManager extends EventManager {
 	public ISourceViewer getSourceViewer() {
 		return fSourceViewer;
 	}
-
-	public String[] getContainerIDs() {
-		String[] containerIDs = new String[fContainers.size()];
-		int i = 0;
-		for (Container container : fContainers) {
-			containerIDs[i++] = container.getContainerID();
-		}
-		return containerIDs;
-	}
 	
 	public UserInteractionManager getUserInteractionManager() {
 		return fUserInteractionManager;
 	}
+
+
 	
 	/* INTERFACE FUNCTIONS */
+	
 	
 	public ContainerManager(ContainerManagerConfig config, IDocument document, ISourceViewer sourceViewer, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
@@ -122,7 +140,7 @@ public class ContainerManager extends EventManager {
 		fPartitioningManager = new PartitioningManager(this);
 		fDocumentAccess = new DocumentAccess(this);
 		
-		fProcessingDocumentModification = false;
+		fState = State.READY;
 		
 		initDocumentListener();
 	}
@@ -130,10 +148,9 @@ public class ContainerManager extends EventManager {
 	public void dispose() {
 		removeDocumentListener();
 	}
-	
+
 	public void RequestContainerAllocation(String containerID, int offset) {
 		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(containerID);
-
 		try {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
 		} catch (BadLocationException e) {
@@ -141,22 +158,48 @@ public class ContainerManager extends EventManager {
 		}
 	}
 	
-	void updateContainersPresentations() {
-		System.out.println("updateContainerPresentations");
-		
-		fStyledTextManager.updatePresentation();
-		
-		/* Update positions */
-		Iterator<Container> it = fContainers.iterator();
-		while (it.hasNext()) {
-			Container container = it.next();
-			container.updatePresentation();
-		}
+	public boolean isModificationAllowed() {
+		return fState == State.READY;
 	}
 	
-	void updateContainerVisibility(boolean visibility) {
-		System.out.println("updateContainerVisibility");
-		
+	public void updateContainersPresentations() {
+		//if (isModificationAllowed()) {
+			boolean doInitiateTextPresentationUpdate = true;
+			fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
+		//}
+	}
+
+
+	
+	/* Internal functions */
+
+	
+	protected void initDocumentListener() {
+		fDocumentListener = new DocumentListener();
+		fDocument.addDocumentPartitioningListener(fDocumentListener);
+		fDocument.addDocumentListener(fDocumentListener);
+	}
+	
+	protected void removeDocumentListener() {
+		fDocument.removeDocumentPartitioningListener(fDocumentListener);
+		fDocument.removeDocumentListener(fDocumentListener);
+	}
+	
+	protected Container createContainer(Position position, String containerID) {
+		return new Container(position, containerID,	this);
+	}
+	
+	protected Container getContainerHavingOffset(int offset) {
+		if (offset < 0)
+			return null;
+		Container c = fContainers.floor(Container.atOffset(offset));
+		if (c != null && c.getPosition().includes(offset)) {
+			return c;
+		}
+		return null;
+	}
+	
+	void updateContainerVisibility(boolean visibility) {		
 		Iterator<Container> it = fContainers.iterator();
 		while (it.hasNext()) {
 			Container container = it.next();
@@ -167,71 +210,12 @@ public class ContainerManager extends EventManager {
 			}
 		}
 	}
-
 	
-	/* FUNCTIONS FOR OBSERVERS */
-
-	public void addContainerManagerListener(IContainerManagerListener listener) {
-		Assert.isNotNull(listener);
-		addListenerObject(listener);
-	}
-
-	public void removeContainerManagerListener(IContainerManagerListener listener) {
-		Assert.isNotNull(listener);
-		removeListenerObject(listener);
-	}
-
-	protected void fireContainerCreated(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-				.containerCreated(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
-
-	protected void fireContainerRemoved(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-				.containerRemoved(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
 	
-	protected void fireContainerSelected(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-				.containerSelected(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
 	
-	protected void fireContainerLostSelection(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-				.containerLostSelection(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
-	
-	protected void fireContainerActivated(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-				.containerActivated(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
-
-	protected void fireDebugNotification() {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-				.debugNotification(new ContainerEvent(null, fContainerManagerID));
-		}
-	}
-	
-
 	/* DOCUMENT MODIFICATION EVENT PROCESSING */
 
+	
 	class DocumentListener implements IDocumentListener,
 			IDocumentPartitioningListener,
 			IDocumentPartitioningListenerExtension2 {
@@ -250,9 +234,14 @@ public class ContainerManager extends EventManager {
 
 		@Override
 		public void documentChanged(DocumentEvent event) {
-
-			fProcessingDocumentModification = true;
-
+			
+			if (fState == State.READY) {
+				System.out.println("\n\n== Begin of document modification handling ==");
+				fState = State.DOCUMENT_CHANGES_HANDLING;	
+			} else {
+				System.out.println("\n\n== Internal document modification ==");
+			}
+			
 			/*
 			 * All pads which placed after 'unmodifiedOffset' are considered to
 			 * be just moved without any other modifications.
@@ -331,12 +320,16 @@ public class ContainerManager extends EventManager {
 			fChangedPartitioningRegion = null;
 
 			if (!fDocumentAccess.processNextDocumentAccessRequest()) {
-				updateContainersPresentations();
+				
+				boolean doInitiateTextPresentationUpdate = false;
+				fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
+				
 				updateContainerVisibility(true);
-				fProcessingDocumentModification = false;
+				
 				fUserInteractionManager.updateCaretSelection();
 
-				System.out.println("End of iteration");
+				System.out.println("== End of document modification handling ==\n\n");
+				fState = State.READY;
 
 				/* For debug */
 				fireDebugNotification();
@@ -444,42 +437,67 @@ public class ContainerManager extends EventManager {
 		}
 	}
 	
-	protected void initDocumentListener() {
-		fDocumentListener = new DocumentListener();
-		fDocument.addDocumentPartitioningListener(fDocumentListener);
-		fDocument.addDocumentListener(fDocumentListener);
-	}
 	
-	protected void removeDocumentListener() {
-		fDocument.removeDocumentPartitioningListener(fDocumentListener);
-		fDocument.removeDocumentListener(fDocumentListener);
-	}
 	
-	public boolean isModificationAllowed() {
-		return !fProcessingDocumentModification;
+	/* FUNCTIONS FOR OBSERVERS */
+	
+
+	public void addContainerManagerListener(IContainerManagerListener listener) {
+		Assert.isNotNull(listener);
+		addListenerObject(listener);
 	}
-		
-	protected Container getContainerHavingOffset(int offset) {
-		if (offset < 0)
-			return null;
-		Container c = fContainers.floor(Container.atOffset(offset));
-		if (c != null && c.getPosition().includes(offset)) {
-			return c;
+
+	public void removeContainerManagerListener(IContainerManagerListener listener) {
+		Assert.isNotNull(listener);
+		removeListenerObject(listener);
+	}
+
+	protected void fireContainerCreated(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerCreated(new ContainerEvent(c, fContainerManagerID));
 		}
-		return null;
 	}
 
-	Collection<Container> getContainersInLine(int lineOffset, int lineLength) {
-		NavigableSet<Container> containersInLine = fContainers.subSet(
-			Container.atOffset(lineOffset),
-			true,
-			Container.atOffset(lineOffset + lineLength),
-			false);
-		
-		return containersInLine;
+	protected void fireContainerRemoved(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerRemoved(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
+	
+	protected void fireContainerSelected(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerSelected(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
+	
+	protected void fireContainerLostSelection(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerLostSelection(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
+	
+	protected void fireContainerActivated(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerActivated(new ContainerEvent(c, fContainerManagerID));
+		}
 	}
 
-	protected Container createContainer(Position position, String containerID) {
-		return new Container(position, containerID,	this);
+	protected void fireDebugNotification() {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.debugNotification(new ContainerEvent(null, fContainerManagerID));
+		}
 	}
+	
 }
