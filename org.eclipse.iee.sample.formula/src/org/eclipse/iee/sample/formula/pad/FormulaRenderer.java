@@ -39,6 +39,8 @@ public class FormulaRenderer {
 	}
 
 	public static Image getFormulaImage(String text) {
+		if (text.trim().isEmpty())
+			return null;
 		Image cachedImage = fCachedImages.get(text);
 		String latex = "";
 		if (cachedImage != null) {

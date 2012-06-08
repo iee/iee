@@ -65,12 +65,22 @@ public class FormulaPad extends Pad {
 	private String fOriginalExpression = "";
 	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
-	
-	public String getExpression() {
+
+	private boolean fTextChanged;
+
+	public String getOriginalExpression() {
+		return fOriginalExpression;
+	}
+
+	public void setOriginalExression(String expression) {
+		fOriginalExpression = expression;
+	}
+
+	public String getTranslatingExpression() {
 		return fTranslatingExpression;
 	}
 
-	public void setExression(String expression) {
+	public void setTranslatingExression(String expression) {
 		fTranslatingExpression = expression;
 	}
 
@@ -133,7 +143,7 @@ public class FormulaPad extends Pad {
 	public void validateInput() {
 		String text = fDocument.get();
 		fOriginalExpression = text;
-			
+
 		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
 			setInputIsValid();
 			fLastValidText = text;
@@ -159,7 +169,7 @@ public class FormulaPad extends Pad {
 		/* Set formula image */
 		Image image = FormulaRenderer.getFormulaImage(fTranslatingExpression);
 		fFormulaImageLabel.setImage(image);
- 
+
 		/* Generate code */
 		String generated = Translator.translateElement(fTranslatingExpression);
 
@@ -175,39 +185,38 @@ public class FormulaPad extends Pad {
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
 			variable = variable.trim();
-			if (variable.charAt(0) != '[')
-			{
+			if (variable.charAt(0) != '[') {
 				return "System.out.println(\"" + getContainerID() + "\" + "
 						+ variable + ");";
-			}
-			else
-			{
+			} else {
 				variable = variable.substring(1, variable.length() - 1);
 				String output = "";
-				
-				//TODO: extend Matrix class or change i, j and matrix
-				
+
+				// TODO: extend Matrix class or change i, j and matrix
+
 				output += "int i=0, j=0; String matrix = \"{\";";
-				
-				output += "for(i = 0; i < " + variable +".getRowDimension(); i++){" +
-							"matrix += \"{\";" +
-							"for(j = 0; j < " + variable +".getColumnDimension(); j++)";
-								output += "{";
-								output += "matrix += " + variable + ".get(i,j);";
-								output += "if (j !=" + variable + ".getColumnDimension() - 1)";
-									output += "matrix += \",\";";
-								output += "else matrix += \"}\";";	
-								output += "}";
-								output += "if (i !=" + variable + ".getRowDimension() - 1)";
-								output += "matrix += \",\";";
-								output += "}";
-				
+
+				output += "for(i = 0; i < " + variable
+						+ ".getRowDimension(); i++){" + "matrix += \"{\";"
+						+ "for(j = 0; j < " + variable
+						+ ".getColumnDimension(); j++)";
+				output += "{";
+				output += "matrix += " + variable + ".get(i,j);";
+				output += "if (j !=" + variable + ".getColumnDimension() - 1)";
+				output += "matrix += \",\";";
+				output += "else matrix += \"}\";";
+				output += "}";
+				output += "if (i !=" + variable + ".getRowDimension() - 1)";
+				output += "matrix += \",\";";
+				output += "}";
+
 				output += "matrix += \"}\";";
-				
-				output += "System.out.print(\"" + getContainerID() + "\" + " + "matrix);";
-				
+
+				output += "System.out.print(\"" + getContainerID() + "\" + "
+						+ "matrix);";
+
 				return output;
-						
+
 			}
 		} else {
 			return "";
@@ -246,9 +255,9 @@ public class FormulaPad extends Pad {
 			public void mouseUp(MouseEvent e) {
 			}
 		});
-		
+
 		fViewer.getControl().addFocusListener(new FocusListener() {
-			
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (fTranslatingExpression != "")
@@ -261,66 +270,73 @@ public class FormulaPad extends Pad {
 			public void focusGained(FocusEvent e) {
 			}
 		});
-		
+
 		fViewer.addTextListener(new ITextListener() {
-			
+
 			@Override
 			public void textChanged(TextEvent event) {
-				if (fDocument.get() != "")
-				{
-					validateInput();
-					Image image = FormulaRenderer.getFormulaImage(fDocument.get());
-					if (image == null)
-						image = FormulaRenderer.getFormulaImage(fLastValidText);
-					if (fHoverShell != null)
-						fHoverShell.dispose();
-					fHoverShell = new HoverShell(fParent, image);
-	
-					/* Resize fInputText */
-					Point size = fViewer.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT,
-							false);
-					fViewer.getControl().setSize(size);
-					fParent.pack();
+				if (fTextChanged) {
+					if (fDocument.get() != "") {
+						fTextChanged = true;
+
+						validateInput();
+						Image image = FormulaRenderer.getFormulaImage(fDocument
+								.get());
+						if (image == null)
+							image = FormulaRenderer
+									.getFormulaImage(fLastValidText);
+						if (fHoverShell != null)
+							fHoverShell.dispose();
+						fHoverShell = new HoverShell(fParent, image);
+
+						/* Resize fInputText */
+						Point size = fViewer.getControl().computeSize(
+								SWT.DEFAULT, SWT.DEFAULT, false);
+						fViewer.getControl().setSize(size);
+						fParent.pack();
+					}
 				}
+				else
+					fTextChanged = true;
 			}
 		});
-		
+
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
-		      public void keyPressed(KeyEvent e) {
+			public void keyPressed(KeyEvent e) {
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;
 					processInput();
 					moveCaretToCurrentPad();
-					
+
 					if (fTranslatingExpression != "")
 						toggleFormulaImage();
-					
+
 					if (fHoverShell != null)
 						fHoverShell.dispose();
-					
+
 					break;
 
 				case SWT.ESC:
 					moveCaretToCurrentPad();
-					
+
 					if (fTranslatingExpression != "")
 						toggleFormulaImage();
-					
+
 					if (fHoverShell != null)
 						fHoverShell.dispose();
-					
+
 					break;
-		        }
-		      }
-		    });
-		
+				}
+			}
+		});
+
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		fParent = parent;
-		
+
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		parent.setLayout(layout);
 
@@ -328,22 +344,26 @@ public class FormulaPad extends Pad {
 		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		/* Input View */
-		
+
 		fInputView = new Composite(sashForm, SWT.NONE);
 		fInputView.setLayout(new GridLayout(1, true));
-		
+
 		fViewer = new TextViewer(fInputView, SWT.SINGLE);
 		fViewer.getControl().setSize(50, 100);
 		fDocument = new Document();
-		fDocument.set(fTranslatingExpression);
+		if (fTranslatingExpression.isEmpty())
+			fDocument.set(fOriginalExpression);
+		else
+			fDocument.set(fTranslatingExpression);
 		fViewer.setDocument(fDocument);
-		
-		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25); 
-		fViewer.setUndoManager(defaultUndoManager); 
-		defaultUndoManager.connect(fViewer); 
-		
+		fTextChanged = false;
+
+		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
+		fViewer.setUndoManager(defaultUndoManager);
+		defaultUndoManager.connect(fViewer);
+
 		fViewerSupport = new TextViewerSupport(fViewer);
-		
+
 		/* Result View */
 
 		fResultView = new Composite(sashForm, SWT.NONE);
@@ -381,6 +401,7 @@ public class FormulaPad extends Pad {
 	public Pad copy() {
 		FormulaPad newPad = new FormulaPad();
 		newPad.fTranslatingExpression = this.fTranslatingExpression;
+		newPad.fOriginalExpression = this.fOriginalExpression;
 		newPad.fIsInputValid = this.fIsInputValid;
 		return newPad;
 	}
