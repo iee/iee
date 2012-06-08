@@ -163,10 +163,10 @@ public class ContainerManager extends EventManager {
 	}
 	
 	public void updateContainersPresentations() {
-		//if (isModificationAllowed()) {
+		if (isModificationAllowed()) {
 			boolean doInitiateTextPresentationUpdate = true;
 			fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
-		//}
+		}
 	}
 
 
