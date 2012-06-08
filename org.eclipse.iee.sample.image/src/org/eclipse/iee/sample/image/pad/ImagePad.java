@@ -36,6 +36,9 @@ public class ImagePad extends Pad implements Serializable {
 	protected String fImagePath;
 	
 	protected transient Image fOriginalImage = null;
+	protected transient Image fResizedImage = null;
+	private int fImageWidth = -1;
+	private int fImageHeigth = -1;
 
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
@@ -133,6 +136,16 @@ public class ImagePad extends Pad implements Serializable {
 	protected void initImageView(final Composite parent) {
 		try {
 			fOriginalImage = new Image(parent.getDisplay(), fImagePath);
+			if (fImageWidth > 0 && fImageHeigth > 0)
+			{
+				fResizedImage = new Image(parent.getDisplay(),
+					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
+			}
+			else
+			{
+				fResizedImage = fOriginalImage;
+			}
+			
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -147,19 +160,19 @@ public class ImagePad extends Pad implements Serializable {
 		FillLayout layout = new FillLayout();
 		parent.setLayout(layout);
 		final Label label = new Label(parent, SWT.NONE);
-		label.setImage(fOriginalImage);
+		label.setImage(fResizedImage);
 		parent.pack();
 
 		parent.addControlListener(new ControlListener() {
 			@Override
 			public void controlResized(ControlEvent e) {				
 				Point size = parent.getSize();
+				fImageWidth = size.x;
+				fImageHeigth = size.y;
+				fResizedImage = new Image(parent.getDisplay(),
+					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
 				
-				final Image resizedImage = new Image(
-					parent.getDisplay(),
-					fOriginalImage.getImageData().scaledTo(size.x, size.y));
-				
-				label.setImage(resizedImage);
+				label.setImage(fResizedImage);
 				parent.redraw();
 			}
 			
