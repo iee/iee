@@ -63,7 +63,7 @@ public class FormulaRenderer {
 			}
 			System.out.println("latex: " + latex);
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
-					TeXConstants.STYLE_TEXT, 40, java.awt.Color.black,
+					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
 
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);

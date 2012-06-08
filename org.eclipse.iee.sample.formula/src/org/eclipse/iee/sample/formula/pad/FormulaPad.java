@@ -292,17 +292,24 @@ public class FormulaPad extends Pad {
 					e.doit = false;
 					processInput();
 					moveCaretToCurrentPad();
+					
 					if (fTranslatingExpression != "")
 						toggleFormulaImage();
-					fHoverShell.dispose();
+					
+					if (fHoverShell != null)
+						fHoverShell.dispose();
+					
 					break;
 
 				case SWT.ESC:
 					moveCaretToCurrentPad();
+					
 					if (fTranslatingExpression != "")
 						toggleFormulaImage();
+					
 					if (fHoverShell != null)
 						fHoverShell.dispose();
+					
 					break;
 		        }
 		      }
@@ -313,7 +320,7 @@ public class FormulaPad extends Pad {
 	@Override
 	public void createPartControl(final Composite parent) {
 		fParent = parent;
-
+		
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		parent.setLayout(layout);
 
@@ -374,6 +381,7 @@ public class FormulaPad extends Pad {
 	public Pad copy() {
 		FormulaPad newPad = new FormulaPad();
 		newPad.fTranslatingExpression = this.fTranslatingExpression;
+		newPad.fIsInputValid = this.fIsInputValid;
 		return newPad;
 	}
 
