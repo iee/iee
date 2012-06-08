@@ -1,19 +1,24 @@
 package org.eclipse.iee.editor.core.container;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.PaintObjectEvent;
 import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GlyphMetrics;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 
 class StyledTextManager {
@@ -87,8 +92,10 @@ class StyledTextManager {
 				if (fState == State.STYLES_UPDATE_REQUESTED) {
 					System.out.println("STYLES_UPDATE_REQUESTED/applyTextPresentation(): applying styles to text presentation");
 					
-					//printTextPresentationStyleRanges(textPresentation);					
-					textPresentation.mergeStyleRanges(getContainersStyleRanges());
+					printTextPresentationStyleRanges(textPresentation);					
+					//textPresentation.mergeStyleRanges(getContainersStyleRanges());
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					printTextPresentationStyleRanges(textPresentation);		
 					
 					//fState = State.STYLES_UPDATED;
 				}
@@ -96,13 +103,69 @@ class StyledTextManager {
 				if (fState == State.TEXT_PRESENTATION_UPDATE_INITIATED) {
 					System.out.println("TEXT_PRESENTATION_UPDATE_INITIATED/applyTextPresentation(): applying styles to text presentation");
 
-					//printTextPresentationStyleRanges(textPresentation);					
-					textPresentation.mergeStyleRanges(getContainersStyleRanges());
+					printTextPresentationStyleRanges(textPresentation);					
+					//textPresentation.mergeStyleRanges(getContainersStyleRanges());
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					printTextPresentationStyleRanges(textPresentation);	
+					
 					fState = State.STYLES_UPDATED;
 				}
 			}
 		});
 		
+	}
+	
+	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
+		
+		/*
+		for (int i = 0; i < containersStyleRanges.length; i += 2) {
+			StyleRange first = containersStyleRanges[i];
+			StyleRange second = containersStyleRanges[i];
+		}*/
+		
+		List<StyleRange> allowedStyleRanges = new ArrayList<StyleRange>();
+		
+		Iterator it = tp.getAllStyleRangeIterator();
+		while (it.hasNext()) {
+			StyleRange styleRange = (StyleRange) it.next();
+			
+			boolean overlap = false;
+			for (StyleRange containersStyleRange : containersStyleRanges) {
+				if (doStyleRangesOverlap(styleRange, containersStyleRange)) {
+					overlap = true;
+					break;
+				}
+			}
+			
+			if (!overlap) {		
+				allowedStyleRanges.add(styleRange);
+			}
+		}
+		
+		StyleRange[] allowedStyleRangesArray = new StyleRange[allowedStyleRanges.size()];
+		for (int i = 0; i < allowedStyleRanges.size(); i++) {
+			allowedStyleRangesArray[i] = allowedStyleRanges.get(i);
+		}
+		
+		StyleRange defaultStyleRange = tp.getDefaultStyleRange();
+		
+		tp.clear();
+		tp.setDefaultStyleRange(defaultStyleRange);		
+		tp.mergeStyleRanges(allowedStyleRangesArray);
+		tp.mergeStyleRanges(containersStyleRanges);		
+	}
+	
+	protected boolean doStyleRangesOverlap(StyleRange a, StyleRange b) {
+		
+		if (a.start <= b.start && b.start < a.start + a.length) {
+			return true;
+		}
+		
+		if (a.start < (b.start + b.length) && (b.start + b.length) <= a.start + a.length) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	protected void printTextPresentationStyleRanges(TextPresentation tp) {
@@ -114,7 +177,7 @@ class StyledTextManager {
 		}
 		System.out.println("\n");
 	}
-	
+		
 	protected StyleRange[] getContainersStyleRanges() {	
 		
 		List<StyleRange> styleRanges = new ArrayList<StyleRange>();
