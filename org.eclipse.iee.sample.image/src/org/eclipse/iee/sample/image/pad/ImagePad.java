@@ -34,7 +34,8 @@ public class ImagePad extends Pad implements Serializable {
 
 	private int fCurrentState;
 	protected String fImagePath;
-	protected Image fOriginalImage = null;
+	
+	protected transient Image fOriginalImage = null;
 
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
