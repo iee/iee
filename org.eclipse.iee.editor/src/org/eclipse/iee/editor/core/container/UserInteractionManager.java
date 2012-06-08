@@ -88,6 +88,10 @@ public class UserInteractionManager {
 				case SWT.ARROW_DOWN:
 					fCaretMovesForward = true;
 					break;
+				case SWT.DEL:
+					if (fSelectedContainer != null)
+						fSelectedContainer.destroy();
+					break;
 				}
 			}
 		});
