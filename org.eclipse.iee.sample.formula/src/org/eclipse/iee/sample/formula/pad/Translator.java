@@ -22,6 +22,8 @@ public class Translator {
 	}
 	
 	public static String translateElement(String text) {
+		if (text.trim().isEmpty())
+			return null;
 		
 		String cached = fCachedItems.get(text);
 		if (cached != null) {
