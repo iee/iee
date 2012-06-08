@@ -11,6 +11,7 @@ import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
+import org.eclipse.iee.sample.formula.storage.FileStorage;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -33,20 +34,30 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 public class FormulaPad extends Pad {
 
+	@XStreamOmitField
 	private Composite fParent;
-
+	@XStreamOmitField
 	private Composite fInputView;
+	@XStreamOmitField
 	private Composite fResultView;
 
+	@XStreamOmitField
 	private Label fFormulaImageLabel;
+	@XStreamOmitField
 	private Label fLastResultImageLabel;
 
+	@XStreamOmitField
 	private TextViewer fViewer;
+	@XStreamOmitField
 	private TextViewerSupport fViewerSupport;
+	@XStreamOmitField
 	private Document fDocument;
 
+	@XStreamOmitField
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
@@ -317,6 +328,7 @@ public class FormulaPad extends Pad {
 		fViewer = new TextViewer(fInputView, SWT.SINGLE);
 		fViewer.getControl().setSize(50, 100);
 		fDocument = new Document();
+		fDocument.set(fTranslatingExpression);
 		fViewer.setDocument(fDocument);
 		
 		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25); 
@@ -369,13 +381,13 @@ public class FormulaPad extends Pad {
 
 	public void save() {
 		System.out.println("Saving...");
-		//FileStorage.getInstance().saveToFile(this);
+		FileStorage.getInstance().saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
 		System.out.println("Unsaving...");
-		//FileStorage.getInstance().removeFile(getContainerID());
+		FileStorage.getInstance().removeFile(getContainerID());
 	}
 
 	@Override
