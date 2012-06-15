@@ -81,28 +81,19 @@ class StyledTextManager {
 				
 				switch (fState) {
 				
-				case STYLES_UPDATE_REQUESTED:
-					System.out.println("STYLES_UPDATE_REQUESTED/applyTextPresentation(): applying styles to text presentation");
-					
-					printTextPresentationStyleRanges(textPresentation);					
-					
-					//textPresentation.mergeStyleRanges(getContainersStyleRanges());
-					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					
-					printTextPresentationStyleRanges(textPresentation);		
-					break;
-					
 				case TEXT_PRESENTATION_UPDATE_INITIATED:
 					System.out.println("TEXT_PRESENTATION_UPDATE_INITIATED/applyTextPresentation(): applying styles to text presentation");
+//					printTextPresentationStyleRanges(textPresentation);					
 
-					printTextPresentationStyleRanges(textPresentation);					
-					
-					//textPresentation.mergeStyleRanges(getContainersStyleRanges());
 					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					
-					printTextPresentationStyleRanges(textPresentation);	
-					
 					fState = State.STYLES_UPDATED;
+					break;
+					
+				default:
+					System.out.println("STYLES_UPDATE_REQUESTED/applyTextPresentation(): applying styles to text presentation");
+//					printTextPresentationStyleRanges(textPresentation);					
+					
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
 					break;
 				}
 			}
