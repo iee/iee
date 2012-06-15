@@ -97,6 +97,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 			String text = document.get();
 			document.replace(0, text.length(), "");
 			document.set(text);
+			
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
