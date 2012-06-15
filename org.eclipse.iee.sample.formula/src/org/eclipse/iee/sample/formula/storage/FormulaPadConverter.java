@@ -18,8 +18,7 @@ public class FormulaPadConverter implements Converter  {
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 		FormulaPad pad = (FormulaPad) source;
-		
-		writer.addAttribute("type", pad.getType());
+	
 		writer.addAttribute("translating_expression", pad.getTranslatingExpression());
 		writer.addAttribute("original_expression", pad.getOriginalExpression());
 	}
