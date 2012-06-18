@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.iee.editor.core.pad.MouseEventManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
@@ -236,6 +237,7 @@ public class FormulaPad extends Pad {
 	}
 
 	public void setListeners() {
+		
 		ConsoleMessager.getInstance().addConsoleMessageListener(
 				fConsoleMessageListener);
 
@@ -426,5 +428,9 @@ public class FormulaPad extends Pad {
 	@Override
 	public String getType() {
 		return "Formula";
+	}
+	
+	@Override
+	public void addMouseListeners(Composite control) {
 	}
 }

@@ -99,14 +99,18 @@ public abstract class Pad {
 		createPartControl(content);
 		fContainer.getComposite().pack();
 		
-		MouseEventManager mouseManager = new MouseEventManager(parent);
-		parent.addMouseTrackListener(mouseManager);
-		parent.addMouseMoveListener(mouseManager);
-		parent.addMouseListener(mouseManager);
+		addMouseListeners(parent);
 		
 		onContainerAttached();
 	}
 
+	public void addMouseListeners(Composite control) {
+		MouseEventManager mouseManager = new MouseEventManager(control);
+		control.addMouseTrackListener(mouseManager);
+		control.addMouseMoveListener(mouseManager);
+		control.addMouseListener(mouseManager);
+	}
+	
 	public void detachContainer() {
 		Assert.isLegal(isContainerAttached(), "No container attached");
 		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
