@@ -19,6 +19,7 @@ import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -113,7 +114,7 @@ public class FormulaPad extends Pad {
 		fResultView.setVisible(false);
 
 		// ON
-		fDocument.set(fOriginalExpression);
+		fDocument.set(fLastValidText);
 		fInputView.setVisible(true);
 
 		fParent.pack();
@@ -164,8 +165,9 @@ public class FormulaPad extends Pad {
 					((FormulaPad) pad).updateLastResult("");
 				}
 			}
-			fTranslatingExpression = fDocument.get();
 		}
+		
+		fTranslatingExpression = fLastValidText;
 
 		/* Set formula image */
 		Image image = FormulaRenderer.getFormulaImage(fTranslatingExpression);
@@ -175,8 +177,10 @@ public class FormulaPad extends Pad {
 		String generated = Translator.translateElement(fTranslatingExpression);
 
 		/* Add result output */
-		if (fTranslatingExpression.charAt(fTranslatingExpression.length() - 1) == '=')
-			generated += generateOutputCode(fTranslatingExpression);
+		if (!fTranslatingExpression.trim().isEmpty())
+			if (fTranslatingExpression
+					.charAt(fTranslatingExpression.length() - 1) == '=')
+				generated += generateOutputCode(fTranslatingExpression);
 		getContainer().setTextContent(generated);
 	}
 
@@ -237,20 +241,19 @@ public class FormulaPad extends Pad {
 	}
 
 	public void setListeners() {
-		
+
 		ConsoleMessager.getInstance().addConsoleMessageListener(
 				fConsoleMessageListener);
 
 		fFormulaImageLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				moveCaretToCurrentPad();
-				toggleInputText();
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
+				toggleInputText();
 			}
 
 			@Override
@@ -261,24 +264,24 @@ public class FormulaPad extends Pad {
 		fLastResultImageLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				moveCaretToCurrentPad();
-				toggleInputText();
 			}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
+				toggleInputText();
 			}
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 			}
 		});
-		
+
 		fViewer.getControl().addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusLost(FocusEvent e) {
+				processInput();
 				if (fTranslatingExpression != "")
 					toggleFormulaImage();
 				if (fHoverShell != null)
@@ -299,6 +302,7 @@ public class FormulaPad extends Pad {
 						fTextChanged = true;
 
 						validateInput();
+						
 						Image image = FormulaRenderer.getFormulaImage(fDocument
 								.get());
 						if (image == null)
@@ -314,8 +318,7 @@ public class FormulaPad extends Pad {
 						fViewer.getControl().setSize(size);
 						fParent.pack();
 					}
-				}
-				else
+				} else
 					fTextChanged = true;
 			}
 		});
@@ -337,6 +340,7 @@ public class FormulaPad extends Pad {
 					break;
 
 				case SWT.ESC:
+					processInput();
 					moveCaretToCurrentPad();
 
 					if (fTranslatingExpression != "")
@@ -346,6 +350,15 @@ public class FormulaPad extends Pad {
 						fHoverShell.dispose();
 
 					break;
+
+				case SWT.HOME:
+					System.out.println("Home");
+					break;
+
+				case SWT.END:
+					System.out.println("End");
+					break;
+
 				}
 			}
 		});
@@ -355,7 +368,7 @@ public class FormulaPad extends Pad {
 	@Override
 	public void createPartControl(final Composite parent) {
 		fParent = parent;
-		
+
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		parent.setLayout(layout);
 
@@ -392,6 +405,7 @@ public class FormulaPad extends Pad {
 		fResultView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		fFormulaImageLabel = new Label(fResultView, SWT.NONE);
+		fFormulaImageLabel.setBackground(new Color(null, 255, 255, 255));
 		GridData formulaImageGridData = new GridData(SWT.FILL, SWT.FILL, true,
 				true);
 		fFormulaImageLabel.setLayoutData(formulaImageGridData);
@@ -424,6 +438,7 @@ public class FormulaPad extends Pad {
 		FormulaPad newPad = new FormulaPad();
 		newPad.fTranslatingExpression = this.fTranslatingExpression;
 		newPad.fOriginalExpression = this.fOriginalExpression;
+		newPad.fLastValidText = this.fLastValidText;
 		newPad.fIsInputValid = this.fIsInputValid;
 		return newPad;
 	}
@@ -449,7 +464,7 @@ public class FormulaPad extends Pad {
 	public String getType() {
 		return "Formula";
 	}
-	
+
 	@Override
 	public void addMouseListeners(Composite control) {
 	}

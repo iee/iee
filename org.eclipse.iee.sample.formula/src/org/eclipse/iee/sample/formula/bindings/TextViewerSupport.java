@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.text.ITextOperationTargetExtension;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -17,6 +20,8 @@ import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 public class TextViewerSupport implements FocusListener, DisposeListener {
 
@@ -66,6 +71,10 @@ public class TextViewerSupport implements FocusListener, DisposeListener {
 					IWorkbenchCommandConstants.EDIT_REDO);
 			activateHandler(ITextOperationTarget.SELECT_ALL,
 					IWorkbenchCommandConstants.EDIT_SELECT_ALL);
+			activateHandler(ST.LINE_START,
+					ITextEditorActionDefinitionIds.LINE_START);
+			activateHandler(ST.LINE_END,
+					ITextEditorActionDefinitionIds.LINE_END);
 		}
 	}
 
@@ -85,6 +94,16 @@ public class TextViewerSupport implements FocusListener, DisposeListener {
 		Action action = new Action() {
 			@Override
 			public void run() {
+				if (operation == ST.LINE_START)
+				{
+					StyledText text = (StyledText)textViewer.getControl();
+					text.setCaretOffset(0);
+				}
+				if (operation == ST.LINE_END)
+				{
+					StyledText text = (StyledText)textViewer.getControl();
+					text.setCaretOffset(textViewer.getDocument().getLength());
+				}
 				if (textViewer.canDoOperation(operation)) {
 					textViewer.doOperation(operation);
 				}
