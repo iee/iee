@@ -338,7 +338,7 @@ public class FormulaPad extends Pad {
 	@Override
 	public void createPartControl(final Composite parent) {
 		fParent = parent;
-
+		
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
 		parent.setLayout(layout);
 
@@ -348,6 +348,7 @@ public class FormulaPad extends Pad {
 		/* Input View */
 
 		fInputView = new Composite(sashForm, SWT.NONE);
+		fInputView.setBackground(new Color(null, 255, 255, 255));
 		fInputView.setLayout(new GridLayout(1, true));
 
 		fViewer = new TextViewer(fInputView, SWT.SINGLE);
@@ -369,6 +370,7 @@ public class FormulaPad extends Pad {
 		/* Result View */
 
 		fResultView = new Composite(sashForm, SWT.NONE);
+		fResultView.setBackground(new Color(null, 255, 255, 255));
 		fResultView.setLayout(new GridLayout(2, false));
 		fResultView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
