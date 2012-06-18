@@ -291,11 +291,13 @@ public class MathGenerator implements IGenerator {
     StringConcatenation _compileName = this.compileName(_element);
     _builder.append(_compileName, "");
     _builder.append(".get(");
-    String _row = e.getRow();
-    _builder.append(_row, "");
+    Formula _row = e.getRow();
+    StringConcatenation _compileFormula = this.compileFormula(_row);
+    _builder.append(_compileFormula, "");
     _builder.append(",");
-    String _column = e.getColumn();
-    _builder.append(_column, "");
+    Formula _column = e.getColumn();
+    StringConcatenation _compileFormula_1 = this.compileFormula(_column);
+    _builder.append(_compileFormula_1, "");
     _builder.append(")");
     return _builder;
   }
@@ -452,19 +454,20 @@ public class MathGenerator implements IGenerator {
             int i = 0;
             _builder.newLineIfNotEmpty();
             {
-              EList<String> _elements = row.getElements();
-              for(final String element : _elements) {
+              EList<Formula> _elements = row.getElements();
+              for(final Formula element : _elements) {
                 {
                   boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(element, null);
                   if (_operator_notEquals_1) {
-                    _builder.append(element, "");
+                    StringConcatenation _compileFormula = this.compileFormula(element);
+                    _builder.append(_compileFormula, "");
                     _builder.newLineIfNotEmpty();
                   }
                 }
                 {
                   int _operator_plus = IntegerExtensions.operator_plus(((Integer)i), ((Integer)1));
                   int _i = i = _operator_plus;
-                  EList<String> _elements_1 = row.getElements();
+                  EList<Formula> _elements_1 = row.getElements();
                   int _size = _elements_1.size();
                   boolean _operator_notEquals_2 = ObjectExtensions.operator_notEquals(((Integer)_i), ((Integer)_size));
                   if (_operator_notEquals_2) {

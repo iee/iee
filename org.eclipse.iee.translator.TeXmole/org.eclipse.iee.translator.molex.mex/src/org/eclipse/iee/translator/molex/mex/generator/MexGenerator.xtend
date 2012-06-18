@@ -147,7 +147,7 @@ class MexGenerator implements IGenerator {
 		«n.value»'''
 		
 	def dispatch compileExpression(MatrixElement e) '''
-		«compileName(e.element)»_{«e.row»,«e.column»}'''
+		«compileName(e.element)»_{«compileFormula(e.row)»,«compileFormula(e.column)»}'''
 		
 	def dispatch compileExpression(Function f) '''
 		«compileFunction(f)»'''
@@ -195,7 +195,7 @@ class MexGenerator implements IGenerator {
 		 	«var i = 0»
 	 		«FOR element:row.elements»
 			 «IF element != null»
-			 	«element»
+			 	«compileFormula(element)»
 			 «ENDIF»
 			 «IF (i = i + 1) != row.elements.size()»&«ENDIF»
 			«ENDFOR»

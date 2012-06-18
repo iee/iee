@@ -32,7 +32,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Matrix/rows"/>
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixRow">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixRow/elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixRow/elements"/>
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixAssignment">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixAssignment/variable"/>
@@ -90,8 +90,8 @@
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixElement/element"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixElement/row"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixElement/column"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixElement/row"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixElement/column"/>
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//InBrackets">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//InBrackets/inBrackets"/>

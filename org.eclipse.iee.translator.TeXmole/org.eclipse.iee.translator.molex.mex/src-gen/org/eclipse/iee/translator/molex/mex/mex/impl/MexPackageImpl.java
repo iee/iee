@@ -519,9 +519,9 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMatrixRow_Elements()
+  public EReference getMatrixRow_Elements()
   {
-    return (EAttribute)matrixRowEClass.getEStructuralFeatures().get(0);
+    return (EReference)matrixRowEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -939,9 +939,9 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMatrixElement_Row()
+  public EReference getMatrixElement_Row()
   {
-    return (EAttribute)matrixElementEClass.getEStructuralFeatures().get(1);
+    return (EReference)matrixElementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -949,9 +949,9 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMatrixElement_Column()
+  public EReference getMatrixElement_Column()
   {
-    return (EAttribute)matrixElementEClass.getEStructuralFeatures().get(2);
+    return (EReference)matrixElementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1207,7 +1207,7 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
     createEReference(matrixEClass, MATRIX__ROWS);
 
     matrixRowEClass = createEClass(MATRIX_ROW);
-    createEAttribute(matrixRowEClass, MATRIX_ROW__ELEMENTS);
+    createEReference(matrixRowEClass, MATRIX_ROW__ELEMENTS);
 
     matrixAssignmentEClass = createEClass(MATRIX_ASSIGNMENT);
     createEReference(matrixAssignmentEClass, MATRIX_ASSIGNMENT__VARIABLE);
@@ -1266,8 +1266,8 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
 
     matrixElementEClass = createEClass(MATRIX_ELEMENT);
     createEReference(matrixElementEClass, MATRIX_ELEMENT__ELEMENT);
-    createEAttribute(matrixElementEClass, MATRIX_ELEMENT__ROW);
-    createEAttribute(matrixElementEClass, MATRIX_ELEMENT__COLUMN);
+    createEReference(matrixElementEClass, MATRIX_ELEMENT__ROW);
+    createEReference(matrixElementEClass, MATRIX_ELEMENT__COLUMN);
 
     inBracketsEClass = createEClass(IN_BRACKETS);
     createEReference(inBracketsEClass, IN_BRACKETS__IN_BRACKETS);
@@ -1372,7 +1372,7 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
     initEReference(getMatrix_Rows(), this.getMatrixRow(), null, "rows", null, 0, -1, Matrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixRowEClass, MatrixRow.class, "MatrixRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMatrixRow_Elements(), ecorePackage.getEString(), "elements", null, 0, -1, MatrixRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMatrixRow_Elements(), this.getFormula(), null, "elements", null, 0, -1, MatrixRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixAssignmentEClass, MatrixAssignment.class, "MatrixAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMatrixAssignment_Variable(), this.getMathName(), null, "variable", null, 0, 1, MatrixAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1431,8 +1431,8 @@ public class MexPackageImpl extends EPackageImpl implements MexPackage
 
     initEClass(matrixElementEClass, MatrixElement.class, "MatrixElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMatrixElement_Element(), this.getMathName(), null, "element", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMatrixElement_Row(), ecorePackage.getEString(), "row", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMatrixElement_Column(), ecorePackage.getEString(), "column", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMatrixElement_Row(), this.getFormula(), null, "row", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMatrixElement_Column(), this.getFormula(), null, "column", null, 0, 1, MatrixElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(inBracketsEClass, InBrackets.class, "InBrackets", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInBrackets_InBrackets(), this.getExpression(), null, "inBrackets", null, 0, 1, InBrackets.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

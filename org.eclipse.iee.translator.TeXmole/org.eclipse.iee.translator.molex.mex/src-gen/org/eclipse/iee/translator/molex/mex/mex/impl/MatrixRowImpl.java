@@ -8,14 +8,19 @@ package org.eclipse.iee.translator.molex.mex.mex.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.iee.translator.molex.mex.mex.Formula;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixRow;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 
@@ -35,14 +40,14 @@ import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
 public class MatrixRowImpl extends MinimalEObjectImpl.Container implements MatrixRow
 {
   /**
-   * The cached value of the '{@link #getElements() <em>Elements</em>}' attribute list.
+   * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getElements()
    * @generated
    * @ordered
    */
-  protected EList<String> elements;
+  protected EList<Formula> elements;
 
   /**
    * <!-- begin-user-doc -->
@@ -70,13 +75,29 @@ public class MatrixRowImpl extends MinimalEObjectImpl.Container implements Matri
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<String> getElements()
+  public EList<Formula> getElements()
   {
     if (elements == null)
     {
-      elements = new EDataTypeEList<String>(String.class, this, MexPackage.MATRIX_ROW__ELEMENTS);
+      elements = new EObjectContainmentEList<Formula>(Formula.class, this, MexPackage.MATRIX_ROW__ELEMENTS);
     }
     return elements;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case MexPackage.MATRIX_ROW__ELEMENTS:
+        return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -108,7 +129,7 @@ public class MatrixRowImpl extends MinimalEObjectImpl.Container implements Matri
     {
       case MexPackage.MATRIX_ROW__ELEMENTS:
         getElements().clear();
-        getElements().addAll((Collection<? extends String>)newValue);
+        getElements().addAll((Collection<? extends Formula>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -145,23 +166,6 @@ public class MatrixRowImpl extends MinimalEObjectImpl.Container implements Matri
         return elements != null && !elements.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (elements: ");
-    result.append(elements);
-    result.append(')');
-    return result.toString();
   }
 
 } //MatrixRowImpl

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.iee.translator.molex.mex.mex.Formula;
 import org.eclipse.iee.translator.molex.mex.mex.MathName;
 import org.eclipse.iee.translator.molex.mex.mex.MatrixElement;
 import org.eclipse.iee.translator.molex.mex.mex.MexPackage;
@@ -46,44 +47,24 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
   protected MathName element;
 
   /**
-   * The default value of the '{@link #getRow() <em>Row</em>}' attribute.
+   * The cached value of the '{@link #getRow() <em>Row</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getRow()
    * @generated
    * @ordered
    */
-  protected static final String ROW_EDEFAULT = null;
+  protected Formula row;
 
   /**
-   * The cached value of the '{@link #getRow() <em>Row</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRow()
-   * @generated
-   * @ordered
-   */
-  protected String row = ROW_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getColumn() <em>Column</em>}' attribute.
+   * The cached value of the '{@link #getColumn() <em>Column</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getColumn()
    * @generated
    * @ordered
    */
-  protected static final String COLUMN_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getColumn() <em>Column</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getColumn()
-   * @generated
-   * @ordered
-   */
-  protected String column = COLUMN_EDEFAULT;
+  protected Formula column;
 
   /**
    * <!-- begin-user-doc -->
@@ -159,7 +140,7 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getRow()
+  public Formula getRow()
   {
     return row;
   }
@@ -169,12 +150,16 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRow(String newRow)
+  public NotificationChain basicSetRow(Formula newRow, NotificationChain msgs)
   {
-    String oldRow = row;
+    Formula oldRow = row;
     row = newRow;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__ROW, oldRow, row));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__ROW, oldRow, newRow);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
   }
 
   /**
@@ -182,7 +167,28 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getColumn()
+  public void setRow(Formula newRow)
+  {
+    if (newRow != row)
+    {
+      NotificationChain msgs = null;
+      if (row != null)
+        msgs = ((InternalEObject)row).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ELEMENT__ROW, null, msgs);
+      if (newRow != null)
+        msgs = ((InternalEObject)newRow).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ELEMENT__ROW, null, msgs);
+      msgs = basicSetRow(newRow, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__ROW, newRow, newRow));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Formula getColumn()
   {
     return column;
   }
@@ -192,12 +198,37 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setColumn(String newColumn)
+  public NotificationChain basicSetColumn(Formula newColumn, NotificationChain msgs)
   {
-    String oldColumn = column;
+    Formula oldColumn = column;
     column = newColumn;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__COLUMN, oldColumn, column));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__COLUMN, oldColumn, newColumn);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setColumn(Formula newColumn)
+  {
+    if (newColumn != column)
+    {
+      NotificationChain msgs = null;
+      if (column != null)
+        msgs = ((InternalEObject)column).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ELEMENT__COLUMN, null, msgs);
+      if (newColumn != null)
+        msgs = ((InternalEObject)newColumn).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MexPackage.MATRIX_ELEMENT__COLUMN, null, msgs);
+      msgs = basicSetColumn(newColumn, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MexPackage.MATRIX_ELEMENT__COLUMN, newColumn, newColumn));
   }
 
   /**
@@ -212,6 +243,10 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
     {
       case MexPackage.MATRIX_ELEMENT__ELEMENT:
         return basicSetElement(null, msgs);
+      case MexPackage.MATRIX_ELEMENT__ROW:
+        return basicSetRow(null, msgs);
+      case MexPackage.MATRIX_ELEMENT__COLUMN:
+        return basicSetColumn(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -250,10 +285,10 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
         setElement((MathName)newValue);
         return;
       case MexPackage.MATRIX_ELEMENT__ROW:
-        setRow((String)newValue);
+        setRow((Formula)newValue);
         return;
       case MexPackage.MATRIX_ELEMENT__COLUMN:
-        setColumn((String)newValue);
+        setColumn((Formula)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -273,10 +308,10 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
         setElement((MathName)null);
         return;
       case MexPackage.MATRIX_ELEMENT__ROW:
-        setRow(ROW_EDEFAULT);
+        setRow((Formula)null);
         return;
       case MexPackage.MATRIX_ELEMENT__COLUMN:
-        setColumn(COLUMN_EDEFAULT);
+        setColumn((Formula)null);
         return;
     }
     super.eUnset(featureID);
@@ -295,30 +330,11 @@ public class MatrixElementImpl extends ExpressionImpl implements MatrixElement
       case MexPackage.MATRIX_ELEMENT__ELEMENT:
         return element != null;
       case MexPackage.MATRIX_ELEMENT__ROW:
-        return ROW_EDEFAULT == null ? row != null : !ROW_EDEFAULT.equals(row);
+        return row != null;
       case MexPackage.MATRIX_ELEMENT__COLUMN:
-        return COLUMN_EDEFAULT == null ? column != null : !COLUMN_EDEFAULT.equals(column);
+        return column != null;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (row: ");
-    result.append(row);
-    result.append(", column: ");
-    result.append(column);
-    result.append(')');
-    return result.toString();
   }
 
 } //MatrixElementImpl

@@ -627,7 +627,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (elements+=Float elements+=Float*)?
+	 *     (elements+=Formula elements+=Formula*)?
 	 *
 	 * Features:
 	 *    elements[0, *]
@@ -771,7 +771,7 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 	
 	/**
 	 * Constraint:
-	 *     (element=MathName row=Float column=Float)
+	 *     (element=MathName row=Formula column=Formula)
 	 *
 	 * Features:
 	 *    element[1, 1]

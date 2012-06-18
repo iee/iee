@@ -105,7 +105,7 @@ class MathGenerator implements IGenerator {
 		«n.value»'''
 		
 	def dispatch compileExpression(MatrixElement e) '''
-		«compileName(e.element)».get(«e.row»,«e.column»)'''	
+		«compileName(e.element)».get(«compileFormula(e.row)»,«compileFormula(e.column)»)'''	
 		
 	def dispatch compileExpression(Function f) '''
 		«compileFunction(f)»'''
@@ -148,7 +148,7 @@ class MathGenerator implements IGenerator {
 		 	«var i = 0»
 	 		«FOR element:row.elements»
 			 «IF element != null»
-			 	«element»
+			 	«compileFormula(element)»
 			 «ENDIF»
 			 «IF (i = i + 1) != row.elements.size()»,«ENDIF»
 			«ENDFOR»

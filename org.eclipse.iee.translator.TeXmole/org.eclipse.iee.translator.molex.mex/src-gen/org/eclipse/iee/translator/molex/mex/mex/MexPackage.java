@@ -274,7 +274,7 @@ public interface MexPackage extends EPackage
   int MATRIX_ROW = 5;
 
   /**
-   * The feature id for the '<em><b>Elements</b></em>' attribute list.
+   * The feature id for the '<em><b>Elements</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1146,7 +1146,7 @@ public interface MexPackage extends EPackage
   int MATRIX_ELEMENT__ELEMENT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Row</b></em>' attribute.
+   * The feature id for the '<em><b>Row</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1155,7 +1155,7 @@ public interface MexPackage extends EPackage
   int MATRIX_ELEMENT__ROW = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Column</b></em>' attribute.
+   * The feature id for the '<em><b>Column</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1716,15 +1716,15 @@ public interface MexPackage extends EPackage
   EClass getMatrixRow();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements <em>Elements</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements <em>Elements</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Elements</em>'.
+   * @return the meta object for the containment reference list '<em>Elements</em>'.
    * @see org.eclipse.iee.translator.molex.mex.mex.MatrixRow#getElements()
    * @see #getMatrixRow()
    * @generated
    */
-  EAttribute getMatrixRow_Elements();
+  EReference getMatrixRow_Elements();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAssignment <em>Matrix Assignment</em>}'.
@@ -2161,26 +2161,26 @@ public interface MexPackage extends EPackage
   EReference getMatrixElement_Element();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getRow <em>Row</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getRow <em>Row</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Row</em>'.
+   * @return the meta object for the containment reference '<em>Row</em>'.
    * @see org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getRow()
    * @see #getMatrixElement()
    * @generated
    */
-  EAttribute getMatrixElement_Row();
+  EReference getMatrixElement_Row();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getColumn <em>Column</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getColumn <em>Column</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Column</em>'.
+   * @return the meta object for the containment reference '<em>Column</em>'.
    * @see org.eclipse.iee.translator.molex.mex.mex.MatrixElement#getColumn()
    * @see #getMatrixElement()
    * @generated
    */
-  EAttribute getMatrixElement_Column();
+  EReference getMatrixElement_Column();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.InBrackets <em>In Brackets</em>}'.
@@ -2574,12 +2574,12 @@ public interface MexPackage extends EPackage
     EClass MATRIX_ROW = eINSTANCE.getMatrixRow();
 
     /**
-     * The meta object literal for the '<em><b>Elements</b></em>' attribute list feature.
+     * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MATRIX_ROW__ELEMENTS = eINSTANCE.getMatrixRow_Elements();
+    EReference MATRIX_ROW__ELEMENTS = eINSTANCE.getMatrixRow_Elements();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAssignmentImpl <em>Matrix Assignment</em>}' class.
@@ -2944,20 +2944,20 @@ public interface MexPackage extends EPackage
     EReference MATRIX_ELEMENT__ELEMENT = eINSTANCE.getMatrixElement_Element();
 
     /**
-     * The meta object literal for the '<em><b>Row</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Row</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MATRIX_ELEMENT__ROW = eINSTANCE.getMatrixElement_Row();
+    EReference MATRIX_ELEMENT__ROW = eINSTANCE.getMatrixElement_Row();
 
     /**
-     * The meta object literal for the '<em><b>Column</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Column</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MATRIX_ELEMENT__COLUMN = eINSTANCE.getMatrixElement_Column();
+    EReference MATRIX_ELEMENT__COLUMN = eINSTANCE.getMatrixElement_Column();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.InBracketsImpl <em>In Brackets</em>}' class.

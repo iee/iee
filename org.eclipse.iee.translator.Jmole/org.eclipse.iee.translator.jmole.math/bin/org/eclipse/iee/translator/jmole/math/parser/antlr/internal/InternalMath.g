@@ -781,9 +781,9 @@ rulePrimary returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPrimaryAccess().getRowFloatParserRuleCall_2_3_0()); 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getRowFormulaParserRuleCall_2_3_0()); 
 	    }
-		lv_row_7_0=ruleFloat		{
+		lv_row_7_0=ruleFormula		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
 	        }
@@ -791,7 +791,7 @@ rulePrimary returns [EObject current=null]
        			$current, 
        			"row",
         		lv_row_7_0, 
-        		"Float");
+        		"Formula");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -807,9 +807,9 @@ rulePrimary returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getPrimaryAccess().getColumnFloatParserRuleCall_2_6_0()); 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getColumnFormulaParserRuleCall_2_6_0()); 
 	    }
-		lv_column_10_0=ruleFloat		{
+		lv_column_10_0=ruleFormula		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
 	        }
@@ -817,7 +817,7 @@ rulePrimary returns [EObject current=null]
        			$current, 
        			"column",
         		lv_column_10_0, 
-        		"Float");
+        		"Formula");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -976,9 +976,9 @@ ruleMatrixRow returns [EObject current=null]
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_0_0()); 
+	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFormulaParserRuleCall_1_0_0()); 
 	    }
-		lv_elements_1_0=ruleFloat		{
+		lv_elements_1_0=ruleFormula		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getMatrixRowRule());
 	        }
@@ -986,7 +986,7 @@ ruleMatrixRow returns [EObject current=null]
        			$current, 
        			"elements",
         		lv_elements_1_0, 
-        		"Float");
+        		"Formula");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -998,9 +998,9 @@ ruleMatrixRow returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_1_1_0()); 
+	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFormulaParserRuleCall_1_1_1_0()); 
 	    }
-		lv_elements_3_0=ruleFloat		{
+		lv_elements_3_0=ruleFormula		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getMatrixRowRule());
 	        }
@@ -1008,7 +1008,7 @@ ruleMatrixRow returns [EObject current=null]
        			$current, 
        			"elements",
         		lv_elements_3_0, 
-        		"Float");
+        		"Formula");
 	        afterParserOrEnumRuleCall();
 	    }
 

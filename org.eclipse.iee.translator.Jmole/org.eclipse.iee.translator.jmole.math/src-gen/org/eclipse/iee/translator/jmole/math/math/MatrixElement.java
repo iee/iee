@@ -54,55 +54,55 @@ public interface MatrixElement extends Expression
   void setElement(MathName value);
 
   /**
-   * Returns the value of the '<em><b>Row</b></em>' attribute.
+   * Returns the value of the '<em><b>Row</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Row</em>' attribute isn't clear,
+   * If the meaning of the '<em>Row</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Row</em>' attribute.
-   * @see #setRow(String)
+   * @return the value of the '<em>Row</em>' containment reference.
+   * @see #setRow(Formula)
    * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getMatrixElement_Row()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getRow();
+  Formula getRow();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement#getRow <em>Row</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement#getRow <em>Row</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Row</em>' attribute.
+   * @param value the new value of the '<em>Row</em>' containment reference.
    * @see #getRow()
    * @generated
    */
-  void setRow(String value);
+  void setRow(Formula value);
 
   /**
-   * Returns the value of the '<em><b>Column</b></em>' attribute.
+   * Returns the value of the '<em><b>Column</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Column</em>' attribute isn't clear,
+   * If the meaning of the '<em>Column</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Column</em>' attribute.
-   * @see #setColumn(String)
+   * @return the value of the '<em>Column</em>' containment reference.
+   * @see #setColumn(Formula)
    * @see org.eclipse.iee.translator.jmole.math.math.MathPackage#getMatrixElement_Column()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getColumn();
+  Formula getColumn();
 
   /**
-   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement#getColumn <em>Column</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.iee.translator.jmole.math.math.MatrixElement#getColumn <em>Column</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Column</em>' attribute.
+   * @param value the new value of the '<em>Column</em>' containment reference.
    * @see #getColumn()
    * @generated
    */
-  void setColumn(String value);
+  void setColumn(Formula value);
 
 } // MatrixElement

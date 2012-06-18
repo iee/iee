@@ -39,8 +39,9 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatrixRow">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elements" unique="false"
-        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Formula"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatrixAssignment">
     <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MathName"
@@ -120,8 +121,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="MatrixElement" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MathName"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="row" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Formula"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Formula"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InBrackets" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inBrackets" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression"

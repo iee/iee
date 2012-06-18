@@ -39,7 +39,7 @@ Exponent returns Expression:
 Primary returns Expression:
 	{Variable} name=MathName |
 	{Float} value=Float |
-	{MatrixElement} element=MathName '[' row=Float ']' '[' column=Float ']' | 
+	{MatrixElement} element=MathName '[' row=Formula ']' '[' column=Formula ']' | 
 	{Function} function=Function |
 	'(' Addition ')';
 
@@ -47,7 +47,7 @@ Matrix:
 	'{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}';
 	
 MatrixRow:
-	'{' (elements+=Float (',' elements+=Float)* ','?)? '}';
+	'{' (elements+=Formula (',' elements+=Formula)* ','?)? '}';
 
 MatrixAssignment:
 	'[' variable=MathName ']' '=' value=MatrixFormula;

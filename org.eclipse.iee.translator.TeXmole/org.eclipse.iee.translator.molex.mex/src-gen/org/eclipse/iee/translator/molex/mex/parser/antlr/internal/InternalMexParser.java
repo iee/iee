@@ -872,28 +872,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             loop2:
             do {
                 int alt2=3;
-                int LA2_0 = input.LA(1);
-
-                if ( (LA2_0==15) ) {
-                    int LA2_2 = input.LA(2);
-
-                    if ( (synpred5_InternalMex()) ) {
-                        alt2=1;
-                    }
-
-
-                }
-                else if ( (LA2_0==16) ) {
-                    int LA2_3 = input.LA(2);
-
-                    if ( (synpred6_InternalMex()) ) {
-                        alt2=2;
-                    }
-
-
-                }
-
-
+                alt2 = dfa2.predict(input);
                 switch (alt2) {
             	case 1 :
             	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:360:2: (otherlv_1= '+' () ( (lv_right_3_0= ruleMultiplication ) ) )
@@ -1926,7 +1905,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePrimary"
-    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:737:1: rulePrimary returns [EObject current=null] : ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) ;
+    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:737:1: rulePrimary returns [EObject current=null] : ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) ;
     public final EObject rulePrimary() throws RecognitionException {
         EObject current = null;
 
@@ -1942,9 +1921,9 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
         EObject lv_element_7_0 = null;
 
-        AntlrDatatypeRuleToken lv_row_9_0 = null;
+        EObject lv_row_9_0 = null;
 
-        AntlrDatatypeRuleToken lv_column_12_0 = null;
+        EObject lv_column_12_0 = null;
 
         EObject lv_inBrackets_15_0 = null;
 
@@ -1952,10 +1931,10 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:740:28: ( ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) )
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:740:28: ( ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
             {
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:741:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_function_5_0= ruleFunction ) ) ) | ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']' ) | ( () ( (lv_inBrackets_15_0= ruleAdditionInBrackets ) ) ) )
             int alt6=5;
             switch ( input.LA(1) ) {
             case RULE_MATH_NAME:
@@ -1975,7 +1954,9 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                 case 19:
                 case 21:
                 case 22:
+                case 24:
                 case 26:
+                case 27:
                     {
                     alt6=1;
                     }
@@ -2210,10 +2191,10 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']' )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']' )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:7: () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFloat ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFloat ) ) otherlv_13= ']'
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:6: ( () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']' )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:7: () ( (lv_element_7_0= ruleMathName ) ) otherlv_8= '[' ( (lv_row_9_0= ruleFormula ) ) otherlv_10= ']' otherlv_11= '[' ( (lv_column_12_0= ruleFormula ) ) otherlv_13= ']'
                     {
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:825:7: ()
                     // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:826:2: 
@@ -2274,19 +2255,19 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_8, grammarAccess.getPrimaryAccess().getLeftSquareBracketKeyword_3_2());
                           
                     }
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:856:1: ( (lv_row_9_0= ruleFloat ) )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= ruleFloat )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:856:1: ( (lv_row_9_0= ruleFormula ) )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= ruleFormula )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= ruleFloat )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:858:3: lv_row_9_0= ruleFloat
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:857:1: (lv_row_9_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:858:3: lv_row_9_0= ruleFormula
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getRowFloatParserRuleCall_3_3_0()); 
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getRowFormulaParserRuleCall_3_3_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFloat_in_rulePrimary1654);
-                    lv_row_9_0=ruleFloat();
+                    pushFollow(FOLLOW_ruleFormula_in_rulePrimary1654);
+                    lv_row_9_0=ruleFormula();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -2299,7 +2280,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                              			current, 
                              			"row",
                               		lv_row_9_0, 
-                              		"Float");
+                              		"Formula");
                       	        afterParserOrEnumRuleCall();
                       	    
                     }
@@ -2321,19 +2302,19 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                           	newLeafNode(otherlv_11, grammarAccess.getPrimaryAccess().getLeftSquareBracketKeyword_3_5());
                           
                     }
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:882:1: ( (lv_column_12_0= ruleFloat ) )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= ruleFloat )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:882:1: ( (lv_column_12_0= ruleFormula ) )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= ruleFormula )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= ruleFloat )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:884:3: lv_column_12_0= ruleFloat
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:883:1: (lv_column_12_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:884:3: lv_column_12_0= ruleFormula
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getColumnFloatParserRuleCall_3_6_0()); 
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getColumnFormulaParserRuleCall_3_6_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFloat_in_rulePrimary1699);
-                    lv_column_12_0=ruleFloat();
+                    pushFollow(FOLLOW_ruleFormula_in_rulePrimary1699);
+                    lv_column_12_0=ruleFormula();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -2346,7 +2327,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                              			current, 
                              			"column",
                               		lv_column_12_0, 
-                              		"Float");
+                              		"Formula");
                       	        afterParserOrEnumRuleCall();
                       	    
                     }
@@ -2739,7 +2720,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrixRow"
-    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1022:1: ruleMatrixRow returns [EObject current=null] : (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) ;
+    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1022:1: ruleMatrixRow returns [EObject current=null] : (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) ;
     public final EObject ruleMatrixRow() throws RecognitionException {
         EObject current = null;
 
@@ -2747,19 +2728,19 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
         Token otherlv_2=null;
         Token otherlv_4=null;
         Token otherlv_5=null;
-        AntlrDatatypeRuleToken lv_elements_1_0 = null;
+        EObject lv_elements_1_0 = null;
 
-        AntlrDatatypeRuleToken lv_elements_3_0 = null;
+        EObject lv_elements_3_0 = null;
 
 
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1025:28: ( (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) )
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1025:28: ( (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
             {
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:3: otherlv_0= '{' ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1026:3: otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
             {
             otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrixRow2006); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -2767,30 +2748,30 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixRowAccess().getLeftCurlyBracketKeyword_0());
                   
             }
-            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1030:1: ( ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )? )?
+            // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1030:1: ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
-            if ( (LA12_0==RULE_INT) ) {
+            if ( ((LA12_0>=RULE_INT && LA12_0<=RULE_MATH_NAME)||LA12_0==13||LA12_0==20) ) {
                 alt12=1;
             }
             switch (alt12) {
                 case 1 :
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1030:2: ( (lv_elements_1_0= ruleFloat ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )* (otherlv_4= ',' )?
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1030:2: ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )?
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1030:2: ( (lv_elements_1_0= ruleFloat ) )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1031:1: (lv_elements_1_0= ruleFloat )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1030:2: ( (lv_elements_1_0= ruleFormula ) )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1031:1: (lv_elements_1_0= ruleFormula )
                     {
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1031:1: (lv_elements_1_0= ruleFloat )
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1032:3: lv_elements_1_0= ruleFloat
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1031:1: (lv_elements_1_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1032:3: lv_elements_1_0= ruleFormula
                     {
                     if ( state.backtracking==0 ) {
                        
-                      	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_0_0()); 
+                      	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFormulaParserRuleCall_1_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFloat_in_ruleMatrixRow2028);
-                    lv_elements_1_0=ruleFloat();
+                    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixRow2028);
+                    lv_elements_1_0=ruleFormula();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -2803,7 +2784,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                              			current, 
                              			"elements",
                               		lv_elements_1_0, 
-                              		"Float");
+                              		"Formula");
                       	        afterParserOrEnumRuleCall();
                       	    
                     }
@@ -2813,7 +2794,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1048:2: (otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) ) )*
+                    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1048:2: (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )*
                     loop10:
                     do {
                         int alt10=2;
@@ -2822,7 +2803,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                         if ( (LA10_0==26) ) {
                             int LA10_1 = input.LA(2);
 
-                            if ( (LA10_1==RULE_INT) ) {
+                            if ( ((LA10_1>=RULE_INT && LA10_1<=RULE_MATH_NAME)||LA10_1==13||LA10_1==20) ) {
                                 alt10=1;
                             }
 
@@ -2832,7 +2813,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1048:4: otherlv_2= ',' ( (lv_elements_3_0= ruleFloat ) )
+                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1048:4: otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) )
                     	    {
                     	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow2041); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
@@ -2840,19 +2821,19 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	          	newLeafNode(otherlv_2, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_1_0());
                     	          
                     	    }
-                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1052:1: ( (lv_elements_3_0= ruleFloat ) )
-                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1053:1: (lv_elements_3_0= ruleFloat )
+                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1052:1: ( (lv_elements_3_0= ruleFormula ) )
+                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1053:1: (lv_elements_3_0= ruleFormula )
                     	    {
-                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1053:1: (lv_elements_3_0= ruleFloat )
-                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1054:3: lv_elements_3_0= ruleFloat
+                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1053:1: (lv_elements_3_0= ruleFormula )
+                    	    // ../org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/parser/antlr/internal/InternalMex.g:1054:3: lv_elements_3_0= ruleFormula
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
-                    	      	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFloatParserRuleCall_1_1_1_0()); 
+                    	      	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFormulaParserRuleCall_1_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleFloat_in_ruleMatrixRow2062);
-                    	    lv_elements_3_0=ruleFloat();
+                    	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixRow2062);
+                    	    lv_elements_3_0=ruleFormula();
 
                     	    state._fsp--;
                     	    if (state.failed) return current;
@@ -2865,7 +2846,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
                     	             			current, 
                     	             			"elements",
                     	              		lv_elements_3_0, 
-                    	              		"Float");
+                    	              		"Formula");
                     	      	        afterParserOrEnumRuleCall();
                     	      	    
                     	    }
@@ -5982,6 +5963,7 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
 
 
     protected DFA1 dfa1 = new DFA1(this);
+    protected DFA2 dfa2 = new DFA2(this);
     protected DFA3 dfa3 = new DFA3(this);
     static final String DFA1_eotS =
         "\12\uffff";
@@ -6099,26 +6081,128 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
             throw nvae;
         }
     }
-    static final String DFA3_eotS =
-        "\12\uffff";
-    static final String DFA3_eofS =
-        "\1\1\11\uffff";
-    static final String DFA3_minS =
-        "\1\16\4\uffff\1\0\4\uffff";
-    static final String DFA3_maxS =
-        "\1\32\4\uffff\1\0\4\uffff";
-    static final String DFA3_acceptS =
-        "\1\uffff\1\4\5\uffff\1\2\1\3\1\1";
-    static final String DFA3_specialS =
-        "\5\uffff\1\0\4\uffff}>";
-    static final String[] DFA3_transitionS = {
-            "\3\1\1\5\1\7\1\10\6\uffff\1\1",
+    static final String DFA2_eotS =
+        "\13\uffff";
+    static final String DFA2_eofS =
+        "\1\1\12\uffff";
+    static final String DFA2_minS =
+        "\1\16\4\uffff\2\0\4\uffff";
+    static final String DFA2_maxS =
+        "\1\33\4\uffff\2\0\4\uffff";
+    static final String DFA2_acceptS =
+        "\1\uffff\1\3\7\uffff\1\1\1\2";
+    static final String DFA2_specialS =
+        "\5\uffff\1\0\1\1\4\uffff}>";
+    static final String[] DFA2_transitionS = {
+            "\1\1\1\5\1\6\1\1\6\uffff\1\1\1\uffff\2\1",
             "",
             "",
             "",
             "",
             "\1\uffff",
+            "\1\uffff",
             "",
+            "",
+            "",
+            ""
+    };
+
+    static final short[] DFA2_eot = DFA.unpackEncodedString(DFA2_eotS);
+    static final short[] DFA2_eof = DFA.unpackEncodedString(DFA2_eofS);
+    static final char[] DFA2_min = DFA.unpackEncodedStringToUnsignedChars(DFA2_minS);
+    static final char[] DFA2_max = DFA.unpackEncodedStringToUnsignedChars(DFA2_maxS);
+    static final short[] DFA2_accept = DFA.unpackEncodedString(DFA2_acceptS);
+    static final short[] DFA2_special = DFA.unpackEncodedString(DFA2_specialS);
+    static final short[][] DFA2_transition;
+
+    static {
+        int numStates = DFA2_transitionS.length;
+        DFA2_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA2_transition[i] = DFA.unpackEncodedString(DFA2_transitionS[i]);
+        }
+    }
+
+    class DFA2 extends DFA {
+
+        public DFA2(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 2;
+            this.eot = DFA2_eot;
+            this.eof = DFA2_eof;
+            this.min = DFA2_min;
+            this.max = DFA2_max;
+            this.accept = DFA2_accept;
+            this.special = DFA2_special;
+            this.transition = DFA2_transition;
+        }
+        public String getDescription() {
+            return "()* loopback of 360:1: ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMultiplication ) ) ) )*";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 : 
+                        int LA2_5 = input.LA(1);
+
+                         
+                        int index2_5 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred5_InternalMex()) ) {s = 9;}
+
+                        else if ( (true) ) {s = 1;}
+
+                         
+                        input.seek(index2_5);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
+                        int LA2_6 = input.LA(1);
+
+                         
+                        int index2_6 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred6_InternalMex()) ) {s = 10;}
+
+                        else if ( (true) ) {s = 1;}
+
+                         
+                        input.seek(index2_6);
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 2, _s, input);
+            error(nvae);
+            throw nvae;
+        }
+    }
+    static final String DFA3_eotS =
+        "\14\uffff";
+    static final String DFA3_eofS =
+        "\1\1\13\uffff";
+    static final String DFA3_minS =
+        "\1\16\7\uffff\1\0\3\uffff";
+    static final String DFA3_maxS =
+        "\1\33\7\uffff\1\0\3\uffff";
+    static final String DFA3_acceptS =
+        "\1\uffff\1\4\7\uffff\1\2\1\3\1\1";
+    static final String DFA3_specialS =
+        "\10\uffff\1\0\3\uffff}>";
+    static final String[] DFA3_transitionS = {
+            "\3\1\1\10\1\11\1\12\4\uffff\1\1\1\uffff\2\1",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\uffff",
             "",
             "",
             ""
@@ -6161,18 +6245,18 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA3_5 = input.LA(1);
+                        int LA3_8 = input.LA(1);
 
                          
-                        int index3_5 = input.index();
+                        int index3_8 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred7_InternalMex()) ) {s = 9;}
+                        if ( (synpred7_InternalMex()) ) {s = 11;}
 
                         else if ( (true) ) {s = 1;}
 
                          
-                        input.seek(index3_5);
+                        input.seek(index3_8);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -6241,11 +6325,11 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleFloat_in_rulePrimary1539 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFunction_in_rulePrimary1580 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMathName_in_rulePrimary1621 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_23_in_rulePrimary1633 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_ruleFloat_in_rulePrimary1654 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_23_in_rulePrimary1633 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_rulePrimary1654 = new BitSet(new long[]{0x0000000001000000L});
     public static final BitSet FOLLOW_24_in_rulePrimary1666 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_23_in_rulePrimary1678 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_ruleFloat_in_rulePrimary1699 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_23_in_rulePrimary1678 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_rulePrimary1699 = new BitSet(new long[]{0x0000000001000000L});
     public static final BitSet FOLLOW_24_in_rulePrimary1711 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleAdditionInBrackets_in_rulePrimary1752 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMatrix_in_entryRuleMatrix1789 = new BitSet(new long[]{0x0000000000000000L});
@@ -6258,10 +6342,10 @@ public class InternalMexParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_27_in_ruleMatrix1923 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1959 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_entryRuleMatrixRow1969 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_ruleMatrixRow2006 = new BitSet(new long[]{0x0000000008000010L});
-    public static final BitSet FOLLOW_ruleFloat_in_ruleMatrixRow2028 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrixRow2041 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_ruleFloat_in_ruleMatrixRow2062 = new BitSet(new long[]{0x000000000C000000L});
+    public static final BitSet FOLLOW_25_in_ruleMatrixRow2006 = new BitSet(new long[]{0x0000000008102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixRow2028 = new BitSet(new long[]{0x000000000C000000L});
+    public static final BitSet FOLLOW_26_in_ruleMatrixRow2041 = new BitSet(new long[]{0x0000000000102030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixRow2062 = new BitSet(new long[]{0x000000000C000000L});
     public static final BitSet FOLLOW_26_in_ruleMatrixRow2077 = new BitSet(new long[]{0x0000000008000000L});
     public static final BitSet FOLLOW_27_in_ruleMatrixRow2093 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2129 = new BitSet(new long[]{0x0000000000000000L});
