@@ -397,6 +397,7 @@ public class FormulaPad extends Pad {
 		fFormulaImageLabel.setLayoutData(formulaImageGridData);
 
 		fLastResultImageLabel = new Label(fResultView, SWT.NONE);
+		fLastResultImageLabel.setBackground(new Color(null, 255, 255, 255));
 		GridData lastResultImageGridData = new GridData(SWT.LEFT, SWT.FILL,
 				true, true);
 		fLastResultImageLabel.setLayoutData(lastResultImageGridData);
