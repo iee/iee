@@ -258,6 +258,23 @@ public class FormulaPad extends Pad {
 			}
 		});
 
+		fLastResultImageLabel.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				moveCaretToCurrentPad();
+				toggleInputText();
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				moveCaretToCurrentPad();
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+		});
+		
 		fViewer.getControl().addFocusListener(new FocusListener() {
 
 			@Override
