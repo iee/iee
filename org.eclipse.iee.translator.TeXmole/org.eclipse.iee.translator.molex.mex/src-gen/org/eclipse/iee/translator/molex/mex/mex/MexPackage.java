@@ -1228,6 +1228,134 @@ public interface MexPackage extends EPackage
   int IN_BRACKETS_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.ClassFunctionImpl <em>Class Function</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.ClassFunctionImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getClassFunction()
+   * @generated
+   */
+  int CLASS_FUNCTION = 24;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_FUNCTION__ADDITION = EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_FUNCTION__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_FUNCTION__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Class </b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_FUNCTION__CLASS_ = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Function</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_FUNCTION__FUNCTION = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Class Function</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_FUNCTION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.ClassMemberImpl <em>Class Member</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.ClassMemberImpl
+   * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getClassMember()
+   * @generated
+   */
+  int CLASS_MEMBER = 25;
+
+  /**
+   * The feature id for the '<em><b>Addition</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_MEMBER__ADDITION = EXPRESSION__ADDITION;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_MEMBER__NAME = EXPRESSION__NAME;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_MEMBER__PARAMETERS = EXPRESSION__PARAMETERS;
+
+  /**
+   * The feature id for the '<em><b>Class </b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_MEMBER__CLASS_ = EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Member</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_MEMBER__MEMBER = EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Class Member</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CLASS_MEMBER_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAdditionImpl <em>Matrix Addition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1235,7 +1363,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixAddition()
    * @generated
    */
-  int MATRIX_ADDITION = 24;
+  int MATRIX_ADDITION = 26;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -1281,7 +1409,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixSubtraction()
    * @generated
    */
-  int MATRIX_SUBTRACTION = 25;
+  int MATRIX_SUBTRACTION = 27;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -1327,7 +1455,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixMultiplication()
    * @generated
    */
-  int MATRIX_MULTIPLICATION = 26;
+  int MATRIX_MULTIPLICATION = 28;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -1382,7 +1510,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getNewMatrix()
    * @generated
    */
-  int NEW_MATRIX = 27;
+  int NEW_MATRIX = 29;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -1419,7 +1547,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getTransposeMatrix()
    * @generated
    */
-  int TRANSPOSE_MATRIX = 28;
+  int TRANSPOSE_MATRIX = 30;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -1456,7 +1584,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixVariable()
    * @generated
    */
-  int MATRIX_VARIABLE = 29;
+  int MATRIX_VARIABLE = 31;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -1493,7 +1621,7 @@ public interface MexPackage extends EPackage
    * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getMatrixInBrackets()
    * @generated
    */
-  int MATRIX_IN_BRACKETS = 30;
+  int MATRIX_IN_BRACKETS = 32;
 
   /**
    * The feature id for the '<em><b>Addition</b></em>' containment reference.
@@ -2202,6 +2330,70 @@ public interface MexPackage extends EPackage
    * @generated
    */
   EReference getInBrackets_InBrackets();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.ClassFunction <em>Class Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Class Function</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassFunction
+   * @generated
+   */
+  EClass getClassFunction();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.ClassFunction#getClass_ <em>Class </em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Class </em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassFunction#getClass_()
+   * @see #getClassFunction()
+   * @generated
+   */
+  EReference getClassFunction_Class_();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.ClassFunction#getFunction <em>Function</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Function</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassFunction#getFunction()
+   * @see #getClassFunction()
+   * @generated
+   */
+  EReference getClassFunction_Function();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.ClassMember <em>Class Member</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Class Member</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassMember
+   * @generated
+   */
+  EClass getClassMember();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.ClassMember#getClass_ <em>Class </em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Class </em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassMember#getClass_()
+   * @see #getClassMember()
+   * @generated
+   */
+  EReference getClassMember_Class_();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.iee.translator.molex.mex.mex.ClassMember#getMember <em>Member</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Member</em>'.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassMember#getMember()
+   * @see #getClassMember()
+   * @generated
+   */
+  EReference getClassMember_Member();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.iee.translator.molex.mex.mex.MatrixAddition <em>Matrix Addition</em>}'.
@@ -2976,6 +3168,58 @@ public interface MexPackage extends EPackage
      * @generated
      */
     EReference IN_BRACKETS__IN_BRACKETS = eINSTANCE.getInBrackets_InBrackets();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.ClassFunctionImpl <em>Class Function</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.ClassFunctionImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getClassFunction()
+     * @generated
+     */
+    EClass CLASS_FUNCTION = eINSTANCE.getClassFunction();
+
+    /**
+     * The meta object literal for the '<em><b>Class </b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CLASS_FUNCTION__CLASS_ = eINSTANCE.getClassFunction_Class_();
+
+    /**
+     * The meta object literal for the '<em><b>Function</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CLASS_FUNCTION__FUNCTION = eINSTANCE.getClassFunction_Function();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.ClassMemberImpl <em>Class Member</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.ClassMemberImpl
+     * @see org.eclipse.iee.translator.molex.mex.mex.impl.MexPackageImpl#getClassMember()
+     * @generated
+     */
+    EClass CLASS_MEMBER = eINSTANCE.getClassMember();
+
+    /**
+     * The meta object literal for the '<em><b>Class </b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CLASS_MEMBER__CLASS_ = eINSTANCE.getClassMember_Class_();
+
+    /**
+     * The meta object literal for the '<em><b>Member</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CLASS_MEMBER__MEMBER = eINSTANCE.getClassMember_Member();
 
     /**
      * The meta object literal for the '{@link org.eclipse.iee.translator.molex.mex.mex.impl.MatrixAdditionImpl <em>Matrix Addition</em>}' class.

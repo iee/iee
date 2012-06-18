@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.ClassFunction;
+import org.eclipse.iee.translator.jmole.math.math.ClassMember;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -212,6 +214,20 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * @generated
    */
   private EClass functionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass classFunctionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass classMemberEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -923,6 +939,66 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getClassFunction()
+  {
+    return classFunctionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getClassFunction_Class_()
+  {
+    return (EReference)classFunctionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getClassFunction_Function()
+  {
+    return (EReference)classFunctionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getClassMember()
+  {
+    return classMemberEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getClassMember_Class_()
+  {
+    return (EReference)classMemberEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getClassMember_Member()
+  {
+    return (EReference)classMemberEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getMatrixAddition()
   {
     return matrixAdditionEClass;
@@ -1191,6 +1267,14 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     functionEClass = createEClass(FUNCTION);
     createEReference(functionEClass, FUNCTION__FUNCTION);
 
+    classFunctionEClass = createEClass(CLASS_FUNCTION);
+    createEReference(classFunctionEClass, CLASS_FUNCTION__CLASS_);
+    createEReference(classFunctionEClass, CLASS_FUNCTION__FUNCTION);
+
+    classMemberEClass = createEClass(CLASS_MEMBER);
+    createEReference(classMemberEClass, CLASS_MEMBER__CLASS_);
+    createEReference(classMemberEClass, CLASS_MEMBER__MEMBER);
+
     matrixAdditionEClass = createEClass(MATRIX_ADDITION);
     createEReference(matrixAdditionEClass, MATRIX_ADDITION__LEFT);
     createEReference(matrixAdditionEClass, MATRIX_ADDITION__RIGHT);
@@ -1255,6 +1339,8 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
     floatEClass.getESuperTypes().add(this.getExpression());
     matrixElementEClass.getESuperTypes().add(this.getExpression());
     functionEClass.getESuperTypes().add(this.getExpression());
+    classFunctionEClass.getESuperTypes().add(this.getExpression());
+    classMemberEClass.getESuperTypes().add(this.getExpression());
     matrixAdditionEClass.getESuperTypes().add(this.getMatrixExpression());
     matrixSubtractionEClass.getESuperTypes().add(this.getMatrixExpression());
     matrixMultiplicationEClass.getESuperTypes().add(this.getMatrixExpression());
@@ -1345,6 +1431,14 @@ public class MathPackageImpl extends EPackageImpl implements MathPackage
 
     initEClass(functionEClass, Function.class, "Function", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFunction_Function(), this.getExpression(), null, "function", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(classFunctionEClass, ClassFunction.class, "ClassFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getClassFunction_Class_(), this.getMathName(), null, "class_", null, 0, 1, ClassFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getClassFunction_Function(), this.getExpression(), null, "function", null, 0, 1, ClassFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(classMemberEClass, ClassMember.class, "ClassMember", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getClassMember_Class_(), this.getMathName(), null, "class_", null, 0, 1, ClassMember.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getClassMember_Member(), this.getMathName(), null, "member", null, 0, 1, ClassMember.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(matrixAdditionEClass, MatrixAddition.class, "MatrixAddition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMatrixAddition_Left(), this.getMatrixExpression(), null, "left", null, 0, 1, MatrixAddition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

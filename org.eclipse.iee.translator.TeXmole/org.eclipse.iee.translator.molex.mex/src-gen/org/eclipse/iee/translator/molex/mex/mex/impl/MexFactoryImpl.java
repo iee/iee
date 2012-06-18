@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.iee.translator.molex.mex.mex.Addition;
+import org.eclipse.iee.translator.molex.mex.mex.ClassFunction;
+import org.eclipse.iee.translator.molex.mex.mex.ClassMember;
 import org.eclipse.iee.translator.molex.mex.mex.Division;
 import org.eclipse.iee.translator.molex.mex.mex.Exponent;
 import org.eclipse.iee.translator.molex.mex.mex.Expression;
@@ -123,6 +125,8 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
       case MexPackage.FUNCTION: return createFunction();
       case MexPackage.MATRIX_ELEMENT: return createMatrixElement();
       case MexPackage.IN_BRACKETS: return createInBrackets();
+      case MexPackage.CLASS_FUNCTION: return createClassFunction();
+      case MexPackage.CLASS_MEMBER: return createClassMember();
       case MexPackage.MATRIX_ADDITION: return createMatrixAddition();
       case MexPackage.MATRIX_SUBTRACTION: return createMatrixSubtraction();
       case MexPackage.MATRIX_MULTIPLICATION: return createMatrixMultiplication();
@@ -397,6 +401,28 @@ public class MexFactoryImpl extends EFactoryImpl implements MexFactory
   {
     InBracketsImpl inBrackets = new InBracketsImpl();
     return inBrackets;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ClassFunction createClassFunction()
+  {
+    ClassFunctionImpl classFunction = new ClassFunctionImpl();
+    return classFunction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ClassMember createClassMember()
+  {
+    ClassMemberImpl classMember = new ClassMemberImpl();
+    return classMember;
   }
 
   /**

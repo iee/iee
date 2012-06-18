@@ -430,14 +430,30 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 		private final Action cInBracketsAction_4_0 = (Action)cGroup_4.eContents().get(0);
 		private final Assignment cInBracketsAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
 		private final RuleCall cInBracketsAdditionInBracketsParserRuleCall_4_1_0 = (RuleCall)cInBracketsAssignment_4_1.eContents().get(0);
+		private final Group cGroup_5 = (Group)cAlternatives.eContents().get(5);
+		private final Action cClassFunctionAction_5_0 = (Action)cGroup_5.eContents().get(0);
+		private final Assignment cClass_Assignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
+		private final RuleCall cClass_MathNameParserRuleCall_5_1_0 = (RuleCall)cClass_Assignment_5_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_5_2 = (Keyword)cGroup_5.eContents().get(2);
+		private final Assignment cFunctionAssignment_5_3 = (Assignment)cGroup_5.eContents().get(3);
+		private final RuleCall cFunctionFunctionParserRuleCall_5_3_0 = (RuleCall)cFunctionAssignment_5_3.eContents().get(0);
+		private final Group cGroup_6 = (Group)cAlternatives.eContents().get(6);
+		private final Action cClassMemberAction_6_0 = (Action)cGroup_6.eContents().get(0);
+		private final Assignment cClass_Assignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
+		private final RuleCall cClass_MathNameParserRuleCall_6_1_0 = (RuleCall)cClass_Assignment_6_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_6_2 = (Keyword)cGroup_6.eContents().get(2);
+		private final Assignment cMemberAssignment_6_3 = (Assignment)cGroup_6.eContents().get(3);
+		private final RuleCall cMemberMathNameParserRuleCall_6_3_0 = (RuleCall)cMemberAssignment_6_3.eContents().get(0);
 		
 		//Primary returns Expression:
 		//	{Variable} name=MathName | {Float} value=Float | {Function} function=Function | {MatrixElement} element=MathName "["
-		//	row=Formula "]" "[" column=Formula "]" | {InBrackets} inBrackets=AdditionInBrackets;
+		//	row=Formula "]" "[" column=Formula "]" | {InBrackets} inBrackets=AdditionInBrackets | {ClassFunction} class_=MathName
+		//	"." function=Function | {ClassMember} class_=MathName "." member=MathName;
 		public ParserRule getRule() { return rule; }
 
 		//{Variable} name=MathName | {Float} value=Float | {Function} function=Function | {MatrixElement} element=MathName "["
-		//row=Formula "]" "[" column=Formula "]" | {InBrackets} inBrackets=AdditionInBrackets
+		//row=Formula "]" "[" column=Formula "]" | {InBrackets} inBrackets=AdditionInBrackets | {ClassFunction} class_=MathName
+		//"." function=Function | {ClassMember} class_=MathName "." member=MathName
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{Variable} name=MathName
@@ -523,6 +539,48 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 
 		//AdditionInBrackets
 		public RuleCall getInBracketsAdditionInBracketsParserRuleCall_4_1_0() { return cInBracketsAdditionInBracketsParserRuleCall_4_1_0; }
+
+		//{ClassFunction} class_=MathName "." function=Function
+		public Group getGroup_5() { return cGroup_5; }
+
+		//{ClassFunction}
+		public Action getClassFunctionAction_5_0() { return cClassFunctionAction_5_0; }
+
+		//class_=MathName
+		public Assignment getClass_Assignment_5_1() { return cClass_Assignment_5_1; }
+
+		//MathName
+		public RuleCall getClass_MathNameParserRuleCall_5_1_0() { return cClass_MathNameParserRuleCall_5_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_5_2() { return cFullStopKeyword_5_2; }
+
+		//function=Function
+		public Assignment getFunctionAssignment_5_3() { return cFunctionAssignment_5_3; }
+
+		//Function
+		public RuleCall getFunctionFunctionParserRuleCall_5_3_0() { return cFunctionFunctionParserRuleCall_5_3_0; }
+
+		//{ClassMember} class_=MathName "." member=MathName
+		public Group getGroup_6() { return cGroup_6; }
+
+		//{ClassMember}
+		public Action getClassMemberAction_6_0() { return cClassMemberAction_6_0; }
+
+		//class_=MathName
+		public Assignment getClass_Assignment_6_1() { return cClass_Assignment_6_1; }
+
+		//MathName
+		public RuleCall getClass_MathNameParserRuleCall_6_1_0() { return cClass_MathNameParserRuleCall_6_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_6_2() { return cFullStopKeyword_6_2; }
+
+		//member=MathName
+		public Assignment getMemberAssignment_6_3() { return cMemberAssignment_6_3; }
+
+		//MathName
+		public RuleCall getMemberMathNameParserRuleCall_6_3_0() { return cMemberMathNameParserRuleCall_6_3_0; }
 	}
 
 	public class MatrixElements extends AbstractParserRuleElementFinder {
@@ -1247,7 +1305,8 @@ public class MexGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Primary returns Expression:
 	//	{Variable} name=MathName | {Float} value=Float | {Function} function=Function | {MatrixElement} element=MathName "["
-	//	row=Formula "]" "[" column=Formula "]" | {InBrackets} inBrackets=AdditionInBrackets;
+	//	row=Formula "]" "[" column=Formula "]" | {InBrackets} inBrackets=AdditionInBrackets | {ClassFunction} class_=MathName
+	//	"." function=Function | {ClassMember} class_=MathName "." member=MathName;
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
 	}

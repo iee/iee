@@ -130,6 +130,18 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inBrackets" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassFunction" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class_" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MathName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassMember" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class_" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MathName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MathName"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatrixAddition" eSuperTypes="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixExpression"
         containment="true"/>

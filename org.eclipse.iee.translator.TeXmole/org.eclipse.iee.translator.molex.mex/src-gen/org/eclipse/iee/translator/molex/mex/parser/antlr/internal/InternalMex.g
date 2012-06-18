@@ -929,6 +929,106 @@ rulePrimary returns [EObject current=null]
 	    }
 
 )
+))
+    |((
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getPrimaryAccess().getClassFunctionAction_5_0(),
+            $current);
+    }
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getClass_MathNameParserRuleCall_5_1_0()); 
+	    }
+		lv_class__17_0=ruleMathName		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
+	        }
+       		set(
+       			$current, 
+       			"class_",
+        		lv_class__17_0, 
+        		"MathName");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_18='.' 
+    {
+    	newLeafNode(otherlv_18, grammarAccess.getPrimaryAccess().getFullStopKeyword_5_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getFunctionFunctionParserRuleCall_5_3_0()); 
+	    }
+		lv_function_19_0=ruleFunction		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
+	        }
+       		set(
+       			$current, 
+       			"function",
+        		lv_function_19_0, 
+        		"Function");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+    |((
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getPrimaryAccess().getClassMemberAction_6_0(),
+            $current);
+    }
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getClass_MathNameParserRuleCall_6_1_0()); 
+	    }
+		lv_class__21_0=ruleMathName		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
+	        }
+       		set(
+       			$current, 
+       			"class_",
+        		lv_class__21_0, 
+        		"MathName");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_22='.' 
+    {
+    	newLeafNode(otherlv_22, grammarAccess.getPrimaryAccess().getFullStopKeyword_6_2());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getPrimaryAccess().getMemberMathNameParserRuleCall_6_3_0()); 
+	    }
+		lv_member_23_0=ruleMathName		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getPrimaryRule());
+	        }
+       		set(
+       			$current, 
+       			"member",
+        		lv_member_23_0, 
+        		"MathName");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
 )))
 ;
 

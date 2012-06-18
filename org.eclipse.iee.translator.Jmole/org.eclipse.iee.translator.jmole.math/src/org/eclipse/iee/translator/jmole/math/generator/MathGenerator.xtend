@@ -109,6 +109,16 @@ class MathGenerator implements IGenerator {
 		
 	def dispatch compileExpression(Function f) '''
 		«compileFunction(f)»'''
+		
+	def dispatch compileExpression(ClassFunction call) '''
+		«compileName(call.class_)».«compileName(call.function.name)»
+		(«FOR param:call.function.parameters»
+		 «IF param != null»«compileFormula(param)»«ENDIF»
+		 «IF call.function.parameters.last() != param»,«ENDIF»
+		«ENDFOR»)'''
+		
+	def dispatch compileExpression(ClassMember call) '''
+		«compileName(call.class_)».«compileName(call.member)»'''	
 	
 	def dispatch compileExpression(Addition op) '''
 		(«compileExpression(op.left)») + («compileExpression(op.right)»)'''

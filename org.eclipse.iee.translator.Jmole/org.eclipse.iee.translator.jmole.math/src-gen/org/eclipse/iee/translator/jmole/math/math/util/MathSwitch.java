@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.ClassFunction;
+import org.eclipse.iee.translator.jmole.math.math.ClassMember;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -274,6 +276,22 @@ public class MathSwitch<T> extends Switch<T>
         Function function = (Function)theEObject;
         T result = caseFunction(function);
         if (result == null) result = caseExpression(function);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.CLASS_FUNCTION:
+      {
+        ClassFunction classFunction = (ClassFunction)theEObject;
+        T result = caseClassFunction(classFunction);
+        if (result == null) result = caseExpression(classFunction);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MathPackage.CLASS_MEMBER:
+      {
+        ClassMember classMember = (ClassMember)theEObject;
+        T result = caseClassMember(classMember);
+        if (result == null) result = caseExpression(classMember);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -693,6 +711,38 @@ public class MathSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseFunction(Function object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Class Function</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Class Function</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseClassFunction(ClassFunction object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Class Member</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Class Member</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseClassMember(ClassMember object)
   {
     return null;
   }

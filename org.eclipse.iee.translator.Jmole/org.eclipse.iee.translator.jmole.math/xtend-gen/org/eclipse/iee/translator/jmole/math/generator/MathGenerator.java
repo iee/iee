@@ -4,6 +4,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.ClassFunction;
+import org.eclipse.iee.translator.jmole.math.math.ClassMember;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -309,6 +311,60 @@ public class MathGenerator implements IGenerator {
     return _builder;
   }
   
+  protected StringConcatenation _compileExpression(final ClassFunction call) {
+    StringConcatenation _builder = new StringConcatenation();
+    MathName _class_ = call.getClass_();
+    StringConcatenation _compileName = this.compileName(_class_);
+    _builder.append(_compileName, "");
+    _builder.append(".");
+    Expression _function = call.getFunction();
+    MathName _name = _function.getName();
+    StringConcatenation _compileName_1 = this.compileName(_name);
+    _builder.append(_compileName_1, "");
+    _builder.newLineIfNotEmpty();
+    _builder.append("(");
+    {
+      Expression _function_1 = call.getFunction();
+      EList<Formula> _parameters = _function_1.getParameters();
+      for(final Formula param : _parameters) {
+        _builder.newLineIfNotEmpty();
+        {
+          boolean _operator_notEquals = ObjectExtensions.operator_notEquals(param, null);
+          if (_operator_notEquals) {
+            StringConcatenation _compileFormula = this.compileFormula(param);
+            _builder.append(_compileFormula, "");
+          }
+        }
+        _builder.newLineIfNotEmpty();
+        {
+          Expression _function_2 = call.getFunction();
+          EList<Formula> _parameters_1 = _function_2.getParameters();
+          Formula _last = IterableExtensions.<Formula>last(_parameters_1);
+          boolean _operator_notEquals_1 = ObjectExtensions.operator_notEquals(_last, param);
+          if (_operator_notEquals_1) {
+            _builder.append(",");
+          }
+        }
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t");
+      }
+    }
+    _builder.append(")");
+    return _builder;
+  }
+  
+  protected StringConcatenation _compileExpression(final ClassMember call) {
+    StringConcatenation _builder = new StringConcatenation();
+    MathName _class_ = call.getClass_();
+    StringConcatenation _compileName = this.compileName(_class_);
+    _builder.append(_compileName, "");
+    _builder.append(".");
+    MathName _member = call.getMember();
+    StringConcatenation _compileName_1 = this.compileName(_member);
+    _builder.append(_compileName_1, "");
+    return _builder;
+  }
+  
   protected StringConcatenation _compileExpression(final Addition op) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("(");
@@ -571,6 +627,10 @@ public class MathGenerator implements IGenerator {
   public StringConcatenation compileExpression(final Expression op) {
     if ((op instanceof Addition)) {
       return _compileExpression((Addition)op);
+    } else if ((op instanceof ClassFunction)) {
+      return _compileExpression((ClassFunction)op);
+    } else if ((op instanceof ClassMember)) {
+      return _compileExpression((ClassMember)op);
     } else if ((op instanceof Division)) {
       return _compileExpression((Division)op);
     } else if ((op instanceof Exponent)) {

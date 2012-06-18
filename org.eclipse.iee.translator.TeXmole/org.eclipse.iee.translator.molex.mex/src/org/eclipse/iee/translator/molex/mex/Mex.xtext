@@ -44,7 +44,9 @@ Primary returns Expression:
 	{Float} value=Float |
 	{Function} function=Function |
 	{MatrixElement} element=MathName '[' row=Formula ']' '[' column=Formula ']' | 
-	{InBrackets} inBrackets=AdditionInBrackets;
+	{InBrackets} inBrackets=AdditionInBrackets |
+	{ClassFunction} class_=MathName '.' function=Function |
+	{ClassMember} class_=MathName '.' member=MathName ;
 
 Matrix:
 	'{' (rows+=MatrixRow (',' rows+=MatrixRow)* ','?)? '}';

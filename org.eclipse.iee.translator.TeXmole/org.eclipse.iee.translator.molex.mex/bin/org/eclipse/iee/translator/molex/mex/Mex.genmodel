@@ -96,6 +96,14 @@
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//InBrackets">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//InBrackets/inBrackets"/>
     </genClasses>
+    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//ClassFunction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//ClassFunction/class_"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//ClassFunction/function"/>
+    </genClasses>
+    <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//ClassMember">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//ClassMember/class_"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//ClassMember/member"/>
+    </genClasses>
     <genClasses ecoreClass="platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixAddition">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixAddition/left"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.eclipse.iee.translator.molex.mex/src-gen/org/eclipse/iee/translator/molex/mex/Mex.ecore#//MatrixAddition/right"/>

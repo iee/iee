@@ -14,6 +14,8 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.iee.translator.molex.mex.mex.Addition;
+import org.eclipse.iee.translator.molex.mex.mex.ClassFunction;
+import org.eclipse.iee.translator.molex.mex.mex.ClassMember;
 import org.eclipse.iee.translator.molex.mex.mex.Division;
 import org.eclipse.iee.translator.molex.mex.mex.Exponent;
 import org.eclipse.iee.translator.molex.mex.mex.Expression;
@@ -227,6 +229,16 @@ public class MexAdapterFactory extends AdapterFactoryImpl
       public Adapter caseInBrackets(InBrackets object)
       {
         return createInBracketsAdapter();
+      }
+      @Override
+      public Adapter caseClassFunction(ClassFunction object)
+      {
+        return createClassFunctionAdapter();
+      }
+      @Override
+      public Adapter caseClassMember(ClassMember object)
+      {
+        return createClassMemberAdapter();
       }
       @Override
       public Adapter caseMatrixAddition(MatrixAddition object)
@@ -641,6 +653,36 @@ public class MexAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createInBracketsAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.molex.mex.mex.ClassFunction <em>Class Function</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassFunction
+   * @generated
+   */
+  public Adapter createClassFunctionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.iee.translator.molex.mex.mex.ClassMember <em>Class Member</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.iee.translator.molex.mex.mex.ClassMember
+   * @generated
+   */
+  public Adapter createClassMemberAdapter()
   {
     return null;
   }

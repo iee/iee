@@ -399,17 +399,33 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cFunctionAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final RuleCall cFunctionFunctionParserRuleCall_3_1_0 = (RuleCall)cFunctionAssignment_3_1.eContents().get(0);
 		private final Group cGroup_4 = (Group)cAlternatives.eContents().get(4);
-		private final Keyword cLeftParenthesisKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
-		private final RuleCall cAdditionParserRuleCall_4_1 = (RuleCall)cGroup_4.eContents().get(1);
-		private final Keyword cRightParenthesisKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
+		private final Action cClassFunctionAction_4_0 = (Action)cGroup_4.eContents().get(0);
+		private final Assignment cClass_Assignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cClass_MathNameParserRuleCall_4_1_0 = (RuleCall)cClass_Assignment_4_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
+		private final Assignment cFunctionAssignment_4_3 = (Assignment)cGroup_4.eContents().get(3);
+		private final RuleCall cFunctionFunctionParserRuleCall_4_3_0 = (RuleCall)cFunctionAssignment_4_3.eContents().get(0);
+		private final Group cGroup_5 = (Group)cAlternatives.eContents().get(5);
+		private final Action cClassMemberAction_5_0 = (Action)cGroup_5.eContents().get(0);
+		private final Assignment cClass_Assignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
+		private final RuleCall cClass_MathNameParserRuleCall_5_1_0 = (RuleCall)cClass_Assignment_5_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_5_2 = (Keyword)cGroup_5.eContents().get(2);
+		private final Assignment cMemberAssignment_5_3 = (Assignment)cGroup_5.eContents().get(3);
+		private final RuleCall cMemberMathNameParserRuleCall_5_3_0 = (RuleCall)cMemberAssignment_5_3.eContents().get(0);
+		private final Group cGroup_6 = (Group)cAlternatives.eContents().get(6);
+		private final Keyword cLeftParenthesisKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
+		private final RuleCall cAdditionParserRuleCall_6_1 = (RuleCall)cGroup_6.eContents().get(1);
+		private final Keyword cRightParenthesisKeyword_6_2 = (Keyword)cGroup_6.eContents().get(2);
 		
 		//Primary returns Expression:
 		//	{Variable} name=MathName | {Float} value=Float | {MatrixElement} element=MathName "[" row=Formula "]" "["
-		//	column=Formula "]" | {Function} function=Function | "(" Addition ")";
+		//	column=Formula "]" | {Function} function=Function | {ClassFunction} class_=MathName "." function=Function |
+		//	{ClassMember} class_=MathName "." member=MathName | "(" Addition ")";
 		public ParserRule getRule() { return rule; }
 
 		//{Variable} name=MathName | {Float} value=Float | {MatrixElement} element=MathName "[" row=Formula "]" "[" column=Formula
-		//"]" | {Function} function=Function | "(" Addition ")"
+		//"]" | {Function} function=Function | {ClassFunction} class_=MathName "." function=Function | {ClassMember}
+		//class_=MathName "." member=MathName | "(" Addition ")"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//{Variable} name=MathName
@@ -484,17 +500,59 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 		//Function
 		public RuleCall getFunctionFunctionParserRuleCall_3_1_0() { return cFunctionFunctionParserRuleCall_3_1_0; }
 
-		//"(" Addition ")"
+		//{ClassFunction} class_=MathName "." function=Function
 		public Group getGroup_4() { return cGroup_4; }
 
+		//{ClassFunction}
+		public Action getClassFunctionAction_4_0() { return cClassFunctionAction_4_0; }
+
+		//class_=MathName
+		public Assignment getClass_Assignment_4_1() { return cClass_Assignment_4_1; }
+
+		//MathName
+		public RuleCall getClass_MathNameParserRuleCall_4_1_0() { return cClass_MathNameParserRuleCall_4_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_4_2() { return cFullStopKeyword_4_2; }
+
+		//function=Function
+		public Assignment getFunctionAssignment_4_3() { return cFunctionAssignment_4_3; }
+
+		//Function
+		public RuleCall getFunctionFunctionParserRuleCall_4_3_0() { return cFunctionFunctionParserRuleCall_4_3_0; }
+
+		//{ClassMember} class_=MathName "." member=MathName
+		public Group getGroup_5() { return cGroup_5; }
+
+		//{ClassMember}
+		public Action getClassMemberAction_5_0() { return cClassMemberAction_5_0; }
+
+		//class_=MathName
+		public Assignment getClass_Assignment_5_1() { return cClass_Assignment_5_1; }
+
+		//MathName
+		public RuleCall getClass_MathNameParserRuleCall_5_1_0() { return cClass_MathNameParserRuleCall_5_1_0; }
+
+		//"."
+		public Keyword getFullStopKeyword_5_2() { return cFullStopKeyword_5_2; }
+
+		//member=MathName
+		public Assignment getMemberAssignment_5_3() { return cMemberAssignment_5_3; }
+
+		//MathName
+		public RuleCall getMemberMathNameParserRuleCall_5_3_0() { return cMemberMathNameParserRuleCall_5_3_0; }
+
+		//"(" Addition ")"
+		public Group getGroup_6() { return cGroup_6; }
+
 		//"("
-		public Keyword getLeftParenthesisKeyword_4_0() { return cLeftParenthesisKeyword_4_0; }
+		public Keyword getLeftParenthesisKeyword_6_0() { return cLeftParenthesisKeyword_6_0; }
 
 		//Addition
-		public RuleCall getAdditionParserRuleCall_4_1() { return cAdditionParserRuleCall_4_1; }
+		public RuleCall getAdditionParserRuleCall_6_1() { return cAdditionParserRuleCall_6_1; }
 
 		//")"
-		public Keyword getRightParenthesisKeyword_4_2() { return cRightParenthesisKeyword_4_2; }
+		public Keyword getRightParenthesisKeyword_6_2() { return cRightParenthesisKeyword_6_2; }
 	}
 
 	public class MatrixElements extends AbstractParserRuleElementFinder {
@@ -1163,7 +1221,8 @@ public class MathGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Primary returns Expression:
 	//	{Variable} name=MathName | {Float} value=Float | {MatrixElement} element=MathName "[" row=Formula "]" "["
-	//	column=Formula "]" | {Function} function=Function | "(" Addition ")";
+	//	column=Formula "]" | {Function} function=Function | {ClassFunction} class_=MathName "." function=Function |
+	//	{ClassMember} class_=MathName "." member=MathName | "(" Addition ")";
 	public PrimaryElements getPrimaryAccess() {
 		return (pPrimary != null) ? pPrimary : (pPrimary = new PrimaryElements());
 	}

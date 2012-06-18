@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.ClassFunction;
+import org.eclipse.iee.translator.jmole.math.math.ClassMember;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -120,6 +122,8 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.FLOAT: return createFloat();
       case MathPackage.MATRIX_ELEMENT: return createMatrixElement();
       case MathPackage.FUNCTION: return createFunction();
+      case MathPackage.CLASS_FUNCTION: return createClassFunction();
+      case MathPackage.CLASS_MEMBER: return createClassMember();
       case MathPackage.MATRIX_ADDITION: return createMatrixAddition();
       case MathPackage.MATRIX_SUBTRACTION: return createMatrixSubtraction();
       case MathPackage.MATRIX_MULTIPLICATION: return createMatrixMultiplication();
@@ -382,6 +386,28 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     FunctionImpl function = new FunctionImpl();
     return function;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ClassFunction createClassFunction()
+  {
+    ClassFunctionImpl classFunction = new ClassFunctionImpl();
+    return classFunction;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ClassMember createClassMember()
+  {
+    ClassMemberImpl classMember = new ClassMemberImpl();
+    return classMember;
   }
 
   /**

@@ -254,6 +254,34 @@
             <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.3"/>
           </elements>
         </elements>
+        <elements xsi:type="xtext:Group">
+          <elements xsi:type="xtext:Action">
+            <type metamodel="/0/@metamodelDeclarations.1">
+              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/molex/mex/Mex#//ClassFunction"/>
+            </type>
+          </elements>
+          <elements xsi:type="xtext:Assignment" feature="class_" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.20"/>
+          </elements>
+          <elements xsi:type="xtext:Keyword" value="."/>
+          <elements xsi:type="xtext:Assignment" feature="function" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.18"/>
+          </elements>
+        </elements>
+        <elements xsi:type="xtext:Group">
+          <elements xsi:type="xtext:Action">
+            <type metamodel="/0/@metamodelDeclarations.1">
+              <classifier xsi:type="ecore:EClass" href="http://www.eclipse.org/iee/translator/molex/mex/Mex#//ClassMember"/>
+            </type>
+          </elements>
+          <elements xsi:type="xtext:Assignment" feature="class_" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.20"/>
+          </elements>
+          <elements xsi:type="xtext:Keyword" value="."/>
+          <elements xsi:type="xtext:Assignment" feature="member" operator="=">
+            <terminal xsi:type="xtext:RuleCall" rule="/0/@rules.20"/>
+          </elements>
+        </elements>
       </alternatives>
     </rules>
     <rules xsi:type="xtext:ParserRule" name="Matrix">

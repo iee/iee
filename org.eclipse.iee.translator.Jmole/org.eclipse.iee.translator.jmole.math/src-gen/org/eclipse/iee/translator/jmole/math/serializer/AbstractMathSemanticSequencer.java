@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.iee.translator.jmole.math.math.Addition;
+import org.eclipse.iee.translator.jmole.math.math.ClassFunction;
+import org.eclipse.iee.translator.jmole.math.math.ClassMember;
 import org.eclipse.iee.translator.jmole.math.math.Division;
 import org.eclipse.iee.translator.jmole.math.math.Exponent;
 import org.eclipse.iee.translator.jmole.math.math.Expression;
@@ -84,6 +86,38 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 				   context == grammarAccess.getPrimaryRule() ||
 				   context == grammarAccess.getUnaryExpressionRule()) {
 					sequence_Addition(context, (Addition) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.CLASS_FUNCTION:
+				if(context == grammarAccess.getAdditionRule() ||
+				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
+				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
+				   context == grammarAccess.getPrimaryRule() ||
+				   context == grammarAccess.getUnaryExpressionRule()) {
+					sequence_Primary(context, (ClassFunction) semanticObject); 
+					return; 
+				}
+				else break;
+			case MathPackage.CLASS_MEMBER:
+				if(context == grammarAccess.getAdditionRule() ||
+				   context == grammarAccess.getAdditionAccess().getAdditionLeftAction_1_0_1() ||
+				   context == grammarAccess.getAdditionAccess().getSubtractionLeftAction_1_1_1() ||
+				   context == grammarAccess.getExponentRule() ||
+				   context == grammarAccess.getExponentAccess().getExponentLeftAction_1_0() ||
+				   context == grammarAccess.getMultiplicationRule() ||
+				   context == grammarAccess.getMultiplicationAccess().getDivisionLeftAction_1_1_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getModuloLeftAction_1_2_1() ||
+				   context == grammarAccess.getMultiplicationAccess().getMultiplicationLeftAction_1_0_1() ||
+				   context == grammarAccess.getPrimaryRule() ||
+				   context == grammarAccess.getUnaryExpressionRule()) {
+					sequence_Primary(context, (ClassMember) semanticObject); 
 					return; 
 				}
 				else break;
@@ -742,6 +776,32 @@ public class AbstractMathSemanticSequencer extends AbstractSemanticSequencer {
 		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
 		feeder.accept(grammarAccess.getPrimaryMatrixAccess().getNameMathNameParserRuleCall_1_2_0(), semanticObject.getName());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (class_=MathName function=Function)
+	 *
+	 * Features:
+	 *    class_[1, 1]
+	 *    function[1, 1]
+	 */
+	protected void sequence_Primary(EObject context, ClassFunction semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (class_=MathName member=MathName)
+	 *
+	 * Features:
+	 *    class_[1, 1]
+	 *    member[1, 1]
+	 */
+	protected void sequence_Primary(EObject context, ClassMember semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

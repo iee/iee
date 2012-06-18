@@ -22,7 +22,7 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalMathParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_INT", "RULE_MATH_NAME", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'='", "'+'", "'-'", "'*'", "'/'", "'%'", "'(-'", "')'", "'('", "')!'", "'^'", "'['", "']'", "'{'", "','", "'}'", "']^T'", "'.'", "'E'", "'e'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_INT", "RULE_MATH_NAME", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'='", "'+'", "'-'", "'*'", "'/'", "'%'", "'(-'", "')'", "'('", "')!'", "'^'", "'['", "']'", "'.'", "'{'", "','", "'}'", "']^T'", "'E'", "'e'"
     };
     public static final int RULE_ID=6;
     public static final int T__29=29;
@@ -1777,7 +1777,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePrimary"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:690:1: rulePrimary returns [EObject current=null] : ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | (otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')' ) ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:690:1: rulePrimary returns [EObject current=null] : ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) ) | ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) ) | (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' ) ) ;
     public final EObject rulePrimary() throws RecognitionException {
         EObject current = null;
 
@@ -1785,8 +1785,10 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
         Token otherlv_8=null;
         Token otherlv_9=null;
         Token otherlv_11=null;
-        Token otherlv_14=null;
         Token otherlv_16=null;
+        Token otherlv_20=null;
+        Token otherlv_22=null;
+        Token otherlv_24=null;
         EObject lv_name_1_0 = null;
 
         AntlrDatatypeRuleToken lv_value_3_0 = null;
@@ -1799,75 +1801,26 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
         EObject lv_function_13_0 = null;
 
-        EObject this_Addition_15 = null;
+        EObject lv_class__15_0 = null;
+
+        EObject lv_function_17_0 = null;
+
+        EObject lv_class__19_0 = null;
+
+        EObject lv_member_21_0 = null;
+
+        EObject this_Addition_23 = null;
 
 
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:693:28: ( ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | (otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')' ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:694:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | (otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')' ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:693:28: ( ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) ) | ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) ) | (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:694:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) ) | ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) ) | (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:694:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | (otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')' ) )
-            int alt6=5;
-            switch ( input.LA(1) ) {
-            case RULE_MATH_NAME:
-                {
-                switch ( input.LA(2) ) {
-                case EOF:
-                case 13:
-                case 14:
-                case 15:
-                case 16:
-                case 17:
-                case 19:
-                case 21:
-                case 22:
-                case 24:
-                case 26:
-                case 27:
-                    {
-                    alt6=1;
-                    }
-                    break;
-                case 20:
-                    {
-                    alt6=4;
-                    }
-                    break;
-                case 23:
-                    {
-                    alt6=3;
-                    }
-                    break;
-                default:
-                    if (state.backtracking>0) {state.failed=true; return current;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 6, 1, input);
-
-                    throw nvae;
-                }
-
-                }
-                break;
-            case RULE_INT:
-                {
-                alt6=2;
-                }
-                break;
-            case 20:
-                {
-                alt6=5;
-                }
-                break;
-            default:
-                if (state.backtracking>0) {state.failed=true; return current;}
-                NoViableAltException nvae =
-                    new NoViableAltException("", 6, 0, input);
-
-                throw nvae;
-            }
-
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:694:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) ) | ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) ) | (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' ) )
+            int alt6=7;
+            alt6 = dfa6.predict(input);
             switch (alt6) {
                 case 1 :
                     // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:694:2: ( () ( (lv_name_1_0= ruleMathName ) ) )
@@ -2224,15 +2177,227 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:6: (otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:6: ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:6: (otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')' )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:8: otherlv_14= '(' this_Addition_15= ruleAddition otherlv_16= ')'
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:6: ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:7: () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) )
                     {
-                    otherlv_14=(Token)match(input,20,FOLLOW_20_in_rulePrimary1615); if (state.failed) return current;
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:858:7: ()
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:859:2: 
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	  /* */ 
+                      	
+                    }
                     if ( state.backtracking==0 ) {
 
-                          	newLeafNode(otherlv_14, grammarAccess.getPrimaryAccess().getLeftParenthesisKeyword_4_0());
+                              current = forceCreateModelElement(
+                                  grammarAccess.getPrimaryAccess().getClassFunctionAction_4_0(),
+                                  current);
+                          
+                    }
+
+                    }
+
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:867:2: ( (lv_class__15_0= ruleMathName ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:868:1: (lv_class__15_0= ruleMathName )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:868:1: (lv_class__15_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:869:3: lv_class__15_0= ruleMathName
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getClass_MathNameParserRuleCall_4_1_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleMathName_in_rulePrimary1636);
+                    lv_class__15_0=ruleMathName();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getPrimaryRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"class_",
+                              		lv_class__15_0, 
+                              		"MathName");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+
+                    otherlv_16=(Token)match(input,25,FOLLOW_25_in_rulePrimary1648); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                          	newLeafNode(otherlv_16, grammarAccess.getPrimaryAccess().getFullStopKeyword_4_2());
+                          
+                    }
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:889:1: ( (lv_function_17_0= ruleFunction ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:890:1: (lv_function_17_0= ruleFunction )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:890:1: (lv_function_17_0= ruleFunction )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:891:3: lv_function_17_0= ruleFunction
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getFunctionFunctionParserRuleCall_4_3_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleFunction_in_rulePrimary1669);
+                    lv_function_17_0=ruleFunction();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getPrimaryRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"function",
+                              		lv_function_17_0, 
+                              		"Function");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+
+
+                    }
+
+
+                    }
+                    break;
+                case 6 :
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:908:6: ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:908:6: ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:908:7: () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:908:7: ()
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:909:2: 
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	  /* */ 
+                      	
+                    }
+                    if ( state.backtracking==0 ) {
+
+                              current = forceCreateModelElement(
+                                  grammarAccess.getPrimaryAccess().getClassMemberAction_5_0(),
+                                  current);
+                          
+                    }
+
+                    }
+
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:917:2: ( (lv_class__19_0= ruleMathName ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:918:1: (lv_class__19_0= ruleMathName )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:918:1: (lv_class__19_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:919:3: lv_class__19_0= ruleMathName
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getClass_MathNameParserRuleCall_5_1_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleMathName_in_rulePrimary1710);
+                    lv_class__19_0=ruleMathName();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getPrimaryRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"class_",
+                              		lv_class__19_0, 
+                              		"MathName");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+
+                    otherlv_20=(Token)match(input,25,FOLLOW_25_in_rulePrimary1722); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                          	newLeafNode(otherlv_20, grammarAccess.getPrimaryAccess().getFullStopKeyword_5_2());
+                          
+                    }
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:939:1: ( (lv_member_21_0= ruleMathName ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:940:1: (lv_member_21_0= ruleMathName )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:940:1: (lv_member_21_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:941:3: lv_member_21_0= ruleMathName
+                    {
+                    if ( state.backtracking==0 ) {
+                       
+                      	        newCompositeNode(grammarAccess.getPrimaryAccess().getMemberMathNameParserRuleCall_5_3_0()); 
+                      	    
+                    }
+                    pushFollow(FOLLOW_ruleMathName_in_rulePrimary1743);
+                    lv_member_21_0=ruleMathName();
+
+                    state._fsp--;
+                    if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      	        if (current==null) {
+                      	            current = createModelElementForParent(grammarAccess.getPrimaryRule());
+                      	        }
+                             		set(
+                             			current, 
+                             			"member",
+                              		lv_member_21_0, 
+                              		"MathName");
+                      	        afterParserOrEnumRuleCall();
+                      	    
+                    }
+
+                    }
+
+
+                    }
+
+
+                    }
+
+
+                    }
+                    break;
+                case 7 :
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:958:6: (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' )
+                    {
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:958:6: (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:958:8: otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')'
+                    {
+                    otherlv_22=(Token)match(input,20,FOLLOW_20_in_rulePrimary1763); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                          	newLeafNode(otherlv_22, grammarAccess.getPrimaryAccess().getLeftParenthesisKeyword_6_0());
                           
                     }
                     if ( state.backtracking==0 ) {
@@ -2242,24 +2407,24 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     }
                     if ( state.backtracking==0 ) {
                        
-                              newCompositeNode(grammarAccess.getPrimaryAccess().getAdditionParserRuleCall_4_1()); 
+                              newCompositeNode(grammarAccess.getPrimaryAccess().getAdditionParserRuleCall_6_1()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleAddition_in_rulePrimary1640);
-                    this_Addition_15=ruleAddition();
+                    pushFollow(FOLLOW_ruleAddition_in_rulePrimary1788);
+                    this_Addition_23=ruleAddition();
 
                     state._fsp--;
                     if (state.failed) return current;
                     if ( state.backtracking==0 ) {
                        
-                              current = this_Addition_15; 
+                              current = this_Addition_23; 
                               afterParserOrEnumRuleCall();
                           
                     }
-                    otherlv_16=(Token)match(input,19,FOLLOW_19_in_rulePrimary1651); if (state.failed) return current;
+                    otherlv_24=(Token)match(input,19,FOLLOW_19_in_rulePrimary1799); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
-                          	newLeafNode(otherlv_16, grammarAccess.getPrimaryAccess().getRightParenthesisKeyword_4_2());
+                          	newLeafNode(otherlv_24, grammarAccess.getPrimaryAccess().getRightParenthesisKeyword_6_2());
                           
                     }
 
@@ -2291,7 +2456,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMatrix"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:886:1: entryRuleMatrix returns [EObject current=null] : iv_ruleMatrix= ruleMatrix EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:986:1: entryRuleMatrix returns [EObject current=null] : iv_ruleMatrix= ruleMatrix EOF ;
     public final EObject entryRuleMatrix() throws RecognitionException {
         EObject current = null;
 
@@ -2299,13 +2464,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:887:2: (iv_ruleMatrix= ruleMatrix EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:888:2: iv_ruleMatrix= ruleMatrix EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:987:2: (iv_ruleMatrix= ruleMatrix EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:988:2: iv_ruleMatrix= ruleMatrix EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrix_in_entryRuleMatrix1688);
+            pushFollow(FOLLOW_ruleMatrix_in_entryRuleMatrix1836);
             iv_ruleMatrix=ruleMatrix();
 
             state._fsp--;
@@ -2313,7 +2478,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrix; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrix1698); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrix1846); if (state.failed) return current;
 
             }
 
@@ -2331,7 +2496,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrix"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:895:1: ruleMatrix returns [EObject current=null] : (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:995:1: ruleMatrix returns [EObject current=null] : (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) ;
     public final EObject ruleMatrix() throws RecognitionException {
         EObject current = null;
 
@@ -2347,41 +2512,41 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:898:28: ( (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:899:1: (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:998:28: ( (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:999:1: (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:899:1: (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:899:3: otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:999:1: (otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:999:3: otherlv_0= '{' ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
             {
-            otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrix1735); if (state.failed) return current;
+            otherlv_0=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1883); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixAccess().getLeftCurlyBracketKeyword_0());
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:903:1: ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )?
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1003:1: ( ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )? )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
-            if ( (LA9_0==25) ) {
+            if ( (LA9_0==26) ) {
                 alt9=1;
             }
             switch (alt9) {
                 case 1 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:903:2: ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1003:2: ( (lv_rows_1_0= ruleMatrixRow ) ) (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )* (otherlv_4= ',' )?
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:903:2: ( (lv_rows_1_0= ruleMatrixRow ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:904:1: (lv_rows_1_0= ruleMatrixRow )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1003:2: ( (lv_rows_1_0= ruleMatrixRow ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1004:1: (lv_rows_1_0= ruleMatrixRow )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:904:1: (lv_rows_1_0= ruleMatrixRow )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:905:3: lv_rows_1_0= ruleMatrixRow
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1004:1: (lv_rows_1_0= ruleMatrixRow )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1005:3: lv_rows_1_0= ruleMatrixRow
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getMatrixAccess().getRowsMatrixRowParserRuleCall_1_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1757);
+                    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1905);
                     lv_rows_1_0=ruleMatrixRow();
 
                     state._fsp--;
@@ -2405,16 +2570,16 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:921:2: (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )*
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1021:2: (otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) ) )*
                     loop7:
                     do {
                         int alt7=2;
                         int LA7_0 = input.LA(1);
 
-                        if ( (LA7_0==26) ) {
+                        if ( (LA7_0==27) ) {
                             int LA7_1 = input.LA(2);
 
-                            if ( (LA7_1==25) ) {
+                            if ( (LA7_1==26) ) {
                                 alt7=1;
                             }
 
@@ -2424,26 +2589,26 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                         switch (alt7) {
                     	case 1 :
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:921:4: otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1021:4: otherlv_2= ',' ( (lv_rows_3_0= ruleMatrixRow ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1770); if (state.failed) return current;
+                    	    otherlv_2=(Token)match(input,27,FOLLOW_27_in_ruleMatrix1918); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_2, grammarAccess.getMatrixAccess().getCommaKeyword_1_1_0());
                     	          
                     	    }
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:925:1: ( (lv_rows_3_0= ruleMatrixRow ) )
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:926:1: (lv_rows_3_0= ruleMatrixRow )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1025:1: ( (lv_rows_3_0= ruleMatrixRow ) )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1026:1: (lv_rows_3_0= ruleMatrixRow )
                     	    {
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:926:1: (lv_rows_3_0= ruleMatrixRow )
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:927:3: lv_rows_3_0= ruleMatrixRow
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1026:1: (lv_rows_3_0= ruleMatrixRow )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1027:3: lv_rows_3_0= ruleMatrixRow
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getMatrixAccess().getRowsMatrixRowParserRuleCall_1_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1791);
+                    	    pushFollow(FOLLOW_ruleMatrixRow_in_ruleMatrix1939);
                     	    lv_rows_3_0=ruleMatrixRow();
 
                     	    state._fsp--;
@@ -2476,18 +2641,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                         }
                     } while (true);
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:943:4: (otherlv_4= ',' )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1043:4: (otherlv_4= ',' )?
                     int alt8=2;
                     int LA8_0 = input.LA(1);
 
-                    if ( (LA8_0==26) ) {
+                    if ( (LA8_0==27) ) {
                         alt8=1;
                     }
                     switch (alt8) {
                         case 1 :
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:943:6: otherlv_4= ','
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1043:6: otherlv_4= ','
                             {
-                            otherlv_4=(Token)match(input,26,FOLLOW_26_in_ruleMatrix1806); if (state.failed) return current;
+                            otherlv_4=(Token)match(input,27,FOLLOW_27_in_ruleMatrix1954); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                   	newLeafNode(otherlv_4, grammarAccess.getMatrixAccess().getCommaKeyword_1_2());
@@ -2505,7 +2670,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleMatrix1822); if (state.failed) return current;
+            otherlv_5=(Token)match(input,28,FOLLOW_28_in_ruleMatrix1970); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_5, grammarAccess.getMatrixAccess().getRightCurlyBracketKeyword_2());
@@ -2534,7 +2699,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMatrixRow"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:959:1: entryRuleMatrixRow returns [EObject current=null] : iv_ruleMatrixRow= ruleMatrixRow EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1059:1: entryRuleMatrixRow returns [EObject current=null] : iv_ruleMatrixRow= ruleMatrixRow EOF ;
     public final EObject entryRuleMatrixRow() throws RecognitionException {
         EObject current = null;
 
@@ -2542,13 +2707,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:960:2: (iv_ruleMatrixRow= ruleMatrixRow EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:961:2: iv_ruleMatrixRow= ruleMatrixRow EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1060:2: (iv_ruleMatrixRow= ruleMatrixRow EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1061:2: iv_ruleMatrixRow= ruleMatrixRow EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixRowRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1858);
+            pushFollow(FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow2006);
             iv_ruleMatrixRow=ruleMatrixRow();
 
             state._fsp--;
@@ -2556,7 +2721,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixRow; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixRow1868); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixRow2016); if (state.failed) return current;
 
             }
 
@@ -2574,7 +2739,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrixRow"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:968:1: ruleMatrixRow returns [EObject current=null] : (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1068:1: ruleMatrixRow returns [EObject current=null] : (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) ;
     public final EObject ruleMatrixRow() throws RecognitionException {
         EObject current = null;
 
@@ -2590,19 +2755,19 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:971:28: ( (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:972:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1071:28: ( (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1072:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:972:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:972:3: otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1072:1: (otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}' )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1072:3: otherlv_0= '{' ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )? otherlv_5= '}'
             {
-            otherlv_0=(Token)match(input,25,FOLLOW_25_in_ruleMatrixRow1905); if (state.failed) return current;
+            otherlv_0=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow2053); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixRowAccess().getLeftCurlyBracketKeyword_0());
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:976:1: ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )?
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1076:1: ( ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )? )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -2611,20 +2776,20 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             }
             switch (alt12) {
                 case 1 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:976:2: ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1076:2: ( (lv_elements_1_0= ruleFormula ) ) (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )* (otherlv_4= ',' )?
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:976:2: ( (lv_elements_1_0= ruleFormula ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:977:1: (lv_elements_1_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1076:2: ( (lv_elements_1_0= ruleFormula ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1077:1: (lv_elements_1_0= ruleFormula )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:977:1: (lv_elements_1_0= ruleFormula )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:978:3: lv_elements_1_0= ruleFormula
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1077:1: (lv_elements_1_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1078:3: lv_elements_1_0= ruleFormula
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFormulaParserRuleCall_1_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixRow1927);
+                    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixRow2075);
                     lv_elements_1_0=ruleFormula();
 
                     state._fsp--;
@@ -2648,13 +2813,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:994:2: (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )*
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1094:2: (otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) ) )*
                     loop10:
                     do {
                         int alt10=2;
                         int LA10_0 = input.LA(1);
 
-                        if ( (LA10_0==26) ) {
+                        if ( (LA10_0==27) ) {
                             int LA10_1 = input.LA(2);
 
                             if ( ((LA10_1>=RULE_INT && LA10_1<=RULE_MATH_NAME)||LA10_1==18||LA10_1==20) ) {
@@ -2667,26 +2832,26 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:994:4: otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1094:4: otherlv_2= ',' ( (lv_elements_3_0= ruleFormula ) )
                     	    {
-                    	    otherlv_2=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow1940); if (state.failed) return current;
+                    	    otherlv_2=(Token)match(input,27,FOLLOW_27_in_ruleMatrixRow2088); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_2, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_1_0());
                     	          
                     	    }
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:998:1: ( (lv_elements_3_0= ruleFormula ) )
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:999:1: (lv_elements_3_0= ruleFormula )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1098:1: ( (lv_elements_3_0= ruleFormula ) )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1099:1: (lv_elements_3_0= ruleFormula )
                     	    {
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:999:1: (lv_elements_3_0= ruleFormula )
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1000:3: lv_elements_3_0= ruleFormula
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1099:1: (lv_elements_3_0= ruleFormula )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1100:3: lv_elements_3_0= ruleFormula
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getMatrixRowAccess().getElementsFormulaParserRuleCall_1_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixRow1961);
+                    	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixRow2109);
                     	    lv_elements_3_0=ruleFormula();
 
                     	    state._fsp--;
@@ -2719,18 +2884,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                         }
                     } while (true);
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1016:4: (otherlv_4= ',' )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1116:4: (otherlv_4= ',' )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
-                    if ( (LA11_0==26) ) {
+                    if ( (LA11_0==27) ) {
                         alt11=1;
                     }
                     switch (alt11) {
                         case 1 :
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1016:6: otherlv_4= ','
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1116:6: otherlv_4= ','
                             {
-                            otherlv_4=(Token)match(input,26,FOLLOW_26_in_ruleMatrixRow1976); if (state.failed) return current;
+                            otherlv_4=(Token)match(input,27,FOLLOW_27_in_ruleMatrixRow2124); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                   	newLeafNode(otherlv_4, grammarAccess.getMatrixRowAccess().getCommaKeyword_1_2());
@@ -2748,7 +2913,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleMatrixRow1992); if (state.failed) return current;
+            otherlv_5=(Token)match(input,28,FOLLOW_28_in_ruleMatrixRow2140); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_5, grammarAccess.getMatrixRowAccess().getRightCurlyBracketKeyword_2());
@@ -2777,7 +2942,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMatrixAssignment"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1032:1: entryRuleMatrixAssignment returns [EObject current=null] : iv_ruleMatrixAssignment= ruleMatrixAssignment EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1132:1: entryRuleMatrixAssignment returns [EObject current=null] : iv_ruleMatrixAssignment= ruleMatrixAssignment EOF ;
     public final EObject entryRuleMatrixAssignment() throws RecognitionException {
         EObject current = null;
 
@@ -2785,13 +2950,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1033:2: (iv_ruleMatrixAssignment= ruleMatrixAssignment EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1034:2: iv_ruleMatrixAssignment= ruleMatrixAssignment EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1133:2: (iv_ruleMatrixAssignment= ruleMatrixAssignment EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1134:2: iv_ruleMatrixAssignment= ruleMatrixAssignment EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixAssignmentRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2028);
+            pushFollow(FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2176);
             iv_ruleMatrixAssignment=ruleMatrixAssignment();
 
             state._fsp--;
@@ -2799,7 +2964,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixAssignment; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAssignment2038); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAssignment2186); if (state.failed) return current;
 
             }
 
@@ -2817,7 +2982,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrixAssignment"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1041:1: ruleMatrixAssignment returns [EObject current=null] : (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1141:1: ruleMatrixAssignment returns [EObject current=null] : (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) ) ;
     public final EObject ruleMatrixAssignment() throws RecognitionException {
         EObject current = null;
 
@@ -2832,30 +2997,30 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1044:28: ( (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1045:1: (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1144:28: ( (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1145:1: (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1045:1: (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1045:3: otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1145:1: (otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1145:3: otherlv_0= '[' ( (lv_variable_1_0= ruleMathName ) ) otherlv_2= ']' otherlv_3= '=' ( (lv_value_4_0= ruleMatrixFormula ) )
             {
-            otherlv_0=(Token)match(input,23,FOLLOW_23_in_ruleMatrixAssignment2075); if (state.failed) return current;
+            otherlv_0=(Token)match(input,23,FOLLOW_23_in_ruleMatrixAssignment2223); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_0, grammarAccess.getMatrixAssignmentAccess().getLeftSquareBracketKeyword_0());
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1049:1: ( (lv_variable_1_0= ruleMathName ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1050:1: (lv_variable_1_0= ruleMathName )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1149:1: ( (lv_variable_1_0= ruleMathName ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1150:1: (lv_variable_1_0= ruleMathName )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1050:1: (lv_variable_1_0= ruleMathName )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1051:3: lv_variable_1_0= ruleMathName
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1150:1: (lv_variable_1_0= ruleMathName )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1151:3: lv_variable_1_0= ruleMathName
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getMatrixAssignmentAccess().getVariableMathNameParserRuleCall_1_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMathName_in_ruleMatrixAssignment2096);
+            pushFollow(FOLLOW_ruleMathName_in_ruleMatrixAssignment2244);
             lv_variable_1_0=ruleMathName();
 
             state._fsp--;
@@ -2879,30 +3044,30 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_2=(Token)match(input,24,FOLLOW_24_in_ruleMatrixAssignment2108); if (state.failed) return current;
+            otherlv_2=(Token)match(input,24,FOLLOW_24_in_ruleMatrixAssignment2256); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_2, grammarAccess.getMatrixAssignmentAccess().getRightSquareBracketKeyword_2());
                   
             }
-            otherlv_3=(Token)match(input,12,FOLLOW_12_in_ruleMatrixAssignment2120); if (state.failed) return current;
+            otherlv_3=(Token)match(input,12,FOLLOW_12_in_ruleMatrixAssignment2268); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_3, grammarAccess.getMatrixAssignmentAccess().getEqualsSignKeyword_3());
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1075:1: ( (lv_value_4_0= ruleMatrixFormula ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1076:1: (lv_value_4_0= ruleMatrixFormula )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1175:1: ( (lv_value_4_0= ruleMatrixFormula ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1176:1: (lv_value_4_0= ruleMatrixFormula )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1076:1: (lv_value_4_0= ruleMatrixFormula )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1077:3: lv_value_4_0= ruleMatrixFormula
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1176:1: (lv_value_4_0= ruleMatrixFormula )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1177:3: lv_value_4_0= ruleMatrixFormula
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getMatrixAssignmentAccess().getValueMatrixFormulaParserRuleCall_4_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2141);
+            pushFollow(FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2289);
             lv_value_4_0=ruleMatrixFormula();
 
             state._fsp--;
@@ -2949,7 +3114,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMatrixFormula"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1101:1: entryRuleMatrixFormula returns [EObject current=null] : iv_ruleMatrixFormula= ruleMatrixFormula EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1201:1: entryRuleMatrixFormula returns [EObject current=null] : iv_ruleMatrixFormula= ruleMatrixFormula EOF ;
     public final EObject entryRuleMatrixFormula() throws RecognitionException {
         EObject current = null;
 
@@ -2957,13 +3122,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1102:2: (iv_ruleMatrixFormula= ruleMatrixFormula EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1103:2: iv_ruleMatrixFormula= ruleMatrixFormula EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1202:2: (iv_ruleMatrixFormula= ruleMatrixFormula EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1203:2: iv_ruleMatrixFormula= ruleMatrixFormula EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixFormulaRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2177);
+            pushFollow(FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2325);
             iv_ruleMatrixFormula=ruleMatrixFormula();
 
             state._fsp--;
@@ -2971,7 +3136,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixFormula; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixFormula2187); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixFormula2335); if (state.failed) return current;
 
             }
 
@@ -2989,7 +3154,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrixFormula"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1110:1: ruleMatrixFormula returns [EObject current=null] : ( (lv_expression_0_0= ruleMatrixAddition ) ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1210:1: ruleMatrixFormula returns [EObject current=null] : ( (lv_expression_0_0= ruleMatrixAddition ) ) ;
     public final EObject ruleMatrixFormula() throws RecognitionException {
         EObject current = null;
 
@@ -2999,21 +3164,21 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1113:28: ( ( (lv_expression_0_0= ruleMatrixAddition ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1114:1: ( (lv_expression_0_0= ruleMatrixAddition ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1213:28: ( ( (lv_expression_0_0= ruleMatrixAddition ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1214:1: ( (lv_expression_0_0= ruleMatrixAddition ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1114:1: ( (lv_expression_0_0= ruleMatrixAddition ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1115:1: (lv_expression_0_0= ruleMatrixAddition )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1214:1: ( (lv_expression_0_0= ruleMatrixAddition ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1215:1: (lv_expression_0_0= ruleMatrixAddition )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1115:1: (lv_expression_0_0= ruleMatrixAddition )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1116:3: lv_expression_0_0= ruleMatrixAddition
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1215:1: (lv_expression_0_0= ruleMatrixAddition )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1216:3: lv_expression_0_0= ruleMatrixAddition
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getMatrixFormulaAccess().getExpressionMatrixAdditionParserRuleCall_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2232);
+            pushFollow(FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2380);
             lv_expression_0_0=ruleMatrixAddition();
 
             state._fsp--;
@@ -3057,7 +3222,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMatrixAddition"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1140:1: entryRuleMatrixAddition returns [EObject current=null] : iv_ruleMatrixAddition= ruleMatrixAddition EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1240:1: entryRuleMatrixAddition returns [EObject current=null] : iv_ruleMatrixAddition= ruleMatrixAddition EOF ;
     public final EObject entryRuleMatrixAddition() throws RecognitionException {
         EObject current = null;
 
@@ -3065,13 +3230,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1141:2: (iv_ruleMatrixAddition= ruleMatrixAddition EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1142:2: iv_ruleMatrixAddition= ruleMatrixAddition EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1241:2: (iv_ruleMatrixAddition= ruleMatrixAddition EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1242:2: iv_ruleMatrixAddition= ruleMatrixAddition EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixAdditionRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2267);
+            pushFollow(FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2415);
             iv_ruleMatrixAddition=ruleMatrixAddition();
 
             state._fsp--;
@@ -3079,7 +3244,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixAddition; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAddition2277); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixAddition2425); if (state.failed) return current;
 
             }
 
@@ -3097,7 +3262,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrixAddition"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1149:1: ruleMatrixAddition returns [EObject current=null] : (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1249:1: ruleMatrixAddition returns [EObject current=null] : (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* ) ;
     public final EObject ruleMatrixAddition() throws RecognitionException {
         EObject current = null;
 
@@ -3113,11 +3278,11 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1152:28: ( (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1153:1: (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1252:28: ( (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1253:1: (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1153:1: (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1154:2: this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )*
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1253:1: (this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )* )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1254:2: this_MatrixMultiplication_0= ruleMatrixMultiplication ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )*
             {
             if ( state.backtracking==0 ) {
                
@@ -3129,7 +3294,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                       newCompositeNode(grammarAccess.getMatrixAdditionAccess().getMatrixMultiplicationParserRuleCall_0()); 
                   
             }
-            pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2327);
+            pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2475);
             this_MatrixMultiplication_0=ruleMatrixMultiplication();
 
             state._fsp--;
@@ -3140,7 +3305,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                       afterParserOrEnumRuleCall();
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1165:1: ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )*
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1265:1: ( (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) ) | (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) ) )*
             loop13:
             do {
                 int alt13=3;
@@ -3156,19 +3321,19 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                 switch (alt13) {
             	case 1 :
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1165:2: (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1265:2: (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1165:2: (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1165:4: otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1265:2: (otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1265:4: otherlv_1= '+' () ( (lv_right_3_0= ruleMatrixMultiplication ) )
             	    {
-            	    otherlv_1=(Token)match(input,13,FOLLOW_13_in_ruleMatrixAddition2340); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,13,FOLLOW_13_in_ruleMatrixAddition2488); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_1, grammarAccess.getMatrixAdditionAccess().getPlusSignKeyword_1_0_0());
             	          
             	    }
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1169:1: ()
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1170:2: 
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1269:1: ()
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1270:2: 
             	    {
             	    if ( state.backtracking==0 ) {
             	       
@@ -3185,18 +3350,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             	    }
 
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1178:2: ( (lv_right_3_0= ruleMatrixMultiplication ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1179:1: (lv_right_3_0= ruleMatrixMultiplication )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1278:2: ( (lv_right_3_0= ruleMatrixMultiplication ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1279:1: (lv_right_3_0= ruleMatrixMultiplication )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1179:1: (lv_right_3_0= ruleMatrixMultiplication )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1180:3: lv_right_3_0= ruleMatrixMultiplication
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1279:1: (lv_right_3_0= ruleMatrixMultiplication )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1280:3: lv_right_3_0= ruleMatrixMultiplication
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getMatrixAdditionAccess().getRightMatrixMultiplicationParserRuleCall_1_0_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2373);
+            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2521);
             	    lv_right_3_0=ruleMatrixMultiplication();
 
             	    state._fsp--;
@@ -3227,19 +3392,19 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             	    }
             	    break;
             	case 2 :
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1197:6: (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1297:6: (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1197:6: (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1197:8: otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1297:6: (otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1297:8: otherlv_4= '-' () ( (lv_right_6_0= ruleMatrixMultiplication ) )
             	    {
-            	    otherlv_4=(Token)match(input,14,FOLLOW_14_in_ruleMatrixAddition2393); if (state.failed) return current;
+            	    otherlv_4=(Token)match(input,14,FOLLOW_14_in_ruleMatrixAddition2541); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_4, grammarAccess.getMatrixAdditionAccess().getHyphenMinusKeyword_1_1_0());
             	          
             	    }
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1201:1: ()
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1202:2: 
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1301:1: ()
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1302:2: 
             	    {
             	    if ( state.backtracking==0 ) {
             	       
@@ -3256,18 +3421,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             	    }
 
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1210:2: ( (lv_right_6_0= ruleMatrixMultiplication ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1211:1: (lv_right_6_0= ruleMatrixMultiplication )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1310:2: ( (lv_right_6_0= ruleMatrixMultiplication ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1311:1: (lv_right_6_0= ruleMatrixMultiplication )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1211:1: (lv_right_6_0= ruleMatrixMultiplication )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1212:3: lv_right_6_0= ruleMatrixMultiplication
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1311:1: (lv_right_6_0= ruleMatrixMultiplication )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1312:3: lv_right_6_0= ruleMatrixMultiplication
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getMatrixAdditionAccess().getRightMatrixMultiplicationParserRuleCall_1_1_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2426);
+            	    pushFollow(FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2574);
             	    lv_right_6_0=ruleMatrixMultiplication();
 
             	    state._fsp--;
@@ -3326,7 +3491,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMatrixMultiplication"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1236:1: entryRuleMatrixMultiplication returns [EObject current=null] : iv_ruleMatrixMultiplication= ruleMatrixMultiplication EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1336:1: entryRuleMatrixMultiplication returns [EObject current=null] : iv_ruleMatrixMultiplication= ruleMatrixMultiplication EOF ;
     public final EObject entryRuleMatrixMultiplication() throws RecognitionException {
         EObject current = null;
 
@@ -3334,13 +3499,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1237:2: (iv_ruleMatrixMultiplication= ruleMatrixMultiplication EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1238:2: iv_ruleMatrixMultiplication= ruleMatrixMultiplication EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1337:2: (iv_ruleMatrixMultiplication= ruleMatrixMultiplication EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1338:2: iv_ruleMatrixMultiplication= ruleMatrixMultiplication EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMatrixMultiplicationRule()); 
             }
-            pushFollow(FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2465);
+            pushFollow(FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2613);
             iv_ruleMatrixMultiplication=ruleMatrixMultiplication();
 
             state._fsp--;
@@ -3348,7 +3513,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMatrixMultiplication; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixMultiplication2475); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMatrixMultiplication2623); if (state.failed) return current;
 
             }
 
@@ -3366,7 +3531,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMatrixMultiplication"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1245:1: ruleMatrixMultiplication returns [EObject current=null] : (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:1: ruleMatrixMultiplication returns [EObject current=null] : (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* ) ;
     public final EObject ruleMatrixMultiplication() throws RecognitionException {
         EObject current = null;
 
@@ -3382,11 +3547,11 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1248:28: ( (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1249:1: (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1348:28: ( (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1349:1: (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1249:1: (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1250:2: this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )*
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1349:1: (this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )* )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1350:2: this_PrimaryMatrix_0= rulePrimaryMatrix ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )*
             {
             if ( state.backtracking==0 ) {
                
@@ -3398,7 +3563,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                       newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getPrimaryMatrixParserRuleCall_0()); 
                   
             }
-            pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2525);
+            pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2673);
             this_PrimaryMatrix_0=rulePrimaryMatrix();
 
             state._fsp--;
@@ -3409,7 +3574,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                       afterParserOrEnumRuleCall();
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:1: ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )*
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:1: ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) | (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )*
             loop14:
             do {
                 int alt14=3;
@@ -3418,10 +3583,10 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                 if ( (LA14_0==15) ) {
                     int LA14_5 = input.LA(2);
 
-                    if ( (synpred25_InternalMath()) ) {
+                    if ( (synpred27_InternalMath()) ) {
                         alt14=1;
                     }
-                    else if ( (synpred26_InternalMath()) ) {
+                    else if ( (synpred28_InternalMath()) ) {
                         alt14=2;
                     }
 
@@ -3431,19 +3596,19 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                 switch (alt14) {
             	case 1 :
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:4: otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:4: otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
             	    {
-            	    otherlv_1=(Token)match(input,15,FOLLOW_15_in_ruleMatrixMultiplication2538); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,15,FOLLOW_15_in_ruleMatrixMultiplication2686); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_1, grammarAccess.getMatrixMultiplicationAccess().getAsteriskKeyword_1_0_0());
             	          
             	    }
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1265:1: ()
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1266:2: 
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1365:1: ()
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1366:2: 
             	    {
             	    if ( state.backtracking==0 ) {
             	       
@@ -3460,18 +3625,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             	    }
 
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1274:2: ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1275:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1374:2: ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1375:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1275:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1276:3: lv_rightMatrix_3_0= rulePrimaryMatrix
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1375:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1376:3: lv_rightMatrix_3_0= rulePrimaryMatrix
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightMatrixPrimaryMatrixParserRuleCall_1_0_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2571);
+            	    pushFollow(FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2719);
             	    lv_rightMatrix_3_0=rulePrimaryMatrix();
 
             	    state._fsp--;
@@ -3502,19 +3667,19 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             	    }
             	    break;
             	case 2 :
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:8: otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:8: otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) )
             	    {
-            	    otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleMatrixMultiplication2591); if (state.failed) return current;
+            	    otherlv_4=(Token)match(input,15,FOLLOW_15_in_ruleMatrixMultiplication2739); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	          	newLeafNode(otherlv_4, grammarAccess.getMatrixMultiplicationAccess().getAsteriskKeyword_1_1_0());
             	          
             	    }
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1297:1: ()
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1298:2: 
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1397:1: ()
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1398:2: 
             	    {
             	    if ( state.backtracking==0 ) {
             	       
@@ -3531,18 +3696,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             	    }
 
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1306:2: ( (lv_rightScalar_6_0= ruleFormula ) )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1307:1: (lv_rightScalar_6_0= ruleFormula )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1406:2: ( (lv_rightScalar_6_0= ruleFormula ) )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1407:1: (lv_rightScalar_6_0= ruleFormula )
             	    {
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1307:1: (lv_rightScalar_6_0= ruleFormula )
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1308:3: lv_rightScalar_6_0= ruleFormula
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1407:1: (lv_rightScalar_6_0= ruleFormula )
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1408:3: lv_rightScalar_6_0= ruleFormula
             	    {
             	    if ( state.backtracking==0 ) {
             	       
             	      	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightScalarFormulaParserRuleCall_1_1_2_0()); 
             	      	    
             	    }
-            	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixMultiplication2624);
+            	    pushFollow(FOLLOW_ruleFormula_in_ruleMatrixMultiplication2772);
             	    lv_rightScalar_6_0=ruleFormula();
 
             	    state._fsp--;
@@ -3601,7 +3766,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRulePrimaryMatrix"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1332:1: entryRulePrimaryMatrix returns [EObject current=null] : iv_rulePrimaryMatrix= rulePrimaryMatrix EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1432:1: entryRulePrimaryMatrix returns [EObject current=null] : iv_rulePrimaryMatrix= rulePrimaryMatrix EOF ;
     public final EObject entryRulePrimaryMatrix() throws RecognitionException {
         EObject current = null;
 
@@ -3609,13 +3774,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1333:2: (iv_rulePrimaryMatrix= rulePrimaryMatrix EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1334:2: iv_rulePrimaryMatrix= rulePrimaryMatrix EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1433:2: (iv_rulePrimaryMatrix= rulePrimaryMatrix EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1434:2: iv_rulePrimaryMatrix= rulePrimaryMatrix EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getPrimaryMatrixRule()); 
             }
-            pushFollow(FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2663);
+            pushFollow(FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2811);
             iv_rulePrimaryMatrix=rulePrimaryMatrix();
 
             state._fsp--;
@@ -3623,7 +3788,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_rulePrimaryMatrix; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRulePrimaryMatrix2673); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRulePrimaryMatrix2821); if (state.failed) return current;
 
             }
 
@@ -3641,7 +3806,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePrimaryMatrix"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1341:1: rulePrimaryMatrix returns [EObject current=null] : ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1441:1: rulePrimaryMatrix returns [EObject current=null] : ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) ) ;
     public final EObject rulePrimaryMatrix() throws RecognitionException {
         EObject current = null;
 
@@ -3663,13 +3828,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1344:28: ( ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:1: ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1444:28: ( ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:1: ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:1: ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:1: ( ( () ( (lv_matrix_1_0= ruleMatrix ) ) ) | ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' ) | ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' ) | (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' ) )
             int alt15=4;
             switch ( input.LA(1) ) {
-            case 25:
+            case 26:
                 {
                 alt15=1;
                 }
@@ -3684,7 +3849,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     if ( (LA15_4==24) ) {
                         alt15=3;
                     }
-                    else if ( (LA15_4==28) ) {
+                    else if ( (LA15_4==29) ) {
                         alt15=2;
                     }
                     else {
@@ -3719,13 +3884,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             switch (alt15) {
                 case 1 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:2: ( () ( (lv_matrix_1_0= ruleMatrix ) ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:2: ( () ( (lv_matrix_1_0= ruleMatrix ) ) )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:2: ( () ( (lv_matrix_1_0= ruleMatrix ) ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:3: () ( (lv_matrix_1_0= ruleMatrix ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:2: ( () ( (lv_matrix_1_0= ruleMatrix ) ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:3: () ( (lv_matrix_1_0= ruleMatrix ) )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1345:3: ()
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1346:2: 
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:3: ()
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1446:2: 
                     {
                     if ( state.backtracking==0 ) {
                        
@@ -3742,18 +3907,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1354:2: ( (lv_matrix_1_0= ruleMatrix ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1355:1: (lv_matrix_1_0= ruleMatrix )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1454:2: ( (lv_matrix_1_0= ruleMatrix ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1455:1: (lv_matrix_1_0= ruleMatrix )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1355:1: (lv_matrix_1_0= ruleMatrix )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1356:3: lv_matrix_1_0= ruleMatrix
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1455:1: (lv_matrix_1_0= ruleMatrix )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1456:3: lv_matrix_1_0= ruleMatrix
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getMatrixMatrixParserRuleCall_0_1_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMatrix_in_rulePrimaryMatrix2732);
+                    pushFollow(FOLLOW_ruleMatrix_in_rulePrimaryMatrix2880);
                     lv_matrix_1_0=ruleMatrix();
 
                     state._fsp--;
@@ -3784,13 +3949,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1373:6: ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1473:6: ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1373:6: ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1373:7: () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T'
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1473:6: ( () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1473:7: () otherlv_3= '[' ( (lv_name_4_0= ruleMathName ) ) otherlv_5= ']^T'
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1373:7: ()
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1374:2: 
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1473:7: ()
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1474:2: 
                     {
                     if ( state.backtracking==0 ) {
                        
@@ -3807,24 +3972,24 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_3=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix2764); if (state.failed) return current;
+                    otherlv_3=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix2912); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_3, grammarAccess.getPrimaryMatrixAccess().getLeftSquareBracketKeyword_1_1());
                           
                     }
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1386:1: ( (lv_name_4_0= ruleMathName ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1387:1: (lv_name_4_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1486:1: ( (lv_name_4_0= ruleMathName ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1487:1: (lv_name_4_0= ruleMathName )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1387:1: (lv_name_4_0= ruleMathName )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1388:3: lv_name_4_0= ruleMathName
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1487:1: (lv_name_4_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1488:3: lv_name_4_0= ruleMathName
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getNameMathNameParserRuleCall_1_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMathName_in_rulePrimaryMatrix2785);
+                    pushFollow(FOLLOW_ruleMathName_in_rulePrimaryMatrix2933);
                     lv_name_4_0=ruleMathName();
 
                     state._fsp--;
@@ -3848,7 +4013,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_5=(Token)match(input,28,FOLLOW_28_in_rulePrimaryMatrix2797); if (state.failed) return current;
+                    otherlv_5=(Token)match(input,29,FOLLOW_29_in_rulePrimaryMatrix2945); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_5, grammarAccess.getPrimaryMatrixAccess().getTKeyword_1_3());
@@ -3861,13 +4026,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1409:6: ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1509:6: ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1409:6: ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1409:7: () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']'
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1509:6: ( () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1509:7: () otherlv_7= '[' ( (lv_name_8_0= ruleMathName ) ) otherlv_9= ']'
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1409:7: ()
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1410:2: 
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1509:7: ()
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1510:2: 
                     {
                     if ( state.backtracking==0 ) {
                        
@@ -3884,24 +4049,24 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_7=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix2829); if (state.failed) return current;
+                    otherlv_7=(Token)match(input,23,FOLLOW_23_in_rulePrimaryMatrix2977); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_7, grammarAccess.getPrimaryMatrixAccess().getLeftSquareBracketKeyword_2_1());
                           
                     }
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1422:1: ( (lv_name_8_0= ruleMathName ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1423:1: (lv_name_8_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1522:1: ( (lv_name_8_0= ruleMathName ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1523:1: (lv_name_8_0= ruleMathName )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1423:1: (lv_name_8_0= ruleMathName )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1424:3: lv_name_8_0= ruleMathName
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1523:1: (lv_name_8_0= ruleMathName )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1524:3: lv_name_8_0= ruleMathName
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getNameMathNameParserRuleCall_2_2_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleMathName_in_rulePrimaryMatrix2850);
+                    pushFollow(FOLLOW_ruleMathName_in_rulePrimaryMatrix2998);
                     lv_name_8_0=ruleMathName();
 
                     state._fsp--;
@@ -3925,7 +4090,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    otherlv_9=(Token)match(input,24,FOLLOW_24_in_rulePrimaryMatrix2862); if (state.failed) return current;
+                    otherlv_9=(Token)match(input,24,FOLLOW_24_in_rulePrimaryMatrix3010); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_9, grammarAccess.getPrimaryMatrixAccess().getRightSquareBracketKeyword_2_3());
@@ -3938,12 +4103,12 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:6: (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1545:6: (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:6: (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1445:8: otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')'
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1545:6: (otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')' )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1545:8: otherlv_10= '(' this_MatrixAddition_11= ruleMatrixAddition otherlv_12= ')'
                     {
-                    otherlv_10=(Token)match(input,20,FOLLOW_20_in_rulePrimaryMatrix2882); if (state.failed) return current;
+                    otherlv_10=(Token)match(input,20,FOLLOW_20_in_rulePrimaryMatrix3030); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_10, grammarAccess.getPrimaryMatrixAccess().getLeftParenthesisKeyword_3_0());
@@ -3959,7 +4124,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                               newCompositeNode(grammarAccess.getPrimaryMatrixAccess().getMatrixAdditionParserRuleCall_3_1()); 
                           
                     }
-                    pushFollow(FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix2907);
+                    pushFollow(FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix3055);
                     this_MatrixAddition_11=ruleMatrixAddition();
 
                     state._fsp--;
@@ -3970,7 +4135,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                               afterParserOrEnumRuleCall();
                           
                     }
-                    otherlv_12=(Token)match(input,19,FOLLOW_19_in_rulePrimaryMatrix2918); if (state.failed) return current;
+                    otherlv_12=(Token)match(input,19,FOLLOW_19_in_rulePrimaryMatrix3066); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                           	newLeafNode(otherlv_12, grammarAccess.getPrimaryMatrixAccess().getRightParenthesisKeyword_3_2());
@@ -4005,7 +4170,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleFloat"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1473:1: entryRuleFloat returns [String current=null] : iv_ruleFloat= ruleFloat EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1573:1: entryRuleFloat returns [String current=null] : iv_ruleFloat= ruleFloat EOF ;
     public final String entryRuleFloat() throws RecognitionException {
         String current = null;
 
@@ -4013,13 +4178,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1474:2: (iv_ruleFloat= ruleFloat EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1475:2: iv_ruleFloat= ruleFloat EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1574:2: (iv_ruleFloat= ruleFloat EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1575:2: iv_ruleFloat= ruleFloat EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFloatRule()); 
             }
-            pushFollow(FOLLOW_ruleFloat_in_entryRuleFloat2956);
+            pushFollow(FOLLOW_ruleFloat_in_entryRuleFloat3104);
             iv_ruleFloat=ruleFloat();
 
             state._fsp--;
@@ -4027,7 +4192,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleFloat.getText(); 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFloat2967); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFloat3115); if (state.failed) return current;
 
             }
 
@@ -4045,7 +4210,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleFloat"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1482:1: ruleFloat returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1582:1: ruleFloat returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? ) ;
     public final AntlrDatatypeRuleToken ruleFloat() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -4057,13 +4222,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1485:28: ( ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1486:1: ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1585:28: ( ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1586:1: ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1486:1: ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1486:2: (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )?
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1586:1: ( (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )? )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1586:2: (this_INT_0= RULE_INT )+ (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )?
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1486:2: (this_INT_0= RULE_INT )+
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1586:2: (this_INT_0= RULE_INT )+
             int cnt16=0;
             loop16:
             do {
@@ -4077,9 +4242,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                 switch (alt16) {
             	case 1 :
-            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1486:7: this_INT_0= RULE_INT
+            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1586:7: this_INT_0= RULE_INT
             	    {
-            	    this_INT_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3008); if (state.failed) return current;
+            	    this_INT_0=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3156); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      		current.merge(this_INT_0);
@@ -4104,25 +4269,25 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                 cnt16++;
             } while (true);
 
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1493:3: (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )?
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1593:3: (kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )? )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
-            if ( (LA22_0==29) ) {
+            if ( (LA22_0==25) ) {
                 alt22=1;
             }
             switch (alt22) {
                 case 1 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1494:2: kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1594:2: kw= '.' (this_INT_2= RULE_INT )+ ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )?
                     {
-                    kw=(Token)match(input,29,FOLLOW_29_in_ruleFloat3029); if (state.failed) return current;
+                    kw=(Token)match(input,25,FOLLOW_25_in_ruleFloat3177); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                               current.merge(kw);
                               newLeafNode(kw, grammarAccess.getFloatAccess().getFullStopKeyword_1_0()); 
                           
                     }
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1499:1: (this_INT_2= RULE_INT )+
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1599:1: (this_INT_2= RULE_INT )+
                     int cnt17=0;
                     loop17:
                     do {
@@ -4136,9 +4301,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1499:6: this_INT_2= RULE_INT
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1599:6: this_INT_2= RULE_INT
                     	    {
-                    	    this_INT_2=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3045); if (state.failed) return current;
+                    	    this_INT_2=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3193); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	      		current.merge(this_INT_2);
@@ -4163,7 +4328,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                         cnt17++;
                     } while (true);
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1506:3: ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1606:3: ( (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+ )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -4172,9 +4337,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                     }
                     switch (alt21) {
                         case 1 :
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1506:4: (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1606:4: (kw= 'E' | kw= 'e' ) (kw= '-' )? (this_INT_6= RULE_INT )+
                             {
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1506:4: (kw= 'E' | kw= 'e' )
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1606:4: (kw= 'E' | kw= 'e' )
                             int alt18=2;
                             int LA18_0 = input.LA(1);
 
@@ -4193,9 +4358,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                             }
                             switch (alt18) {
                                 case 1 :
-                                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1507:2: kw= 'E'
+                                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1607:2: kw= 'E'
                                     {
-                                    kw=(Token)match(input,30,FOLLOW_30_in_ruleFloat3067); if (state.failed) return current;
+                                    kw=(Token)match(input,30,FOLLOW_30_in_ruleFloat3215); if (state.failed) return current;
                                     if ( state.backtracking==0 ) {
 
                                               current.merge(kw);
@@ -4206,9 +4371,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                                     }
                                     break;
                                 case 2 :
-                                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1514:2: kw= 'e'
+                                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1614:2: kw= 'e'
                                     {
-                                    kw=(Token)match(input,31,FOLLOW_31_in_ruleFloat3086); if (state.failed) return current;
+                                    kw=(Token)match(input,31,FOLLOW_31_in_ruleFloat3234); if (state.failed) return current;
                                     if ( state.backtracking==0 ) {
 
                                               current.merge(kw);
@@ -4221,7 +4386,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                             }
 
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1519:2: (kw= '-' )?
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1619:2: (kw= '-' )?
                             int alt19=2;
                             int LA19_0 = input.LA(1);
 
@@ -4230,9 +4395,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                             }
                             switch (alt19) {
                                 case 1 :
-                                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1520:2: kw= '-'
+                                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1620:2: kw= '-'
                                     {
-                                    kw=(Token)match(input,14,FOLLOW_14_in_ruleFloat3101); if (state.failed) return current;
+                                    kw=(Token)match(input,14,FOLLOW_14_in_ruleFloat3249); if (state.failed) return current;
                                     if ( state.backtracking==0 ) {
 
                                               current.merge(kw);
@@ -4245,7 +4410,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                             }
 
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1525:3: (this_INT_6= RULE_INT )+
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1625:3: (this_INT_6= RULE_INT )+
                             int cnt20=0;
                             loop20:
                             do {
@@ -4259,9 +4424,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                                 switch (alt20) {
                             	case 1 :
-                            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1525:8: this_INT_6= RULE_INT
+                            	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1625:8: this_INT_6= RULE_INT
                             	    {
-                            	    this_INT_6=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3119); if (state.failed) return current;
+                            	    this_INT_6=(Token)match(input,RULE_INT,FOLLOW_RULE_INT_in_ruleFloat3267); if (state.failed) return current;
                             	    if ( state.backtracking==0 ) {
 
                             	      		current.merge(this_INT_6);
@@ -4321,7 +4486,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleFunction"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1540:1: entryRuleFunction returns [EObject current=null] : iv_ruleFunction= ruleFunction EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1640:1: entryRuleFunction returns [EObject current=null] : iv_ruleFunction= ruleFunction EOF ;
     public final EObject entryRuleFunction() throws RecognitionException {
         EObject current = null;
 
@@ -4329,13 +4494,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1541:2: (iv_ruleFunction= ruleFunction EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1542:2: iv_ruleFunction= ruleFunction EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1641:2: (iv_ruleFunction= ruleFunction EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1642:2: iv_ruleFunction= ruleFunction EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFunctionRule()); 
             }
-            pushFollow(FOLLOW_ruleFunction_in_entryRuleFunction3170);
+            pushFollow(FOLLOW_ruleFunction_in_entryRuleFunction3318);
             iv_ruleFunction=ruleFunction();
 
             state._fsp--;
@@ -4343,7 +4508,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleFunction; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFunction3180); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFunction3328); if (state.failed) return current;
 
             }
 
@@ -4361,7 +4526,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleFunction"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1549:1: ruleFunction returns [EObject current=null] : ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1649:1: ruleFunction returns [EObject current=null] : ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' ) ;
     public final EObject ruleFunction() throws RecognitionException {
         EObject current = null;
 
@@ -4379,24 +4544,24 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1552:28: ( ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1553:1: ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1652:28: ( ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1653:1: ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1553:1: ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1553:2: ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')'
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1653:1: ( ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')' )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1653:2: ( (lv_name_0_0= ruleMathName ) ) otherlv_1= '(' ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )? otherlv_6= ')'
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1553:2: ( (lv_name_0_0= ruleMathName ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1554:1: (lv_name_0_0= ruleMathName )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1653:2: ( (lv_name_0_0= ruleMathName ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1654:1: (lv_name_0_0= ruleMathName )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1554:1: (lv_name_0_0= ruleMathName )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1555:3: lv_name_0_0= ruleMathName
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1654:1: (lv_name_0_0= ruleMathName )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1655:3: lv_name_0_0= ruleMathName
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getFunctionAccess().getNameMathNameParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleMathName_in_ruleFunction3226);
+            pushFollow(FOLLOW_ruleMathName_in_ruleFunction3374);
             lv_name_0_0=ruleMathName();
 
             state._fsp--;
@@ -4420,13 +4585,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,20,FOLLOW_20_in_ruleFunction3238); if (state.failed) return current;
+            otherlv_1=(Token)match(input,20,FOLLOW_20_in_ruleFunction3386); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getFunctionAccess().getLeftParenthesisKeyword_1());
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1575:1: ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )?
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1675:1: ( ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )? )?
             int alt25=2;
             int LA25_0 = input.LA(1);
 
@@ -4435,20 +4600,20 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             }
             switch (alt25) {
                 case 1 :
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1575:2: ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1675:2: ( (lv_parameters_2_0= ruleFormula ) ) (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )* (otherlv_5= ',' )?
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1575:2: ( (lv_parameters_2_0= ruleFormula ) )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1576:1: (lv_parameters_2_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1675:2: ( (lv_parameters_2_0= ruleFormula ) )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1676:1: (lv_parameters_2_0= ruleFormula )
                     {
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1576:1: (lv_parameters_2_0= ruleFormula )
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1577:3: lv_parameters_2_0= ruleFormula
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1676:1: (lv_parameters_2_0= ruleFormula )
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1677:3: lv_parameters_2_0= ruleFormula
                     {
                     if ( state.backtracking==0 ) {
                        
                       	        newCompositeNode(grammarAccess.getFunctionAccess().getParametersFormulaParserRuleCall_2_0_0()); 
                       	    
                     }
-                    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3260);
+                    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3408);
                     lv_parameters_2_0=ruleFormula();
 
                     state._fsp--;
@@ -4472,13 +4637,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1593:2: (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )*
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1693:2: (otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) ) )*
                     loop23:
                     do {
                         int alt23=2;
                         int LA23_0 = input.LA(1);
 
-                        if ( (LA23_0==26) ) {
+                        if ( (LA23_0==27) ) {
                             int LA23_1 = input.LA(2);
 
                             if ( ((LA23_1>=RULE_INT && LA23_1<=RULE_MATH_NAME)||LA23_1==18||LA23_1==20) ) {
@@ -4491,26 +4656,26 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
                         switch (alt23) {
                     	case 1 :
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1593:4: otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1693:4: otherlv_3= ',' ( (lv_parameters_4_0= ruleFormula ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,26,FOLLOW_26_in_ruleFunction3273); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,27,FOLLOW_27_in_ruleFunction3421); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	          	newLeafNode(otherlv_3, grammarAccess.getFunctionAccess().getCommaKeyword_2_1_0());
                     	          
                     	    }
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1597:1: ( (lv_parameters_4_0= ruleFormula ) )
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1598:1: (lv_parameters_4_0= ruleFormula )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1697:1: ( (lv_parameters_4_0= ruleFormula ) )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1698:1: (lv_parameters_4_0= ruleFormula )
                     	    {
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1598:1: (lv_parameters_4_0= ruleFormula )
-                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1599:3: lv_parameters_4_0= ruleFormula
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1698:1: (lv_parameters_4_0= ruleFormula )
+                    	    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1699:3: lv_parameters_4_0= ruleFormula
                     	    {
                     	    if ( state.backtracking==0 ) {
                     	       
                     	      	        newCompositeNode(grammarAccess.getFunctionAccess().getParametersFormulaParserRuleCall_2_1_1_0()); 
                     	      	    
                     	    }
-                    	    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3294);
+                    	    pushFollow(FOLLOW_ruleFormula_in_ruleFunction3442);
                     	    lv_parameters_4_0=ruleFormula();
 
                     	    state._fsp--;
@@ -4543,18 +4708,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
                         }
                     } while (true);
 
-                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1615:4: (otherlv_5= ',' )?
+                    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1715:4: (otherlv_5= ',' )?
                     int alt24=2;
                     int LA24_0 = input.LA(1);
 
-                    if ( (LA24_0==26) ) {
+                    if ( (LA24_0==27) ) {
                         alt24=1;
                     }
                     switch (alt24) {
                         case 1 :
-                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1615:6: otherlv_5= ','
+                            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1715:6: otherlv_5= ','
                             {
-                            otherlv_5=(Token)match(input,26,FOLLOW_26_in_ruleFunction3309); if (state.failed) return current;
+                            otherlv_5=(Token)match(input,27,FOLLOW_27_in_ruleFunction3457); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                                   	newLeafNode(otherlv_5, grammarAccess.getFunctionAccess().getCommaKeyword_2_2());
@@ -4572,7 +4737,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_6=(Token)match(input,19,FOLLOW_19_in_ruleFunction3325); if (state.failed) return current;
+            otherlv_6=(Token)match(input,19,FOLLOW_19_in_ruleFunction3473); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_6, grammarAccess.getFunctionAccess().getRightParenthesisKeyword_3());
@@ -4601,7 +4766,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleFunctionDefinition"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1631:1: entryRuleFunctionDefinition returns [EObject current=null] : iv_ruleFunctionDefinition= ruleFunctionDefinition EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1731:1: entryRuleFunctionDefinition returns [EObject current=null] : iv_ruleFunctionDefinition= ruleFunctionDefinition EOF ;
     public final EObject entryRuleFunctionDefinition() throws RecognitionException {
         EObject current = null;
 
@@ -4609,13 +4774,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1632:2: (iv_ruleFunctionDefinition= ruleFunctionDefinition EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1633:2: iv_ruleFunctionDefinition= ruleFunctionDefinition EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1732:2: (iv_ruleFunctionDefinition= ruleFunctionDefinition EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1733:2: iv_ruleFunctionDefinition= ruleFunctionDefinition EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getFunctionDefinitionRule()); 
             }
-            pushFollow(FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3361);
+            pushFollow(FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3509);
             iv_ruleFunctionDefinition=ruleFunctionDefinition();
 
             state._fsp--;
@@ -4623,7 +4788,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleFunctionDefinition; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleFunctionDefinition3371); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleFunctionDefinition3519); if (state.failed) return current;
 
             }
 
@@ -4641,7 +4806,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleFunctionDefinition"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1640:1: ruleFunctionDefinition returns [EObject current=null] : ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1740:1: ruleFunctionDefinition returns [EObject current=null] : ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) ) ;
     public final EObject ruleFunctionDefinition() throws RecognitionException {
         EObject current = null;
 
@@ -4654,24 +4819,24 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1643:28: ( ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1644:1: ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1743:28: ( ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1744:1: ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1644:1: ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1644:2: ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1744:1: ( ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1744:2: ( (lv_function_0_0= ruleFunction ) ) otherlv_1= '=' ( (lv_formula_2_0= ruleFormula ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1644:2: ( (lv_function_0_0= ruleFunction ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1645:1: (lv_function_0_0= ruleFunction )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1744:2: ( (lv_function_0_0= ruleFunction ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1745:1: (lv_function_0_0= ruleFunction )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1645:1: (lv_function_0_0= ruleFunction )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1646:3: lv_function_0_0= ruleFunction
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1745:1: (lv_function_0_0= ruleFunction )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1746:3: lv_function_0_0= ruleFunction
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getFunctionFunctionParserRuleCall_0_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleFunction_in_ruleFunctionDefinition3417);
+            pushFollow(FOLLOW_ruleFunction_in_ruleFunctionDefinition3565);
             lv_function_0_0=ruleFunction();
 
             state._fsp--;
@@ -4695,24 +4860,24 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
             }
 
-            otherlv_1=(Token)match(input,12,FOLLOW_12_in_ruleFunctionDefinition3429); if (state.failed) return current;
+            otherlv_1=(Token)match(input,12,FOLLOW_12_in_ruleFunctionDefinition3577); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
                   	newLeafNode(otherlv_1, grammarAccess.getFunctionDefinitionAccess().getEqualsSignKeyword_1());
                   
             }
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1666:1: ( (lv_formula_2_0= ruleFormula ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1667:1: (lv_formula_2_0= ruleFormula )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1766:1: ( (lv_formula_2_0= ruleFormula ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1767:1: (lv_formula_2_0= ruleFormula )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1667:1: (lv_formula_2_0= ruleFormula )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1668:3: lv_formula_2_0= ruleFormula
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1767:1: (lv_formula_2_0= ruleFormula )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1768:3: lv_formula_2_0= ruleFormula
             {
             if ( state.backtracking==0 ) {
                
               	        newCompositeNode(grammarAccess.getFunctionDefinitionAccess().getFormulaFormulaParserRuleCall_2_0()); 
               	    
             }
-            pushFollow(FOLLOW_ruleFormula_in_ruleFunctionDefinition3450);
+            pushFollow(FOLLOW_ruleFormula_in_ruleFunctionDefinition3598);
             lv_formula_2_0=ruleFormula();
 
             state._fsp--;
@@ -4759,7 +4924,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleMathName"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1692:1: entryRuleMathName returns [EObject current=null] : iv_ruleMathName= ruleMathName EOF ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1792:1: entryRuleMathName returns [EObject current=null] : iv_ruleMathName= ruleMathName EOF ;
     public final EObject entryRuleMathName() throws RecognitionException {
         EObject current = null;
 
@@ -4767,13 +4932,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1693:2: (iv_ruleMathName= ruleMathName EOF )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1694:2: iv_ruleMathName= ruleMathName EOF
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1793:2: (iv_ruleMathName= ruleMathName EOF )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1794:2: iv_ruleMathName= ruleMathName EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getMathNameRule()); 
             }
-            pushFollow(FOLLOW_ruleMathName_in_entryRuleMathName3486);
+            pushFollow(FOLLOW_ruleMathName_in_entryRuleMathName3634);
             iv_ruleMathName=ruleMathName();
 
             state._fsp--;
@@ -4781,7 +4946,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             if ( state.backtracking==0 ) {
                current =iv_ruleMathName; 
             }
-            match(input,EOF,FOLLOW_EOF_in_entryRuleMathName3496); if (state.failed) return current;
+            match(input,EOF,FOLLOW_EOF_in_entryRuleMathName3644); if (state.failed) return current;
 
             }
 
@@ -4799,7 +4964,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMathName"
-    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1701:1: ruleMathName returns [EObject current=null] : ( (lv_mathName_0_0= RULE_MATH_NAME ) ) ;
+    // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1801:1: ruleMathName returns [EObject current=null] : ( (lv_mathName_0_0= RULE_MATH_NAME ) ) ;
     public final EObject ruleMathName() throws RecognitionException {
         EObject current = null;
 
@@ -4808,16 +4973,16 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
          enterRule(); 
             
         try {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1704:28: ( ( (lv_mathName_0_0= RULE_MATH_NAME ) ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1705:1: ( (lv_mathName_0_0= RULE_MATH_NAME ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1804:28: ( ( (lv_mathName_0_0= RULE_MATH_NAME ) ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1805:1: ( (lv_mathName_0_0= RULE_MATH_NAME ) )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1705:1: ( (lv_mathName_0_0= RULE_MATH_NAME ) )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1706:1: (lv_mathName_0_0= RULE_MATH_NAME )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1805:1: ( (lv_mathName_0_0= RULE_MATH_NAME ) )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1806:1: (lv_mathName_0_0= RULE_MATH_NAME )
             {
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1706:1: (lv_mathName_0_0= RULE_MATH_NAME )
-            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1707:3: lv_mathName_0_0= RULE_MATH_NAME
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1806:1: (lv_mathName_0_0= RULE_MATH_NAME )
+            // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1807:3: lv_mathName_0_0= RULE_MATH_NAME
             {
-            lv_mathName_0_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_ruleMathName3537); if (state.failed) return current;
+            lv_mathName_0_0=(Token)match(input,RULE_MATH_NAME,FOLLOW_RULE_MATH_NAME_in_ruleMathName3685); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(lv_mathName_0_0, grammarAccess.getMathNameAccess().getMathNameMATH_NAMETerminalRuleCall_0()); 
@@ -5184,21 +5349,21 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
     }
     // $ANTLR end synpred10_InternalMath
 
-    // $ANTLR start synpred25_InternalMath
-    public final void synpred25_InternalMath_fragment() throws RecognitionException {   
+    // $ANTLR start synpred27_InternalMath
+    public final void synpred27_InternalMath_fragment() throws RecognitionException {   
         Token otherlv_1=null;
         EObject lv_rightMatrix_3_0 = null;
 
 
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:2: ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:2: ( (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
         {
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1261:4: otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:2: (otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1361:4: otherlv_1= '*' () ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
         {
-        otherlv_1=(Token)match(input,15,FOLLOW_15_in_synpred25_InternalMath2538); if (state.failed) return ;
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1265:1: ()
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1266:2: 
+        otherlv_1=(Token)match(input,15,FOLLOW_15_in_synpred27_InternalMath2686); if (state.failed) return ;
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1365:1: ()
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1366:2: 
         {
         if ( state.backtracking==0 ) {
            
@@ -5208,18 +5373,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
         }
 
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1274:2: ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1275:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1374:2: ( (lv_rightMatrix_3_0= rulePrimaryMatrix ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1375:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
         {
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1275:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1276:3: lv_rightMatrix_3_0= rulePrimaryMatrix
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1375:1: (lv_rightMatrix_3_0= rulePrimaryMatrix )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1376:3: lv_rightMatrix_3_0= rulePrimaryMatrix
         {
         if ( state.backtracking==0 ) {
            
           	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightMatrixPrimaryMatrixParserRuleCall_1_0_2_0()); 
           	    
         }
-        pushFollow(FOLLOW_rulePrimaryMatrix_in_synpred25_InternalMath2571);
+        pushFollow(FOLLOW_rulePrimaryMatrix_in_synpred27_InternalMath2719);
         lv_rightMatrix_3_0=rulePrimaryMatrix();
 
         state._fsp--;
@@ -5236,23 +5401,23 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
         }
     }
-    // $ANTLR end synpred25_InternalMath
+    // $ANTLR end synpred27_InternalMath
 
-    // $ANTLR start synpred26_InternalMath
-    public final void synpred26_InternalMath_fragment() throws RecognitionException {   
+    // $ANTLR start synpred28_InternalMath
+    public final void synpred28_InternalMath_fragment() throws RecognitionException {   
         Token otherlv_4=null;
         EObject lv_rightScalar_6_0 = null;
 
 
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:6: ( (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:6: ( (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
         {
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1293:8: otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:6: (otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1393:8: otherlv_4= '*' () ( (lv_rightScalar_6_0= ruleFormula ) )
         {
-        otherlv_4=(Token)match(input,15,FOLLOW_15_in_synpred26_InternalMath2591); if (state.failed) return ;
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1297:1: ()
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1298:2: 
+        otherlv_4=(Token)match(input,15,FOLLOW_15_in_synpred28_InternalMath2739); if (state.failed) return ;
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1397:1: ()
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1398:2: 
         {
         if ( state.backtracking==0 ) {
            
@@ -5262,18 +5427,18 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
         }
 
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1306:2: ( (lv_rightScalar_6_0= ruleFormula ) )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1307:1: (lv_rightScalar_6_0= ruleFormula )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1406:2: ( (lv_rightScalar_6_0= ruleFormula ) )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1407:1: (lv_rightScalar_6_0= ruleFormula )
         {
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1307:1: (lv_rightScalar_6_0= ruleFormula )
-        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1308:3: lv_rightScalar_6_0= ruleFormula
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1407:1: (lv_rightScalar_6_0= ruleFormula )
+        // ../org.eclipse.iee.translator.jmole.math/src-gen/org/eclipse/iee/translator/jmole/math/parser/antlr/internal/InternalMath.g:1408:3: lv_rightScalar_6_0= ruleFormula
         {
         if ( state.backtracking==0 ) {
            
           	        newCompositeNode(grammarAccess.getMatrixMultiplicationAccess().getRightScalarFormulaParserRuleCall_1_1_2_0()); 
           	    
         }
-        pushFollow(FOLLOW_ruleFormula_in_synpred26_InternalMath2624);
+        pushFollow(FOLLOW_ruleFormula_in_synpred28_InternalMath2772);
         lv_rightScalar_6_0=ruleFormula();
 
         state._fsp--;
@@ -5290,7 +5455,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
         }
     }
-    // $ANTLR end synpred26_InternalMath
+    // $ANTLR end synpred28_InternalMath
 
     // Delegated rules
 
@@ -5336,6 +5501,20 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
         state.failed=false;
         return success;
     }
+    public final boolean synpred28_InternalMath() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred28_InternalMath_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred10_InternalMath() {
         state.backtracking++;
         int start = input.mark();
@@ -5355,20 +5534,6 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
         int start = input.mark();
         try {
             synpred3_InternalMath_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
-    public final boolean synpred26_InternalMath() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred26_InternalMath_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -5406,6 +5571,20 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
         state.failed=false;
         return success;
     }
+    public final boolean synpred27_InternalMath() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred27_InternalMath_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred1_InternalMath() {
         state.backtracking++;
         int start = input.mark();
@@ -5420,25 +5599,12 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred25_InternalMath() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred25_InternalMath_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
 
 
     protected DFA1 dfa1 = new DFA1(this);
     protected DFA2 dfa2 = new DFA2(this);
     protected DFA3 dfa3 = new DFA3(this);
+    protected DFA6 dfa6 = new DFA6(this);
     static final String DFA1_eotS =
         "\12\uffff";
     static final String DFA1_eofS =
@@ -5446,13 +5612,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
     static final String DFA1_minS =
         "\1\4\1\0\1\uffff\1\0\1\uffff\1\0\4\uffff";
     static final String DFA1_maxS =
-        "\1\31\1\0\1\uffff\1\0\1\uffff\1\0\4\uffff";
+        "\1\32\1\0\1\uffff\1\0\1\uffff\1\0\4\uffff";
     static final String DFA1_acceptS =
         "\2\uffff\1\3\3\uffff\1\5\1\1\1\2\1\4";
     static final String DFA1_specialS =
         "\1\uffff\1\0\1\uffff\1\1\1\uffff\1\2\4\uffff}>";
     static final String[] DFA1_transitionS = {
-            "\1\2\1\1\14\uffff\1\2\1\uffff\1\3\2\uffff\1\5\1\uffff\1\6",
+            "\1\2\1\1\14\uffff\1\2\1\uffff\1\3\2\uffff\1\5\2\uffff\1\6",
             "\1\uffff",
             "",
             "\1\uffff",
@@ -5562,13 +5728,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
     static final String DFA2_minS =
         "\1\15\4\uffff\2\0\4\uffff";
     static final String DFA2_maxS =
-        "\1\33\4\uffff\2\0\4\uffff";
+        "\1\34\4\uffff\2\0\4\uffff";
     static final String DFA2_acceptS =
         "\1\uffff\1\3\7\uffff\1\1\1\2";
     static final String DFA2_specialS =
         "\5\uffff\1\0\1\1\4\uffff}>";
     static final String[] DFA2_transitionS = {
-            "\1\5\1\6\1\1\3\uffff\1\1\4\uffff\1\1\1\uffff\2\1",
+            "\1\5\1\6\1\1\3\uffff\1\1\4\uffff\1\1\2\uffff\2\1",
             "",
             "",
             "",
@@ -5662,13 +5828,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
     static final String DFA3_minS =
         "\1\15\7\uffff\1\0\3\uffff";
     static final String DFA3_maxS =
-        "\1\33\7\uffff\1\0\3\uffff";
+        "\1\34\7\uffff\1\0\3\uffff";
     static final String DFA3_acceptS =
         "\1\uffff\1\4\7\uffff\1\2\1\3\1\1";
     static final String DFA3_specialS =
         "\10\uffff\1\0\3\uffff}>";
     static final String[] DFA3_transitionS = {
-            "\2\1\1\10\1\11\1\12\1\uffff\1\1\4\uffff\1\1\1\uffff\2\1",
+            "\2\1\1\10\1\11\1\12\1\uffff\1\1\4\uffff\1\1\2\uffff\2\1",
             "",
             "",
             "",
@@ -5741,6 +5907,65 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             throw nvae;
         }
     }
+    static final String DFA6_eotS =
+        "\13\uffff";
+    static final String DFA6_eofS =
+        "\1\uffff\1\7\6\uffff\1\12\2\uffff";
+    static final String DFA6_minS =
+        "\1\4\1\15\2\uffff\1\5\3\uffff\1\15\2\uffff";
+    static final String DFA6_maxS =
+        "\1\24\1\34\2\uffff\1\5\3\uffff\1\34\2\uffff";
+    static final String DFA6_acceptS =
+        "\2\uffff\1\2\1\7\1\uffff\1\3\1\4\1\1\1\uffff\1\5\1\6";
+    static final String DFA6_specialS =
+        "\13\uffff}>";
+    static final String[] DFA6_transitionS = {
+            "\1\2\1\1\16\uffff\1\3",
+            "\5\7\1\uffff\1\7\1\6\2\7\1\5\1\7\1\4\1\uffff\2\7",
+            "",
+            "",
+            "\1\10",
+            "",
+            "",
+            "",
+            "\5\12\1\uffff\1\12\1\11\2\12\1\uffff\1\12\2\uffff\2\12",
+            "",
+            ""
+    };
+
+    static final short[] DFA6_eot = DFA.unpackEncodedString(DFA6_eotS);
+    static final short[] DFA6_eof = DFA.unpackEncodedString(DFA6_eofS);
+    static final char[] DFA6_min = DFA.unpackEncodedStringToUnsignedChars(DFA6_minS);
+    static final char[] DFA6_max = DFA.unpackEncodedStringToUnsignedChars(DFA6_maxS);
+    static final short[] DFA6_accept = DFA.unpackEncodedString(DFA6_acceptS);
+    static final short[] DFA6_special = DFA.unpackEncodedString(DFA6_specialS);
+    static final short[][] DFA6_transition;
+
+    static {
+        int numStates = DFA6_transitionS.length;
+        DFA6_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA6_transition[i] = DFA.unpackEncodedString(DFA6_transitionS[i]);
+        }
+    }
+
+    class DFA6 extends DFA {
+
+        public DFA6(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 6;
+            this.eot = DFA6_eot;
+            this.eof = DFA6_eof;
+            this.min = DFA6_min;
+            this.max = DFA6_max;
+            this.accept = DFA6_accept;
+            this.special = DFA6_special;
+            this.transition = DFA6_transition;
+        }
+        public String getDescription() {
+            return "694:1: ( ( () ( (lv_name_1_0= ruleMathName ) ) ) | ( () ( (lv_value_3_0= ruleFloat ) ) ) | ( () ( (lv_element_5_0= ruleMathName ) ) otherlv_6= '[' ( (lv_row_7_0= ruleFormula ) ) otherlv_8= ']' otherlv_9= '[' ( (lv_column_10_0= ruleFormula ) ) otherlv_11= ']' ) | ( () ( (lv_function_13_0= ruleFunction ) ) ) | ( () ( (lv_class__15_0= ruleMathName ) ) otherlv_16= '.' ( (lv_function_17_0= ruleFunction ) ) ) | ( () ( (lv_class__19_0= ruleMathName ) ) otherlv_20= '.' ( (lv_member_21_0= ruleMathName ) ) ) | (otherlv_22= '(' this_Addition_23= ruleAddition otherlv_24= ')' ) )";
+        }
+    }
  
 
     public static final BitSet FOLLOW_ruleStatement_in_entryRuleStatement81 = new BitSet(new long[]{0x0000000000000000L});
@@ -5800,87 +6025,93 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_ruleFormula_in_rulePrimary1542 = new BitSet(new long[]{0x0000000001000000L});
     public static final BitSet FOLLOW_24_in_rulePrimary1554 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFunction_in_rulePrimary1595 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_20_in_rulePrimary1615 = new BitSet(new long[]{0x0000000000140030L});
-    public static final BitSet FOLLOW_ruleAddition_in_rulePrimary1640 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_19_in_rulePrimary1651 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrix_in_entryRuleMatrix1688 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrix1698 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_ruleMatrix1735 = new BitSet(new long[]{0x000000000A000000L});
-    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1757 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrix1770 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1791 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrix1806 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_ruleMatrix1822 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow1858 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixRow1868 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_25_in_ruleMatrixRow1905 = new BitSet(new long[]{0x0000000008140030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixRow1927 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrixRow1940 = new BitSet(new long[]{0x0000000000140030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixRow1961 = new BitSet(new long[]{0x000000000C000000L});
-    public static final BitSet FOLLOW_26_in_ruleMatrixRow1976 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_ruleMatrixRow1992 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2028 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAssignment2038 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_ruleMatrixAssignment2075 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_ruleMathName_in_ruleMatrixAssignment2096 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_ruleMatrixAssignment2108 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_ruleMatrixAssignment2120 = new BitSet(new long[]{0x0000000002900000L});
-    public static final BitSet FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2141 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2177 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixFormula2187 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2232 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2267 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAddition2277 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2327 = new BitSet(new long[]{0x0000000000006002L});
-    public static final BitSet FOLLOW_13_in_ruleMatrixAddition2340 = new BitSet(new long[]{0x0000000002900000L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2373 = new BitSet(new long[]{0x0000000000006002L});
-    public static final BitSet FOLLOW_14_in_ruleMatrixAddition2393 = new BitSet(new long[]{0x0000000002900000L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2426 = new BitSet(new long[]{0x0000000000006002L});
-    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2465 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixMultiplication2475 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2525 = new BitSet(new long[]{0x0000000000008002L});
-    public static final BitSet FOLLOW_15_in_ruleMatrixMultiplication2538 = new BitSet(new long[]{0x0000000002900000L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2571 = new BitSet(new long[]{0x0000000000008002L});
-    public static final BitSet FOLLOW_15_in_ruleMatrixMultiplication2591 = new BitSet(new long[]{0x0000000000140030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixMultiplication2624 = new BitSet(new long[]{0x0000000000008002L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2663 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRulePrimaryMatrix2673 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMatrix_in_rulePrimaryMatrix2732 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix2764 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_ruleMathName_in_rulePrimaryMatrix2785 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_rulePrimaryMatrix2797 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix2829 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_ruleMathName_in_rulePrimaryMatrix2850 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_rulePrimaryMatrix2862 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_20_in_rulePrimaryMatrix2882 = new BitSet(new long[]{0x0000000002900000L});
-    public static final BitSet FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix2907 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_19_in_rulePrimaryMatrix2918 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFloat_in_entryRuleFloat2956 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFloat2967 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3008 = new BitSet(new long[]{0x0000000020000012L});
-    public static final BitSet FOLLOW_29_in_ruleFloat3029 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3045 = new BitSet(new long[]{0x00000000C0000012L});
-    public static final BitSet FOLLOW_30_in_ruleFloat3067 = new BitSet(new long[]{0x0000000000004010L});
-    public static final BitSet FOLLOW_31_in_ruleFloat3086 = new BitSet(new long[]{0x0000000000004010L});
-    public static final BitSet FOLLOW_14_in_ruleFloat3101 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3119 = new BitSet(new long[]{0x0000000000000012L});
-    public static final BitSet FOLLOW_ruleFunction_in_entryRuleFunction3170 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFunction3180 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMathName_in_ruleFunction3226 = new BitSet(new long[]{0x0000000000100000L});
-    public static final BitSet FOLLOW_20_in_ruleFunction3238 = new BitSet(new long[]{0x00000000001C0030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3260 = new BitSet(new long[]{0x0000000004080000L});
-    public static final BitSet FOLLOW_26_in_ruleFunction3273 = new BitSet(new long[]{0x0000000000140030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3294 = new BitSet(new long[]{0x0000000004080000L});
-    public static final BitSet FOLLOW_26_in_ruleFunction3309 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_19_in_ruleFunction3325 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3361 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleFunctionDefinition3371 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFunction_in_ruleFunctionDefinition3417 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_ruleFunctionDefinition3429 = new BitSet(new long[]{0x0000000000140030L});
-    public static final BitSet FOLLOW_ruleFormula_in_ruleFunctionDefinition3450 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMathName_in_entryRuleMathName3486 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_entryRuleMathName3496 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_MATH_NAME_in_ruleMathName3537 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMathName_in_rulePrimary1636 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_25_in_rulePrimary1648 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleFunction_in_rulePrimary1669 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMathName_in_rulePrimary1710 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_25_in_rulePrimary1722 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleMathName_in_rulePrimary1743 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_20_in_rulePrimary1763 = new BitSet(new long[]{0x0000000000140030L});
+    public static final BitSet FOLLOW_ruleAddition_in_rulePrimary1788 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_19_in_rulePrimary1799 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrix_in_entryRuleMatrix1836 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrix1846 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_ruleMatrix1883 = new BitSet(new long[]{0x0000000014000000L});
+    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1905 = new BitSet(new long[]{0x0000000018000000L});
+    public static final BitSet FOLLOW_27_in_ruleMatrix1918 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_ruleMatrixRow_in_ruleMatrix1939 = new BitSet(new long[]{0x0000000018000000L});
+    public static final BitSet FOLLOW_27_in_ruleMatrix1954 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_28_in_ruleMatrix1970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixRow_in_entryRuleMatrixRow2006 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixRow2016 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_ruleMatrixRow2053 = new BitSet(new long[]{0x0000000010140030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixRow2075 = new BitSet(new long[]{0x0000000018000000L});
+    public static final BitSet FOLLOW_27_in_ruleMatrixRow2088 = new BitSet(new long[]{0x0000000000140030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixRow2109 = new BitSet(new long[]{0x0000000018000000L});
+    public static final BitSet FOLLOW_27_in_ruleMatrixRow2124 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_28_in_ruleMatrixRow2140 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAssignment_in_entryRuleMatrixAssignment2176 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAssignment2186 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_ruleMatrixAssignment2223 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleMathName_in_ruleMatrixAssignment2244 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_ruleMatrixAssignment2256 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_ruleMatrixAssignment2268 = new BitSet(new long[]{0x0000000004900000L});
+    public static final BitSet FOLLOW_ruleMatrixFormula_in_ruleMatrixAssignment2289 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixFormula_in_entryRuleMatrixFormula2325 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixFormula2335 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_ruleMatrixFormula2380 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_entryRuleMatrixAddition2415 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixAddition2425 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2475 = new BitSet(new long[]{0x0000000000006002L});
+    public static final BitSet FOLLOW_13_in_ruleMatrixAddition2488 = new BitSet(new long[]{0x0000000004900000L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2521 = new BitSet(new long[]{0x0000000000006002L});
+    public static final BitSet FOLLOW_14_in_ruleMatrixAddition2541 = new BitSet(new long[]{0x0000000004900000L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_ruleMatrixAddition2574 = new BitSet(new long[]{0x0000000000006002L});
+    public static final BitSet FOLLOW_ruleMatrixMultiplication_in_entryRuleMatrixMultiplication2613 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMatrixMultiplication2623 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2673 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_15_in_ruleMatrixMultiplication2686 = new BitSet(new long[]{0x0000000004900000L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_ruleMatrixMultiplication2719 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_15_in_ruleMatrixMultiplication2739 = new BitSet(new long[]{0x0000000000140030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleMatrixMultiplication2772 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_entryRulePrimaryMatrix2811 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRulePrimaryMatrix2821 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMatrix_in_rulePrimaryMatrix2880 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix2912 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleMathName_in_rulePrimaryMatrix2933 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_rulePrimaryMatrix2945 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rulePrimaryMatrix2977 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_ruleMathName_in_rulePrimaryMatrix2998 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_rulePrimaryMatrix3010 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_20_in_rulePrimaryMatrix3030 = new BitSet(new long[]{0x0000000004900000L});
+    public static final BitSet FOLLOW_ruleMatrixAddition_in_rulePrimaryMatrix3055 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_19_in_rulePrimaryMatrix3066 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFloat_in_entryRuleFloat3104 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFloat3115 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3156 = new BitSet(new long[]{0x0000000002000012L});
+    public static final BitSet FOLLOW_25_in_ruleFloat3177 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3193 = new BitSet(new long[]{0x00000000C0000012L});
+    public static final BitSet FOLLOW_30_in_ruleFloat3215 = new BitSet(new long[]{0x0000000000004010L});
+    public static final BitSet FOLLOW_31_in_ruleFloat3234 = new BitSet(new long[]{0x0000000000004010L});
+    public static final BitSet FOLLOW_14_in_ruleFloat3249 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_RULE_INT_in_ruleFloat3267 = new BitSet(new long[]{0x0000000000000012L});
+    public static final BitSet FOLLOW_ruleFunction_in_entryRuleFunction3318 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFunction3328 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMathName_in_ruleFunction3374 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_20_in_ruleFunction3386 = new BitSet(new long[]{0x00000000001C0030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3408 = new BitSet(new long[]{0x0000000008080000L});
+    public static final BitSet FOLLOW_27_in_ruleFunction3421 = new BitSet(new long[]{0x0000000000140030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleFunction3442 = new BitSet(new long[]{0x0000000008080000L});
+    public static final BitSet FOLLOW_27_in_ruleFunction3457 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_19_in_ruleFunction3473 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFunctionDefinition_in_entryRuleFunctionDefinition3509 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleFunctionDefinition3519 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFunction_in_ruleFunctionDefinition3565 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_ruleFunctionDefinition3577 = new BitSet(new long[]{0x0000000000140030L});
+    public static final BitSet FOLLOW_ruleFormula_in_ruleFunctionDefinition3598 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMathName_in_entryRuleMathName3634 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_entryRuleMathName3644 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_MATH_NAME_in_ruleMathName3685 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFunctionDefinition_in_synpred1_InternalMath137 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleVariableAssignment_in_synpred2_InternalMath164 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleFormula_in_synpred3_InternalMath191 = new BitSet(new long[]{0x0000000000000002L});
@@ -5892,9 +6123,9 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_15_in_synpred7_InternalMath767 = new BitSet(new long[]{0x0000000000140030L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_synpred7_InternalMath800 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleExponent_in_synpred10_InternalMath1005 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_15_in_synpred25_InternalMath2538 = new BitSet(new long[]{0x0000000002900000L});
-    public static final BitSet FOLLOW_rulePrimaryMatrix_in_synpred25_InternalMath2571 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_15_in_synpred26_InternalMath2591 = new BitSet(new long[]{0x0000000000140030L});
-    public static final BitSet FOLLOW_ruleFormula_in_synpred26_InternalMath2624 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_15_in_synpred27_InternalMath2686 = new BitSet(new long[]{0x0000000004900000L});
+    public static final BitSet FOLLOW_rulePrimaryMatrix_in_synpred27_InternalMath2719 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_15_in_synpred28_InternalMath2739 = new BitSet(new long[]{0x0000000000140030L});
+    public static final BitSet FOLLOW_ruleFormula_in_synpred28_InternalMath2772 = new BitSet(new long[]{0x0000000000000002L});
 
 }

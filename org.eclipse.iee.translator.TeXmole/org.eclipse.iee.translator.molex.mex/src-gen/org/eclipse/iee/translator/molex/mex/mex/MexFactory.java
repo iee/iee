@@ -243,6 +243,24 @@ public interface MexFactory extends EFactory
   InBrackets createInBrackets();
 
   /**
+   * Returns a new object of class '<em>Class Function</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Class Function</em>'.
+   * @generated
+   */
+  ClassFunction createClassFunction();
+
+  /**
+   * Returns a new object of class '<em>Class Member</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Class Member</em>'.
+   * @generated
+   */
+  ClassMember createClassMember();
+
+  /**
    * Returns a new object of class '<em>Matrix Addition</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

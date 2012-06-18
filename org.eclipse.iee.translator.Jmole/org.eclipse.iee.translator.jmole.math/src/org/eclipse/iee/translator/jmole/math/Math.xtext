@@ -41,6 +41,8 @@ Primary returns Expression:
 	{Float} value=Float |
 	{MatrixElement} element=MathName '[' row=Formula ']' '[' column=Formula ']' | 
 	{Function} function=Function |
+	{ClassFunction} class_=MathName '.' function=Function |
+	{ClassMember} class_=MathName '.' member=MathName |
 	'(' Addition ')';
 
 Matrix:
