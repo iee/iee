@@ -1,7 +1,4 @@
-bin/*
-org.eclipse.iee.translator.jmole.math/bin/*
-
-org.eclipse.iee.translator.molex.mex/bin/*
-
-org.eclipse.iee.editor.wizard/bin/*
+*/xtend-gen/*
+*/src-gen/*
 *.class
+org.eclipse.iee.editor.wizard/bin/*

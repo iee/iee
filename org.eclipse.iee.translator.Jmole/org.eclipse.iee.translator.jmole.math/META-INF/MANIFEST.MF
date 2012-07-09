@@ -16,10 +16,9 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.0.0";visibility:=reexport,
  org.eclipse.emf.common,
  org.antlr.runtime,
  org.eclipse.xtext.common.types
-Import-Package: org.apache.log4j,
- org.apache.commons.logging,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xtend2.lib
+Import-Package: org.apache.commons.logging,
+ org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.eclipse.iee.translator.jmole.math,
  org.eclipse.iee.translator.jmole.math.generator,
@@ -29,4 +28,6 @@ Export-Package: org.eclipse.iee.translator.jmole.math,
  org.eclipse.iee.translator.jmole.math.parser.antlr,
  org.eclipse.iee.translator.jmole.math.parser.antlr.internal,
  org.eclipse.iee.translator.jmole.math.serializer,
- org.eclipse.iee.translator.jmole.math.services
+ org.eclipse.iee.translator.jmole.math.services,
+ org.eclipse.iee.translator.jmole.math.scoping
+

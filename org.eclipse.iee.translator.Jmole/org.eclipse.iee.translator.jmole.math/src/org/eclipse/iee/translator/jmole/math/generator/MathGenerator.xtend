@@ -4,13 +4,8 @@
 package org.eclipse.iee.translator.jmole.math.generator
 
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess
-
-import org.eclipse.iee.translator.jmole.math.math
-
-import org.eclipse.xtext.xtend2.lib.StringConcatenation
-import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
+import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.iee.translator.jmole.math.math.*
 
 class MathGenerator implements IGenerator {
@@ -20,13 +15,15 @@ class MathGenerator implements IGenerator {
 	}
 	
 	def String generateText(Resource resource) {
-		var statements = resource.allContentsIterable.filter(typeof(Statement));
+		var statements = resource.contents;
 		
 		if (statements.empty) {
 			return null;
 		}
 		
-		return statements.head.compileStatement.toString();	
+		var statement = compileStatement(statements.head as Statement);
+		
+		return statement.toString();	
 	}
 	
 	def compileStatement(Statement s)
