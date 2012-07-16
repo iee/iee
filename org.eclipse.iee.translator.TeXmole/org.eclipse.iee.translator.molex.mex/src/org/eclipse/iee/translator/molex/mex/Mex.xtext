@@ -7,14 +7,19 @@ Statement:
 	functionDefinition=FunctionDefinition |
 	variableAssignment=VariableAssignment |
 	formula=Formula |
+	logicalFormula = LogicalFormula |
 	matrixAssignment=MatrixAssignment |
 	matrixFormula=MatrixFormula;
 
 VariableAssignment:
-	variable=MathName '=' value=Formula;
+	variable=Formula '=' value=Formula;
 
 Formula:
 	expression=(Addition);
+	
+LogicalFormula:
+	expression=(LogicalAddition)	
+;
 
 AdditionInBrackets returns Expression:
 	'(' addition=Addition ')'
@@ -91,6 +96,27 @@ FunctionDefinition:
 	
 MathName: 
 	mathName = MATH_NAME
+;
+
+LogicalAdditionInBrackets returns LogicalExpression:
+	'(' addition=LogicalAddition ')'
+;
+
+	// addition: left associative, priority 0
+LogicalAddition returns LogicalExpression:
+	LogicalMultiplication ('||' {LogicalAddition.left=current} right=LogicalMultiplication)*;
+
+	// multiplication, left associative, priority 1
+LogicalMultiplication returns LogicalExpression:
+	LogicalComparison ('&&' {LogicalMultiplication.left=current} right=LogicalComparison)*;
+
+LogicalComparison returns LogicalExpression:
+	{LogicalComparison} left=Formula operation=COMPARISON_OPERATION right=Formula |
+	{LogicalInBrackets} inBrackets=LogicalAdditionInBrackets
+;	
+	
+terminal COMPARISON_OPERATION returns ecore::EString:
+	'<=' | '>=' | '<' | '>' | '==' | '!='
 ;	
 	
 terminal MATH_NAME returns ecore::EString:

@@ -31,6 +31,7 @@ class MexGenerator implements IGenerator {
 	'''
 		«IF s.functionDefinition != null»«compileFunctionDefinition(s.functionDefinition)»«ENDIF»
 		«IF s.formula != null»«compileFormula(s.formula)»«ENDIF»
+		«IF s.logicalFormula != null»«compileLogicalFormula(s.logicalFormula)»«ENDIF»
 		«IF s.variableAssignment != null»«compileVariableAssignment(s.variableAssignment)»«ENDIF»
 		«IF s.matrixAssignment != null»«compileMatrixAssignment(s.matrixAssignment)»«ENDIF»
 		«IF s.matrixFormula != null»«compileMatrixFormula(s.matrixFormula)»«ENDIF»
@@ -52,7 +53,7 @@ class MexGenerator implements IGenerator {
 	def compileVariableAssignment(VariableAssignment a)
 	{
 	 '''
-	 	«compileName(a.variable)» = «compileFormula(a.value)»
+	 	«compileFormula(a.variable)» = «compileFormula(a.value)»
 	 '''
 	}
 	
@@ -109,6 +110,13 @@ class MexGenerator implements IGenerator {
 	{
 	'''
 		«compileExpression(f.expression)»
+	'''
+	}
+	
+	def compileLogicalFormula(LogicalFormula f) 
+	{
+	'''
+		«compileLogicalExpression(f.expression)»
 	'''
 	}
 	
@@ -227,6 +235,37 @@ class MexGenerator implements IGenerator {
 	def dispatch compileMatrixExpression(MatrixMultiplication op) '''
 		«IF op.rightMatrix != null»«compileMatrixExpression(op.left)»*«compileMatrixExpression(op.rightMatrix)»«ENDIF»
 		«IF op.rightScalar != null»«compileMatrixExpression(op.left)»*«compileFormula(op.rightScalar)»«ENDIF»'''
-		
 	
+	//Logical Expressions
+		
+	def dispatch compileLogicalExpression(LogicalInBrackets op) '''
+		(«compileLogicalExpression(op.inBrackets.addition)»)'''	
+		
+	def dispatch compileLogicalExpression(LogicalAddition op) '''
+		«compileLogicalExpression(op.left)» \vee «compileLogicalExpression(op.right)»'''
+	
+	def dispatch compileLogicalExpression(LogicalMultiplication op) '''
+		«compileLogicalExpression(op.left)» \wedge «compileLogicalExpression(op.right)»'''
+		
+	 def dispatch compileLogicalExpression(LogicalComparison op) '''
+		«compileFormula(op.left)» 
+		«IF op.operation.matches(">=")»
+			\ge
+		«ENDIF»
+		«IF op.operation.matches("<=")»
+			\le	
+		«ENDIF»
+		«IF op.operation.matches("<")»
+			<
+		«ENDIF» 
+		«IF op.operation.matches(">")»
+			>	
+		«ENDIF»
+		«IF op.operation.matches("!=")»
+			\ne	
+		«ENDIF»
+		«IF op.operation.matches("==")»
+			==	
+		«ENDIF»
+		«compileFormula(op.right)»'''		
 }

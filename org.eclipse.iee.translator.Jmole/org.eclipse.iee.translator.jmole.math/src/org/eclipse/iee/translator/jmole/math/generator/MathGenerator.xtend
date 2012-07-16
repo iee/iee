@@ -32,8 +32,9 @@ class MathGenerator implements IGenerator {
 		«IF s.functionDefinition != null»«compileFunctionDefinition(s.functionDefinition)»«ENDIF»
 		«IF s.variableAssignment != null»«compileVariableAssignment(s.variableAssignment)»;«ENDIF»
 		«IF s.matrixAssignment != null»«compileMatrixAssignment(s.matrixAssignment)»;«ENDIF»
-		«IF s.formula != null»«compileFormula(s.formula)»;«ENDIF»
-		«IF s.matrixFormula != null»«compileMatrixFormula(s.matrixFormula)»;«ENDIF»
+		«IF s.formula != null»«compileFormula(s.formula)»«ENDIF»
+		«IF s.logicalFormula != null»«compileLogicalFormula(s.logicalFormula)»«ENDIF»
+		«IF s.matrixFormula != null»«compileMatrixFormula(s.matrixFormula)»«ENDIF»
 	'''
 	}
 	
@@ -60,7 +61,7 @@ class MathGenerator implements IGenerator {
 	def compileVariableAssignment(VariableAssignment a)
 	{
 	 '''
-	 	«compileName(a.variable)» = «compileFormula(a.value)»
+	 	«compileFormula(a.variable)» = «compileFormula(a.value)»
 	 '''
 	}
 	
@@ -68,6 +69,13 @@ class MathGenerator implements IGenerator {
 	{
 	'''
 		«compileExpression(f.expression)»
+	'''
+	}
+	
+	def compileLogicalFormula(LogicalFormula f) 
+	{
+	'''
+		«compileLogicalExpression(f.expression)»
 	'''
 	}
 	
@@ -177,5 +185,15 @@ class MathGenerator implements IGenerator {
 	def dispatch compileMatrixExpression(MatrixMultiplication op) '''
 		«IF op.rightMatrix != null»«compileMatrixExpression(op.left)».times(«compileMatrixExpression(op.rightMatrix)»)«ENDIF»
 		«IF op.rightScalar != null»«compileMatrixExpression(op.left)».times(«compileFormula(op.rightScalar)»)«ENDIF»'''
-	 	
+	
+	//Logical Expressions
+		
+	def dispatch compileLogicalExpression(LogicalAddition op) '''
+		(«compileLogicalExpression(op.left)») || («compileLogicalExpression(op.right)»)'''
+	
+	def dispatch compileLogicalExpression(LogicalMultiplication op) '''
+		(«compileLogicalExpression(op.left)») && («compileLogicalExpression(op.right)»)'''
+		
+	 def dispatch compileLogicalExpression(LogicalComparison op) '''
+		(«compileFormula(op.left)») «op.operation» («compileFormula(op.right)»)'''	
 }
