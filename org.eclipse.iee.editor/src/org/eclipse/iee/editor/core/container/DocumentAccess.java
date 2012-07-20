@@ -122,7 +122,7 @@ public class DocumentAccess {
 	protected void releaseTextRegion(Container container) {
 		Position position = container.getPosition();
 		try {
-			fDocument.replace(position.getOffset(), position.getLength(), "");
+			fDocument.replace(position.getOffset(), position.getLength() - 1, "");
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
