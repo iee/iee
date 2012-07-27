@@ -72,6 +72,7 @@ public class UserInteractionManager {
 					return;
 				}
 
+				/* XXX Visibility */
 				fContainerManager.updateContainerVisibility(false);
 			}
 		});

@@ -14,6 +14,8 @@ import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.GlyphMetrics;
+import org.perf4j.LoggingStopWatch;
+import org.perf4j.StopWatch;
 
 
 class StyledTextManager {
@@ -21,14 +23,11 @@ class StyledTextManager {
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
 	
-	private enum State {
-		READY,
-		STYLES_UPDATE_REQUESTED,
-		TEXT_PRESENTATION_UPDATE_INITIATED,
-		STYLES_UPDATED,
-	}	
-	State fState = State.READY; 
+	private PaintObjectListener fPaintObjectListener;
 	
+	private boolean fAreStylesUpdated = true;
+	private boolean fArePresentationsUpdated = true;
+		
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fSourceViewer = containerManager.getSourceViewer();
@@ -38,76 +37,84 @@ class StyledTextManager {
 	}
 		
 	public void updateStyles(boolean doInitiateTextPresentationUpdate) {
-		
-		assert(fState == State.READY);
-		System.out.println("READY/updateStyles()");
 
-		fState = State.STYLES_UPDATE_REQUESTED;
-			
-		if (doInitiateTextPresentationUpdate) {
-			fStyledText.redraw();
+		System.out.println("updateStyles()");
+		
+//		if (fAreStylesUpdated == false || fArePresentationsUpdated == false) {
+//			return;
+//		}
+		
+		fAreStylesUpdated = false;
+		fArePresentationsUpdated = false;
+		
+		//fStyledText.addPaintObjectListener(fPaintObjectListener);
+		
+		if (doInitiateTextPresentationUpdate) { // Now used when container is resized
+			fSourceViewer.invalidateTextPresentation();
 		}
 	}
 	
 	protected void initListeners() {
 		
-		fStyledText.addPaintObjectListener(new PaintObjectListener() {
-			public void paintObject(PaintObjectEvent e) {
-				
-				switch (fState) {
-				
-				case STYLES_UPDATE_REQUESTED:
-					/* If we are here, TextPresentationListener have not been executed yet, so trying to do this */
-					System.out.println("STYLES_UPDATE_REQUESTED/paintObject(): invalidating text presentation");
-					
-					fState = State.TEXT_PRESENTATION_UPDATE_INITIATED; 
-					fSourceViewer.invalidateTextPresentation();
-					break;
-					
-				case STYLES_UPDATED:
-					System.out.println("STYLES_UPDATED/paintObject(): reconcile containers's positions");
-					for (Container c : fContainerManager.getContainers()) {
-						c.updatePresentation();
-					}
-					fState = State.READY;				
-					break;
-				}
-			}
-		});
-		
 		((ITextViewerExtension4) fSourceViewer).addTextPresentationListener(new ITextPresentationListener() {			
 			@Override
 			public void applyTextPresentation(TextPresentation textPresentation) {
-				
-				switch (fState) {
-				
-				case TEXT_PRESENTATION_UPDATE_INITIATED:
-					System.out.println("TEXT_PRESENTATION_UPDATE_INITIATED/applyTextPresentation(): applying styles to text presentation");
-//					printTextPresentationStyleRanges(textPresentation);					
 
-					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					fState = State.STYLES_UPDATED;
-					break;
-					
-				default:
-					System.out.println("STYLES_UPDATE_REQUESTED/applyTextPresentation(): applying styles to text presentation");
-//					printTextPresentationStyleRanges(textPresentation);					
-					
-					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					break;
+				StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
+				
+				System.out.println("Applying styles");
+								
+				if (!fAreStylesUpdated) {
+					/* Исправление непонятного бага.
+					 * При первом вызове applyTextPresentation() почему-то не передаются стили jdt,
+					 * поэтому выставляем те стили, которые уже имеются (может вызывать другие косяки на ~ 1 секунду) */
+					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
 				}
+								
+				//printTextPresentationStyleRanges(textPresentation);
+				
+				injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+				fAreStylesUpdated = true;
+												
+				stylesUpdateSW.stop();
+
 			}
 		});
 		
+		fPaintObjectListener = new PaintObjectListener() {
+			public void paintObject(PaintObjectEvent e) {
+				
+				System.out.print("| ");
+				
+				
+				if (!fAreStylesUpdated) {
+					fSourceViewer.invalidateTextPresentation();
+				}
+				
+				if (!fArePresentationsUpdated) { 
+					
+					StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");	
+					
+					System.out.println("Updating presentations");
+					for (Container c : fContainerManager.getContainers()) {
+						c.updatePresentation();
+					}
+					
+					if (fAreStylesUpdated) {
+						fArePresentationsUpdated = true;
+						
+						//fStyledText.removePaintObjectListener(fPaintObjectListener);
+					}
+					
+					updatePresentationSW.stop();	
+				}
+			}
+		};
+		
+		fStyledText.addPaintObjectListener(fPaintObjectListener);
 	}
 	
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
-		
-		/*
-		for (int i = 0; i < containersStyleRanges.length; i += 2) {
-			StyleRange first = containersStyleRanges[i];
-			StyleRange second = containersStyleRanges[i];
-		}*/
 		
 		List<StyleRange> allowedStyleRanges = new ArrayList<StyleRange>();
 		

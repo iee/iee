@@ -27,6 +27,8 @@ import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
+import org.perf4j.LoggingStopWatch;
+import org.perf4j.StopWatch;
 
 public class ContainerManager extends EventManager {
 
@@ -228,12 +230,33 @@ public class ContainerManager extends EventManager {
 		@Override
 		public void documentPartitioningChanged(
 				DocumentPartitioningChangedEvent event) {
+			
+			assert(fChangedPartitioningRegion == null);
+						
 			fChangedPartitioningRegion = event
-					.getChangedRegion(PartitioningManager.PARTITIONING_ID);
+				.getChangedRegion(PartitioningManager.PARTITIONING_ID);
+			
+			
+			
+			if (fChangedPartitioningRegion != null) {
+				String[] partitionings = event.getChangedPartitionings();
+				
+				for (String partitioning : partitionings) {
+					
+					System.out.println("Changed partitionings: " + partitioning);
+					
+					if (partitioning.equals(PartitioningManager.PARTITIONING_ID)) {
+						continue;
+					}
+				}
+			}
 		}
 
 		@Override
 		public void documentChanged(DocumentEvent event) {
+
+			StopWatch padsPositionsCalculationSW = new LoggingStopWatch("padsPositionsCalculation");
+					
 			
 			if (fState == State.READY) {
 				System.out.println("\n\n== Begin of document modification handling ==");
@@ -318,12 +341,13 @@ public class ContainerManager extends EventManager {
 			}
 
 			fChangedPartitioningRegion = null;
-
+			
 			if (!fDocumentAccess.processNextDocumentAccessRequest()) {
 				
 				boolean doInitiateTextPresentationUpdate = false;
 				fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
 				
+				/* XXX Visibility */
 				updateContainerVisibility(true);
 				
 				fUserInteractionManager.updateCaretSelection();
@@ -333,6 +357,9 @@ public class ContainerManager extends EventManager {
 
 				/* For debug */
 				fireDebugNotification();
+				
+				
+				padsPositionsCalculationSW.stop();
 			}
 		}
 
@@ -391,6 +418,9 @@ public class ContainerManager extends EventManager {
 							new Position(region.getOffset(), region.getLength()),
 							containerID);
 
+					/* XXX Visibility */
+					container.setVisible(false);
+					
 					fContainers.add(container);
 					fireContainerCreated(container);
 				}
@@ -406,6 +436,8 @@ public class ContainerManager extends EventManager {
 
 			Assert.isTrue(container.getPosition().getOffset() == region
 					.getOffset());
+			
+			
 
 			/* Updating container */
 			container.updatePosition(region.getOffset(), region.getLength());
