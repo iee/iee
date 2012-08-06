@@ -15,7 +15,7 @@ Import-Package: org.eclipse.core.expressions,
  org.eclipse.iee.translator.jmole.math.generator,
  org.eclipse.iee.translator.molex.mex.generator,
  org.eclipse.ui
-Bundle-ClassPath: lib/jlatexmath-embedded-fop-0.9.6.jar,
- .,
- lib/xstream-1.4.2.jar
+Bundle-ClassPath: .,
+ lib/xstream-1.4.2.jar,
+ lib/jlatexmath-embedded-fop-0.9.7.jar
 Export-Package: org.eclipse.iee.sample.formula.pad
