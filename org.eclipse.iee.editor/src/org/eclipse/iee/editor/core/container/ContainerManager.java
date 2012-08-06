@@ -84,14 +84,13 @@ public class ContainerManager extends EventManager {
 		}
 		return containerIDs;
 	}
-	
-	public Collection<Container> getContainersInLine(int lineOffset, int lineLength) {
-		NavigableSet<Container> containersInLine = fContainers.subSet(
-			Container.atOffset(lineOffset),
+		
+	public Collection<Container> getContainersInRange(int from, int to) {		
+		return fContainers.subSet(
+			Container.atOffset(from),
 			true,
-			Container.atOffset(lineOffset + lineLength),
-			false);		
-		return containersInLine;
+			Container.atOffset(to),
+			true);
 	}
 		
 	public String getContainerManagerID() {
@@ -112,6 +111,10 @@ public class ContainerManager extends EventManager {
 
 	public StyledText getStyledText() {
 		return fStyledText;
+	}
+	
+	public StyledTextManager getStyledTextManager() {
+		return fStyledTextManager;
 	}
 	
 	public ISourceViewer getSourceViewer() {
@@ -236,8 +239,6 @@ public class ContainerManager extends EventManager {
 			fChangedPartitioningRegion = event
 				.getChangedRegion(PartitioningManager.PARTITIONING_ID);
 			
-			
-			
 			if (fChangedPartitioningRegion != null) {
 				String[] partitionings = event.getChangedPartitionings();
 				
@@ -255,7 +256,8 @@ public class ContainerManager extends EventManager {
 		@Override
 		public void documentChanged(DocumentEvent event) {
 
-			StopWatch padsPositionsCalculationSW = new LoggingStopWatch("padsPositionsCalculation");
+			// XXX
+			//StopWatch padsPositionsCalculationSW = new LoggingStopWatch("padsPositionsCalculation");
 					
 			
 			if (fState == State.READY) {
@@ -348,7 +350,7 @@ public class ContainerManager extends EventManager {
 				fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
 				
 				/* XXX Visibility */
-				updateContainerVisibility(true);
+				//updateContainerVisibility(true);
 				
 				fUserInteractionManager.updateCaretSelection();
 
@@ -359,7 +361,8 @@ public class ContainerManager extends EventManager {
 				fireDebugNotification();
 				
 				
-				padsPositionsCalculationSW.stop();
+				// XXX
+				//padsPositionsCalculationSW.stop();
 			}
 		}
 

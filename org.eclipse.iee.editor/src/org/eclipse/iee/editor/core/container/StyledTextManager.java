@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.core.container;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,7 +14,10 @@ import org.eclipse.swt.custom.PaintObjectEvent;
 import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
+import org.eclipse.swt.graphics.Rectangle;
 import org.perf4j.LoggingStopWatch;
 import org.perf4j.StopWatch;
 
@@ -39,19 +43,17 @@ class StyledTextManager {
 	public void updateStyles(boolean doInitiateTextPresentationUpdate) {
 
 		System.out.println("updateStyles()");
-		
-//		if (fAreStylesUpdated == false || fArePresentationsUpdated == false) {
-//			return;
-//		}
-		
+				
 		fAreStylesUpdated = false;
 		fArePresentationsUpdated = false;
-		
-		//fStyledText.addPaintObjectListener(fPaintObjectListener);
 		
 		if (doInitiateTextPresentationUpdate) { // Now used when container is resized
 			fSourceViewer.invalidateTextPresentation();
 		}
+	}
+	
+	public void updatePresentations() {
+		fArePresentationsUpdated = false;
 	}
 	
 	protected void initListeners() {
@@ -60,7 +62,8 @@ class StyledTextManager {
 			@Override
 			public void applyTextPresentation(TextPresentation textPresentation) {
 
-				StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
+				// XXX
+				//StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
 				
 				System.out.println("Applying styles");
 								
@@ -70,27 +73,82 @@ class StyledTextManager {
 					 * поэтому выставляем те стили, которые уже имеются (может вызывать другие косяки на ~ 1 секунду) */
 					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
 				}
-								
-				//printTextPresentationStyleRanges(textPresentation);
 				
 				injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
 				fAreStylesUpdated = true;
-												
-				stylesUpdateSW.stop();
-
+				
+				// XXX
+				//stylesUpdateSW.stop();
 			}
 		});
 		
+		fStyledText.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				
+				if (!fAreStylesUpdated) {
+					fSourceViewer.invalidateTextPresentation();
+				}			
+
+				// // XXX
+				//StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");
+				
+				int topLineIndex = fSourceViewer.getTopIndex();
+				if (topLineIndex > 0) {
+					topLineIndex--;
+				}
+				
+				int bottomLineIndex = fSourceViewer.getBottomIndex();
+				if (bottomLineIndex < fStyledText.getLineCount() - 1) {
+					bottomLineIndex++;
+				}
+								
+				int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
+				int bottomVisibleOffset =
+					fStyledText.getOffsetAtLine(bottomLineIndex) +
+					fStyledText.getLine(bottomLineIndex).length();
+								
+				boolean isVisible = false;
+				for (Container c : fContainerManager.getContainers()) {
+					if (c.getPosition().getOffset() >= topVisibleOffset) {
+						isVisible = true;
+					}
+					if (c.getPosition().getOffset() + c.getPosition().getLength() > bottomVisibleOffset) {
+						isVisible = false;
+					}
+					c.setVisible(isVisible);
+					if (isVisible) {
+						c.updatePresentation();
+					}
+				}
+				
+				System.out.println("Styled text painted. Presentations udpated.");
+				
+				/*
+				Collection<Container> containersInVisibleArea = 
+					fContainerManager.getContainersInRange(
+							fSourceViewer.getTopIndexStartOffset(),
+							fSourceViewer.getBottomIndexEndOffset());
+								
+				System.out.println("Updating presentations: " + containersInVisibleArea.size());
+				for (Container c : containersInVisibleArea) {
+					c.updatePresentation();
+				}*/
+
+				// XXX
+				//updatePresentationSW.stop();
+			}
+		});
+				
 		fPaintObjectListener = new PaintObjectListener() {
 			public void paintObject(PaintObjectEvent e) {
 				
 				System.out.print("| ");
-				
-				
+	
 				if (!fAreStylesUpdated) {
 					fSourceViewer.invalidateTextPresentation();
 				}
-				
+								
 				if (!fArePresentationsUpdated) { 
 					
 					StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");	
@@ -102,16 +160,12 @@ class StyledTextManager {
 					
 					if (fAreStylesUpdated) {
 						fArePresentationsUpdated = true;
-						
-						//fStyledText.removePaintObjectListener(fPaintObjectListener);
 					}
 					
 					updatePresentationSW.stop();	
 				}
 			}
 		};
-		
-		fStyledText.addPaintObjectListener(fPaintObjectListener);
 	}
 	
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
