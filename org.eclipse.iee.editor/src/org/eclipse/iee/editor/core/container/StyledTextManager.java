@@ -10,6 +10,7 @@ import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.PaintObjectEvent;
 import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
@@ -18,6 +19,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Event;
 import org.perf4j.LoggingStopWatch;
 import org.perf4j.StopWatch;
 
@@ -27,10 +29,9 @@ class StyledTextManager {
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
 	
-	private PaintObjectListener fPaintObjectListener;
-	
 	private boolean fAreStylesUpdated = true;
-	private boolean fArePresentationsUpdated = true;
+	private boolean fInjected = false;
+	private boolean fPreventInject = false;
 		
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
@@ -45,15 +46,12 @@ class StyledTextManager {
 		System.out.println("updateStyles()");
 				
 		fAreStylesUpdated = false;
-		fArePresentationsUpdated = false;
+		fInjected = false;
+		fPreventInject = false;
 		
 		if (doInitiateTextPresentationUpdate) { // Now used when container is resized
 			fSourceViewer.invalidateTextPresentation();
 		}
-	}
-	
-	public void updatePresentations() {
-		fArePresentationsUpdated = false;
 	}
 	
 	protected void initListeners() {
@@ -74,9 +72,19 @@ class StyledTextManager {
 					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
 				}
 				
-				injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-				fAreStylesUpdated = true;
+				if (!fAreStylesUpdated)
+				{
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					fInjected = true;
+					fAreStylesUpdated = true;
+					return;
+				}
 				
+				if (fInjected)
+				{
+					fPreventInject = true;
+				}
+								
 				// XXX
 				//stylesUpdateSW.stop();
 			}
@@ -92,38 +100,45 @@ class StyledTextManager {
 
 				// // XXX
 				//StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");
-				
-				int topLineIndex = fSourceViewer.getTopIndex();
-				if (topLineIndex > 0) {
-					topLineIndex--;
+				if (!fPreventInject)
+				{
+					int topLineIndex = fSourceViewer.getTopIndex();
+					if (topLineIndex > 0) {
+						topLineIndex--;
+					}
+					
+					int bottomLineIndex = fSourceViewer.getBottomIndex();
+					if (bottomLineIndex < fStyledText.getLineCount() - 1) {
+						bottomLineIndex++;
+					}
+									
+					int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
+					int bottomVisibleOffset =
+						fStyledText.getOffsetAtLine(bottomLineIndex) +
+						fStyledText.getLine(bottomLineIndex).length();
+									
+					boolean isVisible = false;
+					for (Container c : fContainerManager.getContainers()) {
+						if (c.getPosition().getOffset() >= topVisibleOffset) {
+							isVisible = true;
+						}
+						if (c.getPosition().getOffset() + c.getPosition().getLength() > bottomVisibleOffset) {
+							isVisible = false;
+						}
+						c.setVisible(isVisible);
+						if (isVisible) {
+							c.updatePresentation();
+						}
+					}
+					
+					System.out.println("Styled text painted. Presentations udpated.");
 				}
 				
-				int bottomLineIndex = fSourceViewer.getBottomIndex();
-				if (bottomLineIndex < fStyledText.getLineCount() - 1) {
-					bottomLineIndex++;
+				if (fInjected && fPreventInject)
+				{
+					updateStyles(true);
 				}
-								
-				int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
-				int bottomVisibleOffset =
-					fStyledText.getOffsetAtLine(bottomLineIndex) +
-					fStyledText.getLine(bottomLineIndex).length();
-								
-				boolean isVisible = false;
-				for (Container c : fContainerManager.getContainers()) {
-					if (c.getPosition().getOffset() >= topVisibleOffset) {
-						isVisible = true;
-					}
-					if (c.getPosition().getOffset() + c.getPosition().getLength() > bottomVisibleOffset) {
-						isVisible = false;
-					}
-					c.setVisible(isVisible);
-					if (isVisible) {
-						c.updatePresentation();
-					}
-				}
-				
-				System.out.println("Styled text painted. Presentations udpated.");
-				
+			
 				/*
 				Collection<Container> containersInVisibleArea = 
 					fContainerManager.getContainersInRange(
@@ -140,32 +155,6 @@ class StyledTextManager {
 			}
 		});
 				
-		fPaintObjectListener = new PaintObjectListener() {
-			public void paintObject(PaintObjectEvent e) {
-				
-				System.out.print("| ");
-	
-				if (!fAreStylesUpdated) {
-					fSourceViewer.invalidateTextPresentation();
-				}
-								
-				if (!fArePresentationsUpdated) { 
-					
-					StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");	
-					
-					System.out.println("Updating presentations");
-					for (Container c : fContainerManager.getContainers()) {
-						c.updatePresentation();
-					}
-					
-					if (fAreStylesUpdated) {
-						fArePresentationsUpdated = true;
-					}
-					
-					updatePresentationSW.stop();	
-				}
-			}
-		};
 	}
 	
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
