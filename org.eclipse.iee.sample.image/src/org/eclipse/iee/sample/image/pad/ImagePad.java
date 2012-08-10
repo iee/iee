@@ -20,12 +20,6 @@ import org.eclipse.swt.widgets.Label;
 
 public class ImagePad extends Pad implements Serializable {
 
-	private transient static XmlFilesStorage fXmlFileStorage;
-
-	public static void setStorage(XmlFilesStorage fStorage) {
-		ImagePad.fXmlFileStorage = fStorage;
-	}
-
 	private transient static final int STATE_MENU = 0;
 	private transient static final int STATE_IMAGE = 1;
 	private transient static final int STATE_ERROR = 2;
@@ -39,6 +33,16 @@ public class ImagePad extends Pad implements Serializable {
 	protected transient Image fResizedImage = null;
 	private int fImageWidth = -1;
 	private int fImageHeigth = -1;
+	
+	private String fStoragePath;
+
+	public String getStoragePath() {
+		return fStoragePath;
+	}
+
+	public void setStoragePath(String storagePath) {
+		this.fStoragePath = storagePath;
+	}
 
 	public ImagePad() {
 		fCurrentState = STATE_MENU;
@@ -234,12 +238,12 @@ public class ImagePad extends Pad implements Serializable {
 
 	@Override
 	public void save() {
-		ImagePad.fXmlFileStorage.saveToFile(this);
+		XmlFilesStorage.getInstance(fStoragePath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		ImagePad.fXmlFileStorage.removeFile(getContainerID());	
+		XmlFilesStorage.getInstance(fStoragePath).removeFile(getContainerID());
 	}
 
 	@Override

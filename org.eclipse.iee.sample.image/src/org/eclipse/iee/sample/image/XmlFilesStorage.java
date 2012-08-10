@@ -16,8 +16,16 @@ public class XmlFilesStorage {
 	
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
 	private String fDirectoryPath;
+	private static XmlFilesStorage fInstance = null;
 	
-	XmlFilesStorage(String directoryPath) {
+	public static XmlFilesStorage getInstance(String directoryPath) {
+		if (fInstance == null) {
+			fInstance = new XmlFilesStorage(directoryPath);
+		}
+		return fInstance;
+	}
+	
+	private XmlFilesStorage(String directoryPath) {
 		System.out.println("XmlFilesStorage");
 		
 		fDirectoryPath = directoryPath;
