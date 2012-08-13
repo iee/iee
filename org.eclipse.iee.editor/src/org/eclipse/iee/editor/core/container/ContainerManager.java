@@ -245,6 +245,7 @@ public class ContainerManager extends EventManager {
 				for (String partitioning : partitionings) {
 					
 					System.out.println("Changed partitionings: " + partitioning);
+					System.out.println("Changed region: " + fChangedPartitioningRegion.toString());
 					
 					if (partitioning.equals(PartitioningManager.PARTITIONING_ID)) {
 						continue;
