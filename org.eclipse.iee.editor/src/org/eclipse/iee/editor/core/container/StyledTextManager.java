@@ -9,10 +9,10 @@ import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.custom.PaintObjectEvent;
-import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
 
 
@@ -21,13 +21,20 @@ class StyledTextManager {
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
 	
-	private enum State {
-		READY,
-		STYLES_UPDATE_REQUESTED,
-		TEXT_PRESENTATION_UPDATE_INITIATED,
-		STYLES_UPDATED,
-	}	
-	State fState = State.READY; 
+	//private PaintObjectListener fPaintObjectListener;
+
+	private enum IterationStatus {
+		NOT_UPDATED,
+		UPDATED_ONCE,
+		UPDATED_TWICE,
+		UPDATED_MORE_THAN_TWICE,
+	};
+	
+	private IterationStatus fStylesIterationStatus;
+	private IterationStatus fPresentationIterationStatus;	
+	
+	private boolean fAreStylesUpdated = true;
+	private boolean fArePresentationsUpdated = true;
 	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
@@ -38,76 +45,156 @@ class StyledTextManager {
 	}
 		
 	public void updateStyles(boolean doInitiateTextPresentationUpdate) {
-		
-		assert(fState == State.READY);
-		System.out.println("READY/updateStyles()");
 
-		fState = State.STYLES_UPDATE_REQUESTED;
-			
-		if (doInitiateTextPresentationUpdate) {
-			fStyledText.redraw();
+		System.out.println("updateStyles()");
+		
+		fStylesIterationStatus = IterationStatus.NOT_UPDATED;
+		fPresentationIterationStatus = IterationStatus.NOT_UPDATED;
+				
+		fAreStylesUpdated = false;
+		fArePresentationsUpdated = false;
+		
+		if (doInitiateTextPresentationUpdate) { // Now used when container is resized
+			fSourceViewer.invalidateTextPresentation();
 		}
+	}
+	
+	public void updatePresentations() {
+		fArePresentationsUpdated = false;
 	}
 	
 	protected void initListeners() {
 		
-		fStyledText.addPaintObjectListener(new PaintObjectListener() {
-			public void paintObject(PaintObjectEvent e) {
-				
-				switch (fState) {
-				
-				case STYLES_UPDATE_REQUESTED:
-					/* If we are here, TextPresentationListener have not been executed yet, so trying to do this */
-					System.out.println("STYLES_UPDATE_REQUESTED/paintObject(): invalidating text presentation");
-					
-					fState = State.TEXT_PRESENTATION_UPDATE_INITIATED; 
-					fSourceViewer.invalidateTextPresentation();
-					break;
-					
-				case STYLES_UPDATED:
-					System.out.println("STYLES_UPDATED/paintObject(): reconcile containers's positions");
-					for (Container c : fContainerManager.getContainers()) {
-						c.updatePresentation();
-					}
-					fState = State.READY;				
-					break;
-				}
-			}
-		});
-		
 		((ITextViewerExtension4) fSourceViewer).addTextPresentationListener(new ITextPresentationListener() {			
 			@Override
 			public void applyTextPresentation(TextPresentation textPresentation) {
-				
-				switch (fState) {
-				
-				case TEXT_PRESENTATION_UPDATE_INITIATED:
-					System.out.println("TEXT_PRESENTATION_UPDATE_INITIATED/applyTextPresentation(): applying styles to text presentation");
-//					printTextPresentationStyleRanges(textPresentation);					
 
+				// XXX
+				//StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
+					
+				switch (fStylesIterationStatus) {
+				
+				case NOT_UPDATED:
+					
+					// Исправление непонятного бага.
+					// При первом вызове applyTextPresentation() почему-то не передаются стили jdt,
+					// поэтому выставляем те стили, которые уже имеются (может вызывать другие косяки на ~ 1 секунду)
+					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
+					
 					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					fState = State.STYLES_UPDATED;
+
+					fStylesIterationStatus = IterationStatus.UPDATED_ONCE;
 					break;
 					
-				default:
-					System.out.println("STYLES_UPDATE_REQUESTED/applyTextPresentation(): applying styles to text presentation");
-//					printTextPresentationStyleRanges(textPresentation);					
-					
+				case UPDATED_ONCE:
 					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					
+					fStylesIterationStatus = IterationStatus.UPDATED_TWICE;
+					break;
+					
+				case UPDATED_TWICE:
+				case UPDATED_MORE_THAN_TWICE:
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					
+					fStylesIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
 					break;
 				}
+				
+				fAreStylesUpdated = true;
+				
+				System.out.println("Applying styles: " + fStylesIterationStatus.toString());
+				
+				// XXX
+				//stylesUpdateSW.stop();
 			}
 		});
 		
+		fStyledText.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				
+				// XXX
+				//StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");
+				
+				/*
+				if (!fAreStylesUpdated) {
+					fSourceViewer.invalidateTextPresentation();
+					return; // ???
+				}*/
+				
+				switch (fStylesIterationStatus) {
+
+				case NOT_UPDATED:
+				case UPDATED_ONCE:
+					fSourceViewer.invalidateTextPresentation();
+					return;
+					
+				default:
+					/* go ahead */
+				}
+				
+				switch (fPresentationIterationStatus) {
+				
+				case NOT_UPDATED:
+					updateContainerPresentations();
+					
+					fPresentationIterationStatus = IterationStatus.UPDATED_ONCE;
+					break;
+					
+				case UPDATED_ONCE:					
+					//updateContainerPresentations();
+					
+					fPresentationIterationStatus = IterationStatus.UPDATED_TWICE;
+					break;
+					
+				case UPDATED_TWICE:
+				case UPDATED_MORE_THAN_TWICE:
+					//updateContainerPresentations();
+					
+					fPresentationIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
+					break;
+				}
+				
+				System.out.println("Cpontainer presentations: " + fPresentationIterationStatus.toString());
+				
+				// XXX
+				//updatePresentationSW.stop();
+			}
+		});
+	}
+	
+	protected void updateContainerPresentations() {
+		int topLineIndex = fSourceViewer.getTopIndex();
+		if (topLineIndex > 0) {
+			topLineIndex--;
+		}
+		
+		int bottomLineIndex = fSourceViewer.getBottomIndex();
+		if (bottomLineIndex < fStyledText.getLineCount() - 1) {
+			bottomLineIndex++;
+		}
+						
+		int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
+		int bottomVisibleOffset =
+			fStyledText.getOffsetAtLine(bottomLineIndex) +
+			fStyledText.getLine(bottomLineIndex).length();
+						
+		boolean isVisible = false;
+		for (Container c : fContainerManager.getContainers()) {
+			if (c.getPosition().getOffset() >= topVisibleOffset) {
+				isVisible = true;
+			}
+			if (c.getPosition().getOffset() + c.getPosition().getLength() > bottomVisibleOffset) {
+				isVisible = false;
+			}
+			c.setVisible(isVisible);
+			if (isVisible) {
+				c.updatePresentation();
+			}
+		}
 	}
 	
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
-		
-		/*
-		for (int i = 0; i < containersStyleRanges.length; i += 2) {
-			StyleRange first = containersStyleRanges[i];
-			StyleRange second = containersStyleRanges[i];
-		}*/
 		
 		List<StyleRange> allowedStyleRanges = new ArrayList<StyleRange>();
 		

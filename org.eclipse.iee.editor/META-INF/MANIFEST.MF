@@ -9,8 +9,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.editors
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/xstream-1.4.2.jar, .
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: lib/xstream-1.4.2.jar,
+ lib/perf4j-0.9.16.jar,
+ .
 Export-Package: org.eclipse.iee.editor;
   uses:="org.eclipse.jface.resource,
    org.eclipse.iee.editor.core.storage,
