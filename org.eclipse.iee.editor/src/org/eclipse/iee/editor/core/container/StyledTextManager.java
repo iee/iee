@@ -61,7 +61,7 @@ class StyledTextManager {
 	
 	public void updatePresentations() {
 		fArePresentationsUpdated = false;
-	}
+	} 
 	
 	protected void initListeners() {
 		
@@ -142,14 +142,14 @@ class StyledTextManager {
 					break;
 					
 				case UPDATED_ONCE:					
-					//updateContainerPresentations();
+					updateContainerPresentations();
 					
 					fPresentationIterationStatus = IterationStatus.UPDATED_TWICE;
 					break;
 					
 				case UPDATED_TWICE:
 				case UPDATED_MORE_THAN_TWICE:
-					//updateContainerPresentations();
+					updateContainerPresentations();
 					
 					fPresentationIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
 					break;
