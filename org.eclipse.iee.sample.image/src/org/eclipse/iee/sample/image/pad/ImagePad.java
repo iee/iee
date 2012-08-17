@@ -28,7 +28,7 @@ public class ImagePad extends Pad implements Serializable {
 
 	private int fCurrentState;
 	protected String fImagePath;
-	
+
 	protected transient Image fOriginalImage = null;
 	protected transient Image fResizedImage = null;
 	private int fImageWidth = -1;
@@ -42,6 +42,14 @@ public class ImagePad extends Pad implements Serializable {
 
 	public void setStoragePath(String storagePath) {
 		this.fStoragePath = storagePath;
+	}
+	
+	public String getImagePath() {
+		return fImagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.fImagePath = imagePath;
 	}
 
 	public ImagePad() {

@@ -13,3 +13,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ui
+Bundle-ClassPath: libs/commons-io-2.4.jar,
+ .

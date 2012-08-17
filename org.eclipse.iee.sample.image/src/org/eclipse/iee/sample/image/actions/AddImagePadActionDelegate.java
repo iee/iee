@@ -41,7 +41,7 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 	    IFile file = input.getFile();
 	    IProject project = file.getProject();
 	    
-		String storagePath = project.getRawLocation().makeAbsolute().toString() + "/pads/";
+		String storagePath = project.getRawLocation().makeAbsolute().toString() + "/pads/image/";
 
 		ImagePad pad = new ImagePad();
 		pad.setStoragePath(storagePath);
@@ -49,7 +49,7 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
 		
 		/* load saved pads */
-		//XmlFilesStorage.getInstance(storagePath);
+		XmlFilesStorage.getInstance(storagePath);
 	}
 
 	@Override

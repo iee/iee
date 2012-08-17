@@ -66,8 +66,7 @@ public class FileStorage {
 		System.out.println("loadAllFiles");
 		for (String name : storageDirectory.list()) {
 			Pad pad = loadFromFile(name);
-			if (pad != null) {
-				System.out.println(">>>>>>>>loadPad");
+			if (pad != null && pad.getType().matches("Formula")) {
 				fPadManager.loadPad(pad);
 			}
 		}

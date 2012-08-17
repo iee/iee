@@ -46,7 +46,7 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 	    IFile file = input.getFile();
 	    IProject project = file.getProject();
 	    
-		String storagePath = project.getRawLocation().makeAbsolute().toString() + "/pads/";
+		String storagePath = project.getRawLocation().makeAbsolute().toString() + "/pads/formula/";
 				
 		FormulaPad pad = new FormulaPad();
 		pad.setDirectoryPath(storagePath);
