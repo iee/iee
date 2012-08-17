@@ -2,6 +2,9 @@ package org.eclipse.iee.sample.image.actions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.iee.sample.image.pad.ImagePad;
@@ -41,7 +44,22 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 	    IFile file = input.getFile();
 	    IProject project = file.getProject();
 	    
-		String storagePath = project.getRawLocation().makeAbsolute().toString() + "/pads/image/";
+	    IPath rawLocation = project.getRawLocation();
+	    
+	    String storagePath = "";
+	    
+	    if (rawLocation != null)
+	    {
+	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/image/";
+	    }
+	    else
+	    {
+	    	IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+	    	IPath workspaceDirectory = workspace.getRoot().getLocation();
+	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/image/";
+	    }
+	    
+		System.out.println("storagePath = " + storagePath);
 
 		ImagePad pad = new ImagePad();
 		pad.setStoragePath(storagePath);
