@@ -1,5 +1,7 @@
 package org.eclipse.iee.sample.formula.actions;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.iee.sample.formula.storage.FileStorage;
@@ -10,6 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 
@@ -38,10 +41,20 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 			return;
 		}
 
-		fPadEditor.createPad(new FormulaPad(), fPadEditor.getCaretOffset());
+		IEditorPart editor = (IEditorPart)fPadEditor;
+		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
+	    IFile file = input.getFile();
+	    IProject project = file.getProject();
+	    
+		String storagePath = project.getRawLocation().makeAbsolute().toString() + "/pads/formula/";
+				
+		FormulaPad pad = new FormulaPad();
+		pad.setDirectoryPath(storagePath);
 		
+		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
+			
 		/* load saved pads */
-		FileStorage.getInstance();
+		FileStorage.getInstance(storagePath);
 	}
 
 	@Override
