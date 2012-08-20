@@ -12,6 +12,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.iee.editor
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6, JavaSE-1.7
 Export-Package: org.eclipse.iee.editor.jdt,
  org.eclipse.iee.editor.jdt.editors
