@@ -61,13 +61,15 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 	    
 		System.out.println("storagePath = " + storagePath);
 
+		/* load saved pads */
+		XmlFilesStorage.getInstance(storagePath);
+		
 		ImagePad pad = new ImagePad();
 		pad.setStoragePath(storagePath);
 		
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
+		pad.moveCaretToCurrentPad();
 		
-		/* load saved pads */
-		XmlFilesStorage.getInstance(storagePath);
 	}
 
 	@Override

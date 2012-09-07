@@ -32,6 +32,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -70,6 +72,28 @@ public class FormulaPad extends Pad {
 
 	private boolean fTextChanged;
 	
+	
+
+	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
+	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
+
+	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
+		@Override
+		public void messageReceived(ConsoleMessageEvent e) {
+			System.out.println("Message received:" + e.getMessage());
+			updateLastResult(e.getMessage());
+		}
+
+		@Override
+		public String getRequesterID() {
+			return getContainerID();
+		}
+	};
+
+	/*
+	 * Getters/Setters
+	 */
+	
 	public String getDirectoryPath() {
 		return fDirectoryPath;
 	}
@@ -93,27 +117,10 @@ public class FormulaPad extends Pad {
 	public void setTranslatingExression(String expression) {
 		fTranslatingExpression = expression;
 	}
-
-	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
-	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
-
-	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
-		@Override
-		public void messageReceived(ConsoleMessageEvent e) {
-			System.out.println("Message received:" + e.getMessage());
-			updateLastResult(e.getMessage());
-		}
-
-		@Override
-		public String getRequesterID() {
-			return getContainerID();
-		}
-	};
-
+	
 	public FormulaPad() {
 	}
 
-	
 	public void toggleInputText() {
 		// OFF
 		fResultView.setVisible(false);
@@ -125,6 +132,8 @@ public class FormulaPad extends Pad {
 		fParent.pack();
 
 		fViewer.getControl().forceFocus();
+		System.out.println("force Focus");
+		
 	}
 
 	public void toggleFormulaImage() {
@@ -295,6 +304,7 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void focusGained(FocusEvent e) {
+				System.out.println("focusGained");
 			}
 		});
 
@@ -357,11 +367,9 @@ public class FormulaPad extends Pad {
 					break;
 
 				case SWT.HOME:
-					System.out.println("Home");
 					break;
 
 				case SWT.END:
-					System.out.println("End");
 					break;
 
 				}
