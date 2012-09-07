@@ -15,27 +15,28 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 public class FileStorage {
-	
-	private static String fDirectoryPath = "D:\\FormulaPads\\";
+
+	private String fDirectoryPath = "";
 	private static FileStorage fInstance = null;
-	
-	public static FileStorage getInstance() {
+
+	public static FileStorage getInstance(String directoryPath) {
 		if (fInstance == null) {
-			fInstance = new FileStorage();
+			fInstance = new FileStorage(directoryPath);
 		}
 		return fInstance;
-	}	
-	
+	}
+
 	private XStream fXstream;
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
-	
-	private FileStorage() {
+
+	private FileStorage(String directoryPath) {
 		fXstream = new XStream(new DomDriver());
 		fXstream.setMode(XStream.ID_REFERENCES);
-		//fXstream.autodetectAnnotations(true);
+
 		fXstream.registerConverter(new FormulaPadConverter());
 		fXstream.alias("FormulaPad", FormulaPad.class);
 		
+		fDirectoryPath = directoryPath;
 		File storageDirectory = new File(fDirectoryPath);
 
 		if (!storageDirectory.exists()) {
@@ -48,11 +49,12 @@ public class FileStorage {
 			loadAllFiles(storageDirectory);
 		}
 	}
-	
+
 	public void saveToFile(Pad pad) {
 		System.out.println("saveToFile");
 		try {
-			FileOutputStream fos = new FileOutputStream(fDirectoryPath + pad.getContainerID());
+			FileOutputStream fos = new FileOutputStream(fDirectoryPath
+					+ pad.getContainerID());
 			fos.write(fXstream.toXML(pad).getBytes());
 			fos.close();
 		} catch (Exception e) {
@@ -64,8 +66,7 @@ public class FileStorage {
 		System.out.println("loadAllFiles");
 		for (String name : storageDirectory.list()) {
 			Pad pad = loadFromFile(name);
-			if (pad != null) {
-				System.out.println(">>>>>>>>loadPad");
+			if (pad != null && pad.getType().matches("Formula")) {
 				fPadManager.loadPad(pad);
 			}
 		}
@@ -77,21 +78,22 @@ public class FileStorage {
 			file.delete();
 		}
 	}
-	
+
 	protected Pad loadFromFile(String containerID) {
 		System.out.println(">>>>>>>>loadFromFile");
-		
+
 		Pad loadedPad = null;
 		try {
-			FileInputStream fis = new FileInputStream(fDirectoryPath + containerID);
-			
+			FileInputStream fis = new FileInputStream(fDirectoryPath
+					+ containerID);
+
 			try {
 				Class.forName("org.eclipse.iee.sample.formula.pad.FormulaPad");
 			} catch (ClassNotFoundException e) {
 				System.out.println("FormulaPad preloading failed");
 				e.printStackTrace();
 			}
-			
+
 			loadedPad = (Pad) fXstream.fromXML(fis);
 			loadedPad.setContainerID(containerID);
 			fis.close();

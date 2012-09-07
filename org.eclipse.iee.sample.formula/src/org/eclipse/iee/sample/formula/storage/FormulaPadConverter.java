@@ -19,6 +19,7 @@ public class FormulaPadConverter implements Converter  {
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 		FormulaPad pad = (FormulaPad) source;
 	
+		writer.addAttribute("storage", pad.getDirectoryPath());
 		writer.addAttribute("translating_expression", pad.getTranslatingExpression());
 		writer.addAttribute("original_expression", pad.getOriginalExpression());
 	}
@@ -27,6 +28,7 @@ public class FormulaPadConverter implements Converter  {
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		FormulaPad pad = new FormulaPad();
 		
+		pad.setTranslatingExression(reader.getAttribute("storage"));
 		pad.setTranslatingExression(reader.getAttribute("translating_expression"));
 		pad.setOriginalExression(reader.getAttribute("original_expression"));
 		return pad;

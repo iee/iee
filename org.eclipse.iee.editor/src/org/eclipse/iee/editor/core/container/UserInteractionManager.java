@@ -4,10 +4,14 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 
@@ -73,7 +77,7 @@ public class UserInteractionManager {
 				}
 
 				/* XXX Visibility */
-				fContainerManager.updateContainerVisibility(false);
+				//fContainerManager.updateContainerVisibility(false);
 			}
 		});
 
@@ -97,12 +101,13 @@ public class UserInteractionManager {
 			}
 		});
 		
-		/*
-		 * CTRL + ALT causes pad activation
-		 */
 		fStyledText.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				
+				/*
+				 * CTRL + ALT causes pad activation
+				 */
 				if ((e.stateMask & SWT.CTRL) != 0 && e.keyCode == SWT.ALT) {
 					int caretOffset = fStyledText.getCaretOffset();
 					Container container = fContainerManager.getContainerHavingOffset(caretOffset);					
@@ -110,10 +115,18 @@ public class UserInteractionManager {
 						fContainerManager.fireContainerActivated(container);
 					}
 				}
+				
+				/*
+				 * PageUP or PageDown
+				 */
+				/*if (e.keyCode == SWT.PAGE_UP || e.keyCode == SWT.PAGE_DOWN) {
+					fContainerManager.getStyledTextManager().updatePresentations();
+				}*/
 			}
 			
 			@Override public void keyReleased(KeyEvent e) {}
 		});
+		
 		
 		/*
 		 * If caret is inside Container's text region, moving it to the
@@ -138,6 +151,6 @@ public class UserInteractionManager {
 				
 				updateCaretSelection();
 			}
-		});
+		});   
 	}
 }

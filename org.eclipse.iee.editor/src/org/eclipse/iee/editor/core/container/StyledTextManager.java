@@ -9,13 +9,11 @@ import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.custom.PaintObjectEvent;
-import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
-import org.perf4j.LoggingStopWatch;
-import org.perf4j.StopWatch;
 
 
 class StyledTextManager {
@@ -23,11 +21,21 @@ class StyledTextManager {
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
 	
-	private PaintObjectListener fPaintObjectListener;
+	//private PaintObjectListener fPaintObjectListener;
+
+	private enum IterationStatus {
+		NOT_UPDATED,
+		UPDATED_ONCE,
+		UPDATED_TWICE,
+		UPDATED_MORE_THAN_TWICE,
+	};
+	
+	private IterationStatus fStylesIterationStatus;
+	private IterationStatus fPresentationIterationStatus;	
 	
 	private boolean fAreStylesUpdated = true;
 	private boolean fArePresentationsUpdated = true;
-		
+	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fSourceViewer = containerManager.getSourceViewer();
@@ -40,19 +48,20 @@ class StyledTextManager {
 
 		System.out.println("updateStyles()");
 		
-//		if (fAreStylesUpdated == false || fArePresentationsUpdated == false) {
-//			return;
-//		}
-		
+		fStylesIterationStatus = IterationStatus.NOT_UPDATED;
+		fPresentationIterationStatus = IterationStatus.NOT_UPDATED;
+				
 		fAreStylesUpdated = false;
 		fArePresentationsUpdated = false;
-		
-		//fStyledText.addPaintObjectListener(fPaintObjectListener);
 		
 		if (doInitiateTextPresentationUpdate) { // Now used when container is resized
 			fSourceViewer.invalidateTextPresentation();
 		}
 	}
+	
+	public void updatePresentations() {
+		fArePresentationsUpdated = false;
+	} 
 	
 	protected void initListeners() {
 		
@@ -60,58 +69,129 @@ class StyledTextManager {
 			@Override
 			public void applyTextPresentation(TextPresentation textPresentation) {
 
-				StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
+				// XXX
+				//StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
+					
+				switch (fStylesIterationStatus) {
 				
-				System.out.println("Applying styles");
-								
-				if (!fAreStylesUpdated) {
-					/* Исправление непонятного бага.
-					 * При первом вызове applyTextPresentation() почему-то не передаются стили jdt,
-					 * поэтому выставляем те стили, которые уже имеются (может вызывать другие косяки на ~ 1 секунду) */
+				case NOT_UPDATED:
+					
+					// Исправление непонятного бага.
+					// При первом вызове applyTextPresentation() почему-то не передаются стили jdt,
+					// поэтому выставляем те стили, которые уже имеются (может вызывать другие косяки на ~ 1 секунду)
 					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
-				}
-								
-				//printTextPresentationStyleRanges(textPresentation);
-				
-				injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-				fAreStylesUpdated = true;
-												
-				stylesUpdateSW.stop();
+					
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
 
+					fStylesIterationStatus = IterationStatus.UPDATED_ONCE;
+					break;
+					
+				case UPDATED_ONCE:
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					
+					fStylesIterationStatus = IterationStatus.UPDATED_TWICE;
+					break;
+					
+				case UPDATED_TWICE:
+				case UPDATED_MORE_THAN_TWICE:
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					
+					fStylesIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
+					break;
+				}
+				
+				fAreStylesUpdated = true;
+				
+				System.out.println("Applying styles: " + fStylesIterationStatus.toString());
+				
+				// XXX
+				//stylesUpdateSW.stop();
 			}
 		});
 		
-		fPaintObjectListener = new PaintObjectListener() {
-			public void paintObject(PaintObjectEvent e) {
+		fStyledText.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
 				
-				System.out.print("| ");
+				// XXX
+				//StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");
 				
-				
+				/*
 				if (!fAreStylesUpdated) {
 					fSourceViewer.invalidateTextPresentation();
+					return; // ???
+				}*/
+				
+				switch (fStylesIterationStatus) {
+
+				case NOT_UPDATED:
+				case UPDATED_ONCE:
+					fSourceViewer.invalidateTextPresentation();
+					return;
+					
+				default:
+					/* go ahead */
 				}
 				
-				if (!fArePresentationsUpdated) { 
+				switch (fPresentationIterationStatus) {
+				
+				case NOT_UPDATED:
+					updateContainerPresentations();
 					
-					StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");	
+					fPresentationIterationStatus = IterationStatus.UPDATED_ONCE;
+					break;
 					
-					System.out.println("Updating presentations");
-					for (Container c : fContainerManager.getContainers()) {
-						c.updatePresentation();
-					}
+				case UPDATED_ONCE:					
+					updateContainerPresentations();
 					
-					if (fAreStylesUpdated) {
-						fArePresentationsUpdated = true;
-						
-						//fStyledText.removePaintObjectListener(fPaintObjectListener);
-					}
+					fPresentationIterationStatus = IterationStatus.UPDATED_TWICE;
+					break;
 					
-					updatePresentationSW.stop();	
+				case UPDATED_TWICE:
+				case UPDATED_MORE_THAN_TWICE:
+					updateContainerPresentations();
+					
+					fPresentationIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
+					break;
 				}
+				
+				System.out.println("Cpontainer presentations: " + fPresentationIterationStatus.toString());
+				
+				// XXX
+				//updatePresentationSW.stop();
 			}
-		};
+		});
+	}
+	
+	protected void updateContainerPresentations() {
+		int topLineIndex = fSourceViewer.getTopIndex();
+		if (topLineIndex > 0) {
+			topLineIndex--;
+		}
 		
-		fStyledText.addPaintObjectListener(fPaintObjectListener);
+		int bottomLineIndex = fSourceViewer.getBottomIndex();
+		if (bottomLineIndex < fStyledText.getLineCount() - 1) {
+			bottomLineIndex++;
+		}
+						
+		int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
+		int bottomVisibleOffset =
+			fStyledText.getOffsetAtLine(bottomLineIndex) +
+			fStyledText.getLine(bottomLineIndex).length();
+						
+		boolean isVisible = false;
+		for (Container c : fContainerManager.getContainers()) {
+			if (c.getPosition().getOffset() >= topVisibleOffset) {
+				isVisible = true;
+			}
+			if (c.getPosition().getOffset() + c.getPosition().getLength() > bottomVisibleOffset) {
+				isVisible = false;
+			}
+			c.setVisible(isVisible);
+			if (isVisible) {
+				c.updatePresentation();
+			}
+		}
 	}
 	
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {

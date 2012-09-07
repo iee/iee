@@ -8,6 +8,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 public class Container {
@@ -119,12 +120,18 @@ public class Container {
 	/**
 	 * This function causes container's SWT-composite get into proper position.
 	 */
-	void updatePresentation() {
+	boolean updatePresentation() {
 		//System.out.println("Updated container's position");
 
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
-		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
+		
+		Rectangle newBounds = new Rectangle(point.x, point.y, gabarit.x, gabarit.y);
+		if (!fComposite.getBounds().equals(newBounds)) {
+			fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
+			return true;
+		}
+		return false;
 	}
 
 	/**
