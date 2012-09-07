@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
@@ -16,8 +17,16 @@ public class XmlFilesStorage {
 	
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
 	private String fDirectoryPath;
+	private static XmlFilesStorage fInstance = null;
 	
-	XmlFilesStorage(String directoryPath) {
+	public static XmlFilesStorage getInstance(String directoryPath) {
+		if (fInstance == null) {
+			fInstance = new XmlFilesStorage(directoryPath);
+		}
+		return fInstance;
+	}
+	
+	private XmlFilesStorage(String directoryPath) {
 		System.out.println("XmlFilesStorage");
 		
 		fDirectoryPath = directoryPath;
@@ -36,7 +45,18 @@ public class XmlFilesStorage {
 	
 	public void saveToFile(ImagePad pad) {
 		System.out.println("saveToFile");
+		
 		try {
+			
+			File imageSrc = new File(pad.getImagePath());
+			File imageDst = new File(pad.getStoragePath() + imageSrc.getName());
+			
+			if (!imageDst.exists())
+			{
+				FileUtils.copyFile(imageSrc, imageDst);
+				pad.setImagePath(imageDst.getAbsolutePath());
+			}
+			
 			File file = new File(fDirectoryPath + pad.getContainerID());
 			
 			if (!file.exists()) {
@@ -58,7 +78,7 @@ public class XmlFilesStorage {
 		System.out.println("loadAllFiles");		
 		for (String name : storageDirectory.list()) {
 			Pad pad = loadFromFile(name);
-			if (pad != null) {
+			if (pad != null && pad.getType().matches("Image")) {
 				fPadManager.loadPad(pad);
 			}
 		}
@@ -71,15 +91,15 @@ public class XmlFilesStorage {
 		}
 	}
 	
-	protected ImagePad loadFromFile(String containerID) {
+	protected Pad loadFromFile(String containerID) {
 		System.out.println("loadFromFile");
-		ImagePad pad = null;
+		Pad pad = null;
 		try {
 			File file = new File(fDirectoryPath + containerID);
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			try {
-				pad = (ImagePad) in.readObject();
+				pad = (Pad) in.readObject();
 				pad.setContainerID(containerID);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

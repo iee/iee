@@ -1,6 +1,5 @@
-package org.eclipse.iee.sample.image;
+package org.eclipse.iee.sample.text;
 
-import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -11,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin implements IStartup {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.iee.sample.image";
+	public static final String PLUGIN_ID = "org.eclipse.iee.sample.text";
 
 	// The shared instance
 	private static Activator plugin;

@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.iee.editor.core.pad.MouseEventManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
@@ -19,7 +18,6 @@ import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -63,12 +61,22 @@ public class FormulaPad extends Pad {
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
+	
+	private String fDirectoryPath = "";
 
 	private String fOriginalExpression = "";
 	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
 
 	private boolean fTextChanged;
+	
+	public String getDirectoryPath() {
+		return fDirectoryPath;
+	}
+
+	public void setDirectoryPath(String directoryPath) {
+		this.fDirectoryPath = directoryPath;
+	}
 
 	public String getOriginalExpression() {
 		return fOriginalExpression;
@@ -105,10 +113,7 @@ public class FormulaPad extends Pad {
 	public FormulaPad() {
 	}
 
-	public FormulaPad(String containerID) {
-		super();
-	}
-
+	
 	public void toggleInputText() {
 		// OFF
 		fResultView.setVisible(false);
@@ -447,13 +452,13 @@ public class FormulaPad extends Pad {
 
 	public void save() {
 		System.out.println("Saving...");
-		FileStorage.getInstance().saveToFile(this);
+		FileStorage.getInstance(fDirectoryPath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
 		System.out.println("Unsaving...");
-		FileStorage.getInstance().removeFile(getContainerID());
+		FileStorage.getInstance(fDirectoryPath).removeFile(getContainerID());
 	}
 
 	@Override

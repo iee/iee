@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.iee.sample.text.contextJava"
+            targetID="#CompilationUnitEditorContext">
+         <action
+               class="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
+               id="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
+               label="Insert Text" 
+               icon="icons/textForeground.ico" 
+               menubarPath="additions"
+               tooltip="Insert Text">
+         </action>
+      </viewerContribution>
+	  <viewerContribution
+            id="org.eclipse.iee.sample.text.contextSample"
+            targetID="#TextEditorContext">
+         <action
+               class="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
+               id="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
+               label="Insert Text" 
+               icon="icons/textForeground.ico" 
+               menubarPath="additions"
+               tooltip="Insert Text">
+         </action>
+      </viewerContribution>
+   </extension>
+
+	<extension
+    	point = "org.eclipse.ui.editorActions">
+		<editorContribution 
+        	id="org.eclipse.iee.sample.text.toolbarJava" 
+         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
+			<action id="org.eclipse.iee.sample.text.add" 
+	        	label="Add Text" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/textForeground.ico" 
+	            tooltip="Add Text" 
+	            class="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.text.add"
+	        /> 
+    	</editorContribution>
+		<editorContribution 
+        	id="org.eclipse.iee.sample.text.toolbarSample" 
+         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+			<action id="org.eclipse.iee.sample.text.add" 
+	        	label="Add Text" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/textForeground.ico" 
+	            tooltip="Add Text" 
+	            class="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
+	            definitionId="org.eclipse.iee.sample.text.add"
+	        /> 
+    	</editorContribution>
+	</extension>
+
+	
+</plugin>

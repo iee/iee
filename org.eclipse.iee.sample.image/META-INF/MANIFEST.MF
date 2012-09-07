@@ -6,6 +6,12 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.iee.sample.image.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.iee.editor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+ org.eclipse.iee.editor,
+ org.eclipse.core.resources;bundle-version="3.7.100",
+ org.eclipse.ui.editors;bundle-version="3.7.0",
+ org.eclipse.jface.text;bundle-version="3.7.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6, JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.ui
+Bundle-ClassPath: libs/commons-io-2.4.jar,
+ .
