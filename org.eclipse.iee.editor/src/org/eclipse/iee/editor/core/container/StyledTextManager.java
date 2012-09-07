@@ -61,7 +61,7 @@ class StyledTextManager {
 	
 	public void updatePresentations() {
 		fArePresentationsUpdated = false;
-	} 
+	}
 	
 	protected void initListeners() {
 		
@@ -115,13 +115,7 @@ class StyledTextManager {
 				
 				// XXX
 				//StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");
-				
-				/*
-				if (!fAreStylesUpdated) {
-					fSourceViewer.invalidateTextPresentation();
-					return; // ???
-				}*/
-				
+								
 				switch (fStylesIterationStatus) {
 
 				case NOT_UPDATED:

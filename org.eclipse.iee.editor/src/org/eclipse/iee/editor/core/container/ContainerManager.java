@@ -73,6 +73,7 @@ public class ContainerManager extends EventManager {
 	}
 		
 	public List<Container> getContainers() {
+		/* XXX Check performance */
 		return new ArrayList<Container>(fContainers);
 	}
 	
@@ -86,6 +87,7 @@ public class ContainerManager extends EventManager {
 	}
 		
 	public Collection<Container> getContainersInRange(int from, int to) {		
+		/* XXX check sublist!!! */
 		return fContainers.subSet(
 			Container.atOffset(from),
 			true,
