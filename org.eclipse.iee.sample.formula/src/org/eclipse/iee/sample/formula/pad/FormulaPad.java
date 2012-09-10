@@ -431,13 +431,17 @@ public class FormulaPad extends Pad {
 
 		setListeners();
 
+		moveCaretToCurrentPad();
+		
 		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
 			processInput();
 			toggleFormulaImage();
 		} else {
+			getContainer().getComposite().setVisible(true);
 			toggleInputText();
 		}
+		
 
 	}
 
