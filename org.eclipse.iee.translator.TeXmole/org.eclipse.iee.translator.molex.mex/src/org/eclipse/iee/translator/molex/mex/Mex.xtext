@@ -24,6 +24,7 @@ LogicalFormula:
 AdditionInBrackets returns Expression:
 	'(' addition=Addition ')'
 ;
+
 	// addition/subtraction: left associative, priority 0
 Addition returns Expression:
 	Multiplication ('+' {Addition.left=current} right=Multiplication | '-' {Subtraction.left=current}
@@ -111,7 +112,10 @@ LogicalMultiplication returns LogicalExpression:
 	LogicalComparison ('&&' {LogicalMultiplication.left=current} right=LogicalComparison)*;
 
 LogicalComparison returns LogicalExpression:
-	{LogicalComparison} left=Formula operation=COMPARISON_OPERATION right=Formula |
+	 LogicalPrimary ( operation=COMPARISON_OPERATION {LogicalComparison.left=current} right=LogicalPrimary )*;
+
+LogicalPrimary returns LogicalExpression:
+	{LogicalOperand} value=Formula |
 	{LogicalInBrackets} inBrackets=LogicalAdditionInBrackets
 ;	
 	
