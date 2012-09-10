@@ -61,7 +61,7 @@ class StyledTextManager {
 	
 	public void updatePresentations() {
 		fArePresentationsUpdated = false;
-	} 
+	}
 	
 	protected void initListeners() {
 		
@@ -94,6 +94,12 @@ class StyledTextManager {
 					
 				case UPDATED_TWICE:
 				case UPDATED_MORE_THAN_TWICE:
+					
+					// Еще одно исправление непонятного бага.
+					// При последнем вызове applyTextPresentation() почему-то не передаются стили jdt,
+					// поэтому выставляем те стили, которые уже имеются
+					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
+					
 					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
 					
 					fStylesIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
@@ -115,13 +121,7 @@ class StyledTextManager {
 				
 				// XXX
 				//StopWatch updatePresentationSW = new LoggingStopWatch("updatePresentationSW");
-				
-				/*
-				if (!fAreStylesUpdated) {
-					fSourceViewer.invalidateTextPresentation();
-					return; // ???
-				}*/
-				
+								
 				switch (fStylesIterationStatus) {
 
 				case NOT_UPDATED:
@@ -193,7 +193,7 @@ class StyledTextManager {
 			}
 		}
 	}
-	
+		
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
 		
 		List<StyleRange> allowedStyleRanges = new ArrayList<StyleRange>();
@@ -210,7 +210,7 @@ class StyledTextManager {
 				}
 			}
 			
-			if (!overlap) {		
+			if (!overlap) {
 				allowedStyleRanges.add(styleRange);
 			}
 		}
