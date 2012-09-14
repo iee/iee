@@ -142,8 +142,10 @@ public class UserInteractionManager {
 					if (e.caretOffset != position.getOffset() && e.caretOffset != position.getOffset() + position.getLength()) {
 						/* Move caret to the Pad's border */
 						if (fCaretMovesForward) {
+							fContainerManager.fireContainerActivated(container);					
 							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
 						} else {
+							fContainerManager.fireContainerActivated(container);
 							fStyledText.setCaretOffset(position.getOffset());
 						}
 					}

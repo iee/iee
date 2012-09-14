@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
@@ -65,7 +67,7 @@ public class FormulaPad extends Pad {
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
-	
+
 	private String fDirectoryPath = "";
 
 	private String fOriginalExpression = "";
@@ -75,7 +77,6 @@ public class FormulaPad extends Pad {
 	private boolean fTextChanged;
 	private int fCaretOffset;
 	private int fPreviousCaretOffset;
-	
 
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
 	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
@@ -96,7 +97,7 @@ public class FormulaPad extends Pad {
 	/*
 	 * Getters/Setters
 	 */
-	
+
 	public String getDirectoryPath() {
 		return fDirectoryPath;
 	}
@@ -120,11 +121,12 @@ public class FormulaPad extends Pad {
 	public void setTranslatingExression(String expression) {
 		fTranslatingExpression = expression;
 	}
-	
+
 	public FormulaPad() {
 	}
 
 	public void toggleInputText() {
+		
 		// OFF
 		fResultView.setVisible(false);
 
@@ -133,11 +135,12 @@ public class FormulaPad extends Pad {
 		fInputView.setVisible(true);
 
 		fParent.pack();
+		
 
 		fViewer.getControl().forceFocus();
 		fCaretOffset = 0;
 		System.out.println("force Focus");
-		
+
 	}
 
 	public void toggleFormulaImage() {
@@ -184,7 +187,7 @@ public class FormulaPad extends Pad {
 				}
 			}
 		}
-		
+
 		fTranslatingExpression = fLastValidText;
 
 		/* Set formula image */
@@ -257,9 +260,8 @@ public class FormulaPad extends Pad {
 		fLastResultImageLabel.setImage(image);
 		fParent.pack();
 	}
-	
-	private void switchToResultView()
-	{
+
+	private void switchToResultView() {
 		processInput();
 		moveCaretToCurrentPad();
 
@@ -268,6 +270,15 @@ public class FormulaPad extends Pad {
 
 		if (fHoverShell != null)
 			fHoverShell.dispose();
+	}
+	
+	private void moveCaretToContainerTail() {
+		Container c = getContainer();
+		ContainerManager containerManager = c
+				.getContainerManager();
+		containerManager.getStyledText().setCaretOffset(
+				c.getPosition().getOffset()
+						+ c.getPosition().getLength());
 	}
 
 	public void setListeners() {
@@ -329,11 +340,12 @@ public class FormulaPad extends Pad {
 			@Override
 			public void textChanged(TextEvent event) {
 				if (fTextChanged) {
+					
 					if (fDocument.get() != "") {
 						fTextChanged = true;
 
 						validateInput();
-						
+
 						Image image = FormulaRenderer.getFormulaImage(fDocument
 								.get());
 						if (image == null)
@@ -356,18 +368,24 @@ public class FormulaPad extends Pad {
 
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				getContainer().getContainerManager().fireContainerSelected(getContainer());
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;
 					switchToResultView();
-
+					moveCaretToContainerTail();
 					break;
 
 				case SWT.ESC:
 					switchToResultView();
-
+					moveCaretToContainerTail();
 					break;
-
+				case SWT.ARROW_UP:
+					moveCaretToCurrentPad();
+					break;
+				case SWT.ARROW_DOWN:
+					moveCaretToCurrentPad();
+					break;
 				case SWT.ARROW_LEFT:
 					if (fCaretOffset == 0 && fPreviousCaretOffset == 0)
 						switchToResultView();
@@ -375,28 +393,23 @@ public class FormulaPad extends Pad {
 						fPreviousCaretOffset = fCaretOffset;
 					break;
 				case SWT.ARROW_RIGHT:
-					int expressionLength = fOriginalExpression.length();
-					if (fCaretOffset == expressionLength && fPreviousCaretOffset == expressionLength)
-					{
-						switchToResultView();
-					}
-					else
-						fPreviousCaretOffset = fCaretOffset;
-					break;
-					
-				case SWT.HOME:
-					break;
 
-				case SWT.END:
+					int expressionLength = fOriginalExpression.length();
+					if (fCaretOffset == expressionLength
+							&& fPreviousCaretOffset == expressionLength) {
+						switchToResultView();
+						moveCaretToContainerTail();
+					} else
+						fPreviousCaretOffset = fCaretOffset;
 					break;
 
 				}
-				
+
 			}
 		});
-		
+
 		fViewer.getTextWidget().addCaretListener(new CaretListener() {
-			
+
 			@Override
 			public void caretMoved(CaretEvent event) {
 				fCaretOffset = event.caretOffset;
@@ -459,7 +472,7 @@ public class FormulaPad extends Pad {
 		setListeners();
 
 		moveCaretToCurrentPad();
-		
+
 		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
 			processInput();
@@ -468,12 +481,21 @@ public class FormulaPad extends Pad {
 			getContainer().getComposite().setVisible(true);
 			toggleInputText();
 		}
-		
+
 	}
 
 	@Override
 	public void activate() {
+		int editorCaretOffset = getContainer().getContainerManager().getStyledText().getCaretOffset();
+		
 		toggleInputText();
+		
+		if (editorCaretOffset > getContainer().getPosition().getOffset() + 1)
+		{
+			fCaretOffset = fTranslatingExpression.length();
+			fViewer.getTextWidget().setCaretOffset(fCaretOffset);
+		}
+		
 	}
 
 	@Override

@@ -506,7 +506,7 @@ public class ContainerManager extends EventManager {
 		}
 	}
 	
-	protected void fireContainerSelected(Container c) {
+	public void fireContainerSelected(Container c) {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
 			((IContainerManagerListener) listeners[i])
