@@ -18,6 +18,8 @@ import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CaretEvent;
+import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -71,7 +73,8 @@ public class FormulaPad extends Pad {
 	private String fLastValidText = "";
 
 	private boolean fTextChanged;
-	
+	private int fCaretOffset;
+	private int fPreviousCaretOffset;
 	
 
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
@@ -132,6 +135,7 @@ public class FormulaPad extends Pad {
 		fParent.pack();
 
 		fViewer.getControl().forceFocus();
+		fCaretOffset = 0;
 		System.out.println("force Focus");
 		
 	}
@@ -253,6 +257,18 @@ public class FormulaPad extends Pad {
 		fLastResultImageLabel.setImage(image);
 		fParent.pack();
 	}
+	
+	private void switchToResultView()
+	{
+		processInput();
+		moveCaretToCurrentPad();
+
+		if (fTranslatingExpression != "")
+			toggleFormulaImage();
+
+		if (fHoverShell != null)
+			fHoverShell.dispose();
+	}
 
 	public void setListeners() {
 
@@ -343,29 +359,31 @@ public class FormulaPad extends Pad {
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;
-					processInput();
-					moveCaretToCurrentPad();
-
-					if (fTranslatingExpression != "")
-						toggleFormulaImage();
-
-					if (fHoverShell != null)
-						fHoverShell.dispose();
+					switchToResultView();
 
 					break;
 
 				case SWT.ESC:
-					processInput();
-					moveCaretToCurrentPad();
-
-					if (fTranslatingExpression != "")
-						toggleFormulaImage();
-
-					if (fHoverShell != null)
-						fHoverShell.dispose();
+					switchToResultView();
 
 					break;
 
+				case SWT.ARROW_LEFT:
+					if (fCaretOffset == 0 && fPreviousCaretOffset == 0)
+						switchToResultView();
+					else
+						fPreviousCaretOffset = fCaretOffset;
+					break;
+				case SWT.ARROW_RIGHT:
+					int expressionLength = fOriginalExpression.length();
+					if (fCaretOffset == expressionLength && fPreviousCaretOffset == expressionLength)
+					{
+						switchToResultView();
+					}
+					else
+						fPreviousCaretOffset = fCaretOffset;
+					break;
+					
 				case SWT.HOME:
 					break;
 
@@ -373,6 +391,15 @@ public class FormulaPad extends Pad {
 					break;
 
 				}
+				
+			}
+		});
+		
+		fViewer.getTextWidget().addCaretListener(new CaretListener() {
+			
+			@Override
+			public void caretMoved(CaretEvent event) {
+				fCaretOffset = event.caretOffset;
 			}
 		});
 
@@ -442,7 +469,6 @@ public class FormulaPad extends Pad {
 			toggleInputText();
 		}
 		
-
 	}
 
 	@Override
