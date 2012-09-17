@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.jdt.editors;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
@@ -9,23 +10,16 @@ import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
-import org.eclipse.jdt.internal.ui.javaeditor.JavaSourceViewer;
-import org.eclipse.jdt.ui.PreferenceConstants;
-import org.eclipse.jdt.ui.text.IJavaPartitions;
-import org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration;
-import org.eclipse.jdt.ui.text.JavaTextTools;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 
 @SuppressWarnings("restriction")
 public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEditor {
 
+	private static final Logger logger = Logger.getLogger(ExtendedJavaEditor.class);
+	
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
 
@@ -38,7 +32,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 	
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-
+		
+		logger.debug("Create ExtendedJavaEditor");
+		
 		initIeeEditorCore();
 	};
 	
@@ -99,13 +95,15 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 			document.set(text);
 			
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
+		
 	}
 
 	@Override
 	public void dispose() {
-		System.out.println("ExtendedJavaEditor dispose() called");
+		logger.debug("ExtendedJavaEditor dispose() called");
 		
 		fPadManager.removeContainerManager(fContainerManager);
 		fContainerManager.removeContainerManagerListener(fContainerManagerListener);

@@ -97,7 +97,6 @@ public class XmlFilesStorage {
 	
 	protected Pad loadFromFile(String containerID) {
 		logger.debug(containerID + " : loadFromFile");
-		System.out.println("loadFromFile");
 		Pad pad = null;
 		try {
 			File file = new File(fDirectoryPath + containerID);
