@@ -3,11 +3,14 @@ package org.eclipse.iee.editor.core.container;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 
 public class DocumentAccess {
+	
+	private static final Logger logger = Logger.getLogger(DocumentAccess.class);
 	
 	/* Access actions IDs */
 	static final int WRITE = 0;
@@ -49,7 +52,7 @@ public class DocumentAccess {
 	 * allowed.
 	 */
 	boolean processNextDocumentAccessRequest() {
-		System.out.println("processNextDocumentAccessRequest");
+		logger.debug("processNextDocumentAccessRequest");
 		
 		AccessAction action = fContainerDocumentAccessQueue.poll();
 		if (action == null) {
@@ -111,6 +114,7 @@ public class DocumentAccess {
 			fDocument.replace(from, length, payload);
 			
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -124,6 +128,7 @@ public class DocumentAccess {
 		try {
 			fDocument.replace(position.getOffset(), position.getLength() - 1, "");
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -151,6 +156,7 @@ public class DocumentAccess {
 		try {
 			return textRegion.substring(from, to);
 		} catch (IndexOutOfBoundsException e) {
+			logger.error(e.getMessage());
 			return null;
 		}
 	}

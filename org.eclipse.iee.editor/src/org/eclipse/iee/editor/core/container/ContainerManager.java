@@ -8,6 +8,7 @@ import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
@@ -32,6 +33,8 @@ import org.perf4j.StopWatch;
 
 public class ContainerManager extends EventManager {
 
+	private static final Logger logger = Logger.getLogger(ContainerManager.class);
+	
 	private final String fContainerManagerID;
 	
 	private final ContainerManagerConfig fConfig;
@@ -161,6 +164,7 @@ public class ContainerManager extends EventManager {
 		try {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -245,9 +249,8 @@ public class ContainerManager extends EventManager {
 				String[] partitionings = event.getChangedPartitionings();
 				
 				for (String partitioning : partitionings) {
-					
-					System.out.println("Changed partitionings: " + partitioning);
-					System.out.println("Changed region: " + fChangedPartitioningRegion.toString());
+					logger.debug("Changed partitionings: " + partitioning);
+					logger.debug("Changed region: " + fChangedPartitioningRegion.toString());
 					
 					if (partitioning.equals(PartitioningManager.PARTITIONING_ID)) {
 						continue;
@@ -264,10 +267,10 @@ public class ContainerManager extends EventManager {
 					
 			
 			if (fState == State.READY) {
-				System.out.println("\n\n== Begin of document modification handling ==");
+				logger.debug("\n\n== Begin of document modification handling ==");
 				fState = State.DOCUMENT_CHANGES_HANDLING;	
 			} else {
-				System.out.println("\n\n== Internal document modification ==");
+				logger.debug("\n\n== Internal document modification ==");
 			}
 			
 			/*
@@ -329,10 +332,13 @@ public class ContainerManager extends EventManager {
 					 */
 				}
 			} catch (BadLocationException e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			} catch (BadPartitioningException e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			} catch (RuntimeException e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -357,7 +363,7 @@ public class ContainerManager extends EventManager {
 				
 				fUserInteractionManager.updateCaretSelection();
 
-				System.out.println("== End of document modification handling ==\n\n");
+				logger.debug("== End of document modification handling ==\n\n");
 				fState = State.READY;
 
 				/* For debug */

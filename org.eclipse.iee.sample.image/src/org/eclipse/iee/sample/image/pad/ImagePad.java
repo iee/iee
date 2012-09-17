@@ -2,6 +2,8 @@ package org.eclipse.iee.sample.image.pad;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.swt.SWT;
@@ -20,6 +22,8 @@ import org.eclipse.swt.widgets.Label;
 
 public class ImagePad extends Pad implements Serializable {
 
+	private transient static final Logger logger = Logger.getLogger(ImagePad.class);
+	
 	private transient static final int STATE_MENU = 0;
 	private transient static final int STATE_IMAGE = 1;
 	private transient static final int STATE_ERROR = 2;
@@ -160,6 +164,7 @@ public class ImagePad extends Pad implements Serializable {
 			
 		} catch (Exception e) {
 
+			logger.error(e.getMessage());
 			e.printStackTrace();
 
 			/* Switch to error state */

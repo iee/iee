@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
@@ -16,6 +17,8 @@ import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 public class FileStorage {
 
+	private static final Logger logger = Logger.getLogger(FileStorage.class);
+	
 	private String fDirectoryPath = "";
 	private static FileStorage fInstance = null;
 
@@ -51,19 +54,20 @@ public class FileStorage {
 	}
 
 	public void saveToFile(Pad pad) {
-		System.out.println("saveToFile");
+		logger.debug(pad.getContainerID() + ":saveToFile");
 		try {
 			FileOutputStream fos = new FileOutputStream(fDirectoryPath
 					+ pad.getContainerID());
 			fos.write(fXstream.toXML(pad).getBytes());
 			fos.close();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
 	public void loadAllFiles(File storageDirectory) {
-		System.out.println("loadAllFiles");
+		logger.debug("loadAllFiles");
 		for (String name : storageDirectory.list()) {
 			Pad pad = loadFromFile(name);
 			if (pad != null && pad.getType().matches("Formula")) {
@@ -80,7 +84,7 @@ public class FileStorage {
 	}
 
 	protected Pad loadFromFile(String containerID) {
-		System.out.println(">>>>>>>>loadFromFile");
+		logger.debug(containerID + " >>>>>>>> loadFromFile");
 
 		Pad loadedPad = null;
 		try {
@@ -90,7 +94,7 @@ public class FileStorage {
 			try {
 				Class.forName("org.eclipse.iee.sample.formula.pad.FormulaPad");
 			} catch (ClassNotFoundException e) {
-				System.out.println("FormulaPad preloading failed");
+				logger.error("FormulaPad preloading failed: " + e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -98,10 +102,11 @@ public class FileStorage {
 			loadedPad.setContainerID(containerID);
 			fis.close();
 		} catch (IOException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		} catch (CannotResolveClassException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
-			System.out.println("Message: " + e.getMessage());
 		}
 		return loadedPad;
 	}

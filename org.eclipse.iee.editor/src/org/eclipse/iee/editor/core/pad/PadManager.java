@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
@@ -20,6 +21,8 @@ import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 
 public class PadManager extends EventManager {
 
+	private static final Logger logger = Logger.getLogger(PadManager.class);
+	
 	/* ContainerManagers */
 
 	private Map<String, ContainerManager> fContainerManagers;

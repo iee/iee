@@ -3,8 +3,10 @@ package org.eclipse.iee.editor.core.utils.console;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -16,6 +18,8 @@ import org.eclipse.ui.console.MessageConsole;
 
 public class ConsoleMessager extends EventManager {
 
+	private static final Logger logger = Logger.getLogger(ConsoleMessager.class);
+	
 	private static ConsoleMessager fConsoleMessager = new ConsoleMessager();
 	public static ConsoleMessager getInstance() {
 		return fConsoleMessager;
@@ -57,7 +61,7 @@ public class ConsoleMessager extends EventManager {
 			@Override
 			public void consolesAdded(IConsole[] consoles) {
 				for (IConsole c : consoles) {
-					System.out.println("Listener added to [" + c.getName() + "] console");
+					logger.debug("Listener added to [" + c.getName() + "] console");
 					((IOConsole) c).getDocument().addDocumentListener(fDocumentListener);
 				}
 			}
@@ -65,7 +69,7 @@ public class ConsoleMessager extends EventManager {
 			@Override
 			public void consolesRemoved(IConsole[] consoles) {
 				for (IConsole c : consoles) {
-					System.out.println("Listener removed from [" + c.getName() + "] console");
+					logger.debug("Listener removed from [" + c.getName() + "] console");
 					((IOConsole) c).getDocument().removeDocumentListener(fDocumentListener);
 				}
 			}
@@ -76,7 +80,7 @@ public class ConsoleMessager extends EventManager {
 		IConsole[] existing = fConsoleManager.getConsoles();
 		for (IConsole c : existing) {
 			if (c instanceof IOConsole) {
-				System.out.println("Listener added to [" + c.getName() + "] console");
+				logger.debug("Listener added to [" + c.getName() + "] console");
 				((MessageConsole) c).getDocument().addDocumentListener(fDocumentListener);
 			}
 		}

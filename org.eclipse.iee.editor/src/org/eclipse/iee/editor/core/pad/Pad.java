@@ -2,6 +2,7 @@ package org.eclipse.iee.editor.core.pad;
 
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.swt.SWT;
@@ -12,6 +13,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad {
+	
+	private static final Logger logger = Logger.getLogger(Pad.class);
 	
 	private String fContainerID;
 	private Container fContainer;

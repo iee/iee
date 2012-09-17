@@ -8,12 +8,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 
 public class XmlFilesStorage {
+	
+	private static final Logger logger = Logger.getLogger(XmlFilesStorage.class);
 	
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
 	private String fDirectoryPath;
@@ -27,7 +30,7 @@ public class XmlFilesStorage {
 	}
 	
 	private XmlFilesStorage(String directoryPath) {
-		System.out.println("XmlFilesStorage");
+		logger.debug("XmlFilesStorage");
 		
 		fDirectoryPath = directoryPath;
 		File storageDirectory = new File(fDirectoryPath);
@@ -44,7 +47,7 @@ public class XmlFilesStorage {
 	}
 	
 	public void saveToFile(ImagePad pad) {
-		System.out.println("saveToFile");
+		logger.debug(pad.getContainerID() + " : saveToFile");
 		
 		try {
 			
@@ -60,7 +63,7 @@ public class XmlFilesStorage {
 			File file = new File(fDirectoryPath + pad.getContainerID());
 			
 			if (!file.exists()) {
-				System.out.println(file.getAbsolutePath());
+				logger.debug("new file: " + file.getAbsolutePath());
 				file.createNewFile();
 			}
 			
@@ -70,12 +73,13 @@ public class XmlFilesStorage {
 			out.close();
 			fos.close();
 		} catch (IOException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
 	public void loadAllFiles(File storageDirectory) {
-		System.out.println("loadAllFiles");		
+		logger.debug("loadAllFiles");
 		for (String name : storageDirectory.list()) {
 			Pad pad = loadFromFile(name);
 			if (pad != null && pad.getType().matches("Image")) {
@@ -92,6 +96,7 @@ public class XmlFilesStorage {
 	}
 	
 	protected Pad loadFromFile(String containerID) {
+		logger.debug(containerID + " : loadFromFile");
 		System.out.println("loadFromFile");
 		Pad pad = null;
 		try {
@@ -102,12 +107,13 @@ public class XmlFilesStorage {
 				pad = (Pad) in.readObject();
 				pad.setContainerID(containerID);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			}
 			in.close();
 			fis.close();
 		} catch (IOException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		return pad;

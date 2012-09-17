@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -13,6 +14,8 @@ import org.eclipse.swt.widgets.Composite;
 
 public class Container {
 
+	private static final Logger logger = Logger.getLogger(Container.class);
+	
 	private String fContainerID;
 	private String fTextContent;
 
@@ -60,6 +63,7 @@ public class Container {
 		try {
 			return fDocument.getLineOfOffset(fPosition.offset);
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 			return -1;
 		}

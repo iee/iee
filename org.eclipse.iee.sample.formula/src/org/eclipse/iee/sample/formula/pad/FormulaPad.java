@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
@@ -45,6 +46,9 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 public class FormulaPad extends Pad {
 
 	@XStreamOmitField
+	private static final Logger logger = Logger.getLogger(FormulaPad.class);
+	
+	@XStreamOmitField
 	private Composite fParent;
 	@XStreamOmitField
 	private Composite fInputView;
@@ -84,7 +88,7 @@ public class FormulaPad extends Pad {
 	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
 		@Override
 		public void messageReceived(ConsoleMessageEvent e) {
-			System.out.println("Message received:" + e.getMessage());
+			logger.debug("Message received:" + e.getMessage());
 			updateLastResult(e.getMessage());
 		}
 
@@ -139,8 +143,7 @@ public class FormulaPad extends Pad {
 
 		fViewer.getControl().forceFocus();
 		fCaretOffset = 0;
-		System.out.println("force Focus");
-
+		logger.debug("force Focus");
 	}
 
 	public void toggleFormulaImage() {
@@ -331,7 +334,7 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				System.out.println("focusGained");
+				logger.debug("focusGained");
 			}
 		});
 
@@ -511,13 +514,13 @@ public class FormulaPad extends Pad {
 	// Save&Load operations, use it for serialization
 
 	public void save() {
-		System.out.println("Saving...");
+		logger.debug("Saving...");
 		FileStorage.getInstance(fDirectoryPath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		System.out.println("Unsaving...");
+		logger.debug("Unsaving...");
 		FileStorage.getInstance(fDirectoryPath).removeFile(getContainerID());
 	}
 

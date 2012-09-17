@@ -7,6 +7,8 @@ import java.awt.image.WritableRaster;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -18,6 +20,8 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class FormulaRenderer {
 
+	private static final Logger logger = Logger.getLogger(FormulaRenderer.class);
+	
 	protected static Display fDisplay;
 
 	protected static Map<String, Image> fCachedImages = new TreeMap<String, Image>();
@@ -63,7 +67,7 @@ public class FormulaRenderer {
 				latex = FormulaPadManager.getMolex().translateMath(text).trim()
 						.replace("\n", "").replace("\r", "");
 			}
-			System.out.println("latex: " + latex);
+			logger.debug("latex: " + latex);
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
 					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
@@ -76,6 +80,7 @@ public class FormulaRenderer {
 			return formulaImage;
 
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}

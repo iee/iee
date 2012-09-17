@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.formula.actions;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -23,6 +24,8 @@ import org.eclipse.ui.IFileEditorInput;
 
 public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 
+	private static final Logger logger = Logger.getLogger(AddFormulaPadActionDelegate.class);
+	
 	Shell shell = null;
 
 	IPadEditor fPadEditor;
@@ -47,6 +50,8 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
 			return;
 		}
+		
+		logger.debug("Insert Formula");
 
 		IEditorPart editor = (IEditorPart)fPadEditor;
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
@@ -68,7 +73,7 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/formula/";
 	    }
 	    
-		System.out.println("storagePath = " + storagePath);
+	    logger.debug("storagePath = " + storagePath);
 		
 		/* load saved pads */
 		FileStorage.getInstance(storagePath);

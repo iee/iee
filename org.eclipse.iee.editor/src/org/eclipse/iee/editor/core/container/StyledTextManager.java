@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
@@ -17,6 +18,9 @@ import org.eclipse.swt.graphics.GlyphMetrics;
 
 
 class StyledTextManager {
+	
+	private static final Logger logger = Logger.getLogger(StyledTextManager.class);
+	
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
@@ -46,7 +50,7 @@ class StyledTextManager {
 		
 	public void updateStyles(boolean doInitiateTextPresentationUpdate) {
 
-		System.out.println("updateStyles()");
+		logger.debug("updateStyles()");
 		
 		fStylesIterationStatus = IterationStatus.NOT_UPDATED;
 		fPresentationIterationStatus = IterationStatus.NOT_UPDATED;
@@ -108,7 +112,7 @@ class StyledTextManager {
 				
 				fAreStylesUpdated = true;
 				
-				System.out.println("Applying styles: " + fStylesIterationStatus.toString());
+				logger.debug("Applying styles: " + fStylesIterationStatus.toString());
 				
 				// XXX
 				//stylesUpdateSW.stop();
@@ -155,7 +159,7 @@ class StyledTextManager {
 					break;
 				}
 				
-				System.out.println("Cpontainer presentations: " + fPresentationIterationStatus.toString());
+				logger.debug("Container presentations: " + fPresentationIterationStatus.toString());
 				
 				// XXX
 				//updatePresentationSW.stop();
@@ -246,13 +250,14 @@ class StyledTextManager {
 	}
 	
 	protected void printTextPresentationStyleRanges(TextPresentation tp) {
-		System.out.println("\n== TextPresentation== ");
+		logger.debug("\n== TextPresentation== ");
 		Iterator it = tp.getAllStyleRangeIterator();
 		while (it.hasNext()) {
 			StyleRange styleRange = (StyleRange) it.next();
-			System.out.println(styleRange);
+			logger.debug(styleRange);
 		}
-		System.out.println("\n");
+		
+		logger.debug("\n");
 	}
 		
 	protected StyleRange[] getContainersStyleRanges() {	
