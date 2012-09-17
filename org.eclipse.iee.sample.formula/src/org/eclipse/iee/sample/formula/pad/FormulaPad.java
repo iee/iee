@@ -471,7 +471,7 @@ public class FormulaPad extends Pad {
 
 		setListeners();
 
-		moveCaretToCurrentPad();
+		//moveCaretToCurrentPad();
 
 		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
