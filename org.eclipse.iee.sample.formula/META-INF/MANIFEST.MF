@@ -20,4 +20,5 @@ Bundle-ClassPath: .,
  lib/xstream-1.4.2.jar,
  lib/jlatexmath-embedded-fop-0.9.7.jar,
  lib/log4j-1.2.17.jar
-Export-Package: org.eclipse.iee.sample.formula.pad
+Export-Package: org.eclipse.iee.sample.formula.pad,
+ org.eclipse.iee.sample.formula.storage

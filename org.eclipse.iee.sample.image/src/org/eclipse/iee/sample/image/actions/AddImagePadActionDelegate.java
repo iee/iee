@@ -7,8 +7,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.editor.core.container.Container;
-import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -66,9 +64,6 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 	    }
 	    
 	    logger.debug("storagePath = " + storagePath);
-
-		/* load saved pads */
-		XmlFilesStorage.getInstance(storagePath);
 		
 		ImagePad pad = new ImagePad();
 		pad.setStoragePath(storagePath);

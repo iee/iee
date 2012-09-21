@@ -14,7 +14,7 @@ import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
-import org.eclipse.iee.sample.formula.storage.FileStorage;
+import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -37,8 +37,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -515,13 +513,13 @@ public class FormulaPad extends Pad {
 
 	public void save() {
 		logger.debug("Saving...");
-		FileStorage.getInstance(fDirectoryPath).saveToFile(this);
+		FormulaFileStorage.getInstance(fDirectoryPath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
 		logger.debug("Unsaving...");
-		FileStorage.getInstance(fDirectoryPath).removeFile(getContainerID());
+		FormulaFileStorage.getInstance(fDirectoryPath).removeFile(getContainerID());
 	}
 
 	@Override

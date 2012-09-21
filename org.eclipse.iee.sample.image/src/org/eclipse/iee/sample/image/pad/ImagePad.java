@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.sample.image.XmlFilesStorage;
+import org.eclipse.iee.sample.image.ImageFileStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -251,12 +251,12 @@ public class ImagePad extends Pad implements Serializable {
 
 	@Override
 	public void save() {
-		XmlFilesStorage.getInstance(fStoragePath).saveToFile(this);
+		ImageFileStorage.getInstance(fStoragePath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		XmlFilesStorage.getInstance(fStoragePath).removeFile(getContainerID());
+		ImageFileStorage.getInstance(fStoragePath).removeFile(getContainerID());
 	}
 
 	@Override

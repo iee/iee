@@ -16,3 +16,4 @@ Import-Package: org.eclipse.ui
 Bundle-ClassPath: libs/commons-io-2.4.jar,
  .,
  libs/log4j-1.2.17.jar
+Export-Package: org.eclipse.iee.sample.image

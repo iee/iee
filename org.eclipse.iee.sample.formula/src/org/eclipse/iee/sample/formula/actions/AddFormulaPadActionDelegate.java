@@ -7,16 +7,11 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
-import org.eclipse.iee.sample.formula.storage.FileStorage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
@@ -74,9 +69,6 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 	    }
 	    
 	    logger.debug("storagePath = " + storagePath);
-		
-		/* load saved pads */
-		FileStorage.getInstance(storagePath);
 		
 		FormulaPad pad = new FormulaPad();
 		pad.setDirectoryPath(storagePath);

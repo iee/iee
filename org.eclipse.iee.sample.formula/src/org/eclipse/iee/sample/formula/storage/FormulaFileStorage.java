@@ -9,22 +9,23 @@ import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.core.storage.FileStorage;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
-public class FileStorage {
+public class FormulaFileStorage extends FileStorage{
 
-	private static final Logger logger = Logger.getLogger(FileStorage.class);
+	private static final Logger logger = Logger.getLogger(FormulaFileStorage.class);
 	
 	private String fDirectoryPath = "";
-	private static FileStorage fInstance = null;
+	private static FormulaFileStorage fInstance = null;
 
-	public static FileStorage getInstance(String directoryPath) {
+	public static FormulaFileStorage getInstance(String directoryPath) {
 		if (fInstance == null) {
-			fInstance = new FileStorage(directoryPath);
+			fInstance = new FormulaFileStorage(directoryPath);
 		}
 		return fInstance;
 	}
@@ -32,7 +33,7 @@ public class FileStorage {
 	private XStream fXstream;
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
 
-	private FileStorage(String directoryPath) {
+	private FormulaFileStorage(String directoryPath) {
 		fXstream = new XStream(new DomDriver());
 		fXstream.setMode(XStream.ID_REFERENCES);
 
@@ -46,10 +47,6 @@ public class FileStorage {
 			if (!storageDirectory.mkdirs()) {
 				return;
 			}
-		}
-
-		if (storageDirectory.exists() && storageDirectory.isDirectory()) {
-			loadAllFiles(storageDirectory);
 		}
 	}
 
@@ -66,16 +63,6 @@ public class FileStorage {
 		}
 	}
 
-	public void loadAllFiles(File storageDirectory) {
-		logger.debug("loadAllFiles");
-		for (String name : storageDirectory.list()) {
-			Pad pad = loadFromFile(name);
-			if (pad != null && pad.getType().matches("Formula")) {
-				fPadManager.loadPad(pad);
-			}
-		}
-	}
-
 	public void removeFile(String containerID) {
 		File file = new File(fDirectoryPath + containerID);
 		if (file.exists()) {
@@ -83,7 +70,7 @@ public class FileStorage {
 		}
 	}
 
-	protected Pad loadFromFile(String containerID) {
+	public void loadFromFile(String containerID) {
 		logger.debug(containerID + " >>>>>>>> loadFromFile");
 
 		Pad loadedPad = null;
@@ -108,6 +95,9 @@ public class FileStorage {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		return loadedPad;
+		
+		if (loadedPad != null && loadedPad.getType().matches("Formula")) {
+			fPadManager.loadPad(loadedPad);
+		}
 	}
 }

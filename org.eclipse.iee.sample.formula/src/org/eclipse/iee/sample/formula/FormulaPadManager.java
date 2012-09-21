@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.sample.formula.storage.FileStorage;
+import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.iee.translator.jmole.math.generator.Mole;
 import org.eclipse.iee.translator.molex.mex.generator.Molex;
 import org.eclipse.ui.IStartup;

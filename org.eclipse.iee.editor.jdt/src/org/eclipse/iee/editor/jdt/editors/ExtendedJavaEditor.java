@@ -1,6 +1,14 @@
 package org.eclipse.iee.editor.jdt.editors;
 
+import java.io.File;
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
@@ -10,10 +18,14 @@ import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
+import org.eclipse.iee.sample.image.ImageFileStorage;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 @SuppressWarnings("restriction")
 public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEditor {
@@ -36,6 +48,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 		logger.debug("Create ExtendedJavaEditor");
 		
 		initIeeEditorCore();
+		
+		loadEditorPads();
 	};
 	
 	public void initIeeEditorCore() {
@@ -101,9 +115,66 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 		
 	}
 
+	private void loadEditorPads() {
+		logger.debug("loadEditorPads");
+		
+		IEditorPart editor = (IEditorPart)this;
+		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
+	    IFile file = input.getFile();
+	    IProject project = file.getProject();
+	    
+	    IPath rawLocation = project.getRawLocation();
+	    
+	    String storagePath = "";
+	    
+	    if (rawLocation != null)
+	    {
+	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
+	    }
+	    else
+	    {
+	    	IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+	    	IPath workspaceDirectory = workspace.getRoot().getLocation();
+	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/";
+	    }
+	    
+	    logger.debug("storagePath = " + storagePath);
+	    
+	    String[] containersIDs = fContainerManager.getContainerIDs();
+	    
+	    if (containersIDs.length > 0)
+	    {
+		    File formulaStorage = new File(storagePath + "formula/");
+		    String[] formulaSerializedPads = formulaStorage.list();
+		    
+		    int i,j;
+		    for (i = 0; i < containersIDs.length; i++)
+		    	for(j = 0; j < formulaSerializedPads.length; j++)
+		    	{
+		    		if (containersIDs[i].matches(formulaSerializedPads[j]))
+		    		{
+		    			FormulaFileStorage.getInstance(storagePath + "formula/").loadFromFile(containersIDs[i]);
+		    		}
+		    	}
+		    
+		    File imageStorage = new File(storagePath + "image/");
+		    String[] imageSerializedPads = imageStorage.list();
+		    
+		    for (i = 0; i < containersIDs.length; i++)
+		    	for(j = 0; j < imageSerializedPads.length; j++)
+		    	{
+		    		if (containersIDs[i].matches(imageSerializedPads[j]))
+		    		{
+		    			ImageFileStorage.getInstance(storagePath + "image/").loadFromFile(containersIDs[i]);
+		    		}
+		    	}
+	    }
+	}
+
+	
 	@Override
 	public void dispose() {
-		logger.debug("ExtendedJavaEditor dispose() called");
+		logger.debug("dispose() called");
 		
 		fPadManager.removeContainerManager(fContainerManager);
 		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
