@@ -3,7 +3,6 @@ package org.eclipse.iee.sample.image.pad;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
-import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.image.ImageFileStorage;
 import org.eclipse.swt.SWT;
@@ -150,6 +149,8 @@ public class ImagePad extends Pad implements Serializable {
 	}
 
 	protected void initImageView(final Composite parent) {
+		logger.debug("initImageView");
+		
 		try {
 			fOriginalImage = new Image(parent.getDisplay(), fImagePath);
 			if (fImageWidth > 0 && fImageHeigth > 0)

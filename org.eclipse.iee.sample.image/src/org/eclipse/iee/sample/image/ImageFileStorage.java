@@ -31,7 +31,7 @@ public class ImageFileStorage extends FileStorage{
 	}
 	
 	private ImageFileStorage(String directoryPath) {
-		logger.debug("XmlFilesStorage");
+		logger.debug("ImageFilesStorage");
 		
 		fDirectoryPath = directoryPath;
 		File storageDirectory = new File(fDirectoryPath);
