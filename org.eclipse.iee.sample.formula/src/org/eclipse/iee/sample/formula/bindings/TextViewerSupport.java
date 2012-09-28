@@ -5,10 +5,8 @@ import java.util.List;
 
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.text.ITextOperationTarget;
-import org.eclipse.jface.text.ITextOperationTargetExtension;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;
@@ -20,7 +18,6 @@ import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 public class TextViewerSupport implements FocusListener, DisposeListener {

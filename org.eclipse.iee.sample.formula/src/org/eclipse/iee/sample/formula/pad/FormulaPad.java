@@ -45,7 +45,7 @@ public class FormulaPad extends Pad {
 
 	@XStreamOmitField
 	private static final Logger logger = Logger.getLogger(FormulaPad.class);
-	
+
 	@XStreamOmitField
 	private Composite fParent;
 	@XStreamOmitField
@@ -128,7 +128,7 @@ public class FormulaPad extends Pad {
 	}
 
 	public void toggleInputText() {
-		
+
 		// OFF
 		fResultView.setVisible(false);
 
@@ -137,7 +137,6 @@ public class FormulaPad extends Pad {
 		fInputView.setVisible(true);
 
 		fParent.pack();
-		
 
 		fViewer.getControl().forceFocus();
 		fCaretOffset = 0;
@@ -272,14 +271,12 @@ public class FormulaPad extends Pad {
 		if (fHoverShell != null)
 			fHoverShell.dispose();
 	}
-	
+
 	private void moveCaretToContainerTail() {
 		Container c = getContainer();
-		ContainerManager containerManager = c
-				.getContainerManager();
+		ContainerManager containerManager = c.getContainerManager();
 		containerManager.getStyledText().setCaretOffset(
-				c.getPosition().getOffset()
-						+ c.getPosition().getLength());
+				c.getPosition().getOffset() + c.getPosition().getLength());
 	}
 
 	public void setListeners() {
@@ -341,7 +338,7 @@ public class FormulaPad extends Pad {
 			@Override
 			public void textChanged(TextEvent event) {
 				if (fTextChanged) {
-					
+
 					if (fDocument.get() != "") {
 						fTextChanged = true;
 
@@ -369,7 +366,8 @@ public class FormulaPad extends Pad {
 
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				getContainer().getContainerManager().fireContainerSelected(getContainer());
+				getContainer().getContainerManager().fireContainerSelected(
+						getContainer());
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;
@@ -409,11 +407,44 @@ public class FormulaPad extends Pad {
 			}
 		});
 
+		fViewer.getTextWidget().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				int caretOffset = fViewer.getTextWidget().getCaretOffset();
+				if (caretOffset == 0) {
+					fCaretOffset = 0;
+					fPreviousCaretOffset = 0;
+				}
+				if (caretOffset == fOriginalExpression.length()) {
+					fCaretOffset = fOriginalExpression.length();
+					fPreviousCaretOffset = fCaretOffset;
+				}
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
+
 		fViewer.getTextWidget().addCaretListener(new CaretListener() {
 
 			@Override
 			public void caretMoved(CaretEvent event) {
+				fPreviousCaretOffset = fCaretOffset;
 				fCaretOffset = event.caretOffset;
+
+				if (fCaretOffset == 0 && fPreviousCaretOffset != 1)
+					fPreviousCaretOffset = 0;
+
+				if (fCaretOffset == fTranslatingExpression.length()
+						&& fPreviousCaretOffset != (fTranslatingExpression
+								.length() - 1))
+					fPreviousCaretOffset = fCaretOffset;
 			}
 		});
 
@@ -472,7 +503,7 @@ public class FormulaPad extends Pad {
 
 		setListeners();
 
-		//moveCaretToCurrentPad();
+		// moveCaretToCurrentPad();
 
 		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
@@ -487,16 +518,16 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void activate() {
-		int editorCaretOffset = getContainer().getContainerManager().getStyledText().getCaretOffset();
-		
+		int editorCaretOffset = getContainer().getContainerManager()
+				.getStyledText().getCaretOffset();
+
 		toggleInputText();
-		
-		if (editorCaretOffset > getContainer().getPosition().getOffset() + 1)
-		{
+
+		if (editorCaretOffset > getContainer().getPosition().getOffset() + 1) {
 			fCaretOffset = fTranslatingExpression.length();
 			fViewer.getTextWidget().setCaretOffset(fCaretOffset);
 		}
-		
+
 	}
 
 	@Override
@@ -519,7 +550,8 @@ public class FormulaPad extends Pad {
 	@Override
 	public void unsave() {
 		logger.debug("Unsaving...");
-		FormulaFileStorage.getInstance(fDirectoryPath).removeFile(getContainerID());
+		FormulaFileStorage.getInstance(fDirectoryPath).removeFile(
+				getContainerID());
 	}
 
 	@Override
