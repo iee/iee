@@ -198,6 +198,22 @@ public class ImagePad extends Pad implements Serializable {
 			public void controlMoved(ControlEvent e) {
 			}			
 		});
+		
+		label.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				moveCaretToCurrentPad();
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
 	}
 
 	protected void initErrorView(final Composite parent) {
