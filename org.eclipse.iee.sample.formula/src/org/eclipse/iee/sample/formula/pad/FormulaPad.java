@@ -201,12 +201,21 @@ public class FormulaPad extends Pad {
 		if (!fTranslatingExpression.trim().isEmpty())
 			if (fTranslatingExpression
 					.charAt(fTranslatingExpression.length() - 1) == '=')
-				generated += generateOutputCode(fTranslatingExpression);
+				{
+					String output = generateOutputCode(fTranslatingExpression);
+					
+					Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
+					Matcher m = p.matcher(fTranslatingExpression);
+					if (m.matches())
+						generated = output;
+					else
+						generated += output;
+				}
 		getContainer().setTextContent(generated);
 	}
 
 	public String generateOutputCode(String expresion) {
-		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.+");
+		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.*");
 		Matcher m = p.matcher(expresion);
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
