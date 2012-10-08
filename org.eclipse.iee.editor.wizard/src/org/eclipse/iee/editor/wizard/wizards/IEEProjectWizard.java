@@ -184,7 +184,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			srcFolder.create(false, true, monitor);
 
 			/* Add an java file */
-			addFileToProject(proj, new Path("src/iee.java"),
+			addFileToProject(proj, new Path("src/Iee.java"),
 					GeneralIEEWizard.openContentStream(), monitor);
 
 			/* Add the lib folder */
