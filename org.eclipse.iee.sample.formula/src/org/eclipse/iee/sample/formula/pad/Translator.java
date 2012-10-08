@@ -57,7 +57,7 @@ public class Translator {
 			if (resultJava == null) {
 				return null;
 			}
-			translated = resultJava.trim();
+			translated = resultJava.trim().replaceAll("\r\n", "");
 			if (translated.matches(";")) {
 				return null;
 			}
