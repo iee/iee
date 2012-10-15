@@ -200,17 +200,16 @@ public class FormulaPad extends Pad {
 		/* Add result output */
 		if (!fTranslatingExpression.trim().isEmpty())
 			if (fTranslatingExpression
-					.charAt(fTranslatingExpression.length() - 1) == '=')
-				{
-					String output = generateOutputCode(fTranslatingExpression);
-					
-					Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
-					Matcher m = p.matcher(fTranslatingExpression);
-					if (m.matches())
-						generated = output;
-					else
-						generated += output;
-				}
+					.charAt(fTranslatingExpression.length() - 1) == '=') {
+				String output = generateOutputCode(fTranslatingExpression);
+
+				Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
+				Matcher m = p.matcher(fTranslatingExpression);
+				if (m.matches())
+					generated = output;
+				else
+					generated += output;
+			}
 		getContainer().setTextContent(generated);
 	}
 
@@ -477,6 +476,8 @@ public class FormulaPad extends Pad {
 
 		fViewer = new TextViewer(fInputView, SWT.SINGLE);
 		fViewer.getControl().setSize(50, 100);
+		fViewer.getControl().setFont(
+				getContainer().getContainerManager().getStyledText().getFont());
 		fDocument = new Document();
 		if (fTranslatingExpression.isEmpty())
 			fDocument.set(fOriginalExpression);
