@@ -30,6 +30,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -128,7 +129,7 @@ public class FormulaPad extends Pad {
 	}
 
 	public void toggleInputText() {
-
+		
 		// OFF
 		fResultView.setVisible(false);
 
@@ -277,7 +278,10 @@ public class FormulaPad extends Pad {
 			toggleFormulaImage();
 
 		if (fHoverShell != null)
+		{
 			fHoverShell.dispose();
+			fHoverShell = null;
+		}
 	}
 
 	private void moveCaretToContainerTail() {
@@ -332,7 +336,10 @@ public class FormulaPad extends Pad {
 				if (fTranslatingExpression != "")
 					toggleFormulaImage();
 				if (fHoverShell != null)
+				{
 					fHoverShell.dispose();
+					fHoverShell = null;
+				}
 			}
 
 			@Override
@@ -358,7 +365,10 @@ public class FormulaPad extends Pad {
 							image = FormulaRenderer
 									.getFormulaImage(fLastValidText);
 						if (fHoverShell != null)
+						{
 							fHoverShell.dispose();
+							fHoverShell = null;
+						}
 						fHoverShell = new HoverShell(fParent, image);
 
 						/* Resize fInputText */
@@ -436,6 +446,18 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
+		
+		fViewer.getTextWidget().addMouseWheelListener(new MouseWheelListener() {
+			
+			@Override
+			public void mouseScrolled(MouseEvent e) {
+				if (fHoverShell != null)
+				{
+					fHoverShell.dispose();
+					fHoverShell = null;
+				}
 			}
 		});
 

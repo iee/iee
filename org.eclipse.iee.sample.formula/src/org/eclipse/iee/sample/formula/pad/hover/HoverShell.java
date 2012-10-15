@@ -16,8 +16,9 @@ public class HoverShell {
 		
 		fShell = new Shell(SWT.TOOL | SWT.RESIZE);
 		fShell.setVisible(false);
-		Point pt = parent.toDisplay(1, 1);
-		fShell.setLocation(pt.x + 10, pt.y +30);
+		Point pt = parent.toDisplay(10, 30);
+		fShell.setLocation(pt.x, pt.y);
+		
 		fShell.setSize(0, 0);
 		fShell.setLayout(new FillLayout());
 		fLabel = new Label(fShell, SWT.NONE);
