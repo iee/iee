@@ -112,7 +112,7 @@ terminal COMPARISON_OPERATION returns ecore::EString:
 ;
 
 terminal EXP returns ecore::EString:
-	('e'|'E') ('+'|'-') (INT)+
+	('e'|'E') ('+'|'-')? (INT)+
 ;
 
 terminal MATH_NAME returns ecore::EString:
