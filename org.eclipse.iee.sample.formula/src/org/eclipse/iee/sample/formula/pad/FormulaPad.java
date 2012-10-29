@@ -77,7 +77,6 @@ public class FormulaPad extends Pad {
 	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
 
-	private boolean fTextChanged;
 	private int fCaretOffset;
 	private int fPreviousCaretOffset;
 
@@ -352,10 +351,8 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void textChanged(TextEvent event) {
-				if (fTextChanged) {
 
 					if (fDocument.get() != "") {
-						fTextChanged = true;
 
 						validateInput();
 
@@ -377,8 +374,6 @@ public class FormulaPad extends Pad {
 						fViewer.getControl().setSize(size);
 						fParent.pack();
 					}
-				} else
-					fTextChanged = true;
 			}
 		});
 
@@ -506,7 +501,6 @@ public class FormulaPad extends Pad {
 		else
 			fDocument.set(fTranslatingExpression);
 		fViewer.setDocument(fDocument);
-		fTextChanged = false;
 
 		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
 		fViewer.setUndoManager(defaultUndoManager);
