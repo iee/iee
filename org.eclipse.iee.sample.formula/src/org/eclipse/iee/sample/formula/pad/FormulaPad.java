@@ -128,7 +128,7 @@ public class FormulaPad extends Pad {
 	}
 
 	public void toggleInputText() {
-		
+
 		// OFF
 		fResultView.setVisible(false);
 
@@ -215,10 +215,13 @@ public class FormulaPad extends Pad {
 
 	public String generateOutputCode(String expresion) {
 		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.*");
-		Matcher m = p.matcher(expresion);
+		Matcher m = p.matcher(expresion.replaceAll(Pattern.quote("{"), "")
+				.replaceAll(Pattern.quote("}"), ""));
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
 			variable = variable.trim();
+			variable = variable.replaceAll(Pattern.quote("{"), "");
+			variable = variable.replaceAll(Pattern.quote("}"), "");
 			if (variable.charAt(0) != '[') {
 				return "System.out.println(\"" + getContainerID() + "\" + "
 						+ variable + ");";
@@ -246,7 +249,7 @@ public class FormulaPad extends Pad {
 
 				output += "matrix += \"}\";";
 
-				output += "System.out.print(\"" + getContainerID() + "\" + "
+				output += "System.out.println(\"" + getContainerID() + "\" + "
 						+ "matrix);";
 
 				return output;
@@ -276,8 +279,7 @@ public class FormulaPad extends Pad {
 		if (fTranslatingExpression != "")
 			toggleFormulaImage();
 
-		if (fHoverShell != null)
-		{
+		if (fHoverShell != null) {
 			fHoverShell.dispose();
 			fHoverShell = null;
 		}
@@ -334,8 +336,7 @@ public class FormulaPad extends Pad {
 				processInput();
 				if (fTranslatingExpression != "")
 					toggleFormulaImage();
-				if (fHoverShell != null)
-				{
+				if (fHoverShell != null) {
 					fHoverShell.dispose();
 					fHoverShell = null;
 				}
@@ -352,28 +353,26 @@ public class FormulaPad extends Pad {
 			@Override
 			public void textChanged(TextEvent event) {
 
-					if (fDocument.get() != "") {
+				if (fDocument.get() != "") {
 
-						validateInput();
+					validateInput();
 
-						Image image = FormulaRenderer.getFormulaImage(fDocument
-								.get());
-						if (image == null)
-							image = FormulaRenderer
-									.getFormulaImage(fLastValidText);
-						if (fHoverShell != null)
-						{
-							fHoverShell.dispose();
-							fHoverShell = null;
-						}
-						fHoverShell = new HoverShell(fParent, image);
-
-						/* Resize fInputText */
-						Point size = fViewer.getControl().computeSize(
-								SWT.DEFAULT, SWT.DEFAULT, false);
-						fViewer.getControl().setSize(size);
-						fParent.pack();
+					Image image = FormulaRenderer.getFormulaImage(fDocument
+							.get());
+					if (image == null)
+						image = FormulaRenderer.getFormulaImage(fLastValidText);
+					if (fHoverShell != null) {
+						fHoverShell.dispose();
+						fHoverShell = null;
 					}
+					fHoverShell = new HoverShell(fParent, image);
+
+					/* Resize fInputText */
+					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
+							SWT.DEFAULT, false);
+					fViewer.getControl().setSize(size);
+					fParent.pack();
+				}
 			}
 		});
 
@@ -443,13 +442,12 @@ public class FormulaPad extends Pad {
 			public void mouseDoubleClick(MouseEvent e) {
 			}
 		});
-		
+
 		fViewer.getTextWidget().addMouseWheelListener(new MouseWheelListener() {
-			
+
 			@Override
 			public void mouseScrolled(MouseEvent e) {
-				if (fHoverShell != null)
-				{
+				if (fHoverShell != null) {
 					fHoverShell.dispose();
 					fHoverShell = null;
 				}
