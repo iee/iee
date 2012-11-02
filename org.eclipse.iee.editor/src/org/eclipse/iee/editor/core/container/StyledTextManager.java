@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.AnnotationPainter.ITextStyleStrategy;
+import org.eclipse.swt.custom.PaintObjectEvent;
+import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GlyphMetrics;
 
 
@@ -23,19 +28,6 @@ class StyledTextManager {
 	
 	//private PaintObjectListener fPaintObjectListener;
 
-	private enum IterationStatus {
-		NOT_UPDATED,
-		UPDATED_ONCE,
-		UPDATED_TWICE,
-		UPDATED_MORE_THAN_TWICE,
-	};
-	
-	private IterationStatus fStylesIterationStatus;
-	private IterationStatus fPresentationIterationStatus;	
-	
-	private boolean fAreStylesUpdated = true;
-	private boolean fArePresentationsUpdated = true;
-	
 	public StyledTextManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fSourceViewer = containerManager.getSourceViewer();
@@ -44,24 +36,12 @@ class StyledTextManager {
 		initListeners();
 	}
 		
-	public void updateStyles(boolean doInitiateTextPresentationUpdate) {
-
-		System.out.println("updateStyles()");
-		
-		fStylesIterationStatus = IterationStatus.NOT_UPDATED;
-		fPresentationIterationStatus = IterationStatus.NOT_UPDATED;
-				
-		fAreStylesUpdated = false;
-		fArePresentationsUpdated = false;
-		
-		if (doInitiateTextPresentationUpdate) { // Now used when container is resized
-			fSourceViewer.invalidateTextPresentation();
+	public void updateStyles(Container container) {
+		List<StyleRange> containerStyles = getContainerStyles(container);
+		for (StyleRange styleRange : containerStyles) {
+			fStyledText.setStyleRange(styleRange);
 		}
 	}
-	
-	public void updatePresentations() {
-		fArePresentationsUpdated = false;
-	} 
 	
 	protected void initListeners() {
 		
@@ -72,38 +52,8 @@ class StyledTextManager {
 				// XXX
 				//StopWatch stylesUpdateSW = new LoggingStopWatch("stylesUpdateSW");
 					
-				switch (fStylesIterationStatus) {
-				
-				case NOT_UPDATED:
-					
-					// Исправление непонятного бага.
-					// При первом вызове applyTextPresentation() почему-то не передаются стили jdt,
-					// поэтому выставляем те стили, которые уже имеются (может вызывать другие косяки на ~ 1 секунду)
-					textPresentation.mergeStyleRanges(fStyledText.getStyleRanges());
-					
-					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
+					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges(textPresentation.getExtent()));
 
-					fStylesIterationStatus = IterationStatus.UPDATED_ONCE;
-					break;
-					
-				case UPDATED_ONCE:
-					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					
-					fStylesIterationStatus = IterationStatus.UPDATED_TWICE;
-					break;
-					
-				case UPDATED_TWICE:
-				case UPDATED_MORE_THAN_TWICE:
-					injectStylesToTextPresentation(textPresentation, getContainersStyleRanges());
-					
-					fStylesIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
-					break;
-				}
-				
-				fAreStylesUpdated = true;
-				
-				System.out.println("Applying styles: " + fStylesIterationStatus.toString());
-				
 				// XXX
 				//stylesUpdateSW.stop();
 			}
@@ -121,46 +71,13 @@ class StyledTextManager {
 					fSourceViewer.invalidateTextPresentation();
 					return; // ???
 				}*/
-				
-				switch (fStylesIterationStatus) {
-
-				case NOT_UPDATED:
-				case UPDATED_ONCE:
-					fSourceViewer.invalidateTextPresentation();
-					return;
-					
-				default:
-					/* go ahead */
-				}
-				
-				switch (fPresentationIterationStatus) {
-				
-				case NOT_UPDATED:
-					updateContainerPresentations();
-					
-					fPresentationIterationStatus = IterationStatus.UPDATED_ONCE;
-					break;
-					
-				case UPDATED_ONCE:					
-					updateContainerPresentations();
-					
-					fPresentationIterationStatus = IterationStatus.UPDATED_TWICE;
-					break;
-					
-				case UPDATED_TWICE:
-				case UPDATED_MORE_THAN_TWICE:
-					updateContainerPresentations();
-					
-					fPresentationIterationStatus = IterationStatus.UPDATED_MORE_THAN_TWICE;
-					break;
-				}
-				
-				System.out.println("Cpontainer presentations: " + fPresentationIterationStatus.toString());
+				updateContainerPresentations();
 				
 				// XXX
 				//updatePresentationSW.stop();
 			}
 		});
+
 	}
 	
 	protected void updateContainerPresentations() {
@@ -179,8 +96,8 @@ class StyledTextManager {
 			fStyledText.getOffsetAtLine(bottomLineIndex) +
 			fStyledText.getLine(bottomLineIndex).length();
 						
-		boolean isVisible = false;
 		for (Container c : fContainerManager.getContainers()) {
+			boolean isVisible = false;
 			if (c.getPosition().getOffset() >= topVisibleOffset) {
 				isVisible = true;
 			}
@@ -196,36 +113,6 @@ class StyledTextManager {
 	
 	protected void injectStylesToTextPresentation(TextPresentation tp, StyleRange[] containersStyleRanges) {
 		
-		List<StyleRange> allowedStyleRanges = new ArrayList<StyleRange>();
-		
-		Iterator it = tp.getAllStyleRangeIterator();
-		while (it.hasNext()) {
-			StyleRange styleRange = (StyleRange) it.next();
-			
-			boolean overlap = false;
-			for (StyleRange containersStyleRange : containersStyleRanges) {
-				if (doStyleRangesOverlap(styleRange, containersStyleRange)) {
-					overlap = true;
-					break;
-				}
-			}
-			
-			if (!overlap) {		
-				allowedStyleRanges.add(styleRange);
-			}
-		}
-		
-		/* Convert to array */
-		StyleRange[] allowedStyleRangesArray = new StyleRange[allowedStyleRanges.size()];
-		for (int i = 0; i < allowedStyleRanges.size(); i++) {
-			allowedStyleRangesArray[i] = allowedStyleRanges.get(i);
-		}
-		
-		StyleRange defaultStyleRange = tp.getDefaultStyleRange();
-		
-		tp.clear();
-		tp.setDefaultStyleRange(defaultStyleRange);		
-		tp.mergeStyleRanges(allowedStyleRangesArray);
 		tp.mergeStyleRanges(containersStyleRanges);		
 	}
 	
@@ -255,17 +142,19 @@ class StyledTextManager {
 		System.out.println("\n");
 	}
 		
-	protected StyleRange[] getContainersStyleRanges() {	
+	protected StyleRange[] getContainersStyleRanges(IRegion region) {	
 		
 		List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 		for (Container c : fContainerManager.getContainers()) {
-			styleRanges.addAll(getContainerStyles(c));
+			Position position = c.getPosition();
+			int regionEnd= region.getOffset() + region.getLength();
+			int pEnd= position.getOffset() + position.getLength();
+			if (pEnd >= region.getOffset() && regionEnd > position.getOffset()) {
+				styleRanges.addAll(getContainerStyles(c));
+			}
 		}
 
-		StyleRange[] rangeArray = new StyleRange[styleRanges.size()];
-		for (int i = 0; i < styleRanges.size(); i++) {
-			rangeArray[i] = styleRanges.get(i);
-		}
+		StyleRange[] rangeArray = (StyleRange[]) styleRanges.toArray(new StyleRange[styleRanges.size()]);
 				
 		return rangeArray;
 	}	
