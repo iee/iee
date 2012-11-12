@@ -27,6 +27,8 @@ import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
+import org.perf4j.LoggingStopWatch;
+import org.perf4j.StopWatch;
 
 public class ContainerManager extends EventManager {
 
@@ -165,9 +167,10 @@ public class ContainerManager extends EventManager {
 		return fState == State.READY;
 	}
 	
-	public void updateContainerPresentations(Container container) {
+	public void updateContainersPresentations() {
 		if (isModificationAllowed()) {
-			fStyledTextManager.updateStyles(container);
+			boolean doInitiateTextPresentationUpdate = true;
+			fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
 		}
 	}
 
@@ -343,6 +346,9 @@ public class ContainerManager extends EventManager {
 			fChangedPartitioningRegion = null;
 			
 			if (!fDocumentAccess.processNextDocumentAccessRequest()) {
+				
+				boolean doInitiateTextPresentationUpdate = false;
+				fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
 				
 				/* XXX Visibility */
 				//updateContainerVisibility(true);
@@ -529,6 +535,5 @@ public class ContainerManager extends EventManager {
 				.debugNotification(new ContainerEvent(null, fContainerManagerID));
 		}
 	}
-
 	
 }
