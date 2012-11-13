@@ -156,7 +156,7 @@ public class Container {
 
 			@Override
 			public void controlResized(ControlEvent e) {
-				fContainerManager.updateContainersPresentations();
+				fContainerManager.updateContainerPresentations(Container.this);
 			}
 
 			@Override

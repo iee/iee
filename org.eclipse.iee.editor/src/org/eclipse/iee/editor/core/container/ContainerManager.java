@@ -27,8 +27,6 @@ import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
-import org.perf4j.LoggingStopWatch;
-import org.perf4j.StopWatch;
 
 public class ContainerManager extends EventManager {
 
@@ -167,10 +165,9 @@ public class ContainerManager extends EventManager {
 		return fState == State.READY;
 	}
 	
-	public void updateContainersPresentations() {
+	public void updateContainerPresentations(Container container) {
 		if (isModificationAllowed()) {
-			boolean doInitiateTextPresentationUpdate = true;
-			fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
+			fStyledTextManager.updateStyles(container);
 		}
 	}
 
@@ -233,7 +230,7 @@ public class ContainerManager extends EventManager {
 		@Override
 		public void documentPartitioningChanged(
 				DocumentPartitioningChangedEvent event) {
-			
+			System.out.println("documentPartitioningChanged " + event);
 			assert(fChangedPartitioningRegion == null);
 						
 			fChangedPartitioningRegion = event
@@ -256,7 +253,7 @@ public class ContainerManager extends EventManager {
 
 		@Override
 		public void documentChanged(DocumentEvent event) {
-
+			System.out.println("documentChanged start " + event);
 			// XXX
 			//StopWatch padsPositionsCalculationSW = new LoggingStopWatch("padsPositionsCalculation");
 					
@@ -289,16 +286,6 @@ public class ContainerManager extends EventManager {
 				unmodifiedOffset -= movingDelta;
 			} else {
 				unmodifiedOffset = event.getOffset() + event.getLength();
-			}
-
-			/*
-			 * Positive delta means that unmodified pads move forward. We have
-			 * to perform this action before any other modifications to avoid
-			 * collisions.
-			 */
-
-			if (movingDelta > 0) {
-				moveUnmodifiedPads(unmodifiedOffset, movingDelta);
 			}
 
 			try {
@@ -334,21 +321,9 @@ public class ContainerManager extends EventManager {
 				e.printStackTrace();
 			}
 
-			/*
-			 * If delta is negative, we move unmodified pads backward, but after
-			 * any other modifications are done.
-			 */
-
-			if (movingDelta < 0) {
-				moveUnmodifiedPads(unmodifiedOffset, movingDelta);
-			}
-
 			fChangedPartitioningRegion = null;
 			
 			if (!fDocumentAccess.processNextDocumentAccessRequest()) {
-				
-				boolean doInitiateTextPresentationUpdate = false;
-				fStyledTextManager.updateStyles(doInitiateTextPresentationUpdate);
 				
 				/* XXX Visibility */
 				//updateContainerVisibility(true);
@@ -365,37 +340,12 @@ public class ContainerManager extends EventManager {
 				// XXX
 				//padsPositionsCalculationSW.stop();
 			}
+			System.out.println("documentChanged end ");
 		}
 
 		private void onPartitioningChanged(DocumentEvent event,
 				int unmodifiedOffset) throws BadLocationException,
 				BadPartitioningException {
-
-			/* Remove all elements within changed area */
-
-			int beginRegionOffset = Math.min(event.getOffset(),
-					fChangedPartitioningRegion.getOffset());
-
-			Container from = fContainers.ceiling(Container
-					.atOffset(beginRegionOffset));
-			Container to = fContainers.lower(Container
-					.atOffset(unmodifiedOffset));
-
-			if (from != null && to != null
-					&& fContainerComparator.isNotDescending(from, to)) {
-				NavigableSet<Container> removeSet = fContainers.subSet(from,
-						true, to, true);
-				if (removeSet != null) {
-					Container container;
-					while ((container = removeSet.pollFirst()) != null) {
-
-						/* Removing container */
-
-						container.dispose();
-						fireContainerRemoved(container);
-					}
-				}
-			}
 
 			/* Scanning for new containers */
 
@@ -470,6 +420,35 @@ public class ContainerManager extends EventManager {
 
 		@Override
 		public void documentAboutToBeChanged(DocumentEvent event) {
+			System.out.println();
+			
+			if (event.getLength() > 0) {
+				/* Remove all elements within changed area */
+
+				Container from = fContainers.ceiling(Container
+						.atOffset(event.getOffset()));
+				Container to = fContainers.lower(Container
+						.atOffset(event.getOffset() + event.getLength()));
+
+				if (from != null && to != null
+						&& fContainerComparator.isNotDescending(from, to)) {
+					NavigableSet<Container> removeSet = fContainers.subSet(from,
+							true, to, true);
+					if (removeSet != null) {
+						Container container;
+						while ((container = removeSet.pollFirst()) != null) {
+
+							/* Removing container */
+
+							container.dispose();
+							fireContainerRemoved(container);
+						}
+					}
+				}
+			}
+			
+			int delta = event.getText().length() - event.getLength();
+			moveUnmodifiedPads(event.getOffset(), delta);
 		}
 	}
 	
@@ -535,5 +514,6 @@ public class ContainerManager extends EventManager {
 				.debugNotification(new ContainerEvent(null, fContainerManagerID));
 		}
 	}
+
 	
 }
