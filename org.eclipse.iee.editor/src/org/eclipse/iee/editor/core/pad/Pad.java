@@ -1,9 +1,11 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -68,6 +70,9 @@ public abstract class Pad {
 			"Another container is already attached");
 
 		container.setContainerID(fContainerID);
+		if (!(this instanceof LoadingPad)) {
+			container.setPadType(getType());
+		}
 		fContainer = container;		
 		final Composite parent = fContainer.getComposite();
 		
@@ -151,4 +156,7 @@ public abstract class Pad {
 	public abstract void onContainerAttached();
 
 	public abstract String getType();
+	
+	public void updateData(Map<String, String> params, String value) {
+	}
 }

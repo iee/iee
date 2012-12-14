@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.sample.formula.pad.FormulaPadFactory;
 import org.eclipse.iee.sample.formula.storage.FileStorage;
 import org.eclipse.iee.translator.jmole.math.generator.Mole;
 import org.eclipse.iee.translator.molex.mex.generator.Molex;
@@ -23,6 +24,8 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 
 	// The shared instance
 	private static FormulaPadManager plugin;
+	
+	private final FormulaPadFactory factory = new FormulaPadFactory();
 	
 	private static Mole mole;
 	private static Molex molex;
@@ -50,6 +53,7 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		IeeEditorPlugin.getPadManager().registerPadFactory("Formula", factory);
 	}
 
 	/*
@@ -58,6 +62,7 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		IeeEditorPlugin.getPadManager().unregisterPadFactory(factory);
 		super.stop(context);
 	}
 
