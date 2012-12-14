@@ -2,8 +2,11 @@ package org.eclipse.iee.editor.core.pad;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -25,6 +28,9 @@ public class PadManager extends EventManager {
 	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
 
+	/** Registered pad factories. */
+	private Map<String, IPadFactory> fPadFactories = new HashMap<String, IPadFactory>();
+	
 	/* Pads */
 
 	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
@@ -195,7 +201,7 @@ public class PadManager extends EventManager {
 				.getContainerManagerID()));
 		fSuspendedPads.add(pad.getContainerID());
 		fPads.put(pad.getContainerID(), pad);
-		containerManager.RequestContainerAllocation(pad.getContainerID(), location);
+		containerManager.RequestContainerAllocation(pad.getType(), pad.getContainerID(), location);
 	}
 
 	/**
@@ -297,6 +303,13 @@ public class PadManager extends EventManager {
 				Pad pad = fPads.get(event.getContainer().getContainerID());
 				pad.activate();
 			}
+
+			@Override
+			public void containerUpdated(ContainerEvent containerEvent) {
+				Container container = containerEvent.getContainer();
+				Pad pad = fPads.get(container.getContainerID());
+				pad.updateData(container.getPadParams(), container.getValue());
+			}
 		};
 	}
 
@@ -334,6 +347,33 @@ public class PadManager extends EventManager {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
 			((IPadManagerListener) listeners[i]).padManagerUpdate(event);
+		}
+	}
+	
+	public void registerPadFactory(String type, IPadFactory factory) {
+		fPadFactories.put(type, factory);
+		List<Pad> loadPads = new ArrayList<Pad>();
+		for (String temp : fTemporaryPads) {
+			Pad pad = fPads.get(temp);
+			Container container = pad.getContainer();
+			if (type.equals(container.getPadType())) {
+				Pad create = factory.create(container.getPadParams(), container.getValue());
+				create.setContainerID(container.getContainerID());
+				loadPads.add(create);
+			}
+		}
+		for (Pad pad : loadPads) {
+			loadPad(pad);
+		}
+	}
+	
+	public void unregisterPadFactory(IPadFactory factory) {
+		Set<Entry<String, IPadFactory>> entrySet = fPadFactories.entrySet();
+		for (Iterator<Entry<String, IPadFactory>> iterator = entrySet.iterator(); iterator.hasNext();) {
+			Entry<String, IPadFactory> entry = iterator.next();
+			if (entry.getValue() == factory) {
+				iterator.remove();
+			}
 		}
 	}
 }

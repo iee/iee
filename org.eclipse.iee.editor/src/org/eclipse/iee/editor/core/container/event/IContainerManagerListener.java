@@ -7,4 +7,5 @@ public interface IContainerManagerListener {
 	public void containerLostSelection(ContainerEvent event);
 	public void containerActivated(ContainerEvent event);
 	public void debugNotification(ContainerEvent event);
+	public void containerUpdated(ContainerEvent containerEvent);
 }

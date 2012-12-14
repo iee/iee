@@ -1,6 +1,7 @@
 package org.eclipse.iee.sample.formula.pad;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -159,7 +160,7 @@ public class FormulaPad extends Pad {
 	public void validateInput() {
 		String text = fDocument.get();
 		fOriginalExpression = text;
-
+		
 		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
 			setInputIsValid();
 			fLastValidText = text;
@@ -196,6 +197,7 @@ public class FormulaPad extends Pad {
 					.charAt(fTranslatingExpression.length() - 1) == '=')
 				generated += generateOutputCode(fTranslatingExpression);
 		getContainer().setTextContent(generated);
+		getContainer().setValue(fOriginalExpression);
 	}
 
 	public String generateOutputCode(String expresion) {
@@ -459,14 +461,10 @@ public class FormulaPad extends Pad {
 	// Save&Load operations, use it for serialization
 
 	public void save() {
-		System.out.println("Saving...");
-		FileStorage.getInstance(fDirectoryPath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		System.out.println("Unsaving...");
-		FileStorage.getInstance(fDirectoryPath).removeFile(getContainerID());
 	}
 
 	@Override
@@ -480,5 +478,10 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void addMouseListeners(Composite control) {
+	}
+	
+	@Override
+	public void updateData(Map<String, String> params, String value) {
+
 	}
 }
