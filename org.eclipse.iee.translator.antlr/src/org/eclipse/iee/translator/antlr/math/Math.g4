@@ -8,15 +8,15 @@ statement:
 ;
 
 functionDefinition:
-	function '=' formula
+	name=function '=' value=formula
 ;
 
 function:
-	MATH_NAME '(' (params+=formula (',' params+=formula)*)? ')'
+	name=MATH_NAME '(' (params+=formula (',' params+=formula)*)? ')'
 ;
 	
 variableAssignment:
-	formula '=' formula
+	name=formula '=' value=formula
 ;
 
 formula:
@@ -28,19 +28,19 @@ logicalFormula:
 ;
 
 expr:
-	expr '^'<assoc=right> expr #Power |
-	('+'|'-') expr #Unary |
-	expr ('*'|'/'|'%') expr #Mult |
-	expr ('+'|'-') expr #Add |
-	'(' expr ')' #ExprBrackets |
+	left=expr '^'<assoc=right> right=expr #Power |
+	sign=('+'|'-') expression=expr #Unary |
+	left=expr sign=('*'|'/'|'%') right=expr #Mult |
+	left=expr sign=('+'|'-') right=expr #Add |
+	'(' expression=expr ')' #ExprBrackets |
 	primary	#PrimaryExpr
 ;
 
 logicalExpr:
-	logicalExpr '&&' logicalExpr #LogicMult |
-	logicalExpr '||' logicalExpr #LogicAdd |
-	'(' logicalExpr ')' #LogicBrackets |
-	expr ('>'|'>='|'<'|'<='|'=='|'!=') expr #LogicComparison
+	left=logicalExpr sign='&&' right=logicalExpr #LogicMult |
+	left=logicalExpr sign='||' right=logicalExpr #LogicAdd |
+	'(' expression=logicalExpr ')' #LogicBrackets |
+	left=expr sign=('>'|'>='|'<'|'<='|'=='|'!=') right=expr #LogicComparison
 ;
 
 primary:
@@ -48,11 +48,11 @@ primary:
 	FLOAT #FloatNumber |
 	INT #IntNumber |
 	matrix #MatrixDefinition |
-	MATH_NAME '[' formula ']' '[' formula ']' #MatrixElement | 
+	name=MATH_NAME '[' rowIdx=formula ']' '[' columnIdx=formula ']' #MatrixElement | 
 	function #PrimaryFunction |
-	MATH_NAME '.' function #MethodCall |
-	MATH_NAME '.' MATH_NAME #Property |
-	MATH_NAME '^T' #TransposeMatrix
+	objName=MATH_NAME '.' objFunction=function #MethodCall |
+	objName=MATH_NAME '.' objProperty=MATH_NAME #Property |
+	name=MATH_NAME '^T' #TransposeMatrix
 ;
 
 matrix:

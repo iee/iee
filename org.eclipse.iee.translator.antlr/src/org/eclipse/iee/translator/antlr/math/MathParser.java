@@ -126,6 +126,8 @@ public class MathParser extends Parser {
 	}
 
 	public static class FunctionDefinitionContext extends ParserRuleContext {
+		public FunctionContext name;
+		public FormulaContext value;
 		public FormulaContext formula() {
 			return getRuleContext(FormulaContext.class,0);
 		}
@@ -157,9 +159,9 @@ public class MathParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(28); function();
+			setState(28); ((FunctionDefinitionContext)_localctx).name = function();
 			setState(29); match(14);
-			setState(30); formula();
+			setState(30); ((FunctionDefinitionContext)_localctx).value = formula();
 			}
 		}
 		catch (RecognitionException re) {
@@ -174,6 +176,7 @@ public class MathParser extends Parser {
 	}
 
 	public static class FunctionContext extends ParserRuleContext {
+		public Token name;
 		public FormulaContext formula;
 		public List<FormulaContext> params = new ArrayList<FormulaContext>();
 		public TerminalNode MATH_NAME() { return getToken(MathParser.MATH_NAME, 0); }
@@ -209,7 +212,7 @@ public class MathParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(32); match(MATH_NAME);
+			setState(32); ((FunctionContext)_localctx).name = match(MATH_NAME);
 			setState(33); match(12);
 			setState(42);
 			_la = _input.LA(1);
@@ -250,6 +253,8 @@ public class MathParser extends Parser {
 	}
 
 	public static class VariableAssignmentContext extends ParserRuleContext {
+		public FormulaContext name;
+		public FormulaContext value;
 		public FormulaContext formula(int i) {
 			return getRuleContext(FormulaContext.class,i);
 		}
@@ -281,9 +286,9 @@ public class MathParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(46); formula();
+			setState(46); ((VariableAssignmentContext)_localctx).name = formula();
 			setState(47); match(14);
-			setState(48); formula();
+			setState(48); ((VariableAssignmentContext)_localctx).value = formula();
 			}
 		}
 		catch (RecognitionException re) {
@@ -399,6 +404,9 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class MultContext extends ExprContext {
+		public ExprContext left;
+		public Token sign;
+		public ExprContext right;
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
@@ -440,6 +448,8 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class PowerContext extends ExprContext {
+		public ExprContext left;
+		public ExprContext right;
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
@@ -462,6 +472,9 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class AddContext extends ExprContext {
+		public ExprContext left;
+		public Token sign;
+		public ExprContext right;
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
@@ -484,6 +497,8 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class UnaryContext extends ExprContext {
+		public Token sign;
+		public ExprContext expression;
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -503,6 +518,7 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class ExprBracketsContext extends ExprContext {
+		public ExprContext expression;
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -544,13 +560,13 @@ public class MathParser extends Parser {
 				_prevctx = _localctx;
 
 				setState(55);
-				_input.LT(1);
+				((UnaryContext)_localctx).sign = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==7 || _la==10) ) {
-				_errHandler.recoverInline(this);
+					((UnaryContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
-				setState(56); expr(5);
+				setState(56); ((UnaryContext)_localctx).expression = expr(5);
 				}
 				break;
 			case 12:
@@ -559,7 +575,7 @@ public class MathParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(57); match(12);
-				setState(58); expr(0);
+				setState(58); ((ExprBracketsContext)_localctx).expression = expr(0);
 				setState(59); match(4);
 				}
 				break;
@@ -591,43 +607,46 @@ public class MathParser extends Parser {
 					case 1:
 						{
 						_localctx = new PowerContext(new ExprContext(_parentctx, _parentState, _p));
+						((PowerContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(64);
 						if (!(6 >= _localctx._p)) throw new FailedPredicateException(this, "6 >= $_p");
 						setState(65); match(3);
-						setState(66); expr(6);
+						setState(66); ((PowerContext)_localctx).right = expr(6);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new MultContext(new ExprContext(_parentctx, _parentState, _p));
+						((MultContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(67);
 						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
 						setState(68);
-						_input.LT(1);
+						((MultContext)_localctx).sign = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==1 || _la==9 || _la==21) ) {
-						_errHandler.recoverInline(this);
+							((MultContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(69); expr(5);
+						setState(69); ((MultContext)_localctx).right = expr(5);
 						}
 						break;
 					case 3:
 						{
 						_localctx = new AddContext(new ExprContext(_parentctx, _parentState, _p));
+						((AddContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(70);
 						if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
 						setState(71);
-						_input.LT(1);
+						((AddContext)_localctx).sign = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==7 || _la==10) ) {
-						_errHandler.recoverInline(this);
+							((AddContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
-						setState(72); expr(4);
+						setState(72); ((AddContext)_localctx).right = expr(4);
 						}
 						break;
 					}
@@ -666,6 +685,9 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class LogicMultContext extends LogicalExprContext {
+		public LogicalExprContext left;
+		public Token sign;
+		public LogicalExprContext right;
 		public List<LogicalExprContext> logicalExpr() {
 			return getRuleContexts(LogicalExprContext.class);
 		}
@@ -688,6 +710,9 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class LogicComparisonContext extends LogicalExprContext {
+		public ExprContext left;
+		public Token sign;
+		public ExprContext right;
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
@@ -710,6 +735,7 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class LogicBracketsContext extends LogicalExprContext {
+		public LogicalExprContext expression;
 		public LogicalExprContext logicalExpr() {
 			return getRuleContext(LogicalExprContext.class,0);
 		}
@@ -729,6 +755,9 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class LogicAddContext extends LogicalExprContext {
+		public LogicalExprContext left;
+		public Token sign;
+		public LogicalExprContext right;
 		public List<LogicalExprContext> logicalExpr() {
 			return getRuleContexts(LogicalExprContext.class);
 		}
@@ -772,7 +801,7 @@ public class MathParser extends Parser {
 				_prevctx = _localctx;
 
 				setState(79); match(12);
-				setState(80); logicalExpr(0);
+				setState(80); ((LogicBracketsContext)_localctx).expression = logicalExpr(0);
 				setState(81); match(4);
 				}
 				break;
@@ -781,15 +810,15 @@ public class MathParser extends Parser {
 				_localctx = new LogicComparisonContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(83); expr(0);
+				setState(83); ((LogicComparisonContext)_localctx).left = expr(0);
 				setState(84);
-				_input.LT(1);
+				((LogicComparisonContext)_localctx).sign = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==13 || _la==15 || _la==16 || _la==19 || _la==22 || _la==23) ) {
-				_errHandler.recoverInline(this);
+					((LogicComparisonContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
-				setState(85); expr(0);
+				setState(85); ((LogicComparisonContext)_localctx).right = expr(0);
 				}
 				break;
 			}
@@ -807,21 +836,23 @@ public class MathParser extends Parser {
 					case 1:
 						{
 						_localctx = new LogicMultContext(new LogicalExprContext(_parentctx, _parentState, _p));
+						((LogicMultContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_logicalExpr);
 						setState(89);
 						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
-						setState(90); match(17);
-						setState(91); logicalExpr(5);
+						setState(90); ((LogicMultContext)_localctx).sign = match(17);
+						setState(91); ((LogicMultContext)_localctx).right = logicalExpr(5);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new LogicAddContext(new LogicalExprContext(_parentctx, _parentState, _p));
+						((LogicAddContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_logicalExpr);
 						setState(92);
 						if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
-						setState(93); match(18);
-						setState(94); logicalExpr(4);
+						setState(93); ((LogicAddContext)_localctx).sign = match(18);
+						setState(94); ((LogicAddContext)_localctx).right = logicalExpr(4);
 						}
 						break;
 					}
@@ -911,6 +942,7 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class TransposeMatrixContext extends PrimaryContext {
+		public Token name;
 		public TerminalNode MATH_NAME() { return getToken(MathParser.MATH_NAME, 0); }
 		public TransposeMatrixContext(PrimaryContext ctx) { copyFrom(ctx); }
 		@Override
@@ -962,6 +994,8 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class PropertyContext extends PrimaryContext {
+		public Token objName;
+		public Token objProperty;
 		public TerminalNode MATH_NAME(int i) {
 			return getToken(MathParser.MATH_NAME, i);
 		}
@@ -982,6 +1016,9 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class MatrixElementContext extends PrimaryContext {
+		public Token name;
+		public FormulaContext rowIdx;
+		public FormulaContext columnIdx;
 		public TerminalNode MATH_NAME() { return getToken(MathParser.MATH_NAME, 0); }
 		public FormulaContext formula(int i) {
 			return getRuleContext(FormulaContext.class,i);
@@ -1005,6 +1042,8 @@ public class MathParser extends Parser {
 		}
 	}
 	public static class MethodCallContext extends PrimaryContext {
+		public Token objName;
+		public FunctionContext objFunction;
 		public TerminalNode MATH_NAME() { return getToken(MathParser.MATH_NAME, 0); }
 		public FunctionContext function() {
 			return getRuleContext(FunctionContext.class,0);
@@ -1063,12 +1102,12 @@ public class MathParser extends Parser {
 				_localctx = new MatrixElementContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(104); match(MATH_NAME);
+				setState(104); ((MatrixElementContext)_localctx).name = match(MATH_NAME);
 				setState(105); match(11);
-				setState(106); formula();
+				setState(106); ((MatrixElementContext)_localctx).rowIdx = formula();
 				setState(107); match(2);
 				setState(108); match(11);
-				setState(109); formula();
+				setState(109); ((MatrixElementContext)_localctx).columnIdx = formula();
 				setState(110); match(2);
 				}
 				break;
@@ -1083,25 +1122,25 @@ public class MathParser extends Parser {
 				_localctx = new MethodCallContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(113); match(MATH_NAME);
+				setState(113); ((MethodCallContext)_localctx).objName = match(MATH_NAME);
 				setState(114); match(5);
-				setState(115); function();
+				setState(115); ((MethodCallContext)_localctx).objFunction = function();
 				}
 				break;
 			case 8:
 				_localctx = new PropertyContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(116); match(MATH_NAME);
+				setState(116); ((PropertyContext)_localctx).objName = match(MATH_NAME);
 				setState(117); match(5);
-				setState(118); match(MATH_NAME);
+				setState(118); ((PropertyContext)_localctx).objProperty = match(MATH_NAME);
 				}
 				break;
 			case 9:
 				_localctx = new TransposeMatrixContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(119); match(MATH_NAME);
+				setState(119); ((TransposeMatrixContext)_localctx).name = match(MATH_NAME);
 				setState(120); match(8);
 				}
 				break;

@@ -18,14 +18,6 @@ public class TexTranslator{
 			return visitChildren(ctx);
 		}
 
-		public String visitFloatNumber(MathParser.FloatNumberContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitProperty(MathParser.PropertyContext ctx) {
-			return visitChildren(ctx);
-		}
-
 		public String visitMethodCall(MathParser.MethodCallContext ctx) {
 			return visitChildren(ctx);
 		}
@@ -47,9 +39,7 @@ public class TexTranslator{
 			return visitChildren(ctx);
 		}
 
-		public String visitIntNumber(MathParser.IntNumberContext ctx) {
-			return visitChildren(ctx);
-		}
+		
 
 		public String visitLogicalFormula(MathParser.LogicalFormulaContext ctx) {
 			return visitChildren(ctx);
@@ -61,11 +51,7 @@ public class TexTranslator{
 
 		public String visitPrimaryExpr(MathParser.PrimaryExprContext ctx) {
 			return visitChildren(ctx);
-		}
-
-		public String visitVariable(MathParser.VariableContext ctx) {
-			return visitChildren(ctx);
-		}
+		}	
 
 		public String visitPower(MathParser.PowerContext ctx) {
 			return visitChildren(ctx);
@@ -120,6 +106,23 @@ public class TexTranslator{
 		public String visitFormula(MathParser.FormulaContext ctx) {
 			return visitChildren(ctx);
 		}
+		
+		public String visitVariable(MathParser.VariableContext ctx) {
+			return ctx.getText();
+		}
+		
+		public String visitFloatNumber(MathParser.FloatNumberContext ctx) {
+			return ctx.getText();
+		}
+		
+		public String visitIntNumber(MathParser.IntNumberContext ctx) {
+			return ctx.getText();
+		}
+		
+		public String visitProperty(MathParser.PropertyContext ctx) {
+			return visitChildren(ctx);
+		}
+		
 	}
 	
 	public static String translate(String expression) {
