@@ -11,7 +11,15 @@ import org.eclipse.jdt.core.ICompilationUnit;
 public class JavaTranslator {
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
-		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
+		// statement rule
+
+		public String visitFunctionDefinition(
+				MathParser.FunctionDefinitionContext ctx) {
+			return visitChildren(ctx);
+		}
+
+		public String visitVariableAssignment(
+				MathParser.VariableAssignmentContext ctx) {
 			return visitChildren(ctx);
 		}
 
@@ -19,40 +27,11 @@ public class JavaTranslator {
 			return visitChildren(ctx);
 		}
 
-		public String visitFloatNumber(MathParser.FloatNumberContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitProperty(MathParser.PropertyContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitMethodCall(MathParser.MethodCallContext ctx) {
-			return visitChildren(ctx);
-		}
-
 		public String visitFunction(MathParser.FunctionContext ctx) {
 			return visitChildren(ctx);
 		}
 
-		public String visitMatrixDefinition(
-				MathParser.MatrixDefinitionContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitTransposeMatrix(MathParser.TransposeMatrixContext ctx) {
-			return visitChildren(ctx);
-		}
-
 		public String visitAdd(MathParser.AddContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitIntNumber(MathParser.IntNumberContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitLogicalFormula(MathParser.LogicalFormulaContext ctx) {
 			return visitChildren(ctx);
 		}
 
@@ -61,10 +40,6 @@ public class JavaTranslator {
 		}
 
 		public String visitPrimaryExpr(MathParser.PrimaryExprContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitVariable(MathParser.VariableContext ctx) {
 			return visitChildren(ctx);
 		}
 
@@ -81,14 +56,10 @@ public class JavaTranslator {
 		}
 
 		public String visitLogicBrackets(MathParser.LogicBracketsContext ctx) {
-			return visitChildren(ctx);
+			return '(' + visit(ctx.expr) + ')';
 		}
 
 		public String visitLogicAdd(MathParser.LogicAddContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
 			return visitChildren(ctx);
 		}
 
@@ -97,28 +68,49 @@ public class JavaTranslator {
 		}
 
 		public String visitExprBrackets(MathParser.ExprBracketsContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitStatement(MathParser.StatementContext ctx) {
-			return visitChildren(ctx);
-		}
-
-		public String visitFunctionDefinition(
-				MathParser.FunctionDefinitionContext ctx) {
-			return visitChildren(ctx);
+			return '(' + visit(ctx.bracketedExpr) + ')';
 		}
 
 		public String visitMatrixRow(MathParser.MatrixRowContext ctx) {
 			return visitChildren(ctx);
 		}
 
-		public String visitVariableAssignment(
-				MathParser.VariableAssignmentContext ctx) {
+		// primary rule
+
+		public String visitVariable(MathParser.VariableContext ctx) {
+			return ctx.getText();
+		}
+
+		public String visitFloatNumber(MathParser.FloatNumberContext ctx) {
+			return ctx.getText();
+		}
+
+		public String visitIntNumber(MathParser.IntNumberContext ctx) {
+			return ctx.getText();
+		}
+
+		public String visitMatrixDefinition(
+				MathParser.MatrixDefinitionContext ctx) {
 			return visitChildren(ctx);
 		}
 
-		public String visitFormula(MathParser.FormulaContext ctx) {
+		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
+			return visitChildren(ctx);
+		}
+
+		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
+			return visitFunction(ctx.function());
+		}
+
+		public String visitMethodCall(MathParser.MethodCallContext ctx) {
+			return ctx.objName.getText() + "." + visitFunction(ctx.objFunction);
+		}
+
+		public String visitProperty(MathParser.PropertyContext ctx) {
+			return ctx.objName.getText() + "." + ctx.objProperty.getText();
+		}
+
+		public String visitTransposeMatrix(MathParser.TransposeMatrixContext ctx) {
 			return visitChildren(ctx);
 		}
 	}
