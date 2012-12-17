@@ -26,8 +26,6 @@ public class MathBaseListener implements MathListener {
 	@Override public void exitAdd(MathParser.AddContext ctx) { }
 	@Override public void enterIntNumber(MathParser.IntNumberContext ctx) { }
 	@Override public void exitIntNumber(MathParser.IntNumberContext ctx) { }
-	@Override public void enterLogicalFormula(MathParser.LogicalFormulaContext ctx) { }
-	@Override public void exitLogicalFormula(MathParser.LogicalFormulaContext ctx) { }
 	@Override public void enterMult(MathParser.MultContext ctx) { }
 	@Override public void exitMult(MathParser.MultContext ctx) { }
 	@Override public void enterPrimaryExpr(MathParser.PrimaryExprContext ctx) { }
@@ -36,10 +34,10 @@ public class MathBaseListener implements MathListener {
 	@Override public void exitVariable(MathParser.VariableContext ctx) { }
 	@Override public void enterPower(MathParser.PowerContext ctx) { }
 	@Override public void exitPower(MathParser.PowerContext ctx) { }
-	@Override public void enterMatrix(MathParser.MatrixContext ctx) { }
-	@Override public void exitMatrix(MathParser.MatrixContext ctx) { }
 	@Override public void enterLogicMult(MathParser.LogicMultContext ctx) { }
 	@Override public void exitLogicMult(MathParser.LogicMultContext ctx) { }
+	@Override public void enterMatrix(MathParser.MatrixContext ctx) { }
+	@Override public void exitMatrix(MathParser.MatrixContext ctx) { }
 	@Override public void enterLogicBrackets(MathParser.LogicBracketsContext ctx) { }
 	@Override public void exitLogicBrackets(MathParser.LogicBracketsContext ctx) { }
 	@Override public void enterLogicAdd(MathParser.LogicAddContext ctx) { }
@@ -58,8 +56,6 @@ public class MathBaseListener implements MathListener {
 	@Override public void exitMatrixRow(MathParser.MatrixRowContext ctx) { }
 	@Override public void enterVariableAssignment(MathParser.VariableAssignmentContext ctx) { }
 	@Override public void exitVariableAssignment(MathParser.VariableAssignmentContext ctx) { }
-	@Override public void enterFormula(MathParser.FormulaContext ctx) { }
-	@Override public void exitFormula(MathParser.FormulaContext ctx) { }
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext ctx) { }

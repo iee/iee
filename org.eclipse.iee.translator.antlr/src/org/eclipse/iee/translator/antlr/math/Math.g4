@@ -3,44 +3,36 @@ grammar Math;
 statement:
 	functionDefinition |
 	variableAssignment |
-	formula |
-	logicalFormula
+	expression |
+	logicalExpression
 ;
 
 functionDefinition:
-	name=function '=' value=formula
+	name=function '=' value=expression
 ;
 
 function:
-	name=MATH_NAME '(' (params+=formula (',' params+=formula)*)? ')'
+	name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')'
 ;
 	
 variableAssignment:
-	name=formula '=' value=formula
+	name=expression '=' value=expression
 ;
 
-formula:
-	expr	
-;
-
-logicalFormula:
-	logicalExpr
-;
-
-expr:
-	left=expr '^'<assoc=right> right=expr #Power |
-	sign=('+'|'-') expression=expr #Unary |
-	left=expr sign=('*'|'/'|'%') right=expr #Mult |
-	left=expr sign=('+'|'-') right=expr #Add |
-	'(' expression=expr ')' #ExprBrackets |
+expression:
+	left=expression '^'<assoc=right> right=expression #Power |
+	sign=('+'|'-') unaryExpr=expression #Unary |
+	left=expression sign=('*'|'/'|'%') right=expression #Mult |
+	left=expression sign=('+'|'-') right=expression #Add |
+	'(' bracketedExpr=expression ')' #ExprBrackets |
 	primary	#PrimaryExpr
 ;
 
-logicalExpr:
-	left=logicalExpr sign='&&' right=logicalExpr #LogicMult |
-	left=logicalExpr sign='||' right=logicalExpr #LogicAdd |
-	'(' expression=logicalExpr ')' #LogicBrackets |
-	left=expr sign=('>'|'>='|'<'|'<='|'=='|'!=') right=expr #LogicComparison
+logicalExpression:
+	left=logicalExpression sign='&&' right=logicalExpression #LogicMult |
+	left=logicalExpression sign='||' right=logicalExpression #LogicAdd |
+	'(' expr=logicalExpression ')' #LogicBrackets |
+	left=expression sign=('>'|'>='|'<'|'<='|'=='|'!=') right=expression #LogicComparison
 ;
 
 primary:
@@ -48,7 +40,7 @@ primary:
 	FLOAT #FloatNumber |
 	INT #IntNumber |
 	matrix #MatrixDefinition |
-	name=MATH_NAME '[' rowIdx=formula ']' '[' columnIdx=formula ']' #MatrixElement | 
+	name=MATH_NAME '[' rowIdx=expression ']' '[' columnIdx=expression ']' #MatrixElement | 
 	function #PrimaryFunction |
 	objName=MATH_NAME '.' objFunction=function #MethodCall |
 	objName=MATH_NAME '.' objProperty=MATH_NAME #Property |
@@ -59,7 +51,7 @@ matrix:
 	'{' (rows+=matrixRow (',' rows+=matrixRow)* ','?)? '}';
 
 matrixRow:
-	'{' (elements+=formula (',' elements+=formula)* ','?)? '}';
+	'{' (elements+=expression (',' elements+=expression)* ','?)? '}';
 	
 MATH_NAME:
 	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

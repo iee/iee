@@ -13,13 +13,12 @@ public interface MathVisitor<T> {
 	T visitTransposeMatrix(MathParser.TransposeMatrixContext ctx);
 	T visitAdd(MathParser.AddContext ctx);
 	T visitIntNumber(MathParser.IntNumberContext ctx);
-	T visitLogicalFormula(MathParser.LogicalFormulaContext ctx);
 	T visitMult(MathParser.MultContext ctx);
 	T visitPrimaryExpr(MathParser.PrimaryExprContext ctx);
 	T visitVariable(MathParser.VariableContext ctx);
 	T visitPower(MathParser.PowerContext ctx);
-	T visitMatrix(MathParser.MatrixContext ctx);
 	T visitLogicMult(MathParser.LogicMultContext ctx);
+	T visitMatrix(MathParser.MatrixContext ctx);
 	T visitLogicBrackets(MathParser.LogicBracketsContext ctx);
 	T visitLogicAdd(MathParser.LogicAddContext ctx);
 	T visitMatrixElement(MathParser.MatrixElementContext ctx);
@@ -29,5 +28,4 @@ public interface MathVisitor<T> {
 	T visitFunctionDefinition(MathParser.FunctionDefinitionContext ctx);
 	T visitMatrixRow(MathParser.MatrixRowContext ctx);
 	T visitVariableAssignment(MathParser.VariableAssignmentContext ctx);
-	T visitFormula(MathParser.FormulaContext ctx);
 }

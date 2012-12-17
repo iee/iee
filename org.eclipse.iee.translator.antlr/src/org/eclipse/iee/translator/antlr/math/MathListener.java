@@ -23,8 +23,6 @@ public interface MathListener extends ParseTreeListener {
 	void exitAdd(MathParser.AddContext ctx);
 	void enterIntNumber(MathParser.IntNumberContext ctx);
 	void exitIntNumber(MathParser.IntNumberContext ctx);
-	void enterLogicalFormula(MathParser.LogicalFormulaContext ctx);
-	void exitLogicalFormula(MathParser.LogicalFormulaContext ctx);
 	void enterMult(MathParser.MultContext ctx);
 	void exitMult(MathParser.MultContext ctx);
 	void enterPrimaryExpr(MathParser.PrimaryExprContext ctx);
@@ -33,10 +31,10 @@ public interface MathListener extends ParseTreeListener {
 	void exitVariable(MathParser.VariableContext ctx);
 	void enterPower(MathParser.PowerContext ctx);
 	void exitPower(MathParser.PowerContext ctx);
-	void enterMatrix(MathParser.MatrixContext ctx);
-	void exitMatrix(MathParser.MatrixContext ctx);
 	void enterLogicMult(MathParser.LogicMultContext ctx);
 	void exitLogicMult(MathParser.LogicMultContext ctx);
+	void enterMatrix(MathParser.MatrixContext ctx);
+	void exitMatrix(MathParser.MatrixContext ctx);
 	void enterLogicBrackets(MathParser.LogicBracketsContext ctx);
 	void exitLogicBrackets(MathParser.LogicBracketsContext ctx);
 	void enterLogicAdd(MathParser.LogicAddContext ctx);
@@ -55,6 +53,4 @@ public interface MathListener extends ParseTreeListener {
 	void exitMatrixRow(MathParser.MatrixRowContext ctx);
 	void enterVariableAssignment(MathParser.VariableAssignmentContext ctx);
 	void exitVariableAssignment(MathParser.VariableAssignmentContext ctx);
-	void enterFormula(MathParser.FormulaContext ctx);
-	void exitFormula(MathParser.FormulaContext ctx);
 }
