@@ -8,6 +8,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -51,6 +53,7 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 		IEditorPart editor = (IEditorPart)fPadEditor;
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
 	    IFile file = input.getFile();
+	    ICompilationUnit compilationUnit = JavaCore.createCompilationUnitFrom(file);
 	    IProject project = file.getProject();
 	    
 	    IPath rawLocation = project.getRawLocation();
@@ -72,6 +75,7 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 		
 		FormulaPad pad = new FormulaPad();
 		pad.setDirectoryPath(storagePath);
+		pad.setCompilationUnit(compilationUnit);
 		
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
 		

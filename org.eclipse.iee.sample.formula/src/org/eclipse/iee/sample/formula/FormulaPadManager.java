@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.translator.jmole.math.generator.Mole;
-import org.eclipse.iee.translator.molex.mex.generator.Molex;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -25,25 +23,12 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	
 	private final FormulaPadFactory factory = new FormulaPadFactory();
 	
-	private static Mole mole;
-	private static Molex molex;
-	
 	/**
 	 * The constructor
 	 */
 	public FormulaPadManager() {
-		mole = Mole.create();
-		molex = Molex.create();
 	}
 	
-	public static Mole getMole() {
-		return mole;
-	}
-	
-	public static Molex getMolex() {
-		return molex;
-	}	
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)

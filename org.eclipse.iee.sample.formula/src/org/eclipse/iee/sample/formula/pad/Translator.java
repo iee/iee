@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
+import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 
 public class Translator {
 	
@@ -18,7 +19,7 @@ public class Translator {
 			return true;
 		}
 		
-		if (translateElement(text) == null) {
+		if (translateElement(text) == "") {
 			return false;
 		} else {
 			return true;
@@ -42,16 +43,17 @@ public class Translator {
 			
 			if (text.charAt(0) == '=')
 			{
-				resultJava = FormulaPadManager.getMole().translateMath(text.substring(1));
+				
+				resultJava = JavaTranslator.translate(text.substring(1));
 				resultJava = "=" + resultJava;
 			}
 			else if (text.charAt(text.length() - 1) == '=')
 			{
-				resultJava = FormulaPadManager.getMole().translateMath(text.substring(0, text.length() - 1));
+				resultJava = JavaTranslator.translate(text.substring(0, text.length() - 1));
 			}
 			else  
 			{
-				resultJava = FormulaPadManager.getMole().translateMath(text);
+				resultJava = JavaTranslator.translate(text);
 			}
 
 			if (resultJava == null) {
