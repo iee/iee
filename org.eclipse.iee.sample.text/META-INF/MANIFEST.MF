@@ -12,8 +12,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.core.expressions,
- org.eclipse.iee.translator.jmole.math.generator,
- org.eclipse.iee.translator.molex.mex.generator,
  org.eclipse.ui
 Bundle-ClassPath: lib/jsoup-1.6.3.jar,
  .
