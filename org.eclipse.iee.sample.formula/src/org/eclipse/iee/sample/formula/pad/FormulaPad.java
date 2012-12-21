@@ -67,10 +67,10 @@ public class FormulaPad extends Pad {
 	private TextViewerSupport fViewerSupport;
 	@XStreamOmitField
 	private Document fDocument;
-	
+
 	@XStreamOmitField
 	private ICompilationUnit fCompilationUnit;
-	
+
 	@XStreamOmitField
 	private HoverShell fHoverShell;
 
@@ -128,7 +128,7 @@ public class FormulaPad extends Pad {
 	public void setTranslatingExression(String expression) {
 		fTranslatingExpression = expression;
 	}
-	
+
 	public ICompilationUnit getCompilationUnit() {
 		return fCompilationUnit;
 	}
@@ -136,7 +136,6 @@ public class FormulaPad extends Pad {
 	public void setCompilationUnit(ICompilationUnit compilationUnit) {
 		this.fCompilationUnit = compilationUnit;
 	}
-
 
 	public FormulaPad() {
 	}
@@ -209,8 +208,9 @@ public class FormulaPad extends Pad {
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */
-		
-		String generated = Translator.translateElement(fTranslatingExpression);
+
+		String generated = Translator.translateElement(fTranslatingExpression,
+				fCompilationUnit, getContainer().getPosition().getOffset());
 
 		/* Add result output */
 		if (!fTranslatingExpression.trim().isEmpty())

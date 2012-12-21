@@ -1,7 +1,5 @@
 package org.eclipse.iee.sample.matrix;
 
-import org.eclipse.iee.translator.jmole.math.generator.Mole;
-import org.eclipse.iee.translator.molex.mex.generator.Molex;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -15,25 +13,14 @@ public class Activator extends AbstractUIPlugin {
 
 	private static Activator plugin;
 	
-	private static Mole mole;
-	private static Molex molex;
 	
 	/**
 	 * The constructor
 	 */
 	public Activator() {	
-		mole = Mole.create();
-		molex = Molex.create();
 		System.out.println("Activated");
 	}
 	
-	public static Mole getMole() {
-		return mole;
-	}
-	
-	public static Molex getMolex() {
-		return molex;
-	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);

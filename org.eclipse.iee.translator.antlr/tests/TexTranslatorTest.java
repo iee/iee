@@ -5,7 +5,7 @@ public class TexTranslatorTest {
 
 	@Test
 	public void testTranslate() {
-		String input = "-2^2";
+		String input = "alpha^T";
 		String result = TexTranslator.translate(input);
 		System.out.println(result);
 	}

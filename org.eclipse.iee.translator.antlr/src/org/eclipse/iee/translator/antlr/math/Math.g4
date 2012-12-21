@@ -43,8 +43,7 @@ primary:
 	name=MATH_NAME '[' rowIdx=expression ']' '[' columnIdx=expression ']' #MatrixElement | 
 	function #PrimaryFunction |
 	objName=MATH_NAME '.' objFunction=function #MethodCall |
-	objName=MATH_NAME '.' objProperty=MATH_NAME #Property |
-	name=MATH_NAME '^T' #TransposeMatrix
+	objName=MATH_NAME '.' objProperty=MATH_NAME #Property 
 ;
 
 matrix:

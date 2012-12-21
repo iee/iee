@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-import org.eclipse.iee.editor.core.container.Container;
-import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.translator.antlr.translator.TexTranslator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -21,8 +19,9 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class FormulaRenderer {
 
-	private static final Logger logger = Logger.getLogger(FormulaRenderer.class);
-	
+	private static final Logger logger = Logger
+			.getLogger(FormulaRenderer.class);
+
 	protected static Display fDisplay;
 
 	protected static Map<String, Image> fCachedImages = new TreeMap<String, Image>();
@@ -55,16 +54,14 @@ public class FormulaRenderer {
 		try {
 			/* Translating to Latex */
 			if (text.charAt(0) == '=') {
-				latex = TexTranslator.translate(text.substring(1)).trim()
-						.replace("\n", "").replace("\r", "");
+				latex = TexTranslator.translate(text.substring(1));
 				latex = "=" + latex;
 			} else if (text.charAt(text.length() - 1) == '=') {
-				latex = TexTranslator.translate(text.substring(0, text.length() - 1))
-						.trim().replace("\n", "").replace("\r", "");
+				latex = TexTranslator.translate(text.substring(0,
+						text.length() - 1));
 				latex = latex + "=";
 			} else {
-				latex = TexTranslator.translate(text).trim()
-						.replace("\n", "").replace("\r", "");
+				latex = TexTranslator.translate(text);
 			}
 			logger.debug("latex: " + latex);
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
