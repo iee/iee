@@ -12,3 +12,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator
+Bundle-ClassPath: lib/antlr-complete.jar,
+ .

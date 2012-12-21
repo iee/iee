@@ -36,12 +36,24 @@ public class TexTranslator {
 				return visit(ctx.left) + "\\ne" + visit(ctx.right);
 			if (ctx.sign.getText().matches("=="))
 				return visit(ctx.left) + "==" + visit(ctx.right);
-			
+
 			return visitChildren(ctx);
 		}
 
 		public String visitFunction(MathParser.FunctionContext ctx) {
-			return visitChildren(ctx);
+			String function = "";
+			function += translateName(ctx.name.getText());
+			function += "(";
+
+			for (int i = 0; i < ctx.params.size(); i++) {
+				function += visit(ctx.params.get(i));
+				if (i != ctx.params.size() - 1)
+					function += ",";
+			}
+
+			function += ")";
+
+			return function;
 		}
 
 		public String visitAdd(MathParser.AddContext ctx) {
@@ -52,10 +64,11 @@ public class TexTranslator {
 			if (ctx.sign.getText().matches("*"))
 				return visit(ctx.left) + "*" + visit(ctx.right);
 			if (ctx.sign.getText().matches("/"))
-				return "\\frac{" + visit(ctx.left) + "}{" +  visit(ctx.right) + "}";
+				return "\\frac{" + visit(ctx.left) + "}{" + visit(ctx.right)
+						+ "}";
 			if (ctx.sign.getText().matches("%"))
 				return visit(ctx.left) + "\\mod" + visit(ctx.right);
-			
+
 			return visitChildren(ctx);
 		}
 
@@ -68,7 +81,24 @@ public class TexTranslator {
 		}
 
 		public String visitMatrix(MathParser.MatrixContext ctx) {
-			return visitChildren(ctx);
+			String matrix = "";
+			int i;
+			
+			matrix += "$$\\left(\\begin{array}{";
+			int rowsCount = ctx.rows.size();
+			for (i = 0; i < rowsCount; i++)
+				matrix += "c";
+			
+			for (i = 0; i < rowsCount; i++)
+			{
+				matrix += visitMatrixRow(ctx.rows.get(i));
+				if (i != rowsCount - 1)
+					matrix += "\\\\";
+			}
+			
+			matrix += "\\end{array}\\right)$$";
+			
+			return matrix;
 		}
 
 		public String visitLogicMult(MathParser.LogicMultContext ctx) {
@@ -92,7 +122,15 @@ public class TexTranslator {
 		}
 
 		public String visitMatrixRow(MathParser.MatrixRowContext ctx) {
-			return visitChildren(ctx);
+			String row = "";
+			
+			for (int i = 0; i < ctx.elements.size(); i++) {
+				row += visit(ctx.elements.get(i));
+				if (i != ctx.elements.size() - 1)
+					row += "&";
+			}
+			
+			return row;
 		}
 
 		// primary rule
@@ -115,7 +153,8 @@ public class TexTranslator {
 		}
 
 		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
-			return visitChildren(ctx);
+			return translateName(ctx.name.getText()) + "_{" + visit(ctx.rowIdx)
+					+ "," + visit(ctx.columnIdx) + "}";
 		}
 
 		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
@@ -130,10 +169,6 @@ public class TexTranslator {
 		public String visitProperty(MathParser.PropertyContext ctx) {
 			return translateName(ctx.objName.getText()) + "."
 					+ translateName(ctx.objProperty.getText());
-		}
-
-		public String visitTransposeMatrix(MathParser.TransposeMatrixContext ctx) {
-			return visitChildren(ctx);
 		}
 
 	}
@@ -155,8 +190,87 @@ public class TexTranslator {
 	}
 
 	private static String translateName(String name) {
-		// TODO: add greek letters support
-		return name;
+		String translatedName = name;
+		
+		if (name.matches("^alpha$"))
+			translatedName = "\\\\alpha";
+		if (name.matches("^beta$"))
+			translatedName = "\\\\beta";
+		if (name.matches("^delta$"))
+			translatedName = "\\\\delta";
+		if (name.matches("^epsilon$"))
+			translatedName = "\\\\epsilon";
+		if (name.matches("^varepsilon$"))
+			translatedName = "\\\\varepsilon";
+		if (name.matches("^zeta$"))
+			translatedName = "\\\\zeta";
+		if (name.matches("^eta$"))
+			translatedName = "\\\\eta";
+		if (name.matches("^theta$"))
+			translatedName = "\\\\theta";
+		if (name.matches("^vartheta$"))
+			translatedName = "\\\\vartheta";
+		if (name.matches("^gamma$"))
+			translatedName = "\\\\gamma";
+		if (name.matches("^kappa$"))
+			translatedName = "\\\\kappa";
+		if (name.matches("^lambda$"))
+			translatedName = "\\\\lambda";
+		if (name.matches("^mu$"))
+			translatedName = "\\\\mu";
+		if (name.matches("^nu$"))
+			translatedName = "\\\\nu";
+		if (name.matches("^xi$"))
+			translatedName = "\\\\xi";
+		if (name.matches("^varpi$"))
+			translatedName = "\\\\varpi";
+		if (name.matches("^rho$"))
+			translatedName = "\\\\rho";
+		if (name.matches("^varrho$"))
+			translatedName = "\\\\varrho";
+		if (name.matches("^sigma$"))
+			translatedName = "\\\\sigma";
+		if (name.matches("^varsigma$"))
+			translatedName = "\\\\varsigma";
+		if (name.matches("^tau$"))
+			translatedName = "\\\\tau";
+		if (name.matches("^upsilon$"))
+			translatedName = "\\\\upsilon";
+		if (name.matches("^phi$"))
+			translatedName = "\\\\phi";
+		if (name.matches("^varphi$"))
+			translatedName = "\\\\varphi";
+		if (name.matches("^chi$"))
+			translatedName = "\\\\chi";
+		if (name.matches("^psi$"))
+			translatedName = "\\\\psi";
+		if (name.matches("^omega$"))
+			translatedName = "\\\\omega";
+		if (name.matches("^Gamma$"))
+			translatedName = "\\\\Gamma";
+		if (name.matches("^Delta$"))
+			translatedName = "\\\\Delta";
+		if (name.matches("^Theta$"))
+			translatedName = "\\\\Theta";
+		if (name.matches("^Lambda$"))
+			translatedName = "\\\\Lambda";
+		if (name.matches("^Xi$"))
+			translatedName = "\\\\Xi";
+		if (name.matches("^Pi$"))
+			translatedName = "\\\\Pi";
+		if (name.matches("^Sigma$"))
+			translatedName = "\\\\Sigma";
+		if (name.matches("^Upsilon$"))
+			translatedName = "\\\\Upsilon";
+		if (name.matches("^Phi$"))
+			translatedName = "\\\\Phi";
+		if (name.matches("^Psi$"))
+			translatedName = "\\\\Psi";
+		if (name.matches("^Omega$"))
+			translatedName = "\\\\Omega";
+		
+		
+		return translatedName;
 	}
 
 }
