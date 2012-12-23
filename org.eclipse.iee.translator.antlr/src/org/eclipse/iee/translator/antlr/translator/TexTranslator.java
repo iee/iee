@@ -3,6 +3,7 @@ package org.eclipse.iee.translator.antlr.translator;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
@@ -83,21 +84,20 @@ public class TexTranslator {
 		public String visitMatrix(MathParser.MatrixContext ctx) {
 			String matrix = "";
 			int i;
-			
+
 			matrix += "$$\\left(\\begin{array}{";
 			int rowsCount = ctx.rows.size();
 			for (i = 0; i < rowsCount; i++)
 				matrix += "c";
-			
-			for (i = 0; i < rowsCount; i++)
-			{
+
+			for (i = 0; i < rowsCount; i++) {
 				matrix += visitMatrixRow(ctx.rows.get(i));
 				if (i != rowsCount - 1)
 					matrix += "\\\\";
 			}
-			
+
 			matrix += "\\end{array}\\right)$$";
-			
+
 			return matrix;
 		}
 
@@ -123,13 +123,13 @@ public class TexTranslator {
 
 		public String visitMatrixRow(MathParser.MatrixRowContext ctx) {
 			String row = "";
-			
+
 			for (int i = 0; i < ctx.elements.size(); i++) {
 				row += visit(ctx.elements.get(i));
 				if (i != ctx.elements.size() - 1)
 					row += "&";
 			}
-			
+
 			return row;
 		}
 
@@ -170,8 +170,9 @@ public class TexTranslator {
 			return translateName(ctx.objName.getText()) + "."
 					+ translateName(ctx.objProperty.getText());
 		}
-
+		
 	}
+	
 
 	public static String translate(String expression) {
 		String result = "";
@@ -191,7 +192,7 @@ public class TexTranslator {
 
 	private static String translateName(String name) {
 		String translatedName = name;
-		
+
 		if (name.matches("^alpha$"))
 			translatedName = "\\\\alpha";
 		if (name.matches("^beta$"))
@@ -269,7 +270,83 @@ public class TexTranslator {
 		if (name.matches("^Omega$"))
 			translatedName = "\\\\Omega";
 		
-		
+		if (name.matches("^alpha_*$"))
+			translatedName = name.replaceFirst("alpha", "\\\\alpha");
+		if (name.matches("^beta_*$"))
+			translatedName = name.replaceFirst("beta", "\\\\beta");
+		if (name.matches("^delta_*$"))
+			translatedName = name.replaceFirst("delta", "\\\\delta");
+		if (name.matches("^epsilon_*$"))
+			translatedName = name.replaceFirst("epsilon", "\\\\epsilon");
+		if (name.matches("^varepsilon_*$"))
+			translatedName = name.replaceFirst("varepsilon", "\\\\varepsilon");
+		if (name.matches("^zeta_*$"))
+			translatedName = name.replaceFirst("zeta", "\\\\zeta");
+		if (name.matches("^eta_*$"))
+			translatedName = name.replaceFirst("eta", "\\\\eta");
+		if (name.matches("^theta_*$"))
+			translatedName = name.replaceFirst("theta", "\\\\theta");
+		if (name.matches("^vartheta_*$"))
+			translatedName = name.replaceFirst("vartheta", "\\\\vartheta");
+		if (name.matches("^gamma_*$"))
+			translatedName = name.replaceFirst("gamma", "\\\\gamma");
+		if (name.matches("^kappa_*$"))
+			translatedName = name.replaceFirst("kappa", "\\\\kappa");
+		if (name.matches("^lambda_*$"))
+			translatedName = name.replaceFirst("lambda", "\\\\lambda");
+		if (name.matches("^mu_*$"))
+			translatedName = name.replaceFirst("mu", "\\\\mu");
+		if (name.matches("^nu_*$"))
+			translatedName = name.replaceFirst("nu", "\\\\nu");
+		if (name.matches("^xi_*$"))
+			translatedName = name.replaceFirst("xi", "\\\\xi");
+		if (name.matches("^varpi_*$"))
+			translatedName = name.replaceFirst("varpi", "\\\\varpi");
+		if (name.matches("^rho_*$"))
+			translatedName = name.replaceFirst("rho", "\\\\rho");
+		if (name.matches("^varrho_*$"))
+			translatedName = name.replaceFirst("varrho", "\\\\varrho");
+		if (name.matches("^sigma_*$"))
+			translatedName = name.replaceFirst("sigma", "\\\\sigma");
+		if (name.matches("^varsigma_*$"))
+			translatedName = name.replaceFirst("varsigma", "\\\\varsigma");
+		if (name.matches("^tau_*$"))
+			translatedName = name.replaceFirst("tau", "\\\\tau");
+		if (name.matches("^upsilon_*$"))
+			translatedName = name.replaceFirst("upsilon", "\\\\upsilon");
+		if (name.matches("^phi_*$"))
+			translatedName = name.replaceFirst("phi", "\\\\phi");
+		if (name.matches("^varphi_*$"))
+			translatedName = name.replaceFirst("varphi", "\\\\varphi");
+		if (name.matches("^chi_*$"))
+			translatedName = name.replaceFirst("chi", "\\\\chi");
+		if (name.matches("^psi_*$"))
+			translatedName = name.replaceFirst("psi", "\\\\psi");
+		if (name.matches("^omega_*$"))
+			translatedName = name.replaceFirst("omega", "\\\\omega");
+		if (name.matches("^Gamma_*$"))
+			translatedName = name.replaceFirst("Gamma", "\\\\Gamma");
+		if (name.matches("^Delta_*$"))
+			translatedName = name.replaceFirst("Delta", "\\\\Delta");
+		if (name.matches("^Theta_*$"))
+			translatedName = name.replaceFirst("Theta", "\\\\Theta");
+		if (name.matches("^Lambda_*$"))
+			translatedName = name.replaceFirst("Lambda", "\\\\Lambda");
+		if (name.matches("^Xi_*$"))
+			translatedName = name.replaceFirst("Xi", "\\\\Xi");
+		if (name.matches("^Pi_*$"))
+			translatedName = name.replaceFirst("Pi", "\\\\Pi");
+		if (name.matches("^Sigma_*$"))
+			translatedName = name.replaceFirst("Sigma", "\\\\Sigma");
+		if (name.matches("^Upsilon_*$"))
+			translatedName = name.replaceFirst("Upsilon", "\\\\Upsilon");
+		if (name.matches("^Phi_*$"))
+			translatedName = name.replaceFirst("Phi", "\\\\Phi");
+		if (name.matches("^Psi_*$"))
+			translatedName = name.replaceFirst("Psi", "\\\\Psi");
+		if (name.matches("^Omega_*$"))
+			translatedName = name.replaceFirst("Omega", "\\\\Omega");
+
 		return translatedName;
 	}
 
