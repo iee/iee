@@ -62,13 +62,13 @@ public class TexTranslator {
 		}
 
 		public String visitMult(MathParser.MultContext ctx) {
-			if (ctx.sign.getText().matches("*"))
+			if (ctx.sign.getText().matches("\\*"))
 				return visit(ctx.left) + "*" + visit(ctx.right);
 			if (ctx.sign.getText().matches("/"))
 				return "\\frac{" + visit(ctx.left) + "}{" + visit(ctx.right)
 						+ "}";
 			if (ctx.sign.getText().matches("%"))
-				return visit(ctx.left) + "\\mod" + visit(ctx.right);
+				return visit(ctx.left) + " \\mod " + visit(ctx.right);
 
 			return visitChildren(ctx);
 		}
@@ -102,7 +102,7 @@ public class TexTranslator {
 		}
 
 		public String visitLogicMult(MathParser.LogicMultContext ctx) {
-			return visit(ctx.left) + "\\wedge" + visit(ctx.right);
+			return visit(ctx.left) + " \\wedge " + visit(ctx.right);
 		}
 
 		public String visitLogicBrackets(MathParser.LogicBracketsContext ctx) {
@@ -110,7 +110,7 @@ public class TexTranslator {
 		}
 
 		public String visitLogicAdd(MathParser.LogicAddContext ctx) {
-			return visit(ctx.left) + "\\vee" + visit(ctx.right);
+			return visit(ctx.left) + " \\vee " + visit(ctx.right);
 		}
 
 		public String visitUnary(MathParser.UnaryContext ctx) {
