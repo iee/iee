@@ -53,7 +53,7 @@ matrixRow:
 	'{' (elements+=expression (',' elements+=expression)* ','?)? '}';
 	
 MATH_NAME:
-	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
+	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'{'|'}')*
 ;
 
 INT :   DIGIT+ [Ll]? ;
