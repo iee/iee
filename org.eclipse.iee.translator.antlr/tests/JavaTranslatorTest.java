@@ -7,14 +7,10 @@ public class JavaTranslatorTest {
 
 	@Test
 	public void testTranslateString() {
-		String input = "a=x[0][1]";
+		String input = "x<y&&x>z";
 		String result = JavaTranslator.translate(input);
 		System.out.println(result);
 	}
 
-	@Test
-	public void testTranslateICompilationUnitStringInt() {
-		fail("Not yet implemented");
-	}
 
 }

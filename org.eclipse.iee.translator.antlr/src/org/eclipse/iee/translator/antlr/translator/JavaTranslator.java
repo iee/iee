@@ -44,7 +44,7 @@ public class JavaTranslator {
 				MathParser.FunctionDefinitionContext ctx) {
 			String functionDef = "";
 
-			functionDef += "public static double " + ctx.name.name.getText();
+			functionDef += "public static double " + translateName(ctx.name.name.getText());
 			functionDef += "(";
 
 			for (int i = 0; i < ctx.name.params.size(); i++) {
@@ -99,7 +99,7 @@ public class JavaTranslator {
 
 		public String visitFunction(MathParser.FunctionContext ctx) {
 			String function = "";
-			function += ctx.name.getText();
+			function += translateName(ctx.name.getText());
 			function += "(";
 
 			for (int i = 0; i < ctx.params.size(); i++) {
@@ -118,14 +118,13 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
 
-			if (fMatrixFields.contains(left) && fMatrixFields.contains(right))
-			{
+			if (fMatrixFields.contains(left) && fMatrixFields.contains(right)) {
 				if (sign.matches("+"))
 					return left + ".plus(" + right + ")";
 				if (sign.matches("-"))
 					return left + ".minus(" + right + ")";
 			}
-			
+
 			return "(" + left + ")" + sign + "(" + right + ")";
 		}
 
@@ -133,13 +132,12 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
-			
-			if (fMatrixFields.contains(left))
-			{
+
+			if (fMatrixFields.contains(left)) {
 				if (sign.matches("*"))
 					return left + ".times(" + right + ")";
 			}
-			
+
 			return "(" + left + ")" + sign + "(" + right + ")";
 		}
 
@@ -150,10 +148,10 @@ public class JavaTranslator {
 		public String visitPower(MathParser.PowerContext ctx) {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
-			
+
 			if (fMatrixFields.contains(left) && right.matches("T"))
 				return left + ".transpose()";
-			
+
 			return "Math.pow((" + left + "),(" + right + "))";
 		}
 
@@ -222,7 +220,7 @@ public class JavaTranslator {
 		// primary rule
 
 		public String visitVariable(MathParser.VariableContext ctx) {
-			return ctx.getText();
+			return translateName(ctx.getText());
 		}
 
 		public String visitFloatNumber(MathParser.FloatNumberContext ctx) {
@@ -242,10 +240,10 @@ public class JavaTranslator {
 
 			if (fVisitVariableName) {
 				fVisitedMatrixElement = true;
-				return ctx.name.getText() + ".set(" + visit(ctx.rowIdx) + ","
+				return translateName(ctx.name.getText()) + ".set(" + visit(ctx.rowIdx) + ","
 						+ visit(ctx.columnIdx) + ",";
 			} else
-				return ctx.name.getText() + ".get(" + visit(ctx.rowIdx) + ","
+				return translateName(ctx.name.getText()) + ".get(" + visit(ctx.rowIdx) + ","
 						+ visit(ctx.columnIdx) + ")";
 		}
 
@@ -254,11 +252,11 @@ public class JavaTranslator {
 		}
 
 		public String visitMethodCall(MathParser.MethodCallContext ctx) {
-			return ctx.objName.getText() + "." + visitFunction(ctx.objFunction);
+			return translateName(ctx.objName.getText()) + "." + visitFunction(ctx.objFunction);
 		}
 
 		public String visitProperty(MathParser.PropertyContext ctx) {
-			return ctx.objName.getText() + "." + ctx.objProperty.getText();
+			return translateName(ctx.objName.getText()) + "." + translateName(ctx.objProperty.getText());
 		}
 
 	}
@@ -396,6 +394,12 @@ public class JavaTranslator {
 		parser.setSource(unit);
 		parser.setResolveBindings(true);
 		return (CompilationUnit) parser.createAST(null); // parse
+	}
+
+	private static String translateName(String name) {
+		String translatedName = name.replaceAll("\\{", "").replaceAll("\\}", "");
+
+		return translatedName;
 	}
 
 }
