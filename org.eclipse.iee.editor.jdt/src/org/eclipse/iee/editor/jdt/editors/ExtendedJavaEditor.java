@@ -83,6 +83,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements IPadEdi
 			@Override
 			public void containerActivated(ContainerEvent event) {
 			}
+
+			@Override
+			public void containerUpdated(ContainerEvent containerEvent) {
+			}
 		};
 		fContainerManager.addContainerManagerListener(fContainerManagerListener);
 

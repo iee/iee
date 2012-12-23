@@ -1,9 +1,14 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.io.IOException;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -152,8 +157,8 @@ public class ContainerManager extends EventManager {
 		removeDocumentListener();
 	}
 
-	public void RequestContainerAllocation(String containerID, int offset) {
-		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(containerID);
+	public void RequestContainerAllocation(String type, String id, int offset) {
+		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(type, id);
 		try {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
 		} catch (BadLocationException e) {
@@ -364,13 +369,19 @@ public class ContainerManager extends EventManager {
 							region.getOffset(), region.getLength());
 
 					/* Adding container */
-
 					String containerID = fDocumentAccess
 							.getContainerIDFromTextRegion(containerTextRegion);
 
-					Container container = createContainer(
-							new Position(region.getOffset(), region.getLength()),
-							containerID);
+					Container container;
+					if (containerID.matches("\\w*-\\w*-\\w*-\\w*-\\w*")) {
+						//old style
+						container = createContainer(
+								new Position(region.getOffset(), region.getLength()),
+								containerID);
+					} else {
+						//new style
+						container = parseContainer(new Position(region.getOffset(), region.getLength()), containerID);
+					}
 
 					/* XXX Visibility */
 					container.setVisible(false);
@@ -391,10 +402,18 @@ public class ContainerManager extends EventManager {
 			Assert.isTrue(container.getPosition().getOffset() == region
 					.getOffset());
 			
-			
+			String containerTextRegion = fDocument.get(
+					region.getOffset(), region.getLength());
 
+			String content = fDocumentAccess
+					.getContainerIDFromTextRegion(containerTextRegion);
+			
+			Container parsed = parseContainer(new Position(region.getOffset(), region.getLength()), content);
+			container.updateSilently(parsed.getPadParams(), parsed.getValue());
+			
 			/* Updating container */
 			container.updatePosition(region.getOffset(), region.getLength());
+			fireContainerUpdated(container);
 		}
 
 		private void moveUnmodifiedPads(int offset, int delta) {
@@ -474,6 +493,14 @@ public class ContainerManager extends EventManager {
 				.containerCreated(new ContainerEvent(c, fContainerManagerID));
 		}
 	}
+	
+	protected void fireContainerUpdated(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerUpdated(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
 
 	protected void fireContainerRemoved(Container c) {
 		Object[] listeners = getListeners();
@@ -515,5 +542,90 @@ public class ContainerManager extends EventManager {
 		}
 	}
 
+	private Container parseContainer(Position position, String content) {
+		try {
+		    StringReader r = new StringReader(content);
+			StreamTokenizer st = new StreamTokenizer(r);
+		    String type = readString(st);
+		    if("----".equals(type)) {
+		    	type = null;
+		    }
+		    Map<String, String> params = readParams(st);
+		    int nextToken = st.nextToken();
+		    String value;
+		    if (nextToken == ':') {
+		        StringBuilder sb = new StringBuilder();
+		        int c;
+		        while ((c = r.read()) != -1) {
+		            sb.append((char)c);
+		        }
+		        value = sb.toString();
+		    } else {
+		        value = "";
+		    }
+		    return new Container(position, type, params, value, this);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @param st
+	 * @return
+	 * @throws IOException 
+	 */
+	private static Map<String, String> readParams(StreamTokenizer st) throws IOException {
+	    Map<String, String> params = new HashMap<String, String>();
+	    int nextToken = st.nextToken();
+	    if ((char) nextToken == '(') {
+	        while (true) {
+	            parseParam(st, params);
+	            nextToken = st.nextToken();
+	            if ((char) nextToken == ')') {
+	               break;
+	            } else if ((char) nextToken == ',') {
+	                
+	            } else {
+	                throw new IllegalArgumentException("failed to parse: " + st);
+	            }
+	        }
+	    } else {
+	        st.pushBack();
+	    }
+	    return params;
+	}
+	
+	/**
+	 * @param st
+	 * @param params
+	 * @throws IOException
+	 */
+	private static void parseParam(StreamTokenizer st, Map<String, String> params) throws IOException {
+	    int nextToken;
+	    String param = readString(st);
+	    nextToken = st.nextToken();
+	    if ((char) nextToken != '=') {
+	        throw new IllegalArgumentException("failed to parse: " + st);
+	    }
+	    String value = readString(st);
+	    params.put(param, value);
+	}
+	
+	
+	/**
+	 * @param st
+	 * @return
+	 * @throws IOException 
+	 */
+	private static String readString(StreamTokenizer st) throws IOException {
+	    int nextToken = st.nextToken();
+	    if (nextToken == StreamTokenizer.TT_WORD || nextToken == 34) {
+	        return st.sval;
+	    } else if (nextToken == StreamTokenizer.TT_NUMBER) {
+	        return String.valueOf(st.nval);
+	    }
+	    throw new IllegalArgumentException("failed to parse: " + st);
+	}
 	
 }

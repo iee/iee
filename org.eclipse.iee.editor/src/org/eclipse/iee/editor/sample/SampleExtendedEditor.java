@@ -70,6 +70,10 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 			@Override
 			public void containerActivated(ContainerEvent event) {
 			}
+
+			@Override
+			public void containerUpdated(ContainerEvent containerEvent) {
+			}
 		};
 		fContainerManager.addContainerManagerListener(fContainerManagerListener);
 
