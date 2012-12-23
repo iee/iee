@@ -62,8 +62,8 @@ public class MathParser extends Parser {
 		public LogicalExpressionContext logicalExpression() {
 			return getRuleContext(LogicalExpressionContext.class,0);
 		}
-		public StatementContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public StatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
@@ -76,14 +76,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitStatement(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitStatement(this);
 			else return null;
 		}
 	}
 
 	public final StatementContext statement() throws RecognitionException {
-		StatementContext _localctx = new StatementContext(_ctx, 0);
-		enterRule(_localctx, RULE_statement);
+		StatementContext _localctx = new StatementContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_statement);
 		try {
 			setState(22);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
@@ -93,18 +93,21 @@ public class MathParser extends Parser {
 				setState(18); functionDefinition();
 				}
 				break;
+
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(19); variableAssignment();
 				}
 				break;
+
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(20); expression(0);
 				}
 				break;
+
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
@@ -133,8 +136,8 @@ public class MathParser extends Parser {
 		public FunctionContext function() {
 			return getRuleContext(FunctionContext.class,0);
 		}
-		public FunctionDefinitionContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public FunctionDefinitionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionDefinition; }
 		@Override
@@ -147,14 +150,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitFunctionDefinition(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitFunctionDefinition(this);
 			else return null;
 		}
 	}
 
 	public final FunctionDefinitionContext functionDefinition() throws RecognitionException {
-		FunctionDefinitionContext _localctx = new FunctionDefinitionContext(_ctx, 2);
-		enterRule(_localctx, RULE_functionDefinition);
+		FunctionDefinitionContext _localctx = new FunctionDefinitionContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_functionDefinition);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -185,8 +188,8 @@ public class MathParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public TerminalNode MATH_NAME() { return getToken(MathParser.MATH_NAME, 0); }
-		public FunctionContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public FunctionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function; }
 		@Override
@@ -199,14 +202,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitFunction(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitFunction(this);
 			else return null;
 		}
 	}
 
 	public final FunctionContext function() throws RecognitionException {
-		FunctionContext _localctx = new FunctionContext(_ctx, 4);
-		enterRule(_localctx, RULE_function);
+		FunctionContext _localctx = new FunctionContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_function);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -215,7 +218,7 @@ public class MathParser extends Parser {
 			setState(29); match(11);
 			setState(38);
 			_la = _input.LA(1);
-			if (_la==7 || _la==9 || _la==11 || _la==19 || _la==MATH_NAME || _la==INT || _la==FLOAT) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 9) | (1L << 11) | (1L << 19) | (1L << MATH_NAME) | (1L << INT) | (1L << FLOAT))) != 0)) {
 				{
 				setState(30); ((FunctionContext)_localctx).expression = expression(0);
 				((FunctionContext)_localctx).params.add(((FunctionContext)_localctx).expression);
@@ -260,8 +263,8 @@ public class MathParser extends Parser {
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public VariableAssignmentContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public VariableAssignmentContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_variableAssignment; }
 		@Override
@@ -274,14 +277,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitVariableAssignment(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitVariableAssignment(this);
 			else return null;
 		}
 	}
 
 	public final VariableAssignmentContext variableAssignment() throws RecognitionException {
-		VariableAssignmentContext _localctx = new VariableAssignmentContext(_ctx, 6);
-		enterRule(_localctx, RULE_variableAssignment);
+		VariableAssignmentContext _localctx = new VariableAssignmentContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_variableAssignment);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -303,9 +306,9 @@ public class MathParser extends Parser {
 
 	public static class ExpressionContext extends ParserRuleContext {
 		public int _p;
-		public ExpressionContext(ParserRuleContext parent, int state) { super(parent, state); }
-		public ExpressionContext(ParserRuleContext parent, int state, int _p) {
-			super(parent, state);
+		public ExpressionContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public ExpressionContext(ParserRuleContext parent, int invokingState, int _p) {
+			super(parent, invokingState);
 			this._p = _p;
 		}
 		@Override public int getRuleIndex() { return RULE_expression; }
@@ -337,7 +340,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitMult(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMult(this);
 			else return null;
 		}
 	}
@@ -356,7 +359,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitPrimaryExpr(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitPrimaryExpr(this);
 			else return null;
 		}
 	}
@@ -380,7 +383,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitPower(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitPower(this);
 			else return null;
 		}
 	}
@@ -405,7 +408,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitAdd(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitAdd(this);
 			else return null;
 		}
 	}
@@ -426,7 +429,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitUnary(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitUnary(this);
 			else return null;
 		}
 	}
@@ -446,14 +449,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitExprBrackets(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitExprBrackets(this);
 			else return null;
 		}
 	}
 
 	public final ExpressionContext expression(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
-		int _parentState = _ctx.s;
+		int _parentState = getState();
 		ExpressionContext _localctx = new ExpressionContext(_ctx, _parentState, _p);
 		ExpressionContext _prevctx = _localctx;
 		int _startState = 8;
@@ -528,6 +531,7 @@ public class MathParser extends Parser {
 						setState(58); ((PowerContext)_localctx).right = expression(6);
 						}
 						break;
+
 					case 2:
 						{
 						_localctx = new MultContext(new ExpressionContext(_parentctx, _parentState, _p));
@@ -538,13 +542,14 @@ public class MathParser extends Parser {
 						setState(60);
 						((MultContext)_localctx).sign = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==1 || _la==8 || _la==20) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 8) | (1L << 20))) != 0)) ) {
 							((MultContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 						}
 						consume();
 						setState(61); ((MultContext)_localctx).right = expression(5);
 						}
 						break;
+
 					case 3:
 						{
 						_localctx = new AddContext(new ExpressionContext(_parentctx, _parentState, _p));
@@ -584,9 +589,9 @@ public class MathParser extends Parser {
 
 	public static class LogicalExpressionContext extends ParserRuleContext {
 		public int _p;
-		public LogicalExpressionContext(ParserRuleContext parent, int state) { super(parent, state); }
-		public LogicalExpressionContext(ParserRuleContext parent, int state, int _p) {
-			super(parent, state);
+		public LogicalExpressionContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public LogicalExpressionContext(ParserRuleContext parent, int invokingState, int _p) {
+			super(parent, invokingState);
 			this._p = _p;
 		}
 		@Override public int getRuleIndex() { return RULE_logicalExpression; }
@@ -618,7 +623,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitLogicMult(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicMult(this);
 			else return null;
 		}
 	}
@@ -643,7 +648,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitLogicComparison(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicComparison(this);
 			else return null;
 		}
 	}
@@ -663,7 +668,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitLogicBrackets(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicBrackets(this);
 			else return null;
 		}
 	}
@@ -688,14 +693,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitLogicAdd(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicAdd(this);
 			else return null;
 		}
 	}
 
 	public final LogicalExpressionContext logicalExpression(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
-		int _parentState = _ctx.s;
+		int _parentState = getState();
 		LogicalExpressionContext _localctx = new LogicalExpressionContext(_ctx, _parentState, _p);
 		LogicalExpressionContext _prevctx = _localctx;
 		int _startState = 10;
@@ -718,6 +723,7 @@ public class MathParser extends Parser {
 				setState(73); match(4);
 				}
 				break;
+
 			case 2:
 				{
 				_localctx = new LogicComparisonContext(_localctx);
@@ -727,7 +733,7 @@ public class MathParser extends Parser {
 				setState(76);
 				((LogicComparisonContext)_localctx).sign = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(_la==12 || _la==14 || _la==15 || _la==18 || _la==21 || _la==22) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 12) | (1L << 14) | (1L << 15) | (1L << 18) | (1L << 21) | (1L << 22))) != 0)) ) {
 					((LogicComparisonContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 				}
 				consume();
@@ -757,6 +763,7 @@ public class MathParser extends Parser {
 						setState(83); ((LogicMultContext)_localctx).right = logicalExpression(5);
 						}
 						break;
+
 					case 2:
 						{
 						_localctx = new LogicAddContext(new LogicalExpressionContext(_parentctx, _parentState, _p));
@@ -789,8 +796,8 @@ public class MathParser extends Parser {
 	}
 
 	public static class PrimaryContext extends ParserRuleContext {
-		public PrimaryContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public PrimaryContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primary; }
 	 
@@ -812,7 +819,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitVariable(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitVariable(this);
 			else return null;
 		}
 	}
@@ -831,7 +838,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitMatrixDefinition(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrixDefinition(this);
 			else return null;
 		}
 	}
@@ -850,7 +857,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitPrimaryFunction(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitPrimaryFunction(this);
 			else return null;
 		}
 	}
@@ -867,7 +874,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitFloatNumber(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitFloatNumber(this);
 			else return null;
 		}
 	}
@@ -884,7 +891,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitIntNumber(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitIntNumber(this);
 			else return null;
 		}
 	}
@@ -906,7 +913,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitProperty(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitProperty(this);
 			else return null;
 		}
 	}
@@ -932,7 +939,7 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitMatrixElement(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrixElement(this);
 			else return null;
 		}
 	}
@@ -954,14 +961,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitMethodCall(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMethodCall(this);
 			else return null;
 		}
 	}
 
 	public final PrimaryContext primary() throws RecognitionException {
-		PrimaryContext _localctx = new PrimaryContext(_ctx, 12);
-		enterRule(_localctx, RULE_primary);
+		PrimaryContext _localctx = new PrimaryContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_primary);
 		try {
 			setState(111);
 			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
@@ -972,6 +979,7 @@ public class MathParser extends Parser {
 				setState(92); match(MATH_NAME);
 				}
 				break;
+
 			case 2:
 				_localctx = new FloatNumberContext(_localctx);
 				enterOuterAlt(_localctx, 2);
@@ -979,6 +987,7 @@ public class MathParser extends Parser {
 				setState(93); match(FLOAT);
 				}
 				break;
+
 			case 3:
 				_localctx = new IntNumberContext(_localctx);
 				enterOuterAlt(_localctx, 3);
@@ -986,6 +995,7 @@ public class MathParser extends Parser {
 				setState(94); match(INT);
 				}
 				break;
+
 			case 4:
 				_localctx = new MatrixDefinitionContext(_localctx);
 				enterOuterAlt(_localctx, 4);
@@ -993,6 +1003,7 @@ public class MathParser extends Parser {
 				setState(95); matrix();
 				}
 				break;
+
 			case 5:
 				_localctx = new MatrixElementContext(_localctx);
 				enterOuterAlt(_localctx, 5);
@@ -1006,6 +1017,7 @@ public class MathParser extends Parser {
 				setState(102); match(2);
 				}
 				break;
+
 			case 6:
 				_localctx = new PrimaryFunctionContext(_localctx);
 				enterOuterAlt(_localctx, 6);
@@ -1013,6 +1025,7 @@ public class MathParser extends Parser {
 				setState(104); function();
 				}
 				break;
+
 			case 7:
 				_localctx = new MethodCallContext(_localctx);
 				enterOuterAlt(_localctx, 7);
@@ -1022,6 +1035,7 @@ public class MathParser extends Parser {
 				setState(107); ((MethodCallContext)_localctx).objFunction = function();
 				}
 				break;
+
 			case 8:
 				_localctx = new PropertyContext(_localctx);
 				enterOuterAlt(_localctx, 8);
@@ -1053,8 +1067,8 @@ public class MathParser extends Parser {
 		public MatrixRowContext matrixRow(int i) {
 			return getRuleContext(MatrixRowContext.class,i);
 		}
-		public MatrixContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public MatrixContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_matrix; }
 		@Override
@@ -1067,14 +1081,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitMatrix(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrix(this);
 			else return null;
 		}
 	}
 
 	public final MatrixContext matrix() throws RecognitionException {
-		MatrixContext _localctx = new MatrixContext(_ctx, 14);
-		enterRule(_localctx, RULE_matrix);
+		MatrixContext _localctx = new MatrixContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_matrix);
 		int _la;
 		try {
 			int _alt;
@@ -1138,8 +1152,8 @@ public class MathParser extends Parser {
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public MatrixRowContext(ParserRuleContext parent, int state) {
-			super(parent, state);
+		public MatrixRowContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_matrixRow; }
 		@Override
@@ -1152,14 +1166,14 @@ public class MathParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MathVisitor ) return ((MathVisitor<T>)visitor).visitMatrixRow(this);
+			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrixRow(this);
 			else return null;
 		}
 	}
 
 	public final MatrixRowContext matrixRow() throws RecognitionException {
-		MatrixRowContext _localctx = new MatrixRowContext(_ctx, 16);
-		enterRule(_localctx, RULE_matrixRow);
+		MatrixRowContext _localctx = new MatrixRowContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_matrixRow);
 		int _la;
 		try {
 			int _alt;
@@ -1168,7 +1182,7 @@ public class MathParser extends Parser {
 			setState(129); match(19);
 			setState(141);
 			_la = _input.LA(1);
-			if (_la==7 || _la==9 || _la==11 || _la==19 || _la==MATH_NAME || _la==INT || _la==FLOAT) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 9) | (1L << 11) | (1L << 19) | (1L << MATH_NAME) | (1L << INT) | (1L << FLOAT))) != 0)) {
 				{
 				setState(130); ((MatrixRowContext)_localctx).expression = expression(0);
 				((MatrixRowContext)_localctx).elements.add(((MatrixRowContext)_localctx).expression);
@@ -1217,38 +1231,42 @@ public class MathParser extends Parser {
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 4: return expression_sempred((ExpressionContext)_localctx, predIndex);
+
 		case 5: return logicalExpression_sempred((LogicalExpressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
-	public boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
+	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0: return 6 >= _localctx._p;
+
 		case 1: return 4 >= _localctx._p;
+
 		case 2: return 3 >= _localctx._p;
 		}
 		return true;
 	}
-	public boolean logicalExpression_sempred(LogicalExpressionContext _localctx, int predIndex) {
+	private boolean logicalExpression_sempred(LogicalExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 3: return 4 >= _localctx._p;
+
 		case 4: return 3 >= _localctx._p;
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\3\33\u0092\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2"+
-		"\7\7\7\2\b\7\b\1\0\1\0\1\0\1\0\3\0\27\b\0\1\1\1\1\1\1\1\1\1\2\1\2\1\2"+
-		"\1\2\1\2\5\2\"\b\2\n\2\f\2%\t\2\3\2\'\b\2\1\2\1\2\1\3\1\3\1\3\1\3\1\4"+
-		"\1\4\1\4\1\4\1\4\1\4\1\4\1\4\3\4\67\b\4\1\4\1\4\1\4\1\4\1\4\1\4\1\4\1"+
-		"\4\1\4\5\4B\b\4\n\4\f\4E\t\4\1\5\1\5\1\5\1\5\1\5\1\5\1\5\1\5\1\5\3\5P"+
-		"\b\5\1\5\1\5\1\5\1\5\1\5\1\5\5\5X\b\5\n\5\f\5[\t\5\1\6\1\6\1\6\1\6\1\6"+
-		"\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\3\6p\b\6\1\7"+
-		"\1\7\1\7\1\7\5\7v\b\7\n\7\f\7y\t\7\1\7\3\7|\b\7\3\7~\b\7\1\7\1\7\1\b\1"+
-		"\b\1\b\1\b\5\b\u0086\b\b\n\b\f\b\u0089\t\b\1\b\3\b\u008c\b\b\3\b\u008e"+
-		"\b\b\1\b\1\b\1\b\t\0\2\4\6\b\n\f\16\20\0\4\2\7\7\t\t\3\1\1\b\b\24\24\2"+
-		"\7\7\t\t\4\f\f\16\17\22\22\25\26\u00a2\0\26\1\0\0\0\2\30\1\0\0\0\4\34"+
+		"\1\3\33\u0092\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6"+
+		"\2\7\7\7\2\b\7\b\1\0\1\0\1\0\1\0\3\0\27\b\0\1\1\1\1\1\1\1\1\1\2\1\2\1"+
+		"\2\1\2\1\2\5\2\"\b\2\n\2\f\2%\t\2\3\2\'\b\2\1\2\1\2\1\3\1\3\1\3\1\3\1"+
+		"\4\1\4\1\4\1\4\1\4\1\4\1\4\1\4\3\4\67\b\4\1\4\1\4\1\4\1\4\1\4\1\4\1\4"+
+		"\1\4\1\4\5\4B\b\4\n\4\f\4E\t\4\1\5\1\5\1\5\1\5\1\5\1\5\1\5\1\5\1\5\3\5"+
+		"P\b\5\1\5\1\5\1\5\1\5\1\5\1\5\5\5X\b\5\n\5\f\5[\t\5\1\6\1\6\1\6\1\6\1"+
+		"\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\3\6p\b\6\1"+
+		"\7\1\7\1\7\1\7\5\7v\b\7\n\7\f\7y\t\7\1\7\3\7|\b\7\3\7~\b\7\1\7\1\7\1\b"+
+		"\1\b\1\b\1\b\5\b\u0086\b\b\n\b\f\b\u0089\t\b\1\b\3\b\u008c\b\b\3\b\u008e"+
+		"\b\b\1\b\1\b\1\b\0\t\0\2\4\6\b\n\f\16\20\0\4\2\7\7\t\t\3\1\1\b\b\24\24"+
+		"\2\7\7\t\t\4\f\f\16\17\22\22\25\26\u00a2\0\26\1\0\0\0\2\30\1\0\0\0\4\34"+
 		"\1\0\0\0\6*\1\0\0\0\b\66\1\0\0\0\nO\1\0\0\0\fo\1\0\0\0\16q\1\0\0\0\20"+
 		"\u0081\1\0\0\0\22\27\3\2\1\0\23\27\3\6\3\0\24\27\3\b\4\0\25\27\3\n\5\0"+
 		"\26\22\1\0\0\0\26\23\1\0\0\0\26\24\1\0\0\0\26\25\1\0\0\0\27\1\1\0\0\0"+
