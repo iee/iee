@@ -1,21 +1,33 @@
 package org.eclipse.iee.translator.antlr.translator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
-import org.eclipse.iee.translator.antlr.math.MathParser.MatrixContext;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class JavaTranslator {
 
 	private static IType fClass;
+	private static IMethod fMethod;
+	private static List<String> fDoubleFields = new ArrayList<>();
+	private static List<String> fMatrixFields = new ArrayList<>();
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -23,7 +35,7 @@ public class JavaTranslator {
 		/*
 		 * Help variables
 		 */
-		
+
 		Boolean fVisitVariableName = false;
 		Boolean fVisitedMatrixElement = false;
 		Boolean fNewMatrix = false;
@@ -53,11 +65,10 @@ public class JavaTranslator {
 			fVisitVariableName = true;
 			String name = visit(ctx.name);
 			fVisitVariableName = false;
-			
+
 			String value = visit(ctx.value);
 
-			if (fVisitedMatrixElement)
-			{
+			if (fVisitedMatrixElement) {
 				return name += value + ");";
 			}
 
@@ -66,9 +77,7 @@ public class JavaTranslator {
 
 			String assignment = "";
 
-			IField field = fClass.getField(visit(ctx.name));
-			
-			if (field != null)
+			if (fDoubleFields.contains(name) || fMatrixFields.contains(name))
 				assignment += name + "=" + value + ";";
 			else {
 				if (fNewMatrix)
@@ -107,15 +116,31 @@ public class JavaTranslator {
 		public String visitAdd(MathParser.AddContext ctx) {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
+			String sign = ctx.sign.getText();
 
-			return "(" + left + ")" + ctx.sign.getText() + "(" + right + ")";
+			if (fMatrixFields.contains(left) && fMatrixFields.contains(right))
+			{
+				if (sign.matches("+"))
+					return left + ".plus(" + right + ")";
+				if (sign.matches("-"))
+					return left + ".minus(" + right + ")";
+			}
+			
+			return "(" + left + ")" + sign + "(" + right + ")";
 		}
 
 		public String visitMult(MathParser.MultContext ctx) {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
-
-			return "(" + left + ")" + ctx.sign.getText() + "(" + right + ")";
+			String sign = ctx.sign.getText();
+			
+			if (fMatrixFields.contains(left))
+			{
+				if (sign.matches("*"))
+					return left + ".times(" + right + ")";
+			}
+			
+			return "(" + left + ")" + sign + "(" + right + ")";
 		}
 
 		public String visitPrimaryExpr(MathParser.PrimaryExprContext ctx) {
@@ -125,14 +150,17 @@ public class JavaTranslator {
 		public String visitPower(MathParser.PowerContext ctx) {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
-
+			
+			if (fMatrixFields.contains(left) && right.matches("T"))
+				return left + ".transpose()";
+			
 			return "Math.pow((" + left + "),(" + right + "))";
 		}
 
 		public String visitMatrix(MathParser.MatrixContext ctx) {
 
 			fNewMatrix = true;
-			
+
 			String matrix = "";
 			int i;
 
@@ -211,14 +239,12 @@ public class JavaTranslator {
 		}
 
 		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
-			
-			if (fVisitVariableName)
-			{
+
+			if (fVisitVariableName) {
 				fVisitedMatrixElement = true;
 				return ctx.name.getText() + ".set(" + visit(ctx.rowIdx) + ","
 						+ visit(ctx.columnIdx) + ",";
-			}
-			else
+			} else
 				return ctx.name.getText() + ".get(" + visit(ctx.rowIdx) + ","
 						+ visit(ctx.columnIdx) + ")";
 		}
@@ -253,8 +279,8 @@ public class JavaTranslator {
 		return result;
 	}
 
-	public static String translate(String expression, ICompilationUnit compilationUnit,
-			int position) {
+	public static String translate(String expression,
+			ICompilationUnit compilationUnit, final int position) {
 		String result = "";
 
 		try {
@@ -270,6 +296,83 @@ public class JavaTranslator {
 						fClass = type;
 				}
 			}
+			IMethod[] methods = fClass.getMethods();
+			for (int i = 0; i < methods.length; i++) {
+				IMethod method = methods[i];
+
+				ISourceRange methodSourceRange = method.getSourceRange();
+				int methodOffset = methodSourceRange.getOffset();
+				if (position > methodOffset
+						&& position <= (methodOffset + methodSourceRange
+								.getLength()))
+					fMethod = method;
+			}
+
+			IField[] classFields = null;
+
+			classFields = fClass.getFields();
+			for (int i = 0; i < classFields.length; i++) {
+				IField field = classFields[i];
+				String name = field.getElementName();
+				String type = field.getTypeSignature();
+
+				ISourceRange fieldSourceRange = field.getSourceRange();
+				int fieldOffset = fieldSourceRange.getOffset();
+
+				if (position > fieldOffset) {
+					if (type.matches("D")) {
+						if (!fDoubleFields.contains(name))
+							fDoubleFields.add(name);
+					}
+					if (type.matches("QMatrix;")) {
+						if (!fMatrixFields.contains(name))
+							fMatrixFields.add(name);
+					}
+				}
+			}
+
+			CompilationUnit unit = (CompilationUnit) parse(compilationUnit);
+			unit.accept(new ASTVisitor() {
+				@Override
+				public boolean visit(VariableDeclarationStatement node) {
+					try {
+						ISourceRange methodSourceRange = fMethod
+								.getSourceRange();
+						int methodOffset = methodSourceRange.getOffset();
+
+						int variableAssignmentOffset = node.getStartPosition();
+
+						if (variableAssignmentOffset > methodOffset
+								&& variableAssignmentOffset <= (methodOffset + methodSourceRange
+										.getLength())
+								&& position > variableAssignmentOffset) {
+
+							List<?> fragments = node.fragments();
+							String type = node.getType().toString();
+
+							for (int i = 0; i < fragments.size(); i++) {
+								VariableDeclarationFragment fragment = (VariableDeclarationFragment) fragments
+										.get(i);
+								String name = fragment.getName().toString();
+
+								if (type.matches("double")) {
+									if (!fDoubleFields.contains(name))
+										fDoubleFields.add(name);
+								}
+								if (type.matches("Matrix")) {
+									if (!fMatrixFields.contains(name))
+										fMatrixFields.add(name);
+								}
+							}
+						}
+					} catch (JavaModelException e) {
+						e.printStackTrace();
+					}
+
+					return true;
+				}
+			});
+
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
@@ -285,6 +388,14 @@ public class JavaTranslator {
 		result = mathVisitor.visit(tree);
 
 		return result;
+	}
+
+	private static CompilationUnit parse(ICompilationUnit unit) {
+		ASTParser parser = ASTParser.newParser(AST.JLS4);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(unit);
+		parser.setResolveBindings(true);
+		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
 }

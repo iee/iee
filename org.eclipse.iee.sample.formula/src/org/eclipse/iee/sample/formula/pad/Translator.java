@@ -26,7 +26,6 @@ public class Translator {
 	}
 
 	public static String translateElement(String text) {
-		text = "a=5";
 		if (text.trim().isEmpty())
 			return null;
 
@@ -70,7 +69,6 @@ public class Translator {
 
 	public static String translateElement(String text,
 			ICompilationUnit compilationUnit, int position) {
-		text = "a=5";
 		if (text.trim().isEmpty())
 			return null;
 
