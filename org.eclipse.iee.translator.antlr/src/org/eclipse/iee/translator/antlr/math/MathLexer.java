@@ -57,162 +57,21 @@ public class MathLexer extends Lexer {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-
 	@Override
 	public void action(RuleContext _localctx, int ruleIndex, int actionIndex) {
 		switch (ruleIndex) {
-		case 0: T__22_action((RuleContext)_localctx, actionIndex); break;
-		case 1: T__21_action((RuleContext)_localctx, actionIndex); break;
-		case 2: T__20_action((RuleContext)_localctx, actionIndex); break;
-		case 3: T__19_action((RuleContext)_localctx, actionIndex); break;
-		case 4: T__18_action((RuleContext)_localctx, actionIndex); break;
-		case 5: T__17_action((RuleContext)_localctx, actionIndex); break;
-		case 6: T__16_action((RuleContext)_localctx, actionIndex); break;
-		case 7: T__15_action((RuleContext)_localctx, actionIndex); break;
-		case 8: T__14_action((RuleContext)_localctx, actionIndex); break;
-		case 9: T__13_action((RuleContext)_localctx, actionIndex); break;
-		case 10: T__12_action((RuleContext)_localctx, actionIndex); break;
-		case 11: T__11_action((RuleContext)_localctx, actionIndex); break;
-		case 12: T__10_action((RuleContext)_localctx, actionIndex); break;
-		case 13: T__9_action((RuleContext)_localctx, actionIndex); break;
-		case 14: T__8_action((RuleContext)_localctx, actionIndex); break;
-		case 15: T__7_action((RuleContext)_localctx, actionIndex); break;
-		case 16: T__6_action((RuleContext)_localctx, actionIndex); break;
-		case 17: T__5_action((RuleContext)_localctx, actionIndex); break;
-		case 18: T__4_action((RuleContext)_localctx, actionIndex); break;
-		case 19: T__3_action((RuleContext)_localctx, actionIndex); break;
-		case 20: T__2_action((RuleContext)_localctx, actionIndex); break;
-		case 21: T__1_action((RuleContext)_localctx, actionIndex); break;
-		case 22: T__0_action((RuleContext)_localctx, actionIndex); break;
-		case 23: MATH_NAME_action((RuleContext)_localctx, actionIndex); break;
-		case 24: INT_action((RuleContext)_localctx, actionIndex); break;
 		case 25: WS_action((RuleContext)_localctx, actionIndex); break;
-		case 26: FLOAT_action((RuleContext)_localctx, actionIndex); break;
-		case 27: DIGIT_action((RuleContext)_localctx, actionIndex); break;
-		case 28: EXP_action((RuleContext)_localctx, actionIndex); break;
 		}
 	}
-	public void T__22_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__21_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__20_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void FLOAT_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void INT_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__9_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__8_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__7_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__6_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void MATH_NAME_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__5_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__4_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__19_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void WS_action(RuleContext _localctx, int actionIndex) {
+	private void WS_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 0: skip();  break;
 		}
 	}
-	public void T__16_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__15_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__18_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__17_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void EXP_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__12_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__11_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__14_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__13_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__1_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__0_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__10_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__3_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void T__2_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void DIGIT_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
 
 	public static final String _serializedATN =
-		"\2\33\u00b5\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2"+
-		"\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13\2\f\7\f\2\r\7\r\2\16"+
+		"\1\2\33\u00b5\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5"+
+		"\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13\2\f\7\f\2\r\7\r\2\16"+
 		"\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22\7\22\2\23\7\23\2\24\7\24\2\25"+
 		"\7\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31\7\31\2\32\7\32\2\33\7\33\2\34"+
 		"\7\34\1\0\1\0\1\1\1\1\1\2\1\2\1\3\1\3\1\4\1\4\1\5\1\5\1\6\1\6\1\7\1\7"+
@@ -224,10 +83,10 @@ public class MathLexer extends Lexer {
 		"\t\32\1\32\3\32\u0090\b\32\1\32\3\32\u0093\b\32\1\32\4\32\u0096\b\32\13"+
 		"\32\f\32\u0097\1\32\3\32\u009b\b\32\1\32\3\32\u009e\b\32\1\32\1\32\4\32"+
 		"\u00a2\b\32\13\32\f\32\u00a3\1\32\3\32\u00a7\b\32\1\32\3\32\u00aa\b\32"+
-		"\3\32\u00ac\b\32\1\33\1\33\1\34\1\34\3\34\u00b2\b\34\1\34\1\34\35\1\1"+
-		"\uffff\3\2\uffff\5\3\uffff\7\4\uffff\t\5\uffff\13\6\uffff\r\7\uffff\17"+
-		"\b\uffff\21\t\uffff\23\n\uffff\25\13\uffff\27\f\uffff\31\r\uffff\33\16"+
-		"\uffff\35\17\uffff\37\20\uffff!\21\uffff#\22\uffff%\23\uffff\'\24\uffff"+
+		"\3\32\u00ac\b\32\1\33\1\33\1\34\1\34\3\34\u00b2\b\34\1\34\1\34\0\35\1"+
+		"\1\uffff\3\2\uffff\5\3\uffff\7\4\uffff\t\5\uffff\13\6\uffff\r\7\uffff"+
+		"\17\b\uffff\21\t\uffff\23\n\uffff\25\13\uffff\27\f\uffff\31\r\uffff\33"+
+		"\16\uffff\35\17\uffff\37\20\uffff!\21\uffff#\22\uffff%\23\uffff\'\24\uffff"+
 		")\25\uffff+\26\uffff-\27\uffff/\30\uffff\61\31\uffff\63\32\0\65\33\uffff"+
 		"\67\0\uffff9\0\uffff\1\0\t\3AZ__az\4\609AZ__az\2LLll\3\t\n\r\r  \2LLl"+
 		"l\2LLll\2LLll\2EEee\2++--\u00c2\0\1\1\0\0\0\0\3\1\0\0\0\0\5\1\0\0\0\0"+
