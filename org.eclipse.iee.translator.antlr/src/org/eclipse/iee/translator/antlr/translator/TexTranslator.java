@@ -89,7 +89,7 @@ public class TexTranslator {
 			int rowsCount = ctx.rows.size();
 			for (i = 0; i < rowsCount; i++)
 				matrix += "c";
-
+			matrix += "}";
 			for (i = 0; i < rowsCount; i++) {
 				matrix += visitMatrixRow(ctx.rows.get(i));
 				if (i != rowsCount - 1)
