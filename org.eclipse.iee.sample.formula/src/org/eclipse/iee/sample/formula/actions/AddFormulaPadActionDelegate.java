@@ -75,7 +75,6 @@ public class AddFormulaPadActionDelegate implements IEditorActionDelegate {
 		
 		FormulaPad pad = new FormulaPad();
 		pad.setDirectoryPath(storagePath);
-		pad.setCompilationUnit(compilationUnit);
 		
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
 		

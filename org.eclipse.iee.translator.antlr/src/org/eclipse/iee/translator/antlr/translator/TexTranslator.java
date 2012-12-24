@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
@@ -271,16 +270,16 @@ public class TexTranslator {
 
 					translatedName += "\\";
 				} else {
-					if (name.substring(end, end + 1).matches("[_=]"))
+					if (name.substring(end, end + 1).matches("[_]"))
 						translatedName += "\\";
 				}
 			} else {
 				if (end == length) {
-					if (name.substring(start - 1, start).matches("[_=]"))
+					if (name.substring(start - 1, start).matches("[_]"))
 						translatedName += "\\";
 				} else {
-					if (name.substring(start - 1, start).matches("[_=]")
-							&& name.substring(end, end + 1).matches("[_=]"))
+					if (name.substring(start - 1, start).matches("[_]")
+							&& name.substring(end, end + 1).matches("[_]"))
 						translatedName += "\\";
 				}
 			}

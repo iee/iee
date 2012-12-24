@@ -20,6 +20,8 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.iee.sample.image.ImageFileStorage;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -66,6 +68,12 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		fContainerManager = new ContainerManager(config, document,
 				getSourceViewer(), getSourceViewer().getTextWidget());
+		
+		IEditorPart editor = (IEditorPart)this;
+		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
+	    IFile file = input.getFile();
+	    ICompilationUnit compilationUnit = JavaCore.createCompilationUnitFrom(file);
+	    fContainerManager.setCompilationUnit(compilationUnit);
 
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override

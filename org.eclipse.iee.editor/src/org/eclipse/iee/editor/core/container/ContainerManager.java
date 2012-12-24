@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DocumentEvent;
@@ -58,6 +59,8 @@ public class ContainerManager extends EventManager {
 	private final IDocument fDocument;
 	
 	private DocumentListener fDocumentListener;
+	
+	private ICompilationUnit fCompilationUnit;
 
 	private final NavigableSet<Container> fContainers;
 	
@@ -133,6 +136,13 @@ public class ContainerManager extends EventManager {
 		return fUserInteractionManager;
 	}
 
+	public ICompilationUnit getCompilationUnit() {
+		return fCompilationUnit;
+	}
+
+	public void setCompilationUnit(ICompilationUnit compilationUnit) {
+		this.fCompilationUnit = compilationUnit;
+	}
 
 	
 	/* INTERFACE FUNCTIONS */
