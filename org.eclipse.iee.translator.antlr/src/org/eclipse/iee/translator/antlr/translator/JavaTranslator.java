@@ -2,6 +2,7 @@ package org.eclipse.iee.translator.antlr.translator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -25,11 +26,35 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class JavaTranslator {
 
+	public enum VariableType {
+		INT, DOUBLE, MATRIX, OTHER
+	}
+
 	private static IType fClass;
 	private static IMethod fMethod;
 	private static List<String> fDoubleFields = new ArrayList<>();
+
 	private static List<String> fIntegerFields = new ArrayList<>();
+
 	private static List<String> fMatrixFields = new ArrayList<>();
+
+	private static VariableType fVariableType = null;
+
+	public static VariableType getVariableType() {
+		return fVariableType;
+	}
+
+	public static List<String> getDoubleFields() {
+		return fDoubleFields;
+	}
+
+	public static List<String> getIntegerFields() {
+		return fIntegerFields;
+	}
+
+	public static List<String> getMatrixFields() {
+		return fMatrixFields;
+	}
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -72,6 +97,7 @@ public class JavaTranslator {
 			String value = visit(ctx.value);
 
 			if (fVisitedMatrixElement) {
+				fVariableType = VariableType.DOUBLE;
 				return name += value + ");";
 			}
 
@@ -81,15 +107,25 @@ public class JavaTranslator {
 			String assignment = "";
 
 			if (fDoubleFields.contains(name) || fMatrixFields.contains(name)
-					|| fIntegerFields.contains(name))
+					|| fIntegerFields.contains(name)) {
+				if (fDoubleFields.contains(name))
+					fVariableType = VariableType.DOUBLE;
+				else if (fMatrixFields.contains(name))
+					fVariableType = VariableType.MATRIX;
+				else if (fIntegerFields.contains(name))
+					fVariableType = VariableType.INT;
+
 				assignment += name + "=" + value + ";";
-			else {
+			} else {
 				if (fNewMatrix
 						|| (fMatrixFields.contains(value) && !name
-								.matches(value)))
+								.matches(value))) {
 					assignment += "Matrix ";
-				else
+					fVariableType = VariableType.MATRIX;
+				} else {
 					assignment += "double ";
+					fVariableType = VariableType.DOUBLE;
+				}
 				assignment += name + "=" + value + ";";
 			}
 
@@ -125,9 +161,9 @@ public class JavaTranslator {
 			String sign = ctx.sign.getText();
 
 			if (fMatrixFields.contains(left) && fMatrixFields.contains(right)) {
-				if (sign.matches("+"))
+				if (sign.matches(Pattern.quote("+")))
 					return left + ".plus(" + right + ")";
-				if (sign.matches("-"))
+				if (sign.matches(Pattern.quote("-")))
 					return left + ".minus(" + right + ")";
 			}
 
@@ -140,7 +176,7 @@ public class JavaTranslator {
 			String sign = ctx.sign.getText();
 
 			if (fMatrixFields.contains(left)) {
-				if (sign.matches("*"))
+				if (sign.matches(Pattern.quote("*")))
 					return left + ".times(" + right + ")";
 			}
 
@@ -287,7 +323,8 @@ public class JavaTranslator {
 
 	public static String translate(String expression,
 			ICompilationUnit compilationUnit, final int position) {
-		String result = "";
+
+		clear();
 
 		try {
 			IType[] types = compilationUnit.getTypes();
@@ -420,9 +457,19 @@ public class JavaTranslator {
 		ParserRuleContext tree = parser.statement();
 
 		JavaMathVisitor mathVisitor = new JavaMathVisitor();
-		result = mathVisitor.visit(tree);
+		String result = mathVisitor.visit(tree);
 
 		return result;
+	}
+
+	private static void clear() {
+		fClass = null;
+		fMethod = null;
+		fVariableType = null;
+
+		fMatrixFields.clear();
+		fDoubleFields.clear();
+		fIntegerFields.clear();
 	}
 
 	private static CompilationUnit parse(ICompilationUnit unit) {
