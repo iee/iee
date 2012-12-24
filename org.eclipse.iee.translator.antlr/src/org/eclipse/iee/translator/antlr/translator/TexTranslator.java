@@ -1,5 +1,10 @@
 package org.eclipse.iee.translator.antlr.translator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -9,6 +14,50 @@ import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 
 public class TexTranslator {
+
+	private static List<String> fGreekLetters = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			add("alpha");
+			add("beta");
+			add("delta");
+			add("epsilon");
+			add("varepsilon");
+			add("zeta");
+			add("eta");
+			add("theta");
+			add("vartheta");
+			add("gamma");
+			add("kappa");
+			add("lambda");
+			add("mu");
+			add("nu");
+			add("xi");
+			add("varpi");
+			add("rho");
+			add("varrho");
+			add("sigma");
+			add("varsigma");
+			add("tau");
+			add("upsilon");
+			add("phi");
+			add("varphi");
+			add("chi");
+			add("psi");
+			add("omega");
+			add("Gamma");
+			add("Delta");
+			add("Theta");
+			add("Lambda");
+			add("Xi");
+			add("Pi");
+			add("Sigma");
+			add("Upsilon");
+			add("Phi");
+			add("Psi");
+			add("Omega");
+		}
+	};
 
 	private static class TexMathVisitor extends MathBaseVisitor<String> {
 
@@ -170,9 +219,8 @@ public class TexTranslator {
 			return translateName(ctx.objName.getText()) + "."
 					+ translateName(ctx.objProperty.getText());
 		}
-		
+
 	}
-	
 
 	public static String translate(String expression) {
 		String result = "";
@@ -193,161 +241,59 @@ public class TexTranslator {
 	private static String translateName(String name) {
 		String translatedName = name;
 
-		if (name.matches("^alpha$"))
-			translatedName = "\\\\alpha";
-		if (name.matches("^beta$"))
-			translatedName = "\\\\beta";
-		if (name.matches("^delta$"))
-			translatedName = "\\\\delta";
-		if (name.matches("^epsilon$"))
-			translatedName = "\\\\epsilon";
-		if (name.matches("^varepsilon$"))
-			translatedName = "\\\\varepsilon";
-		if (name.matches("^zeta$"))
-			translatedName = "\\\\zeta";
-		if (name.matches("^eta$"))
-			translatedName = "\\\\eta";
-		if (name.matches("^theta$"))
-			translatedName = "\\\\theta";
-		if (name.matches("^vartheta$"))
-			translatedName = "\\\\vartheta";
-		if (name.matches("^gamma$"))
-			translatedName = "\\\\gamma";
-		if (name.matches("^kappa$"))
-			translatedName = "\\\\kappa";
-		if (name.matches("^lambda$"))
-			translatedName = "\\\\lambda";
-		if (name.matches("^mu$"))
-			translatedName = "\\\\mu";
-		if (name.matches("^nu$"))
-			translatedName = "\\\\nu";
-		if (name.matches("^xi$"))
-			translatedName = "\\\\xi";
-		if (name.matches("^varpi$"))
-			translatedName = "\\\\varpi";
-		if (name.matches("^rho$"))
-			translatedName = "\\\\rho";
-		if (name.matches("^varrho$"))
-			translatedName = "\\\\varrho";
-		if (name.matches("^sigma$"))
-			translatedName = "\\\\sigma";
-		if (name.matches("^varsigma$"))
-			translatedName = "\\\\varsigma";
-		if (name.matches("^tau$"))
-			translatedName = "\\\\tau";
-		if (name.matches("^upsilon$"))
-			translatedName = "\\\\upsilon";
-		if (name.matches("^phi$"))
-			translatedName = "\\\\phi";
-		if (name.matches("^varphi$"))
-			translatedName = "\\\\varphi";
-		if (name.matches("^chi$"))
-			translatedName = "\\\\chi";
-		if (name.matches("^psi$"))
-			translatedName = "\\\\psi";
-		if (name.matches("^omega$"))
-			translatedName = "\\\\omega";
-		if (name.matches("^Gamma$"))
-			translatedName = "\\\\Gamma";
-		if (name.matches("^Delta$"))
-			translatedName = "\\\\Delta";
-		if (name.matches("^Theta$"))
-			translatedName = "\\\\Theta";
-		if (name.matches("^Lambda$"))
-			translatedName = "\\\\Lambda";
-		if (name.matches("^Xi$"))
-			translatedName = "\\\\Xi";
-		if (name.matches("^Pi$"))
-			translatedName = "\\\\Pi";
-		if (name.matches("^Sigma$"))
-			translatedName = "\\\\Sigma";
-		if (name.matches("^Upsilon$"))
-			translatedName = "\\\\Upsilon";
-		if (name.matches("^Phi$"))
-			translatedName = "\\\\Phi";
-		if (name.matches("^Psi$"))
-			translatedName = "\\\\Psi";
-		if (name.matches("^Omega$"))
-			translatedName = "\\\\Omega";
-		
-		if (name.matches("^alpha_*$"))
-			translatedName = name.replaceFirst("alpha", "\\\\alpha");
-		if (name.matches("^beta_*$"))
-			translatedName = name.replaceFirst("beta", "\\\\beta");
-		if (name.matches("^delta_*$"))
-			translatedName = name.replaceFirst("delta", "\\\\delta");
-		if (name.matches("^epsilon_*$"))
-			translatedName = name.replaceFirst("epsilon", "\\\\epsilon");
-		if (name.matches("^varepsilon_*$"))
-			translatedName = name.replaceFirst("varepsilon", "\\\\varepsilon");
-		if (name.matches("^zeta_*$"))
-			translatedName = name.replaceFirst("zeta", "\\\\zeta");
-		if (name.matches("^eta_*$"))
-			translatedName = name.replaceFirst("eta", "\\\\eta");
-		if (name.matches("^theta_*$"))
-			translatedName = name.replaceFirst("theta", "\\\\theta");
-		if (name.matches("^vartheta_*$"))
-			translatedName = name.replaceFirst("vartheta", "\\\\vartheta");
-		if (name.matches("^gamma_*$"))
-			translatedName = name.replaceFirst("gamma", "\\\\gamma");
-		if (name.matches("^kappa_*$"))
-			translatedName = name.replaceFirst("kappa", "\\\\kappa");
-		if (name.matches("^lambda_*$"))
-			translatedName = name.replaceFirst("lambda", "\\\\lambda");
-		if (name.matches("^mu_*$"))
-			translatedName = name.replaceFirst("mu", "\\\\mu");
-		if (name.matches("^nu_*$"))
-			translatedName = name.replaceFirst("nu", "\\\\nu");
-		if (name.matches("^xi_*$"))
-			translatedName = name.replaceFirst("xi", "\\\\xi");
-		if (name.matches("^varpi_*$"))
-			translatedName = name.replaceFirst("varpi", "\\\\varpi");
-		if (name.matches("^rho_*$"))
-			translatedName = name.replaceFirst("rho", "\\\\rho");
-		if (name.matches("^varrho_*$"))
-			translatedName = name.replaceFirst("varrho", "\\\\varrho");
-		if (name.matches("^sigma_*$"))
-			translatedName = name.replaceFirst("sigma", "\\\\sigma");
-		if (name.matches("^varsigma_*$"))
-			translatedName = name.replaceFirst("varsigma", "\\\\varsigma");
-		if (name.matches("^tau_*$"))
-			translatedName = name.replaceFirst("tau", "\\\\tau");
-		if (name.matches("^upsilon_*$"))
-			translatedName = name.replaceFirst("upsilon", "\\\\upsilon");
-		if (name.matches("^phi_*$"))
-			translatedName = name.replaceFirst("phi", "\\\\phi");
-		if (name.matches("^varphi_*$"))
-			translatedName = name.replaceFirst("varphi", "\\\\varphi");
-		if (name.matches("^chi_*$"))
-			translatedName = name.replaceFirst("chi", "\\\\chi");
-		if (name.matches("^psi_*$"))
-			translatedName = name.replaceFirst("psi", "\\\\psi");
-		if (name.matches("^omega_*$"))
-			translatedName = name.replaceFirst("omega", "\\\\omega");
-		if (name.matches("^Gamma_*$"))
-			translatedName = name.replaceFirst("Gamma", "\\\\Gamma");
-		if (name.matches("^Delta_*$"))
-			translatedName = name.replaceFirst("Delta", "\\\\Delta");
-		if (name.matches("^Theta_*$"))
-			translatedName = name.replaceFirst("Theta", "\\\\Theta");
-		if (name.matches("^Lambda_*$"))
-			translatedName = name.replaceFirst("Lambda", "\\\\Lambda");
-		if (name.matches("^Xi_*$"))
-			translatedName = name.replaceFirst("Xi", "\\\\Xi");
-		if (name.matches("^Pi_*$"))
-			translatedName = name.replaceFirst("Pi", "\\\\Pi");
-		if (name.matches("^Sigma_*$"))
-			translatedName = name.replaceFirst("Sigma", "\\\\Sigma");
-		if (name.matches("^Upsilon_*$"))
-			translatedName = name.replaceFirst("Upsilon", "\\\\Upsilon");
-		if (name.matches("^Phi_*$"))
-			translatedName = name.replaceFirst("Phi", "\\\\Phi");
-		if (name.matches("^Psi_*$"))
-			translatedName = name.replaceFirst("Psi", "\\\\Psi");
-		if (name.matches("^Omega_*$"))
-			translatedName = name.replaceFirst("Omega", "\\\\Omega");
+		for (int i = 0; i < fGreekLetters.size(); i++)
+		{
+			translatedName = replaceGreekLetter(translatedName, fGreekLetters.get(i));
+		}
 
 		return translatedName;
+	}
+
+	private static String replaceGreekLetter(String name, String letter) {
+		String translatedName = "";
+		int beginIndex = 0;
+		int start = 0;
+		int end = 0;
+
+		int length = name.length();
+
+		Pattern p = Pattern.compile(letter);
+
+		Matcher m = p.matcher(name);
+
+		while (m.find()) {
+			start = m.start();
+			end = m.end();
+
+			translatedName += name.substring(beginIndex, start);
+			if (start == 0) {
+				if (end == length) {
+
+					translatedName += "\\";
+				} else {
+					if (name.substring(end, end + 1).matches("[_=]"))
+						translatedName += "\\";
+				}
+			} else {
+				if (end == length) {
+					if (name.substring(start - 1, start).matches("[_=]"))
+						translatedName += "\\";
+				} else {
+					if (name.substring(start - 1, start).matches("[_=]")
+							&& name.substring(end, end + 1).matches("[_=]"))
+						translatedName += "\\";
+				}
+			}
+
+			translatedName += letter;
+			beginIndex = end;
+		}
+
+		if (end != length)
+			translatedName += name.substring(end, length);
+
+		return translatedName;
+
 	}
 
 }
