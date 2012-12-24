@@ -16,6 +16,8 @@ import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
+import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
+import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -227,11 +229,25 @@ public class FormulaPad extends Pad {
 			variable = variable.trim();
 			variable = variable.replaceAll(Pattern.quote("{"), "");
 			variable = variable.replaceAll(Pattern.quote("}"), "");
-			if (variable.charAt(0) != '[') {
+			VariableType varType = JavaTranslator.getVariableType();
+
+			if (varType == null) {
+				if (JavaTranslator.getDoubleFields().contains(variable))
+					varType = JavaTranslator.VariableType.DOUBLE;
+				else if (JavaTranslator.getIntegerFields().contains(variable))
+					varType = JavaTranslator.VariableType.INT;
+				else if (JavaTranslator.getMatrixFields().contains(variable))
+					varType = JavaTranslator.VariableType.MATRIX;
+				else
+					return "";
+			}
+
+			System.out.println("Type:" + varType.toString());
+
+			if (varType != JavaTranslator.VariableType.MATRIX) {
 				return "System.out.println(\"" + getContainerID() + "\" + "
 						+ variable + ");";
 			} else {
-				variable = variable.substring(1, variable.length() - 1);
 				String output = "";
 
 				// TODO: extend Matrix class or change i, j and matrix
