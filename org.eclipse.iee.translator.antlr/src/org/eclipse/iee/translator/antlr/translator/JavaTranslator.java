@@ -27,6 +27,7 @@ public class JavaTranslator {
 	private static IType fClass;
 	private static IMethod fMethod;
 	private static List<String> fDoubleFields = new ArrayList<>();
+	private static List<String> fIntegerFields = new ArrayList<>();
 	private static List<String> fMatrixFields = new ArrayList<>();
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
@@ -77,10 +78,10 @@ public class JavaTranslator {
 
 			String assignment = "";
 
-			if (fDoubleFields.contains(name) || fMatrixFields.contains(name))
+			if (fDoubleFields.contains(name) || fMatrixFields.contains(name) || fIntegerFields.contains(name))
 				assignment += name + "=" + value + ";";
 			else {
-				if (fNewMatrix)
+				if (fNewMatrix || (fMatrixFields.contains(value) && !name.matches(value)))
 					assignment += "Matrix ";
 				else
 					assignment += "double ";
@@ -326,6 +327,10 @@ public class JavaTranslator {
 						if (!fMatrixFields.contains(name))
 							fMatrixFields.add(name);
 					}
+					if (type.matches("I")) {
+						if (!fIntegerFields.contains(name))
+							fIntegerFields.add(name);
+					}
 				}
 			}
 
@@ -360,6 +365,10 @@ public class JavaTranslator {
 								if (type.matches("Matrix")) {
 									if (!fMatrixFields.contains(name))
 										fMatrixFields.add(name);
+								}
+								if (type.matches("int")) {
+									if (!fIntegerFields.contains(name))
+										fIntegerFields.add(name);
 								}
 							}
 						}
