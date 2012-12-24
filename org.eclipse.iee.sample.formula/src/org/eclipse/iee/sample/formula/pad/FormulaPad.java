@@ -15,7 +15,6 @@ import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -66,9 +65,6 @@ public class FormulaPad extends Pad {
 	private TextViewerSupport fViewerSupport;
 	@XStreamOmitField
 	private Document fDocument;
-
-	@XStreamOmitField
-	private ICompilationUnit fCompilationUnit;
 
 	@XStreamOmitField
 	private HoverShell fHoverShell;
@@ -126,14 +122,6 @@ public class FormulaPad extends Pad {
 
 	public void setTranslatingExression(String expression) {
 		fTranslatingExpression = expression;
-	}
-
-	public ICompilationUnit getCompilationUnit() {
-		return fCompilationUnit;
-	}
-
-	public void setCompilationUnit(ICompilationUnit compilationUnit) {
-		this.fCompilationUnit = compilationUnit;
 	}
 
 	public FormulaPad() {
@@ -209,7 +197,8 @@ public class FormulaPad extends Pad {
 		/* Generate code */
 
 		String generated = Translator.translateElement(fTranslatingExpression,
-				fCompilationUnit, getContainer().getPosition().getOffset());
+				getContainer().getContainerManager().getCompilationUnit(),
+				getContainer().getPosition().getOffset());
 
 		/* Add result output */
 		if (!fTranslatingExpression.trim().isEmpty())
@@ -489,6 +478,7 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void createPartControl(final Composite parent) {
+
 		fParent = parent;
 
 		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
