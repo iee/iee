@@ -4,18 +4,15 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
-import org.eclipse.swt.custom.LineStyleEvent;
-import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 
 public class UserInteractionManager {
+		
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	
@@ -142,8 +139,10 @@ public class UserInteractionManager {
 					if (e.caretOffset != position.getOffset() && e.caretOffset != position.getOffset() + position.getLength()) {
 						/* Move caret to the Pad's border */
 						if (fCaretMovesForward) {
+							fContainerManager.fireContainerActivated(container);					
 							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
 						} else {
+							fContainerManager.fireContainerActivated(container);
 							fStyledText.setCaretOffset(position.getOffset());
 						}
 					}

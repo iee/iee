@@ -2,8 +2,9 @@ package org.eclipse.iee.sample.image.pad;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.sample.image.XmlFilesStorage;
+import org.eclipse.iee.sample.image.ImageFileStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -20,6 +21,8 @@ import org.eclipse.swt.widgets.Label;
 
 public class ImagePad extends Pad implements Serializable {
 
+	private transient static final Logger logger = Logger.getLogger(ImagePad.class);
+	
 	private transient static final int STATE_MENU = 0;
 	private transient static final int STATE_IMAGE = 1;
 	private transient static final int STATE_ERROR = 2;
@@ -146,6 +149,8 @@ public class ImagePad extends Pad implements Serializable {
 	}
 
 	protected void initImageView(final Composite parent) {
+		logger.debug("initImageView");
+		
 		try {
 			fOriginalImage = new Image(parent.getDisplay(), fImagePath);
 			if (fImageWidth > 0 && fImageHeigth > 0)
@@ -160,6 +165,7 @@ public class ImagePad extends Pad implements Serializable {
 			
 		} catch (Exception e) {
 
+			logger.error(e.getMessage());
 			e.printStackTrace();
 
 			/* Switch to error state */
@@ -191,6 +197,22 @@ public class ImagePad extends Pad implements Serializable {
 			@Override
 			public void controlMoved(ControlEvent e) {
 			}			
+		});
+		
+		label.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				moveCaretToCurrentPad();
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
 		});
 	}
 
@@ -246,12 +268,12 @@ public class ImagePad extends Pad implements Serializable {
 
 	@Override
 	public void save() {
-		XmlFilesStorage.getInstance(fStoragePath).saveToFile(this);
+		ImageFileStorage.getInstance(fStoragePath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		XmlFilesStorage.getInstance(fStoragePath).removeFile(getContainerID());
+		ImageFileStorage.getInstance(fStoragePath).removeFile(getContainerID());
 	}
 
 	@Override

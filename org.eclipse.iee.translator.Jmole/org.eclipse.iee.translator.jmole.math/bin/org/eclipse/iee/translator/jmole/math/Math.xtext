@@ -7,14 +7,19 @@ Statement:
 	functionDefinition=FunctionDefinition |
 	variableAssignment=VariableAssignment |
 	formula=Formula |
+	logicalFormula = LogicalFormula |
 	matrixAssignment=MatrixAssignment |
 	matrixFormula=MatrixFormula;
 
 VariableAssignment:
-	variable=MathName '=' value=Formula;
+	variable=Formula '=' value=Formula;
 
 Formula:
 	expression=(Addition);
+
+LogicalFormula:
+	expression=(LogicalAddition)	
+;
 
 	// addition/subtraction: left associative, priority 0
 Addition returns Expression:
@@ -73,7 +78,8 @@ PrimaryMatrix returns MatrixExpression:
 	'(' MatrixAddition ')';
 
 Float:
-	INT+ ('.' INT+ (('E' | 'e') ('-')? (INT)+)?)?;
+	(INT)+ EXP?
+	| (INT)+ '.' (INT)* EXP?;
 
 Function returns Expression:
 	name=MathName '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
@@ -84,6 +90,30 @@ FunctionDefinition:
 MathName: 
 	mathName = MATH_NAME
 ;
-	
+
+	// addition: left associative, priority 0
+LogicalAddition returns LogicalExpression:
+	LogicalMultiplication ('||' {LogicalAddition.left=current} right=LogicalMultiplication)*;
+
+	// multiplication, left associative, priority 1
+LogicalMultiplication returns LogicalExpression:
+	LogicalComparison ('&&' {LogicalMultiplication.left=current} right=LogicalComparison)*;
+
+LogicalComparison returns LogicalExpression:
+	 LogicalPrimary ( operation=COMPARISON_OPERATION {LogicalComparison.left=current} right=LogicalPrimary )*;
+
+LogicalPrimary returns LogicalExpression:
+	{LogicalOperand} value=Formula |
+	'(' LogicalAddition ')'
+;
+
+terminal COMPARISON_OPERATION returns ecore::EString:
+	'<=' | '>=' | '<' | '>' | '==' | '!='
+;
+
+terminal EXP returns ecore::EString:
+	('e'|'E') ('+'|'-')? (INT)+
+;
+
 terminal MATH_NAME returns ecore::EString:
 	('a'..'z' | 'A'..'Z') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '{' | '}')*;

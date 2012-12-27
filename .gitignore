@@ -1,4 +1,4 @@
 */xtend-gen/*
 */src-gen/*
 *.class
-org.eclipse.iee.editor.wizard/bin/*
+*/bin/*

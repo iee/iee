@@ -3,6 +3,9 @@ package org.eclipse.iee.editor;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -44,6 +47,20 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 		plugin = this;
 		
 		fPadManager = new PadManager();
+		
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		workbench.addWorkbenchListener(new IWorkbenchListener() {
+			
+			@Override
+			public boolean preShutdown(IWorkbench workbench, boolean forced) {
+				return true;
+			}
+			
+			@Override
+			public void postShutdown(IWorkbench workbench) {
+			}
+		});
+		
 	}
 
 	/*

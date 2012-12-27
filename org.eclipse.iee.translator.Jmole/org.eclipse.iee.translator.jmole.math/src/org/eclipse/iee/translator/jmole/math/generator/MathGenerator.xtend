@@ -194,6 +194,9 @@ class MathGenerator implements IGenerator {
 	def dispatch compileLogicalExpression(LogicalMultiplication op) '''
 		(«compileLogicalExpression(op.left)») && («compileLogicalExpression(op.right)»)'''
 		
-	 def dispatch compileLogicalExpression(LogicalComparison op) '''
-		(«compileFormula(op.left)») «op.operation» («compileFormula(op.right)»)'''	
+ 	def dispatch compileLogicalExpression(LogicalComparison op) '''
+		(«compileLogicalExpression(op.left)») «op.left.operation» («compileLogicalExpression(op.right)»)'''	
+		
+ 	def dispatch compileLogicalExpression(LogicalOperand op) '''
+		«compileFormula(op.value)»'''	
 }

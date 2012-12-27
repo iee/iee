@@ -7,18 +7,24 @@ Statement:
 	functionDefinition=FunctionDefinition |
 	variableAssignment=VariableAssignment |
 	formula=Formula |
+	logicalFormula = LogicalFormula |
 	matrixAssignment=MatrixAssignment |
 	matrixFormula=MatrixFormula;
 
 VariableAssignment:
-	variable=MathName '=' value=Formula;
+	variable=Formula '=' value=Formula;
 
 Formula:
 	expression=(Addition);
+	
+LogicalFormula:
+	expression=(LogicalAddition)	
+;
 
 AdditionInBrackets returns Expression:
 	'(' addition=Addition ')'
 ;
+
 	// addition/subtraction: left associative, priority 0
 Addition returns Expression:
 	Multiplication ('+' {Addition.left=current} right=Multiplication | '-' {Subtraction.left=current}
@@ -81,7 +87,8 @@ PrimaryMatrix returns MatrixExpression:
 	{MatrixInBrackets} inBrackets=MatrixAdditionInBrackets;
 
 Float:
-	INT+ ('.' INT+ (('E' | 'e') ('-')? (INT)+)?)?;
+	(INT)+ EXP?
+	| (INT)+ '.' (INT)* EXP?;
 
 Function returns Expression:
 	name=MathName '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
@@ -91,6 +98,34 @@ FunctionDefinition:
 	
 MathName: 
 	mathName = MATH_NAME
+;
+
+LogicalAdditionInBrackets returns LogicalExpression:
+	'(' addition=LogicalAddition ')'
+;
+
+	// addition: left associative, priority 0
+LogicalAddition returns LogicalExpression:
+	LogicalMultiplication ('||' {LogicalAddition.left=current} right=LogicalMultiplication)*;
+
+	// multiplication, left associative, priority 1
+LogicalMultiplication returns LogicalExpression:
+	LogicalComparison ('&&' {LogicalMultiplication.left=current} right=LogicalComparison)*;
+
+LogicalComparison returns LogicalExpression:
+	 LogicalPrimary ( operation=COMPARISON_OPERATION {LogicalComparison.left=current} right=LogicalPrimary )*;
+
+LogicalPrimary returns LogicalExpression:
+	{LogicalOperand} value=Formula |
+	{LogicalInBrackets} inBrackets=LogicalAdditionInBrackets
+;	
+	
+terminal COMPARISON_OPERATION returns ecore::EString:
+	'<=' | '>=' | '<' | '>' | '==' | '!='
+;
+
+terminal EXP returns ecore::EString:
+	('e'|'E') ('+'|'-')? (INT)+
 ;	
 	
 terminal MATH_NAME returns ecore::EString:

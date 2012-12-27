@@ -248,24 +248,27 @@ class MexGenerator implements IGenerator {
 		«compileLogicalExpression(op.left)» \wedge «compileLogicalExpression(op.right)»'''
 		
 	 def dispatch compileLogicalExpression(LogicalComparison op) '''
-		«compileFormula(op.left)» 
-		«IF op.operation.matches(">=")»
+		«compileLogicalExpression(op.left)» 
+		«IF op.left.operation.matches(">=")»
 			\ge
 		«ENDIF»
-		«IF op.operation.matches("<=")»
+		«IF op.left.operation.matches("<=")»
 			\le	
 		«ENDIF»
-		«IF op.operation.matches("<")»
+		«IF op.left.operation.matches("<")»
 			<
 		«ENDIF» 
-		«IF op.operation.matches(">")»
+		«IF op.left.operation.matches(">")»
 			>	
 		«ENDIF»
-		«IF op.operation.matches("!=")»
+		«IF op.left.operation.matches("!=")»
 			\ne	
 		«ENDIF»
-		«IF op.operation.matches("==")»
+		«IF op.left.operation.matches("==")»
 			==	
 		«ENDIF»
-		«compileFormula(op.right)»'''		
+		«compileLogicalExpression(op.right)»'''
+		
+	def dispatch compileLogicalExpression(LogicalOperand op) '''
+		«compileFormula(op.value)»'''		
 }

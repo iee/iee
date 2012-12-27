@@ -78,7 +78,8 @@ PrimaryMatrix returns MatrixExpression:
 	'(' MatrixAddition ')';
 
 Float:
-	INT+ ('.' INT+ (('E' | 'e') ('-')? (INT)+)?)?;
+	(INT)+ EXP?
+	| (INT)+ '.' (INT)* EXP?;
 
 Function returns Expression:
 	name=MathName '(' (parameters+=Formula (',' parameters+=Formula)* ','?)? ')';
@@ -99,12 +100,19 @@ LogicalMultiplication returns LogicalExpression:
 	LogicalComparison ('&&' {LogicalMultiplication.left=current} right=LogicalComparison)*;
 
 LogicalComparison returns LogicalExpression:
-	{LogicalComparison} left=Formula operation=COMPARISON_OPERATION right=Formula |
+	 LogicalPrimary ( operation=COMPARISON_OPERATION {LogicalComparison.left=current} right=LogicalPrimary )*;
+
+LogicalPrimary returns LogicalExpression:
+	{LogicalOperand} value=Formula |
 	'(' LogicalAddition ')'
 ;
 
 terminal COMPARISON_OPERATION returns ecore::EString:
 	'<=' | '>=' | '<' | '>' | '==' | '!='
+;
+
+terminal EXP returns ecore::EString:
+	('e'|'E') ('+'|'-')? (INT)+
 ;
 
 terminal MATH_NAME returns ecore::EString:

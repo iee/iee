@@ -6,11 +6,6 @@ package org.eclipse.iee.translator.molex.mex.generator
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess
-
-import org.eclipse.iee.translator.molex.mex.mex
-
-import org.eclipse.xtext.xtend2.lib.StringConcatenation
-import static extension org.eclipse.xtext.xtend2.lib.ResourceExtensions.*
 import org.eclipse.iee.translator.molex.mex.mex.*
 
 class MexGenerator implements IGenerator {
@@ -20,13 +15,15 @@ class MexGenerator implements IGenerator {
 	}
 	
 	def String generateText(Resource resource) {
-		var statements = resource.allContentsIterable.filter(typeof(Statement));
+		var statements = resource.contents;
 		
 		if (statements.empty) {
 			return null;
 		}
 		
-		return statements.head.compileStatement.toString();	
+		var statement = compileStatement(statements.head as Statement);
+		
+		return statement.toString();
 	}
 	
 	def compileStatement(Statement s)
@@ -34,6 +31,7 @@ class MexGenerator implements IGenerator {
 	'''
 		«IF s.functionDefinition != null»«compileFunctionDefinition(s.functionDefinition)»«ENDIF»
 		«IF s.formula != null»«compileFormula(s.formula)»«ENDIF»
+		«IF s.logicalFormula != null»«compileLogicalFormula(s.logicalFormula)»«ENDIF»
 		«IF s.variableAssignment != null»«compileVariableAssignment(s.variableAssignment)»«ENDIF»
 		«IF s.matrixAssignment != null»«compileMatrixAssignment(s.matrixAssignment)»«ENDIF»
 		«IF s.matrixFormula != null»«compileMatrixFormula(s.matrixFormula)»«ENDIF»
@@ -55,7 +53,7 @@ class MexGenerator implements IGenerator {
 	def compileVariableAssignment(VariableAssignment a)
 	{
 	 '''
-	 	«compileName(a.variable)» = «compileFormula(a.value)»
+	 	«compileFormula(a.variable)» = «compileFormula(a.value)»
 	 '''
 	}
 	
@@ -112,6 +110,13 @@ class MexGenerator implements IGenerator {
 	{
 	'''
 		«compileExpression(f.expression)»
+	'''
+	}
+	
+	def compileLogicalFormula(LogicalFormula f) 
+	{
+	'''
+		«compileLogicalExpression(f.expression)»
 	'''
 	}
 	
@@ -230,6 +235,40 @@ class MexGenerator implements IGenerator {
 	def dispatch compileMatrixExpression(MatrixMultiplication op) '''
 		«IF op.rightMatrix != null»«compileMatrixExpression(op.left)»*«compileMatrixExpression(op.rightMatrix)»«ENDIF»
 		«IF op.rightScalar != null»«compileMatrixExpression(op.left)»*«compileFormula(op.rightScalar)»«ENDIF»'''
-		
 	
+	//Logical Expressions
+		
+	def dispatch compileLogicalExpression(LogicalInBrackets op) '''
+		(«compileLogicalExpression(op.inBrackets.addition)»)'''	
+		
+	def dispatch compileLogicalExpression(LogicalAddition op) '''
+		«compileLogicalExpression(op.left)» \vee «compileLogicalExpression(op.right)»'''
+	
+	def dispatch compileLogicalExpression(LogicalMultiplication op) '''
+		«compileLogicalExpression(op.left)» \wedge «compileLogicalExpression(op.right)»'''
+		
+	 def dispatch compileLogicalExpression(LogicalComparison op) '''
+		«compileLogicalExpression(op.left)» 
+		«IF op.left.operation.matches(">=")»
+			\ge
+		«ENDIF»
+		«IF op.left.operation.matches("<=")»
+			\le	
+		«ENDIF»
+		«IF op.left.operation.matches("<")»
+			<
+		«ENDIF» 
+		«IF op.left.operation.matches(">")»
+			>	
+		«ENDIF»
+		«IF op.left.operation.matches("!=")»
+			\ne	
+		«ENDIF»
+		«IF op.left.operation.matches("==")»
+			==	
+		«ENDIF»
+		«compileLogicalExpression(op.right)»'''
+		
+	def dispatch compileLogicalExpression(LogicalOperand op) '''
+		«compileFormula(op.value)»'''		
 }

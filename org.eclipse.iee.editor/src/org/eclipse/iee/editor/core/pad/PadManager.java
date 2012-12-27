@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
@@ -23,6 +24,8 @@ import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 
 public class PadManager extends EventManager {
 
+	private static final Logger logger = Logger.getLogger(PadManager.class);
+	
 	/* ContainerManagers */
 
 	private Map<String, ContainerManager> fContainerManagers;
@@ -81,7 +84,7 @@ public class PadManager extends EventManager {
 		containerManager.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.remove(containerManager.getContainerManagerID());
 		for (String containerID : containerManager.getContainerIDs()) {
-			onContainerRemoved(containerID);
+			onEditorClosed(containerID);
 		}
 		firePadManagerEvent(new PadManagerEvent());
 	}
@@ -96,10 +99,6 @@ public class PadManager extends EventManager {
 			}
 		}
 		
-		/* Remove storages of all suspended pads */
-		for (String containerID : fSuspendedPads) {
-			fPads.get(containerID).unsave();
-		}
 	}
 	
 	public List<Pad> selectPadsByType(String type) {
@@ -118,7 +117,7 @@ public class PadManager extends EventManager {
 		return null;
 	}
 
-	public Collection<Pad> selectPadsInContainerManager(String containerManager) {
+	public Collection<Pad> selectPadsInContainerManager(String containerManagerID) {
 		
 		return null;
 	}
@@ -157,7 +156,9 @@ public class PadManager extends EventManager {
 	public void loadPad(Pad pad) {
 		String containerID = pad.getContainerID();
 
-		Assert.isLegal(!fActivePads.contains(containerID));
+		if (fActivePads.contains(containerID))
+			return;
+		
 		Assert.isLegal(!fSuspendedPads.contains(containerID));
 
 		if (fTemporaryPads.contains(containerID)) {
@@ -320,6 +321,22 @@ public class PadManager extends EventManager {
 			pad.detachContainer();
 			fActivePads.remove(containerID);
 			fSuspendedPads.add(containerID);
+			return;
+		}
+		if (fTemporaryPads.contains(containerID)) {
+			Pad pad = fPads.get(containerID);
+			pad.detachContainer();
+			fTemporaryPads.remove(containerID);
+			return;
+		}
+		Assert.isLegal(false);
+	}
+	
+	protected void onEditorClosed(String containerID) {
+		if (fActivePads.contains(containerID)) {
+			Pad pad = fPads.get(containerID);
+			pad.detachContainer();
+			fActivePads.remove(containerID);
 			return;
 		}
 		if (fTemporaryPads.contains(containerID)) {

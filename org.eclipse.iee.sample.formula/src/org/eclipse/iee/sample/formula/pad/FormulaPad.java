@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
 import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
@@ -12,13 +15,15 @@ import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
-import org.eclipse.iee.sample.formula.storage.FileStorage;
+import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CaretEvent;
+import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -26,6 +31,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -33,13 +39,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class FormulaPad extends Pad {
+
+	@XStreamOmitField
+	private static final Logger logger = Logger.getLogger(FormulaPad.class);
 
 	@XStreamOmitField
 	private Composite fParent;
@@ -64,16 +71,15 @@ public class FormulaPad extends Pad {
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
-	
+
 	private String fDirectoryPath = "";
 
 	private String fOriginalExpression = "";
 	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
 
-	private boolean fTextChanged;
-	
-	
+	private int fCaretOffset;
+	private int fPreviousCaretOffset;
 
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
 	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
@@ -81,7 +87,7 @@ public class FormulaPad extends Pad {
 	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
 		@Override
 		public void messageReceived(ConsoleMessageEvent e) {
-			System.out.println("Message received:" + e.getMessage());
+			logger.debug("Message received:" + e.getMessage());
 			updateLastResult(e.getMessage());
 		}
 
@@ -94,7 +100,7 @@ public class FormulaPad extends Pad {
 	/*
 	 * Getters/Setters
 	 */
-	
+
 	public String getDirectoryPath() {
 		return fDirectoryPath;
 	}
@@ -118,11 +124,12 @@ public class FormulaPad extends Pad {
 	public void setTranslatingExression(String expression) {
 		fTranslatingExpression = expression;
 	}
-	
+
 	public FormulaPad() {
 	}
 
 	public void toggleInputText() {
+
 		// OFF
 		fResultView.setVisible(false);
 
@@ -133,8 +140,8 @@ public class FormulaPad extends Pad {
 		fParent.pack();
 
 		fViewer.getControl().forceFocus();
-		System.out.println("force Focus");
-		
+		fCaretOffset = 0;
+		logger.debug("force Focus");
 	}
 
 	public void toggleFormulaImage() {
@@ -181,7 +188,7 @@ public class FormulaPad extends Pad {
 				}
 			}
 		}
-		
+
 		fTranslatingExpression = fLastValidText;
 
 		/* Set formula image */
@@ -194,18 +201,29 @@ public class FormulaPad extends Pad {
 		/* Add result output */
 		if (!fTranslatingExpression.trim().isEmpty())
 			if (fTranslatingExpression
-					.charAt(fTranslatingExpression.length() - 1) == '=')
-				generated += generateOutputCode(fTranslatingExpression);
+					.charAt(fTranslatingExpression.length() - 1) == '=') {
+				String output = generateOutputCode(fTranslatingExpression);
+
+				Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
+				Matcher m = p.matcher(fTranslatingExpression);
+				if (m.matches())
+					generated = output;
+				else
+					generated += output;
+			}
 		getContainer().setTextContent(generated);
 		getContainer().setValue(fOriginalExpression);
 	}
 
 	public String generateOutputCode(String expresion) {
-		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.+");
-		Matcher m = p.matcher(expresion);
+		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.*");
+		Matcher m = p.matcher(expresion.replaceAll(Pattern.quote("{"), "")
+				.replaceAll(Pattern.quote("}"), ""));
 		if (m.matches()) {
 			String variable = expresion.substring(0, expresion.indexOf('='));
 			variable = variable.trim();
+			variable = variable.replaceAll(Pattern.quote("{"), "");
+			variable = variable.replaceAll(Pattern.quote("}"), "");
 			if (variable.charAt(0) != '[') {
 				return "System.out.println(\"" + getContainerID() + "\" + "
 						+ variable + ");";
@@ -233,7 +251,7 @@ public class FormulaPad extends Pad {
 
 				output += "matrix += \"}\";";
 
-				output += "System.out.print(\"" + getContainerID() + "\" + "
+				output += "System.out.println(\"" + getContainerID() + "\" + "
 						+ "matrix);";
 
 				return output;
@@ -254,6 +272,26 @@ public class FormulaPad extends Pad {
 		Image image = FormulaRenderer.getFormulaImage(result);
 		fLastResultImageLabel.setImage(image);
 		fParent.pack();
+	}
+
+	private void switchToResultView() {
+		processInput();
+		moveCaretToCurrentPad();
+
+		if (fTranslatingExpression != "")
+			toggleFormulaImage();
+
+		if (fHoverShell != null) {
+			fHoverShell.dispose();
+			fHoverShell = null;
+		}
+	}
+
+	private void moveCaretToContainerTail() {
+		Container c = getContainer();
+		ContainerManager containerManager = c.getContainerManager();
+		containerManager.getStyledText().setCaretOffset(
+				c.getPosition().getOffset() + c.getPosition().getLength());
 	}
 
 	public void setListeners() {
@@ -300,13 +338,15 @@ public class FormulaPad extends Pad {
 				processInput();
 				if (fTranslatingExpression != "")
 					toggleFormulaImage();
-				if (fHoverShell != null)
+				if (fHoverShell != null) {
 					fHoverShell.dispose();
+					fHoverShell = null;
+				}
 			}
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				System.out.println("focusGained");
+				logger.debug("focusGained");
 			}
 		});
 
@@ -314,67 +354,122 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void textChanged(TextEvent event) {
-				if (fTextChanged) {
-					if (fDocument.get() != "") {
-						fTextChanged = true;
 
-						validateInput();
-						
-						Image image = FormulaRenderer.getFormulaImage(fDocument
-								.get());
-						if (image == null)
-							image = FormulaRenderer
-									.getFormulaImage(fLastValidText);
-						if (fHoverShell != null)
-							fHoverShell.dispose();
-						fHoverShell = new HoverShell(fParent, image);
+				if (fDocument.get() != "") {
 
-						/* Resize fInputText */
-						Point size = fViewer.getControl().computeSize(
-								SWT.DEFAULT, SWT.DEFAULT, false);
-						fViewer.getControl().setSize(size);
-						fParent.pack();
+					validateInput();
+
+					Image image = FormulaRenderer.getFormulaImage(fDocument
+							.get());
+					if (image == null)
+						image = FormulaRenderer.getFormulaImage(fLastValidText);
+					if (fHoverShell != null) {
+						fHoverShell.dispose();
+						fHoverShell = null;
 					}
-				} else
-					fTextChanged = true;
+					fHoverShell = new HoverShell(fParent, image);
+
+					/* Resize fInputText */
+					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
+							SWT.DEFAULT, false);
+					fViewer.getControl().setSize(size);
+					fParent.pack();
+				}
 			}
 		});
 
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				getContainer().getContainerManager().fireContainerSelected(
+						getContainer());
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;
-					processInput();
-					moveCaretToCurrentPad();
-
-					if (fTranslatingExpression != "")
-						toggleFormulaImage();
-
-					if (fHoverShell != null)
-						fHoverShell.dispose();
-
+					switchToResultView();
+					moveCaretToContainerTail();
 					break;
 
 				case SWT.ESC:
-					processInput();
+					switchToResultView();
+					moveCaretToContainerTail();
+					break;
+				case SWT.ARROW_UP:
 					moveCaretToCurrentPad();
-
-					if (fTranslatingExpression != "")
-						toggleFormulaImage();
-
-					if (fHoverShell != null)
-						fHoverShell.dispose();
-
 					break;
-
-				case SWT.HOME:
+				case SWT.ARROW_DOWN:
+					moveCaretToCurrentPad();
 					break;
+				case SWT.ARROW_LEFT:
+					if (fCaretOffset == 0 && fPreviousCaretOffset == 0)
+						switchToResultView();
+					else
+						fPreviousCaretOffset = fCaretOffset;
+					break;
+				case SWT.ARROW_RIGHT:
 
-				case SWT.END:
+					int expressionLength = fOriginalExpression.length();
+					if (fCaretOffset == expressionLength
+							&& fPreviousCaretOffset == expressionLength) {
+						switchToResultView();
+						moveCaretToContainerTail();
+					} else
+						fPreviousCaretOffset = fCaretOffset;
 					break;
 
 				}
+
+			}
+		});
+
+		fViewer.getTextWidget().addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				int caretOffset = fViewer.getTextWidget().getCaretOffset();
+				if (caretOffset == 0) {
+					fCaretOffset = 0;
+					fPreviousCaretOffset = 0;
+				}
+				if (caretOffset == fOriginalExpression.length()) {
+					fCaretOffset = fOriginalExpression.length();
+					fPreviousCaretOffset = fCaretOffset;
+				}
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
+
+		fViewer.getTextWidget().addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseScrolled(MouseEvent e) {
+				if (fHoverShell != null) {
+					fHoverShell.dispose();
+					fHoverShell = null;
+				}
+			}
+		});
+
+		fViewer.getTextWidget().addCaretListener(new CaretListener() {
+
+			@Override
+			public void caretMoved(CaretEvent event) {
+				fPreviousCaretOffset = fCaretOffset;
+				fCaretOffset = event.caretOffset;
+
+				if (fCaretOffset == 0 && fPreviousCaretOffset != 1)
+					fPreviousCaretOffset = 0;
+
+				if (fCaretOffset == fTranslatingExpression.length()
+						&& fPreviousCaretOffset != (fTranslatingExpression
+								.length() - 1))
+					fPreviousCaretOffset = fCaretOffset;
 			}
 		});
 
@@ -398,13 +493,14 @@ public class FormulaPad extends Pad {
 
 		fViewer = new TextViewer(fInputView, SWT.SINGLE);
 		fViewer.getControl().setSize(50, 100);
+		fViewer.getControl().setFont(
+				getContainer().getContainerManager().getStyledText().getFont());
 		fDocument = new Document();
 		if (fTranslatingExpression.isEmpty())
 			fDocument.set(fOriginalExpression);
 		else
 			fDocument.set(fTranslatingExpression);
 		fViewer.setDocument(fDocument);
-		fTextChanged = false;
 
 		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
 		fViewer.setUndoManager(defaultUndoManager);
@@ -433,11 +529,14 @@ public class FormulaPad extends Pad {
 
 		setListeners();
 
+		// moveCaretToCurrentPad();
+
 		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
 			processInput();
 			toggleFormulaImage();
 		} else {
+			getContainer().getComposite().setVisible(true);
 			toggleInputText();
 		}
 
@@ -445,7 +544,16 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void activate() {
+		int editorCaretOffset = getContainer().getContainerManager()
+				.getStyledText().getCaretOffset();
+
 		toggleInputText();
+
+		if (editorCaretOffset > getContainer().getPosition().getOffset() + 1) {
+			fCaretOffset = fTranslatingExpression.length();
+			fViewer.getTextWidget().setCaretOffset(fCaretOffset);
+		}
+
 	}
 
 	@Override

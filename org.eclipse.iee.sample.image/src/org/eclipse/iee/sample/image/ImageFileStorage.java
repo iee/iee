@@ -8,26 +8,30 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.core.storage.FileStorage;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 
-public class XmlFilesStorage {
+public class ImageFileStorage extends FileStorage{
+	
+	private static final Logger logger = Logger.getLogger(ImageFileStorage.class);
 	
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
 	private String fDirectoryPath;
-	private static XmlFilesStorage fInstance = null;
+	private static ImageFileStorage fInstance = null;
 	
-	public static XmlFilesStorage getInstance(String directoryPath) {
+	public static ImageFileStorage getInstance(String directoryPath) {
 		if (fInstance == null) {
-			fInstance = new XmlFilesStorage(directoryPath);
+			fInstance = new ImageFileStorage(directoryPath);
 		}
 		return fInstance;
 	}
 	
-	private XmlFilesStorage(String directoryPath) {
-		System.out.println("XmlFilesStorage");
+	private ImageFileStorage(String directoryPath) {
+		logger.debug("ImageFilesStorage");
 		
 		fDirectoryPath = directoryPath;
 		File storageDirectory = new File(fDirectoryPath);
@@ -37,30 +41,28 @@ public class XmlFilesStorage {
 				return;
 			}
 		}
-
-		if (storageDirectory.exists() && storageDirectory.isDirectory()) {
-			loadAllFiles(storageDirectory);
-		}
 	}
 	
-	public void saveToFile(ImagePad pad) {
-		System.out.println("saveToFile");
+	public void saveToFile(Pad pad) {
+		logger.debug(pad.getContainerID() + " : saveToFile");
+		
+		ImagePad imagePad = (ImagePad)pad;
 		
 		try {
 			
-			File imageSrc = new File(pad.getImagePath());
-			File imageDst = new File(pad.getStoragePath() + imageSrc.getName());
+			File imageSrc = new File(imagePad.getImagePath());
+			File imageDst = new File(imagePad.getStoragePath() + imageSrc.getName());
 			
 			if (!imageDst.exists())
 			{
 				FileUtils.copyFile(imageSrc, imageDst);
-				pad.setImagePath(imageDst.getAbsolutePath());
+				imagePad.setImagePath(imageDst.getAbsolutePath());
 			}
 			
 			File file = new File(fDirectoryPath + pad.getContainerID());
 			
 			if (!file.exists()) {
-				System.out.println(file.getAbsolutePath());
+				logger.debug("new file: " + file.getAbsolutePath());
 				file.createNewFile();
 			}
 			
@@ -70,17 +72,8 @@ public class XmlFilesStorage {
 			out.close();
 			fos.close();
 		} catch (IOException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
-		}
-	}
-
-	public void loadAllFiles(File storageDirectory) {
-		System.out.println("loadAllFiles");		
-		for (String name : storageDirectory.list()) {
-			Pad pad = loadFromFile(name);
-			if (pad != null && pad.getType().matches("Image")) {
-				fPadManager.loadPad(pad);
-			}
 		}
 	}
 	
@@ -91,8 +84,8 @@ public class XmlFilesStorage {
 		}
 	}
 	
-	protected Pad loadFromFile(String containerID) {
-		System.out.println("loadFromFile");
+	public void loadFromFile(String containerID) {
+		logger.debug(containerID + " : loadFromFile");
 		Pad pad = null;
 		try {
 			File file = new File(fDirectoryPath + containerID);
@@ -102,14 +95,20 @@ public class XmlFilesStorage {
 				pad = (Pad) in.readObject();
 				pad.setContainerID(containerID);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			}
 			in.close();
 			fis.close();
 		} catch (IOException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		return pad;
+
+		if (pad != null && pad.getType().matches("Image")) {
+			fPadManager.loadPad(pad);
+		}
+		
 	}
+
 }

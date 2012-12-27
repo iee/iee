@@ -1,12 +1,12 @@
 package org.eclipse.iee.sample.image.actions;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.sample.image.XmlFilesStorage;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -18,6 +18,8 @@ import org.eclipse.ui.IFileEditorInput;
 
 public class AddImagePadActionDelegate implements IEditorActionDelegate {
 
+	private static final Logger logger = Logger.getLogger(AddImagePadActionDelegate.class);
+	
 	Shell shell = null;
 
 	IPadEditor fPadEditor;
@@ -39,6 +41,8 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 			return;
 		}
 		
+		logger.debug("Insert Image");
+		
 		IEditorPart editor = (IEditorPart)fPadEditor;
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
 	    IFile file = input.getFile();
@@ -59,10 +63,7 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/image/";
 	    }
 	    
-		System.out.println("storagePath = " + storagePath);
-
-		/* load saved pads */
-		XmlFilesStorage.getInstance(storagePath);
+	    logger.debug("storagePath = " + storagePath);
 		
 		ImagePad pad = new ImagePad();
 		pad.setStoragePath(storagePath);

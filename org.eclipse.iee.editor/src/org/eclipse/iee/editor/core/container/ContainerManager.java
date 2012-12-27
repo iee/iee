@@ -13,6 +13,7 @@ import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
@@ -35,6 +36,8 @@ import org.eclipse.swt.custom.StyledText;
 
 public class ContainerManager extends EventManager {
 
+	private static final Logger logger = Logger.getLogger(ContainerManager.class);
+	
 	private final String fContainerManagerID;
 	
 	private final ContainerManagerConfig fConfig;
@@ -76,6 +79,7 @@ public class ContainerManager extends EventManager {
 	}
 		
 	public List<Container> getContainers() {
+		/* XXX Check performance */
 		return new ArrayList<Container>(fContainers);
 	}
 	
@@ -89,6 +93,7 @@ public class ContainerManager extends EventManager {
 	}
 		
 	public Collection<Container> getContainersInRange(int from, int to) {		
+		/* XXX check sublist!!! */
 		return fContainers.subSet(
 			Container.atOffset(from),
 			true,
@@ -162,6 +167,7 @@ public class ContainerManager extends EventManager {
 		try {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -245,9 +251,8 @@ public class ContainerManager extends EventManager {
 				String[] partitionings = event.getChangedPartitionings();
 				
 				for (String partitioning : partitionings) {
-					
-					System.out.println("Changed partitionings: " + partitioning);
-					System.out.println("Changed region: " + fChangedPartitioningRegion.toString());
+					logger.debug("Changed partitionings: " + partitioning);
+					logger.debug("Changed region: " + fChangedPartitioningRegion.toString());
 					
 					if (partitioning.equals(PartitioningManager.PARTITIONING_ID)) {
 						continue;
@@ -264,10 +269,10 @@ public class ContainerManager extends EventManager {
 					
 			
 			if (fState == State.READY) {
-				System.out.println("\n\n== Begin of document modification handling ==");
+				logger.debug("\n\n== Begin of document modification handling ==");
 				fState = State.DOCUMENT_CHANGES_HANDLING;	
 			} else {
-				System.out.println("\n\n== Internal document modification ==");
+				logger.debug("\n\n== Internal document modification ==");
 			}
 			
 			/*
@@ -319,10 +324,13 @@ public class ContainerManager extends EventManager {
 					 */
 				}
 			} catch (BadLocationException e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			} catch (BadPartitioningException e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			} catch (RuntimeException e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -335,7 +343,7 @@ public class ContainerManager extends EventManager {
 				
 				fUserInteractionManager.updateCaretSelection();
 
-				System.out.println("== End of document modification handling ==\n\n");
+				logger.debug("== End of document modification handling ==\n\n");
 				fState = State.READY;
 
 				/* For debug */
@@ -510,7 +518,7 @@ public class ContainerManager extends EventManager {
 		}
 	}
 	
-	protected void fireContainerSelected(Container c) {
+	public void fireContainerSelected(Container c) {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
 			((IContainerManagerListener) listeners[i])
