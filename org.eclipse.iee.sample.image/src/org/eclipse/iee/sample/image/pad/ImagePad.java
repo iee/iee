@@ -23,9 +23,9 @@ public class ImagePad extends Pad implements Serializable {
 
 	private transient static final Logger logger = Logger.getLogger(ImagePad.class);
 	
-	private transient static final int STATE_MENU = 0;
-	private transient static final int STATE_IMAGE = 1;
-	private transient static final int STATE_ERROR = 2;
+	public transient static final int STATE_MENU = 0;
+	public transient static final int STATE_IMAGE = 1;
+	public transient static final int STATE_ERROR = 2;
 
 	private static final long serialVersionUID = -5570698937452800023L;
 
@@ -38,6 +38,8 @@ public class ImagePad extends Pad implements Serializable {
 	private int fImageHeigth = -1;
 	
 	private String fStoragePath;
+
+	private Label label;
 
 	public String getStoragePath() {
 		return fStoragePath;
@@ -60,7 +62,7 @@ public class ImagePad extends Pad implements Serializable {
 		fImagePath = null;
 	}
 
-	protected ImagePad(int currentState, String imagePath) {
+	public ImagePad(int currentState, String imagePath) {
 		fCurrentState = currentState;
 		fImagePath = imagePath;
 	}
@@ -133,6 +135,7 @@ public class ImagePad extends Pad implements Serializable {
 				/* Switch to image presentation state */
 
 				fImagePath = imagePath;
+				getContainer().setValue(fImagePath);
 				fCurrentState = STATE_IMAGE;
 				initView(parent);
 			}
@@ -177,7 +180,7 @@ public class ImagePad extends Pad implements Serializable {
 		/* Initialize controls */
 		FillLayout layout = new FillLayout();
 		parent.setLayout(layout);
-		final Label label = new Label(parent, SWT.NONE);
+		label = new Label(parent, SWT.NONE);
 		label.setImage(fResizedImage);
 		parent.pack();
 
@@ -187,6 +190,8 @@ public class ImagePad extends Pad implements Serializable {
 				Point size = parent.getSize();
 				fImageWidth = size.x;
 				fImageHeigth = size.y;
+				getContainer().setPadParam("width", String.valueOf(fImageWidth));
+				getContainer().setPadParam("height", String.valueOf(fImageHeigth));
 				fResizedImage = new Image(parent.getDisplay(),
 					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
 				
@@ -285,6 +290,17 @@ public class ImagePad extends Pad implements Serializable {
 	public void activate() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setSize(int width, int heght) {
+		fImageWidth = width;
+		fImageHeigth = heght;
+		if (label != null) {
+			fResizedImage = new Image(label.getParent().getDisplay(),
+					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
+			label.setImage(fResizedImage);
+			label.getParent().redraw();
+		}
 	}
 
 	@Override

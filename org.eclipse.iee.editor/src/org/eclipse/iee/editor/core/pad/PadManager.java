@@ -309,7 +309,9 @@ public class PadManager extends EventManager {
 			public void containerUpdated(ContainerEvent containerEvent) {
 				Container container = containerEvent.getContainer();
 				Pad pad = fPads.get(container.getContainerID());
-				pad.updateData(container.getPadParams(), container.getValue());
+				if (pad != null) {
+					pad.updateData(container.getPadParams(), container.getValue());
+				}
 			}
 		};
 	}

@@ -14,7 +14,7 @@ public class HoverShell {
 
 	public HoverShell(Composite parent, Image image) {
 		
-		fShell = new Shell(SWT.TOOL | SWT.RESIZE);
+		fShell = new Shell(SWT.TOOL | SWT.RESIZE | SWT.NO_FOCUS);
 		fShell.setVisible(false);
 		Point pt = parent.toDisplay(10, 30);
 		fShell.setLocation(pt.x, pt.y);

@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.iee.editor,
  org.eclipse.iee.sample.formula;bundle-version="1.0.0",
  org.eclipse.iee.sample.image;bundle-version="1.0.0",
- org.eclipse.core.resources;bundle-version="3.7.0"
+ org.eclipse.core.resources;bundle-version="3.7.0",
+ org.eclipse.iee.sample.text;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6, JavaSE-1.7
 Export-Package: org.eclipse.iee.editor.jdt,

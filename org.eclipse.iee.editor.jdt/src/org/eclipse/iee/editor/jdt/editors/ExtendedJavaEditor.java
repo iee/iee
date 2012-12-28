@@ -18,8 +18,11 @@ import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.iee.sample.image.ImageFileStorage;
+import org.eclipse.iee.sample.image.ImagePadFactory;
+import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
@@ -154,6 +157,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		String[] containersIDs = fContainerManager.getContainerIDs();
 
 		if (containersIDs.length > 0) {
+			FormulaPad.class.getName();
+			ImagePadFactory.class.getName();
+			TextPadFactory.class.getName();
 			File formulaStorage = new File(storagePath + "formula/");
 			String[] formulaSerializedPads = formulaStorage.list();
 

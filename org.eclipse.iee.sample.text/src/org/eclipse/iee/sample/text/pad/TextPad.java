@@ -168,17 +168,17 @@ public class TextPad extends Pad {
 			@Override
 			public void textChanged(TextEvent event) {
 				System.out.println(event);
-				if (fTextChanged) {
-					if (fDocument.get() != "") {
-						fTextChanged = true;
-						/* Resize fInputText */
-						Point size = fViewer.getControl().computeSize(
-								SWT.DEFAULT, SWT.DEFAULT, false);
-						fViewer.getControl().setSize(size);
+				fTextChanged = true;
+				String newText = fDocument.get();
+				fText = newText;
+				getContainer().setValue(fText);
+				if (newText != "") {
+					/* Resize fInputText */
+					Point size = fViewer.getControl().computeSize(
+							SWT.DEFAULT, SWT.DEFAULT, false);
+					fViewer.getControl().setSize(size);
 						fParent.pack();
-					}
-				} else
-					fTextChanged = true;
+				}
 			}
 		});
 
@@ -220,7 +220,7 @@ public class TextPad extends Pad {
 
 		fViewer = new TextViewer(fInputView, SWT.MULTI);
 		fViewer.getControl().setSize(50, 100);
-		fDocument = new Document();
+		fDocument = new Document(fText != null ?  fText : "");
 		fViewer.setDocument(fDocument);
 		fTextChanged = false;
 
@@ -540,5 +540,12 @@ public class TextPad extends Pad {
 			index++;
 		}
 		if (index == styles.length) resource.dispose();
+	}
+	
+	public void setText(String fText) {
+		this.fText = fText;
+		if (fDocument != null) {
+			fDocument.set(fText);
+		}
 	}
 }

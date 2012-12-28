@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.text;
 
+import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -15,6 +16,8 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	// The shared instance
 	private static Activator plugin;
 	
+	private final TextPadFactory factory = new TextPadFactory();
+	
 	/**
 	 * The constructor
 	 */
@@ -28,6 +31,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		IeeEditorPlugin.getPadManager().registerPadFactory("Text", factory);
 	}
 
 	/*
@@ -36,6 +40,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		IeeEditorPlugin.getPadManager().unregisterPadFactory(factory);
 		super.stop(context);
 	}
 

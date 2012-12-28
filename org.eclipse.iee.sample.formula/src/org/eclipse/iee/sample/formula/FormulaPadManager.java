@@ -60,7 +60,6 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		// TODO Auto-generated method stub
 	}
 
 	public static List<Pad> getFollowingPads(Pad pad) {		

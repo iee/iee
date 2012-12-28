@@ -15,7 +15,6 @@ import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
-import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 import org.eclipse.jface.text.Document;
@@ -41,6 +40,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -387,7 +387,6 @@ public class FormulaPad extends Pad {
 						fHoverShell = null;
 					}
 					fHoverShell = new HoverShell(fParent, image);
-
 					/* Resize fInputText */
 					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
 							SWT.DEFAULT, false);
