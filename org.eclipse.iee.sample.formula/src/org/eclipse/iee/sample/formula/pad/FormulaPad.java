@@ -241,28 +241,50 @@ public class FormulaPad extends Pad {
 			}
 
 			System.out.println("Type:" + varType.toString());
-
+			
 			if (varType != JavaTranslator.VariableType.MATRIX) {
-				return "System.out.println(\"" + getContainerID() + "\" + "
-						+ variable + ");";
+				
+				String type = "";
+				if (varType == JavaTranslator.VariableType.DOUBLE)
+					type = "double";
+				else if (varType == JavaTranslator.VariableType.INT)
+					type = "int";
+				
+				return "new Runnable() {" +
+				"private " + type + " variable;" +
+				"private Runnable init("+ type +" var){" +
+			     "   variable = var;" +
+			     "   return this;" +
+			    "}" +
+				"@Override " + 
+				"public void run() { System.out.println(\"" + getContainerID() + "\" + "
+						+ "variable" + ");" +
+					"}}.init(" + variable + ").run();";
 			} else {
 				String output = "";
-
-				// TODO: extend Matrix class or change i, j and matrix
+				String type = "Matrix";
+				output += "new Runnable() {" +
+						"private " + type + " variable;" +
+						"private Runnable init("+ type +" var){" +
+					     "   variable = var;" +
+					     "   return this;" +
+					    "}" +
+						"@Override " + 
+						"public void run() {";
 
 				output += "int i=0, j=0; String matrix = \"{\";";
 
-				output += "for(i = 0; i < " + variable
+				output += "for(i = 0; i < " + "variable"
 						+ ".getRowDimension(); i++){" + "matrix += \"{\";"
-						+ "for(j = 0; j < " + variable
+						+ "for(j = 0; j < " + "variable"
 						+ ".getColumnDimension(); j++)";
 				output += "{";
-				output += "matrix += " + variable + ".get(i,j);";
-				output += "if (j !=" + variable + ".getColumnDimension() - 1)";
+				output += "matrix += " + "variable" + ".get(i,j);";
+				output += "if (j !=" + "variable" + ".getColumnDimension() - 1)";
 				output += "matrix += \",\";";
 				output += "else matrix += \"}\";";
 				output += "}";
-				output += "if (i !=" + variable + ".getRowDimension() - 1)";
+				output += "if (i !=" + "variable" + ".getRowDimension() - 1)";
 				output += "matrix += \",\";";
 				output += "}";
 
@@ -271,6 +293,8 @@ public class FormulaPad extends Pad {
 				output += "System.out.println(\"" + getContainerID() + "\" + "
 						+ "matrix);";
 
+				output += "}}.init(" + variable + ").run();";
+				
 				return output;
 
 			}
