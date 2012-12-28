@@ -1,7 +1,5 @@
 package org.eclipse.iee.editor.jdt.editors;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -18,7 +16,6 @@ import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
-import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
 import org.eclipse.iee.sample.image.ImagePadFactory;
 import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -171,29 +168,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		logger.debug("storagePath = " + storagePath);
 
-		String[] containersIDs = fContainerManager.getContainerIDs();
-
-		if (containersIDs.length > 0) {
-			FormulaPad.class.getName();
-			ImagePadFactory.class.getName();
-			TextPadFactory.class.getName();
-			File formulaStorage = new File(storagePath + "formula/");
-			String[] formulaSerializedPads = formulaStorage.list();
-
-			int i, j;
-
-			if (formulaSerializedPads != null) {
-				for (i = 0; i < containersIDs.length; i++)
-					for (j = 0; j < formulaSerializedPads.length; j++) {
-						if (containersIDs[i].matches(formulaSerializedPads[j])) {
-							FormulaFileStorage.getInstance(
-									storagePath + "formula/").loadFromFile(
-									containersIDs[i]);
-						}
-					}
-			}
-
-		}
+		//init pads
+		FormulaPad.class.getName();
+		ImagePadFactory.class.getName();
+		TextPadFactory.class.getName();
 	}
 
 	@Override
