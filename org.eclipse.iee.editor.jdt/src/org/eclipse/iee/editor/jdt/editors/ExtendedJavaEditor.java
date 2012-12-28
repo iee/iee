@@ -1,7 +1,6 @@
 package org.eclipse.iee.editor.jdt.editors;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;

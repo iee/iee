@@ -22,7 +22,7 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	private static FormulaPadManager plugin;
 	
 	private final FormulaPadFactory factory = new FormulaPadFactory();
-	
+
 	/**
 	 * The constructor
 	 */
