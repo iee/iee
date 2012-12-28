@@ -14,9 +14,9 @@ public class Translator {
 	protected static Map<String, String> fCachedItems = new TreeMap<String, String>();
 
 	public static boolean isTextValid(String text) {
-		if (fCachedItems.containsKey(text)) {
-			return true;
-		}
+//		if (fCachedItems.containsKey(text)) {
+//			return true;
+//		}
 
 		if (translateElement(text) == "") {
 			return false;
@@ -29,10 +29,10 @@ public class Translator {
 		if (text.trim().isEmpty())
 			return null;
 
-		String cached = fCachedItems.get(text);
-		if (cached != null) {
-			return cached;
-		}
+//		String cached = fCachedItems.get(text);
+//		if (cached != null) {
+//			return cached;
+//		}
 
 		// XXX Rewrite this
 
@@ -72,10 +72,10 @@ public class Translator {
 		if (text.trim().isEmpty())
 			return null;
 
-		String cached = fCachedItems.get(text);
-		if (cached != null) {
-			return cached;
-		}
+//		String cached = fCachedItems.get(text);
+//		if (cached != null) {
+//			return cached;
+//		}
 
 		// XXX Rewrite this
 
@@ -109,7 +109,7 @@ public class Translator {
 		}
 
 		logger.debug("java: " + resultJava);
-		fCachedItems.put(text, resultJava);
+		//fCachedItems.put(text, resultJava);
 		return resultJava;
 	}
 }

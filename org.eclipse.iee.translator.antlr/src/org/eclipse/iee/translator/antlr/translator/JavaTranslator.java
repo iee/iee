@@ -21,6 +21,9 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
@@ -339,30 +342,55 @@ public class JavaTranslator {
 						fClass = type;
 				}
 			}
-			IMethod[] methods = fClass.getMethods();
-			for (int i = 0; i < methods.length; i++) {
-				IMethod method = methods[i];
 
-				ISourceRange methodSourceRange = method.getSourceRange();
-				int methodOffset = methodSourceRange.getOffset();
-				if (position > methodOffset
-						&& position <= (methodOffset + methodSourceRange
-								.getLength()))
-					fMethod = method;
+			if (fClass != null) {
+				IMethod[] methods = fClass.getMethods();
+				for (int i = 0; i < methods.length; i++) {
+					IMethod method = methods[i];
+
+					ISourceRange methodSourceRange = method.getSourceRange();
+					int methodOffset = methodSourceRange.getOffset();
+					if (position > methodOffset
+							&& position <= (methodOffset + methodSourceRange
+									.getLength()))
+						fMethod = method;
+				}
+
+				IField[] classFields = null;
+
+				classFields = fClass.getFields();
+				for (int i = 0; i < classFields.length; i++) {
+					IField field = classFields[i];
+					String name = field.getElementName();
+					String type = field.getTypeSignature();
+
+					ISourceRange fieldSourceRange = field.getSourceRange();
+					int fieldOffset = fieldSourceRange.getOffset();
+
+					if (position > fieldOffset) {
+						if (type.matches("D")) {
+							if (!fDoubleFields.contains(name))
+								fDoubleFields.add(name);
+						}
+						if (type.matches("QMatrix;")) {
+							if (!fMatrixFields.contains(name))
+								fMatrixFields.add(name);
+						}
+						if (type.matches("I")) {
+							if (!fIntegerFields.contains(name))
+								fIntegerFields.add(name);
+						}
+					}
+				}
 			}
 
-			IField[] classFields = null;
+			if (fMethod != null) {
+				ILocalVariable[] methodParams = fMethod.getParameters();
+				for (int i = 0; i < methodParams.length; i++) {
+					ILocalVariable param = methodParams[i];
+					String name = param.getElementName();
+					String type = param.getTypeSignature();
 
-			classFields = fClass.getFields();
-			for (int i = 0; i < classFields.length; i++) {
-				IField field = classFields[i];
-				String name = field.getElementName();
-				String type = field.getTypeSignature();
-
-				ISourceRange fieldSourceRange = field.getSourceRange();
-				int fieldOffset = fieldSourceRange.getOffset();
-
-				if (position > fieldOffset) {
 					if (type.matches("D")) {
 						if (!fDoubleFields.contains(name))
 							fDoubleFields.add(name);
@@ -375,75 +403,57 @@ public class JavaTranslator {
 						if (!fIntegerFields.contains(name))
 							fIntegerFields.add(name);
 					}
-				}
-			}
 
-			ILocalVariable[] methodParams = fMethod.getParameters();
-			for (int i = 0; i < methodParams.length; i++) {
-				ILocalVariable param = methodParams[i];
-				String name = param.getElementName();
-				String type = param.getTypeSignature();
-
-				if (type.matches("D")) {
-					if (!fDoubleFields.contains(name))
-						fDoubleFields.add(name);
-				}
-				if (type.matches("QMatrix;")) {
-					if (!fMatrixFields.contains(name))
-						fMatrixFields.add(name);
-				}
-				if (type.matches("I")) {
-					if (!fIntegerFields.contains(name))
-						fIntegerFields.add(name);
 				}
 
-			}
+				CompilationUnit unit = (CompilationUnit) parse(compilationUnit);
+				unit.accept(new ASTVisitor() {
+					@Override
+					public boolean visit(VariableDeclarationStatement node) {
+						try {
+							ISourceRange methodSourceRange = fMethod
+									.getSourceRange();
+							int methodOffset = methodSourceRange.getOffset();
 
-			CompilationUnit unit = (CompilationUnit) parse(compilationUnit);
-			unit.accept(new ASTVisitor() {
-				@Override
-				public boolean visit(VariableDeclarationStatement node) {
-					try {
-						ISourceRange methodSourceRange = fMethod
-								.getSourceRange();
-						int methodOffset = methodSourceRange.getOffset();
+							int variableAssignmentOffset = node
+									.getStartPosition();
 
-						int variableAssignmentOffset = node.getStartPosition();
+							if (variableAssignmentOffset > methodOffset
+									&& variableAssignmentOffset <= (methodOffset + methodSourceRange
+											.getLength())
+									&& position > variableAssignmentOffset) {
 
-						if (variableAssignmentOffset > methodOffset
-								&& variableAssignmentOffset <= (methodOffset + methodSourceRange
-										.getLength())
-								&& position > variableAssignmentOffset) {
+								List<?> fragments = node.fragments();
+								String type = node.getType().toString();
 
-							List<?> fragments = node.fragments();
-							String type = node.getType().toString();
+								for (int i = 0; i < fragments.size(); i++) {
+									VariableDeclarationFragment fragment = (VariableDeclarationFragment) fragments
+											.get(i);
+									String name = fragment.getName().toString();
 
-							for (int i = 0; i < fragments.size(); i++) {
-								VariableDeclarationFragment fragment = (VariableDeclarationFragment) fragments
-										.get(i);
-								String name = fragment.getName().toString();
-
-								if (type.matches("double")) {
-									if (!fDoubleFields.contains(name))
-										fDoubleFields.add(name);
-								}
-								if (type.matches("Matrix")) {
-									if (!fMatrixFields.contains(name))
-										fMatrixFields.add(name);
-								}
-								if (type.matches("int")) {
-									if (!fIntegerFields.contains(name))
-										fIntegerFields.add(name);
+									if (type.matches("double")) {
+										if (!fDoubleFields.contains(name))
+											fDoubleFields.add(name);
+									}
+									if (type.matches("Matrix")) {
+										if (!fMatrixFields.contains(name))
+											fMatrixFields.add(name);
+									}
+									if (type.matches("int")) {
+										if (!fIntegerFields.contains(name))
+											fIntegerFields.add(name);
+									}
 								}
 							}
+						} catch (JavaModelException e) {
+							e.printStackTrace();
 						}
-					} catch (JavaModelException e) {
-						e.printStackTrace();
+
+						return true;
 					}
 
-					return true;
-				}
-			});
+				});
+			}
 
 		} catch (JavaModelException e) {
 			e.printStackTrace();

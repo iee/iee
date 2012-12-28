@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 
 import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.IeeEditorPlugin;
@@ -20,11 +21,11 @@ public class FormulaFileStorage extends FileStorage{
 
 	private static final Logger logger = Logger.getLogger(FormulaFileStorage.class);
 	
-	private String fDirectoryPath = "";
+	private static String fDirectoryPath = "";
 	private static FormulaFileStorage fInstance = null;
 
 	public static FormulaFileStorage getInstance(String directoryPath) {
-		if (fInstance == null) {
+		if (fInstance == null || !directoryPath.matches(fDirectoryPath)) {
 			fInstance = new FormulaFileStorage(directoryPath);
 		}
 		return fInstance;
