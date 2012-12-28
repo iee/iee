@@ -43,30 +43,7 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 		
 		logger.debug("Insert Image");
 		
-		IEditorPart editor = (IEditorPart)fPadEditor;
-		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
-	    IFile file = input.getFile();
-	    IProject project = file.getProject();
-	    
-	    IPath rawLocation = project.getRawLocation();
-	    
-	    String storagePath = "";
-	    
-	    if (rawLocation != null)
-	    {
-	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/image/";
-	    }
-	    else
-	    {
-	    	IWorkspace workspace = ResourcesPlugin.getWorkspace();  
-	    	IPath workspaceDirectory = workspace.getRoot().getLocation();
-	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/image/";
-	    }
-	    
-	    logger.debug("storagePath = " + storagePath);
-		
 		ImagePad pad = new ImagePad();
-		pad.setStoragePath(storagePath);
 		
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
 		pad.moveCaretToCurrentPad();

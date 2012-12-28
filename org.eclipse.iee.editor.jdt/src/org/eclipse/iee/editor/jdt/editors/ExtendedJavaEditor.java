@@ -19,7 +19,6 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.iee.sample.formula.storage.FormulaFileStorage;
-import org.eclipse.iee.sample.image.ImageFileStorage;
 import org.eclipse.iee.sample.image.ImagePadFactory;
 import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -74,9 +73,28 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		IEditorPart editor = (IEditorPart)this;
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
 	    IFile file = input.getFile();
+	    IProject project = file.getProject();
 	    ICompilationUnit compilationUnit = JavaCore.createCompilationUnitFrom(file);
 	    fContainerManager.setCompilationUnit(compilationUnit);
-
+	    
+	    IPath rawLocation = project.getRawLocation();
+	    
+	    String storagePath = "";
+	    
+	    if (rawLocation != null)
+	    {
+	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/image/";
+	    }
+	    else
+	    {
+	    	IWorkspace workspace = ResourcesPlugin.getWorkspace();  
+	    	IPath workspaceDirectory = workspace.getRoot().getLocation();
+	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/image/";
+	    }
+	    
+	    logger.debug("storagePath = " + storagePath);
+	    fContainerManager.setStoragePath(storagePath);
+	    
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
 			public void debugNotification(ContainerEvent event) {
@@ -175,20 +193,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 					}
 			}
 
-			File imageStorage = new File(storagePath + "image/");
-			String[] imageSerializedPads = imageStorage.list();
-
-			if (imageSerializedPads != null) {
-				for (i = 0; i < containersIDs.length; i++)
-					for (j = 0; j < imageSerializedPads.length; j++) {
-						if (containersIDs[i].matches(imageSerializedPads[j])) {
-							ImageFileStorage
-									.getInstance(storagePath + "image/")
-									.loadFromFile(containersIDs[i]);
-						}
-					}
-			}
-			
 		}
 	}
 

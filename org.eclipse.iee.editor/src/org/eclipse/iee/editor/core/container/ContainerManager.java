@@ -61,6 +61,8 @@ public class ContainerManager extends EventManager {
 	private DocumentListener fDocumentListener;
 	
 	private ICompilationUnit fCompilationUnit;
+	
+	private String fStoragePath;
 
 	private final NavigableSet<Container> fContainers;
 	
@@ -645,5 +647,13 @@ public class ContainerManager extends EventManager {
 	    }
 	    throw new IllegalArgumentException("failed to parse: " + st);
 	}
-	
+
+	public String getStoragePath() {
+		return fStoragePath;
+	}
+
+	public void setStoragePath(String storagePath) {
+		this.fStoragePath = storagePath;
+	}
+
 }

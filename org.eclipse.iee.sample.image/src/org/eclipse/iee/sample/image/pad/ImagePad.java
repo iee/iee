@@ -1,10 +1,12 @@
 package org.eclipse.iee.sample.image.pad;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.sample.image.ImageFileStorage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -37,18 +39,8 @@ public class ImagePad extends Pad implements Serializable {
 	private int fImageWidth = -1;
 	private int fImageHeigth = -1;
 	
-	private String fStoragePath;
-
 	private Label label;
 
-	public String getStoragePath() {
-		return fStoragePath;
-	}
-
-	public void setStoragePath(String storagePath) {
-		this.fStoragePath = storagePath;
-	}
-	
 	public String getImagePath() {
 		return fImagePath;
 	}
@@ -132,9 +124,26 @@ public class ImagePad extends Pad implements Serializable {
 				button.dispose();
 				label.dispose();
 
+				File storageDirectory = new File(getContainer().getContainerManager().getStoragePath());
+				
+				if (!storageDirectory.exists()) {
+					if (!storageDirectory.mkdirs()) {
+						return;
+					}
+				}
+				
+				File imageSrc = new File(imagePath);
+				File imageDst = new File(getContainer().getContainerManager().getStoragePath() + imageSrc.getName());
+				if (!imageDst.exists())
+				{
+					try {
+						FileUtils.copyFile(imageSrc, imageDst);
+					} catch (IOException e1) {
+					}
+				}
+				
 				/* Switch to image presentation state */
-
-				fImagePath = imagePath;
+				fImagePath = imageSrc.getName();
 				getContainer().setValue(fImagePath);
 				fCurrentState = STATE_IMAGE;
 				initView(parent);
@@ -155,7 +164,7 @@ public class ImagePad extends Pad implements Serializable {
 		logger.debug("initImageView");
 		
 		try {
-			fOriginalImage = new Image(parent.getDisplay(), fImagePath);
+			fOriginalImage = new Image(parent.getDisplay(), getContainer().getContainerManager().getStoragePath() + fImagePath);
 			if (fImageWidth > 0 && fImageHeigth > 0)
 			{
 				fResizedImage = new Image(parent.getDisplay(),
@@ -273,12 +282,10 @@ public class ImagePad extends Pad implements Serializable {
 
 	@Override
 	public void save() {
-		ImageFileStorage.getInstance(fStoragePath).saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		ImageFileStorage.getInstance(fStoragePath).removeFile(getContainerID());
 	}
 
 	@Override
