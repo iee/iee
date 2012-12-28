@@ -20,11 +20,11 @@ public class ImageFileStorage extends FileStorage{
 	private static final Logger logger = Logger.getLogger(ImageFileStorage.class);
 	
 	private final PadManager fPadManager = IeeEditorPlugin.getPadManager();
-	private String fDirectoryPath;
+	private static String fDirectoryPath;
 	private static ImageFileStorage fInstance = null;
 	
 	public static ImageFileStorage getInstance(String directoryPath) {
-		if (fInstance == null) {
+		if (fInstance == null || !directoryPath.matches(fDirectoryPath)) {
 			fInstance = new ImageFileStorage(directoryPath);
 		}
 		return fInstance;
