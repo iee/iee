@@ -15,7 +15,7 @@ import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
+import org.eclipse.iee.sample.formula.FormulaPadFactory;
 import org.eclipse.iee.sample.image.ImagePadFactory;
 import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -146,32 +146,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	private void loadEditorPads() {
 		logger.debug("loadEditorPads");
-
-		IEditorPart editor = (IEditorPart) this;
-		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-		IFile file = input.getFile();
-		IProject project = file.getProject();
-
-		IPath rawLocation = project.getRawLocation();
-
-		String storagePath = "";
-
-		if (rawLocation != null) {
-			storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
-		} else {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IPath workspaceDirectory = workspace.getRoot().getLocation();
-			storagePath = workspaceDirectory.toString()
-					+ project.getFullPath().makeAbsolute().toString()
-					+ "/pads/";
-		}
-
-		logger.debug("storagePath = " + storagePath);
-
-		//init pads
-		FormulaPad.class.getName();
-		ImagePadFactory.class.getName();
-		TextPadFactory.class.getName();
+		
+		fPadManager.registerPadFactory("Formula", new FormulaPadFactory());
+		fPadManager.registerPadFactory("Image", new ImagePadFactory());
+		fPadManager.registerPadFactory("Text", new TextPadFactory());
 	}
 
 	@Override

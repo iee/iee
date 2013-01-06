@@ -20,8 +20,6 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 
 	// The shared instance
 	private static FormulaPadManager plugin;
-	
-	private final FormulaPadFactory factory = new FormulaPadFactory();
 
 	/**
 	 * The constructor
@@ -36,7 +34,6 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		IeeEditorPlugin.getPadManager().registerPadFactory("Formula", factory);
 	}
 
 	/*
@@ -45,7 +42,6 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		IeeEditorPlugin.getPadManager().unregisterPadFactory(factory);
 		super.stop(context);
 	}
 
