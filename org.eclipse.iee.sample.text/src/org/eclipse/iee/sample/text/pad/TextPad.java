@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
-import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
-import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -66,17 +63,6 @@ public class TextPad extends Pad {
 
 	private boolean fTextChanged;
 
-	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
-		@Override
-		public void messageReceived(ConsoleMessageEvent e) {
-			System.out.println("Message received:" + e.getMessage());
-		}
-
-		@Override
-		public String getRequesterID() {
-			return getContainerID();
-		}
-	};
 	private Image iBold;
 	private Image iItalic;
 	private Image iUnderline;
@@ -119,9 +105,6 @@ public class TextPad extends Pad {
 	}
 
 	public void setListeners() {
-
-		ConsoleMessager.getInstance().addConsoleMessageListener(
-				fConsoleMessageListener);
 
 		fViewer.getControl().addMouseListener(new MouseListener() {
 			@Override

@@ -80,13 +80,13 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	    
 	    if (rawLocation != null)
 	    {
-	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/image/";
+	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
 	    }
 	    else
 	    {
 	    	IWorkspace workspace = ResourcesPlugin.getWorkspace();  
 	    	IPath workspaceDirectory = workspace.getRoot().getLocation();
-	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/image/";
+	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/";
 	    }
 	    
 	    logger.debug("storagePath = " + storagePath);
