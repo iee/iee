@@ -9,10 +9,11 @@ matrix(type, id, variable, path) ::= <<
 		@Override
 		public void run() {
 			int i=0, j=0; String matrix = "{";
-			for (i = 0; i < variable.getRowDimension(); i++)
+			for (i = 0; i \< variable.getRowDimension(); i++)
 			{
 				matrix += "{";
-				for (j = 0; j < variable.getColumnDimension(); j++)
+				
+				for (j = 0; j \< variable.getColumnDimension(); j++)
 				{
 					matrix += variable.get(i,j);
 					if (j != variable.getColumnDimension() - 1)
