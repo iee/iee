@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.monitor.FileAlterationListener;
@@ -72,7 +74,6 @@ public class FileMessager extends EventManager {
 					try {
 						line = FileUtils.readFileToString(arg0);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
@@ -93,8 +94,17 @@ public class FileMessager extends EventManager {
 				public void onDirectoryChange(File arg0) {
 				}
 			});
-			
-			fObservers.put(path, observer);	
+
+			fObservers.put(path, observer);
+		}
+	}
+
+	public void checkRuntimeValues() {
+		Set<Entry<String, FileAlterationObserver>> set = fObservers.entrySet();
+		for (Iterator<Entry<String, FileAlterationObserver>> iterator = set
+				.iterator(); iterator.hasNext();) {
+			FileAlterationObserver observer = iterator.next().getValue();
+			observer.checkAndNotify();
 		}
 	}
 

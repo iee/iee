@@ -323,9 +323,9 @@ public class PadManager extends EventManager {
 	}
 
 	/* Internal functions */
-	protected void onContainerRemoved(String containerID) {
+	private void clearPadSetsAndRuntime(String containerID, boolean addToSuspended) {
 		Pad pad = fPads.get(containerID);
-		
+
 		String runtimePath = pad.getContainer().getContainerManager()
 				.getStoragePath()
 				+ FileMessager.getInstance().getRuntimeDirectoryName()
@@ -339,7 +339,10 @@ public class PadManager extends EventManager {
 		if (fActivePads.contains(containerID)) {
 			pad.detachContainer();
 			fActivePads.remove(containerID);
-			fSuspendedPads.add(containerID);
+			
+			if (addToSuspended)
+				fSuspendedPads.add(containerID);
+			
 			return;
 		}
 		if (fTemporaryPads.contains(containerID)) {
@@ -350,20 +353,12 @@ public class PadManager extends EventManager {
 		Assert.isLegal(false);
 	}
 
+	protected void onContainerRemoved(String containerID) {
+		clearPadSetsAndRuntime(containerID, true);
+	}
+
 	protected void onEditorClosed(String containerID) {
-		if (fActivePads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
-			pad.detachContainer();
-			fActivePads.remove(containerID);
-			return;
-		}
-		if (fTemporaryPads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
-			pad.detachContainer();
-			fTemporaryPads.remove(containerID);
-			return;
-		}
-		Assert.isLegal(false);
+		clearPadSetsAndRuntime(containerID, false);
 	}
 
 	/* For observers */
