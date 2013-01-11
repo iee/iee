@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.log4j.Logger;
@@ -28,8 +24,8 @@ public class FileMessager extends EventManager {
 	public static FileMessager getInstance() {
 		return fFileMessager;
 	}
-	
-	public String getRuntimeFileName() {
+
+	public String getRuntimeDirectoryName() {
 		return "runtime";
 	}
 
@@ -48,12 +44,9 @@ public class FileMessager extends EventManager {
 
 		if (!fObservers.containsKey(path)) {
 
-			IOFileFilter filter = FileFilterUtils.and(
-					FileFilterUtils.fileFileFilter(),
-					FileFilterUtils.nameFileFilter(getRuntimeFileName()));
-
 			FileAlterationObserver observer = new FileAlterationObserver(
-					new File(path), filter);
+					new File(path + getRuntimeDirectoryName()));
+
 			observer.addListener(new FileAlterationListener() {
 
 				@Override
@@ -75,30 +68,16 @@ public class FileMessager extends EventManager {
 				@Override
 				public void onFileChange(File arg0) {
 
-					String[] lines = null;
+					String line = null;
 					try {
-						lines = FileUtils.readFileToString(arg0).split(
-								"\\r?\\n");
+						line = FileUtils.readFileToString(arg0);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					for (String line : lines) {
-						try {
-							final int prefixLength = 36;
-							String id = line.substring(0, prefixLength);
 
-							Pattern p = Pattern
-									.compile("\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}");
-							Matcher m = p.matcher(id);
-							if (m.matches()) {
-								String message = line.substring(prefixLength);
-								fireFileMessage(id, message);
-							}
-						} catch (IndexOutOfBoundsException e) {
-							// Do nothing
-						}
-					}
+					String id = arg0.getName();
+					fireFileMessage(id, line);
 
 				}
 
@@ -114,8 +93,8 @@ public class FileMessager extends EventManager {
 				public void onDirectoryChange(File arg0) {
 				}
 			});
-
-			fObservers.put(path, observer);
+			
+			fObservers.put(path, observer);	
 		}
 	}
 

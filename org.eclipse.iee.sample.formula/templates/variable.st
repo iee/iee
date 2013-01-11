@@ -8,9 +8,9 @@ variable(type, id, variable, path) ::= <<
 		}
 		@Override
 		public void run() {
-			File file = new File("<path>");
+			File file = new File("<path>/<id>");
 			try {
-				FileUtils.writeStringToFile(file, "<id>"+variable);
+				FileUtils.writeStringToFile(file, "" + variable);
 			}
 			catch(IOException e)
 			{

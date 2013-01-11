@@ -9,9 +9,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessageEvent;
-import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessager;
-import org.eclipse.iee.editor.core.utils.runtime.console.IConsoleMessageListener;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
@@ -90,19 +87,6 @@ public class FormulaPad extends Pad {
 
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
 	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
-
-	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
-		@Override
-		public void messageReceived(ConsoleMessageEvent e) {
-			logger.debug("Message received:" + e.getMessage());
-			updateLastResult(e.getMessage());
-		}
-
-		@Override
-		public String getRequesterID() {
-			return getContainerID();
-		}
-	};
 
 	private IFileMessageListener fFileMessageListener = new IFileMessageListener() {
 
@@ -280,9 +264,10 @@ public class FormulaPad extends Pad {
 				template.add("variable", variable);
 				template.add("path", getContainer().getContainerManager()
 						.getStoragePath()
-						+ FileMessager.getInstance().getRuntimeFileName());
+						+ FileMessager.getInstance().getRuntimeDirectoryName());
 
-				return template.render(1).trim().replaceAll("\r\n", "").replaceAll("\t", " ");
+				return template.render(1).trim().replaceAll("\r\n", "")
+						.replaceAll("\t", " ");
 
 			} else {
 
@@ -294,9 +279,10 @@ public class FormulaPad extends Pad {
 				template.add("variable", variable);
 				template.add("path", getContainer().getContainerManager()
 						.getStoragePath()
-						+ FileMessager.getInstance().getRuntimeFileName());
+						+ FileMessager.getInstance().getRuntimeDirectoryName());
 
-				return template.render(1).trim().replaceAll("\r\n", "").replaceAll("\t", " ");
+				return template.render(1).trim().replaceAll("\r\n", "")
+						.replaceAll("\t", " ");
 			}
 		} else {
 			return "";
@@ -337,11 +323,8 @@ public class FormulaPad extends Pad {
 
 	public void setListeners() {
 
-		ConsoleMessager.getInstance().addConsoleMessageListener(
-				fConsoleMessageListener);
-
-		// FileMessager.getInstance().addFileMessageListener(fFileMessageListener,
-		// getContainer().getContainerManager().getStoragePath());
+		FileMessager.getInstance().addFileMessageListener(fFileMessageListener,
+				getContainer().getContainerManager().getStoragePath());
 
 		fFormulaImageLabel.addMouseListener(new MouseListener() {
 			@Override

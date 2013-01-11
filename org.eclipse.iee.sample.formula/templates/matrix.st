@@ -25,9 +25,9 @@ matrix(type, id, variable, path) ::= <<
 					matrix += ",";
 			}
 			matrix += "}";
-			File file = new File("<path>");
+			File file = new File("<path>/<id>");
 			try {
-				FileUtils.writeStringToFile(file, "<id>"+matrix);
+				FileUtils.writeStringToFile(file, "" + matrix);
 			}
 			catch(IOException e)
 			{

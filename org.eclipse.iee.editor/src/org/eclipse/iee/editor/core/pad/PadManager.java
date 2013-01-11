@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
@@ -21,6 +23,7 @@ import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 
 public class PadManager extends EventManager {
 
@@ -321,15 +324,25 @@ public class PadManager extends EventManager {
 
 	/* Internal functions */
 	protected void onContainerRemoved(String containerID) {
+		Pad pad = fPads.get(containerID);
+		
+		String runtimePath = pad.getContainer().getContainerManager()
+				.getStoragePath()
+				+ FileMessager.getInstance().getRuntimeDirectoryName()
+				+ "/"
+				+ containerID;
+
+		File runtimeFile = new File(runtimePath);
+		if (runtimeFile.exists())
+			FileUtils.deleteQuietly(runtimeFile);
+
 		if (fActivePads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
 			pad.detachContainer();
 			fActivePads.remove(containerID);
 			fSuspendedPads.add(containerID);
 			return;
 		}
 		if (fTemporaryPads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
 			pad.detachContainer();
 			fTemporaryPads.remove(containerID);
 			return;
