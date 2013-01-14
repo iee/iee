@@ -16,6 +16,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
@@ -33,6 +36,7 @@ public class PadManager extends EventManager {
 
 	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
+	private IDebugEventSetListener fDebugListener;
 
 	/** Registered pad factories. */
 	private Map<String, IPadFactory> fPadFactories = new HashMap<String, IPadFactory>();
@@ -320,6 +324,18 @@ public class PadManager extends EventManager {
 				}
 			}
 		};
+		
+		DebugPlugin.getDefault().addDebugEventListener(new IDebugEventSetListener() {
+			
+			@Override
+			public void handleDebugEvents(DebugEvent[] events) {
+				 for (DebugEvent e : events) {
+			            if (e.getKind() == DebugEvent.TERMINATE)
+			            	FileMessager.getInstance().checkRuntimeValues();
+			        }
+			}
+		});
+		
 	}
 
 	/* Internal functions */
