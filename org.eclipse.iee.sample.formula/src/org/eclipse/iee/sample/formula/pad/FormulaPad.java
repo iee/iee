@@ -304,8 +304,10 @@ public class FormulaPad extends Pad {
 			@Override
 			public void f() {
 				if (!fLastResultImageLabel.isDisposed())
+				{
 					fLastResultImageLabel.setImage(image);
-				fParent.pack();
+					fParent.pack();
+				}
 			}
 		};
 
