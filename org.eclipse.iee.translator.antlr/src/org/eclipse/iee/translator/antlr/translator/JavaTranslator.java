@@ -66,6 +66,7 @@ public class JavaTranslator {
 		Boolean fVisitVariableName = false;
 		Boolean fVisitedMatrixElement = false;
 		Boolean fNewMatrix = false;
+		Boolean fMatrixExpression = false;
 
 		public String visitFunctionDefinition(
 				MathParser.FunctionDefinitionContext ctx) {
@@ -118,6 +119,7 @@ public class JavaTranslator {
 				assignment += name + "=" + value + ";";
 			} else {
 				if (fNewMatrix
+						|| fMatrixExpression
 						|| (fMatrixFields.contains(value) && !name
 								.matches(value))) {
 					assignment += "Matrix ";
@@ -161,6 +163,9 @@ public class JavaTranslator {
 			String sign = ctx.sign.getText();
 
 			if (fMatrixFields.contains(left) && fMatrixFields.contains(right)) {
+				// XXX: temporary solution
+				fMatrixExpression = true;
+
 				if (sign.matches(Pattern.quote("+")))
 					return left + ".plus(" + right + ")";
 				if (sign.matches(Pattern.quote("-")))
@@ -176,6 +181,9 @@ public class JavaTranslator {
 			String sign = ctx.sign.getText();
 
 			if (fMatrixFields.contains(left)) {
+				// XXX: temporary solution
+				fMatrixExpression = true;
+
 				if (sign.matches(Pattern.quote("*")))
 					return left + ".times(" + right + ")";
 			}
@@ -191,8 +199,12 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 
-			if (fMatrixFields.contains(left) && right.matches("T"))
+			if (fMatrixFields.contains(left) && right.matches("T")) {
+				// XXX: temporary solution
+				fMatrixExpression = true;
+
 				return left + ".transpose()";
+			}
 
 			return "Math.pow((" + left + "),(" + right + "))";
 		}
