@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,9 +12,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
@@ -21,6 +26,7 @@ import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 
 public class PadManager extends EventManager {
 
@@ -30,6 +36,7 @@ public class PadManager extends EventManager {
 
 	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
+	private IDebugEventSetListener fDebugListener;
 
 	/** Registered pad factories. */
 	private Map<String, IPadFactory> fPadFactories = new HashMap<String, IPadFactory>();
@@ -317,19 +324,44 @@ public class PadManager extends EventManager {
 				}
 			}
 		};
+		
+		DebugPlugin.getDefault().addDebugEventListener(new IDebugEventSetListener() {
+			
+			@Override
+			public void handleDebugEvents(DebugEvent[] events) {
+				 for (DebugEvent e : events) {
+			            if (e.getKind() == DebugEvent.TERMINATE)
+			            	FileMessager.getInstance().checkRuntimeValues();
+			        }
+			}
+		});
+		
 	}
 
 	/* Internal functions */
-	protected void onContainerRemoved(String containerID) {
+	private void clearPadSetsAndRuntime(String containerID, boolean addToSuspended) {
+		Pad pad = fPads.get(containerID);
+
+		String runtimePath = pad.getContainer().getContainerManager()
+				.getStoragePath()
+				+ FileMessager.getInstance().getRuntimeDirectoryName()
+				+ "/"
+				+ containerID;
+
+		File runtimeFile = new File(runtimePath);
+		if (runtimeFile.exists())
+			FileUtils.deleteQuietly(runtimeFile);
+
 		if (fActivePads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
 			pad.detachContainer();
 			fActivePads.remove(containerID);
-			fSuspendedPads.add(containerID);
+			
+			if (addToSuspended)
+				fSuspendedPads.add(containerID);
+			
 			return;
 		}
 		if (fTemporaryPads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
 			pad.detachContainer();
 			fTemporaryPads.remove(containerID);
 			return;
@@ -337,20 +369,12 @@ public class PadManager extends EventManager {
 		Assert.isLegal(false);
 	}
 
+	protected void onContainerRemoved(String containerID) {
+		clearPadSetsAndRuntime(containerID, true);
+	}
+
 	protected void onEditorClosed(String containerID) {
-		if (fActivePads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
-			pad.detachContainer();
-			fActivePads.remove(containerID);
-			return;
-		}
-		if (fTemporaryPads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
-			pad.detachContainer();
-			fTemporaryPads.remove(containerID);
-			return;
-		}
-		Assert.isLegal(false);
+		clearPadSetsAndRuntime(containerID, false);
 	}
 
 	/* For observers */

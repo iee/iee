@@ -1,24 +1,17 @@
 package org.eclipse.iee.editor.wizard.wizards;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -27,7 +20,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -57,8 +49,6 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 
 	private IWorkbench workbench;
 
-	private IStructuredSelection selection;
-
 	private IProject project;
 
 	/**
@@ -69,8 +59,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 	}
 
 	public void addPages() {
-		wizardPage = new WizardNewProjectCreationPage(
-				"GeneralIEEProject");
+		wizardPage = new WizardNewProjectCreationPage("GeneralIEEProject");
 		wizardPage.setDescription("Create a new IEE Project.");
 		wizardPage.setTitle("New IEE Project");
 		addPage(wizardPage);
@@ -176,9 +165,6 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 						element.getSystemLibraryPath(), null, null));
 			}
 
-
-
-
 			/* Add the src folder */
 			final IFolder srcFolder = proj.getFolder(new Path("src"));
 			srcFolder.create(false, true, monitor);
@@ -190,20 +176,31 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			/* Add the lib folder */
 			final IFolder libFolder = proj.getFolder(new Path("lib"));
 			libFolder.create(false, true, monitor);
-			
-			InputStream input = IEEProjectWizard.class.getResourceAsStream("templates/Jama-1.0.2.jar");
-			final IFile file = proj.getFile("lib/Jama-1.0.2.jar");
-			/* Add an java file */
-			addFileToProject(proj, new Path("lib/Jama-1.0.2.jar"),
-					input, monitor);
-			
-			IPath jamaEntry = new Path(file.getLocation().toString());
-			
-			entries.add(JavaCore.newLibraryEntry(jamaEntry, null, null));
+
+			List<String> libs = new ArrayList<String>();
+			libs.add("Jama-1.0.2.jar");
+			libs.add("commons-io-2.4.jar");
+
+			for (Iterator<String> it = libs.iterator(); it.hasNext();) {
+				String libName = it.next();
+
+				InputStream input = IEEProjectWizard.class
+						.getResourceAsStream("templates/" + libName);
+				final IFile file = proj.getFile("lib/" + libName);
+				/* Add an java file */
+				addFileToProject(proj, new Path("lib/" + libName), input,
+						monitor);
+
+				IPath entry = new Path(file.getLocation().toString());
+
+				entries.add(JavaCore.newLibraryEntry(entry, null, null));
+
+			}
+
 			// add libs to project class path
 			javaProject.setRawClasspath(
 					entries.toArray(new IClasspathEntry[entries.size()]), null);
-			
+
 			/*
 			 * Add the images folder
 			 */
@@ -231,7 +228,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
-		
+
 		// snipped...
 	}
 

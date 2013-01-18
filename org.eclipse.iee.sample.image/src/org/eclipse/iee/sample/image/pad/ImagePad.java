@@ -124,7 +124,7 @@ public class ImagePad extends Pad implements Serializable {
 				button.dispose();
 				label.dispose();
 
-				File storageDirectory = new File(getContainer().getContainerManager().getStoragePath());
+				File storageDirectory = new File(getContainer().getContainerManager().getStoragePath() + "image/");
 				
 				if (!storageDirectory.exists()) {
 					if (!storageDirectory.mkdirs()) {
@@ -164,7 +164,7 @@ public class ImagePad extends Pad implements Serializable {
 		logger.debug("initImageView");
 		
 		try {
-			fOriginalImage = new Image(parent.getDisplay(), getContainer().getContainerManager().getStoragePath() + fImagePath);
+			fOriginalImage = new Image(parent.getDisplay(), getContainer().getContainerManager().getStoragePath() + "image/" + fImagePath);
 			if (fImageWidth > 0 && fImageHeigth > 0)
 			{
 				fResizedImage = new Image(parent.getDisplay(),

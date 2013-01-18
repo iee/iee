@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
-import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
-import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
+import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessageEvent;
+import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessager;
+import org.eclipse.iee.editor.core.utils.runtime.console.IConsoleMessageListener;
 import org.eclipse.iee.sample.formula.pad.Translator;
 import org.eclipse.iee.sample.graph.FileStorage;
 import org.eclipse.iee.sample.graph.pad.model.GraphElement;

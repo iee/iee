@@ -9,12 +9,13 @@ import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.utils.console.ConsoleMessageEvent;
-import org.eclipse.iee.editor.core.utils.console.ConsoleMessager;
-import org.eclipse.iee.editor.core.utils.console.IConsoleMessageListener;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
+import org.eclipse.iee.sample.formula.utils.Function;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 import org.eclipse.jface.text.Document;
@@ -40,35 +41,31 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupDir;
 
 public class FormulaPad extends Pad {
 
-	@XStreamOmitField
 	private static final Logger logger = Logger.getLogger(FormulaPad.class);
 
-	@XStreamOmitField
 	private Composite fParent;
-	@XStreamOmitField
+
 	private Composite fInputView;
-	@XStreamOmitField
+
 	private Composite fResultView;
 
-	@XStreamOmitField
 	private Label fFormulaImageLabel;
-	@XStreamOmitField
+
 	private Label fLastResultImageLabel;
 
-	@XStreamOmitField
 	private TextViewer fViewer;
-	@XStreamOmitField
 	private TextViewerSupport fViewerSupport;
-	@XStreamOmitField
+
 	private Document fDocument;
 
-	@XStreamOmitField
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
@@ -85,9 +82,10 @@ public class FormulaPad extends Pad {
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
 	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
 
-	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
+	private IFileMessageListener fFileMessageListener = new IFileMessageListener() {
+
 		@Override
-		public void messageReceived(ConsoleMessageEvent e) {
+		public void messageReceived(FileMessageEvent e) {
 			logger.debug("Message received:" + e.getMessage());
 			updateLastResult(e.getMessage());
 		}
@@ -96,6 +94,7 @@ public class FormulaPad extends Pad {
 		public String getRequesterID() {
 			return getContainerID();
 		}
+
 	};
 
 	/*
@@ -127,6 +126,14 @@ public class FormulaPad extends Pad {
 	}
 
 	public FormulaPad() {
+	}
+
+	public void asyncUIUpdate(final Function function) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				function.f();
+			}
+		});
 	}
 
 	public void toggleInputText() {
@@ -168,7 +175,7 @@ public class FormulaPad extends Pad {
 	public void validateInput() {
 		String text = fDocument.get();
 		fOriginalExpression = text;
-		
+
 		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
 			setInputIsValid();
 			fLastValidText = text;
@@ -242,62 +249,42 @@ public class FormulaPad extends Pad {
 			}
 
 			System.out.println("Type:" + varType.toString());
-			
+			STGroup group = new STGroupDir("/templates");
+
 			if (varType != JavaTranslator.VariableType.MATRIX) {
-				
+
 				String type = "";
 				if (varType == JavaTranslator.VariableType.DOUBLE)
 					type = "double";
 				else if (varType == JavaTranslator.VariableType.INT)
 					type = "int";
-				
-				return "new Runnable() {" +
-				"private " + type + " variable;" +
-				"private Runnable init("+ type +" var){" +
-			     "   variable = var;" +
-			     "   return this;" +
-			    "}" +
-				"@Override " + 
-				"public void run() { System.out.println(\"" + getContainerID() + "\" + "
-						+ "variable" + ");" +
-					"}}.init(" + variable + ").run();";
+
+				ST template = group.getInstanceOf("variable");
+
+				template.add("type", type);
+				template.add("id", getContainerID());
+				template.add("variable", variable);
+				template.add("path", getContainer().getContainerManager()
+						.getStoragePath()
+						+ FileMessager.getInstance().getRuntimeDirectoryName());
+
+				return template.render(1).trim().replaceAll("\r\n", "")
+						.replaceAll("\t", " ");
+
 			} else {
-				String output = "";
+
 				String type = "Matrix";
-				output += "new Runnable() {" +
-						"private " + type + " variable;" +
-						"private Runnable init("+ type +" var){" +
-					     "   variable = var;" +
-					     "   return this;" +
-					    "}" +
-						"@Override " + 
-						"public void run() {";
 
-				output += "int i=0, j=0; String matrix = \"{\";";
+				ST template = group.getInstanceOf("matrix");
+				template.add("type", type);
+				template.add("id", getContainerID());
+				template.add("variable", variable);
+				template.add("path", getContainer().getContainerManager()
+						.getStoragePath()
+						+ FileMessager.getInstance().getRuntimeDirectoryName());
 
-				output += "for(i = 0; i < " + "variable"
-						+ ".getRowDimension(); i++){" + "matrix += \"{\";"
-						+ "for(j = 0; j < " + "variable"
-						+ ".getColumnDimension(); j++)";
-				output += "{";
-				output += "matrix += " + "variable" + ".get(i,j);";
-				output += "if (j !=" + "variable" + ".getColumnDimension() - 1)";
-				output += "matrix += \",\";";
-				output += "else matrix += \"}\";";
-				output += "}";
-				output += "if (i !=" + "variable" + ".getRowDimension() - 1)";
-				output += "matrix += \",\";";
-				output += "}";
-
-				output += "matrix += \"}\";";
-
-				output += "System.out.println(\"" + getContainerID() + "\" + "
-						+ "matrix);";
-
-				output += "}}.init(" + variable + ").run();";
-				
-				return output;
-
+				return template.render(1).trim().replaceAll("\r\n", "")
+						.replaceAll("\t", " ");
 			}
 		} else {
 			return "";
@@ -305,15 +292,24 @@ public class FormulaPad extends Pad {
 	}
 
 	public void updateLastResult(String result) {
-		if (result == "") {
-			fLastResultImageLabel.setImage(null);
-			fParent.pack();
-			return;
-		}
+		final Image image;
 
-		Image image = FormulaRenderer.getFormulaImage(result);
-		fLastResultImageLabel.setImage(image);
-		fParent.pack();
+		if (result == "")
+			image = null;
+		else
+			image = FormulaRenderer.getFormulaImage(result);
+
+		Function updateImage = new Function() {
+
+			@Override
+			public void f() {
+				fLastResultImageLabel.setImage(image);
+				fParent.pack();
+			}
+		};
+
+		asyncUIUpdate(updateImage);
+
 	}
 
 	private void switchToResultView() {
@@ -338,8 +334,8 @@ public class FormulaPad extends Pad {
 
 	public void setListeners() {
 
-		ConsoleMessager.getInstance().addConsoleMessageListener(
-				fConsoleMessageListener);
+		FileMessager.getInstance().addFileMessageListener(fFileMessageListener,
+				getContainer().getContainerManager().getStoragePath());
 
 		fFormulaImageLabel.addMouseListener(new MouseListener() {
 			@Override
@@ -629,7 +625,7 @@ public class FormulaPad extends Pad {
 	@Override
 	public void addMouseListeners(Composite control) {
 	}
-	
+
 	@Override
 	public void updateData(Map<String, String> params, String value) {
 
