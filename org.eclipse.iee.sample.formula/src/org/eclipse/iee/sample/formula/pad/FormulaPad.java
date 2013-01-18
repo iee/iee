@@ -15,6 +15,7 @@ import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
 import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
+import org.eclipse.iee.sample.formula.utils.Function;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 import org.eclipse.jface.text.Document;
@@ -40,38 +41,31 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
 
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 public class FormulaPad extends Pad {
 
-	@XStreamOmitField
 	private static final Logger logger = Logger.getLogger(FormulaPad.class);
 
-	@XStreamOmitField
 	private Composite fParent;
-	@XStreamOmitField
+
 	private Composite fInputView;
-	@XStreamOmitField
+
 	private Composite fResultView;
 
-	@XStreamOmitField
 	private Label fFormulaImageLabel;
-	@XStreamOmitField
+
 	private Label fLastResultImageLabel;
 
-	@XStreamOmitField
 	private TextViewer fViewer;
-	@XStreamOmitField
 	private TextViewerSupport fViewerSupport;
-	@XStreamOmitField
+
 	private Document fDocument;
 
-	@XStreamOmitField
 	private HoverShell fHoverShell;
 
 	private boolean fIsInputValid;
@@ -132,6 +126,14 @@ public class FormulaPad extends Pad {
 	}
 
 	public FormulaPad() {
+	}
+
+	public void asyncUIUpdate(final Function function) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				function.f();
+			}
+		});
 	}
 
 	public void toggleInputText() {
@@ -290,15 +292,24 @@ public class FormulaPad extends Pad {
 	}
 
 	public void updateLastResult(String result) {
-		if (result == "") {
-			fLastResultImageLabel.setImage(null);
-			fParent.pack();
-			return;
-		}
+		final Image image;
 
-		Image image = FormulaRenderer.getFormulaImage(result);
-		fLastResultImageLabel.setImage(image);
-		fParent.pack();
+		if (result == "")
+			image = null;
+		else
+			image = FormulaRenderer.getFormulaImage(result);
+
+		Function updateImage = new Function() {
+
+			@Override
+			public void f() {
+				fLastResultImageLabel.setImage(image);
+				fParent.pack();
+			}
+		};
+
+		asyncUIUpdate(updateImage);
+
 	}
 
 	private void switchToResultView() {

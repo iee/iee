@@ -65,21 +65,12 @@ public class FileMessager extends EventManager {
 
 				@Override
 				public void onFileCreate(File arg0) {
+					sendFileContent(arg0);
 				}
 
 				@Override
 				public void onFileChange(File arg0) {
-
-					String line = null;
-					try {
-						line = FileUtils.readFileToString(arg0);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-
-					String id = arg0.getName();
-					fireFileMessage(id, line);
-
+					sendFileContent(arg0);
 				}
 
 				@Override
@@ -130,6 +121,18 @@ public class FileMessager extends EventManager {
 				listener.messageReceived(new FileMessageEvent(message));
 			}
 		}
+	}
+
+	protected void sendFileContent(File file) {
+		String line = null;
+		try {
+			line = FileUtils.readFileToString(file);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		String id = file.getName();
+		fireFileMessage(id, line);
 	}
 
 }
