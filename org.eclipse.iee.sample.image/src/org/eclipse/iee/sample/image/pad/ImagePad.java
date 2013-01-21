@@ -133,7 +133,7 @@ public class ImagePad extends Pad implements Serializable {
 				}
 				
 				File imageSrc = new File(imagePath);
-				File imageDst = new File(getContainer().getContainerManager().getStoragePath() + imageSrc.getName());
+				File imageDst = new File(getContainer().getContainerManager().getStoragePath() + "image/" + imageSrc.getName());
 				if (!imageDst.exists())
 				{
 					try {
