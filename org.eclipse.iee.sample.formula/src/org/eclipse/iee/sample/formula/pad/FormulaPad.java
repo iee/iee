@@ -54,11 +54,9 @@ public class FormulaPad extends Pad {
 	private Composite fParent;
 
 	private Composite fInputView;
-
 	private Composite fResultView;
 
 	private Label fFormulaImageLabel;
-
 	private Label fLastResultImageLabel;
 
 	private TextViewer fViewer;
@@ -149,7 +147,6 @@ public class FormulaPad extends Pad {
 
 		fViewer.getControl().forceFocus();
 		fCaretOffset = 0;
-		logger.debug("force Focus");
 	}
 
 	public void toggleFormulaImage() {
@@ -176,10 +173,11 @@ public class FormulaPad extends Pad {
 		String text = fDocument.get();
 		fOriginalExpression = text;
 
-		if (Translator.isTextValid(text) && FormulaRenderer.isTextValid(text)) {
+		if (Translator.isTextValid(text)) {
 			setInputIsValid();
 			fLastValidText = text;
 		} else {
+
 			setInputIsInvalid();
 		}
 	}
@@ -248,7 +246,7 @@ public class FormulaPad extends Pad {
 					return "";
 			}
 
-			System.out.println("Type:" + varType.toString());
+			logger.debug("Type:" + varType.toString());
 			STGroup group = new STGroupDir("/templates");
 
 			if (varType != JavaTranslator.VariableType.MATRIX) {
@@ -303,8 +301,7 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void f() {
-				if (!fLastResultImageLabel.isDisposed())
-				{
+				if (!fLastResultImageLabel.isDisposed()) {
 					fLastResultImageLabel.setImage(image);
 					fParent.pack();
 				}
@@ -585,6 +582,8 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void activate() {
+		logger.debug(getContainerID() + " activated");
+
 		int editorCaretOffset = getContainer().getContainerManager()
 				.getStyledText().getCaretOffset();
 

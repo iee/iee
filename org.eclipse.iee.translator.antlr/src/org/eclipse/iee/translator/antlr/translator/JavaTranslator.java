@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.apache.log4j.Logger;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
@@ -26,6 +27,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class JavaTranslator {
 
+	private static final Logger logger = Logger
+			.getLogger(JavaTranslator.class);
+	
 	public enum VariableType {
 		INT, DOUBLE, MATRIX, OTHER
 	}
@@ -474,7 +478,14 @@ public class JavaTranslator {
 		MathParser parser = new MathParser(tokens);
 		parser.setBuildParseTree(true);
 		ParserRuleContext tree = parser.statement();
-
+		
+		logger.debug("expr: " + expression);
+		logger.debug("fClass: " + fClass.getElementName());
+		logger.debug("fMethod: " + fMethod.getElementName());
+		logger.debug("fMatrixFields: " + fMatrixFields.toString());
+		logger.debug("fDoubleFields: " + fDoubleFields.toString());
+		logger.debug("fIntegerFields: " + fIntegerFields.toString());
+		
 		JavaMathVisitor mathVisitor = new JavaMathVisitor();
 		String result = mathVisitor.visit(tree);
 

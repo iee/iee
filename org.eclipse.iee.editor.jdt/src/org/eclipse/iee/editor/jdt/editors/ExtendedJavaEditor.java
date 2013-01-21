@@ -66,32 +66,32 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		fContainerManager = new ContainerManager(config, document,
 				getSourceViewer(), getSourceViewer().getTextWidget());
-		
-		IEditorPart editor = (IEditorPart)this;
-		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
-	    IFile file = input.getFile();
-	    IProject project = file.getProject();
-	    ICompilationUnit compilationUnit = JavaCore.createCompilationUnitFrom(file);
-	    fContainerManager.setCompilationUnit(compilationUnit);
-	    
-	    IPath rawLocation = project.getRawLocation();
-	    
-	    String storagePath = "";
-	    
-	    if (rawLocation != null)
-	    {
-	    	storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
-	    }
-	    else
-	    {
-	    	IWorkspace workspace = ResourcesPlugin.getWorkspace();  
-	    	IPath workspaceDirectory = workspace.getRoot().getLocation();
-	    	storagePath = workspaceDirectory.toString() + project.getFullPath().makeAbsolute().toString() + "/pads/";
-	    }
-	    
-	    logger.debug("storagePath = " + storagePath);
-	    fContainerManager.setStoragePath(storagePath);
-	    
+
+		IEditorPart editor = (IEditorPart) this;
+		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+		IFile file = input.getFile();
+		IProject project = file.getProject();
+		ICompilationUnit compilationUnit = JavaCore
+				.createCompilationUnitFrom(file);
+		fContainerManager.setCompilationUnit(compilationUnit);
+
+		IPath rawLocation = project.getRawLocation();
+
+		String storagePath = "";
+
+		if (rawLocation != null) {
+			storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
+		} else {
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IPath workspaceDirectory = workspace.getRoot().getLocation();
+			storagePath = workspaceDirectory.toString()
+					+ project.getFullPath().makeAbsolute().toString()
+					+ "/pads/";
+		}
+
+		logger.debug("storagePath = " + storagePath);
+		fContainerManager.setStoragePath(storagePath);
+
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
 			public void debugNotification(ContainerEvent event) {
@@ -146,10 +146,16 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	private void loadEditorPads() {
 		logger.debug("loadEditorPads");
-		
-		fPadManager.registerPadFactory("Formula", new FormulaPadFactory());
-		fPadManager.registerPadFactory("Image", new ImagePadFactory());
-		fPadManager.registerPadFactory("Text", new TextPadFactory());
+
+		fPadManager.registerPadFactory(
+				fContainerManager.getContainerManagerID(), "Formula",
+				new FormulaPadFactory());
+		fPadManager.registerPadFactory(
+				fContainerManager.getContainerManagerID(), "Image",
+				new ImagePadFactory());
+		fPadManager.registerPadFactory(
+				fContainerManager.getContainerManagerID(), "Text",
+				new TextPadFactory());
 	}
 
 	@Override
