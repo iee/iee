@@ -182,7 +182,7 @@ public class Container {
 	 * This function causes container's SWT-composite get into proper position.
 	 */
 	boolean updatePresentation() {
-		//System.out.println("Updated container's position");
+		//logger.debug("Updated container's position");
 
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();

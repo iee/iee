@@ -253,7 +253,7 @@ public class ContainerManager extends EventManager {
 		@Override
 		public void documentPartitioningChanged(
 				DocumentPartitioningChangedEvent event) {
-			System.out.println("documentPartitioningChanged " + event);
+			logger.debug("documentPartitioningChanged " + event);
 			assert(fChangedPartitioningRegion == null);
 						
 			fChangedPartitioningRegion = event
@@ -275,7 +275,7 @@ public class ContainerManager extends EventManager {
 
 		@Override
 		public void documentChanged(DocumentEvent event) {
-			System.out.println("documentChanged start " + event);
+			logger.debug("documentChanged start " + event);
 			// XXX
 			//StopWatch padsPositionsCalculationSW = new LoggingStopWatch("padsPositionsCalculation");
 					
@@ -365,7 +365,7 @@ public class ContainerManager extends EventManager {
 				// XXX
 				//padsPositionsCalculationSW.stop();
 			}
-			System.out.println("documentChanged end ");
+			logger.debug("documentChanged end ");
 		}
 
 		private void onPartitioningChanged(DocumentEvent event,
@@ -459,7 +459,6 @@ public class ContainerManager extends EventManager {
 
 		@Override
 		public void documentAboutToBeChanged(DocumentEvent event) {
-			System.out.println();
 			
 			if (event.getLength() > 0) {
 				/* Remove all elements within changed area */
