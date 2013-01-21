@@ -27,9 +27,8 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class JavaTranslator {
 
-	private static final Logger logger = Logger
-			.getLogger(JavaTranslator.class);
-	
+	private static final Logger logger = Logger.getLogger(JavaTranslator.class);
+
 	public enum VariableType {
 		INT, DOUBLE, MATRIX, OTHER
 	}
@@ -478,14 +477,16 @@ public class JavaTranslator {
 		MathParser parser = new MathParser(tokens);
 		parser.setBuildParseTree(true);
 		ParserRuleContext tree = parser.statement();
-		
+
 		logger.debug("expr: " + expression);
-		logger.debug("fClass: " + fClass.getElementName());
-		logger.debug("fMethod: " + fMethod.getElementName());
+		if (fClass != null)
+			logger.debug("fClass: " + fClass.getElementName());
+		if (fMethod != null)
+			logger.debug("fMethod: " + fMethod.getElementName());
 		logger.debug("fMatrixFields: " + fMatrixFields.toString());
 		logger.debug("fDoubleFields: " + fDoubleFields.toString());
 		logger.debug("fIntegerFields: " + fIntegerFields.toString());
-		
+
 		JavaMathVisitor mathVisitor = new JavaMathVisitor();
 		String result = mathVisitor.visit(tree);
 
