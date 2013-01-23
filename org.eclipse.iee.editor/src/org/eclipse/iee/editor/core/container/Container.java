@@ -1,5 +1,9 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -8,11 +12,16 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 public class Container {
 
-	private String fContainerID;
+	private static final Logger logger = Logger.getLogger(Container.class);
+	
+	private String fPadType;
+	private Map<String, String> fPadParams;
+	private String fValue;
 	private String fTextContent;
 
 	private Position fPosition;
@@ -28,19 +37,55 @@ public class Container {
 	/* Setters */
 
 	public void setContainerID(String containerID) {
-		fContainerID = containerID;
-		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+		setPadParam("id", containerID);
 	}
 
 	public void setTextContent(String content) {
 		fTextContent = content;
 		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
-
+	public void setPadParam(String name, String value) {
+		if (fPadParams == null) {
+			fPadParams = new HashMap<String, String>();
+		}
+		fPadParams.put(name, value);
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+	}
+	
+	public void setPadType(String fPadType) {
+		this.fPadType = fPadType;
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+	}
+	
+	public void setValue(String fValue) {
+		this.fValue = fValue;
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+	}
+	
+	public void updateSilently(Map<String, String> params, String value) {
+		fPadParams = params;
+		fValue = value;
+	}
+	
 	/* Getters */
 
+	public Map<String, String> getPadParams() {
+		if (fPadParams == null) {
+			fPadParams = new HashMap<String, String>();
+		}
+		return fPadParams;
+	}
+	
 	public String getContainerID() {
-		return fContainerID;
+		return getPadParams().get("id");
+	}
+	
+	public String getPadType() {
+		return fPadType;
+	}
+
+	public String getValue() {
+		return fValue;
 	}
 
 	public String getTextContent() {
@@ -59,6 +104,7 @@ public class Container {
 		try {
 			return fDocument.getLineOfOffset(fPosition.offset);
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 			return -1;
 		}
@@ -96,13 +142,29 @@ public class Container {
 	Container(Position position, String containerID,
 			ContainerManager containerManager) {
 		fPosition = position;
-		fContainerID = containerID;
+		setContainerID(containerID);
 
 		fContainerManager = containerManager;
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fDocument = containerManager.getDocument();
 		fStyledText = containerManager.getStyledText();
 
+		fComposite = new Composite(fStyledText, SWT.NONE);
+
+		initListeners();
+	}
+	
+	public Container(Position position, String type, Map<String, String> params, String value,
+			ContainerManager containerManager) {
+		fPosition = position;
+		fPadType = type;		
+		fPadParams = params;
+		fValue = value;
+		fContainerManager = containerManager;
+		fDocumentAccess = containerManager.getDocumentAccess();
+		fDocument = containerManager.getDocument();
+		fStyledText = containerManager.getStyledText();
+		
 		fComposite = new Composite(fStyledText, SWT.NONE);
 
 		initListeners();
@@ -119,12 +181,18 @@ public class Container {
 	/**
 	 * This function causes container's SWT-composite get into proper position.
 	 */
-	void updatePresentation() {
-		System.out.println("updatePresentation");
+	boolean updatePresentation() {
+		//logger.debug("Updated container's position");
 
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
-		fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
+		
+		Rectangle newBounds = new Rectangle(point.x, point.y, gabarit.x, gabarit.y);
+		if (!fComposite.getBounds().equals(newBounds)) {
+			fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -149,7 +217,7 @@ public class Container {
 
 			@Override
 			public void controlResized(ControlEvent e) {
-				fContainerManager.updateContainersPresentations();
+				fContainerManager.updateContainerPresentations(Container.this);
 			}
 
 			@Override
@@ -195,6 +263,6 @@ public class Container {
 
 	@Override
 	public String toString() {
-		return "[" + fContainerID + ", " + fPosition + "]";
+		return "[" + getContainerID() + ", " + fPosition + "]";
 	}
 }

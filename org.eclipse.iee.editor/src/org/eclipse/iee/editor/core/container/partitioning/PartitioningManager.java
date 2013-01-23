@@ -34,7 +34,7 @@ public class PartitioningManager {
 	
 		((IDocumentExtension3) fDocument).setDocumentPartitioner(
 				PartitioningManager.PARTITIONING_ID, fDocumentPartitioner);
-	
+			
 		fDocumentPartitioner.connect(fDocument);
 	}
 }

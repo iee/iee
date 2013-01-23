@@ -1,123 +1,97 @@
 package org.eclipse.iee.sample.graph.pad;
 
 import java.awt.Color;
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessageEvent;
+import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessager;
+import org.eclipse.iee.editor.core.utils.runtime.console.IConsoleMessageListener;
+import org.eclipse.iee.sample.formula.pad.Translator;
 import org.eclipse.iee.sample.graph.FileStorage;
+import org.eclipse.iee.sample.graph.pad.model.GraphElement;
+import org.eclipse.iee.sample.graph.pad.model.GraphModel;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.general.DatasetChangeEvent;
+import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.experimental.chart.swt.ChartComposite;
 import org.jfree.ui.RectangleInsets;
-import org.nfunk.jep.JEP;
-import org.nfunk.jep.Node;
-import org.nfunk.jep.ParseException;
 
 public class GraphPad extends Pad implements Serializable {
 
-	private String fFunction;
-	private double[][] fData;
-	private double fDomainMin;
-	private double fDomainMax;
-	private int fDomainCardinality;
+	private static final long serialVersionUID = 1L;
+
+	private GraphModel model;
+
 	private boolean fIsAdvancedMode;
-	private boolean fIsActive;
 	private transient static FileStorage fFileStorage;
 
+	private transient GraphModelPresenter graphModelPresenter;
+	private transient XYPlot plot;
+	private transient XYDataset dataset;
+	private Map<Integer, double[][]> results;
+	
 	public GraphPad() {
 		super();
-		fFunction = "";
-		fData = null;
-		fDomainMin = 0;
-		fDomainMax = 0;
-		fDomainCardinality = 0;
 		fIsAdvancedMode = false;
-		fIsActive = false;
+		model = new GraphModel();
+		model.getElements().add(new GraphElement());
 		save();
 	}
 
+	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
+		@Override
+		public void messageReceived(ConsoleMessageEvent e) {
+			System.out.println("Message received:" + e.getMessage());
+			updateResult(e.getMessage());
+		}
+
+		@Override
+		public String getRequesterID() {
+			return getContainerID();
+		}
+	};
+
+	
+
+	
+
 	@Override
 	public void createPartControl(final Composite parent) {
-		//GridLayout layout = new GridLayout(1, false);
-		GridLayout layout = new GridLayout(9,false);
-		layout.verticalSpacing = 5;
-		layout.marginHeight = 5;
-		layout.marginWidth = 5;
-		parent.setLayout(layout);
-		
-		final Label functionLabel = new Label(parent, SWT.NONE);
-		functionLabel.setText("f(x) = ");
-		final Text function = new Text(parent, SWT.BORDER);
-		function.setText("");
+		parent.setLayout(new FillLayout());
+		GraphComposite graphComposite = new GraphComposite(parent, SWT.NONE);
 
-		new Label(parent, SWT.NONE).setText("#(points): ");
-		final Text points = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		points.setText("100");
-
-		new Label(parent, SWT.NONE).setText("From");
-		final Text initialValue = new Text(parent, SWT.BORDER | SWT.RIGHT);
-		initialValue.setText("-100");
-
-		new Label(parent, SWT.NONE).setText("To");
-		final Text finalValue = new Text(parent, SWT.BORDER | SWT.LEFT);
-		finalValue.setText("100");
-
-		Button draw = new Button(parent, SWT.NONE);
-		draw.setText("Plot graph");
-
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.exclude = false;
-		gridData.widthHint = 720;
-		gridData.heightHint = 300;
-		gridData.horizontalSpan = 9;
-		
 		JFreeChart chart = createChart();
-		final ChartComposite frame = new ChartComposite(parent, SWT.BORDER_DASH,
-				chart, true);
-		frame.setDisplayToolTips(false);
-		frame.setHorizontalAxisTrace(true);
-		frame.setVerticalAxisTrace(true);
-		frame.setLayoutData(gridData);
-		
-		// Listeners
-		draw.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);				
-				gridData.exclude = false;
-				gridData.horizontalSpan = 9;
-				fFunction = function.getText();
-				fDomainMax = Double.valueOf(initialValue.getText());
-				fDomainMin = Double.valueOf(finalValue.getText());
-				fDomainCardinality = Integer.valueOf(points.getText());
-				JFreeChart chart = createChart();
-				frame.setChart(chart);
-				frame.redraw();
-				frame.setLayoutData(gridData);	
-			
-			}
-		});
+		graphComposite.getGraphComposite().setChart(chart);
 
+		initModelView(graphComposite, model);
+
+		ConsoleMessager.getInstance().addConsoleMessageListener(
+				fConsoleMessageListener);
+	}
+
+	public void initModelView(GraphComposite parent, GraphModel model) {
+		graphModelPresenter = new GraphModelPresenter(this, parent, model);
 	}
 
 	protected GraphPad(String containerID) {
 		super();
-		fFunction = "";
+		model = new GraphModel();
 		save();
 	}
 
@@ -128,59 +102,25 @@ public class GraphPad extends Pad implements Serializable {
 	@Override
 	public Pad copy() {
 		GraphPad newPad = new GraphPad();
-		newPad.fFunction = this.fFunction;
-		newPad.fData = this.fData;
-		newPad.fDomainMin = this.fDomainMin;
-		newPad.fDomainMax = this.fDomainMax;
-		newPad.fDomainCardinality = this.fDomainCardinality;
+		newPad.results = this.results;
+		newPad.model = this.model.clone();
 		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
-		newPad.fIsActive = false;
 		return newPad;
 	}
 
 	// Save&Load operations, use it for serialization
 
 	public void save() {
+		if (graphModelPresenter != null) {
+			graphModelPresenter.save();
+			processInput(model);
+		}
 		GraphPad.fFileStorage.saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
 		GraphPad.fFileStorage.removeFile(getContainerID());
-	}
-
-	// Getters&Setters
-
-	public void setFunction(String function) {
-		fFunction = function;
-	}
-
-	public String getFunction() {
-		return fFunction;
-	}
-
-	public void setDomainMin(Double value) {
-		fDomainMin = value;
-	}
-
-	public Double getDomainMin() {
-		return fDomainMin;
-	}
-
-	public void setDomainMax(Double value) {
-		fDomainMax = value;
-	}
-
-	public Double getDomainMax() {
-		return fDomainMax;
-	}
-
-	public void setDomainCardinality(int value) {
-		fDomainCardinality = value;
-	}
-
-	public int getDomainCardinality() {
-		return fDomainCardinality;
 	}
 
 	/**
@@ -192,15 +132,13 @@ public class GraphPad extends Pad implements Serializable {
 
 		XYDataset dataset = createDataset("Series 1");
 
-		JFreeChart chart = ChartFactory.createXYLineChart("XY plot demo", "X",
+		JFreeChart chart = ChartFactory.createXYLineChart(null, "X",
 				"Y", dataset, PlotOrientation.HORIZONTAL, false, false, false);
-
+		
 		chart.setBackgroundPaint(Color.white);
 		chart.setBorderVisible(true);
 		chart.setBorderPaint(Color.BLACK);
-		TextTitle subtitle = new TextTitle("Sample.");
-		chart.addSubtitle(subtitle);
-		XYPlot plot = (XYPlot) chart.getPlot();
+		plot = (XYPlot) chart.getPlot();
 		plot.setOrientation(PlotOrientation.VERTICAL);
 		plot.setBackgroundPaint(Color.lightGray);
 		plot.setDomainGridlinePaint(Color.white);
@@ -222,55 +160,188 @@ public class GraphPad extends Pad implements Serializable {
 	 * @return The dataset.
 	 */
 	public XYDataset createDataset(String name) {
-		DefaultXYDataset dataset = new DefaultXYDataset();
+		dataset = new AbstractXYDataset() {
 
-		JEP jep = new JEP();
-		jep.addStandardFunctions();
-		jep.addStandardConstants();
-		jep.setImplicitMul(true);
+			private static final long serialVersionUID = 1L;
 
-		Node node;
-		try {
-			jep.addVariable("x", 0);
-
-			node = jep.parse(getFunction());
-
-			double init = getDomainMin();
-			double end = getDomainMax();
-			int nValues = getDomainCardinality();
-			double step = Math.abs((end - init) / nValues);
-
-			int i = 0;
-			fData = new double[2][nValues];
-			for (double x = Math.min(init, end); x < Math.max(init, end); x += step) {
-				jep.setVarValue("x", x);
-
-				Object obj = jep.evaluate(node);
-				if (obj instanceof Double) {
-					double y = (Double) obj;
-					fData[0][i] = x;
-					fData[1][i] = y;
-					i++;
-				}
+			@Override
+			public Number getY(int arg0, int arg1) {
+				return getResult(arg0)[arg1][1];
 			}
 
-			dataset.addSeries(1, fData);
-		} catch (ParseException e) {
+			@Override
+			public Number getX(int arg0, int arg1) {
+				return getResult(arg0)[arg1][0];
+			}
+
+			@Override
+			public int getItemCount(int arg0) {
+				return getResult(arg0).length;
+			}
+
+			@Override
+			public Comparable getSeriesKey(int arg0) {
+				return Integer.valueOf(arg0);
+			}
+
+			@Override
+			public int getSeriesCount() {
+				return model.getElements().size();
+			}
+			
+			private double[][] getResult(int number) {
+				double[][] ds = getResults().get(Integer.valueOf(number));
+				if (ds == null) {
+					return new double[0][];
+				}
+				return ds;
+			}
+			
+		};
+
+		return dataset;
+	}
+
+	public void processInput(GraphModel model) {
+
+		List<GraphElement> elements = model.getElements();
+		StringBuilder generatedText = new StringBuilder();
+
+		int counter = 0;
+
+		for (GraphElement graphElement : elements) {
+			String function = graphElement.getfFunction();
+			if (function != null && function.trim().length() > 0) {
+				String translateElement = Translator.translateElement(function);
+				generatedText.append("StringBuilder sb").append(counter).append(" = new StringBuilder();");
+				generatedText.append("sb").append(counter).append(".append(\"{\");");
+				generatedText.append("for (double x = ")
+						.append(graphElement.getfDomainMin()).append("; x < ")
+						.append(graphElement.getfDomainMax())
+						.append("; x += Math.abs((")
+						.append(graphElement.getfDomainMax()).append(" - ")
+						.append(graphElement.getfDomainMin()).append(") / ")
+						.append(graphElement.getfDomainCardinality())
+						.append(")) {");
+				generatedText.append("double y = ").append(translateElement)
+						.append(";");
+				generatedText.append("sb").append(counter).append(".append(\"{\").append(x).append(\",\").append(y).append(\"},\");");
+				generatedText.append("}");
+				generatedText.append("sb").append(counter).append(".append(\"}\");");
+				generatedText.append("System.out.println(\"").append(getContainerID()).append(" ").append(counter).append(": \" + ").append("sb").append(counter).append(".toString()").append(");");
+				
+			}
+			counter++;
+		}
+
+		getContainer().setTextContent(generatedText.toString());
+	}
+
+	public void updateResult(String result) {
+		String[] splited = result.split("\\:");
+		Integer number = Integer.valueOf(splited[0].trim());
+		try {
+			getResults().put(number, parseArray(splited[1].trim()));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return dataset;
+		plot.datasetChanged(new DatasetChangeEvent(this, dataset));
+	}
+	
+	public Map<Integer, double[][]> getResults() {
+		if (results == null) {
+			results = new HashMap<Integer, double[][]>();
+		}
+		return results;
+	}
+	
+	public double[][] parseArray(String arrayStr) throws IOException {
+		StringReader reader = new StringReader(arrayStr);
+		return parseArray(reader);
+	}
+	
+	public double[][] parseArray(Reader reader) throws IOException {
+		List<double[]> parsed = new ArrayList<double[]>();
+		readChar(reader, '{', true);
+		double[] readPair;
+		while ((readPair = readPair(reader)) != null) {
+			parsed.add(readPair);
+			readChar(reader, ',', false);
+		}
+		readChar(reader, '}', true);
+		double[][] result = new double[parsed.size()][];
+		for (int i = 0; i < parsed.size(); i++) {
+			result[i] = parsed.get(i);
+		}
+		return result;
+	}
+	
+	public double[] readPair(Reader reader) throws IOException {
+		double result[]; 
+		if (readChar(reader, '{', false)) {
+			result = new double[2];
+			result[0] = readDouble(reader);
+			readChar(reader, ',', true);
+			result[1] = readDouble(reader);
+			readChar(reader, '}', true);
+		} else {
+			result = null;
+		}
+		return result;
+	}
+	
+	public double readDouble(Reader reader) throws IOException {
+		
+		StringBuilder str = new StringBuilder();
+		while (true) {
+			reader.mark(1);
+			int i = reader.read();
+			if (i == -1) {
+				break;
+			} 
+			char c = (char) i;
+			if (Character.isDigit(c) || c == '.' || c =='-' || c == 'e' || c == 'E') {
+				str.append(c);
+			} else {
+				reader.reset();
+				break;
+			}
+		}
+		return Double.parseDouble(str.toString());
+	}
+	
+	public boolean readChar(Reader reader, char character, boolean mandatory) throws IOException {
+		while (true) {
+			reader.mark(1);
+			int i = reader.read();
+			if (i == -1) {
+				break;
+			} 
+			char c = (char) i;
+			if (character == c) {
+				return true;
+			} else if (Character.isSpaceChar(c)) {
+				continue;
+			} else if (mandatory) {
+				throw new IllegalArgumentException("Illegal symbol " + c);
+			} else {
+				reader.reset();
+				return false;
+			}
+		}
+		throw new IllegalArgumentException("Stream unexpectedly closed");
 	}
 
 	@Override
 	public void onContainerAttached() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void activate() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

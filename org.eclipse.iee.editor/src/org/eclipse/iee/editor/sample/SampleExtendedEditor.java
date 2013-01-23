@@ -30,7 +30,6 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	};
 
 	public void initIeeEditorCore() {
-		StyledText styledText = getSourceViewer().getTextWidget();
 		IDocument document = getSourceViewer().getDocument();
 		
 		ContainerManagerConfig config = new ContainerManagerConfig();
@@ -40,7 +39,11 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 		//config.INNER_TEXT_BEGIN = "*/";
 		//config.INNER_TEXT_END = "/*";
 		
-		fContainerManager = new ContainerManager(config, document, styledText);
+		fContainerManager = new ContainerManager(
+			config,
+			document,
+			getSourceViewer(),
+			getSourceViewer().getTextWidget());
 
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
@@ -66,6 +69,10 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 
 			@Override
 			public void containerActivated(ContainerEvent event) {
+			}
+
+			@Override
+			public void containerUpdated(ContainerEvent containerEvent) {
 			}
 		};
 		fContainerManager.addContainerManagerListener(fContainerManagerListener);

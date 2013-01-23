@@ -13,10 +13,16 @@ import org.eclipse.swt.widgets.Display;
 public class MatrixPad extends Pad implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private transient static final int STATE_MENU = 0;
+	private transient static final int STATE_INTERACTIVE = 1;
+	private transient static final int STATE_STATIC = 2;
+	private transient static final int STATE_TABLE = 1;
+	
 	private MatrixModel fMatrixModel;
 	private MatrixView fMatrixView;
 	private Controller fController;
+	private int fCurrentState;
 	
 	public MatrixPad() {
 		init();

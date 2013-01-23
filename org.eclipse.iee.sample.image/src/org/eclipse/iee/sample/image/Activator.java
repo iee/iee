@@ -1,6 +1,5 @@
 package org.eclipse.iee.sample.image;
 
-import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -20,7 +19,6 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	 * The constructor
 	 */
 	public Activator() {
-		ImagePad.setStorage(new XmlFilesStorage("D:\\ImagePads\\"));
 	}
 
 	/*

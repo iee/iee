@@ -54,7 +54,7 @@ public class FormulaRenderer {
 				TeXFormula.createBufferedImage(
 					latex,
 					TeXConstants.STYLE_TEXT,
-					60,
+					40,
 					java.awt.Color.black,
 					java.awt.Color.white);
 			

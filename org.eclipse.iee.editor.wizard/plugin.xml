@@ -6,19 +6,19 @@
          point="org.eclipse.ui.newWizards">
       <category
             name="IEE Wizards"
-            id="IEEWizards">
+            id="org.eclipse.iee.editor.wizard.IEEWizards">
       </category>
       <wizard
             name="General IEE Wizard"
-            icon="icons/sample.gif"
-            category="IEEWizards"
+            icon="icons/iee_logo.png"
+            category="org.eclipse.iee.editor.wizard.IEEWizards"
             class="org.eclipse.iee.editor.wizard.wizards.GeneralIEEWizard"
             id="org.eclipse.iee.editor.wizard.wizards.GeneralIEEWizard">
       </wizard>
       <wizard
-            category="IEEWizards"
+            category="org.eclipse.iee.editor.wizard.IEEWizards"
             class="org.eclipse.iee.editor.wizard.wizards.IEEProjectWizard"
-            icon="icons/sample.gif"
+            icon="icons/iee_logo.png"
             id="org.eclipse.iee.editor.wizard.wizards.IEEProjectWizard"
             name="IEE General Project"
             project="true">

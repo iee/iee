@@ -43,8 +43,7 @@ public class CalendarPad extends Pad {
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Calendar";
 	}
 
 	@Override

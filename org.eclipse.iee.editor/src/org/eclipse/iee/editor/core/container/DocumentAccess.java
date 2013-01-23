@@ -1,13 +1,18 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 
 public class DocumentAccess {
+	
+	private static final Logger logger = Logger.getLogger(DocumentAccess.class);
 	
 	/* Access actions IDs */
 	static final int WRITE = 0;
@@ -49,7 +54,7 @@ public class DocumentAccess {
 	 * allowed.
 	 */
 	boolean processNextDocumentAccessRequest() {
-		System.out.println("processNextDocumentAccessRequest");
+		logger.debug("processNextDocumentAccessRequest");
 		
 		AccessAction action = fContainerDocumentAccessQueue.poll();
 		if (action == null) {
@@ -76,26 +81,46 @@ public class DocumentAccess {
 	 */
 	protected void writeContentToTextRegion(Container container) {
 		Position position = container.getPosition();
-		String containerID = container.getContainerID();
 		String textContent = container.getTextContent();
 			
 		/* Container ID */
-		String payload = containerID;
+		StringBuilder payload = new StringBuilder();
+		payload.append(container.getPadType() != null ? container.getPadType() : "----");
+		Map<String, String> padParams = container.getPadParams();
+		if (padParams.size() > 0) {
+			payload.append('(');
+			boolean isFirst = true;
+			for (Entry<String, String> entry : padParams.entrySet()) {
+				if (!isFirst) {
+					payload.append(",");
+				}
+				payload.append('"');
+				payload.append(entry.getKey().replace("\"", "\\\""));
+				payload.append("\"=\"");
+				if (entry.getValue() != null) {
+					payload.append(entry.getValue().replace("\"", "\\\""));
+				}
+				payload.append('"');
+				isFirst = false;
+			}
+			payload.append(')');
+		}
+		if (container.getValue() != null && container.getValue().length() > 0) {
+			payload.append(':').append(container.getValue());
+		}
 		
 		if (textContent != null && !textContent.isEmpty()) {
 			/* Payload if exists */
 			
-			payload = payload.concat(fConfig.INNER_TEXT_BEGIN);
+			payload.append(fConfig.INNER_TEXT_BEGIN);
 			
 			String[] lines = textContent.split("\n");
 			for (int i = 0; i < lines.length - 1; i++) {
-				payload = payload
-					.concat(lines[i].trim())
-					.concat(fConfig.INNER_TEXT_BR);
+				payload.append(lines[i].trim())
+					.append(fConfig.INNER_TEXT_BR);
 			}
-			payload = payload
-				.concat(lines[lines.length - 1])
-				.concat(fConfig.INNER_TEXT_END);
+			payload.append(lines[lines.length - 1])
+				.append(fConfig.INNER_TEXT_END);
 		}
 		
 		/* Old bounds */
@@ -108,11 +133,13 @@ public class DocumentAccess {
 			- fContainerManager.getConfig().EMBEDDED_REGION_END.length();
 
 		try {
-			fDocument.replace(from, length, payload);
+			fDocument.replace(from, length, payload.toString());
 			
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
+
 	}
 
 	/**
@@ -122,19 +149,21 @@ public class DocumentAccess {
 	protected void releaseTextRegion(Container container) {
 		Position position = container.getPosition();
 		try {
-			fDocument.replace(position.getOffset(), position.getLength(), "");
+			fDocument.replace(position.getOffset(), position.getLength() - 1, "");
 		} catch (BadLocationException e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
 	/**
 	 * Generates initial text region
+	 * @param id 
 	 */
-	String getInitialTextRegion(String containerID) {
+	String getInitialTextRegion(String type, String id) {
 		return fConfig.EMBEDDED_REGION_BEGIN
-			   + containerID +
-			   fConfig.EMBEDDED_REGION_END;
+				   + type + "(\"id\"=\"" + id + "\")" +
+				   fConfig.EMBEDDED_REGION_END;
 	}
 
 	/**
@@ -151,6 +180,7 @@ public class DocumentAccess {
 		try {
 			return textRegion.substring(from, to);
 		} catch (IndexOutOfBoundsException e) {
+			logger.error(e.getMessage());
 			return null;
 		}
 	}

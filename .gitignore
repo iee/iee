@@ -1,5 +1,4 @@
-
-bin/*
-org.eclipse.iee.translator.jmole.math/bin/*
-org.eclipse.iee.translator.molex.mex/bin/*
+*/xtend-gen/*
+*/src-gen/*
 *.class
+*/bin/*

@@ -1,9 +1,12 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.util.Map;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -12,6 +15,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad {
+	
+	private static final Logger logger = Logger.getLogger(Pad.class);
 	
 	private String fContainerID;
 	private Container fContainer;
@@ -68,6 +73,9 @@ public abstract class Pad {
 			"Another container is already attached");
 
 		container.setContainerID(fContainerID);
+		if (!(this instanceof LoadingPad)) {
+			container.setPadType(getType());
+		}
 		fContainer = container;		
 		final Composite parent = fContainer.getComposite();
 		
@@ -99,14 +107,18 @@ public abstract class Pad {
 		createPartControl(content);
 		fContainer.getComposite().pack();
 		
-		MouseEventManager mouseManager = new MouseEventManager(parent);
-		parent.addMouseTrackListener(mouseManager);
-		parent.addMouseMoveListener(mouseManager);
-		parent.addMouseListener(mouseManager);
+		addMouseListeners(parent);
 		
 		onContainerAttached();
 	}
 
+	public void addMouseListeners(Composite control) {
+		MouseEventManager mouseManager = new MouseEventManager(control);
+		control.addMouseTrackListener(mouseManager);
+		control.addMouseMoveListener(mouseManager);
+		control.addMouseListener(mouseManager);
+	}
+	
 	public void detachContainer() {
 		Assert.isLegal(isContainerAttached(), "No container attached");
 		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
@@ -147,4 +159,7 @@ public abstract class Pad {
 	public abstract void onContainerAttached();
 
 	public abstract String getType();
+	
+	public void updateData(Map<String, String> params, String value) {
+	}
 }

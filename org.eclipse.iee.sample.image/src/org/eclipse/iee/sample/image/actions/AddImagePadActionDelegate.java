@@ -1,5 +1,11 @@
 package org.eclipse.iee.sample.image.actions;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.jface.action.IAction;
@@ -8,9 +14,12 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 public class AddImagePadActionDelegate implements IEditorActionDelegate {
 
+	private static final Logger logger = Logger.getLogger(AddImagePadActionDelegate.class);
+	
 	Shell shell = null;
 
 	IPadEditor fPadEditor;
@@ -31,8 +40,14 @@ public class AddImagePadActionDelegate implements IEditorActionDelegate {
 			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
 			return;
 		}
-
-		fPadEditor.createPad(new ImagePad(), fPadEditor.getCaretOffset());
+		
+		logger.debug("Insert Image");
+		
+		ImagePad pad = new ImagePad();
+		
+		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
+		pad.moveCaretToCurrentPad();
+		
 	}
 
 	@Override

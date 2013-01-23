@@ -59,15 +59,6 @@
             id="org.eclipse.iee.editor.monitoring.IEEcategory"
             name="Integrated Engineering Environment">
       </category>
-      <wizard
-            category="org.eclipse.iee.editor.monitoring.IEEcategory"
-            class="org.eclipse.iee.editor.monitoring.wizards.NewIEEMathWizard"
-            hasPages="true"
-            icon="icons/cmath.png"
-            id="org.eclipse.iee.editor.monitoring.IEEMathWizard"
-            name="IEE Math Project"
-            project="true">
-      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.startup">

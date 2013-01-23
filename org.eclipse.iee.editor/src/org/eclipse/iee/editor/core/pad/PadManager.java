@@ -1,15 +1,25 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
@@ -17,27 +27,36 @@ import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+
+import com.thoughtworks.xstream.converters.reflection.SortableFieldKeySorter;
 
 public class PadManager extends EventManager {
+
+	private static final Logger logger = Logger.getLogger(PadManager.class);
 
 	/* ContainerManagers */
 
 	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
+	private IDebugEventSetListener fDebugListener;
+
+	/** Registered pad factories. */
+	private Map<String, IPadFactory> fPadFactories = new HashMap<String, IPadFactory>();
 
 	/* Pads */
 
 	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
-	
+
 	/** Pads which are visible by user (have attached container) */
 	private Set<String> fActivePads = new TreeSet<String>();
-	
+
 	/**
 	 * Pads which are stored in memory and temporarily not visible by user
 	 * (don't have attached container)
 	 */
 	private Set<String> fSuspendedPads = new TreeSet<String>();
-	
+
 	/**
 	 * Temporary pads which are attached to existent container until
 	 * corresponding pad is loaded. This pads are intended to show some loading
@@ -46,7 +65,7 @@ public class PadManager extends EventManager {
 	private Set<String> fTemporaryPads = new TreeSet<String>();
 
 	/* Constructor */
-	
+
 	public PadManager() {
 		fContainerManagers = new TreeMap<String, ContainerManager>();
 		InitListener();
@@ -61,9 +80,8 @@ public class PadManager extends EventManager {
 	 */
 	public void registerContainerManager(ContainerManager containerManager) {
 		containerManager.addContainerManagerListener(fContainerManagerListener);
-		fContainerManagers.put(
-			containerManager.getContainerManagerID(),
-			containerManager);
+		fContainerManagers.put(containerManager.getContainerManagerID(),
+				containerManager);
 	}
 
 	/**
@@ -72,30 +90,27 @@ public class PadManager extends EventManager {
 	 * @param containerManager
 	 */
 	public void removeContainerManager(ContainerManager containerManager) {
-		containerManager.removeContainerManagerListener(fContainerManagerListener);
+		containerManager
+				.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.remove(containerManager.getContainerManagerID());
 		for (String containerID : containerManager.getContainerIDs()) {
-			onContainerRemoved(containerID);
+			onEditorClosed(containerID);
 		}
 		firePadManagerEvent(new PadManagerEvent());
 	}
 
 	public void savePadsInEditor(String containerManagerID) {
-		String[] containerIDs =
-			fContainerManagers.get(containerManagerID).getContainerIDs();
-		
+		String[] containerIDs = fContainerManagers.get(containerManagerID)
+				.getContainerIDs();
+
 		for (String containerID : containerIDs) {
 			if (fActivePads.contains(containerID)) {
 				fPads.get(containerID).save();
 			}
 		}
-		
-		/* Remove storages of all suspended pads */
-		for (String containerID : fSuspendedPads) {
-			fPads.get(containerID).unsave();
-		}
+
 	}
-	
+
 	public List<Pad> selectPadsByType(String type) {
 		List<Pad> result = new ArrayList<Pad>();
 		for (String id : fActivePads) {
@@ -106,19 +121,20 @@ public class PadManager extends EventManager {
 		}
 		return result;
 	}
-	
+
 	public Collection<Pad> selectPadsOfCategory(String category) {
-		
+
 		return null;
 	}
 
-	public Collection<Pad> selectPadsInContainerManager(String containerManager) {
-		
+	public Collection<Pad> selectPadsInContainerManager(
+			String containerManagerID) {
+
 		return null;
 	}
 
 	public Collection<Pad> selectPads(String containerManager, String category) {
-		
+
 		return null;
 	}
 
@@ -151,7 +167,9 @@ public class PadManager extends EventManager {
 	public void loadPad(Pad pad) {
 		String containerID = pad.getContainerID();
 
-		Assert.isLegal(!fActivePads.contains(containerID));
+		if (fActivePads.contains(containerID))
+			return;
+
 		Assert.isLegal(!fSuspendedPads.contains(containerID));
 
 		if (fTemporaryPads.contains(containerID)) {
@@ -195,7 +213,8 @@ public class PadManager extends EventManager {
 				.getContainerManagerID()));
 		fSuspendedPads.add(pad.getContainerID());
 		fPads.put(pad.getContainerID(), pad);
-		containerManager.RequestContainerAllocation(pad.getContainerID(), location);
+		containerManager.RequestContainerAllocation(pad.getType(),
+				pad.getContainerID(), location);
 	}
 
 	/**
@@ -283,7 +302,7 @@ public class PadManager extends EventManager {
 			@Override
 			public void containerSelected(ContainerEvent event) {
 				Pad selected = fPads.get(event.getContainer().getContainerID());
-				selected.setSelected(true);			
+				selected.setSelected(true);
 			}
 
 			@Override
@@ -297,25 +316,70 @@ public class PadManager extends EventManager {
 				Pad pad = fPads.get(event.getContainer().getContainerID());
 				pad.activate();
 			}
+
+			@Override
+			public void containerUpdated(ContainerEvent containerEvent) {
+				Container container = containerEvent.getContainer();
+				Pad pad = fPads.get(container.getContainerID());
+				if (pad != null) {
+					pad.updateData(container.getPadParams(),
+							container.getValue());
+				}
+			}
 		};
+
+		DebugPlugin.getDefault().addDebugEventListener(
+				new IDebugEventSetListener() {
+
+					@Override
+					public void handleDebugEvents(DebugEvent[] events) {
+						for (DebugEvent e : events) {
+							if (e.getKind() == DebugEvent.TERMINATE)
+								FileMessager.getInstance().checkRuntimeValues();
+						}
+					}
+				});
+
 	}
 
 	/* Internal functions */
-	protected void onContainerRemoved(String containerID) {
+	private void clearPadSetsAndRuntime(String containerID,
+			boolean addToSuspended) {
+		Pad pad = fPads.get(containerID);
+
+		String runtimePath = pad.getContainer().getContainerManager()
+				.getStoragePath()
+				+ FileMessager.getInstance().getRuntimeDirectoryName()
+				+ "/"
+				+ containerID;
+
+		File runtimeFile = new File(runtimePath);
+		if (runtimeFile.exists())
+			FileUtils.deleteQuietly(runtimeFile);
+
 		if (fActivePads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
 			pad.detachContainer();
 			fActivePads.remove(containerID);
-			fSuspendedPads.add(containerID);
+
+			if (addToSuspended)
+				fSuspendedPads.add(containerID);
+
 			return;
 		}
 		if (fTemporaryPads.contains(containerID)) {
-			Pad pad = fPads.get(containerID);
 			pad.detachContainer();
 			fTemporaryPads.remove(containerID);
 			return;
 		}
 		Assert.isLegal(false);
+	}
+
+	protected void onContainerRemoved(String containerID) {
+		clearPadSetsAndRuntime(containerID, true);
+	}
+
+	protected void onEditorClosed(String containerID) {
+		clearPadSetsAndRuntime(containerID, false);
 	}
 
 	/* For observers */
@@ -334,6 +398,49 @@ public class PadManager extends EventManager {
 		Object[] listeners = getListeners();
 		for (int i = 0; i < listeners.length; i++) {
 			((IPadManagerListener) listeners[i]).padManagerUpdate(event);
+		}
+	}
+
+	public void registerPadFactory(String containerManagerId, String type,
+			IPadFactory factory) {
+		fPadFactories.put(type, factory);
+		loadPads(containerManagerId, type, factory);
+	}
+
+	public void loadPads(String containerManagerId, String type,
+			IPadFactory factory) {
+		Map<Integer, Pad> loadPads = new HashMap<Integer, Pad>();
+		for (String temp : fTemporaryPads) {
+			Pad pad = fPads.get(temp);
+			Container container = pad.getContainer();
+			if (container.getContainerManagerID().equals(containerManagerId)
+					&& type.equals(container.getPadType())) {
+				Pad create = factory.create(container.getPadParams(),
+						container.getValue());
+				create.setContainerID(container.getContainerID());
+				loadPads.put(container.getPosition().offset, create);
+
+			}
+		}
+
+		List<Integer> padsOffsets = new ArrayList<Integer>();
+		padsOffsets.addAll(loadPads.keySet());
+		Collections.sort(padsOffsets);
+
+		for (int offset : padsOffsets) {
+			loadPad(loadPads.get(offset));
+		}
+
+	}
+
+	public void unregisterPadFactory(IPadFactory factory) {
+		Set<Entry<String, IPadFactory>> entrySet = fPadFactories.entrySet();
+		for (Iterator<Entry<String, IPadFactory>> iterator = entrySet
+				.iterator(); iterator.hasNext();) {
+			Entry<String, IPadFactory> entry = iterator.next();
+			if (entry.getValue() == factory) {
+				iterator.remove();
+			}
 		}
 	}
 }

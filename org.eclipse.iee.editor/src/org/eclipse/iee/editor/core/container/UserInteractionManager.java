@@ -12,6 +12,7 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 
 public class UserInteractionManager {
+		
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	
@@ -72,7 +73,8 @@ public class UserInteractionManager {
 					return;
 				}
 
-				fContainerManager.updateContainerVisibility(false);
+				/* XXX Visibility */
+				//fContainerManager.updateContainerVisibility(false);
 			}
 		});
 
@@ -88,16 +90,21 @@ public class UserInteractionManager {
 				case SWT.ARROW_DOWN:
 					fCaretMovesForward = true;
 					break;
+				case SWT.DEL:
+					if (fSelectedContainer != null)
+						fSelectedContainer.destroy();
+					break;
 				}
 			}
 		});
 		
-		/*
-		 * CTRL + ALT causes pad activation
-		 */
 		fStyledText.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				
+				/*
+				 * CTRL + ALT causes pad activation
+				 */
 				if ((e.stateMask & SWT.CTRL) != 0 && e.keyCode == SWT.ALT) {
 					int caretOffset = fStyledText.getCaretOffset();
 					Container container = fContainerManager.getContainerHavingOffset(caretOffset);					
@@ -105,10 +112,18 @@ public class UserInteractionManager {
 						fContainerManager.fireContainerActivated(container);
 					}
 				}
+				
+				/*
+				 * PageUP or PageDown
+				 */
+				/*if (e.keyCode == SWT.PAGE_UP || e.keyCode == SWT.PAGE_DOWN) {
+					fContainerManager.getStyledTextManager().updatePresentations();
+				}*/
 			}
 			
 			@Override public void keyReleased(KeyEvent e) {}
 		});
+		
 		
 		/*
 		 * If caret is inside Container's text region, moving it to the
@@ -124,8 +139,10 @@ public class UserInteractionManager {
 					if (e.caretOffset != position.getOffset() && e.caretOffset != position.getOffset() + position.getLength()) {
 						/* Move caret to the Pad's border */
 						if (fCaretMovesForward) {
+							fContainerManager.fireContainerActivated(container);					
 							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
 						} else {
+							fContainerManager.fireContainerActivated(container);
 							fStyledText.setCaretOffset(position.getOffset());
 						}
 					}
@@ -133,6 +150,6 @@ public class UserInteractionManager {
 				
 				updateCaretSelection();
 			}
-		});
+		});   
 	}
 }
