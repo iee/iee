@@ -4,26 +4,28 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
+import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Point;
 
 public class UserInteractionManager {
 		
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	
-	private Boolean fCaretMovesForward;
 	private Container fSelectedContainer;
 	
 	public UserInteractionManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fStyledText = containerManager.getStyledText();
 		
-		fCaretMovesForward = false;
 		fSelectedContainer = null;
 		
 		initListeners();
@@ -81,19 +83,14 @@ public class UserInteractionManager {
 		fStyledText.addVerifyKeyListener(new VerifyKeyListener() {
 			@Override
 			public void verifyKey(VerifyEvent event) {
-				switch (event.keyCode) {
-				case SWT.ARROW_LEFT:
-				case SWT.ARROW_UP:
-					fCaretMovesForward = false;
-					break;
-				case SWT.ARROW_RIGHT:
-				case SWT.ARROW_DOWN:
-					fCaretMovesForward = true;
-					break;
-				case SWT.DEL:
-					if (fSelectedContainer != null)
-						fSelectedContainer.destroy();
-					break;
+				int action = fStyledText.getKeyBinding(event.keyCode | event.stateMask);
+				if (action != SWT.NULL) {
+				switch (action) {
+					case ST.DELETE_NEXT:
+						if (fSelectedContainer != null)
+							fSelectedContainer.destroy();
+						break;
+					}
 				}
 			}
 		});
@@ -101,7 +98,17 @@ public class UserInteractionManager {
 		fStyledText.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
+				int action = fStyledText.getKeyBinding(e.keyCode | e.stateMask);
+				if (action != SWT.NULL) {
+					switch (action) {
+						case ST.COLUMN_PREVIOUS:
+							caretPositionChange(fStyledText.getCaretOffset(), false);
+							break;
+						case ST.COLUMN_NEXT:
+							caretPositionChange(fStyledText.getCaretOffset(), true);
+							break;
+					}
+				}
 				/*
 				 * CTRL + ALT causes pad activation
 				 */
@@ -124,10 +131,8 @@ public class UserInteractionManager {
 			@Override public void keyReleased(KeyEvent e) {}
 		});
 		
-		
 		/*
-		 * If caret is inside Container's text region, moving it to the
-		 * beginning of line
+		 * If caret is inside Container's text region, moving it to the end of line
 		 */
 		fStyledText.addCaretListener(new CaretListener() {
 			@Override
@@ -135,21 +140,33 @@ public class UserInteractionManager {
 				Container container = fContainerManager.getContainerHavingOffset(e.caretOffset);
 				if (container != null) {
 					Position position = container.getPosition();
-					
-					if (e.caretOffset != position.getOffset() && e.caretOffset != position.getOffset() + position.getLength()) {
-						/* Move caret to the Pad's border */
-						if (fCaretMovesForward) {
-							fContainerManager.fireContainerActivated(container);					
+					if (e.caretOffset != position.getOffset()) {
+							/* Move caret to the Pad's border */
 							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
-						} else {
-							fContainerManager.fireContainerActivated(container);
-							fStyledText.setCaretOffset(position.getOffset());
-						}
 					}
 				}
-				
 				updateCaretSelection();
 			}
-		});   
+		}); 
+		
+	}
+	
+	private void caretPositionChange(int x, boolean caretMovesForward) {
+		Point selection = fStyledText.getSelection();
+		if (selection.y - selection.x == 0) {
+			Container container = fContainerManager.getContainerHavingOffset(caretMovesForward ? x : x - 1);
+			if (container != null) {
+				Position position = container.getPosition();
+				if (caretMovesForward) {
+					fContainerManager.fireContainerActivated(container);					
+					fStyledText.setCaretOffset(position.getOffset() + position.getLength());
+				} else {
+					fContainerManager.fireContainerActivated(container);
+					fStyledText.setCaretOffset(position.getOffset());
+				}
+			}
+			
+			updateCaretSelection();
+		}
 	}
 }
