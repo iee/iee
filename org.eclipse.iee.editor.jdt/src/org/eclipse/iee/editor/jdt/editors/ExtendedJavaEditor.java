@@ -1,5 +1,7 @@
 package org.eclipse.iee.editor.jdt.editors;
 
+import java.util.ResourceBundle;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -17,13 +19,25 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.formula.FormulaPadFactory;
 import org.eclipse.iee.sample.image.ImagePadFactory;
+import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
+import org.eclipse.jdt.internal.ui.javaeditor.JavaSourceViewer;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.IOverviewRuler;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.ImageTransfer;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
@@ -34,6 +48,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	private static final Logger logger = Logger
 			.getLogger(ExtendedJavaEditor.class);
 
+	private static final String BUNDLE_FOR_CONSTRUCTED_KEYS= "org.eclipse.jdt.internal.ui.javaeditor.ConstructedJavaEditorMessages";//$NON-NLS-1$
+	private static ResourceBundle fgBundleForConstructedKeys= ResourceBundle.getBundle(BUNDLE_FOR_CONSTRUCTED_KEYS);
+	
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
 
@@ -191,5 +208,74 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	public void doSaveAs() {
 		fPadManager.savePadsInEditor(fContainerManager.getContainerManagerID());
 		super.doSaveAs();
+	}
+	
+	//TODO move to separate class
+	@Override
+	protected ISourceViewer createJavaSourceViewer(Composite parent,
+			IVerticalRuler verticalRuler, IOverviewRuler overviewRuler,
+			boolean isOverviewRulerVisible, int styles, IPreferenceStore store) {
+		return new JavaSourceViewer(parent, verticalRuler, overviewRuler,
+				isOverviewRulerVisible, styles, store) {
+
+			public void doOperation(int operation) {
+
+				if (getTextWidget() == null
+						|| (!redraws() && operation != FORMAT))
+					return;
+
+				switch (operation) {
+				case PASTE:
+					boolean result = paste();
+					if (!result) {
+						super.doOperation(operation);
+					}
+					break;
+				default:
+					super.doOperation(operation);
+				}
+			}
+			
+			private boolean paste() {
+				Clipboard clipboard= new Clipboard(getDisplay());
+				try {
+					ImageTransfer transfer = ImageTransfer.getInstance();
+					ImageData content = (ImageData) clipboard.getContents(transfer);
+					if (content != null) {
+						ImagePad pad = new ImagePad();
+						createPad(pad, getTextWidget().getCaretOffset());
+						pad.setImageData(content);
+						return true;
+					}
+					FileTransfer fileTransfer = FileTransfer.getInstance();
+					String[] files = (String[]) clipboard.getContents(fileTransfer);
+					if (files != null && files.length > 0) {
+						try {
+							new ImageData(files[0]);
+							ImagePad pad = new ImagePad();
+							createPad(pad, getTextWidget().getCaretOffset());
+							pad.setImageFile(files[0]);
+						} catch (Exception e) {
+							//not image
+						}
+					}
+				} finally {
+					clipboard.dispose();
+				}
+				
+				return false;
+			}
+			
+			private Display getDisplay() {
+				if (getTextWidget() == null || getTextWidget().isDisposed())
+					return null;
+
+				Display display= getTextWidget().getDisplay();
+				if (display != null && display.isDisposed())
+					return null;
+
+				return display;
+			}
+		};
 	}
 }

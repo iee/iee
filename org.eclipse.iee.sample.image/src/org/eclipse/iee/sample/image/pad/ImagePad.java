@@ -1,10 +1,14 @@
 package org.eclipse.iee.sample.image.pad;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.swt.SWT;
@@ -14,12 +18,15 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Widget;
 
 public class ImagePad extends Pad implements Serializable {
 
@@ -41,6 +48,10 @@ public class ImagePad extends Pad implements Serializable {
 	
 	private Label label;
 
+	private Composite fParent;
+	
+	private Composite fCurrent;
+	
 	public String getImagePath() {
 		return fImagePath;
 	}
@@ -61,22 +72,27 @@ public class ImagePad extends Pad implements Serializable {
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		fParent = parent;
 		initView(parent);
 	}
 
 	protected void initView(Composite parent) {
+		if (fCurrent != null) {
+			fCurrent.dispose();
+		}
+		
 		switch (fCurrentState) {
 
 		case STATE_MENU:
-			initWelcomeView(parent);
+			initWelcomeView();
 			break;
 
 		case STATE_IMAGE:
-			initImageView(parent);
+			initImageView();
 			break;
 
 		case STATE_ERROR:
-			initErrorView(parent);
+			initErrorView();
 			break;
 
 		default:
@@ -84,32 +100,34 @@ public class ImagePad extends Pad implements Serializable {
 		}
 	}
 
-	protected void initWelcomeView(final Composite parent) {
+	protected void initWelcomeView() {
 		/* Clear data */
 
 		fImagePath = null;
 
 		/* Initialize controls */
 		FillLayout layout = new FillLayout(SWT.VERTICAL);
-		parent.setLayout(layout);
+		fParent.setLayout(layout);
+		
+		final Composite welcome = new Composite(fParent, SWT.NONE);
 		// It is hint operation now
-		parent.setBackground(new Color(null, 255, 255, 255));
+		welcome.setBackground(new Color(null, 255, 255, 255));
 
-		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
+		final Label label = new Label(welcome, SWT.WRAP | SWT.CENTER);
 		label.setText("This sample control is for inserting image into Eclipse editor");
 		label.setSize(200, 100);
 
-		final Button button = new Button(parent, SWT.PUSH);
+		final Button button = new Button(welcome, SWT.PUSH);
 		button.setText("Choose image");
 
-		parent.pack();
+		welcome.pack();
 
 		/* State logic */
 
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
+				FileDialog fileDialog = new FileDialog(welcome.getShell(), SWT.OPEN);
 				fileDialog.setFilterNames(new String[] { "Jpeg (*.jpg)", "PNG (*.png)" });
 				fileDialog.setFilterExtensions(new String[] { "*.jpg", "*.png" });
 
@@ -124,29 +142,7 @@ public class ImagePad extends Pad implements Serializable {
 				button.dispose();
 				label.dispose();
 
-				File storageDirectory = new File(getContainer().getContainerManager().getStoragePath() + "image/");
-				
-				if (!storageDirectory.exists()) {
-					if (!storageDirectory.mkdirs()) {
-						return;
-					}
-				}
-				
-				File imageSrc = new File(imagePath);
-				File imageDst = new File(getContainer().getContainerManager().getStoragePath() + "image/" + imageSrc.getName());
-				if (!imageDst.exists())
-				{
-					try {
-						FileUtils.copyFile(imageSrc, imageDst);
-					} catch (IOException e1) {
-					}
-				}
-				
-				/* Switch to image presentation state */
-				fImagePath = imageSrc.getName();
-				getContainer().setValue(fImagePath);
-				fCurrentState = STATE_IMAGE;
-				initView(parent);
+				setImageFile(imagePath);
 			}
 
 			@Override
@@ -157,17 +153,17 @@ public class ImagePad extends Pad implements Serializable {
 			public void mouseDown(MouseEvent arg0) {
 			}
 		});
-
+		fCurrent = welcome;
 	}
 
-	protected void initImageView(final Composite parent) {
+	protected void initImageView() {
 		logger.debug("initImageView");
 		
 		try {
-			fOriginalImage = new Image(parent.getDisplay(), getContainer().getContainerManager().getStoragePath() + "image/" + fImagePath);
+			fOriginalImage = new Image(fParent.getDisplay(), getContainer().getContainerManager().getStoragePath() + "image/" + fImagePath);
 			if (fImageWidth > 0 && fImageHeigth > 0)
 			{
-				fResizedImage = new Image(parent.getDisplay(),
+				fResizedImage = new Image(fParent.getDisplay(),
 					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
 			}
 			else
@@ -183,29 +179,29 @@ public class ImagePad extends Pad implements Serializable {
 			/* Switch to error state */
 
 			fCurrentState = STATE_ERROR;
-			initView(parent);
+			initView(fParent);
 		}
 
 		/* Initialize controls */
 		FillLayout layout = new FillLayout();
-		parent.setLayout(layout);
-		label = new Label(parent, SWT.NONE);
+		fParent.setLayout(layout);
+		label = new Label(fParent, SWT.NONE);
 		label.setImage(fResizedImage);
-		parent.pack();
+		fParent.pack();
 
-		parent.addControlListener(new ControlListener() {
+		fParent.addControlListener(new ControlListener() {
 			@Override
 			public void controlResized(ControlEvent e) {				
-				Point size = parent.getSize();
+				Point size = fParent.getSize();
 				fImageWidth = size.x;
 				fImageHeigth = size.y;
 				getContainer().setPadParam("width", String.valueOf(fImageWidth));
 				getContainer().setPadParam("height", String.valueOf(fImageHeigth));
-				fResizedImage = new Image(parent.getDisplay(),
+				fResizedImage = new Image(fParent.getDisplay(),
 					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
 				
 				label.setImage(fResizedImage);
-				parent.redraw();
+				fParent.redraw();
 			}
 			
 			@Override
@@ -230,20 +226,20 @@ public class ImagePad extends Pad implements Serializable {
 		});
 	}
 
-	protected void initErrorView(final Composite parent) {
+	protected void initErrorView() {
 
 		FillLayout layout = new FillLayout(SWT.VERTICAL);
-		parent.setLayout(layout);
+		fParent.setLayout(layout);
 		// It is hint operation now
-		parent.setBackground(new Color(null, 255, 255, 255));
+		fParent.setBackground(new Color(null, 255, 255, 255));
 
-		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
+		final Label label = new Label(fParent, SWT.WRAP | SWT.CENTER);
 		label.setText("Error occured");
 
-		final Button button = new Button(parent, SWT.PUSH);
+		final Button button = new Button(fParent, SWT.PUSH);
 		button.setText("Reload");
 
-		parent.pack();
+		fParent.pack();
 
 		/* State logic */
 
@@ -262,7 +258,7 @@ public class ImagePad extends Pad implements Serializable {
 
 				fImagePath = null;
 				fCurrentState = STATE_MENU;
-				initView(parent);
+				initView(fParent);
 			}
 
 			@Override
@@ -313,5 +309,62 @@ public class ImagePad extends Pad implements Serializable {
 	@Override
 	public String getType() {
 		return "Image";
+	}
+
+	public void setImageFile(String imagePath) {
+		File storageDirectory = new File(getContainer().getContainerManager().getStoragePath() + "image/");
+		
+		if (!storageDirectory.exists()) {
+			if (!storageDirectory.mkdirs()) {
+				return;
+			}
+		}
+		
+		File imageSrc = new File(imagePath);
+		File imageDst = new File(getContainer().getContainerManager().getStoragePath() + "image/" + imageSrc.getName());
+		if (!imageDst.exists())
+		{
+			try {
+				FileUtils.copyFile(imageSrc, imageDst);
+			} catch (IOException e1) {
+			}
+		}
+		
+		fImagePath = imageSrc.getName();
+		getContainer().setValue(fImagePath);
+		switchToImage();
+	}
+	
+	public void setImageData(ImageData imageData) {
+		File storageDirectory = new File(getContainer().getContainerManager().getStoragePath() + "image/");
+		
+		if (!storageDirectory.exists()) {
+			if (!storageDirectory.mkdirs()) {
+				return;
+			}
+		}
+		ImageLoader loader = new ImageLoader();
+		loader.data = new ImageData[] {imageData};
+		String imageName = UUID.randomUUID().toString() + ".png";
+		File imageDst = new File(getContainer().getContainerManager().getStoragePath() + "image/" + imageName);
+		FileOutputStream stream = null;
+		try {
+			stream = new FileOutputStream(imageDst);
+			loader.save(stream, SWT.IMAGE_PNG);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} finally {
+			IOUtils.closeQuietly(stream);
+		}
+
+		fImagePath = imageName;
+		getContainer().setValue(fImagePath);
+		switchToImage();
+	}
+
+	private void switchToImage() {
+		/* Switch to image presentation state */
+		fCurrentState = STATE_IMAGE;
+		initView(fParent);
 	}
 }
