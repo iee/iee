@@ -132,15 +132,18 @@ public class UserInteractionManager {
 		fStyledText.addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				Container container = fContainerManager.getContainerHavingOffset(e.caretOffset);
-				if (container != null) {
-					Position position = container.getPosition();
-					if (e.caretOffset != position.getOffset()) {
-							/* Move caret to the Pad's border */
-							fStyledText.setCaretOffset(position.getOffset() + position.getLength());
+				Point selection = fStyledText.getSelection();
+				if (selection.y - selection.x == 0) {
+					Container container = fContainerManager.getContainerHavingOffset(e.caretOffset);
+					if (container != null) {
+						Position position = container.getPosition();
+						if (e.caretOffset != position.getOffset()) {
+								/* Move caret to the Pad's border */
+								fStyledText.setCaretOffset(position.getOffset() + position.getLength());
+						}
 					}
+					updateCaretSelection();
 				}
-				updateCaretSelection();
 			}
 		}); 
 		
