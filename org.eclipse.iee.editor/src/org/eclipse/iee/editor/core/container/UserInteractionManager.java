@@ -86,6 +86,12 @@ public class UserInteractionManager {
 				int action = fStyledText.getKeyBinding(event.keyCode | event.stateMask);
 				if (action != SWT.NULL) {
 				switch (action) {
+					case ST.COLUMN_PREVIOUS:
+						caretPositionChange(fStyledText.getCaretOffset(), false);
+						break;
+					case ST.COLUMN_NEXT:
+						caretPositionChange(fStyledText.getCaretOffset(), true);
+						break;
 					case ST.DELETE_NEXT:
 						if (fSelectedContainer != null)
 							fSelectedContainer.destroy();
@@ -98,17 +104,6 @@ public class UserInteractionManager {
 		fStyledText.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				int action = fStyledText.getKeyBinding(e.keyCode | e.stateMask);
-				if (action != SWT.NULL) {
-					switch (action) {
-						case ST.COLUMN_PREVIOUS:
-							caretPositionChange(fStyledText.getCaretOffset(), false);
-							break;
-						case ST.COLUMN_NEXT:
-							caretPositionChange(fStyledText.getCaretOffset(), true);
-							break;
-					}
-				}
 				/*
 				 * CTRL + ALT causes pad activation
 				 */
