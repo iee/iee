@@ -14,6 +14,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
@@ -26,6 +27,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -165,20 +167,38 @@ public class TextPad extends Pad {
 			}
 		});
 
-		fViewer.getControl().addKeyListener(new KeyAdapter() {
+		final StyledText control = (StyledText)fViewer.getControl();
+		control.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				switch (e.keyCode) {
 				case SWT.ESC:
 					toggleViewMode();
+					moveCaretToContainerTail();
 					break;
-				case SWT.HOME:
-					System.out.println("Home");
-					break;
+				
 
-				case SWT.END:
-					System.out.println("End");
+				}
+			}
+		});
+		
+		control.addVerifyKeyListener(new VerifyKeyListener() {
+			@Override
+			public void verifyKey(VerifyEvent event) {
+				Point selection = control.getSelection();
+				int caretOffset = control.getCaretOffset();
+				switch (event.keyCode) {
+				case SWT.ARROW_LEFT:
+					if (selection.y - selection.x == 0 && caretOffset == 0) {
+						toggleViewMode();
+						moveCaretToCurrentPad();
+					}
 					break;
-
+				case SWT.ARROW_RIGHT:
+					if (selection.y - selection.x == 0 && caretOffset == control.getCharCount()) {
+						toggleViewMode();
+						moveCaretToContainerTail();
+					}
+					break;
 				}
 			}
 		});

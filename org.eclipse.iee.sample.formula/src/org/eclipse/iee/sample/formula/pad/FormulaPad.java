@@ -6,8 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.eclipse.iee.editor.core.container.Container;
-import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -323,13 +321,6 @@ public class FormulaPad extends Pad {
 			fHoverShell.dispose();
 			fHoverShell = null;
 		}
-	}
-
-	private void moveCaretToContainerTail() {
-		Container c = getContainer();
-		ContainerManager containerManager = c.getContainerManager();
-		containerManager.getStyledText().setCaretOffset(
-				c.getPosition().getOffset() + c.getPosition().getLength());
 	}
 
 	public void setListeners() {

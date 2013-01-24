@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -161,5 +162,12 @@ public abstract class Pad {
 	public abstract String getType();
 	
 	public void updateData(Map<String, String> params, String value) {
+	}
+
+	protected void moveCaretToContainerTail() {
+		Container c = getContainer();
+		ContainerManager containerManager = c.getContainerManager();
+		containerManager.getUserInteractionManager()
+			.moveCaretTo(c.getPosition().getOffset() + c.getPosition().getLength());
 	}
 }
