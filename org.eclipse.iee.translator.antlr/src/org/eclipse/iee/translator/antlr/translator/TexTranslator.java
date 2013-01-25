@@ -112,9 +112,11 @@ public class TexTranslator {
 		public String visitMult(MathParser.MultContext ctx) {
 			if (ctx.sign.getText().matches("\\*"))
 				return visit(ctx.left) + "*" + visit(ctx.right);
-			if (ctx.sign.getText().matches("/"))
-				return "\\frac{" + visit(ctx.left) + "}{" + visit(ctx.right)
-						+ "}";
+			if (ctx.sign.getText().matches("/")) {
+
+				return "\\frac{" + removeRoundBrackets(visit(ctx.left)) + "}{"
+						+ removeRoundBrackets(visit(ctx.right)) + "}";
+			}
 			if (ctx.sign.getText().matches("%"))
 				return visit(ctx.left) + " \\mod " + visit(ctx.right);
 
@@ -240,9 +242,9 @@ public class TexTranslator {
 	private static String translateName(String name) {
 		String translatedName = name;
 
-		for (int i = 0; i < fGreekLetters.size(); i++)
-		{
-			translatedName = replaceGreekLetter(translatedName, fGreekLetters.get(i));
+		for (int i = 0; i < fGreekLetters.size(); i++) {
+			translatedName = replaceGreekLetter(translatedName,
+					fGreekLetters.get(i));
 		}
 
 		return translatedName;
@@ -295,4 +297,14 @@ public class TexTranslator {
 
 	}
 
+	private static String removeRoundBrackets(String input) {
+		String result = input.trim();
+
+		if (result.charAt(0) == '('
+				&& result.charAt(result.length() - 1) == ')') {
+			result = result.substring(1, result.length() - 1);
+		}
+
+		return result;
+	}
 }
