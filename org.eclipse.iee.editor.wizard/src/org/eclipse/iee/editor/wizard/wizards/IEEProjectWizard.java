@@ -201,12 +201,6 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			javaProject.setRawClasspath(
 					entries.toArray(new IClasspathEntry[entries.size()]), null);
 
-			/*
-			 * Add the images folder
-			 */
-			IFolder imageFolder = proj.getFolder(new Path("images"));
-			imageFolder.create(false, true, monitor);
-
 			IPackageFragmentRoot root = javaProject
 					.getPackageFragmentRoot(srcFolder);
 			IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
