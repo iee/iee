@@ -597,9 +597,10 @@ public class FormulaPad extends Pad {
 		return newPad;
 	}
 
-	// Save&Load operations, use it for serialization
+	// Save&Load operations
 
 	public void save() {
+		processInput();
 	}
 
 	@Override
