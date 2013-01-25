@@ -69,6 +69,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		initIeeEditorCore();
 
 		loadEditorPads();
+		
+		doSave(null);
 	};
 
 	public void initIeeEditorCore() {
