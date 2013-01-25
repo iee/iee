@@ -1,3 +1,4 @@
+// Generated from D:\sergey\antlr\math\Math.g4 by ANTLR 4.0
 package org.eclipse.iee.translator.antlr.math;
 
 import org.antlr.v4.runtime.ParserRuleContext;

@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> MathParser.java generatedTimestamp>
+// Generated from D:\sergey\antlr\math\Math.g4 by ANTLR 4.0
 package org.eclipse.iee.translator.antlr.math;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -77,7 +77,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitStatement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitFunctionDefinition(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -203,7 +203,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitFunction(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -278,7 +278,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitVariableAssignment(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -341,7 +341,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMult(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class PrimaryExprContext extends ExpressionContext {
@@ -360,7 +360,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitPrimaryExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class PowerContext extends ExpressionContext {
@@ -384,7 +384,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitPower(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class AddContext extends ExpressionContext {
@@ -409,7 +409,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitAdd(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class UnaryContext extends ExpressionContext {
@@ -430,7 +430,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitUnary(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ExprBracketsContext extends ExpressionContext {
@@ -450,7 +450,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitExprBrackets(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -624,7 +624,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicMult(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class LogicComparisonContext extends LogicalExpressionContext {
@@ -649,7 +649,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicComparison(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class LogicBracketsContext extends LogicalExpressionContext {
@@ -669,7 +669,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicBrackets(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class LogicAddContext extends LogicalExpressionContext {
@@ -694,7 +694,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitLogicAdd(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -820,7 +820,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitVariable(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class MatrixDefinitionContext extends PrimaryContext {
@@ -839,7 +839,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrixDefinition(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class PrimaryFunctionContext extends PrimaryContext {
@@ -858,7 +858,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitPrimaryFunction(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class FloatNumberContext extends PrimaryContext {
@@ -875,7 +875,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitFloatNumber(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class IntNumberContext extends PrimaryContext {
@@ -892,7 +892,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitIntNumber(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class PropertyContext extends PrimaryContext {
@@ -914,7 +914,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitProperty(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class MatrixElementContext extends PrimaryContext {
@@ -940,7 +940,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrixElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class MethodCallContext extends PrimaryContext {
@@ -962,7 +962,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMethodCall(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1082,7 +1082,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrix(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1167,7 +1167,7 @@ public class MathParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MathVisitor ) return ((MathVisitor<? extends T>)visitor).visitMatrixRow(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1256,49 +1256,49 @@ public class MathParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\1\3\33\u0092\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6"+
-		"\2\7\7\7\2\b\7\b\1\0\1\0\1\0\1\0\3\0\27\b\0\1\1\1\1\1\1\1\1\1\2\1\2\1"+
-		"\2\1\2\1\2\5\2\"\b\2\n\2\f\2%\t\2\3\2\'\b\2\1\2\1\2\1\3\1\3\1\3\1\3\1"+
-		"\4\1\4\1\4\1\4\1\4\1\4\1\4\1\4\3\4\67\b\4\1\4\1\4\1\4\1\4\1\4\1\4\1\4"+
-		"\1\4\1\4\5\4B\b\4\n\4\f\4E\t\4\1\5\1\5\1\5\1\5\1\5\1\5\1\5\1\5\1\5\3\5"+
-		"P\b\5\1\5\1\5\1\5\1\5\1\5\1\5\5\5X\b\5\n\5\f\5[\t\5\1\6\1\6\1\6\1\6\1"+
-		"\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\1\6\3\6p\b\6\1"+
-		"\7\1\7\1\7\1\7\5\7v\b\7\n\7\f\7y\t\7\1\7\3\7|\b\7\3\7~\b\7\1\7\1\7\1\b"+
-		"\1\b\1\b\1\b\5\b\u0086\b\b\n\b\f\b\u0089\t\b\1\b\3\b\u008c\b\b\3\b\u008e"+
-		"\b\b\1\b\1\b\1\b\0\t\0\2\4\6\b\n\f\16\20\0\4\2\7\7\t\t\3\1\1\b\b\24\24"+
-		"\2\7\7\t\t\4\f\f\16\17\22\22\25\26\u00a2\0\26\1\0\0\0\2\30\1\0\0\0\4\34"+
-		"\1\0\0\0\6*\1\0\0\0\b\66\1\0\0\0\nO\1\0\0\0\fo\1\0\0\0\16q\1\0\0\0\20"+
-		"\u0081\1\0\0\0\22\27\3\2\1\0\23\27\3\6\3\0\24\27\3\b\4\0\25\27\3\n\5\0"+
-		"\26\22\1\0\0\0\26\23\1\0\0\0\26\24\1\0\0\0\26\25\1\0\0\0\27\1\1\0\0\0"+
-		"\30\31\3\4\2\0\31\32\5\r\0\0\32\33\3\b\4\0\33\3\1\0\0\0\34\35\5\30\0\0"+
-		"\35&\5\13\0\0\36#\3\b\4\0\37 \5\6\0\0 \"\3\b\4\0!\37\1\0\0\0\"%\1\0\0"+
-		"\0#!\1\0\0\0#$\1\0\0\0$\'\1\0\0\0%#\1\0\0\0&\36\1\0\0\0&\'\1\0\0\0\'("+
-		"\1\0\0\0()\5\4\0\0)\5\1\0\0\0*+\3\b\4\0+,\5\r\0\0,-\3\b\4\0-\7\1\0\0\0"+
-		"./\6\4\uffff\0/\60\7\0\0\0\60\67\3\b\4\0\61\62\5\13\0\0\62\63\3\b\4\0"+
-		"\63\64\5\4\0\0\64\67\1\0\0\0\65\67\3\f\6\0\66.\1\0\0\0\66\61\1\0\0\0\66"+
-		"\65\1\0\0\0\67C\1\0\0\089\4\4\0\19:\5\3\0\0:B\3\b\4\0;<\4\4\1\1<=\7\1"+
-		"\0\0=B\3\b\4\0>?\4\4\2\1?@\7\2\0\0@B\3\b\4\0A8\1\0\0\0A;\1\0\0\0A>\1\0"+
-		"\0\0BE\1\0\0\0CA\1\0\0\0CD\1\0\0\0D\t\1\0\0\0EC\1\0\0\0FG\6\5\uffff\0"+
-		"GH\5\13\0\0HI\3\n\5\0IJ\5\4\0\0JP\1\0\0\0KL\3\b\4\0LM\7\3\0\0MN\3\b\4"+
-		"\0NP\1\0\0\0OF\1\0\0\0OK\1\0\0\0PY\1\0\0\0QR\4\5\3\1RS\5\20\0\0SX\3\n"+
-		"\5\0TU\4\5\4\1UV\5\21\0\0VX\3\n\5\0WQ\1\0\0\0WT\1\0\0\0X[\1\0\0\0YW\1"+
-		"\0\0\0YZ\1\0\0\0Z\13\1\0\0\0[Y\1\0\0\0\\p\5\30\0\0]p\5\33\0\0^p\5\31\0"+
-		"\0_p\3\16\7\0`a\5\30\0\0ab\5\n\0\0bc\3\b\4\0cd\5\2\0\0de\5\n\0\0ef\3\b"+
-		"\4\0fg\5\2\0\0gp\1\0\0\0hp\3\4\2\0ij\5\30\0\0jk\5\5\0\0kp\3\4\2\0lm\5"+
-		"\30\0\0mn\5\5\0\0np\5\30\0\0o\\\1\0\0\0o]\1\0\0\0o^\1\0\0\0o_\1\0\0\0"+
-		"o`\1\0\0\0oh\1\0\0\0oi\1\0\0\0ol\1\0\0\0p\r\1\0\0\0q}\5\23\0\0rw\3\20"+
-		"\b\0st\5\6\0\0tv\3\20\b\0us\1\0\0\0vy\1\0\0\0wu\1\0\0\0wx\1\0\0\0x{\1"+
-		"\0\0\0yw\1\0\0\0z|\5\6\0\0{z\1\0\0\0{|\1\0\0\0|~\1\0\0\0}r\1\0\0\0}~\1"+
-		"\0\0\0~\177\1\0\0\0\177\u0080\5\27\0\0\u0080\17\1\0\0\0\u0081\u008d\5"+
-		"\23\0\0\u0082\u0087\3\b\4\0\u0083\u0084\5\6\0\0\u0084\u0086\3\b\4\0\u0085"+
-		"\u0083\1\0\0\0\u0086\u0089\1\0\0\0\u0087\u0085\1\0\0\0\u0087\u0088\1\0"+
-		"\0\0\u0088\u008b\1\0\0\0\u0089\u0087\1\0\0\0\u008a\u008c\5\6\0\0\u008b"+
-		"\u008a\1\0\0\0\u008b\u008c\1\0\0\0\u008c\u008e\1\0\0\0\u008d\u0082\1\0"+
-		"\0\0\u008d\u008e\1\0\0\0\u008e\u008f\1\0\0\0\u008f\u0090\5\27\0\0\u0090"+
-		"\21\1\0\0\0\20\26#&\66ACOWYow{}\u0087\u008b\u008d";
+		"\2\3\35\u0094\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b"+
+		"\4\t\t\t\4\n\t\n\3\2\3\2\3\2\3\2\5\2\31\n\2\3\3\3\3\3\3\3\3\3\4\3\4\3"+
+		"\4\3\4\3\4\7\4$\n\4\f\4\16\4\'\13\4\5\4)\n\4\3\4\3\4\3\5\3\5\3\5\3\5\3"+
+		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\69\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
+		"\6\3\6\7\6D\n\6\f\6\16\6G\13\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7"+
+		"R\n\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7Z\n\7\f\7\16\7]\13\7\3\b\3\b\3\b\3\b"+
+		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\br\n\b"+
+		"\3\t\3\t\3\t\3\t\7\tx\n\t\f\t\16\t{\13\t\3\t\5\t~\n\t\5\t\u0080\n\t\3"+
+		"\t\3\t\3\n\3\n\3\n\3\n\7\n\u0088\n\n\f\n\16\n\u008b\13\n\3\n\5\n\u008e"+
+		"\n\n\5\n\u0090\n\n\3\n\3\n\3\n\2\13\2\4\6\b\n\f\16\20\22\2\6\4\t\t\13"+
+		"\13\5\3\3\n\n\26\26\4\t\t\13\13\6\16\16\20\21\24\24\27\30\u00a4\2\30\3"+
+		"\2\2\2\4\32\3\2\2\2\6\36\3\2\2\2\b,\3\2\2\2\n8\3\2\2\2\fQ\3\2\2\2\16q"+
+		"\3\2\2\2\20s\3\2\2\2\22\u0083\3\2\2\2\24\31\5\4\3\2\25\31\5\b\5\2\26\31"+
+		"\5\n\6\2\27\31\5\f\7\2\30\24\3\2\2\2\30\25\3\2\2\2\30\26\3\2\2\2\30\27"+
+		"\3\2\2\2\31\3\3\2\2\2\32\33\5\6\4\2\33\34\7\17\2\2\34\35\5\n\6\2\35\5"+
+		"\3\2\2\2\36\37\7\32\2\2\37(\7\r\2\2 %\5\n\6\2!\"\7\b\2\2\"$\5\n\6\2#!"+
+		"\3\2\2\2$\'\3\2\2\2%#\3\2\2\2%&\3\2\2\2&)\3\2\2\2\'%\3\2\2\2( \3\2\2\2"+
+		"()\3\2\2\2)*\3\2\2\2*+\7\6\2\2+\7\3\2\2\2,-\5\n\6\2-.\7\17\2\2./\5\n\6"+
+		"\2/\t\3\2\2\2\60\61\b\6\1\2\61\62\t\2\2\2\629\5\n\6\2\63\64\7\r\2\2\64"+
+		"\65\5\n\6\2\65\66\7\6\2\2\669\3\2\2\2\679\5\16\b\28\60\3\2\2\28\63\3\2"+
+		"\2\28\67\3\2\2\29E\3\2\2\2:;\6\6\2\3;<\7\5\2\2<D\5\n\6\2=>\6\6\3\3>?\t"+
+		"\3\2\2?D\5\n\6\2@A\6\6\4\3AB\t\4\2\2BD\5\n\6\2C:\3\2\2\2C=\3\2\2\2C@\3"+
+		"\2\2\2DG\3\2\2\2EC\3\2\2\2EF\3\2\2\2F\13\3\2\2\2GE\3\2\2\2HI\b\7\1\2I"+
+		"J\7\r\2\2JK\5\f\7\2KL\7\6\2\2LR\3\2\2\2MN\5\n\6\2NO\t\5\2\2OP\5\n\6\2"+
+		"PR\3\2\2\2QH\3\2\2\2QM\3\2\2\2R[\3\2\2\2ST\6\7\5\3TU\7\22\2\2UZ\5\f\7"+
+		"\2VW\6\7\6\3WX\7\23\2\2XZ\5\f\7\2YS\3\2\2\2YV\3\2\2\2Z]\3\2\2\2[Y\3\2"+
+		"\2\2[\\\3\2\2\2\\\r\3\2\2\2][\3\2\2\2^r\7\32\2\2_r\7\35\2\2`r\7\33\2\2"+
+		"ar\5\20\t\2bc\7\32\2\2cd\7\f\2\2de\5\n\6\2ef\7\4\2\2fg\7\f\2\2gh\5\n\6"+
+		"\2hi\7\4\2\2ir\3\2\2\2jr\5\6\4\2kl\7\32\2\2lm\7\7\2\2mr\5\6\4\2no\7\32"+
+		"\2\2op\7\7\2\2pr\7\32\2\2q^\3\2\2\2q_\3\2\2\2q`\3\2\2\2qa\3\2\2\2qb\3"+
+		"\2\2\2qj\3\2\2\2qk\3\2\2\2qn\3\2\2\2r\17\3\2\2\2s\177\7\25\2\2ty\5\22"+
+		"\n\2uv\7\b\2\2vx\5\22\n\2wu\3\2\2\2x{\3\2\2\2yw\3\2\2\2yz\3\2\2\2z}\3"+
+		"\2\2\2{y\3\2\2\2|~\7\b\2\2}|\3\2\2\2}~\3\2\2\2~\u0080\3\2\2\2\177t\3\2"+
+		"\2\2\177\u0080\3\2\2\2\u0080\u0081\3\2\2\2\u0081\u0082\7\31\2\2\u0082"+
+		"\21\3\2\2\2\u0083\u008f\7\25\2\2\u0084\u0089\5\n\6\2\u0085\u0086\7\b\2"+
+		"\2\u0086\u0088\5\n\6\2\u0087\u0085\3\2\2\2\u0088\u008b\3\2\2\2\u0089\u0087"+
+		"\3\2\2\2\u0089\u008a\3\2\2\2\u008a\u008d\3\2\2\2\u008b\u0089\3\2\2\2\u008c"+
+		"\u008e\7\b\2\2\u008d\u008c\3\2\2\2\u008d\u008e\3\2\2\2\u008e\u0090\3\2"+
+		"\2\2\u008f\u0084\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0091\3\2\2\2\u0091"+
+		"\u0092\7\31\2\2\u0092\23\3\2\2\2\22\30%(8CEQY[qy}\177\u0089\u008d\u008f";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
-	    _decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
+		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
 	}
 }
