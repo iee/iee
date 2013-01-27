@@ -84,17 +84,31 @@ public class UserInteractionManager {
 			@Override
 			public void verifyKey(VerifyEvent event) {
 				int action = fStyledText.getKeyBinding(event.keyCode | event.stateMask);
+				if (action == SWT.NULL) {
+					if (event.character == SWT.DEL) {
+						action = ST.DELETE_NEXT;
+					}
+				}
 				if (action != SWT.NULL) {
-				switch (action) {
+					int caretOffset = fStyledText.getCaretOffset();
+					switch (action) {
 					case ST.COLUMN_PREVIOUS:
-						caretPositionChange(fStyledText.getCaretOffset(), false);
+						caretPositionChange(caretOffset, false);
 						break;
 					case ST.COLUMN_NEXT:
-						caretPositionChange(fStyledText.getCaretOffset(), true);
+						caretPositionChange(caretOffset, true);
 						break;
 					case ST.DELETE_NEXT:
-						if (fSelectedContainer != null)
-							fSelectedContainer.destroy();
+						Container container = fContainerManager.getContainerHavingOffset(caretOffset);
+						if (container != null) {
+							container.destroy();
+						}
+						break;
+					case ST.DELETE_PREVIOUS:
+						Container prevContainer = fContainerManager.getContainerHavingOffset(caretOffset - 1);
+						if (prevContainer != null) {
+							prevContainer.destroy();
+						}
 						break;
 					}
 				}
