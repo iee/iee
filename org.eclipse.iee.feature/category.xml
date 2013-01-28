@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.iee.feature_1.0.0.qualifier.jar" id="org.eclipse.iee.feature" version="1.0.0.qualifier">
+      <category name="IntegratedEngineeringEnvironment"/>
+   </feature>
+   <category-def name="IntegratedEngineeringEnvironment" label="IEE"/>
+</site>
