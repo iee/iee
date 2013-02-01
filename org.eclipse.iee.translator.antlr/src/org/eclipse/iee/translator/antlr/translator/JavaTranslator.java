@@ -575,7 +575,14 @@ public class JavaTranslator {
 		if (fVariableTypeString.matches("double"))
 			fVariableType = VariableType.DOUBLE;
 		else if (fVariableTypeString.matches("int"))
-			fVariableType = VariableType.INT;
+		{
+			/*
+			 * If user want's use integer variables, he should define it before
+			 */
+			//fVariableType = VariableType.INT;
+			fVariableTypeString = "double";
+			fVariableType = VariableType.DOUBLE;
+		}
 		else if (fVariableTypeString.matches("Matrix"))
 			fVariableType = VariableType.MATRIX;
 		else
