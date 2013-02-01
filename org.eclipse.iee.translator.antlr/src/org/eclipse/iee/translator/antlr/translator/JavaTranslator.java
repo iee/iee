@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
+import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.ILocalVariable;
@@ -21,7 +22,9 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
@@ -41,7 +44,12 @@ public class JavaTranslator {
 
 	private static List<String> fMatrixFields = new ArrayList<>();
 
+	private static List<String> fOtherFields = new ArrayList<>();
+
 	private static VariableType fVariableType = null;
+	private static String fVariableTypeString = "";
+
+	private static boolean fNewVariable;
 
 	public static VariableType getVariableType() {
 		return fVariableType;
@@ -118,6 +126,8 @@ public class JavaTranslator {
 					fVariableType = VariableType.MATRIX;
 				else if (fIntegerFields.contains(name))
 					fVariableType = VariableType.INT;
+				else if (fOtherFields.contains(name))
+					fVariableType = VariableType.OTHER;
 
 				assignment += name + "=" + value + ";";
 			} else {
@@ -128,8 +138,7 @@ public class JavaTranslator {
 					assignment += "Matrix ";
 					fVariableType = VariableType.MATRIX;
 				} else {
-					assignment += "double ";
-					fVariableType = VariableType.DOUBLE;
+					fNewVariable = true;
 				}
 				assignment += name + "=" + value + ";";
 			}
@@ -383,14 +392,15 @@ public class JavaTranslator {
 						if (type.matches("D")) {
 							if (!fDoubleFields.contains(name))
 								fDoubleFields.add(name);
-						}
-						if (type.matches("QMatrix;")) {
+						} else if (type.matches("QMatrix;")) {
 							if (!fMatrixFields.contains(name))
 								fMatrixFields.add(name);
-						}
-						if (type.matches("I")) {
+						} else if (type.matches("I")) {
 							if (!fIntegerFields.contains(name))
 								fIntegerFields.add(name);
+						} else {
+							if (!fOtherFields.contains(name))
+								fOtherFields.add(name);
 						}
 					}
 				}
@@ -407,13 +417,16 @@ public class JavaTranslator {
 						if (!fDoubleFields.contains(name))
 							fDoubleFields.add(name);
 					}
-					if (type.matches("QMatrix;")) {
+					else if (type.matches("QMatrix;")) {
 						if (!fMatrixFields.contains(name))
 							fMatrixFields.add(name);
 					}
-					if (type.matches("I")) {
+					else if (type.matches("I")) {
 						if (!fIntegerFields.contains(name))
 							fIntegerFields.add(name);
+					} else {
+						if (!fOtherFields.contains(name))
+							fOtherFields.add(name);
 					}
 
 				}
@@ -446,14 +459,15 @@ public class JavaTranslator {
 									if (type.matches("double")) {
 										if (!fDoubleFields.contains(name))
 											fDoubleFields.add(name);
-									}
-									if (type.matches("Matrix")) {
+									} else if (type.matches("Matrix")) {
 										if (!fMatrixFields.contains(name))
 											fMatrixFields.add(name);
-									}
-									if (type.matches("int")) {
+									} else if (type.matches("int")) {
 										if (!fIntegerFields.contains(name))
 											fIntegerFields.add(name);
+									} else {
+										if (!fOtherFields.contains(name))
+											fOtherFields.add(name);
 									}
 								}
 							}
@@ -486,9 +500,18 @@ public class JavaTranslator {
 		logger.debug("fMatrixFields: " + fMatrixFields.toString());
 		logger.debug("fDoubleFields: " + fDoubleFields.toString());
 		logger.debug("fIntegerFields: " + fIntegerFields.toString());
+		logger.debug("fOtherFields: " + fOtherFields.toString());
 
 		JavaMathVisitor mathVisitor = new JavaMathVisitor();
 		String result = mathVisitor.visit(tree);
+
+		/*
+		 * Try get recognize variable type from expression
+		 */
+
+		if (fNewVariable) {
+			result = getType(compilationUnit, position, result) + " " + result;
+		}
 
 		return result;
 	}
@@ -497,10 +520,13 @@ public class JavaTranslator {
 		fClass = null;
 		fMethod = null;
 		fVariableType = null;
+		fVariableTypeString = "";
+		fNewVariable = false;
 
 		fMatrixFields.clear();
 		fDoubleFields.clear();
 		fIntegerFields.clear();
+		fOtherFields.clear();
 	}
 
 	private static CompilationUnit parse(ICompilationUnit unit) {
@@ -509,6 +535,53 @@ public class JavaTranslator {
 		parser.setSource(unit);
 		parser.setResolveBindings(true);
 		return (CompilationUnit) parser.createAST(null); // parse
+	}
+
+	private static String getType(ICompilationUnit compilationUnit,
+			final int position, final String assignment) {
+		fVariableTypeString = "double";
+
+		try {
+			ICompilationUnit copy = compilationUnit.getWorkingCopy(null);
+			IBuffer buffer = copy.getBuffer();
+			buffer.replace(position, 0, assignment);
+			copy.reconcile(AST.JLS4, false, null, null);
+
+			CompilationUnit unit = (CompilationUnit) parse(copy);
+			unit.accept(new ASTVisitor() {
+				@Override
+				public boolean visit(Assignment node) {
+					int startPosition = node.getStartPosition();
+					if (startPosition >= position
+							&& startPosition < (position + assignment.length())) {
+						Expression rightSide = node.getRightHandSide();
+						logger.debug("expr: " + rightSide.toString());
+						fVariableTypeString = rightSide.resolveTypeBinding()
+								.getName();
+						logger.debug("expr type: " + fVariableTypeString);
+					}
+
+					return true;
+				}
+
+			});
+
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+		}
+
+		logger.debug("Type: " + fVariableTypeString);
+		
+		if (fVariableTypeString.matches("double"))
+			fVariableType = VariableType.DOUBLE;
+		else if (fVariableTypeString.matches("int"))
+			fVariableType = VariableType.INT;
+		else if (fVariableTypeString.matches("Matrix"))
+			fVariableType = VariableType.MATRIX;
+		else
+			fVariableType = VariableType.OTHER;
+
+		return fVariableTypeString;
 	}
 
 	private static String translateName(String name) {
