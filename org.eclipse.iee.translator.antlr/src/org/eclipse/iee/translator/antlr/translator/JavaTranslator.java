@@ -131,9 +131,9 @@ public class JavaTranslator {
 
 				assignment += name + "=" + value + ";";
 			} else {
-				if (fNewMatrix
+				if ((fNewMatrix
 						|| fMatrixExpression
-						|| (fMatrixFields.contains(value) && !name
+						|| (fMatrixFields.contains(value)) && !name
 								.matches(value))) {
 					assignment += "Matrix ";
 					fVariableType = VariableType.MATRIX;
@@ -349,8 +349,10 @@ public class JavaTranslator {
 			ICompilationUnit compilationUnit, final int position) {
 
 		clear();
+		
 
 		try {
+			
 			IType[] types = compilationUnit.getTypes();
 			for (int i = 0; i < types.length; i++) {
 				IType type = types[i];
@@ -416,12 +418,10 @@ public class JavaTranslator {
 					if (type.matches("D")) {
 						if (!fDoubleFields.contains(name))
 							fDoubleFields.add(name);
-					}
-					else if (type.matches("QMatrix;")) {
+					} else if (type.matches("QMatrix;")) {
 						if (!fMatrixFields.contains(name))
 							fMatrixFields.add(name);
-					}
-					else if (type.matches("I")) {
+					} else if (type.matches("I")) {
 						if (!fIntegerFields.contains(name))
 							fIntegerFields.add(name);
 					} else {
@@ -493,6 +493,12 @@ public class JavaTranslator {
 		ParserRuleContext tree = parser.statement();
 
 		logger.debug("expr: " + expression);
+		try {
+			logger.debug("Source: " + compilationUnit.getSource());
+		} catch (JavaModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (fClass != null)
 			logger.debug("fClass: " + fClass.getElementName());
 		if (fMethod != null)
@@ -508,7 +514,7 @@ public class JavaTranslator {
 		/*
 		 * Try get recognize variable type from expression
 		 */
-
+		
 		if (fNewVariable) {
 			result = getType(compilationUnit, position, result) + " " + result;
 		}
@@ -547,6 +553,8 @@ public class JavaTranslator {
 			buffer.replace(position, 0, assignment);
 			copy.reconcile(AST.JLS4, false, null, null);
 
+			logger.debug("CopySource" + copy.getSource());
+
 			CompilationUnit unit = (CompilationUnit) parse(copy);
 			unit.accept(new ASTVisitor() {
 				@Override
@@ -563,27 +571,26 @@ public class JavaTranslator {
 
 					return true;
 				}
-
 			});
+			
+			copy.discardWorkingCopy();
 
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
 
 		logger.debug("Type: " + fVariableTypeString);
-		
+
 		if (fVariableTypeString.matches("double"))
 			fVariableType = VariableType.DOUBLE;
-		else if (fVariableTypeString.matches("int"))
-		{
+		else if (fVariableTypeString.matches("int")) {
 			/*
 			 * If user want's use integer variables, he should define it before
 			 */
-			//fVariableType = VariableType.INT;
+			// fVariableType = VariableType.INT;
 			fVariableTypeString = "double";
 			fVariableType = VariableType.DOUBLE;
-		}
-		else if (fVariableTypeString.matches("Matrix"))
+		} else if (fVariableTypeString.matches("Matrix"))
 			fVariableType = VariableType.MATRIX;
 		else
 			fVariableType = VariableType.OTHER;
