@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.iee.math.symbolic.contextJava"
+            targetID="#CompilationUnitEditorContext">
+         <action
+               class="org.eclipse.iee.math.symbolic.actions.AddSymbolicPadActionDelegate"
+               id="org.eclipse.iee.math.symbolic.actions.AddMathPadActionDelegate"
+               label="Insert Symbolic" 
+               icon="icons/math.jpg" 
+               menubarPath="additions"
+               tooltip="Insert Symbolic">
+         </action>
+      </viewerContribution>
+	  <viewerContribution
+            id="org.eclipse.iee.math.symbolic.contextSample"
+            targetID="#TextEditorContext">
+         <action
+               class="org.eclipse.iee.math.symbolic.actions.AddSymbolicPadActionDelegate"
+               id="org.eclipse.iee.math.symbolic.actions.AddMathPadActionDelegate"
+               label="Insert Symbolic" 
+               icon="icons/math.jpg" 
+               menubarPath="additions"
+               tooltip="Insert Symbolic">
+         </action>
+      </viewerContribution>
+   </extension>
+
+	<extension
+    	point = "org.eclipse.ui.editorActions">
+		<editorContribution 
+        	id="org.eclipse.iee.math.symbolic.toolbarJava" 
+         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
+			<action id="org.eclipse.iee.math.symbolic.add" 
+	        	label="Add Symbolic" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/math.jpg" 
+	            tooltip="Add Symbolic" 
+	            class="org.eclipse.iee.math.symbolic.actions.AddSymbolicPadActionDelegate"
+	            definitionId="org.eclipse.iee.math.symbolic.add"
+	        /> 
+    	</editorContribution>
+		<editorContribution 
+        	id="org.eclipse.iee.math.symbolic.toolbarSample" 
+         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+			<action id="org.eclipse.iee.math.symbolic.add" 
+	        	label="Add Symbolic" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/math.jpg" 
+	            tooltip="Add Symbolic" 
+	            class="org.eclipse.iee.math.symbolic.actions.AddSymbolicPadActionDelegate"
+	            definitionId="org.eclipse.iee.math.symbolic.add"
+	        /> 
+    	</editorContribution>
+	</extension>
+
+	
+</plugin>

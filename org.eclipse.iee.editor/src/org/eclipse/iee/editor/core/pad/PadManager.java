@@ -29,8 +29,6 @@ import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 
-import com.thoughtworks.xstream.converters.reflection.SortableFieldKeySorter;
-
 public class PadManager extends EventManager {
 
 	private static final Logger logger = Logger.getLogger(PadManager.class);
