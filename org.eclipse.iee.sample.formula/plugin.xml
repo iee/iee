@@ -2,61 +2,28 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <viewerContribution
-            id="org.eclipse.iee.sample.formula.contextJava"
-            targetID="#CompilationUnitEditorContext">
-         <action
-               class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
-               id="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
-               label="Insert Formula" 
-               icon="icons/math.jpg" 
-               menubarPath="additions"
-               tooltip="Insert Formula">
-         </action>
-      </viewerContribution>
-	  <viewerContribution
-            id="org.eclipse.iee.sample.formula.contextSample"
-            targetID="#TextEditorContext">
-         <action
-               class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
-               id="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
-               label="Insert Formula" 
-               icon="icons/math.jpg" 
-               menubarPath="additions"
-               tooltip="Insert Formula">
-         </action>
-      </viewerContribution>
-   </extension>
 
-	<extension
-    	point = "org.eclipse.ui.editorActions">
-		<editorContribution 
-        	id="org.eclipse.iee.sample.formula.toolbarJava" 
-         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
-			<action id="org.eclipse.iee.sample.formula.add" 
-	        	label="Add Formula" 
-	            toolbarPath="TextEditor" 
-	            icon="icons/math.jpg" 
-	            tooltip="Add Formula" 
-	            class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.formula.add"
-	        /> 
-    	</editorContribution>
-		<editorContribution 
-        	id="org.eclipse.iee.sample.formula.toolbarSample" 
-         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
-			<action id="org.eclipse.iee.sample.formula.add" 
-	        	label="Add Formula" 
-	            toolbarPath="TextEditor" 
-	            icon="icons/math.jpg" 
-	            tooltip="Add Formula" 
-	            class="org.eclipse.iee.sample.formula.actions.AddFormulaPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.formula.add"
-	        /> 
-    	</editorContribution>
-	</extension>
+ <extension
+       point="org.eclipse.ui.commandImages">
+    <image
+          commandId="org.eclipse.iee.sample.formula.addCommand"
+          icon="icons/math.jpg">
+    </image>
+ </extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          id="org.eclipse.iee.sample.formula.addCommand"
+          name="Add Formula">
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+          class="org.eclipse.iee.sample.formula.handlers.AddFormulaHandler"
+          commandId="org.eclipse.iee.sample.formula.addCommand">
+    </handler>
+ </extension>
 
 	
 </plugin>

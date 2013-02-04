@@ -13,5 +13,22 @@
             id="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="org.eclipse.iee.editor.addToolbar"
+               label="Pads">
+            <command
+                  commandId="org.eclipse.iee.sample.formula.addCommand"
+                  id="org.eclipse.iee.sample.formula.toolbar.addCommand"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+  
 
 </plugin>

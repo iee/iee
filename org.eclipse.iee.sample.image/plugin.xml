@@ -2,33 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <viewerContribution
-            id="org.eclipse.iee.sample.image.contextJava"
-            targetID="#CompilationUnitEditorContext">
-         <action
-               class="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
-               id="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
-               label="Insert Image" 
-               icon="icons/cat.gif" 
-               menubarPath="additions"
-               tooltip="Insert Image">
-         </action>
-      </viewerContribution>
-	  <viewerContribution
-            id="org.eclipse.iee.sample.image.contextSample"
-            targetID="#TextEditorContext">
-         <action
-               class="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
-               id="org.eclipse.iee.sample.image.actions.AddImagePadActionDelegate"
-               label="Insert Image" 
-               icon="icons/cat.gif" 
-               menubarPath="additions"
-               tooltip="Insert Image">
-         </action>
-      </viewerContribution>
-   </extension>
 
    
    <extension

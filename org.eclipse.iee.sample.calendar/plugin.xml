@@ -2,33 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <viewerContribution
-            id="org.eclipse.iee.sample.calendar.contextJava"
-            targetID="#CompilationUnitEditorContext">
-         <action
-               class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-               id="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-               label="Insert Calendar" 
-               icon="icons/datetime.gif" 
-               menubarPath="additions"
-               tooltip="Insert Calendar">
-         </action>
-      </viewerContribution>
-      <viewerContribution
-            id="org.eclipse.iee.sample.calendar.contextSample"
-            targetID="#TextEditorContext">
-		<action
-               class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-               id="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-               label="Insert Calendar" 
-               icon="icons/datetime.gif" 
-               menubarPath="additions"
-               tooltip="Insert Calendar">
-         </action>
-      </viewerContribution>
-   </extension>
 
 	<extension
     	point = "org.eclipse.ui.editorActions">
