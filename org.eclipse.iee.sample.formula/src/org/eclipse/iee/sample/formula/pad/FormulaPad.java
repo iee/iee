@@ -66,8 +66,6 @@ public class FormulaPad extends Pad {
 
 	private boolean fIsInputValid;
 
-	private String fDirectoryPath = "";
-
 	private String fOriginalExpression = "";
 	private String fTranslatingExpression = "";
 	private String fLastValidText = "";
@@ -96,14 +94,6 @@ public class FormulaPad extends Pad {
 	/*
 	 * Getters/Setters
 	 */
-
-	public String getDirectoryPath() {
-		return fDirectoryPath;
-	}
-
-	public void setDirectoryPath(String directoryPath) {
-		this.fDirectoryPath = directoryPath;
-	}
 
 	public String getOriginalExpression() {
 		return fOriginalExpression;
