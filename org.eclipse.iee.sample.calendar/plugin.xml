@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.sample.calendar.addCommand"
+            icon="icons/datetime.gif">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.iee.sample.calendar.addCommand"
+            name="Add Calendar">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.iee.sample.calendar.handlers.AddCalendarHandler"
+            commandId="org.eclipse.iee.sample.calendar.addCommand">
+      </handler>
+   </extension>
 
 
-	<extension
-    	point = "org.eclipse.ui.editorActions">
-		<editorContribution 
-        	id="org.eclipse.iee.sample.calendar.toolbarJava" 
-         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
-			<action id="org.eclipse.iee.sample.calendar.add" 
-	        	label="Add Calendar" 
-	            toolbarPath="TextEditor" 
-	            icon="icons/datetime.gif" 
-	            tooltip="Add Calendar" 
-	            class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.calendar.add"
-	        /> 
-    	</editorContribution>
-		<editorContribution
-			id="org.eclipse.iee.sample.calendar.toolbarSample"
-			targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">
-			<action id="org.eclipse.iee.sample.calendar.add" 
-	        	label="Add Calendar" 
-	            toolbarPath="TextEditor" 
-	            icon="icons/datetime.gif" 
-	            tooltip="Add Calendar" 
-	            class="org.eclipse.iee.sample.calendar.actions.AddCalendarPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.calendar.add"
-	        />
-		</editorContribution>
-	</extension>
 	
 </plugin>

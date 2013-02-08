@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.iee.sample.text.addCommand"
+            name="Add Text">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.iee.sample.text.handlers.AddTextHandler"
+            commandId="org.eclipse.iee.sample.text.addCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.sample.text.addCommand"
+            icon="icons/textForeground.ico">
+      </image>
+   </extension>
 
 
-	<extension
-    	point = "org.eclipse.ui.editorActions">
-		<editorContribution 
-        	id="org.eclipse.iee.sample.text.toolbarJava" 
-         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
-			<action id="org.eclipse.iee.sample.text.add" 
-	        	label="Add Text" 
-	            toolbarPath="TextEditor" 
-	            icon="icons/textForeground.ico" 
-	            tooltip="Add Text" 
-	            class="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.text.add"
-	        /> 
-    	</editorContribution>
-		<editorContribution 
-        	id="org.eclipse.iee.sample.text.toolbarSample" 
-         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
-			<action id="org.eclipse.iee.sample.text.add" 
-	        	label="Add Text" 
-	            toolbarPath="TextEditor" 
-	            icon="icons/textForeground.ico" 
-	            tooltip="Add Text" 
-	            class="org.eclipse.iee.sample.text.actions.AddTextPadActionDelegate"
-	            definitionId="org.eclipse.iee.sample.text.add"
-	        /> 
-    	</editorContribution>
-	</extension>
 
 	
 </plugin>
