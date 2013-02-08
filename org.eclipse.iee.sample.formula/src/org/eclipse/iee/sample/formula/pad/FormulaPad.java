@@ -1,5 +1,7 @@
 package org.eclipse.iee.sample.formula.pad;
 
+import java.awt.image.BufferedImage;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -36,6 +38,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -43,6 +46,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.matheclipse.core.eval.EvalEngine;
+import org.matheclipse.core.eval.EvalUtilities;
+import org.matheclipse.core.eval.TeXUtilities;
+import org.matheclipse.core.expression.F;
+import org.matheclipse.core.form.output.OutputFormFactory;
+import org.matheclipse.core.form.output.StringBufferWriter;
+import org.matheclipse.core.interfaces.IExpr;
+import org.scilab.forge.jlatexmath.TeXConstants;
+import org.scilab.forge.jlatexmath.TeXFormula;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
@@ -201,8 +213,9 @@ public class FormulaPad extends Pad {
 		if (!fTranslatingExpression.trim().isEmpty())
 			if (fTranslatingExpression
 					.charAt(fTranslatingExpression.length() - 1) == '=') {
-				String output = generateOutputCode(fTranslatingExpression);
-
+				//String output = generateOutputCode(fTranslatingExpression);
+				String output = generateSymjaOutputCode(fTranslatingExpression);
+				
 				Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
 				Matcher m = p.matcher(fTranslatingExpression);
 				if (m.matches())
@@ -210,8 +223,10 @@ public class FormulaPad extends Pad {
 				else
 					generated += output;
 			}
-		getContainer().setTextContent(generated);
-		getContainer().setValue(fOriginalExpression);
+		//getContainer().setTextContent(generated);
+		//getContainer().setValue(fOriginalExpression);
+		updateLastResult(generated);
+		
 	}
 
 	public String generateOutputCode(String expresion) {
@@ -277,6 +292,33 @@ public class FormulaPad extends Pad {
 		} else {
 			return "";
 		}
+	}
+
+	public String generateSymjaOutputCode(String expression) {
+		String variable = expression.substring(0, expression.indexOf('='));
+		String output = "";
+		
+		F.initSymbols(null);
+		EvalUtilities util = new EvalUtilities();
+		IExpr result = null;
+		StringBufferWriter buf = new StringBufferWriter();
+
+		try {
+			result = util.evaluate(variable);
+
+			OutputFormFactory.get().convert(buf, result);
+
+			output = buf.toString();
+
+			logger.debug("result: " + output);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
+
+		return output;
 	}
 
 	public void updateLastResult(String result) {

@@ -22,6 +22,6 @@ Bundle-ClassPath: .,
  lib/log4j-1.2.17.jar,
  lib/jlatexmath-embedded-fop-1.0.0.jar,
  lib/ST-4.0.7.jar,
- lib/symja-2012-04-08.jar
+ lib/symja-2013-02-08.jar
 Export-Package: org.eclipse.iee.sample.formula,
  org.eclipse.iee.sample.formula.pad

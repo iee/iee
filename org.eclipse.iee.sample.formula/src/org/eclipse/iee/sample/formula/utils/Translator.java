@@ -69,8 +69,10 @@ public class Translator {
 
 	public static String translateElement(String text,
 			ICompilationUnit compilationUnit, int position) {
-		if (text.trim().isEmpty())
-			return null;
+		return "";
+		
+		//if (text.trim().isEmpty())
+		//	return null;
 
 //		String cached = fCachedItems.get(text);
 //		if (cached != null) {
@@ -79,37 +81,37 @@ public class Translator {
 
 		// XXX Rewrite this
 
-		String resultJava;
-		try {
-
-			if (text.charAt(0) == '=') {
-
-				resultJava = JavaTranslator.translate(text.substring(1),
-						compilationUnit, position);
-				resultJava = "=" + resultJava;
-			} else if (text.charAt(text.length() - 1) == '=') {
-				resultJava = JavaTranslator.translate(
-						text.substring(0, text.length() - 1), compilationUnit,
-						position);
-			} else {
-				resultJava = JavaTranslator.translate(text, compilationUnit,
-						position);
-			}
-
-			if (resultJava == null) {
-				return null;
-			}
-			if (resultJava.matches(";")) {
-				return null;
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-
-		logger.debug("java: " + resultJava);
-		//fCachedItems.put(text, resultJava);
-		return resultJava;
+//		String resultJava;
+//		try {
+//
+//			if (text.charAt(0) == '=') {
+//
+//				resultJava = JavaTranslator.translate(text.substring(1),
+//						compilationUnit, position);
+//				resultJava = "=" + resultJava;
+//			} else if (text.charAt(text.length() - 1) == '=') {
+//				resultJava = JavaTranslator.translate(
+//						text.substring(0, text.length() - 1), compilationUnit,
+//						position);
+//			} else {
+//				resultJava = JavaTranslator.translate(text, compilationUnit,
+//						position);
+//			}
+//
+//			if (resultJava == null) {
+//				return null;
+//			}
+//			if (resultJava.matches(";")) {
+//				return null;
+//			}
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			e.printStackTrace();
+//			return null;
+//		}
+//
+//		logger.debug("java: " + resultJava);
+//		//fCachedItems.put(text, resultJava);
+//		return resultJava;
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
+import java.io.StringWriter;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,6 +15,8 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.matheclipse.core.eval.EvalEngine;
+import org.matheclipse.core.eval.TeXUtilities;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 
@@ -51,20 +54,46 @@ public class FormulaRenderer {
 			return cachedImage;
 		}
 
+		// try {
+		// /* Translating to Latex */
+		// if (text.charAt(0) == '=') {
+		// latex = TexTranslator.translate(text.substring(1));
+		// latex = "=" + latex;
+		// } else if (text.charAt(text.length() - 1) == '=') {
+		// latex = TexTranslator.translate(text.substring(0,
+		// text.length() - 1));
+		// latex = latex + "=";
+		// } else {
+		// latex = TexTranslator.translate(text);
+		// }
+		// logger.debug("latex: " + latex);
+		// java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
+		// TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
+		// java.awt.Color.white);
+		//
+		// ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
+		//
+		// Image formulaImage = new Image(fDisplay, swtImageData);
+		//
+		// fCachedImages.put(text, formulaImage);
+		// return formulaImage;
+		//
+		// } catch (Exception e) {
+		// logger.error(e.getMessage());
+		// e.printStackTrace();
+		// return null;
+		// }
+		String output = "";
+		if (text.charAt(text.length() - 1) == '=') {
+			output = getTeX(text.substring(0, text.indexOf('=')));
+			output = output + "=";
+		} else
+			output = getTeX(text);
+		
+		logger.debug("tex: " + output);
+
 		try {
-			/* Translating to Latex */
-			if (text.charAt(0) == '=') {
-				latex = TexTranslator.translate(text.substring(1));
-				latex = "=" + latex;
-			} else if (text.charAt(text.length() - 1) == '=') {
-				latex = TexTranslator.translate(text.substring(0,
-						text.length() - 1));
-				latex = latex + "=";
-			} else {
-				latex = TexTranslator.translate(text);
-			}
-			logger.debug("latex: " + latex);
-			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
+			java.awt.Image awtImage = TeXFormula.createBufferedImage(output,
 					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
 
@@ -76,10 +105,23 @@ public class FormulaRenderer {
 			return formulaImage;
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
+
+	}
+
+	private static String getTeX(String expression) {
+		/* Convert to TeX and image */
+		EvalEngine engine = new EvalEngine();
+		TeXUtilities texUtil = new TeXUtilities(engine);
+
+		StringWriter stw = new StringWriter();
+		texUtil.toTeX(expression, stw);
+		String output = stw.toString();
+
+		return output;
 	}
 
 	protected static ImageData convertToSWT(BufferedImage bufferedImage) {
