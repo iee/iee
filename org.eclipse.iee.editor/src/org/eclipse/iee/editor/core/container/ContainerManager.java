@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
+import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
@@ -62,6 +63,8 @@ public class ContainerManager extends EventManager {
 	
 	private ICompilationUnit fCompilationUnit;
 	
+	private SymbolicEngine fSymbolicEngine;
+
 	private String fStoragePath;
 
 	private final NavigableSet<Container> fContainers;
@@ -145,6 +148,10 @@ public class ContainerManager extends EventManager {
 	public void setCompilationUnit(ICompilationUnit compilationUnit) {
 		this.fCompilationUnit = compilationUnit;
 	}
+	
+	public SymbolicEngine getSymbolicEngine() {
+		return fSymbolicEngine;
+	}
 
 	
 	/* INTERFACE FUNCTIONS */
@@ -157,6 +164,7 @@ public class ContainerManager extends EventManager {
 		fDocument = document;
 		fStyledText = styledText;
 		fSourceViewer = sourceViewer;
+		fSymbolicEngine = new SymbolicEngine();
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 

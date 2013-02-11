@@ -209,12 +209,13 @@ public class FormulaPad extends Pad {
 				getContainer().getContainerManager().getCompilationUnit(),
 				getContainer().getPosition().getOffset());
 
+		String output = generateSymjaOutputCode(fTranslatingExpression);
+		
 		/* Add result output */
 		if (!fTranslatingExpression.trim().isEmpty())
 			if (fTranslatingExpression
 					.charAt(fTranslatingExpression.length() - 1) == '=') {
-				//String output = generateOutputCode(fTranslatingExpression);
-				String output = generateSymjaOutputCode(fTranslatingExpression);
+				// String output = generateOutputCode(fTranslatingExpression);
 				
 				Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
 				Matcher m = p.matcher(fTranslatingExpression);
@@ -223,10 +224,10 @@ public class FormulaPad extends Pad {
 				else
 					generated += output;
 			}
-		//getContainer().setTextContent(generated);
-		//getContainer().setValue(fOriginalExpression);
+		// getContainer().setTextContent(generated);
+		// getContainer().setValue(fOriginalExpression);
 		updateLastResult(generated);
-		
+
 	}
 
 	public String generateOutputCode(String expresion) {
@@ -295,28 +296,13 @@ public class FormulaPad extends Pad {
 	}
 
 	public String generateSymjaOutputCode(String expression) {
-		String variable = expression.substring(0, expression.indexOf('='));
+		String variable = expression;
+		if (variable.charAt(fTranslatingExpression.length() - 1) == '=')
+			variable = expression.substring(0, expression.indexOf('='));
 		String output = "";
-		
-		F.initSymbols(null);
-		EvalUtilities util = new EvalUtilities();
-		IExpr result = null;
-		StringBufferWriter buf = new StringBufferWriter();
 
-		try {
-			result = util.evaluate(variable);
-
-			OutputFormFactory.get().convert(buf, result);
-
-			output = buf.toString();
-
-			logger.debug("result: " + output);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "";
-		}
+		output = getContainer().getContainerManager().getSymbolicEngine()
+				.getOutput(variable);
 
 		return output;
 	}
