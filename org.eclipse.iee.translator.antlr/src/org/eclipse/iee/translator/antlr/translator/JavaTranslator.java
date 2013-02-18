@@ -583,6 +583,10 @@ public class JavaTranslator {
 			result = getType(compilationUnit, position, result) + " " + result;
 		}
 
+		String[] parts = result.split("=");
+		if (parts.length == 1)
+			getType(compilationUnit, position, "myTmp=" + parts[0] + ";");
+
 		return result;
 	}
 

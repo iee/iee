@@ -201,30 +201,38 @@ public class FormulaPad extends Pad {
 		if (!fTranslatingExpression.trim().isEmpty())
 			if (fTranslatingExpression
 					.charAt(fTranslatingExpression.length() - 1) == '=') {
-				String output = generateOutputCode(fTranslatingExpression);
-
-				Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=$");
-				Matcher m = p.matcher(fTranslatingExpression);
-				if (m.matches())
+				String[] parts = fTranslatingExpression.split("=");
+				
+				if (parts.length == 1)
+				{
+					String output = generateOutputCode(generated);
 					generated = output;
-				else
+				}
+				else if (parts.length > 1)
+				{
+					String output = generateOutputCode(fTranslatingExpression);
 					generated += output;
+				}	
 			}
 		getContainer().setTextContent(generated);
 		getContainer().setValue(fOriginalExpression);
 	}
 
-	public String generateOutputCode(String expresion) {
-		Pattern p = Pattern.compile("\\s*\\[?\\w+\\]?\\s*=.*");
-		Matcher m = p.matcher(expresion.replaceAll(Pattern.quote("{"), "")
-				.replaceAll(Pattern.quote("}"), ""));
-		if (m.matches()) {
-			String variable = expresion.substring(0, expresion.indexOf('='));
+	public String generateOutputCode(String expression) {
+		String expr = expression;
+		
+		String[] parts = expr.replaceAll(Pattern.quote("{"), "")
+				.replaceAll(Pattern.quote("}"), "").split("=");
+		if (parts.length >= 1) {
+			String variable = expression;
+			if (parts.length > 1)
+				variable = expression.substring(0, expression.indexOf('='));
+			
 			variable = variable.trim();
 			variable = variable.replaceAll(Pattern.quote("{"), "");
 			variable = variable.replaceAll(Pattern.quote("}"), "");
 			VariableType varType = JavaTranslator.getVariableType();
-
+			
 			if (varType == null) {
 				if (JavaTranslator.getDoubleFields().contains(variable))
 					varType = JavaTranslator.VariableType.DOUBLE;
