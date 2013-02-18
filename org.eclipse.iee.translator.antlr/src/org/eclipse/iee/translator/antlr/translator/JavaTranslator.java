@@ -14,6 +14,7 @@ import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
@@ -46,6 +47,10 @@ public class JavaTranslator {
 
 	private static List<String> fOtherFields = new ArrayList<>();
 
+	private static List<String> fOtherSourceClasses = new ArrayList<>();
+	private static List<String> fMethodClasses = new ArrayList<>();
+	private static List<String> fInnerClasses = new ArrayList<>();
+
 	private static VariableType fVariableType = null;
 	private static String fVariableTypeString = "";
 
@@ -67,6 +72,10 @@ public class JavaTranslator {
 		return fMatrixFields;
 	}
 
+	public static List<String> getInnerClasses() {
+		return fInnerClasses;
+	}
+
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
 
@@ -83,18 +92,29 @@ public class JavaTranslator {
 				MathParser.FunctionDefinitionContext ctx) {
 			String functionDef = "";
 
-			functionDef += "public static double "
-					+ translateName(ctx.name.name.getText());
+			String name = translateName(ctx.name.name.getText());
+			name = firstLetterUpperCase(name);
+
+			functionDef += "class " + name;
+			functionDef += "{";
+
+			functionDef += "public double compute";
 			functionDef += "(";
 
 			for (int i = 0; i < ctx.name.params.size(); i++) {
-				functionDef += "double " + visit(ctx.name.params.get(i));
+				String paramName = visit(ctx.name.params.get(i));
+
+				functionDef += "double ";
+				functionDef += paramName;
+
 				if (i != ctx.name.params.size() - 1)
 					functionDef += ",";
 			}
 
 			functionDef += ")";
 			functionDef += "{ return " + visit(ctx.value) + "; }";
+
+			functionDef += "}";
 
 			return functionDef;
 		}
@@ -131,16 +151,16 @@ public class JavaTranslator {
 
 				assignment += name + "=" + value + ";";
 			} else {
-				if ((fNewMatrix
-						|| fMatrixExpression
-						|| (fMatrixFields.contains(value)) && !name
-								.matches(value))) {
+				if ((fNewMatrix || fMatrixExpression || (fMatrixFields
+						.contains(value)) && !name.matches(value))) {
 					assignment += "Matrix ";
 					fVariableType = VariableType.MATRIX;
 				} else {
 					fNewVariable = true;
 				}
-				assignment += name + "=" + value + ";";
+				assignment += name + "=";
+				assignment += value + ";";
+
 			}
 
 			return assignment;
@@ -155,7 +175,24 @@ public class JavaTranslator {
 
 		public String visitFunction(MathParser.FunctionContext ctx) {
 			String function = "";
-			function += translateName(ctx.name.getText());
+
+			String name = translateName(ctx.name.getText());
+
+			if (fMethodClasses.contains(firstLetterUpperCase(name))) {
+				function += "new ";
+				function += firstLetterUpperCase(name);
+				function += "().compute";
+			} else if (fInnerClasses.contains(firstLetterUpperCase(name))) {
+				function += "this.new ";
+				function += firstLetterUpperCase(name);
+				function += "().compute";
+			} else if (fOtherSourceClasses.contains(firstLetterUpperCase(name))) {
+				function += "new ";
+				function += firstLetterUpperCase(name);
+				function += "().compute";
+			} else
+				function += translateName(ctx.name.getText());
+
 			function += "(";
 
 			for (int i = 0; i < ctx.params.size(); i++) {
@@ -349,10 +386,9 @@ public class JavaTranslator {
 			ICompilationUnit compilationUnit, final int position) {
 
 		clear();
-		
 
 		try {
-			
+
 			IType[] types = compilationUnit.getTypes();
 			for (int i = 0; i < types.length; i++) {
 				IType type = types[i];
@@ -363,6 +399,9 @@ public class JavaTranslator {
 							&& position <= (classOffset + classSourceRange
 									.getLength()))
 						fClass = type;
+					else if (!fOtherSourceClasses.contains(type
+							.getElementName()))
+						fOtherSourceClasses.add(type.getElementName());
 				}
 			}
 
@@ -377,6 +416,16 @@ public class JavaTranslator {
 							&& position <= (methodOffset + methodSourceRange
 									.getLength()))
 						fMethod = method;
+				}
+
+				IType[] innerTypes = fClass.getTypes();
+				for (int i = 0; i < innerTypes.length; i++) {
+					IType type = innerTypes[i];
+					String name = type.getElementName();
+					if (type.isClass()) {
+						if (!fInnerClasses.contains(name))
+							fInnerClasses.add(name);
+					}
 				}
 
 				IField[] classFields = null;
@@ -429,6 +478,16 @@ public class JavaTranslator {
 							fOtherFields.add(name);
 					}
 
+				}
+
+				IJavaElement[] innerElements = fMethod.getChildren();
+				for (int i = 0; i < innerElements.length; i++) {
+					IType type = (IType) innerElements[i];
+					String name = type.getElementName();
+					if (type.isClass()) {
+						if (!fMethodClasses.contains(name))
+							fMethodClasses.add(name);
+					}
 				}
 
 				CompilationUnit unit = (CompilationUnit) parse(compilationUnit);
@@ -499,10 +558,15 @@ public class JavaTranslator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (fClass != null)
+		if (fClass != null) {
 			logger.debug("fClass: " + fClass.getElementName());
-		if (fMethod != null)
+			logger.debug("fSourceClasses: " + fOtherSourceClasses.toString());
+			logger.debug("fInnerClasses: " + fInnerClasses.toString());
+		}
+		if (fMethod != null) {
 			logger.debug("fMethod: " + fMethod.getElementName());
+			logger.debug("fMethodClasses: " + fMethodClasses.toString());
+		}
 		logger.debug("fMatrixFields: " + fMatrixFields.toString());
 		logger.debug("fDoubleFields: " + fDoubleFields.toString());
 		logger.debug("fIntegerFields: " + fIntegerFields.toString());
@@ -514,7 +578,7 @@ public class JavaTranslator {
 		/*
 		 * Try get recognize variable type from expression
 		 */
-		
+
 		if (fNewVariable) {
 			result = getType(compilationUnit, position, result) + " " + result;
 		}
@@ -533,6 +597,10 @@ public class JavaTranslator {
 		fDoubleFields.clear();
 		fIntegerFields.clear();
 		fOtherFields.clear();
+
+		fMethodClasses.clear();
+		fInnerClasses.clear();
+		fOtherSourceClasses.clear();
 	}
 
 	private static CompilationUnit parse(ICompilationUnit unit) {
@@ -572,7 +640,7 @@ public class JavaTranslator {
 					return true;
 				}
 			});
-			
+
 			copy.discardWorkingCopy();
 
 		} catch (JavaModelException e) {
@@ -603,6 +671,17 @@ public class JavaTranslator {
 				.replaceAll("\\}", "");
 
 		return translatedName;
+	}
+
+	private static String firstLetterUpperCase(String str) {
+		String result = str;
+		String firstLetter = result.substring(0, 1).toUpperCase();
+		if (result.length() > 1)
+			result = firstLetter.concat(result.substring(1));
+		else
+			result = firstLetter;
+
+		return result;
 	}
 
 }
