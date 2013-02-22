@@ -2,7 +2,6 @@ package org.eclipse.iee.sample.formula.pad;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -15,7 +14,6 @@ import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.utils.FormulaRenderer;
 import org.eclipse.iee.sample.formula.utils.Function;
-import org.eclipse.iee.sample.formula.utils.Translator;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 import org.eclipse.jface.text.Document;
@@ -43,9 +41,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupDir;
 
 public class FormulaPad extends Pad {
 
@@ -163,7 +158,7 @@ public class FormulaPad extends Pad {
 		String text = fDocument.get();
 		fOriginalExpression = text;
 
-		if (Translator.isTextValid(text)) {
+		if (JavaTranslator.validate(text)) {
 			setInputIsValid();
 			fLastValidText = text;
 		} else {
@@ -193,98 +188,21 @@ public class FormulaPad extends Pad {
 
 		/* Generate code */
 
-		String generated = Translator.translateElement(fTranslatingExpression,
-				getContainer().getContainerManager().getCompilationUnit(),
-				getContainer().getPosition().getOffset());
+		String generated = "";
+		try {
+			generated = JavaTranslator.translate(fTranslatingExpression,
+					getContainer().getContainerManager().getCompilationUnit(),
+					getContainer().getPosition().getOffset(), getContainerID(),
+					getContainer().getContainerManager().getStoragePath(),
+					FileMessager.getInstance().getRuntimeDirectoryName());
+		} catch (Exception e) {
+			generated = "";
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
 
-		/* Add result output */
-		if (!fTranslatingExpression.trim().isEmpty())
-			if (fTranslatingExpression
-					.charAt(fTranslatingExpression.length() - 1) == '=') {
-				String[] parts = fTranslatingExpression.split("=");
-				
-				if (parts.length == 1)
-				{
-					String output = generateOutputCode(generated);
-					generated = output;
-				}
-				else if (parts.length > 1)
-				{
-					String output = generateOutputCode(fTranslatingExpression);
-					generated += output;
-				}	
-			}
 		getContainer().setTextContent(generated);
 		getContainer().setValue(fOriginalExpression);
-	}
-
-	public String generateOutputCode(String expression) {
-		String expr = expression;
-		
-		String[] parts = expr.replaceAll(Pattern.quote("{"), "")
-				.replaceAll(Pattern.quote("}"), "").split("=");
-		if (parts.length >= 1) {
-			String variable = expression;
-			if (parts.length > 1)
-				variable = expression.substring(0, expression.indexOf('='));
-			
-			variable = variable.trim();
-			variable = variable.replaceAll(Pattern.quote("{"), "");
-			variable = variable.replaceAll(Pattern.quote("}"), "");
-			VariableType varType = JavaTranslator.getVariableType();
-			
-			if (varType == null) {
-				if (JavaTranslator.getDoubleFields().contains(variable))
-					varType = JavaTranslator.VariableType.DOUBLE;
-				else if (JavaTranslator.getIntegerFields().contains(variable))
-					varType = JavaTranslator.VariableType.INT;
-				else if (JavaTranslator.getMatrixFields().contains(variable))
-					varType = JavaTranslator.VariableType.MATRIX;
-				else
-					return "";
-			}
-
-			logger.debug("Type:" + varType.toString());
-			STGroup group = new STGroupDir("/templates");
-
-			if (varType != JavaTranslator.VariableType.MATRIX) {
-
-				String type = "";
-				if (varType == JavaTranslator.VariableType.DOUBLE)
-					type = "double";
-				else if (varType == JavaTranslator.VariableType.INT)
-					type = "int";
-
-				ST template = group.getInstanceOf("variable");
-
-				template.add("type", type);
-				template.add("id", getContainerID());
-				template.add("variable", variable);
-				template.add("path", getContainer().getContainerManager()
-						.getStoragePath()
-						+ FileMessager.getInstance().getRuntimeDirectoryName());
-
-				return template.render(1).trim().replaceAll("\r\n", "")
-						.replaceAll("\t", " ");
-
-			} else {
-
-				String type = "Matrix";
-
-				ST template = group.getInstanceOf("matrix");
-				template.add("type", type);
-				template.add("id", getContainerID());
-				template.add("variable", variable);
-				template.add("path", getContainer().getContainerManager()
-						.getStoragePath()
-						+ FileMessager.getInstance().getRuntimeDirectoryName());
-
-				return template.render(1).trim().replaceAll("\r\n", "")
-						.replaceAll("\t", " ");
-			}
-		} else {
-			return "";
-		}
 	}
 
 	public void updateLastResult(String result) {

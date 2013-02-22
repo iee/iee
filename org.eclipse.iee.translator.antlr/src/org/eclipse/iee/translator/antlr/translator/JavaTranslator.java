@@ -28,6 +28,9 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupDir;
 
 public class JavaTranslator {
 
@@ -55,26 +58,6 @@ public class JavaTranslator {
 	private static String fVariableTypeString = "";
 
 	private static boolean fNewVariable;
-
-	public static VariableType getVariableType() {
-		return fVariableType;
-	}
-
-	public static List<String> getDoubleFields() {
-		return fDoubleFields;
-	}
-
-	public static List<String> getIntegerFields() {
-		return fIntegerFields;
-	}
-
-	public static List<String> getMatrixFields() {
-		return fMatrixFields;
-	}
-
-	public static List<String> getInnerClasses() {
-		return fInnerClasses;
-	}
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -366,6 +349,20 @@ public class JavaTranslator {
 
 	}
 
+	public static boolean validate(String text) {
+
+		try {
+
+			if (translate(text) == "") {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public static String translate(String expression) {
 		String result = "";
 
@@ -382,11 +379,155 @@ public class JavaTranslator {
 		return result;
 	}
 
-	public static String translate(String expression,
-			ICompilationUnit compilationUnit, final int position) {
+	public static String translate(String inputExpression,
+			ICompilationUnit compilationUnit, int position, String containerId,
+			String storagePath, String runtimeDirectoryName) {
+
+		if (inputExpression.trim().isEmpty())
+			return "";
+
+		String result = "";
+		String expression = "";
+
+		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
+			expression = inputExpression.substring(0,
+					inputExpression.length() - 1);
+		} else {
+			expression = inputExpression;
+		}
 
 		clear();
 
+		parse(compilationUnit, position);
+
+		logger.debug("expr: " + expression);
+		result = translate(expression);
+
+		/*
+		 * Try get recognize variable type from expression
+		 */
+
+		if (fNewVariable) {
+			result = getType(compilationUnit, position, result) + " " + result;
+		}
+
+		String[] parts = result.split("=");
+		if (parts.length == 1)
+			getType(compilationUnit, position, "myTmp=" + parts[0] + ";");
+
+		/*
+		 * Generate output code, if necessary
+		 */
+		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
+			parts = inputExpression.split("=");
+
+			if (parts.length == 1) {
+				String output = generateOutputCode(result, containerId,
+						storagePath, runtimeDirectoryName);
+				result = output;
+			} else if (parts.length > 1) {
+				String output = generateOutputCode(inputExpression,
+						containerId, storagePath, runtimeDirectoryName);
+				result += output;
+			}
+		}
+
+		return result;
+	}
+
+	public static String generateOutputCode(String expression,
+			String containerId, String storagePath, String runtimeDirectoryName) {
+		String expr = expression;
+
+		String[] parts = expr.replaceAll(Pattern.quote("{"), "")
+				.replaceAll(Pattern.quote("}"), "").split("=");
+		if (parts.length >= 1) {
+			String variable = expression;
+			if (parts.length > 1)
+				variable = expression.substring(0, expression.indexOf('='));
+
+			variable = variable.trim();
+			variable = variable.replaceAll(Pattern.quote("{"), "");
+			variable = variable.replaceAll(Pattern.quote("}"), "");
+			VariableType varType = fVariableType;
+
+			if (varType == null) {
+				if (fDoubleFields.contains(variable))
+					varType = VariableType.DOUBLE;
+				else if (fIntegerFields.contains(variable))
+					varType = VariableType.INT;
+				else if (fMatrixFields.contains(variable))
+					varType = VariableType.MATRIX;
+				else
+					return "";
+			}
+
+			logger.debug("Type:" + varType.toString());
+			STGroup group = new STGroupDir("/templates");
+
+			if (varType != VariableType.MATRIX) {
+
+				String type = "";
+				if (varType == VariableType.DOUBLE)
+					type = "double";
+				else if (varType == VariableType.INT)
+					type = "int";
+
+				ST template = group.getInstanceOf("variable");
+
+				template.add("type", type);
+				template.add("id", containerId);
+				template.add("variable", variable);
+				template.add("path", storagePath + runtimeDirectoryName);
+
+				return template.render(1).trim().replaceAll("\r\n", "")
+						.replaceAll("\t", " ");
+
+			} else {
+
+				String type = "Matrix";
+
+				ST template = group.getInstanceOf("matrix");
+				template.add("type", type);
+				template.add("id", containerId);
+				template.add("variable", variable);
+				template.add("path", storagePath + runtimeDirectoryName);
+
+				return template.render(1).trim().replaceAll("\r\n", "")
+						.replaceAll("\t", " ");
+			}
+		} else {
+			return "";
+		}
+	}
+
+	private static void clear() {
+		fClass = null;
+		fMethod = null;
+		fVariableType = null;
+		fVariableTypeString = "";
+		fNewVariable = false;
+
+		fMatrixFields.clear();
+		fDoubleFields.clear();
+		fIntegerFields.clear();
+		fOtherFields.clear();
+
+		fMethodClasses.clear();
+		fInnerClasses.clear();
+		fOtherSourceClasses.clear();
+	}
+
+	private static CompilationUnit createAST(ICompilationUnit unit) {
+		ASTParser parser = ASTParser.newParser(AST.JLS4);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(unit);
+		parser.setResolveBindings(true);
+		return (CompilationUnit) parser.createAST(null); // parse
+	}
+
+	private static void parse(ICompilationUnit compilationUnit,
+			final int position) {
 		try {
 
 			IType[] types = compilationUnit.getTypes();
@@ -490,7 +631,7 @@ public class JavaTranslator {
 					}
 				}
 
-				CompilationUnit unit = (CompilationUnit) parse(compilationUnit);
+				CompilationUnit unit = (CompilationUnit) createAST(compilationUnit);
 				unit.accept(new ASTVisitor() {
 					@Override
 					public boolean visit(VariableDeclarationStatement node) {
@@ -544,18 +685,9 @@ public class JavaTranslator {
 			e.printStackTrace();
 		}
 
-		ANTLRInputStream input = new ANTLRInputStream(expression);
-		MathLexer lexer = new MathLexer(input);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		MathParser parser = new MathParser(tokens);
-		parser.setBuildParseTree(true);
-		ParserRuleContext tree = parser.statement();
-
-		logger.debug("expr: " + expression);
 		try {
 			logger.debug("Source: " + compilationUnit.getSource());
 		} catch (JavaModelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (fClass != null) {
@@ -572,47 +704,6 @@ public class JavaTranslator {
 		logger.debug("fIntegerFields: " + fIntegerFields.toString());
 		logger.debug("fOtherFields: " + fOtherFields.toString());
 
-		JavaMathVisitor mathVisitor = new JavaMathVisitor();
-		String result = mathVisitor.visit(tree);
-
-		/*
-		 * Try get recognize variable type from expression
-		 */
-
-		if (fNewVariable) {
-			result = getType(compilationUnit, position, result) + " " + result;
-		}
-
-		String[] parts = result.split("=");
-		if (parts.length == 1)
-			getType(compilationUnit, position, "myTmp=" + parts[0] + ";");
-
-		return result;
-	}
-
-	private static void clear() {
-		fClass = null;
-		fMethod = null;
-		fVariableType = null;
-		fVariableTypeString = "";
-		fNewVariable = false;
-
-		fMatrixFields.clear();
-		fDoubleFields.clear();
-		fIntegerFields.clear();
-		fOtherFields.clear();
-
-		fMethodClasses.clear();
-		fInnerClasses.clear();
-		fOtherSourceClasses.clear();
-	}
-
-	private static CompilationUnit parse(ICompilationUnit unit) {
-		ASTParser parser = ASTParser.newParser(AST.JLS4);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setSource(unit);
-		parser.setResolveBindings(true);
-		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
 	private static String getType(ICompilationUnit compilationUnit,
@@ -627,7 +718,7 @@ public class JavaTranslator {
 
 			logger.debug("CopySource" + copy.getSource());
 
-			CompilationUnit unit = (CompilationUnit) parse(copy);
+			CompilationUnit unit = (CompilationUnit) createAST(copy);
 			unit.accept(new ASTVisitor() {
 				@Override
 				public boolean visit(Assignment node) {

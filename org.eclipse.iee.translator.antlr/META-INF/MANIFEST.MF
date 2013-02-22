@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Antlr
+Bundle-Name: IEE Antlr translator
 Bundle-SymbolicName: org.eclipse.iee.translator.antlr
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.iee.translator.antlr.Activator
@@ -15,4 +15,5 @@ Export-Package: org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator
 Bundle-ClassPath: .,
  lib/log4j-1.2.17.jar,
- lib/antlr-4.0-complete.jar
+ lib/antlr-4.0-complete.jar,
+ lib/ST-4.0.7.jar

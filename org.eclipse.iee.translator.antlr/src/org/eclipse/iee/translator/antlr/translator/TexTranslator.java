@@ -13,7 +13,7 @@ import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 
 public class TexTranslator {
-
+	
 	private static List<String> fGreekLetters = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
