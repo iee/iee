@@ -73,33 +73,26 @@ public class JavaTranslator {
 
 		public String visitFunctionDefinition(
 				MathParser.FunctionDefinitionContext ctx) {
-			String functionDef = "";
 
 			String name = translateName(ctx.name.name.getText());
 			name = firstLetterUpperCase(name);
 
-			functionDef += "class " + name;
-			functionDef += "{";
-
-			functionDef += "public double compute";
-			functionDef += "(";
+			String value = visit(ctx.value);
+			List<String> params = new ArrayList<>();
 
 			for (int i = 0; i < ctx.name.params.size(); i++) {
-				String paramName = visit(ctx.name.params.get(i));
-
-				functionDef += "double ";
-				functionDef += paramName;
-
-				if (i != ctx.name.params.size() - 1)
-					functionDef += ",";
+				params.add(visit(ctx.name.params.get(i)));
 			}
 
-			functionDef += ")";
-			functionDef += "{ return " + visit(ctx.value) + "; }";
+			STGroup group = new STGroupDir("/templates");
+			ST template = group.getInstanceOf("function");
+			template.add("name", name);
+			template.add("params", params);
+			template.add("value", value);
 
-			functionDef += "}";
+			return template.render(1).trim().replaceAll("\r\n", "")
+					.replaceAll("\t", " ");
 
-			return functionDef;
 		}
 
 		public String visitVariableAssignment(
