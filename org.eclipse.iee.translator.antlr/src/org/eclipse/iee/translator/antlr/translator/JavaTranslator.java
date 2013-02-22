@@ -40,6 +40,7 @@ public class JavaTranslator {
 		INT, DOUBLE, MATRIX, OTHER
 	}
 
+	private static ICompilationUnit fCompilationUnit;
 	private static IType fClass;
 	private static IMethod fMethod;
 	private static List<String> fDoubleFields = new ArrayList<>();
@@ -53,11 +54,14 @@ public class JavaTranslator {
 	private static List<String> fOtherSourceClasses = new ArrayList<>();
 	private static List<String> fMethodClasses = new ArrayList<>();
 	private static List<String> fInnerClasses = new ArrayList<>();
+	
+	private static List<String> fFunctionVariables = new ArrayList<>();
 
 	private static VariableType fVariableType = null;
 	private static String fVariableTypeString = "";
 
 	private static boolean fNewVariable;
+	private static List<String> fFoundedVariables = new ArrayList<>();
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -77,18 +81,32 @@ public class JavaTranslator {
 			String name = translateName(ctx.name.name.getText());
 			name = firstLetterUpperCase(name);
 
-			String value = visit(ctx.value);
 			List<String> params = new ArrayList<>();
 
 			for (int i = 0; i < ctx.name.params.size(); i++) {
 				params.add(visit(ctx.name.params.get(i)));
 			}
 
+			fFoundedVariables.clear();
+			
+			String value = visit(ctx.value);
+			
+			List<String> variables = new ArrayList<>();
+			
+			for (int i = 0; i < fFoundedVariables.size(); i++) {
+				String variable = fFoundedVariables.get(i);
+				if (!params.contains(variable))
+					variables.add(variable);
+			}
+			
+			logger.debug("Variables: " + variables.toString());
+			
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("function");
 			template.add("name", name);
 			template.add("params", params);
 			template.add("value", value);
+			template.add("variables", variables);
 
 			return template.render(1).trim().replaceAll("\r\n", "")
 					.replaceAll("\t", " ");
@@ -153,33 +171,63 @@ public class JavaTranslator {
 			String function = "";
 
 			String name = translateName(ctx.name.getText());
-
+			
+			String new_ = "";
+			String name_ = "";
+			List<String> fieldsNames = new ArrayList<>();
+			List<String> params = new ArrayList<>();
+			
 			if (fMethodClasses.contains(firstLetterUpperCase(name))) {
-				function += "new ";
-				function += firstLetterUpperCase(name);
-				function += "().compute";
+				new_ = "new ";
+				name_ = firstLetterUpperCase(name);
+				
+				IType type = fMethod.getType(firstLetterUpperCase(name), 1);
+				try {
+					IField[] fields = type.getFields();
+					for (int i = 0; i < fields.length; i++) {
+						IField field = fields[i];
+						fieldsNames.add(field.getElementName());
+					}
+				} catch (JavaModelException e) {
+					e.printStackTrace();
+				}
+				
 			} else if (fInnerClasses.contains(firstLetterUpperCase(name))) {
-				function += "this.new ";
-				function += firstLetterUpperCase(name);
-				function += "().compute";
+				new_ = "this.new ";
+				name_ = firstLetterUpperCase(name);
+				
+				IType type = fClass.getType(firstLetterUpperCase(name), 1);
+				try {
+					IField[] fields = type.getFields();
+					for (int i = 0; i < fields.length; i++) {
+						IField field = fields[i];
+						fieldsNames.add(field.getElementName());
+					}
+				} catch (JavaModelException e) {
+					e.printStackTrace();
+				}
+				
 			} else if (fOtherSourceClasses.contains(firstLetterUpperCase(name))) {
-				function += "new ";
-				function += firstLetterUpperCase(name);
-				function += "().compute";
+				new_ = "new ";
+				name_ = firstLetterUpperCase(name);
+				
 			} else
-				function += translateName(ctx.name.getText());
-
-			function += "(";
+				name_ = translateName(ctx.name.getText());
 
 			for (int i = 0; i < ctx.params.size(); i++) {
-				function += visit(ctx.params.get(i));
-				if (i != ctx.params.size() - 1)
-					function += ",";
+				params.add(visit(ctx.params.get(i)));
 			}
+			
+			STGroup group = new STGroupDir("/templates");
+			ST template = group.getInstanceOf("functionCall");
+			template.add("new", new_);
+			template.add("name", name_);
+			template.add("fields", fieldsNames);
+			template.add("params", params);
 
-			function += ")";
+			return template.render(1).trim().replaceAll("\r\n", "")
+					.replaceAll("\t", " ");
 
-			return function;
 		}
 
 		public String visitAdd(MathParser.AddContext ctx) {
@@ -299,7 +347,10 @@ public class JavaTranslator {
 		// primary rule
 
 		public String visitVariable(MathParser.VariableContext ctx) {
-			return translateName(ctx.getText());
+			String variable = translateName(ctx.getText());
+			fFoundedVariables.add(variable);
+			
+			return variable;
 		}
 
 		public String visitFloatNumber(MathParser.FloatNumberContext ctx) {
@@ -378,7 +429,7 @@ public class JavaTranslator {
 
 		if (inputExpression.trim().isEmpty())
 			return "";
-
+		
 		String result = "";
 		String expression = "";
 
@@ -391,7 +442,9 @@ public class JavaTranslator {
 
 		clear();
 
-		parse(compilationUnit, position);
+		fCompilationUnit = compilationUnit;
+		
+		parse(position);
 
 		logger.debug("expr: " + expression);
 		result = translate(expression);
@@ -401,12 +454,12 @@ public class JavaTranslator {
 		 */
 
 		if (fNewVariable) {
-			result = getType(compilationUnit, position, result) + " " + result;
+			result = getType(position, result) + " " + result;
 		}
 
 		String[] parts = result.split("=");
 		if (parts.length == 1)
-			getType(compilationUnit, position, "myTmp=" + parts[0] + ";");
+			getType(position, "myTmp=" + parts[0] + ";");
 
 		/*
 		 * Generate output code, if necessary
@@ -495,6 +548,7 @@ public class JavaTranslator {
 	}
 
 	private static void clear() {
+		fCompilationUnit = null;
 		fClass = null;
 		fMethod = null;
 		fVariableType = null;
@@ -508,6 +562,7 @@ public class JavaTranslator {
 
 		fMethodClasses.clear();
 		fInnerClasses.clear();
+		fFunctionVariables.clear();
 		fOtherSourceClasses.clear();
 	}
 
@@ -519,11 +574,10 @@ public class JavaTranslator {
 		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
-	private static void parse(ICompilationUnit compilationUnit,
-			final int position) {
+	private static void parse(final int position) {
 		try {
 
-			IType[] types = compilationUnit.getTypes();
+			IType[] types = fCompilationUnit.getTypes();
 			for (int i = 0; i < types.length; i++) {
 				IType type = types[i];
 				if (type.isClass()) {
@@ -624,7 +678,7 @@ public class JavaTranslator {
 					}
 				}
 
-				CompilationUnit unit = (CompilationUnit) createAST(compilationUnit);
+				CompilationUnit unit = (CompilationUnit) createAST(fCompilationUnit);
 				unit.accept(new ASTVisitor() {
 					@Override
 					public boolean visit(VariableDeclarationStatement node) {
@@ -679,7 +733,7 @@ public class JavaTranslator {
 		}
 
 		try {
-			logger.debug("Source: " + compilationUnit.getSource());
+			logger.debug("Source: " + fCompilationUnit.getSource());
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
@@ -699,12 +753,11 @@ public class JavaTranslator {
 
 	}
 
-	private static String getType(ICompilationUnit compilationUnit,
-			final int position, final String assignment) {
+	private static String getType(final int position, final String assignment) {
 		fVariableTypeString = "double";
 
 		try {
-			ICompilationUnit copy = compilationUnit.getWorkingCopy(null);
+			ICompilationUnit copy = fCompilationUnit.getWorkingCopy(null);
 			IBuffer buffer = copy.getBuffer();
 			buffer.replace(position, 0, assignment);
 			copy.reconcile(AST.JLS4, false, null, null);
