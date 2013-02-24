@@ -324,6 +324,12 @@ public class PadManager extends EventManager {
 							container.getValue());
 				}
 			}
+
+			@Override
+			public void containerDeactivated(ContainerEvent event) {
+				Pad pad = fPads.get(event.getContainer().getContainerID());
+				pad.deactivate();
+			}
 		};
 
 		DebugPlugin.getDefault().addDebugEventListener(

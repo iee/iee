@@ -140,6 +140,12 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			@Override
 			public void containerUpdated(ContainerEvent containerEvent) {
 			}
+
+			@Override
+			public void containerDeactivated(ContainerEvent containerEvent) {
+				// TODO Auto-generated method stub
+				
+			}
 		};
 		fContainerManager
 				.addContainerManagerListener(fContainerManagerListener);

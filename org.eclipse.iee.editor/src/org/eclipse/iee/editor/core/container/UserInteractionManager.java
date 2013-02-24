@@ -22,6 +22,8 @@ public class UserInteractionManager {
 	
 	private Container fSelectedContainer;
 	
+	private Container fActiveContainer;
+	
 	public UserInteractionManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fStyledText = containerManager.getStyledText();
@@ -40,7 +42,7 @@ public class UserInteractionManager {
 	public void updateCaretSelection() {
 	}
 
-	public void setSelectedContainer(Container container) {
+	private void setSelectedContainer(Container container) {
 		if (container != null && container.equals(fSelectedContainer)) {
 			return;
 		}
@@ -53,6 +55,20 @@ public class UserInteractionManager {
 		}
 	}
 		
+	public void activateContainer(Container container) {
+		if (container != null && container.equals(fActiveContainer)) {
+			return;
+		}
+		if (fActiveContainer != null) {
+			fContainerManager.fireContainerDeactivated(fActiveContainer);
+		}
+		fActiveContainer = container;
+		if (fActiveContainer != null) {
+			fContainerManager.fireContainerActivated(fActiveContainer);
+		}
+		setSelectedContainer(container);
+	}
+	
 		
 	protected void initListeners() {
 		/* 1) Disallow modification within Container's text region */
@@ -163,12 +179,10 @@ public class UserInteractionManager {
 			if (container != null) {
 				Position position = container.getPosition();
 				if (caretMovesForward) {
-					setSelectedContainer(container);
-					fContainerManager.fireContainerActivated(container);	
+					activateContainer(container);	
 					fStyledText.setCaretOffset(position.getOffset() + position.getLength());
 				} else {
-					setSelectedContainer(container);
-					fContainerManager.fireContainerActivated(container);
+					activateContainer(container);
 					fStyledText.setCaretOffset(position.getOffset());
 				}
 				return false;

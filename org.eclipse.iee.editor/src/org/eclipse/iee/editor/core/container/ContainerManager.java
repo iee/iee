@@ -552,6 +552,14 @@ public class ContainerManager extends EventManager {
 				.containerActivated(new ContainerEvent(c, fContainerManagerID));
 		}
 	}
+	
+	public void fireContainerDeactivated(Container c) {
+		Object[] listeners = getListeners();
+		for (int i = 0; i < listeners.length; i++) {
+			((IContainerManagerListener) listeners[i])
+				.containerDeactivated(new ContainerEvent(c, fContainerManagerID));
+		}
+	}
 
 	protected void fireDebugNotification() {
 		Object[] listeners = getListeners();
@@ -654,5 +662,7 @@ public class ContainerManager extends EventManager {
 	public void setStoragePath(String storagePath) {
 		this.fStoragePath = storagePath;
 	}
+
+
 
 }

@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.formula.pad;
 
+import java.awt.EventQueue;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -254,8 +255,7 @@ public class FormulaPad extends Pad {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
-				toggleInputText();
-				getContainer().getContainerManager().getUserInteractionManager().setSelectedContainer(getContainer());
+				getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
 			}
 
 			@Override
@@ -271,8 +271,7 @@ public class FormulaPad extends Pad {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
-				toggleInputText();
-				getContainer().getContainerManager().getUserInteractionManager().setSelectedContainer(getContainer());
+				getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
 			}
 
 			@Override
@@ -284,13 +283,7 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				processInput();
-				if (fTranslatingExpression != "")
-					toggleFormulaImage();
-				if (fHoverShell != null) {
-					fHoverShell.dispose();
-					fHoverShell = null;
-				}
+				deactivate();
 			}
 
 			@Override
@@ -308,15 +301,20 @@ public class FormulaPad extends Pad {
 
 					validateInput();
 
-					Image image = FormulaRenderer.getFormulaImage(fDocument
-							.get());
-					if (image == null)
-						image = FormulaRenderer.getFormulaImage(fLastValidText);
 					if (fHoverShell != null) {
 						fHoverShell.dispose();
 						fHoverShell = null;
 					}
-					fHoverShell = new HoverShell(fParent, image);
+					//hack to paint hover image after widgets size recalculation.
+					Display.getCurrent().asyncExec(new Runnable() {
+						 public void run() {
+							 Image image = FormulaRenderer.getFormulaImage(fDocument
+									 .get());
+							 if (image == null)
+								 image = FormulaRenderer.getFormulaImage(fLastValidText);
+							 fHoverShell = new HoverShell(fParent, image);
+						 }
+					});
 					/* Resize fInputText */
 					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
 							SWT.DEFAULT, false);
@@ -505,6 +503,18 @@ public class FormulaPad extends Pad {
 
 	}
 
+	@Override
+	public void deactivate() {
+		processInput();
+		if (fTranslatingExpression != "") {
+			toggleFormulaImage();
+		}
+		if (fHoverShell != null) {
+			fHoverShell.dispose();
+			fHoverShell = null;
+		}
+	}
+	
 	@Override
 	public Pad copy() {
 		FormulaPad newPad = new FormulaPad();

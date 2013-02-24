@@ -137,6 +137,9 @@ public abstract class Pad {
 
 	public abstract void activate();
 	
+	public void deactivate() {
+	}
+	
 	/**
 	 * Copy pad with @param containerID
 	 * 
@@ -170,4 +173,6 @@ public abstract class Pad {
 		containerManager.getUserInteractionManager()
 			.moveCaretTo(c.getPosition().getOffset() + c.getPosition().getLength());
 	}
+
+
 }
