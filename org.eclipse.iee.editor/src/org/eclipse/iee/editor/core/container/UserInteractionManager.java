@@ -88,23 +88,21 @@ public class UserInteractionManager {
 					int caretOffset = fStyledText.getCaretOffset();
 					switch (action) {
 					case ST.COLUMN_PREVIOUS:
-						caretPositionChange(caretOffset, false);
+						event.doit = caretPositionChange(caretOffset, false);
 						break;
 					case ST.COLUMN_NEXT:
-						caretPositionChange(caretOffset, true);
+						event.doit = caretPositionChange(caretOffset, true);
 						break;
 					case ST.DELETE_NEXT:
 						Container container = fContainerManager.getContainerHavingOffset(caretOffset);
 						if (container != null) {
 							container.destroy();
 						}
-						break;
 					case ST.DELETE_PREVIOUS:
 						Container prevContainer = fContainerManager.getContainerHavingOffset(caretOffset - 1);
 						if (prevContainer != null) {
 							prevContainer.destroy();
 						}
-						break;
 					}
 				}
 			}
@@ -158,7 +156,7 @@ public class UserInteractionManager {
 		
 	}
 	
-	private void caretPositionChange(int x, boolean caretMovesForward) {
+	private boolean caretPositionChange(int x, boolean caretMovesForward) {
 		Point selection = fStyledText.getSelection();
 		if (selection.y - selection.x == 0) {
 			Container container = fContainerManager.getContainerHavingOffset(caretMovesForward ? x : x - 1);
@@ -173,7 +171,9 @@ public class UserInteractionManager {
 					fContainerManager.fireContainerActivated(container);
 					fStyledText.setCaretOffset(position.getOffset());
 				}
+				return false;
 			}
 		}
+		return true;
 	}
 }
