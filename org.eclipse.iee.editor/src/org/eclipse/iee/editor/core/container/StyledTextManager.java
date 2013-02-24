@@ -21,6 +21,9 @@ class StyledTextManager {
 	private static final Logger logger = Logger
 			.getLogger(StyledTextManager.class);
 
+	/** left pad margin is necessary to show carret*/
+	public static final int PAD_LEFT_MARGIN = 2;
+	
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
@@ -134,7 +137,7 @@ class StyledTextManager {
 		firstSymbol.start = p.getOffset();
 		firstSymbol.length = 1;
 		firstSymbol.metrics = new GlyphMetrics(0, descent, c.getComposite()
-				.getSize().x);
+				.getSize().x + PAD_LEFT_MARGIN);
 
 		/* Setting data */
 		firstSymbol.data = c;

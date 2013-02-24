@@ -255,6 +255,7 @@ public class FormulaPad extends Pad {
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
 				toggleInputText();
+				getContainer().getContainerManager().getUserInteractionManager().setSelectedContainer(getContainer());
 			}
 
 			@Override
@@ -271,6 +272,7 @@ public class FormulaPad extends Pad {
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
 				toggleInputText();
+				getContainer().getContainerManager().getUserInteractionManager().setSelectedContainer(getContainer());
 			}
 
 			@Override
@@ -326,8 +328,6 @@ public class FormulaPad extends Pad {
 
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				getContainer().getContainerManager().fireContainerSelected(
-						getContainer());
 				switch (e.keyCode) {
 				case SWT.CR:
 					e.doit = false;

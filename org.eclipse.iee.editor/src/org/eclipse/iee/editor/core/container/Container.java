@@ -187,9 +187,9 @@ public class Container {
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		
-		Rectangle newBounds = new Rectangle(point.x, point.y, gabarit.x, gabarit.y);
+		Rectangle newBounds = new Rectangle(point.x + StyledTextManager.PAD_LEFT_MARGIN, point.y, gabarit.x, gabarit.y);
 		if (!fComposite.getBounds().equals(newBounds)) {
-			fComposite.setBounds(point.x, point.y, gabarit.x, gabarit.y);
+			fComposite.setBounds(newBounds);
 			return true;
 		}
 		return false;

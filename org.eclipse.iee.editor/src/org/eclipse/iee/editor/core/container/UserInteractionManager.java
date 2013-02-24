@@ -32,29 +32,24 @@ public class UserInteractionManager {
 	}
 	
 	public void moveCaretTo(int offset) {
+		setSelectedContainer(null);
 		fStyledText.setCaretOffset(offset);
 		fStyledText.forceFocus();
 	}
 	
 	public void updateCaretSelection() {
-		int caretOffset = fStyledText.getCaretOffset();
-		Container container = fContainerManager.getContainerHavingOffset(caretOffset);
-		
-		if (container != null && container.getPosition().getOffset() == caretOffset) {
-			/* Caret is at the left side of the pad */
-			if (container != fSelectedContainer) {
-				/* Select this container and unselect previous */
-				if (fSelectedContainer != null) {
-					fContainerManager.fireContainerLostSelection(fSelectedContainer);
-				}
-				fSelectedContainer = container;
-				fContainerManager.fireContainerSelected(container);
-			}
+	}
+
+	public void setSelectedContainer(Container container) {
+		if (container != null && container.equals(fSelectedContainer)) {
+			return;
 		}
-		else if (fSelectedContainer != null) {
-			/* Only unselect previous container */
+		if (fSelectedContainer != null) {
 			fContainerManager.fireContainerLostSelection(fSelectedContainer);
-			fSelectedContainer = null;
+		}
+		fSelectedContainer = container;
+		if (fSelectedContainer != null) {
+			fContainerManager.fireContainerSelected(fSelectedContainer);
 		}
 	}
 		
@@ -154,9 +149,9 @@ public class UserInteractionManager {
 						if (e.caretOffset != position.getOffset()) {
 								/* Move caret to the Pad's border */
 								fStyledText.setCaretOffset(position.getOffset() + position.getLength());
+								setSelectedContainer(null);
 						}
 					}
-					updateCaretSelection();
 				}
 			}
 		}); 
@@ -170,15 +165,15 @@ public class UserInteractionManager {
 			if (container != null) {
 				Position position = container.getPosition();
 				if (caretMovesForward) {
-					fContainerManager.fireContainerActivated(container);					
+					setSelectedContainer(container);
+					fContainerManager.fireContainerActivated(container);	
 					fStyledText.setCaretOffset(position.getOffset() + position.getLength());
 				} else {
+					setSelectedContainer(container);
 					fContainerManager.fireContainerActivated(container);
 					fStyledText.setCaretOffset(position.getOffset());
 				}
 			}
-			
-			updateCaretSelection();
 		}
 	}
 }
