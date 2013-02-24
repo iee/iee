@@ -19,7 +19,7 @@
          point="org.eclipse.ui.commandImages">
       <image
             commandId="org.eclipse.iee.sample.image.addCommand"
-            icon="icons/cat.gif">
+            icon="icons/image.png">
       </image>
    </extension>
 

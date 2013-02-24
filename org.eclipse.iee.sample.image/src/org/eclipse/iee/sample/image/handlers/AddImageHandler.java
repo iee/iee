@@ -8,6 +8,8 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -48,10 +50,21 @@ public class AddImageHandler implements IHandler {
 			return null;
 		}
 
-		ImagePad pad = new ImagePad();
+		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
+		fileDialog.setFilterNames(new String[] { "Jpeg (*.jpg)", "PNG (*.png)" });
+		fileDialog.setFilterExtensions(new String[] { "*.jpg", "*.png" });
 
+		String imagePath = fileDialog.open();
+		if (imagePath == null) {
+			return null;
+		}
+		
+		ImagePad pad = new ImagePad();
+		
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
 		pad.moveCaretToCurrentPad();
+		
+		pad.setImageFile(imagePath);
 
 		return null;
 	}
