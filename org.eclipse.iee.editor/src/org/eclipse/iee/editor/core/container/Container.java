@@ -185,9 +185,10 @@ public class Container {
 		//logger.debug("Updated container's position");
 
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
+		int height = fStyledText.getLineHeight(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
-		
-		Rectangle newBounds = new Rectangle(point.x + StyledTextManager.PAD_LEFT_MARGIN, point.y, gabarit.x, gabarit.y);
+		int heightOffset = height - gabarit.y;
+		Rectangle newBounds = new Rectangle(point.x + StyledTextManager.PAD_LEFT_MARGIN, point.y + heightOffset, gabarit.x, gabarit.y);
 		if (!fComposite.getBounds().equals(newBounds)) {
 			fComposite.setBounds(newBounds);
 			return true;

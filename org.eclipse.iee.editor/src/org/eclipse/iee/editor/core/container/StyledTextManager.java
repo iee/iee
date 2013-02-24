@@ -10,6 +10,8 @@ import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.PaintEvent;
@@ -59,7 +61,6 @@ class StyledTextManager {
 										.getExtent()));
 					}
 				});
-
 		fStyledText.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -130,13 +131,13 @@ class StyledTextManager {
 
 		int descent = // TODO: Quickly fix it!!!
 		(c.getComposite().getSize().y < 10) ? 0
-				: c.getComposite().getSize().y - 10;
+				: c.getComposite().getSize().y;
 
 		/* First symbol is shaped by container's geometry */
 		StyleRange firstSymbol = new StyleRange();
 		firstSymbol.start = p.getOffset();
 		firstSymbol.length = 1;
-		firstSymbol.metrics = new GlyphMetrics(0, descent, c.getComposite()
+		firstSymbol.metrics = new GlyphMetrics(descent, 0, c.getComposite()
 				.getSize().x + PAD_LEFT_MARGIN);
 
 		/* Setting data */
