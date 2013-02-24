@@ -10,6 +10,7 @@ import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyleRange;
@@ -116,7 +117,7 @@ public class TextPad extends Pad {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
-				toggleEditMode();
+				getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
 			}
 
 			@Override
@@ -128,7 +129,7 @@ public class TextPad extends Pad {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				toggleViewMode();
+				getContainer().getContainerManager().getUserInteractionManager().deactivateContainer(getContainer());
 			}
 
 			@Override
@@ -336,6 +337,12 @@ public class TextPad extends Pad {
 		toggleEditMode();
 	}
 
+	@Override
+	public void deactivate() {
+		fViewer.getTextWidget().setSelection(0,0);
+		toggleViewMode();
+	}
+	
 	@Override
 	public Pad copy() {
 		TextPad newPad = new TextPad();

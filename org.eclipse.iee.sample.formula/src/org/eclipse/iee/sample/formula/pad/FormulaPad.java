@@ -283,7 +283,7 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				deactivate();
+				getContainer().getContainerManager().getUserInteractionManager().deactivateContainer(getContainer());
 			}
 
 			@Override

@@ -69,6 +69,10 @@ public class UserInteractionManager {
 		setSelectedContainer(container);
 	}
 	
+
+	public void deactivateContainer(Container container) {
+		activateContainer(null);
+	}
 		
 	protected void initListeners() {
 		/* 1) Disallow modification within Container's text region */
@@ -190,4 +194,5 @@ public class UserInteractionManager {
 		}
 		return true;
 	}
+
 }
