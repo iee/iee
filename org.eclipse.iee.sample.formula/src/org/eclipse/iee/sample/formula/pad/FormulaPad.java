@@ -1,9 +1,7 @@
 package org.eclipse.iee.sample.formula.pad;
 
-import java.awt.EventQueue;
 import java.util.Collection;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.pad.Pad;
@@ -16,7 +14,6 @@ import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.utils.FormulaRenderer;
 import org.eclipse.iee.sample.formula.utils.Function;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
-import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -26,6 +23,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
@@ -33,6 +33,8 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -42,6 +44,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 public class FormulaPad extends Pad {
 
@@ -55,6 +59,8 @@ public class FormulaPad extends Pad {
 	private Label fFormulaImageLabel;
 	private Label fLastResultImageLabel;
 
+	private String fResult;
+	
 	private TextViewer fViewer;
 	private TextViewerSupport fViewerSupport;
 
@@ -208,7 +214,7 @@ public class FormulaPad extends Pad {
 
 	public void updateLastResult(String result) {
 		final Image image;
-
+		fResult = result;
 		if (result == "")
 			image = null;
 		else
@@ -270,8 +276,10 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				moveCaretToCurrentPad();
-				getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
+				if (e.button == 1) {
+					moveCaretToCurrentPad();
+					getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
+				}
 			}
 
 			@Override
@@ -471,7 +479,7 @@ public class FormulaPad extends Pad {
 		GridData lastResultImageGridData = new GridData(SWT.LEFT, SWT.FILL,
 				true, true);
 		fLastResultImageLabel.setLayoutData(lastResultImageGridData);
-
+		fLastResultImageLabel.setMenu(createPopupMenu(parent));
 		setListeners();
 
 		// moveCaretToCurrentPad();
@@ -487,6 +495,26 @@ public class FormulaPad extends Pad {
 
 	}
 
+	private Menu createPopupMenu(org.eclipse.swt.widgets.Control parent) {
+		Menu menu = new Menu(parent);
+
+		final MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
+		copyItem.setText("Copy result"); 
+		copyItem.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				Clipboard clipboard= new Clipboard(Display.getCurrent());
+				try {
+					TextTransfer transfer = TextTransfer.getInstance();
+					clipboard.setContents(new Object[] {fResult}, new Transfer[] {transfer});
+				} finally {
+					clipboard.dispose();
+				}
+			}
+		});
+
+		return menu;
+	}
+	
 	@Override
 	public void activate() {
 		logger.debug(getContainerID() + " activated");
