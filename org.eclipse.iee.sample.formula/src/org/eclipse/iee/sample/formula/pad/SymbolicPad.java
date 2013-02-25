@@ -1,9 +1,14 @@
 package org.eclipse.iee.sample.formula.pad;
 
-public class SymbolicPad  extends FormulaPad{
+public class SymbolicPad  extends FormulaPad {
 
 	public SymbolicPad() {
 		super();
+	}
+	
+	@Override
+	public String getType() {
+		return "Symbolic";
 	}
 	
 }
