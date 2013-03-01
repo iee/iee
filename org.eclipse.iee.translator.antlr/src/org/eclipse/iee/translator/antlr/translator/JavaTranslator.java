@@ -54,7 +54,7 @@ public class JavaTranslator {
 	private static List<String> fOtherSourceClasses = new ArrayList<>();
 	private static List<String> fMethodClasses = new ArrayList<>();
 	private static List<String> fInnerClasses = new ArrayList<>();
-	
+
 	private static List<String> fFunctionVariables = new ArrayList<>();
 
 	private static VariableType fVariableType = null;
@@ -88,19 +88,19 @@ public class JavaTranslator {
 			}
 
 			fFoundedVariables.clear();
-			
+
 			String value = visit(ctx.value);
-			
+
 			List<String> variables = new ArrayList<>();
-			
+
 			for (int i = 0; i < fFoundedVariables.size(); i++) {
 				String variable = fFoundedVariables.get(i);
 				if (!params.contains(variable))
 					variables.add(variable);
 			}
-			
+
 			logger.debug("Variables: " + variables.toString());
-			
+
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("function");
 			template.add("name", name);
@@ -171,16 +171,16 @@ public class JavaTranslator {
 			String function = "";
 
 			String name = translateName(ctx.name.getText());
-			
+
 			String new_ = "";
 			String name_ = "";
 			List<String> fieldsNames = new ArrayList<>();
 			List<String> params = new ArrayList<>();
-			
+
 			if (fMethodClasses.contains(firstLetterUpperCase(name))) {
 				new_ = "new ";
 				name_ = firstLetterUpperCase(name);
-				
+
 				IType type = fMethod.getType(firstLetterUpperCase(name), 1);
 				try {
 					IField[] fields = type.getFields();
@@ -191,11 +191,11 @@ public class JavaTranslator {
 				} catch (JavaModelException e) {
 					e.printStackTrace();
 				}
-				
+
 			} else if (fInnerClasses.contains(firstLetterUpperCase(name))) {
 				new_ = "this.new ";
 				name_ = firstLetterUpperCase(name);
-				
+
 				IType type = fClass.getType(firstLetterUpperCase(name), 1);
 				try {
 					IField[] fields = type.getFields();
@@ -206,18 +206,18 @@ public class JavaTranslator {
 				} catch (JavaModelException e) {
 					e.printStackTrace();
 				}
-				
+
 			} else if (fOtherSourceClasses.contains(firstLetterUpperCase(name))) {
 				new_ = "new ";
 				name_ = firstLetterUpperCase(name);
-				
+
 			} else
 				name_ = translateName(ctx.name.getText());
 
 			for (int i = 0; i < ctx.params.size(); i++) {
 				params.add(visit(ctx.params.get(i)));
 			}
-			
+
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("functionCall");
 			template.add("new", new_);
@@ -349,7 +349,7 @@ public class JavaTranslator {
 		public String visitVariable(MathParser.VariableContext ctx) {
 			String variable = translateName(ctx.getText());
 			fFoundedVariables.add(variable);
-			
+
 			return variable;
 		}
 
@@ -429,7 +429,7 @@ public class JavaTranslator {
 
 		if (inputExpression.trim().isEmpty())
 			return "";
-		
+
 		String result = "";
 		String expression = "";
 
@@ -443,7 +443,7 @@ public class JavaTranslator {
 		clear();
 
 		fCompilationUnit = compilationUnit;
-		
+
 		parse(position);
 
 		logger.debug("expr: " + expression);

@@ -51,34 +51,34 @@ public class FormulaPad extends Pad {
 
 	private static final Logger logger = Logger.getLogger(FormulaPad.class);
 
-	private Composite fParent;
+	Composite fParent;
 
 	private Composite fInputView;
 	private Composite fResultView;
 
-	private Label fFormulaImageLabel;
-	private Label fLastResultImageLabel;
+	protected Label fFormulaImageLabel;
+	Label fLastResultImageLabel;
 
-	private String fResult;
-	
-	private TextViewer fViewer;
+	protected String fResult;
+
+	protected TextViewer fViewer;
 	private TextViewerSupport fViewerSupport;
 
-	private Document fDocument;
+	protected Document fDocument;
 
-	private HoverShell fHoverShell;
+	HoverShell fHoverShell;
 
-	private boolean fIsInputValid;
+	protected boolean fIsInputValid;
 
-	private String fOriginalExpression = "";
-	private String fTranslatingExpression = "";
-	private String fLastValidText = "";
+	protected String fOriginalExpression = "";
+	protected String fTranslatingExpression = "";
+	protected String fLastValidText = "";
 
 	private int fCaretOffset;
 	private int fPreviousCaretOffset;
 
 	private final Color INPUT_VALID_COLOR = new Color(null, 255, 255, 255);
-	private final Color INPUT_INVALID_COLOR = new Color(null, 128, 255, 255);
+	private final Color INPUT_INVALID_COLOR = new Color(null, 255, 0, 0);
 
 	private IFileMessageListener fFileMessageListener = new IFileMessageListener() {
 
@@ -261,7 +261,9 @@ public class FormulaPad extends Pad {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
-				getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
+				getContainer().getContainerManager()
+						.getUserInteractionManager()
+						.activateContainer(getContainer());
 			}
 
 			@Override
@@ -278,7 +280,9 @@ public class FormulaPad extends Pad {
 			public void mouseDown(MouseEvent e) {
 				if (e.button == 1) {
 					moveCaretToCurrentPad();
-					getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
+					getContainer().getContainerManager()
+							.getUserInteractionManager()
+							.activateContainer(getContainer());
 				}
 			}
 
@@ -291,7 +295,9 @@ public class FormulaPad extends Pad {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				getContainer().getContainerManager().getUserInteractionManager().deactivateContainer(getContainer());
+				getContainer().getContainerManager()
+						.getUserInteractionManager()
+						.deactivateContainer(getContainer());
 			}
 
 			@Override
@@ -300,37 +306,7 @@ public class FormulaPad extends Pad {
 			}
 		});
 
-		fViewer.addTextListener(new ITextListener() {
-
-			@Override
-			public void textChanged(TextEvent event) {
-
-				if (fDocument.get() != "") {
-
-					validateInput();
-
-					if (fHoverShell != null) {
-						fHoverShell.dispose();
-						fHoverShell = null;
-					}
-					//hack to paint hover image after widgets size recalculation.
-					Display.getCurrent().asyncExec(new Runnable() {
-						 public void run() {
-							 Image image = FormulaRenderer.getFormulaImage(fDocument
-									 .get());
-							 if (image == null)
-								 image = FormulaRenderer.getFormulaImage(fLastValidText);
-							 fHoverShell = new HoverShell(fParent, image);
-						 }
-					});
-					/* Resize fInputText */
-					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
-							SWT.DEFAULT, false);
-					fViewer.getControl().setSize(size);
-					fParent.pack();
-				}
-			}
-		});
+		addTextListener();
 
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
@@ -427,6 +403,42 @@ public class FormulaPad extends Pad {
 
 	}
 
+	public void addTextListener() {
+		fViewer.addTextListener(new ITextListener() {
+
+			@Override
+			public void textChanged(TextEvent event) {
+
+				if (fDocument.get() != "") {
+
+					validateInput();
+
+					if (fHoverShell != null) {
+						fHoverShell.dispose();
+						fHoverShell = null;
+					}
+					// hack to paint hover image after widgets size
+					// recalculation.
+					Display.getCurrent().asyncExec(new Runnable() {
+						public void run() {
+							Image image = FormulaRenderer
+									.getFormulaImage(fDocument.get());
+							if (image == null)
+								image = FormulaRenderer
+										.getFormulaImage(fLastValidText);
+							fHoverShell = new HoverShell(fParent, image);
+						}
+					});
+					/* Resize fInputText */
+					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
+							SWT.DEFAULT, false);
+					fViewer.getControl().setSize(size);
+					fParent.pack();
+				}
+			}
+		});
+	}
+
 	@Override
 	public void createPartControl(final Composite parent) {
 
@@ -499,13 +511,14 @@ public class FormulaPad extends Pad {
 		Menu menu = new Menu(parent);
 
 		final MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
-		copyItem.setText("Copy result"); 
+		copyItem.setText("Copy result");
 		copyItem.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				Clipboard clipboard= new Clipboard(Display.getCurrent());
+				Clipboard clipboard = new Clipboard(Display.getCurrent());
 				try {
 					TextTransfer transfer = TextTransfer.getInstance();
-					clipboard.setContents(new Object[] {fResult}, new Transfer[] {transfer});
+					clipboard.setContents(new Object[] { fResult },
+							new Transfer[] { transfer });
 				} finally {
 					clipboard.dispose();
 				}
@@ -514,7 +527,7 @@ public class FormulaPad extends Pad {
 
 		return menu;
 	}
-	
+
 	@Override
 	public void activate() {
 		logger.debug(getContainerID() + " activated");
@@ -542,7 +555,7 @@ public class FormulaPad extends Pad {
 			fHoverShell = null;
 		}
 	}
-	
+
 	@Override
 	public Pad copy() {
 		FormulaPad newPad = new FormulaPad();

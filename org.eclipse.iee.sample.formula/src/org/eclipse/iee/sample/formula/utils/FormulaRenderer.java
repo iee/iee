@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.iee.translator.antlr.translator.TexTranslator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -28,18 +29,6 @@ public class FormulaRenderer {
 
 	public static void setDisplay(Display display) {
 		fDisplay = display;
-	}
-
-	public static boolean isTextValid(String text) {
-		if (fCachedImages.containsKey(text)) {
-			return true;
-		}
-
-		if (getFormulaImage(text) == null) {
-			return false;
-		} else {
-			return true;
-		}
 	}
 
 	public static Image getFormulaImage(String text) {
@@ -65,6 +54,44 @@ public class FormulaRenderer {
 			}
 			logger.debug("latex: " + latex);
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
+					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
+					java.awt.Color.white);
+
+			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
+
+			Image formulaImage = new Image(fDisplay, swtImageData);
+
+			fCachedImages.put(text, formulaImage);
+			return formulaImage;
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static Image getSymbolicImage(String text) {
+		if (text.trim().isEmpty())
+			return null;
+		Image cachedImage = fCachedImages.get(text);
+
+		if (cachedImage != null) {
+			return cachedImage;
+		}
+
+		try {
+			String output = "";
+			if (text.charAt(text.length() - 1) == '=') {
+				output = SymbolicEngine.getTeX(text.substring(0,
+						text.indexOf('=')));
+				output = output + "=";
+			} else
+				output = SymbolicEngine.getTeX(text);
+
+			logger.debug("tex: " + output);
+
+			java.awt.Image awtImage = TeXFormula.createBufferedImage(output,
 					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
 
