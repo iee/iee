@@ -187,7 +187,9 @@ public class JavaTranslator {
 					IField[] fields = type.getFields();
 					for (int i = 0; i < fields.length; i++) {
 						IField field = fields[i];
-						fieldsNames.add(field.getElementName());
+						String fieldName = field.getElementName();
+						if (!fieldsNames.contains(fieldName))
+							fieldsNames.add(fieldName);
 					}
 				} catch (JavaModelException e) {
 					e.printStackTrace();
@@ -202,7 +204,9 @@ public class JavaTranslator {
 					IField[] fields = type.getFields();
 					for (int i = 0; i < fields.length; i++) {
 						IField field = fields[i];
-						fieldsNames.add(field.getElementName());
+						String fieldName = field.getElementName();
+						if (!fieldsNames.contains(fieldName))
+							fieldsNames.add(fieldName);
 					}
 				} catch (JavaModelException e) {
 					e.printStackTrace();
