@@ -218,13 +218,18 @@ public class JavaTranslator {
 			for (int i = 0; i < ctx.params.size(); i++) {
 				params.add(visit(ctx.params.get(i)));
 			}
-
+			
+			boolean isFunctionClass = true;
+			if (new_.isEmpty())
+				isFunctionClass = false;
+			
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("functionCall");
 			template.add("new", new_);
 			template.add("name", name_);
 			template.add("fields", fieldsNames);
 			template.add("params", params);
+			template.add("class", isFunctionClass);
 
 			return template.render(1).trim().replaceAll("\r\n", "")
 					.replaceAll("\t", " ");
