@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.stringtemplate.v4.ST;
@@ -773,9 +774,15 @@ public class JavaTranslator {
 							&& startPosition < (position + assignment.length())) {
 						Expression rightSide = node.getRightHandSide();
 						logger.debug("expr: " + rightSide.toString());
-						fVariableTypeString = rightSide.resolveTypeBinding()
-								.getName();
-						logger.debug("expr type: " + fVariableTypeString);
+						ITypeBinding typeBinding = rightSide.resolveTypeBinding();
+						if (typeBinding != null)
+						{
+							fVariableTypeString = rightSide.resolveTypeBinding()
+									.getName();
+							logger.debug("expr type: " + fVariableTypeString);
+						}
+						else
+							logger.debug("expr type: undefined variable");
 					}
 
 					return true;
