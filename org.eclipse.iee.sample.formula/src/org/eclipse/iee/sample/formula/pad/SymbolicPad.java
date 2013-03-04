@@ -68,10 +68,10 @@ public class SymbolicPad extends FormulaPad {
 
 	public String generateSymjaOutputCode(String expression) {
 		String variable = expression;
-		char lastVariable = variable.charAt(fTranslatingExpression.trim()
+		char lastVariable = variable.charAt(expression.trim()
 				.length() - 1);
 		if (lastVariable == '=')
-			variable = expression.substring(0, expression.indexOf('='));
+			variable = expression.substring(0, expression.lastIndexOf('='));
 		String output = "";
 
 		output = getContainer().getContainerManager().getSymbolicEngine()

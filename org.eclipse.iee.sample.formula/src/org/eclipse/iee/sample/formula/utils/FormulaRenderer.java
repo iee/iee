@@ -84,7 +84,7 @@ public class FormulaRenderer {
 			String output = "";
 			if (text.charAt(text.length() - 1) == '=') {
 				output = SymbolicEngine.getTeX(text.substring(0,
-						text.indexOf('=')));
+						text.lastIndexOf('=')));
 				output = output + "=";
 			} else
 				output = SymbolicEngine.getTeX(text);

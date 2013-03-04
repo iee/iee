@@ -43,6 +43,8 @@ public class SymbolicEngine {
 		IExpr result = null;
 		StringBufferWriter buf = new StringBufferWriter();
 
+		logger.debug("expression: " + expression);
+		
 		try {
 			result = fUtil.evaluate(expression);
 
@@ -57,7 +59,7 @@ public class SymbolicEngine {
 			return "";
 		}
 
-		return output;
+		return output.replaceAll("->", "=");
 	}
 
 	public static String getTeX(String expression) {
