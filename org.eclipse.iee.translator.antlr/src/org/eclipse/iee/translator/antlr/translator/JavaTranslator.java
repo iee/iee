@@ -222,11 +222,11 @@ public class JavaTranslator {
 			for (int i = 0; i < ctx.params.size(); i++) {
 				params.add(visit(ctx.params.get(i)));
 			}
-			
+
 			boolean isFunctionClass = true;
 			if (new_.isEmpty())
 				isFunctionClass = false;
-			
+
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("functionCall");
 			template.add("new", new_);
@@ -358,7 +358,8 @@ public class JavaTranslator {
 
 		public String visitVariable(MathParser.VariableContext ctx) {
 			String variable = translateName(ctx.getText());
-			fFoundedVariables.add(variable);
+			if (!fFoundedVariables.contains(variable))
+				fFoundedVariables.add(variable);
 
 			return variable;
 		}
@@ -783,14 +784,13 @@ public class JavaTranslator {
 							&& startPosition < (position + assignment.length())) {
 						Expression rightSide = node.getRightHandSide();
 						logger.debug("expr: " + rightSide.toString());
-						ITypeBinding typeBinding = rightSide.resolveTypeBinding();
-						if (typeBinding != null)
-						{
-							fVariableTypeString = rightSide.resolveTypeBinding()
-									.getName();
+						ITypeBinding typeBinding = rightSide
+								.resolveTypeBinding();
+						if (typeBinding != null) {
+							fVariableTypeString = rightSide
+									.resolveTypeBinding().getName();
 							logger.debug("expr type: " + fVariableTypeString);
-						}
-						else
+						} else
 							logger.debug("expr type: undefined variable");
 					}
 
