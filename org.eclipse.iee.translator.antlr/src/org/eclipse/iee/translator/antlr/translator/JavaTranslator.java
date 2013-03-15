@@ -169,6 +169,10 @@ public class JavaTranslator {
 		}
 
 		public String visitFunction(MathParser.FunctionContext ctx) {
+			return visitChildren(ctx);
+		}
+		
+		public String visitStandardFunction(MathParser.StandardFunctionContext ctx) {
 			String function = "";
 
 			String name = translateName(ctx.name.getText());
@@ -238,6 +242,12 @@ public class JavaTranslator {
 			return template.render(1).trim().replaceAll("\r\n", "")
 					.replaceAll("\t", " ");
 
+		}
+		
+		public String visitInternalFunction(MathParser.InternalFunctionContext ctx) {
+			String function = "internal test";
+			
+			return function;
 		}
 
 		public String visitAdd(MathParser.AddContext ctx) {

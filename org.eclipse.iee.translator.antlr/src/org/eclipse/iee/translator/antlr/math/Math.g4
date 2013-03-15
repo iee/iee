@@ -12,7 +12,11 @@ functionDefinition:
 ;
 
 function:
-	name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')'
+	name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')' 
+        #StandardFunction |
+        name=INTERNAL_FUNCTION_NAME '(' 
+            func=expression (',' (params+=parameter (',' params+=parameter)*)?)?
+        ')'#InternalFunction
 ;
 	
 variableAssignment:
@@ -32,7 +36,9 @@ logicalExpression:
 	left=logicalExpression sign='&&' right=logicalExpression #LogicMult |
 	left=logicalExpression sign='||' right=logicalExpression #LogicAdd |
 	'(' expr=logicalExpression ')' #LogicBrackets |
-	left=expression sign=('>'|'>='|'<'|'<='|'=='|'!=') right=expression #LogicComparison
+	left=expression 
+            sign=('>'|'>='|'<'|'<='|'=='|'!=') 
+        right=expression #LogicComparison
 ;
 
 primary:
@@ -46,6 +52,11 @@ primary:
 	objName=MATH_NAME '.' objProperty=MATH_NAME #Property 
 ;
 
+parameter: 
+    '{' variable=MATH_NAME ',' value=( INT | FLOAT ) '}' #ValueParameter |
+    '{' variable=MATH_NAME ',' min=( INT | FLOAT ) ',' max=( INT | FLOAT ) '}' #IntervalParameter
+;
+
 matrix:
 	'{' (rows+=matrixRow (',' rows+=matrixRow)* ','?)? '}';
 
@@ -56,6 +67,10 @@ MATH_NAME:
 	LETTER (LETTER | INT |
                 '_{' (MATH_NAME | INT) '}' |
                 '_' (MATH_NAME | INT))*
+;
+
+INTERNAL_FUNCTION_NAME:
+    'NIntegrate' | 'NSum' | 'D' | 'Product' | 'Sqrt'                      
 ;
 
 LETTER:

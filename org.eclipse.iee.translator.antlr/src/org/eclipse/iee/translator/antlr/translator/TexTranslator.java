@@ -64,7 +64,7 @@ public class TexTranslator {
 
 		public String visitFunctionDefinition(
 				MathParser.FunctionDefinitionContext ctx) {
-			return visitFunction(ctx.name) + "=" + visit(ctx.value);
+			return visitStandardFunction(ctx.name) + "=" + visit(ctx.value);
 		}
 
 		public String visitVariableAssignment(
@@ -90,6 +90,10 @@ public class TexTranslator {
 		}
 
 		public String visitFunction(MathParser.FunctionContext ctx) {
+			return visitChildren(ctx);
+		}
+		
+		public String visitStandardFunction(MathParser.StandardFunctionContext ctx) {
 			String function = "";
 			function += translateName(ctx.name.getText());
 			function += "(";
@@ -102,6 +106,12 @@ public class TexTranslator {
 
 			function += ")";
 
+			return function;
+		}
+		
+		public String visitInternalFunction(MathParser.InternalFunctionContext ctx) {
+			String function = "internal test";
+			
 			return function;
 		}
 
