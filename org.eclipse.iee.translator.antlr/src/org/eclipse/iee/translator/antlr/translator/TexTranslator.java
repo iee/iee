@@ -11,9 +11,11 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
+import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.ParameterContext;
 
 public class TexTranslator {
-	
+
 	private static List<String> fGreekLetters = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -92,8 +94,9 @@ public class TexTranslator {
 		public String visitFunction(MathParser.FunctionContext ctx) {
 			return visitChildren(ctx);
 		}
-		
-		public String visitStandardFunction(MathParser.StandardFunctionContext ctx) {
+
+		public String visitStandardFunction(
+				MathParser.StandardFunctionContext ctx) {
 			String function = "";
 			function += translateName(ctx.name.getText());
 			function += "(";
@@ -108,10 +111,36 @@ public class TexTranslator {
 
 			return function;
 		}
-		
-		public String visitInternalFunction(MathParser.InternalFunctionContext ctx) {
-			String function = "internal test";
+
+		public String visitInternalFunction(
+				MathParser.InternalFunctionContext ctx) {
+			String function = "";
+
+			switch (ctx.name.getText()) {
+			case "NIntegrate":
+				break;
+			case "NSum":
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "\\sum_";
+					
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params.get(i);
+					function += "{" + paramCtx.variable.getText() + "=" + paramCtx.min.getText();
+					function += "^{" + paramCtx.max.getText() + "}";
+					
+				}
+				function += " ";
+				function += visit(ctx.func);
+				break;
+			case "D":
+				break;
+			case "Product":
+				break;
+			case "Sqrt":
+				function += "\\sqrt{" + visit(ctx.func) + "}";
+				break;
+			}
 			
+
 			return function;
 		}
 

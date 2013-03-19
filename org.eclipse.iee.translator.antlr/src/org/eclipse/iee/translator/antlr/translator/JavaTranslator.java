@@ -171,8 +171,9 @@ public class JavaTranslator {
 		public String visitFunction(MathParser.FunctionContext ctx) {
 			return visitChildren(ctx);
 		}
-		
-		public String visitStandardFunction(MathParser.StandardFunctionContext ctx) {
+
+		public String visitStandardFunction(
+				MathParser.StandardFunctionContext ctx) {
 			String function = "";
 
 			String name = translateName(ctx.name.getText());
@@ -243,10 +244,24 @@ public class JavaTranslator {
 					.replaceAll("\t", " ");
 
 		}
-		
-		public String visitInternalFunction(MathParser.InternalFunctionContext ctx) {
-			String function = "internal test";
-			
+
+		public String visitInternalFunction(
+				MathParser.InternalFunctionContext ctx) {
+			String function = "";
+
+			switch (ctx.name.getText()) {
+			case "NIntegrate":
+				break;
+			case "NSum":
+				break;
+			case "D":
+				break;
+			case "Product":
+				break;
+			case "Sqrt":
+				break;
+			}
+
 			return function;
 		}
 
