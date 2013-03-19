@@ -118,28 +118,53 @@ public class TexTranslator {
 
 			switch (ctx.name.getText()) {
 			case "NIntegrate":
+				function += "\\[";
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "\\int_";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += "{"
+							+ paramCtx.min.getText() + "}";
+					function += "^{" + paramCtx.max.getText() + "}";
+
+				}
+				function += visit(ctx.func) + "\\]";
 				break;
 			case "NSum":
+				function += "\\[";
 				for (int i = 0; i < ctx.params.size(); i++) {
 					function += "\\sum_";
-					
-					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params.get(i);
-					function += "{" + paramCtx.variable.getText() + "=" + paramCtx.min.getText();
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += "{" + paramCtx.variable.getText() + "="
+							+ paramCtx.min.getText() + "}";
 					function += "^{" + paramCtx.max.getText() + "}";
-					
+
 				}
-				function += " ";
-				function += visit(ctx.func);
+				function += visit(ctx.func) + "\\]";
 				break;
 			case "D":
 				break;
 			case "Product":
+				function += "\\[";
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "\\prod_";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += "{" + paramCtx.variable.getText() + "="
+							+ paramCtx.min.getText() + "}";
+					function += "^{" + paramCtx.max.getText() + "}";
+
+				}
+				function += visit(ctx.func) + "\\]";
 				break;
 			case "Sqrt":
 				function += "\\sqrt{" + visit(ctx.func) + "}";
 				break;
 			}
-			
 
 			return function;
 		}
