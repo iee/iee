@@ -8,16 +8,23 @@ statement:
 ;
 
 functionDefinition:
-	name=function '=' value=expression
+	name=standardFunction '=' value=expression
 ;
 
 function:
-	name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')' 
-        #StandardFunction |
+        standardFunction |
+        internalFunction
+        ;
+
+internalFunction:
         name=INTERNAL_FUNCTION_NAME '(' 
             func=expression (',' (params+=parameter (',' params+=parameter)*)?)?
-        ')'#InternalFunction
+        ')'
 ;
+
+standardFunction:
+        name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')'            
+                ;
 	
 variableAssignment:
 	name=expression '=' value=expression
@@ -62,15 +69,15 @@ matrix:
 
 matrixRow:
 	'{' (elements+=expression (',' elements+=expression)* ','?)? '}';
-	
+
+INTERNAL_FUNCTION_NAME:
+    'NIntegrate' | 'NSum' | 'D' | 'Product' | 'Sqrt'                      
+;
+
 MATH_NAME:
 	LETTER (LETTER | INT |
                 '_{' (MATH_NAME | INT) '}' |
                 '_' (MATH_NAME | INT))*
-;
-
-INTERNAL_FUNCTION_NAME:
-    'NIntegrate' | 'NSum' | 'D' | 'Product' | 'Sqrt'                      
 ;
 
 LETTER:
