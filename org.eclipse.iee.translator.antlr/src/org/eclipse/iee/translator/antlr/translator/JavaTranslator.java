@@ -409,20 +409,6 @@ public class JavaTranslator {
 
 	}
 
-	public static boolean validate(String text) {
-
-		try {
-
-			if (translate(text) == "") {
-				return false;
-			} else {
-				return true;
-			}
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
 	public static String translate(String expression) {
 		String result = "";
 

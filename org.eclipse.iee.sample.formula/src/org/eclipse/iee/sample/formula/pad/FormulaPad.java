@@ -162,16 +162,11 @@ public class FormulaPad extends Pad {
 	}
 
 	public void validateInput() {
+		//TODO: add validation
 		String text = fDocument.get();
 		fOriginalExpression = text;
-
-		if (JavaTranslator.validate(text)) {
-			setInputIsValid();
-			fLastValidText = text;
-		} else {
-
-			setInputIsInvalid();
-		}
+		setInputIsValid();
+		fLastValidText = text;
 	}
 
 	public void processInput() {
