@@ -177,7 +177,6 @@ public class JavaTranslator {
 
 		public String visitStandardFunction(
 				MathParser.StandardFunctionContext ctx) {
-			String function = "";
 
 			String name = translateName(ctx.name.getText());
 
@@ -262,6 +261,7 @@ public class JavaTranslator {
 			case "Product":
 				break;
 			case "Sqrt":
+				function = "Math.sqrt(" + visit(ctx.func) + ")";
 				break;
 			}
 
