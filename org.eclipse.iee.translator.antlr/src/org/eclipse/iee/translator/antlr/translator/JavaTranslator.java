@@ -44,6 +44,9 @@ public class JavaTranslator {
 	private static ICompilationUnit fCompilationUnit;
 	private static IType fClass;
 	private static IMethod fMethod;
+
+	private static int fPosition;
+
 	private static List<String> fDoubleFields = new ArrayList<>();
 
 	private static List<String> fIntegerFields = new ArrayList<>();
@@ -244,8 +247,9 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
-
-			if (fMatrixFields.contains(left) && fMatrixFields.contains(right)) {
+			
+			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
+					&& getType(fPosition, "myTmp=" + right + ";").matches("Matrix")) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 
@@ -262,8 +266,9 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
-
-			if (fMatrixFields.contains(left)) {
+			
+			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
+					&& getType(fPosition, "myTmp=" + right + ";").matches("Matrix")) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 
@@ -282,7 +287,7 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 
-			if (fMatrixFields.contains(left) && right.matches("T")) {
+			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix") && right.matches("T")) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 
@@ -454,8 +459,9 @@ public class JavaTranslator {
 		clear();
 
 		fCompilationUnit = compilationUnit;
+		fPosition = position;
 
-		parse(position);
+		parse();
 
 		logger.debug("expr: " + expression);
 		result = translate(expression);
@@ -465,7 +471,7 @@ public class JavaTranslator {
 		 */
 
 		if (fNewVariable) {
-			result = getType(position, result) + " " + result;
+			result = getType(fPosition, result) + " " + result;
 		}
 
 		String[] parts = result.split("=");
@@ -562,6 +568,8 @@ public class JavaTranslator {
 		fCompilationUnit = null;
 		fClass = null;
 		fMethod = null;
+		fPosition = 0;
+
 		fVariableType = null;
 		fVariableTypeString = "";
 		fNewVariable = false;
@@ -585,7 +593,7 @@ public class JavaTranslator {
 		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
-	private static void parse(final int position) {
+	private static void parse() {
 		try {
 
 			IType[] types = fCompilationUnit.getTypes();
@@ -594,8 +602,8 @@ public class JavaTranslator {
 				if (type.isClass()) {
 					ISourceRange classSourceRange = type.getSourceRange();
 					int classOffset = classSourceRange.getOffset();
-					if (position > classOffset
-							&& position <= (classOffset + classSourceRange
+					if (fPosition > classOffset
+							&& fPosition <= (classOffset + classSourceRange
 									.getLength()))
 						fClass = type;
 					else if (!fOtherSourceClasses.contains(type
@@ -611,8 +619,8 @@ public class JavaTranslator {
 
 					ISourceRange methodSourceRange = method.getSourceRange();
 					int methodOffset = methodSourceRange.getOffset();
-					if (position > methodOffset
-							&& position <= (methodOffset + methodSourceRange
+					if (fPosition > methodOffset
+							&& fPosition <= (methodOffset + methodSourceRange
 									.getLength()))
 						fMethod = method;
 				}
@@ -638,7 +646,7 @@ public class JavaTranslator {
 					ISourceRange fieldSourceRange = field.getSourceRange();
 					int fieldOffset = fieldSourceRange.getOffset();
 
-					if (position > fieldOffset) {
+					if (fPosition > fieldOffset) {
 						if (type.matches("D")) {
 							if (!fDoubleFields.contains(name))
 								fDoubleFields.add(name);
@@ -704,7 +712,7 @@ public class JavaTranslator {
 							if (variableAssignmentOffset > methodOffset
 									&& variableAssignmentOffset <= (methodOffset + methodSourceRange
 											.getLength())
-									&& position > variableAssignmentOffset) {
+									&& fPosition > variableAssignmentOffset) {
 
 								List<?> fragments = node.fragments();
 								String type = node.getType().toString();
