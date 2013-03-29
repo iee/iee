@@ -129,7 +129,20 @@ public class TexTranslator {
 					function += "^{" + paramCtx.max.getText() + "}";
 
 				}
-				function += visit(ctx.func) + "\\]";
+				function += "(" + visit(ctx.func) + ")" + "\\,";
+				
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "d";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += paramCtx.variable.getText();
+					
+					if (i < ctx.params.size() - 1)
+						function += "\\,";
+				}
+				
+				function += "\\]";
 				break;
 			case "NSum":
 				function += "\\[";
@@ -143,7 +156,7 @@ public class TexTranslator {
 					function += "^{" + paramCtx.max.getText() + "}";
 
 				}
-				function += visit(ctx.func) + "\\]";
+				function += "(" + visit(ctx.func) + ")" + "\\]";
 				break;
 			case "D":
 				function += "\\[";
@@ -151,7 +164,7 @@ public class TexTranslator {
 				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params.get(0);
 				function += "\\frac{d}{d" + valueParamCtx.variable.getText() + "}";
 				
-				function += visit(ctx.func) + "\\]";
+				function += "(" + visit(ctx.func) + ")" + "\\]";
 				break;
 			case "Product":
 				function += "\\[";
@@ -165,7 +178,7 @@ public class TexTranslator {
 					function += "^{" + paramCtx.max.getText() + "}";
 
 				}
-				function += visit(ctx.func) + "\\]";
+				function += "(" + visit(ctx.func) + ")" + "\\]";
 				break;
 			case "Sqrt":
 				function += "\\sqrt{" + visit(ctx.func) + "}";
