@@ -60,7 +60,7 @@ primary:
 ;
 
 parameter: 
-    '{' variable=MATH_NAME ',' value=( INT | FLOAT ) '}' #ValueParameter |
+    '{' variable=MATH_NAME '}' #ValueParameter |
     '{' variable=MATH_NAME ',' min=( INT | FLOAT ) ',' max=( INT | FLOAT ) '}' #IntervalParameter
 ;
 

@@ -12,7 +12,7 @@ import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
-import org.eclipse.iee.translator.antlr.math.MathParser.ParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 
 public class TexTranslator {
 
@@ -146,6 +146,12 @@ public class TexTranslator {
 				function += visit(ctx.func) + "\\]";
 				break;
 			case "D":
+				function += "\\[";
+				
+				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params.get(0);
+				function += "\\frac{d}{d" + valueParamCtx.variable.getText() + "}";
+				
+				function += visit(ctx.func) + "\\]";
 				break;
 			case "Product":
 				function += "\\[";
