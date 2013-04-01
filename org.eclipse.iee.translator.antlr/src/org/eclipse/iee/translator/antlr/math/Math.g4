@@ -35,6 +35,10 @@ expression:
 	sign=('+'|'-') unaryExpr=expression #Unary |
 	left=expression sign=('*'|'/'|'%') right=expression #Mult |
 	left=expression sign=('+'|'-') right=expression #Add |
+        left=expression sign=('<<'|'>>'|'>>>') right=expression #Shift |
+        left=expression '&' right=expression #BitwiseAdd |
+        left=expression XOR right=expression #Xor |
+        left=expression '|' right=expression #BitwiseOr |
 	'(' bracketedExpr=expression ')' #ExprBrackets |
 	primary	#PrimaryExpr
 ;
@@ -72,6 +76,10 @@ matrixRow:
 
 INTERNAL_FUNCTION_NAME:
     'NIntegrate' | 'NSum' | 'D' | 'Product' | 'Sqrt'                      
+;
+
+XOR: 
+    'XOR'
 ;
 
 MATH_NAME:

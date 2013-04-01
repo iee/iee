@@ -22,6 +22,9 @@ public interface MathListener extends ParseTreeListener {
 	void enterStandardFunction(MathParser.StandardFunctionContext ctx);
 	void exitStandardFunction(MathParser.StandardFunctionContext ctx);
 
+	void enterBitwiseOr(MathParser.BitwiseOrContext ctx);
+	void exitBitwiseOr(MathParser.BitwiseOrContext ctx);
+
 	void enterFunction(MathParser.FunctionContext ctx);
 	void exitFunction(MathParser.FunctionContext ctx);
 
@@ -40,6 +43,9 @@ public interface MathListener extends ParseTreeListener {
 	void enterIntNumber(MathParser.IntNumberContext ctx);
 	void exitIntNumber(MathParser.IntNumberContext ctx);
 
+	void enterXor(MathParser.XorContext ctx);
+	void exitXor(MathParser.XorContext ctx);
+
 	void enterMult(MathParser.MultContext ctx);
 	void exitMult(MathParser.MultContext ctx);
 
@@ -57,6 +63,9 @@ public interface MathListener extends ParseTreeListener {
 
 	void enterLogicMult(MathParser.LogicMultContext ctx);
 	void exitLogicMult(MathParser.LogicMultContext ctx);
+
+	void enterShift(MathParser.ShiftContext ctx);
+	void exitShift(MathParser.ShiftContext ctx);
 
 	void enterLogicBrackets(MathParser.LogicBracketsContext ctx);
 	void exitLogicBrackets(MathParser.LogicBracketsContext ctx);
@@ -87,4 +96,7 @@ public interface MathListener extends ParseTreeListener {
 
 	void enterVariableAssignment(MathParser.VariableAssignmentContext ctx);
 	void exitVariableAssignment(MathParser.VariableAssignmentContext ctx);
+
+	void enterBitwiseAdd(MathParser.BitwiseAddContext ctx);
+	void exitBitwiseAdd(MathParser.BitwiseAddContext ctx);
 }

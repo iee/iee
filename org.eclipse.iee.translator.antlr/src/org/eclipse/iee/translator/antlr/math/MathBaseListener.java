@@ -25,6 +25,9 @@ public class MathBaseListener implements MathListener {
 	@Override public void enterStandardFunction(MathParser.StandardFunctionContext ctx) { }
 	@Override public void exitStandardFunction(MathParser.StandardFunctionContext ctx) { }
 
+	@Override public void enterBitwiseOr(MathParser.BitwiseOrContext ctx) { }
+	@Override public void exitBitwiseOr(MathParser.BitwiseOrContext ctx) { }
+
 	@Override public void enterFunction(MathParser.FunctionContext ctx) { }
 	@Override public void exitFunction(MathParser.FunctionContext ctx) { }
 
@@ -43,6 +46,9 @@ public class MathBaseListener implements MathListener {
 	@Override public void enterIntNumber(MathParser.IntNumberContext ctx) { }
 	@Override public void exitIntNumber(MathParser.IntNumberContext ctx) { }
 
+	@Override public void enterXor(MathParser.XorContext ctx) { }
+	@Override public void exitXor(MathParser.XorContext ctx) { }
+
 	@Override public void enterMult(MathParser.MultContext ctx) { }
 	@Override public void exitMult(MathParser.MultContext ctx) { }
 
@@ -60,6 +66,9 @@ public class MathBaseListener implements MathListener {
 
 	@Override public void enterLogicMult(MathParser.LogicMultContext ctx) { }
 	@Override public void exitLogicMult(MathParser.LogicMultContext ctx) { }
+
+	@Override public void enterShift(MathParser.ShiftContext ctx) { }
+	@Override public void exitShift(MathParser.ShiftContext ctx) { }
 
 	@Override public void enterLogicBrackets(MathParser.LogicBracketsContext ctx) { }
 	@Override public void exitLogicBrackets(MathParser.LogicBracketsContext ctx) { }
@@ -90,6 +99,9 @@ public class MathBaseListener implements MathListener {
 
 	@Override public void enterVariableAssignment(MathParser.VariableAssignmentContext ctx) { }
 	@Override public void exitVariableAssignment(MathParser.VariableAssignmentContext ctx) { }
+
+	@Override public void enterBitwiseAdd(MathParser.BitwiseAddContext ctx) { }
+	@Override public void exitBitwiseAdd(MathParser.BitwiseAddContext ctx) { }
 
 	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext ctx) { }

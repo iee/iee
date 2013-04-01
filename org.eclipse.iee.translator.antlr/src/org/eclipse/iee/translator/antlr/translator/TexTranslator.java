@@ -191,6 +191,22 @@ public class TexTranslator {
 		public String visitAdd(MathParser.AddContext ctx) {
 			return visit(ctx.left) + ctx.sign.getText() + visit(ctx.right);
 		}
+		
+		public String visitShift(MathParser.ShiftContext ctx) {
+			return visit(ctx.left) + ctx.sign.getText() + visit(ctx.right);
+		}
+		
+		public String visitBitwiseAdd(MathParser.BitwiseAddContext ctx) {
+			return visit(ctx.left) + "\\&" + visit(ctx.right);
+		}
+		
+		public String visitBitwiseOr(MathParser.BitwiseOrContext ctx) {
+			return visit(ctx.left) + "|" + visit(ctx.right);
+		}
+		
+		public String visitXor(MathParser.XorContext ctx) {
+			return visit(ctx.left) + "\\oplus " + visit(ctx.right);
+		}
 
 		public String visitMult(MathParser.MultContext ctx) {
 			if (ctx.sign.getText().matches("\\*"))

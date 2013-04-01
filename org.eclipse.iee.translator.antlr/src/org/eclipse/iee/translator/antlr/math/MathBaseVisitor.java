@@ -17,6 +17,8 @@ public class MathBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 
 	@Override public T visitStandardFunction(MathParser.StandardFunctionContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitBitwiseOr(MathParser.BitwiseOrContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitFunction(MathParser.FunctionContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitInternalFunction(MathParser.InternalFunctionContext ctx) { return visitChildren(ctx); }
@@ -29,6 +31,8 @@ public class MathBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 
 	@Override public T visitIntNumber(MathParser.IntNumberContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitXor(MathParser.XorContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitMult(MathParser.MultContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitPrimaryExpr(MathParser.PrimaryExprContext ctx) { return visitChildren(ctx); }
@@ -40,6 +44,8 @@ public class MathBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 	@Override public T visitMatrix(MathParser.MatrixContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitLogicMult(MathParser.LogicMultContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitShift(MathParser.ShiftContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitLogicBrackets(MathParser.LogicBracketsContext ctx) { return visitChildren(ctx); }
 
@@ -60,4 +66,6 @@ public class MathBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements M
 	@Override public T visitMatrixRow(MathParser.MatrixRowContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitVariableAssignment(MathParser.VariableAssignmentContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitBitwiseAdd(MathParser.BitwiseAddContext ctx) { return visitChildren(ctx); }
 }

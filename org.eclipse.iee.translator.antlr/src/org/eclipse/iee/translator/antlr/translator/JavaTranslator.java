@@ -303,6 +303,22 @@ public class JavaTranslator {
 
 			return "(" + left + ")" + sign + "(" + right + ")";
 		}
+		
+		public String visitShift(MathParser.ShiftContext ctx) {
+			return visit(ctx.left) + ctx.sign.getText() + visit(ctx.right);
+		}
+		
+		public String visitBitwiseAdd(MathParser.BitwiseAddContext ctx) {
+			return visit(ctx.left) + '&' + visit(ctx.right);
+		}
+		
+		public String visitBitwiseOr(MathParser.BitwiseOrContext ctx) {
+			return visit(ctx.left) + '|' + visit(ctx.right);
+		}
+		
+		public String visitXor(MathParser.XorContext ctx) {
+			return visit(ctx.left) + "^" + visit(ctx.right);
+		}
 
 		public String visitPrimaryExpr(MathParser.PrimaryExprContext ctx) {
 			return visitChildren(ctx);

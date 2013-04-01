@@ -16,6 +16,8 @@ public interface MathVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitStandardFunction(MathParser.StandardFunctionContext ctx);
 
+	T visitBitwiseOr(MathParser.BitwiseOrContext ctx);
+
 	T visitFunction(MathParser.FunctionContext ctx);
 
 	T visitInternalFunction(MathParser.InternalFunctionContext ctx);
@@ -28,6 +30,8 @@ public interface MathVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitIntNumber(MathParser.IntNumberContext ctx);
 
+	T visitXor(MathParser.XorContext ctx);
+
 	T visitMult(MathParser.MultContext ctx);
 
 	T visitPrimaryExpr(MathParser.PrimaryExprContext ctx);
@@ -39,6 +43,8 @@ public interface MathVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMatrix(MathParser.MatrixContext ctx);
 
 	T visitLogicMult(MathParser.LogicMultContext ctx);
+
+	T visitShift(MathParser.ShiftContext ctx);
 
 	T visitLogicBrackets(MathParser.LogicBracketsContext ctx);
 
@@ -59,4 +65,6 @@ public interface MathVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMatrixRow(MathParser.MatrixRowContext ctx);
 
 	T visitVariableAssignment(MathParser.VariableAssignmentContext ctx);
+
+	T visitBitwiseAdd(MathParser.BitwiseAddContext ctx);
 }
