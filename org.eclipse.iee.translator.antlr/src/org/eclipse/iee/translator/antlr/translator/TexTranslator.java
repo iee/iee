@@ -11,9 +11,11 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
+import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 
 public class TexTranslator {
-	
+
 	private static List<String> fGreekLetters = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -64,7 +66,7 @@ public class TexTranslator {
 
 		public String visitFunctionDefinition(
 				MathParser.FunctionDefinitionContext ctx) {
-			return visitFunction(ctx.name) + "=" + visit(ctx.value);
+			return visitStandardFunction(ctx.name) + "=" + visit(ctx.value);
 		}
 
 		public String visitVariableAssignment(
@@ -90,6 +92,11 @@ public class TexTranslator {
 		}
 
 		public String visitFunction(MathParser.FunctionContext ctx) {
+			return visitChildren(ctx);
+		}
+
+		public String visitStandardFunction(
+				MathParser.StandardFunctionContext ctx) {
 			String function = "";
 			function += translateName(ctx.name.getText());
 			function += "(";
@@ -101,6 +108,82 @@ public class TexTranslator {
 			}
 
 			function += ")";
+
+			return function;
+		}
+
+		public String visitInternalFunction(
+				MathParser.InternalFunctionContext ctx) {
+			String function = "";
+
+			switch (ctx.name.getText()) {
+			case "NIntegrate":
+				function += "\\[";
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "\\int_";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += "{"
+							+ paramCtx.min.getText() + "}";
+					function += "^{" + paramCtx.max.getText() + "}";
+
+				}
+				function += "(" + visit(ctx.func) + ")" + "\\,";
+				
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "d";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += paramCtx.variable.getText();
+					
+					if (i < ctx.params.size() - 1)
+						function += "\\,";
+				}
+				
+				function += "\\]";
+				break;
+			case "NSum":
+				function += "\\[";
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "\\sum_";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += "{" + paramCtx.variable.getText() + "="
+							+ paramCtx.min.getText() + "}";
+					function += "^{" + paramCtx.max.getText() + "}";
+
+				}
+				function += "(" + visit(ctx.func) + ")" + "\\]";
+				break;
+			case "D":
+				function += "\\[";
+				
+				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params.get(0);
+				function += "\\frac{d}{d" + valueParamCtx.variable.getText() + "}";
+				
+				function += "(" + visit(ctx.func) + ")" + "\\]";
+				break;
+			case "Product":
+				function += "\\[";
+				for (int i = 0; i < ctx.params.size(); i++) {
+					function += "\\prod_";
+
+					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
+							.get(i);
+					function += "{" + paramCtx.variable.getText() + "="
+							+ paramCtx.min.getText() + "}";
+					function += "^{" + paramCtx.max.getText() + "}";
+
+				}
+				function += "(" + visit(ctx.func) + ")" + "\\]";
+				break;
+			case "Sqrt":
+				function += "\\sqrt{" + visit(ctx.func) + "}";
+				break;
+			}
 
 			return function;
 		}
