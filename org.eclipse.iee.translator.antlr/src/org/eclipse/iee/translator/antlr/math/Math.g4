@@ -64,8 +64,8 @@ primary:
 ;
 
 parameter: 
-    '{' variable=MATH_NAME '}' #ValueParameter |
-    '{' variable=MATH_NAME ',' min=( INT | FLOAT ) ',' max=( INT | FLOAT ) '}' #IntervalParameter
+    variable=MATH_NAME #ValueParameter |
+    variable=MATH_NAME '=' min=( INT | FLOAT ) INTERVAL max=( INT | FLOAT ) #IntervalParameter
 ;
 
 matrix:
@@ -75,7 +75,11 @@ matrixRow:
 	'{' (elements+=expression (',' elements+=expression)* ','?)? '}';
 
 INTERNAL_FUNCTION_NAME:
-    'NIntegrate' | 'NSum' | 'D' | 'Product' | 'Sqrt'                      
+    'Integrate' | 'Sum' | 'Diff' | 'Product' | 'Sqrt'                      
+;
+
+INTERVAL:
+    '..'        
 ;
 
 XOR: 
@@ -98,9 +102,8 @@ WS:
 	( ' ' | '\t' | '\r' | '\n' ) -> skip 
 ;
 
-FLOAT:  DIGIT+ '.' DIGIT* EXP? [Ll]?
+FLOAT:  DIGIT+ '.' DIGIT+ EXP? [Ll]?
     |   DIGIT+ EXP? [Ll]?
-    |   '.' DIGIT+ EXP? [Ll]?
 ;
 
 fragment

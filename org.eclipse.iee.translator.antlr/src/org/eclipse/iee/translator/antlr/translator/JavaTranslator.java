@@ -252,11 +252,11 @@ public class JavaTranslator {
 			String function = "";
 
 			switch (ctx.name.getText()) {
-			case "NIntegrate":
+			case "Integrate":
 				break;
-			case "NSum":
+			case "Sum":
 				break;
-			case "D":
+			case "Diff":
 				break;
 			case "Product":
 				break;

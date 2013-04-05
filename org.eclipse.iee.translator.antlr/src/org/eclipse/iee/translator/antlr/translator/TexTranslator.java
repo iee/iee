@@ -117,7 +117,7 @@ public class TexTranslator {
 			String function = "";
 
 			switch (ctx.name.getText()) {
-			case "NIntegrate":
+			case "Integrate":
 				function += "\\[";
 				for (int i = 0; i < ctx.params.size(); i++) {
 					function += "\\int_";
@@ -144,7 +144,7 @@ public class TexTranslator {
 				
 				function += "\\]";
 				break;
-			case "NSum":
+			case "Sum":
 				function += "\\[";
 				for (int i = 0; i < ctx.params.size(); i++) {
 					function += "\\sum_";
@@ -158,7 +158,7 @@ public class TexTranslator {
 				}
 				function += "(" + visit(ctx.func) + ")" + "\\]";
 				break;
-			case "D":
+			case "Diff":
 				function += "\\[";
 				
 				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params.get(0);
