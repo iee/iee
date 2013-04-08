@@ -22,6 +22,15 @@
             icon="icons/textForeground.ico">
       </image>
    </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.iee.sample.text.addCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+T">
+      </key>
+   </extension>
 
 
 

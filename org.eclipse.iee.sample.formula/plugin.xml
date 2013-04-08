@@ -45,6 +45,21 @@
           commandId="org.eclipse.iee.sample.formula.addSymbolicCommand">
     </handler>
  </extension>
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="org.eclipse.iee.sample.formula.addCommand"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M3+N">
+     </key>
+     <key
+           commandId="org.eclipse.iee.sample.formula.addSymbolicCommand"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M3+S">
+     </key>
+  </extension>
 
 	
 </plugin>
