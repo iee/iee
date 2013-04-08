@@ -66,5 +66,26 @@
             class="org.eclipse.iee.editor.monitoring.perspectives.EarlyStartup">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.editor.monitoring.pfdExport"
+            icon="icons/pdfExport.jpg">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.iee.editor.monitoring.pfdExport"
+            name="Export to pdf">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.iee.editor.monitoring.handlers.PdfExportHandler"
+            commandId="org.eclipse.iee.editor.monitoring.pfdExport">
+      </handler>
+   </extension>
 
 </plugin>

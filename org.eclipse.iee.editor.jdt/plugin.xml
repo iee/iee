@@ -61,6 +61,11 @@
 					</with>
                </visibleWhen>
             </command>
+            <command
+                  commandId="org.eclipse.iee.editor.monitoring.pfdExport"
+                  id="org.eclipse.iee.editor.monitoring.toolbar.pfdExport"
+                  style="push">
+            </command>
          </toolbar>
       </menuContribution>
    </extension>
