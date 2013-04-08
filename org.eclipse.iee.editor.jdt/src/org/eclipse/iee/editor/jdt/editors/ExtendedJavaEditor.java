@@ -36,7 +36,6 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.ImageTransfer;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -289,5 +288,13 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				return display;
 			}
 		};
+	}
+
+	public PadManager getPadManager() {
+		return fPadManager;
+	}
+
+	public ContainerManager getContainerManager() {
+		return fContainerManager;
 	}
 }

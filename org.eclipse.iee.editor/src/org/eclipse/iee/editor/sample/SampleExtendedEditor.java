@@ -11,7 +11,6 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
@@ -20,8 +19,8 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
 
-	private final PadManager fPadManager =
-		IeeEditorPlugin.getDefault().getPadManager();
+	private final PadManager fPadManager = IeeEditorPlugin.getDefault()
+			.getPadManager();
 
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
@@ -31,19 +30,16 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 
 	public void initIeeEditorCore() {
 		IDocument document = getSourceViewer().getDocument();
-		
+
 		ContainerManagerConfig config = new ContainerManagerConfig();
 
-		//config.EMBEDDED_REGION_BEGIN = "/*<";
-		//config.EMBEDDED_REGION_END = ">*/";
-		//config.INNER_TEXT_BEGIN = "*/";
-		//config.INNER_TEXT_END = "/*";
-		
-		fContainerManager = new ContainerManager(
-			config,
-			document,
-			getSourceViewer(),
-			getSourceViewer().getTextWidget());
+		// config.EMBEDDED_REGION_BEGIN = "/*<";
+		// config.EMBEDDED_REGION_END = ">*/";
+		// config.INNER_TEXT_BEGIN = "*/";
+		// config.INNER_TEXT_END = "/*";
+
+		fContainerManager = new ContainerManager(config, document,
+				getSourceViewer(), getSourceViewer().getTextWidget());
 
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
@@ -60,7 +56,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 			}
 
 			@Override
-			public void containerSelected(ContainerEvent event) {				
+			public void containerSelected(ContainerEvent event) {
 			}
 
 			@Override
@@ -78,10 +74,11 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 			@Override
 			public void containerDeactivated(ContainerEvent containerEvent) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
-		fContainerManager.addContainerManagerListener(fContainerManagerListener);
+		fContainerManager
+				.addContainerManagerListener(fContainerManagerListener);
 
 		fPadManager.registerContainerManager(fContainerManager);
 
@@ -102,7 +99,8 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	@Override
 	public void dispose() {
 		fPadManager.removeContainerManager(fContainerManager);
-		fContainerManager.removeContainerManagerListener(fContainerManagerListener);
+		fContainerManager
+				.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManager.dispose();
 		fContainerManager = null;
 
@@ -129,6 +127,14 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	public void doSaveAs() {
 		fPadManager.savePadsInEditor(fContainerManager.getContainerManagerID());
 		super.doSaveAs();
+	}
+
+	public PadManager getPadManager() {
+		return fPadManager;
+	}
+
+	public ContainerManager getContainerManager() {
+		return fContainerManager;
 	}
 
 }

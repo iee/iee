@@ -1,7 +1,9 @@
 package org.eclipse.iee.editor;
 
 
+import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.PadManager;
 
 public interface IPadEditor {
 	
@@ -15,5 +17,9 @@ public interface IPadEditor {
 	
 	public int getCaretOffset();
 	
-	public Object[] getElements(); 
+	public Object[] getElements();
+	
+	public PadManager getPadManager();
+	
+	public ContainerManager getContainerManager();
 }
