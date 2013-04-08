@@ -11,6 +11,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
+import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.ParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
@@ -251,8 +254,50 @@ public class JavaTranslator {
 				MathParser.InternalFunctionContext ctx) {
 			String function = "";
 
+			List<String> params = new ArrayList<>();
+
+			for (int i = 0; i < ctx.params.size(); i++) {
+				if (ctx.params.get(i) instanceof ValueParameterContext) {
+					ValueParameterContext param = (ValueParameterContext) ctx.params
+							.get(i);
+					params.add(param.variable.getText());
+				} else if (ctx.params.get(i) instanceof IntervalParameterContext) {
+					IntervalParameterContext param = (IntervalParameterContext) ctx.params
+							.get(i);
+					params.add(param.variable.getText());
+				}
+
+			}
+
+			fFoundedVariables.clear();
+
+			String value = visit(ctx.func);
+
+			List<String> variables = new ArrayList<>();
+
+			for (int i = 0; i < fFoundedVariables.size(); i++) {
+				String variable = fFoundedVariables.get(i);
+				if (!params.contains(variable))
+					variables.add(variable);
+			}
+
+			logger.debug("Variables: " + variables.toString());
+
+			STGroup group = new STGroupDir("/templates");
+			ST template = group.getInstanceOf("anonymousFunction");
+			template.add("param", params.get(0));
+			template.add("value", value);
+			template.add("variables", variables);
+
+			String anonymousFunction = template.render(1).trim()
+					.replaceAll("\r\n", "").replaceAll("\t", " ");
+
 			switch (ctx.name.getText()) {
 			case "Integrate":
+				IntervalParameterContext param = (IntervalParameterContext) ctx.params
+						.get(0);
+				function += "integrate(" + anonymousFunction + ", "
+						+ visit(param.min) + ","+ visit(param.max) + ")";
 				break;
 			case "Sum":
 				break;
@@ -272,9 +317,10 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
-			
+
 			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
-					&& getType(fPosition, "myTmp=" + right + ";").matches("Matrix")) {
+					&& getType(fPosition, "myTmp=" + right + ";").matches(
+							"Matrix")) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 
@@ -291,9 +337,10 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
-			
+
 			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
-					&& getType(fPosition, "myTmp=" + right + ";").matches("Matrix")) {
+					&& getType(fPosition, "myTmp=" + right + ";").matches(
+							"Matrix")) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 
@@ -303,19 +350,19 @@ public class JavaTranslator {
 
 			return "(" + left + ")" + sign + "(" + right + ")";
 		}
-		
+
 		public String visitShift(MathParser.ShiftContext ctx) {
 			return visit(ctx.left) + ctx.sign.getText() + visit(ctx.right);
 		}
-		
+
 		public String visitBitwiseAdd(MathParser.BitwiseAddContext ctx) {
 			return visit(ctx.left) + '&' + visit(ctx.right);
 		}
-		
+
 		public String visitBitwiseOr(MathParser.BitwiseOrContext ctx) {
 			return visit(ctx.left) + '|' + visit(ctx.right);
 		}
-		
+
 		public String visitXor(MathParser.XorContext ctx) {
 			return visit(ctx.left) + "^" + visit(ctx.right);
 		}
@@ -328,7 +375,8 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 
-			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix") && right.matches("T")) {
+			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
+					&& right.matches("T")) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 

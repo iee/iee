@@ -65,7 +65,7 @@ primary:
 
 parameter: 
     variable=MATH_NAME #ValueParameter |
-    variable=MATH_NAME '=' min=( INT | FLOAT ) INTERVAL max=( INT | FLOAT ) #IntervalParameter
+    variable=MATH_NAME '=' min=expression INTERVAL max=expression #IntervalParameter
 ;
 
 matrix:
