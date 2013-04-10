@@ -1,5 +1,8 @@
 package org.eclipse.iee.sample.formula.utils;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
@@ -17,6 +20,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
+import org.scilab.forge.jlatexmath.TeXIcon;
 
 public class FormulaRenderer {
 
@@ -56,11 +60,8 @@ public class FormulaRenderer {
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
 					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
-
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
-
 			Image formulaImage = new Image(fDisplay, swtImageData);
-
 			fCachedImages.put(text, formulaImage);
 			return formulaImage;
 
@@ -76,9 +77,9 @@ public class FormulaRenderer {
 			return null;
 		Image cachedImage = fCachedImages.get(text);
 
-		if (cachedImage != null) {
-			return cachedImage;
-		}
+//		if (cachedImage != null) {
+//			return cachedImage;
+//		}
 
 		try {
 			String output = "";
@@ -92,7 +93,7 @@ public class FormulaRenderer {
 			logger.debug("tex: " + output);
 
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(output,
-					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
+					TeXConstants.STYLE_TEXT, 20, java.awt.Color.GREEN,
 					java.awt.Color.white);
 
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
@@ -111,51 +112,35 @@ public class FormulaRenderer {
 
 	protected static ImageData convertToSWT(BufferedImage bufferedImage) {
 		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
-			DirectColorModel colorModel = (DirectColorModel) bufferedImage
-					.getColorModel();
-
-			PaletteData palette = new PaletteData(colorModel.getRedMask(),
-					colorModel.getGreenMask(), colorModel.getBlueMask());
-
-			ImageData data = new ImageData(bufferedImage.getWidth(),
-					bufferedImage.getHeight(), colorModel.getPixelSize(),
-					palette);
-
-			WritableRaster raster = bufferedImage.getRaster();
-
-			int[] pixelArray = new int[3];
+			DirectColorModel colorModel = (DirectColorModel)bufferedImage.getColorModel();
+			PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(), colorModel.getBlueMask());
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
 			for (int y = 0; y < data.height; y++) {
 				for (int x = 0; x < data.width; x++) {
-					raster.getPixel(x, y, pixelArray);
-					int pixel = palette.getPixel(new RGB(pixelArray[0],
-							pixelArray[1], pixelArray[2]));
+					int rgb = bufferedImage.getRGB(x, y);
+					int pixel = palette.getPixel(new RGB((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF)); 
 					data.setPixel(x, y, pixel);
+					if (colorModel.hasAlpha()) {
+						data.setAlpha(x, y, (rgb >> 24) & 0xFF);
+					}
 				}
 			}
-			return data;
+			return data;		
 		} else if (bufferedImage.getColorModel() instanceof IndexColorModel) {
-			IndexColorModel colorModel = (IndexColorModel) bufferedImage
-					.getColorModel();
-
+			IndexColorModel colorModel = (IndexColorModel)bufferedImage.getColorModel();
 			int size = colorModel.getMapSize();
 			byte[] reds = new byte[size];
 			byte[] greens = new byte[size];
 			byte[] blues = new byte[size];
-
 			colorModel.getReds(reds);
 			colorModel.getGreens(greens);
 			colorModel.getBlues(blues);
-
 			RGB[] rgbs = new RGB[size];
 			for (int i = 0; i < rgbs.length; i++) {
-				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF,
-						blues[i] & 0xFF);
+				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF, blues[i] & 0xFF);
 			}
 			PaletteData palette = new PaletteData(rgbs);
-			ImageData data = new ImageData(bufferedImage.getWidth(),
-					bufferedImage.getHeight(), colorModel.getPixelSize(),
-					palette);
-
+			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
 			data.transparentPixel = colorModel.getTransparentPixel();
 			WritableRaster raster = bufferedImage.getRaster();
 			int[] pixelArray = new int[1];
