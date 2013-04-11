@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
-import org.eclipse.iee.sample.formula.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.utils.FormulaRenderer;
 import org.eclipse.iee.sample.formula.utils.Function;
@@ -421,7 +421,7 @@ public class FormulaPad extends Pad {
 							if (image == null)
 								image = FormulaRenderer
 										.getFormulaImage(fLastValidText);
-							fHoverShell = new HoverShell(fParent, image);
+//							fHoverShell = new HoverShell(fParent, image);
 						}
 					});
 					/* Resize fInputText */

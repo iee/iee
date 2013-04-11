@@ -1,4 +1,4 @@
-package org.eclipse.iee.sample.formula.bindings;
+package org.eclipse.iee.editor.core.bindings;
 
 import java.util.ArrayList;
 import java.util.List;

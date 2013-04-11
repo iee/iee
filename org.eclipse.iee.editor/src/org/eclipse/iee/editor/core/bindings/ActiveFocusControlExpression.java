@@ -1,4 +1,4 @@
-package org.eclipse.iee.sample.formula.bindings;
+package org.eclipse.iee.editor.core.bindings;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Control;
