@@ -421,7 +421,7 @@ public class FormulaPad extends Pad {
 							if (image == null)
 								image = FormulaRenderer
 										.getFormulaImage(fLastValidText);
-//							fHoverShell = new HoverShell(fParent, image);
+							fHoverShell = new HoverShell(fParent, image);
 						}
 					});
 					/* Resize fInputText */
