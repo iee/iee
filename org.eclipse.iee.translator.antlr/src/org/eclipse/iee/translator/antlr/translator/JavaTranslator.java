@@ -294,16 +294,30 @@ public class JavaTranslator {
 
 			switch (ctx.name.getText()) {
 			case "Integrate":
-				IntervalParameterContext param = (IntervalParameterContext) ctx.params
+				IntervalParameterContext integrateParam = (IntervalParameterContext) ctx.params
 						.get(0);
 				function += "integrate(" + anonymousFunction + ", "
-						+ visit(param.min) + ","+ visit(param.max) + ")";
+						+ visit(integrateParam.min) + ","
+						+ visit(integrateParam.max) + ")";
 				break;
 			case "Sum":
+				IntervalParameterContext sumParam = (IntervalParameterContext) ctx.params
+						.get(0);
+				function += "sum(" + anonymousFunction + ", "
+						+ visit(sumParam.min) + "," + visit(sumParam.max) + ")";
 				break;
 			case "Diff":
+				ValueParameterContext diffParam = (ValueParameterContext) ctx.params
+						.get(0);
+				function += "differentiate(" + anonymousFunction + ", "
+						+ diffParam.getText() + ")";
 				break;
 			case "Product":
+				IntervalParameterContext productParam = (IntervalParameterContext) ctx.params
+						.get(0);
+				function += "product(" + anonymousFunction + ", "
+						+ visit(productParam.min) + ","
+						+ visit(productParam.max) + ")";
 				break;
 			case "Sqrt":
 				function = "Math.sqrt(" + visit(ctx.func) + ")";
