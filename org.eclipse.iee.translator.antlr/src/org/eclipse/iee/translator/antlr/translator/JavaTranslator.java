@@ -477,7 +477,7 @@ public class JavaTranslator {
 		}
 
 		public String visitIntNumber(MathParser.IntNumberContext ctx) {
-			return ctx.getText();
+			return ctx.getText() + ".0";
 		}
 
 		public String visitMatrixDefinition(
