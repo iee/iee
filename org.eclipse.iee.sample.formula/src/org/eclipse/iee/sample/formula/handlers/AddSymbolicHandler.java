@@ -37,21 +37,26 @@ public class AddSymbolicHandler implements IHandler {
 				.getActivePage();
 		IEditorPart targetEditor = page.getActiveEditor();
 
-		IPadEditor fPadEditor;
+		final IPadEditor fPadEditor;
 		try {
 			fPadEditor = (IPadEditor) targetEditor;
 		} catch (ClassCastException e) {
-			fPadEditor = null;
-		}
-
-		if (fPadEditor == null) {
 			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
 			return null;
 		}
 
-		SymbolicPad pad = new SymbolicPad();
+		final SymbolicPad pad = new SymbolicPad();
 
 		fPadEditor.createPad(pad, fPadEditor.getCaretOffset());
+
+		shell.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				fPadEditor.getContainerManager().getUserInteractionManager()
+						.activateContainer(pad.getContainer());
+			}
+		});
 
 		return null;
 	}
