@@ -106,7 +106,8 @@ public class JavaTranslator {
 					variables.add(variable);
 			}
 
-			logger.debug("Variables: " + variables.toString());
+			logger.debug("funcDef FoundedVariables: " + fFoundedVariables.toString());
+			logger.debug("funcDef Variables: " + variables.toString());
 
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("function");
@@ -281,7 +282,8 @@ public class JavaTranslator {
 					variables.add(variable);
 			}
 
-			logger.debug("Variables: " + variables.toString());
+			logger.debug("internalFunc FoundedVariables: " + fFoundedVariables.toString());
+			logger.debug("internalFunc Variables: " + variables.toString());
 
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("anonymousFunction");
@@ -840,11 +842,6 @@ public class JavaTranslator {
 			e.printStackTrace();
 		}
 
-		try {
-			logger.debug("Source: " + fCompilationUnit.getSource());
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
 		if (fClass != null) {
 			logger.debug("fClass: " + fClass.getElementName());
 			logger.debug("fSourceClasses: " + fOtherSourceClasses.toString());
@@ -870,7 +867,7 @@ public class JavaTranslator {
 			buffer.replace(position, 0, assignment);
 			copy.reconcile(AST.JLS4, false, null, null);
 
-			logger.debug("CopySource" + copy.getSource());
+			//logger.debug("CopySource" + copy.getSource());
 
 			CompilationUnit unit = (CompilationUnit) createAST(copy);
 			unit.accept(new ASTVisitor() {
