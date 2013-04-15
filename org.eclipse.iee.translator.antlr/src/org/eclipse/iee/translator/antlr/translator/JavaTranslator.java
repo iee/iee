@@ -12,7 +12,6 @@ import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
-import org.eclipse.iee.translator.antlr.math.MathParser.ParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -69,6 +68,7 @@ public class JavaTranslator {
 
 	private static boolean fNewVariable;
 	private static List<String> fFoundedVariables = new ArrayList<>();
+	private static List<String> fFoundedParams = new ArrayList<>();
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -106,7 +106,8 @@ public class JavaTranslator {
 					variables.add(variable);
 			}
 
-			logger.debug("funcDef FoundedVariables: " + fFoundedVariables.toString());
+			logger.debug("funcDef FoundedVariables: "
+					+ fFoundedVariables.toString());
 			logger.debug("funcDef Variables: " + variables.toString());
 
 			STGroup group = new STGroupDir("/templates");
@@ -255,6 +256,10 @@ public class JavaTranslator {
 				MathParser.InternalFunctionContext ctx) {
 			String function = "";
 
+			fFoundedVariables.clear();
+
+			String value = visit(ctx.func);
+
 			List<String> params = new ArrayList<>();
 
 			for (int i = 0; i < ctx.params.size(); i++) {
@@ -265,24 +270,27 @@ public class JavaTranslator {
 				} else if (ctx.params.get(i) instanceof IntervalParameterContext) {
 					IntervalParameterContext param = (IntervalParameterContext) ctx.params
 							.get(i);
-					params.add(param.variable.getText());
+
+					String paramVariable = param.variable.getText();
+					params.add(paramVariable);
+
+					if (!fFoundedParams.contains(paramVariable))
+						fFoundedParams.add(paramVariable);
 				}
 
 			}
-
-			fFoundedVariables.clear();
-
-			String value = visit(ctx.func);
 
 			List<String> variables = new ArrayList<>();
 
 			for (int i = 0; i < fFoundedVariables.size(); i++) {
 				String variable = fFoundedVariables.get(i);
-				if (!params.contains(variable))
+				if (!params.contains(variable)
+						&& !fFoundedParams.contains(variable))
 					variables.add(variable);
 			}
 
-			logger.debug("internalFunc FoundedVariables: " + fFoundedVariables.toString());
+			logger.debug("internalFunc FoundedVariables: "
+					+ fFoundedVariables.toString());
 			logger.debug("internalFunc Variables: " + variables.toString());
 
 			STGroup group = new STGroupDir("/templates");
@@ -468,6 +476,7 @@ public class JavaTranslator {
 
 		public String visitVariable(MathParser.VariableContext ctx) {
 			String variable = translateName(ctx.getText());
+
 			if (!fFoundedVariables.contains(variable))
 				fFoundedVariables.add(variable);
 
@@ -673,6 +682,7 @@ public class JavaTranslator {
 		fMethodClasses.clear();
 		fInnerClasses.clear();
 		fFunctionVariables.clear();
+		fFoundedParams.clear();
 		fOtherSourceClasses.clear();
 	}
 
@@ -867,7 +877,7 @@ public class JavaTranslator {
 			buffer.replace(position, 0, assignment);
 			copy.reconcile(AST.JLS4, false, null, null);
 
-			//logger.debug("CopySource" + copy.getSource());
+			// logger.debug("CopySource" + copy.getSource());
 
 			CompilationUnit unit = (CompilationUnit) createAST(copy);
 			unit.accept(new ASTVisitor() {
