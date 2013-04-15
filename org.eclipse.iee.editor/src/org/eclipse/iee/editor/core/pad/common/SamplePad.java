@@ -46,4 +46,9 @@ public class SamplePad extends Pad {
 	public void activate() {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public String getTex() {
+		return "";
+	}
 }

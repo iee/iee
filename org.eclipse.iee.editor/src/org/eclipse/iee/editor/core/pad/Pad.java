@@ -164,6 +164,8 @@ public abstract class Pad {
 
 	public abstract String getType();
 	
+	public abstract String getTex();
+	
 	public void updateData(Map<String, String> params, String value) {
 	}
 

@@ -73,6 +73,7 @@ public class FormulaPad extends Pad {
 	protected String fOriginalExpression = "";
 	protected String fTranslatingExpression = "";
 	protected String fLastValidText = "";
+	protected String fTexExpression = "";
 
 	private int fCaretOffset;
 	private int fPreviousCaretOffset;
@@ -186,6 +187,7 @@ public class FormulaPad extends Pad {
 
 		/* Set formula image */
 		Image image = FormulaRenderer.getFormulaImage(fTranslatingExpression);
+		fTexExpression = FormulaRenderer.getLastResult();
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */
@@ -589,6 +591,10 @@ public class FormulaPad extends Pad {
 
 	@Override
 	public void updateData(Map<String, String> params, String value) {
-
+	}
+	
+	@Override
+	public String getTex() {
+		return fTexExpression;
 	}
 }

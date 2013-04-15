@@ -64,4 +64,9 @@ public class LoadingPad extends Pad {
 	@Override
 	public void activate() {
 	}
+
+	@Override
+	public String getTex() {
+		return "";
+	}
 }

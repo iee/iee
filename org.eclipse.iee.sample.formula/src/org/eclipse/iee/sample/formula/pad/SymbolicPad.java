@@ -56,6 +56,7 @@ public class SymbolicPad extends FormulaPad {
 
 		/* Set formula image */
 		Image image = FormulaRenderer.getSymbolicImage(fTranslatingExpression);
+		fTexExpression = FormulaRenderer.getLastResult();
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */

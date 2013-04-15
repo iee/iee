@@ -48,6 +48,8 @@ public class PdfExportHandler implements IHandler {
 		}
 
 		//TODO: add export
+		String latex = "";
+		
 
 		return null;
 	}

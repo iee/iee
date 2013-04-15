@@ -548,4 +548,9 @@ public class TextPad extends Pad {
 			fDocument.set(fText);
 		}
 	}
+	
+	@Override
+	public String getTex() {
+		return "";
+	}
 }

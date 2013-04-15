@@ -367,4 +367,10 @@ public class ImagePad extends Pad implements Serializable {
 		fCurrentState = STATE_IMAGE;
 		initView(fParent);
 	}
+	
+	@Override
+	public String getTex() {
+		return "\\\\includegraphics{" + fImagePath + "}";
+	}
+	
 }

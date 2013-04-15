@@ -1,8 +1,5 @@
 package org.eclipse.iee.sample.formula.utils;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
@@ -20,7 +17,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
-import org.scilab.forge.jlatexmath.TeXIcon;
 
 public class FormulaRenderer {
 
@@ -30,9 +26,15 @@ public class FormulaRenderer {
 	protected static Display fDisplay;
 
 	protected static Map<String, Image> fCachedImages = new TreeMap<String, Image>();
+	
+	private static String fLastResult;
 
 	public static void setDisplay(Display display) {
 		fDisplay = display;
+	}
+	
+	public static String getLastResult() {
+		return fLastResult;
 	}
 
 	public static Image getFormulaImage(String text) {
@@ -56,7 +58,10 @@ public class FormulaRenderer {
 			} else {
 				latex = TexTranslator.translate(text);
 			}
+			
 			logger.debug("latex: " + latex);
+			fLastResult = latex;
+			
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
 					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
@@ -91,6 +96,7 @@ public class FormulaRenderer {
 				output = SymbolicEngine.getTeX(text);
 
 			logger.debug("tex: " + output);
+			fLastResult = output;
 
 			java.awt.Image awtImage = TeXFormula.createBufferedImage(output,
 					TeXConstants.STYLE_TEXT, 20, new java.awt.Color(63, 127, 95),
