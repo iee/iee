@@ -55,7 +55,7 @@ public class PdfExportHandler implements IHandler {
 			MessageDialog.openError(shell, "Invalid editor", "Invalid editor");
 			return null;
 		}
-		
+
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setFilterNames(new String[] { "pdf (*.pdf)" });
 		fileDialog.setFilterExtensions(new String[] { "*.pdf" });
@@ -65,33 +65,43 @@ public class PdfExportHandler implements IHandler {
 			return null;
 		}
 
-		//TODO: add export
+		// TODO: add export
 		String latex = "";
 		int lastOffset = 0;
-		
+		String javaSource = "";
+
 		PadManager padManager = fPadEditor.getPadManager();
 		ContainerManager containerManager = fPadEditor.getContainerManager();
-		
-		for (Container c : containerManager.getContainers())
-		{
-			String javaSource = "";
+
+		for (Container c : containerManager.getContainers()) {
+			javaSource = "";
 			int offset = c.getPosition().getOffset();
 			int length = c.getPosition().getLength();
-			
+
 			try {
-				javaSource = containerManager.getDocument().get(lastOffset, offset);
+				javaSource = containerManager.getDocument().get(lastOffset,
+						offset - lastOffset);
 			} catch (BadLocationException e) {
 				e.printStackTrace();
 			}
-			
+
 			latex += javaSource;
-			
+
 			Pad pad = padManager.getPadById(c.getContainerID());
 			latex += pad.getTex();
-			
+
 			lastOffset = offset + length;
 		}
+
+		try {
+			javaSource = containerManager.getDocument().get(lastOffset,
+					containerManager.getDocument().getLength() - lastOffset);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 		
+		latex += javaSource;
+
 		logger.debug("full latex: " + latex);
 
 		return null;
@@ -112,4 +122,3 @@ public class PdfExportHandler implements IHandler {
 	}
 
 }
-
