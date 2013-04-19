@@ -215,7 +215,10 @@ public class FormulaPad extends Pad {
 		if (result == "")
 			image = null;
 		else
+		{
 			image = FormulaRenderer.getFormulaImage(result);
+			fTexExpression += FormulaRenderer.getLastResult();
+		}
 
 		Function updateImage = new Function() {
 
