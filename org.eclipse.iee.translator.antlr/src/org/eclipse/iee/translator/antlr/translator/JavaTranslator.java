@@ -287,6 +287,9 @@ public class JavaTranslator {
 				if (!params.contains(variable)
 						&& !fFoundedParams.contains(variable))
 					variables.add(variable);
+				if (params.size() > 1 && fFoundedParams.contains(variable)
+						&& !variable.matches(params.get(0)))
+					variables.add(variable);
 			}
 
 			logger.debug("internalFunc FoundedVariables: "
@@ -309,12 +312,62 @@ public class JavaTranslator {
 				function += "integrate(" + anonymousFunction + ", "
 						+ visit(integrateParam.min) + ","
 						+ visit(integrateParam.max) + ")";
+
+				if (ctx.params.size() > 1)
+					for (int i = 1; i < ctx.params.size(); i++) {
+						IntervalParameterContext param = (IntervalParameterContext) ctx.params
+								.get(i);
+						
+						String variable = param.variable.getText();
+						
+						if (variables.contains(variable))
+							variables.remove(variable);
+
+						template = group.getInstanceOf("anonymousFunction");
+						template.add("param", variable);
+						template.add("value", function);
+						template.add("variables", variables);
+						anonymousFunction = template.render(1).trim()
+								.replaceAll("\r\n", "").replaceAll("\t", " ");
+
+						function = "integrate(" + anonymousFunction;
+
+						function += ", " + visit(param.min) + ","
+								+ visit(param.max) + ")";
+
+					}
+
 				break;
 			case "Sum":
 				IntervalParameterContext sumParam = (IntervalParameterContext) ctx.params
 						.get(0);
 				function += "sum(" + anonymousFunction + ", "
 						+ visit(sumParam.min) + "," + visit(sumParam.max) + ")";
+				
+				if (ctx.params.size() > 1)
+					for (int i = 1; i < ctx.params.size(); i++) {
+						IntervalParameterContext param = (IntervalParameterContext) ctx.params
+								.get(i);
+						
+						String variable = param.variable.getText();
+						
+						if (variables.contains(variable))
+							variables.remove(variable);
+
+						template = group.getInstanceOf("anonymousFunction");
+						template.add("param", variable);
+						template.add("value", function);
+						template.add("variables", variables);
+						anonymousFunction = template.render(1).trim()
+								.replaceAll("\r\n", "").replaceAll("\t", " ");
+
+						function = "sum(" + anonymousFunction;
+
+						function += ", " + visit(param.min) + ","
+								+ visit(param.max) + ")";
+
+					}
+				
 				break;
 			case "Diff":
 				ValueParameterContext diffParam = (ValueParameterContext) ctx.params
@@ -328,6 +381,31 @@ public class JavaTranslator {
 				function += "product(" + anonymousFunction + ", "
 						+ visit(productParam.min) + ","
 						+ visit(productParam.max) + ")";
+				
+				if (ctx.params.size() > 1)
+					for (int i = 1; i < ctx.params.size(); i++) {
+						IntervalParameterContext param = (IntervalParameterContext) ctx.params
+								.get(i);
+						
+						String variable = param.variable.getText();
+						
+						if (variables.contains(variable))
+							variables.remove(variable);
+
+						template = group.getInstanceOf("anonymousFunction");
+						template.add("param", variable);
+						template.add("value", function);
+						template.add("variables", variables);
+						anonymousFunction = template.render(1).trim()
+								.replaceAll("\r\n", "").replaceAll("\t", " ");
+
+						function = "product(" + anonymousFunction;
+
+						function += ", " + visit(param.min) + ","
+								+ visit(param.max) + ")";
+
+					}
+				
 				break;
 			case "Sqrt":
 				function = "Math.sqrt(" + visit(ctx.func) + ")";

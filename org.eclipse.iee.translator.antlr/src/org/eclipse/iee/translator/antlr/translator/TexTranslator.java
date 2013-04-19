@@ -119,34 +119,33 @@ public class TexTranslator {
 			switch (ctx.name.getText()) {
 			case "Integrate":
 				function += "\\[";
-				for (int i = 0; i < ctx.params.size(); i++) {
+				for (int i = ctx.params.size() - 1; i >= 0; i--) {
 					function += "\\int_";
 
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
 							.get(i);
-					function += "{"
-							+ paramCtx.min.getText() + "}";
+					function += "{" + paramCtx.min.getText() + "}";
 					function += "^{" + paramCtx.max.getText() + "}";
 
 				}
 				function += "(" + visit(ctx.func) + ")" + "\\,";
-				
+
 				for (int i = 0; i < ctx.params.size(); i++) {
 					function += "d";
 
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
 							.get(i);
 					function += paramCtx.variable.getText();
-					
+
 					if (i < ctx.params.size() - 1)
 						function += "\\,";
 				}
-				
+
 				function += "\\]";
 				break;
 			case "Sum":
 				function += "\\[";
-				for (int i = 0; i < ctx.params.size(); i++) {
+				for (int i = ctx.params.size() - 1; i >= 0; i--) {
 					function += "\\sum_";
 
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
@@ -160,15 +159,17 @@ public class TexTranslator {
 				break;
 			case "Diff":
 				function += "\\[";
-				
-				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params.get(0);
-				function += "\\frac{d}{d" + valueParamCtx.variable.getText() + "}";
-				
+
+				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params
+						.get(0);
+				function += "\\frac{d}{d" + valueParamCtx.variable.getText()
+						+ "}";
+
 				function += "(" + visit(ctx.func) + ")" + "\\]";
 				break;
 			case "Product":
 				function += "\\[";
-				for (int i = 0; i < ctx.params.size(); i++) {
+				for (int i = ctx.params.size() - 1; i >= 0; i--) {
 					function += "\\prod_";
 
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
@@ -191,19 +192,19 @@ public class TexTranslator {
 		public String visitAdd(MathParser.AddContext ctx) {
 			return visit(ctx.left) + ctx.sign.getText() + visit(ctx.right);
 		}
-		
+
 		public String visitShift(MathParser.ShiftContext ctx) {
 			return visit(ctx.left) + ctx.sign.getText() + visit(ctx.right);
 		}
-		
+
 		public String visitBitwiseAdd(MathParser.BitwiseAddContext ctx) {
 			return visit(ctx.left) + "\\&" + visit(ctx.right);
 		}
-		
+
 		public String visitBitwiseOr(MathParser.BitwiseOrContext ctx) {
 			return visit(ctx.left) + "|" + visit(ctx.right);
 		}
-		
+
 		public String visitXor(MathParser.XorContext ctx) {
 			return visit(ctx.left) + "\\oplus " + visit(ctx.right);
 		}
