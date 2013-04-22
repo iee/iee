@@ -14,6 +14,7 @@ import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.utils.FormulaRenderer;
 import org.eclipse.iee.sample.formula.utils.Function;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
+import org.eclipse.iee.translator.antlr.translator.TexTranslator;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -163,7 +164,7 @@ public class FormulaPad extends Pad {
 	}
 
 	public void validateInput() {
-		//TODO: add validation
+		// TODO: add validation
 		String text = fDocument.get();
 		fOriginalExpression = text;
 		setInputIsValid();
@@ -186,8 +187,9 @@ public class FormulaPad extends Pad {
 		fTranslatingExpression = fLastValidText;
 
 		/* Set formula image */
-		Image image = FormulaRenderer.getFormulaImage(fTranslatingExpression);
-		fTexExpression = FormulaRenderer.getLastResult();
+		fTexExpression = translateToLatex(fTranslatingExpression);
+		Image image = FormulaRenderer.getFormulaImage(fTexExpression);
+
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */
@@ -214,10 +216,10 @@ public class FormulaPad extends Pad {
 		fResult = result;
 		if (result == "")
 			image = null;
-		else
-		{
-			image = FormulaRenderer.getFormulaImage(result);
-			fTexExpression += FormulaRenderer.getLastResult();
+		else {
+			String latex = translateToLatex(result);
+			fTexExpression += latex;
+			image = FormulaRenderer.getFormulaImage(latex);
 		}
 
 		Function updateImage = new Function() {
@@ -246,6 +248,27 @@ public class FormulaPad extends Pad {
 			fHoverShell.dispose();
 			fHoverShell = null;
 		}
+	}
+
+	private String translateToLatex(String text) {
+		String latex = "";
+
+		/* Translating to Latex */
+		if (text.charAt(0) == '=') {
+			latex = TexTranslator.translate(text.substring(1));
+			latex = "=" + latex;
+		} else if (text.charAt(text.length() - 1) == '=') {
+			latex = TexTranslator
+					.translate(text.substring(0, text.length() - 1));
+			latex = latex + "=";
+		} else {
+			latex = TexTranslator.translate(text);
+		}
+
+		logger.debug("latex: " + latex);
+
+		return latex;
+
 	}
 
 	public void setListeners() {
@@ -421,11 +444,14 @@ public class FormulaPad extends Pad {
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
+							fTexExpression = translateToLatex(fDocument.get());
 							Image image = FormulaRenderer
-									.getFormulaImage(fDocument.get());
-							if (image == null)
+									.getFormulaImage(fTexExpression);
+							if (image == null) {
+								fTexExpression = translateToLatex(fLastValidText);
 								image = FormulaRenderer
-										.getFormulaImage(fLastValidText);
+										.getFormulaImage(fTexExpression);
+							}
 							fHoverShell = new HoverShell(fParent, image);
 						}
 					});
@@ -595,7 +621,7 @@ public class FormulaPad extends Pad {
 	@Override
 	public void updateData(Map<String, String> params, String value) {
 	}
-	
+
 	@Override
 	public String getTex() {
 		return fTexExpression;

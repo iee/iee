@@ -370,7 +370,7 @@ public class ImagePad extends Pad implements Serializable {
 	
 	@Override
 	public String getTex() {
-		return "\\\\includegraphics{" + fImagePath + "}";
+		return "\\includegraphics{" + getContainer().getContainerManager().getStoragePath() + "image/" + fImagePath + "}";
 	}
 	
 }

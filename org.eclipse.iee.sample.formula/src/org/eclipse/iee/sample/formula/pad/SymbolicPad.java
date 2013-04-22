@@ -2,6 +2,7 @@ package org.eclipse.iee.sample.formula.pad;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.iee.sample.formula.FormulaPadManager;
@@ -16,6 +17,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 public class SymbolicPad extends FormulaPad {
+
+	private static final Logger logger = Logger.getLogger(FormulaPad.class);
 
 	public SymbolicPad() {
 		super();
@@ -55,8 +58,8 @@ public class SymbolicPad extends FormulaPad {
 		fTranslatingExpression = fLastValidText;
 
 		/* Set formula image */
-		Image image = FormulaRenderer.getSymbolicImage(fTranslatingExpression);
-		fTexExpression = FormulaRenderer.getLastResult();
+		fTexExpression = translateToLatex(fTranslatingExpression);
+		Image image = FormulaRenderer.getSymbolicImage(fTexExpression);
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */
@@ -69,8 +72,7 @@ public class SymbolicPad extends FormulaPad {
 
 	public String generateSymjaOutputCode(String expression) {
 		String variable = expression;
-		char lastVariable = variable.charAt(expression.trim()
-				.length() - 1);
+		char lastVariable = variable.charAt(expression.trim().length() - 1);
 		if (lastVariable == '=')
 			variable = expression.substring(0, expression.lastIndexOf('='));
 		String output = "";
@@ -89,9 +91,11 @@ public class SymbolicPad extends FormulaPad {
 		fResult = result;
 		if (result == "")
 			image = null;
-		else
-			image = FormulaRenderer.getSymbolicImage(result);
-
+		else {
+			String latex = translateToLatex(result);
+			fTexExpression += latex;
+			image = FormulaRenderer.getSymbolicImage(latex);
+		}
 		Function updateImage = new Function() {
 
 			@Override
@@ -104,6 +108,22 @@ public class SymbolicPad extends FormulaPad {
 		};
 
 		asyncUIUpdate(updateImage);
+
+	}
+
+	private String translateToLatex(String text) {
+		String latex = "";
+
+		if (text.charAt(text.length() - 1) == '=') {
+			latex = SymbolicEngine.getTeX(text.substring(0,
+					text.lastIndexOf('=')));
+			latex = latex + "=";
+		} else
+			latex = SymbolicEngine.getTeX(text);
+
+		logger.debug("tex: " + latex);
+
+		return latex;
 
 	}
 
@@ -126,11 +146,14 @@ public class SymbolicPad extends FormulaPad {
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
+							fTexExpression = translateToLatex(fDocument.get());
 							Image image = FormulaRenderer
-									.getSymbolicImage(fDocument.get());
-							if (image == null)
+									.getSymbolicImage(fTexExpression);
+							if (image == null) {
+								fTexExpression = translateToLatex(fLastValidText);
 								image = FormulaRenderer
-										.getSymbolicImage(fLastValidText);
+										.getSymbolicImage(fTexExpression);
+							}
 							fHoverShell = new HoverShell(fParent, image);
 						}
 					});

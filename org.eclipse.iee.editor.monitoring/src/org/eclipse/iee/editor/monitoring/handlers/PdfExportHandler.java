@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.monitoring.handlers;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -12,9 +13,11 @@ import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.monitoring.utils.Convert;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
@@ -26,6 +29,9 @@ public class PdfExportHandler implements IHandler {
 	private static final Logger logger = Logger
 			.getLogger(PdfExportHandler.class);
 
+	private String fLatex;
+	private String fPdfPath;
+	
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
 	}
@@ -60,13 +66,13 @@ public class PdfExportHandler implements IHandler {
 		fileDialog.setFilterNames(new String[] { "pdf (*.pdf)" });
 		fileDialog.setFilterExtensions(new String[] { "*.pdf" });
 
-		String pdfPath = fileDialog.open();
-		if (pdfPath == null) {
+		fPdfPath = fileDialog.open();
+		if (fPdfPath == null) {
 			return null;
 		}
 
 		// TODO: add export
-		String latex = "";
+		fLatex = "";
 		int lastOffset = 0;
 		String javaSource = "";
 
@@ -85,10 +91,10 @@ public class PdfExportHandler implements IHandler {
 				e.printStackTrace();
 			}
 
-			latex += javaSource;
+			fLatex += javaSource;
 
 			Pad pad = padManager.getPadById(c.getContainerID());
-			latex += pad.getTex();
+			fLatex += pad.getTex();
 
 			lastOffset = offset + length;
 		}
@@ -99,10 +105,23 @@ public class PdfExportHandler implements IHandler {
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
-		
-		latex += javaSource;
 
-		logger.debug("full latex: " + latex);
+		fLatex += javaSource;
+
+		logger.debug("full latex: " + fLatex);
+
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				try {
+					Convert.toSVG(fLatex, "Example.svg", true);
+					Convert.SVGTo("Example.svg", fPdfPath, Convert.PDF);
+					
+					File svgFile = new File("Example.svg");
+					svgFile.delete();
+				} catch (IOException ex) {
+				}
+			}
+		});
 
 		return null;
 	}

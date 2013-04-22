@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
-import org.eclipse.iee.translator.antlr.translator.TexTranslator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
@@ -26,43 +24,23 @@ public class FormulaRenderer {
 	protected static Display fDisplay;
 
 	protected static Map<String, Image> fCachedImages = new TreeMap<String, Image>();
-	
-	private static String fLastResult;
 
 	public static void setDisplay(Display display) {
 		fDisplay = display;
-	}
-	
-	public static String getLastResult() {
-		return fLastResult;
 	}
 
 	public static Image getFormulaImage(String text) {
 		if (text.trim().isEmpty())
 			return null;
 		Image cachedImage = fCachedImages.get(text);
-		String latex = "";
+
 		if (cachedImage != null) {
 			return cachedImage;
 		}
 
 		try {
-			/* Translating to Latex */
-			if (text.charAt(0) == '=') {
-				latex = TexTranslator.translate(text.substring(1));
-				latex = "=" + latex;
-			} else if (text.charAt(text.length() - 1) == '=') {
-				latex = TexTranslator.translate(text.substring(0,
-						text.length() - 1));
-				latex = latex + "=";
-			} else {
-				latex = TexTranslator.translate(text);
-			}
-			
-			logger.debug("latex: " + latex);
-			fLastResult = latex;
-			
-			java.awt.Image awtImage = TeXFormula.createBufferedImage(latex,
+
+			java.awt.Image awtImage = TeXFormula.createBufferedImage(text,
 					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
 					java.awt.Color.white);
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
@@ -80,33 +58,16 @@ public class FormulaRenderer {
 	public static Image getSymbolicImage(String text) {
 		if (text.trim().isEmpty())
 			return null;
-		Image cachedImage = fCachedImages.get(text);
-
-//		if (cachedImage != null) {
-//			return cachedImage;
-//		}
 
 		try {
-			String output = "";
-			if (text.charAt(text.length() - 1) == '=') {
-				output = SymbolicEngine.getTeX(text.substring(0,
-						text.lastIndexOf('=')));
-				output = output + "=";
-			} else
-				output = SymbolicEngine.getTeX(text);
 
-			logger.debug("tex: " + output);
-			fLastResult = output;
-
-			java.awt.Image awtImage = TeXFormula.createBufferedImage(output,
-					TeXConstants.STYLE_TEXT, 20, new java.awt.Color(63, 127, 95),
-					java.awt.Color.white);
+			java.awt.Image awtImage = TeXFormula.createBufferedImage(text,
+					TeXConstants.STYLE_TEXT, 20,
+					new java.awt.Color(63, 127, 95), java.awt.Color.white);
 
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
-
 			Image formulaImage = new Image(fDisplay, swtImageData);
 
-			fCachedImages.put(text, formulaImage);
 			return formulaImage;
 
 		} catch (Exception e) {
@@ -118,22 +79,28 @@ public class FormulaRenderer {
 
 	protected static ImageData convertToSWT(BufferedImage bufferedImage) {
 		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
-			DirectColorModel colorModel = (DirectColorModel)bufferedImage.getColorModel();
-			PaletteData palette = new PaletteData(colorModel.getRedMask(), colorModel.getGreenMask(), colorModel.getBlueMask());
-			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
+			DirectColorModel colorModel = (DirectColorModel) bufferedImage
+					.getColorModel();
+			PaletteData palette = new PaletteData(colorModel.getRedMask(),
+					colorModel.getGreenMask(), colorModel.getBlueMask());
+			ImageData data = new ImageData(bufferedImage.getWidth(),
+					bufferedImage.getHeight(), colorModel.getPixelSize(),
+					palette);
 			for (int y = 0; y < data.height; y++) {
 				for (int x = 0; x < data.width; x++) {
 					int rgb = bufferedImage.getRGB(x, y);
-					int pixel = palette.getPixel(new RGB((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF)); 
+					int pixel = palette.getPixel(new RGB((rgb >> 16) & 0xFF,
+							(rgb >> 8) & 0xFF, rgb & 0xFF));
 					data.setPixel(x, y, pixel);
 					if (colorModel.hasAlpha()) {
 						data.setAlpha(x, y, (rgb >> 24) & 0xFF);
 					}
 				}
 			}
-			return data;		
+			return data;
 		} else if (bufferedImage.getColorModel() instanceof IndexColorModel) {
-			IndexColorModel colorModel = (IndexColorModel)bufferedImage.getColorModel();
+			IndexColorModel colorModel = (IndexColorModel) bufferedImage
+					.getColorModel();
 			int size = colorModel.getMapSize();
 			byte[] reds = new byte[size];
 			byte[] greens = new byte[size];
@@ -143,10 +110,13 @@ public class FormulaRenderer {
 			colorModel.getBlues(blues);
 			RGB[] rgbs = new RGB[size];
 			for (int i = 0; i < rgbs.length; i++) {
-				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF, blues[i] & 0xFF);
+				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF,
+						blues[i] & 0xFF);
 			}
 			PaletteData palette = new PaletteData(rgbs);
-			ImageData data = new ImageData(bufferedImage.getWidth(), bufferedImage.getHeight(), colorModel.getPixelSize(), palette);
+			ImageData data = new ImageData(bufferedImage.getWidth(),
+					bufferedImage.getHeight(), colorModel.getPixelSize(),
+					palette);
 			data.transparentPixel = colorModel.getTransparentPixel();
 			WritableRaster raster = bufferedImage.getRaster();
 			int[] pixelArray = new int[1];
