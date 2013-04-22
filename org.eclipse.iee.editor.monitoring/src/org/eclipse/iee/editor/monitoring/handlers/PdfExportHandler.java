@@ -2,6 +2,8 @@ package org.eclipse.iee.editor.monitoring.handlers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -24,6 +26,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import de.java2html.javasource.JavaSource;
+import de.java2html.javasource.JavaSourceParser;
+import de.java2html.options.JavaSourceConversionOptions;
+
 public class PdfExportHandler implements IHandler {
 
 	private static final Logger logger = Logger
@@ -31,7 +37,7 @@ public class PdfExportHandler implements IHandler {
 
 	private String fLatex;
 	private String fPdfPath;
-	
+
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
 	}
@@ -91,7 +97,7 @@ public class PdfExportHandler implements IHandler {
 				e.printStackTrace();
 			}
 
-			fLatex += javaSource;
+			fLatex += convertJavaSource(javaSource);
 
 			Pad pad = padManager.getPadById(c.getContainerID());
 			fLatex += pad.getTex();
@@ -106,7 +112,7 @@ public class PdfExportHandler implements IHandler {
 			e.printStackTrace();
 		}
 
-		fLatex += javaSource;
+		fLatex += convertJavaSource(javaSource);
 
 		logger.debug("full latex: " + fLatex);
 
@@ -115,7 +121,7 @@ public class PdfExportHandler implements IHandler {
 				try {
 					Convert.toSVG(fLatex, "Example.svg", true);
 					Convert.SVGTo("Example.svg", fPdfPath, Convert.PDF);
-					
+
 					File svgFile = new File("Example.svg");
 					svgFile.delete();
 				} catch (IOException ex) {
@@ -124,6 +130,13 @@ public class PdfExportHandler implements IHandler {
 		});
 
 		return null;
+	}
+
+	private String convertJavaSource(String inputSource) {
+		return inputSource.replaceAll(" ", " \\\\ ")
+				.replaceAll("\r\n", " \\\\\\\\ ")
+				.replaceAll("\t", " \\\\quad ").replaceAll("\\{", "\\\\{")
+				.replaceAll("\\}", "\\\\}");
 	}
 
 	@Override
