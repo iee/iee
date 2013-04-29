@@ -125,8 +125,8 @@ public class TexTranslator {
 
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
 							.get(i);
-					function += "{" + paramCtx.min.getText() + "}";
-					function += "^{" + paramCtx.max.getText() + "}";
+					function += "{" + visit(paramCtx.min) + "}";
+					function += "^{" + visit(paramCtx.max) + "}";
 
 				}
 				function += "(" + visit(ctx.func) + ")" + "\\,";
@@ -152,8 +152,8 @@ public class TexTranslator {
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
 							.get(i);
 					function += "{" + paramCtx.variable.getText() + "="
-							+ paramCtx.min.getText() + "}";
-					function += "^{" + paramCtx.max.getText() + "}";
+							+ visit(paramCtx.min) + "}";
+					function += "^{" + visit(paramCtx.max) + "}";
 
 				}
 				function += "(" + visit(ctx.func) + ")" + "\\]";
@@ -176,8 +176,8 @@ public class TexTranslator {
 					IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params
 							.get(i);
 					function += "{" + paramCtx.variable.getText() + "="
-							+ paramCtx.min.getText() + "}";
-					function += "^{" + paramCtx.max.getText() + "}";
+							+ visit(paramCtx.min) + "}";
+					function += "^{" + visit(paramCtx.max) + "}";
 
 				}
 				function += "(" + visit(ctx.func) + ")" + "\\]";
