@@ -202,6 +202,8 @@ public class JavaTranslator {
 						String fieldName = field.getElementName();
 						if (!fieldsNames.contains(fieldName))
 							fieldsNames.add(fieldName);
+						if (!fFoundedVariables.contains(fieldName))
+							fFoundedVariables.add(fieldName);
 					}
 				} catch (JavaModelException e) {
 					e.printStackTrace();
@@ -219,6 +221,8 @@ public class JavaTranslator {
 						String fieldName = field.getElementName();
 						if (!fieldsNames.contains(fieldName))
 							fieldsNames.add(fieldName);
+						if (!fFoundedVariables.contains(fieldName))
+							fFoundedVariables.add(fieldName);
 					}
 				} catch (JavaModelException e) {
 					e.printStackTrace();
