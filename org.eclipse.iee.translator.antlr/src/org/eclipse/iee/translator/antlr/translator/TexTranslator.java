@@ -31,6 +31,7 @@ public class TexTranslator {
 			add("gamma");
 			add("kappa");
 			add("lambda");
+			add("pi");
 			add("mu");
 			add("nu");
 			add("xi");
