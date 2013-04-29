@@ -67,6 +67,7 @@ public class JavaTranslator {
 	private static String fVariableTypeString = "";
 
 	private static boolean fNewVariable;
+	private static boolean fVariableAssignment;
 	private static List<String> fFoundedVariables = new ArrayList<>();
 	private static List<String> fFoundedParams = new ArrayList<>();
 
@@ -124,6 +125,8 @@ public class JavaTranslator {
 
 		public String visitVariableAssignment(
 				MathParser.VariableAssignmentContext ctx) {
+
+			fVariableAssignment = true;
 
 			fVisitVariableName = true;
 			String name = visit(ctx.name);
@@ -321,9 +324,9 @@ public class JavaTranslator {
 					for (int i = 1; i < ctx.params.size(); i++) {
 						IntervalParameterContext param = (IntervalParameterContext) ctx.params
 								.get(i);
-						
+
 						String variable = param.variable.getText();
-						
+
 						if (variables.contains(variable))
 							variables.remove(variable);
 
@@ -347,14 +350,14 @@ public class JavaTranslator {
 						.get(0);
 				function += "sum(" + anonymousFunction + ", "
 						+ visit(sumParam.min) + "," + visit(sumParam.max) + ")";
-				
+
 				if (ctx.params.size() > 1)
 					for (int i = 1; i < ctx.params.size(); i++) {
 						IntervalParameterContext param = (IntervalParameterContext) ctx.params
 								.get(i);
-						
+
 						String variable = param.variable.getText();
-						
+
 						if (variables.contains(variable))
 							variables.remove(variable);
 
@@ -371,7 +374,7 @@ public class JavaTranslator {
 								+ visit(param.max) + ")";
 
 					}
-				
+
 				break;
 			case "Diff":
 				ValueParameterContext diffParam = (ValueParameterContext) ctx.params
@@ -385,14 +388,14 @@ public class JavaTranslator {
 				function += "product(" + anonymousFunction + ", "
 						+ visit(productParam.min) + ","
 						+ visit(productParam.max) + ")";
-				
+
 				if (ctx.params.size() > 1)
 					for (int i = 1; i < ctx.params.size(); i++) {
 						IntervalParameterContext param = (IntervalParameterContext) ctx.params
 								.get(i);
-						
+
 						String variable = param.variable.getText();
-						
+
 						if (variables.contains(variable))
 							variables.remove(variable);
 
@@ -409,7 +412,7 @@ public class JavaTranslator {
 								+ visit(param.max) + ")";
 
 					}
-				
+
 				break;
 			case "Sqrt":
 				function = "Math.sqrt(" + visit(ctx.func) + ")";
@@ -656,23 +659,20 @@ public class JavaTranslator {
 			result = getType(fPosition, result) + " " + result;
 		}
 
-		String[] parts = result.split("=");
-		if (parts.length == 1)
-			getType(position, "myTmp=" + parts[0] + ";");
+		if (!fVariableAssignment)
+			getType(position, "myTmp=" + result + ";");
 
 		/*
 		 * Generate output code, if necessary
 		 */
 		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
-			parts = inputExpression.split("=");
-
-			if (parts.length == 1) {
+			if (!fVariableAssignment) {
 				String output = generateOutputCode(result, containerId,
-						storagePath, runtimeDirectoryName);
+						storagePath, runtimeDirectoryName, false);
 				result = output;
-			} else if (parts.length > 1) {
+			} else {
 				String output = generateOutputCode(inputExpression,
-						containerId, storagePath, runtimeDirectoryName);
+						containerId, storagePath, runtimeDirectoryName, true);
 				result += output;
 			}
 		}
@@ -681,19 +681,29 @@ public class JavaTranslator {
 	}
 
 	public static String generateOutputCode(String expression,
-			String containerId, String storagePath, String runtimeDirectoryName) {
+			String containerId, String storagePath,
+			String runtimeDirectoryName, boolean isInputExpression) {
 		String expr = expression;
 
-		String[] parts = expr.replaceAll(Pattern.quote("{"), "")
-				.replaceAll(Pattern.quote("}"), "").split("=");
+		String[] parts;
+
+		if (isInputExpression) {
+			parts = expr.replaceAll(Pattern.quote("{"), "")
+					.replaceAll(Pattern.quote("}"), "").split("=");
+		} else
+			parts = expr.split("=");
+
 		if (parts.length >= 1) {
 			String variable = expression;
-			if (parts.length > 1)
+			if (parts.length > 1 && isInputExpression)
 				variable = expression.substring(0, expression.indexOf('='));
 
 			variable = variable.trim();
-			variable = variable.replaceAll(Pattern.quote("{"), "");
-			variable = variable.replaceAll(Pattern.quote("}"), "");
+			if (isInputExpression) {
+				variable = variable.replaceAll(Pattern.quote("{"), "");
+				variable = variable.replaceAll(Pattern.quote("}"), "");
+			}
+
 			VariableType varType = fVariableType;
 
 			if (varType == null) {
@@ -755,6 +765,7 @@ public class JavaTranslator {
 		fVariableType = null;
 		fVariableTypeString = "";
 		fNewVariable = false;
+		fVariableAssignment = false;
 
 		fMatrixFields.clear();
 		fDoubleFields.clear();
