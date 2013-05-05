@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.web.html"
+            icon="icons/html.gif">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.iee.web.html"
+            name="Open browser">
+      </command>
+   </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="org.eclipse.iee.web.ui.handlers.OpenBrowserHandler"
+             commandId="org.eclipse.iee.web.html">
+       </handler>
+    </extension>
+
+  <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="org.eclipse.iee.editor.addToolbar"
+               label="Pads">
+            <command
+                  commandId="org.eclipse.iee.web.html"
+                  id="org.eclipse.iee.web.html"
+                  style="push">
+               <visibleWhen checkEnabled="false">
+                  	<with variable="activePartId">
+ 					 <equals value="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor" />
+					</with>
+               </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+</plugin>

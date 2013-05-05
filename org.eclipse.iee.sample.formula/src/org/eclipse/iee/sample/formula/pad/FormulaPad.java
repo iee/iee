@@ -198,9 +198,7 @@ public class FormulaPad extends Pad {
 		try {
 			generated = JavaTranslator.translate(fTranslatingExpression,
 					getContainer().getContainerManager().getCompilationUnit(),
-					getContainer().getPosition().getOffset(), getContainerID(),
-					getContainer().getContainerManager().getStoragePath(),
-					FileMessager.getInstance().getRuntimeDirectoryName());
+					getContainer().getPosition().getOffset(), getContainerID());
 		} catch (Exception e) {
 			generated = "";
 			logger.error(e.getMessage());
@@ -250,7 +248,7 @@ public class FormulaPad extends Pad {
 		}
 	}
 
-	private String translateToLatex(String text) {
+	public static String translateToLatex(String text) {
 		String latex = "";
 
 		/* Translating to Latex */

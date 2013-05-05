@@ -25,14 +25,7 @@ matrix(type, id, variable, path) ::= <<
 					matrix += ",";
 			}
 			matrix += "}";
-			File file = new File("<path>/<id>");
-			try {
-				FileUtils.writeStringToFile(file, "" + matrix);
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			org.eclipse.iee.editor.core.pad.result.ResultContainerHolder.putResult("<id>", String.valueOf(matrix));
 		}
 	}.init(<variable>).run();
 >>
