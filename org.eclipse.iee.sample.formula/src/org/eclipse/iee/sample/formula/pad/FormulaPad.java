@@ -210,9 +210,7 @@ public class FormulaPad extends Pad {
 	protected String generateCode() {
 		return JavaTranslator.translate(fTranslatingExpression,
 				getContainer().getContainerManager().getCompilationUnit(),
-				getContainer().getPosition().getOffset(), getContainerID(),
-				getContainer().getContainerManager().getStoragePath(),
-				FileMessager.getInstance().getRuntimeDirectoryName());
+				getContainer().getPosition().getOffset(), getContainerID());
 	}
 
 	public void updateLastResult(String result) {
@@ -254,7 +252,7 @@ public class FormulaPad extends Pad {
 		}
 	}
 
-	private String translateToLatex(String text) {
+	public static String translateToLatex(String text) {
 		String latex = "";
 
 		/* Translating to Latex */

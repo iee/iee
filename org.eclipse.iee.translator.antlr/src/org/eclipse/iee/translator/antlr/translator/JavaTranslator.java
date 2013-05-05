@@ -61,6 +61,8 @@ public class JavaTranslator {
 	private static List<String> fMethodClasses = new ArrayList<>();
 	private static List<String> fInnerClasses = new ArrayList<>();
 
+	private static List<String> fFunctionVariables = new ArrayList<>();
+
 	private static VariableType fVariableType = null;
 	private static String fVariableTypeString = "";
 
@@ -683,8 +685,7 @@ public class JavaTranslator {
 	}
 
 	public static String translate(String inputExpression,
-			ICompilationUnit compilationUnit, int position, String containerId,
-			String storagePath, String runtimeDirectoryName) {
+			ICompilationUnit compilationUnit, int position, String containerId) {
 
 		logger.debug("Translate. Position: " + position + ", container: "
 				+ containerId);
@@ -728,12 +729,11 @@ public class JavaTranslator {
 		 */
 		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
 			if (!fVariableAssignment) {
-				String output = generateOutputCode(result, containerId,
-						storagePath, runtimeDirectoryName, false);
+				String output = generateOutputCode(result, containerId, false);
 				result = output;
 			} else {
 				String output = generateOutputCode(inputExpression,
-						containerId, storagePath, runtimeDirectoryName, true);
+						containerId, true);
 				result += output;
 			}
 		}
@@ -742,8 +742,7 @@ public class JavaTranslator {
 	}
 
 	private static String generateOutputCode(String expression,
-			String containerId, String storagePath,
-			String runtimeDirectoryName, boolean isInputExpression) {
+			String containerId, boolean isInputExpression) {
 		String expr = expression;
 
 		String[] parts;
@@ -794,7 +793,6 @@ public class JavaTranslator {
 				template.add("type", type);
 				template.add("id", containerId);
 				template.add("variable", variable);
-				template.add("path", storagePath + runtimeDirectoryName);
 
 				return template.render(1).trim().replaceAll("\r\n", "")
 						.replaceAll("\t", " ");
@@ -807,7 +805,6 @@ public class JavaTranslator {
 				template.add("type", type);
 				template.add("id", containerId);
 				template.add("variable", variable);
-				template.add("path", storagePath + runtimeDirectoryName);
 
 				return template.render(1).trim().replaceAll("\r\n", "")
 						.replaceAll("\t", " ");

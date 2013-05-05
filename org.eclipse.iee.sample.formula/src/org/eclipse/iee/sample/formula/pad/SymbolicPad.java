@@ -111,7 +111,7 @@ public class SymbolicPad extends FormulaPad {
 
 	}
 
-	private String translateToLatex(String text) {
+	public static String translateToLatex(String text) {
 		String latex = "";
 
 		if (text.length() > 0 && text.charAt(text.length() - 1) == '=') {

@@ -16,8 +16,8 @@ Bundle-ClassPath: lib/xstream-1.4.2.jar,
  lib/perf4j-0.9.16.jar,
  .,
  lib/log4j-1.2.17.jar,
- lib/commons-io-2.4.jar,
- lib/symja-2013-02-08.jar
+ lib/symja-2013-02-08.jar,
+ lib/commons-io-2.4.jar
 Export-Package: org.eclipse.iee.editor;
   uses:="org.eclipse.jface.resource,
    org.eclipse.iee.editor.core.storage,
@@ -41,6 +41,7 @@ Export-Package: org.eclipse.iee.editor;
    org.eclipse.swt.widgets",
  org.eclipse.iee.editor.core.pad.common;uses:="org.eclipse.iee.editor.core.pad,org.eclipse.swt.widgets",
  org.eclipse.iee.editor.core.pad.event,
+ org.eclipse.iee.editor.core.pad.result,
  org.eclipse.iee.editor.core.storage;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream,org.eclipse.iee.editor.core.pad",
  org.eclipse.iee.editor.core.utils.runtime.console;uses:="org.eclipse.jface.text,org.eclipse.core.commands.common,org.eclipse.ui.console",
  org.eclipse.iee.editor.core.utils.runtime.file,
@@ -51,5 +52,6 @@ Export-Package: org.eclipse.iee.editor;
    org.eclipse.iee.editor.core.pad,
    org.eclipse.swt.widgets,
    org.eclipse.ui.editors.text"
-Import-Package: org.eclipse.core.expressions,
+Import-Package: org.apache.commons.io,
+ org.eclipse.core.expressions,
  org.eclipse.ui.console

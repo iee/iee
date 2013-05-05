@@ -15,4 +15,5 @@ Import-Package: org.eclipse.core.expressions,
  org.eclipse.ui
 Bundle-ClassPath: lib/jsoup-1.6.3.jar,
  .
-Export-Package: org.eclipse.iee.sample.text
+Export-Package: org.eclipse.iee.sample.text,
+ org.eclipse.iee.sample.text.pad

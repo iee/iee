@@ -8,14 +8,7 @@ variable(type, id, variable, path) ::= <<
 		}
 		@Override
 		public void run() {
-			File file = new File("<path>/<id>");
-			try {
-				FileUtils.writeStringToFile(file, "" + variable);
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			org.eclipse.iee.editor.core.pad.result.ResultContainerHolder.putResult("<id>", String.valueOf(variable));
 		}
 	}.init(<variable>).run();
 >>
