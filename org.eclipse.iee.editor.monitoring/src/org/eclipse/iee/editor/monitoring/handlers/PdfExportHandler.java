@@ -77,7 +77,6 @@ public class PdfExportHandler implements IHandler {
 			return null;
 		}
 
-		// TODO: add export
 		fLatex = "";
 		int lastOffset = 0;
 		String javaSource = "";

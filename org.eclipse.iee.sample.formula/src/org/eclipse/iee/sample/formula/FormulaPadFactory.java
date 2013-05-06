@@ -14,8 +14,8 @@ public class FormulaPadFactory implements IPadFactory {
 	@Override
 	public Pad create(Map<String, String> padParams, String value) {
 		FormulaPad formulaPad = new FormulaPad();
-		formulaPad.setOriginalExression(value);
-		formulaPad.setTranslatingExression(value);
+		formulaPad.setOriginalExpression(value);
+		formulaPad.setTranslatingExpression(value);
 		return formulaPad;
 	}
 

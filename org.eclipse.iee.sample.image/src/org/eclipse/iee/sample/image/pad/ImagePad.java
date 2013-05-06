@@ -26,12 +26,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Widget;
 
 public class ImagePad extends Pad implements Serializable {
 
-	private transient static final Logger logger = Logger.getLogger(ImagePad.class);
-	
+	private transient static final Logger logger = Logger
+			.getLogger(ImagePad.class);
+
 	public transient static final int STATE_MENU = 0;
 	public transient static final int STATE_IMAGE = 1;
 	public transient static final int STATE_ERROR = 2;
@@ -45,13 +45,13 @@ public class ImagePad extends Pad implements Serializable {
 	protected transient Image fResizedImage = null;
 	private int fImageWidth = -1;
 	private int fImageHeigth = -1;
-	
+
 	private Label label;
 
 	private Composite fParent;
-	
+
 	private Composite fCurrent;
-	
+
 	public String getImagePath() {
 		return fImagePath;
 	}
@@ -80,7 +80,7 @@ public class ImagePad extends Pad implements Serializable {
 		if (fCurrent != null) {
 			fCurrent.dispose();
 		}
-		
+
 		switch (fCurrentState) {
 
 		case STATE_MENU:
@@ -108,7 +108,7 @@ public class ImagePad extends Pad implements Serializable {
 		/* Initialize controls */
 		FillLayout layout = new FillLayout(SWT.VERTICAL);
 		fParent.setLayout(layout);
-		
+
 		final Composite welcome = new Composite(fParent, SWT.NONE);
 		// It is hint operation now
 		welcome.setBackground(new Color(null, 255, 255, 255));
@@ -127,9 +127,12 @@ public class ImagePad extends Pad implements Serializable {
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				FileDialog fileDialog = new FileDialog(welcome.getShell(), SWT.OPEN);
-				fileDialog.setFilterNames(new String[] { "Jpeg (*.jpg)", "PNG (*.png)" });
-				fileDialog.setFilterExtensions(new String[] { "*.jpg", "*.png" });
+				FileDialog fileDialog = new FileDialog(welcome.getShell(),
+						SWT.OPEN);
+				fileDialog.setFilterNames(new String[] { "Jpeg (*.jpg)",
+						"PNG (*.png)" });
+				fileDialog
+						.setFilterExtensions(new String[] { "*.jpg", "*.png" });
 
 				String imagePath = fileDialog.open();
 				if (imagePath == null) {
@@ -158,19 +161,19 @@ public class ImagePad extends Pad implements Serializable {
 
 	protected void initImageView() {
 		logger.debug("initImageView");
-		
+
 		try {
-			fOriginalImage = new Image(fParent.getDisplay(), getContainer().getContainerManager().getStoragePath() + "image/" + fImagePath);
-			if (fImageWidth > 0 && fImageHeigth > 0)
-			{
-				fResizedImage = new Image(fParent.getDisplay(),
-					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
-			}
-			else
-			{
+			fOriginalImage = new Image(fParent.getDisplay(), getContainer()
+					.getContainerManager().getStoragePath()
+					+ "image/"
+					+ fImagePath);
+			if (fImageWidth > 0 && fImageHeigth > 0) {
+				fResizedImage = new Image(fParent.getDisplay(), fOriginalImage
+						.getImageData().scaledTo(fImageWidth, fImageHeigth));
+			} else {
 				fResizedImage = fOriginalImage;
 			}
-			
+
 		} catch (Exception e) {
 
 			logger.error(e.getMessage());
@@ -191,35 +194,40 @@ public class ImagePad extends Pad implements Serializable {
 
 		fParent.addControlListener(new ControlListener() {
 			@Override
-			public void controlResized(ControlEvent e) {				
+			public void controlResized(ControlEvent e) {
 				Point size = fParent.getSize();
 				fImageWidth = size.x;
 				fImageHeigth = size.y;
-				getContainer().setPadParam("width", String.valueOf(fImageWidth));
-				getContainer().setPadParam("height", String.valueOf(fImageHeigth));
-				fResizedImage = new Image(fParent.getDisplay(),
-					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
-				
+				getContainer()
+						.setPadParam("width", String.valueOf(fImageWidth));
+				getContainer().setPadParam("height",
+						String.valueOf(fImageHeigth));
+				fResizedImage = new Image(fParent.getDisplay(), fOriginalImage
+						.getImageData().scaledTo(fImageWidth, fImageHeigth));
+
 				label.setImage(fResizedImage);
 				fParent.redraw();
 			}
-			
+
 			@Override
 			public void controlMoved(ControlEvent e) {
-			}			
+			}
 		});
-		
+
 		label.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseUp(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseDown(MouseEvent e) {
 				moveCaretToCurrentPad();
+				getContainer().getContainerManager()
+						.getUserInteractionManager()
+						.activateContainer(getContainer());
 			}
-			
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 			}
@@ -292,15 +300,16 @@ public class ImagePad extends Pad implements Serializable {
 	@Override
 	public void activate() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void setSize(int width, int heght) {
 		fImageWidth = width;
 		fImageHeigth = heght;
 		if (label != null) {
 			fResizedImage = new Image(label.getParent().getDisplay(),
-					fOriginalImage.getImageData().scaledTo(fImageWidth, fImageHeigth));
+					fOriginalImage.getImageData().scaledTo(fImageWidth,
+							fImageHeigth));
 			label.setImage(fResizedImage);
 			label.getParent().redraw();
 		}
@@ -312,41 +321,44 @@ public class ImagePad extends Pad implements Serializable {
 	}
 
 	public void setImageFile(String imagePath) {
-		File storageDirectory = new File(getContainer().getContainerManager().getStoragePath() + "image/");
-		
+		File storageDirectory = new File(getContainer().getContainerManager()
+				.getStoragePath() + "image/");
+
 		if (!storageDirectory.exists()) {
 			if (!storageDirectory.mkdirs()) {
 				return;
 			}
 		}
-		
+
 		File imageSrc = new File(imagePath);
-		File imageDst = new File(getContainer().getContainerManager().getStoragePath() + "image/" + imageSrc.getName());
-		if (!imageDst.exists())
-		{
+		File imageDst = new File(getContainer().getContainerManager()
+				.getStoragePath() + "image/" + imageSrc.getName());
+		if (!imageDst.exists()) {
 			try {
 				FileUtils.copyFile(imageSrc, imageDst);
 			} catch (IOException e1) {
 			}
 		}
-		
+
 		fImagePath = imageSrc.getName();
 		getContainer().setValue(fImagePath);
 		switchToImage();
 	}
-	
+
 	public void setImageData(ImageData imageData) {
-		File storageDirectory = new File(getContainer().getContainerManager().getStoragePath() + "image/");
-		
+		File storageDirectory = new File(getContainer().getContainerManager()
+				.getStoragePath() + "image/");
+
 		if (!storageDirectory.exists()) {
 			if (!storageDirectory.mkdirs()) {
 				return;
 			}
 		}
 		ImageLoader loader = new ImageLoader();
-		loader.data = new ImageData[] {imageData};
+		loader.data = new ImageData[] { imageData };
 		String imageName = UUID.randomUUID().toString() + ".png";
-		File imageDst = new File(getContainer().getContainerManager().getStoragePath() + "image/" + imageName);
+		File imageDst = new File(getContainer().getContainerManager()
+				.getStoragePath() + "image/" + imageName);
 		FileOutputStream stream = null;
 		try {
 			stream = new FileOutputStream(imageDst);
@@ -367,10 +379,12 @@ public class ImagePad extends Pad implements Serializable {
 		fCurrentState = STATE_IMAGE;
 		initView(fParent);
 	}
-	
+
 	@Override
 	public String getTex() {
-		return "\\includegraphics{" + getContainer().getContainerManager().getStoragePath() + "image/" + fImagePath + "}";
+		return "\\includegraphics{"
+				+ getContainer().getContainerManager().getStoragePath()
+				+ "image/" + fImagePath + "}";
 	}
-	
+
 }

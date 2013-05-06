@@ -105,7 +105,7 @@ public class FormulaPad extends Pad {
 		return fOriginalExpression;
 	}
 
-	public void setOriginalExression(String expression) {
+	public void setOriginalExpression(String expression) {
 		fOriginalExpression = expression;
 	}
 
@@ -113,7 +113,7 @@ public class FormulaPad extends Pad {
 		return fTranslatingExpression;
 	}
 
-	public void setTranslatingExression(String expression) {
+	public void setTranslatingExpression(String expression) {
 		fTranslatingExpression = expression;
 	}
 

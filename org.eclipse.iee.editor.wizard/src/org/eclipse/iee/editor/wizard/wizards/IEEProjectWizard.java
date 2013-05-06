@@ -180,6 +180,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			List<String> libs = new ArrayList<String>();
 			libs.add("Jama-1.0.2.jar");
 			libs.add("commons-io-2.4.jar");
+			libs.add("ieeutils.jar");
 
 			for (Iterator<String> it = libs.iterator(); it.hasNext();) {
 				String libName = it.next();
