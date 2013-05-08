@@ -48,19 +48,6 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 		
 		fPadManager = new PadManager();
 		
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		workbench.addWorkbenchListener(new IWorkbenchListener() {
-			
-			@Override
-			public boolean preShutdown(IWorkbench workbench, boolean forced) {
-				return true;
-			}
-			
-			@Override
-			public void postShutdown(IWorkbench workbench) {
-			}
-		});
-		
 	}
 
 	/*

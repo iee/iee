@@ -22,6 +22,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.editor.core.pad.result.FileResultContainer;
@@ -33,6 +35,7 @@ import org.eclipse.iee.web.renderer.HTMLRendererManager;
 import org.eclipse.iee.web.renderer.IHTMLRenderer;
 import org.eclipse.iee.web.renderer.IHTMLRendererContext;
 import org.eclipse.iee.web.renderer.IResourceRenderContext;
+import org.eclipse.ui.internal.Workbench;
 
 
 public class TestServlet extends HttpServlet {
@@ -53,8 +56,10 @@ public class TestServlet extends HttpServlet {
 		String pathInfo = req.getPathInfo();
 		String[] parts = pathInfo.split("/");
 		
-		String projectLoc = parts[1];
+		String projectName = parts[1];
 		String clazz = parts[2];
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		File projectLoc = project.getLocation().toFile();
 		InputStream resource = new FileInputStream(new File(projectLoc, "src/" + clazz.replace(".", "/") + ".java"));
 		URLClassLoader classLoader = new URLClassLoader(new URL[] {new File(projectLoc, "bin").toURL()}, getClass().getClassLoader());
 		Class<?> loadClass;
