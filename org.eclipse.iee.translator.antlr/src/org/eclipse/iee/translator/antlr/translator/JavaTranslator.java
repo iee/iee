@@ -583,13 +583,17 @@ public class JavaTranslator {
 
 		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
 
+			String rowIndex = visit(ctx.rowIdx).replaceAll("\\.0", "");
+			String columnIndex = visit(ctx.columnIdx).replaceAll("\\.0", "");
+
 			if (fVisitVariableName) {
 				fVisitedMatrixElement = true;
-				return translateName(ctx.name.getText()) + ".set("
-						+ visit(ctx.rowIdx) + "," + visit(ctx.columnIdx) + ",";
+
+				return translateName(ctx.name.getText()) + ".set(" + rowIndex
+						+ "," + columnIndex + ",";
 			} else
-				return translateName(ctx.name.getText()) + ".get("
-						+ visit(ctx.rowIdx) + "," + visit(ctx.columnIdx) + ")";
+				return translateName(ctx.name.getText()) + ".get(" + rowIndex
+						+ "," + columnIndex + ")";
 		}
 
 		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
