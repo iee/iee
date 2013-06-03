@@ -551,6 +551,8 @@ public class TextPad extends Pad {
 	
 	@Override
 	public String getTex() {
-		return "";
+		return this.fText.replaceAll(" ", " \\\\ ")
+				.replaceAll("\r\n", " \\\\\\\\ ")
+				.replaceAll("\t", " \\\\quad ");
 	}
 }
