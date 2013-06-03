@@ -266,7 +266,7 @@ public class JavaTranslator {
 
 			String function = template.render(1).trim().replaceAll("\r\n", "")
 					.replaceAll("\t", " ");
-			
+
 			return function;
 		}
 
@@ -277,6 +277,20 @@ public class JavaTranslator {
 			fInternalFunctionsParams.clear();
 			visit(ctx.func);
 
+			switch (ctx.name.getText()) {
+			case "Sqrt":
+			case "Diff":
+				break;
+			default:
+				for (int i = 0; i < ctx.params.size(); i++) {
+					IntervalParameterContext param = (IntervalParameterContext) ctx.params
+							.get(i);
+					visit(param.min);
+					visit(param.max);
+				}
+
+			}
+
 			return fFoundedVariables;
 		}
 
@@ -285,10 +299,10 @@ public class JavaTranslator {
 			String function = "";
 
 			logger.debug("Internal function: " + ctx.func.getText());
-			
+
 			List<String> internalFunctionVariables = getInternalFunctionVariables(ctx);
 			List<String> internalFunctionParams = new ArrayList<>();
-						
+
 			String value = visit(ctx.func);
 
 			List<String> params = new ArrayList<>();
@@ -672,9 +686,9 @@ public class JavaTranslator {
 			ICompilationUnit compilationUnit, int position, String containerId,
 			String storagePath, String runtimeDirectoryName) {
 
-		logger.debug("Translate. Position: " + position + ", container: " + containerId);
-		
-		
+		logger.debug("Translate. Position: " + position + ", container: "
+				+ containerId);
+
 		if (inputExpression.trim().isEmpty())
 			return "";
 
