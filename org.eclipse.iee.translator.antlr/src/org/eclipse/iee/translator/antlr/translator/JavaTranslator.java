@@ -61,15 +61,18 @@ public class JavaTranslator {
 	private static List<String> fMethodClasses = new ArrayList<>();
 	private static List<String> fInnerClasses = new ArrayList<>();
 
-	private static List<String> fFunctionVariables = new ArrayList<>();
-
 	private static VariableType fVariableType = null;
 	private static String fVariableTypeString = "";
 
 	private static boolean fNewVariable;
 	private static boolean fVariableAssignment;
+
+	private static boolean fFunctionDefinition;
+	private static List<String> fDeterminedFunctionParams = new ArrayList<>();
+	private static List<String> fDeterminedFunctionVariables = new ArrayList<>();
+
 	private static List<String> fFoundedVariables = new ArrayList<>();
-	private static List<String> fFoundedParams = new ArrayList<>();
+	private static List<String> fInternalFunctionsParams = new ArrayList<>();
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -86,37 +89,35 @@ public class JavaTranslator {
 		public String visitFunctionDefinition(
 				MathParser.FunctionDefinitionContext ctx) {
 
+			fFunctionDefinition = true;
+
 			String name = translateName(ctx.name.name.getText());
 			name = firstLetterUpperCase(name);
 
-			List<String> params = new ArrayList<>();
-
 			for (int i = 0; i < ctx.name.params.size(); i++) {
-				params.add(visit(ctx.name.params.get(i)));
+				String param = visit(ctx.name.params.get(i));
+				fDeterminedFunctionParams.add(param);
 			}
 
-			fFoundedVariables.clear();
+			fDeterminedFunctionVariables.clear();
 
 			String value = visit(ctx.value);
 
-			List<String> variables = new ArrayList<>();
-
-			for (int i = 0; i < fFoundedVariables.size(); i++) {
-				String variable = fFoundedVariables.get(i);
-				if (!params.contains(variable))
-					variables.add(variable);
+			for (int i = 0; i < fInternalFunctionsParams.size(); i++) {
+				String param = fInternalFunctionsParams.get(i);
+				if (fDeterminedFunctionVariables.contains(param))
+					fDeterminedFunctionVariables.remove(param);
 			}
 
-			logger.debug("funcDef FoundedVariables: "
-					+ fFoundedVariables.toString());
-			logger.debug("funcDef Variables: " + variables.toString());
+			logger.debug("funcDef DeterminedFunctionVariables: "
+					+ fDeterminedFunctionVariables.toString());
 
 			STGroup group = new STGroupDir("/templates");
 			ST template = group.getInstanceOf("function");
 			template.add("name", name);
-			template.add("params", params);
+			template.add("params", fDeterminedFunctionParams);
 			template.add("value", value);
-			template.add("variables", variables);
+			template.add("variables", fDeterminedFunctionVariables);
 
 			return template.render(1).trim().replaceAll("\r\n", "")
 					.replaceAll("\t", " ");
@@ -207,6 +208,11 @@ public class JavaTranslator {
 							fieldsNames.add(fieldName);
 						if (!fFoundedVariables.contains(fieldName))
 							fFoundedVariables.add(fieldName);
+						if (fFunctionDefinition
+								&& !fDeterminedFunctionVariables
+										.contains(fieldName))
+							fDeterminedFunctionVariables.add(fieldName);
+
 					}
 				} catch (JavaModelException e) {
 					e.printStackTrace();
@@ -226,6 +232,10 @@ public class JavaTranslator {
 							fieldsNames.add(fieldName);
 						if (!fFoundedVariables.contains(fieldName))
 							fFoundedVariables.add(fieldName);
+						if (fFunctionDefinition
+								&& !fDeterminedFunctionVariables
+										.contains(fieldName))
+							fDeterminedFunctionVariables.add(fieldName);
 					}
 				} catch (JavaModelException e) {
 					e.printStackTrace();
@@ -254,17 +264,31 @@ public class JavaTranslator {
 			template.add("params", params);
 			template.add("class", isFunctionClass);
 
-			return template.render(1).trim().replaceAll("\r\n", "")
+			String function = template.render(1).trim().replaceAll("\r\n", "")
 					.replaceAll("\t", " ");
+			
+			return function;
+		}
 
+		private List<String> getInternalFunctionVariables(
+				MathParser.InternalFunctionContext ctx) {
+
+			fFoundedVariables.clear();
+			fInternalFunctionsParams.clear();
+			visit(ctx.func);
+
+			return fFoundedVariables;
 		}
 
 		public String visitInternalFunction(
 				MathParser.InternalFunctionContext ctx) {
 			String function = "";
 
-			fFoundedVariables.clear();
-
+			logger.debug("Internal function: " + ctx.func.getText());
+			
+			List<String> internalFunctionVariables = getInternalFunctionVariables(ctx);
+			List<String> internalFunctionParams = new ArrayList<>();
+						
 			String value = visit(ctx.func);
 
 			List<String> params = new ArrayList<>();
@@ -281,34 +305,35 @@ public class JavaTranslator {
 					String paramVariable = param.variable.getText();
 					params.add(paramVariable);
 
-					if (!fFoundedParams.contains(paramVariable))
-						fFoundedParams.add(paramVariable);
+					if (!internalFunctionParams.contains(paramVariable))
+						internalFunctionParams.add(paramVariable);
+					if (!fInternalFunctionsParams.contains(paramVariable))
+						fInternalFunctionsParams.add(paramVariable);
+
 				}
 
 			}
 
 			List<String> variables = new ArrayList<>();
 
-			for (int i = 0; i < fFoundedVariables.size(); i++) {
-				String variable = fFoundedVariables.get(i);
-				if (!params.contains(variable)
-						&& !fFoundedParams.contains(variable))
+			for (int i = 0; i < internalFunctionVariables.size(); i++) {
+				String variable = internalFunctionVariables.get(i);
+				if (!fInternalFunctionsParams.contains(variable)
+						&& !internalFunctionParams.contains(variable))
 					variables.add(variable);
-				if (params.size() > 1 && fFoundedParams.contains(variable)
+				if (params.size() > 1
+						&& internalFunctionParams.contains(variable)
 						&& !variable.matches(params.get(0)))
 					variables.add(variable);
 			}
 
 			logger.debug("internalFunc FoundedVariables: "
-					+ fFoundedVariables.toString());
+					+ internalFunctionVariables.toString());
 			logger.debug("internalFunc Variables: " + variables.toString());
 
-			if (ctx.name.getText().matches("Sqrt"))
-			{
-				function = "Math.sqrt(" + visit(ctx.func) + ")";
-			}
-			else
-			{
+			if (ctx.name.getText().matches("Sqrt")) {
+				function = "Math.sqrt(" + value + ")";
+			} else {
 				STGroup group = new STGroupDir("/templates");
 				ST template = group.getInstanceOf("anonymousFunction");
 				template.add("param", params.get(0));
@@ -319,7 +344,7 @@ public class JavaTranslator {
 						.replaceAll("\r\n", "").replaceAll("\t", " ");
 
 				logger.debug("InternalFunc name: " + ctx.name.getText());
-				
+
 				switch (ctx.name.getText()) {
 				case "Integrate":
 					IntervalParameterContext integrateParam = (IntervalParameterContext) ctx.params
@@ -343,7 +368,8 @@ public class JavaTranslator {
 							template.add("value", function);
 							template.add("variables", variables);
 							anonymousFunction = template.render(1).trim()
-									.replaceAll("\r\n", "").replaceAll("\t", " ");
+									.replaceAll("\r\n", "")
+									.replaceAll("\t", " ");
 
 							function = "integrate(" + anonymousFunction;
 
@@ -357,7 +383,8 @@ public class JavaTranslator {
 					IntervalParameterContext sumParam = (IntervalParameterContext) ctx.params
 							.get(0);
 					function += "sum(" + anonymousFunction + ", "
-							+ visit(sumParam.min) + "," + visit(sumParam.max) + ")";
+							+ visit(sumParam.min) + "," + visit(sumParam.max)
+							+ ")";
 
 					if (ctx.params.size() > 1)
 						for (int i = 1; i < ctx.params.size(); i++) {
@@ -374,7 +401,8 @@ public class JavaTranslator {
 							template.add("value", function);
 							template.add("variables", variables);
 							anonymousFunction = template.render(1).trim()
-									.replaceAll("\r\n", "").replaceAll("\t", " ");
+									.replaceAll("\r\n", "")
+									.replaceAll("\t", " ");
 
 							function = "sum(" + anonymousFunction;
 
@@ -412,7 +440,8 @@ public class JavaTranslator {
 							template.add("value", function);
 							template.add("variables", variables);
 							anonymousFunction = template.render(1).trim()
-									.replaceAll("\r\n", "").replaceAll("\t", " ");
+									.replaceAll("\r\n", "")
+									.replaceAll("\t", " ");
 
 							function = "product(" + anonymousFunction;
 
@@ -571,6 +600,11 @@ public class JavaTranslator {
 			if (!fFoundedVariables.contains(variable))
 				fFoundedVariables.add(variable);
 
+			if (fFunctionDefinition
+					&& !fDeterminedFunctionVariables.contains(variable)
+					&& !fDeterminedFunctionParams.contains(variable))
+				fDeterminedFunctionVariables.add(variable);
+
 			return variable;
 		}
 
@@ -638,6 +672,9 @@ public class JavaTranslator {
 			ICompilationUnit compilationUnit, int position, String containerId,
 			String storagePath, String runtimeDirectoryName) {
 
+		logger.debug("Translate. Position: " + position + ", container: " + containerId);
+		
+		
 		if (inputExpression.trim().isEmpty())
 			return "";
 
@@ -690,7 +727,7 @@ public class JavaTranslator {
 		return result;
 	}
 
-	public static String generateOutputCode(String expression,
+	private static String generateOutputCode(String expression,
 			String containerId, String storagePath,
 			String runtimeDirectoryName, boolean isInputExpression) {
 		String expr = expression;
@@ -776,6 +813,7 @@ public class JavaTranslator {
 		fVariableTypeString = "";
 		fNewVariable = false;
 		fVariableAssignment = false;
+		fFunctionDefinition = false;
 
 		fMatrixFields.clear();
 		fDoubleFields.clear();
@@ -784,8 +822,12 @@ public class JavaTranslator {
 
 		fMethodClasses.clear();
 		fInnerClasses.clear();
-		fFunctionVariables.clear();
-		fFoundedParams.clear();
+
+		fDeterminedFunctionParams.clear();
+		fDeterminedFunctionVariables.clear();
+
+		fFoundedVariables.clear();
+		fInternalFunctionsParams.clear();
 		fOtherSourceClasses.clear();
 	}
 
