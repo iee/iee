@@ -5,12 +5,12 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="JavaEditor with Pads"
+            class="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             extensions="java"
             icon="icons/iee_logo.png"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            class="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor"
-            id="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">
+            id="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor"
+            name="IEE Editor">
       </editor>
    </extension>
    <extension
@@ -68,6 +68,15 @@
             </command>
          </toolbar>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.iee.editor.jdt.perspectives.IEEPerspective"
+            icon="icons/iee_logo.png"
+            id="org.eclipse.iee.editor.jdt.perspectives.IEEPerspective"
+            name="IEE">
+      </perspective>
    </extension>
   
 

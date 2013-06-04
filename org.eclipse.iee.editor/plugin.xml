@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="Text Editor with IEE pads"
+            name="IEE Editor"
             icon="icons/iee_logo.png"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             class="org.eclipse.iee.editor.sample.SampleExtendedEditor"
