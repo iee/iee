@@ -16,6 +16,10 @@
           commandId="org.eclipse.iee.sample.formula.addSymbolicCommand"
           icon="icons/symbolic.jpg">
     </image>
+    <image
+          commandId="org.eclipse.iee.sample.formula.addInputCommand"
+          icon="icons/input.png">
+    </image>
  </extension> 
  <extension
        point="org.eclipse.ui.commands">
@@ -30,6 +34,10 @@
           id="org.eclipse.iee.sample.formula.addSymbolicCommand"
           name="Add Symbolic">
     </command>
+    <command
+          id="org.eclipse.iee.sample.formula.addInputCommand"
+          name="Add Input">
+    </command>
  </extension>
  <extension
        point="org.eclipse.ui.handlers">
@@ -43,6 +51,10 @@
     <handler
           class="org.eclipse.iee.sample.formula.handlers.AddSymbolicHandler"
           commandId="org.eclipse.iee.sample.formula.addSymbolicCommand">
+    </handler>
+    <handler
+          class="org.eclipse.iee.sample.formula.handlers.AddInputHandler"
+          commandId="org.eclipse.iee.sample.formula.addInputCommand">
     </handler>
  </extension>
   <extension

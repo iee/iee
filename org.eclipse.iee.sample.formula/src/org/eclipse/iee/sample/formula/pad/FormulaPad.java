@@ -196,11 +196,7 @@ public class FormulaPad extends Pad {
 
 		String generated = "";
 		try {
-			generated = JavaTranslator.translate(fTranslatingExpression,
-					getContainer().getContainerManager().getCompilationUnit(),
-					getContainer().getPosition().getOffset(), getContainerID(),
-					getContainer().getContainerManager().getStoragePath(),
-					FileMessager.getInstance().getRuntimeDirectoryName());
+			generated = generateCode();
 		} catch (Exception e) {
 			generated = "";
 			logger.error(e.getMessage());
@@ -209,6 +205,14 @@ public class FormulaPad extends Pad {
 
 		getContainer().setTextContent(generated);
 		getContainer().setValue(fOriginalExpression);
+	}
+
+	protected String generateCode() {
+		return JavaTranslator.translate(fTranslatingExpression,
+				getContainer().getContainerManager().getCompilationUnit(),
+				getContainer().getPosition().getOffset(), getContainerID(),
+				getContainer().getContainerManager().getStoragePath(),
+				FileMessager.getInstance().getRuntimeDirectoryName());
 	}
 
 	public void updateLastResult(String result) {

@@ -176,6 +176,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				fContainerManager.getContainerManagerID(), "Formula",
 				new FormulaPadFactory());
 		fPadManager.registerPadFactory(
+				fContainerManager.getContainerManagerID(), "Input",
+				new FormulaPadFactory());
+		fPadManager.registerPadFactory(
 				fContainerManager.getContainerManagerID(), "Symbolic",
 				new SymbolicPadFactory());
 		fPadManager.registerPadFactory(

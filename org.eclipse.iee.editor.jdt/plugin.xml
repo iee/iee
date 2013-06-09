@@ -42,6 +42,16 @@
                </visibleWhen>
             </command>
             <command
+                  commandId="org.eclipse.iee.sample.formula.addInputCommand"
+                  id="org.eclipse.iee.sample.formula.toolbar.addCommand"
+                  style="push">
+               <visibleWhen checkEnabled="false">
+                  	<with variable="activePartId">
+ 					 <equals value="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor" />
+					</with>
+               </visibleWhen>
+            </command>
+            <command
                   commandId="org.eclipse.iee.sample.text.addCommand"
                   id="org.eclipse.iee.sample.text.toolbar.addCommand"
                   style="push">

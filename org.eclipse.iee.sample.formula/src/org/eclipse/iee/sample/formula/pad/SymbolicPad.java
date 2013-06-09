@@ -114,13 +114,13 @@ public class SymbolicPad extends FormulaPad {
 	private String translateToLatex(String text) {
 		String latex = "";
 
-		if (text.charAt(text.length() - 1) == '=') {
+		if (text.length() > 0 && text.charAt(text.length() - 1) == '=') {
 			latex = SymbolicEngine.getTeX(text.substring(0,
 					text.lastIndexOf('=')));
 			latex = latex + "=";
-		} else
+		} else {
 			latex = SymbolicEngine.getTeX(text);
-
+		}
 		logger.debug("tex: " + latex);
 
 		return latex;
