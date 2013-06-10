@@ -687,7 +687,7 @@ public class JavaTranslator {
 			String storagePath, String runtimeDirectoryName) {
 
 		logger.debug("Translate. Position: " + position + ", container: "
-				+ containerId);
+				+ containerId + "; Input: " + inputExpression);
 
 		if (inputExpression.trim().isEmpty())
 			return "";
@@ -704,8 +704,14 @@ public class JavaTranslator {
 
 		clear();
 
-		fCompilationUnit = compilationUnit;
 		fPosition = position;
+
+		try {
+			fCompilationUnit = compilationUnit.getWorkingCopy(null);
+			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+		}
 
 		parse();
 
@@ -737,6 +743,8 @@ public class JavaTranslator {
 				result += output;
 			}
 		}
+
+		logger.debug("Translate. Output: " + result);
 
 		return result;
 	}
@@ -850,6 +858,8 @@ public class JavaTranslator {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(unit);
 		parser.setResolveBindings(true);
+		parser.setStatementsRecovery(true);
+		parser.setBindingsRecovery(true);
 		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
@@ -1031,14 +1041,14 @@ public class JavaTranslator {
 		fVariableTypeString = "double";
 
 		try {
-			ICompilationUnit copy = fCompilationUnit.getWorkingCopy(null);
-			IBuffer buffer = copy.getBuffer();
+
+			IBuffer buffer = fCompilationUnit.getBuffer();
 			buffer.replace(position, 0, assignment);
-			copy.reconcile(AST.JLS4, false, null, null);
+			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
 
 			// logger.debug("CopySource" + copy.getSource());
 
-			CompilationUnit unit = (CompilationUnit) createAST(copy);
+			CompilationUnit unit = (CompilationUnit) createAST(fCompilationUnit);
 			unit.accept(new ASTVisitor() {
 				@Override
 				public boolean visit(Assignment node) {
@@ -1061,7 +1071,8 @@ public class JavaTranslator {
 				}
 			});
 
-			copy.discardWorkingCopy();
+			buffer.replace(position, assignment.length(), "");
+			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
 
 		} catch (JavaModelException e) {
 			e.printStackTrace();
