@@ -45,12 +45,12 @@ public class OpenBrowserHandler implements IHandler {
 			return null;
 		}
 		IResource resource = ResourceUtil.getResource(targetEditor.getEditorInput());
-		File projectLoc = resource.getProject().getLocation().toFile();
-		String clazz = root.getElementName().replace(".java", "");
+		String projectName = resource.getProject().getName();
+		String clazz = root.findPrimaryType().getFullyQualifiedName();
 		StringBuilder sb = new StringBuilder();
 		sb.append("http://localhost:8080/test/doc/");
 		try {
-			sb.append(URLEncoder.encode(projectLoc.getAbsolutePath(), "utf-8"));
+			sb.append(URLEncoder.encode(projectName, "utf-8"));
 			sb.append('/');
 			sb.append(URLEncoder.encode(clazz, "utf-8"));
 		} catch (UnsupportedEncodingException e1) {

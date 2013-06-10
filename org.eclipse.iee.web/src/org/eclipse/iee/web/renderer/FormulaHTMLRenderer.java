@@ -19,9 +19,12 @@ public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPad> {
 			IHTMLRendererContext context) throws IOException {
 			
 		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), new HashMap<String, String>())).append("' />");
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("type", "result");
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), params)).append("' />");
+		String result = context.getResultContainer().getResult(pad.getContainerID());
+		if (result != null) {
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("type", "result");
+			writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), params)).append("' />");
+		}
 	}
 
 	@Override

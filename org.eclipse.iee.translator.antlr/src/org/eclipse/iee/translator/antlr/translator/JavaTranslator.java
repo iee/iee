@@ -741,7 +741,7 @@ public class JavaTranslator {
 		return result;
 	}
 
-	private static String generateOutputCode(String expression,
+	public static String generateOutputCode(String expression,
 			String containerId, boolean isInputExpression) {
 		String expr = expression;
 

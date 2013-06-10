@@ -1,5 +1,6 @@
 package org.eclipse.iee.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -35,7 +36,6 @@ import org.eclipse.iee.web.renderer.IResourceRenderContext;
 import org.eclipse.iee.web.store.DevDocumentStore;
 import org.eclipse.iee.web.store.IDocumentStore;
 
-
 public class TestServlet extends HttpServlet {
 
 	private HTMLRendererManager manager;
@@ -44,11 +44,11 @@ public class TestServlet extends HttpServlet {
 	
 	private IDocumentStore documentStore;
 	
-	public TestServlet(PadManager padManager, HTMLRendererManager manager) {
+	public TestServlet(File root, PadManager padManager, HTMLRendererManager manager) {
 		super();
 		this.manager = manager;
 		documentRenderer = new DefaultHTMLDocumentRenderer(manager);
-		documentStore = new DevDocumentStore(new DefaultDocumentParser(padManager));
+		documentStore = new DevDocumentStore(root, new DefaultDocumentParser(padManager));
 	}	
 	
 	@Override

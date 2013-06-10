@@ -2,10 +2,11 @@ package org.eclipse.iee.web;
 
 import java.util.Hashtable;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
-import org.eclipse.iee.sample.formula.pad.SymbolicPad;
-import org.eclipse.iee.web.renderer.DefaultHTMLRenderer;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
 import org.eclipse.iee.web.renderer.HTMLRendererManager;
 import org.eclipse.iee.web.renderer.ImageHTMLRenderer;
@@ -15,7 +16,6 @@ import org.eclipse.iee.web.renderer.TextHTMLRenderer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -51,7 +51,8 @@ public class Activator implements BundleActivator {
 		server = new Server(8080);
 		ServletContextHandler ctx = new ServletContextHandler();
 		ctx.setContextPath("/test");
-		ctx.addServlet(new ServletHolder(new TestServlet(IeeEditorPlugin.getPadManager(), rendererManager)),"/doc/*");
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		ctx.addServlet(new ServletHolder(new TestServlet(workspace.getRoot().getLocation().toFile(), IeeEditorPlugin.getPadManager(), rendererManager)),"/doc/*");
         server.setHandler(ctx);
         server.start();
 	}

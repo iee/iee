@@ -53,16 +53,16 @@ public class FileResultContainer implements IResultContainer {
 		InputStream is = null;
 		try {
 			File file = getFile(padId);
-			if (!file.exists()) {
-				return null;
+			if (file.exists()) {
+				is = new FileInputStream(file);
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				int b;
+				while ((b = is.read()) != -1) {
+					bos.write(b);
+				}
+				return new String(bos.toByteArray(), Charset.forName("utf-8"));
 			}
-			is = new FileInputStream(file);
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			int b;
-			while ((b = is.read()) != -1) {
-				bos.write(b);
-			}
-			return new String(bos.toByteArray(), Charset.forName("utf-8"));
+			return null;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
