@@ -9,6 +9,7 @@ import org.eclipse.iee.web.renderer.DefaultHTMLRenderer;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
 import org.eclipse.iee.web.renderer.HTMLRendererManager;
 import org.eclipse.iee.web.renderer.ImageHTMLRenderer;
+import org.eclipse.iee.web.renderer.InputHTMLRenderer;
 import org.eclipse.iee.web.renderer.SymbolicHTMLRenderer;
 import org.eclipse.iee.web.renderer.TextHTMLRenderer;
 import org.eclipse.jetty.server.Server;
@@ -67,6 +68,7 @@ public class Activator implements BundleActivator {
 
 	private void registerRenderer(HTMLRendererManager rendererManager) {
 		rendererManager.registerPadHTMLRenderer("Formula", new FormulaHTMLRenderer());
+		rendererManager.registerPadHTMLRenderer("Input", new InputHTMLRenderer());
 		rendererManager.registerPadHTMLRenderer("Symbolic", new SymbolicHTMLRenderer(new SymbolicEngine()));
 		rendererManager.registerPadHTMLRenderer("Image", new ImageHTMLRenderer());
 		rendererManager.registerPadHTMLRenderer("Text", new TextHTMLRenderer());

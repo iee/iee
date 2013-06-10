@@ -8,7 +8,7 @@ variable(type, id, variable, path) ::= <<
 		}
 		@Override
 		public void run() {
-			org.eclipse.iee.editor.core.pad.result.ResultContainerHolder.putResult("<id>", String.valueOf(variable));
+			org.eclipse.iee.editor.core.pad.result.EvaluationContextHolder.putResult("<id>", String.valueOf(variable));
 		}
 	}.init(<variable>).run();
 >>

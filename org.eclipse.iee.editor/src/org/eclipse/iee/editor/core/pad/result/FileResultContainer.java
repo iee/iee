@@ -52,7 +52,11 @@ public class FileResultContainer implements IResultContainer {
 	public String getResult(String padId) {
 		InputStream is = null;
 		try {
-			is = new FileInputStream(getFile(padId));
+			File file = getFile(padId);
+			if (!file.exists()) {
+				return null;
+			}
+			is = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			int b;
 			while ((b = is.read()) != -1) {

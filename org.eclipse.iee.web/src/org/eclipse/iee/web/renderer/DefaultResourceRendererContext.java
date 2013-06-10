@@ -3,15 +3,16 @@
  */
 package org.eclipse.iee.web.renderer;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.iee.editor.core.pad.result.IParameterProvider;
 import org.eclipse.iee.editor.core.pad.result.IResultContainer;
+import org.eclipse.iee.web.store.IDocumentStore;
 
 /**
  * @author Toxin
@@ -23,15 +24,21 @@ public class DefaultResourceRendererContext extends DefaultHTMLRendererContext i
 	
 	private HttpServletResponse response;
 	
-	private File storagePath;
+	private IDocumentStore documentStore;
 	
-	public DefaultResourceRendererContext(String docUrl,
-			IResultContainer fResultContainer, File storagePath, 
-			HttpServletRequest request, HttpServletResponse response) {
-		super(docUrl, fResultContainer);
-		this.storagePath = storagePath;
+	private String bundle;
+	
+	private String document;
+	
+	public DefaultResourceRendererContext(String docUrl, Map<String, String> params,
+			IResultContainer fResultContainer, boolean isEditMode, IDocumentStore documentStore, 
+			HttpServletRequest request, HttpServletResponse response, String bundle, String document, IParameterProvider parameterProvider) {
+		super(docUrl, params, fResultContainer, isEditMode, parameterProvider);
 		this.request = request;
 		this.response = response;
+		this.documentStore = documentStore;
+		this.bundle = bundle;
+		this.document = document;
 	}
 
 	@Override
@@ -46,7 +53,7 @@ public class DefaultResourceRendererContext extends DefaultHTMLRendererContext i
 
 	@Override
 	public InputStream getResourceAsStream(String string) throws IOException {
-		return new FileInputStream(new File(storagePath, string));
+		return documentStore.getResourceAsStream(bundle, document, string);
 	}
 
 }
