@@ -61,8 +61,10 @@ class StyledTextManager {
 						logger.debug("applyTextPresentation start "
 								+ changedRegion);
 
+						StyleRange[] containersRanges = getContainersStyleRanges(changedRegion);
+
 						injectStylesToTextPresentation(textPresentation,
-								getContainersStyleRanges(changedRegion));
+								containersRanges);
 
 					}
 				});
@@ -83,14 +85,23 @@ class StyledTextManager {
 		}
 
 		int bottomLineIndex = fSourceViewer.getBottomIndex();
-		if (bottomLineIndex < fStyledText.getLineCount() - 1) {
+		int lineCount = fStyledText.getLineCount();
+
+		if (bottomLineIndex < lineCount - 1) {
 			bottomLineIndex++;
 		}
-
+		
+		if (bottomLineIndex > lineCount - 1) {
+			bottomLineIndex = lineCount - 1;
+		}
+				
 		int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
 		int bottomVisibleOffset = fStyledText.getOffsetAtLine(bottomLineIndex)
 				+ fStyledText.getLine(bottomLineIndex).length();
 
+		logger.debug("topVisibleOffset: " + topVisibleOffset );
+		logger.debug("bottomVisibleOffset: " + bottomVisibleOffset);
+		
 		for (Container c : fContainerManager.getContainers()) {
 			boolean isVisible = false;
 			if (c.getPosition().getOffset() >= topVisibleOffset) {
@@ -101,8 +112,12 @@ class StyledTextManager {
 			}
 			c.setVisible(isVisible);
 			if (isVisible) {
+				logger.debug("set container visible: " + c.toString());
 				c.updatePresentation();
 			}
+			else
+				logger.debug("set container invisible: " + c.toString());
+			
 		}
 	}
 
