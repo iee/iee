@@ -199,11 +199,8 @@ public class ContainerManager extends EventManager {
 			fStyledTextManager.updateStyles(container);
 		}
 	}
-
-
 	
 	/* Internal functions */
-
 	
 	protected void initDocumentListener() {
 		fDocumentListener = new DocumentListener();

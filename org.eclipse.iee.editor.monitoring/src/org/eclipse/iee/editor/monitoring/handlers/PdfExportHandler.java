@@ -2,9 +2,6 @@ package org.eclipse.iee.editor.monitoring.handlers;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -25,10 +22,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
-
-import de.java2html.javasource.JavaSource;
-import de.java2html.javasource.JavaSourceParser;
-import de.java2html.options.JavaSourceConversionOptions;
 
 public class PdfExportHandler implements IHandler {
 

@@ -88,15 +88,6 @@
             name="IEE">
       </perspective>
    </extension>
-   <extension
-         point="org.eclipse.jdt.ui.foldingStructureProviders">
-      <provider
-            class="org.eclipse.iee.editor.jdt.ui.text.folding.IeeJavaFoldingStructureProvider"
-            id="org.eclipse.iee.editor.jdt.foldingProvider"
-            name="IEE Java Folding"
-            preferencesClass="org.eclipse.iee.editor.jdt.ui.text.folding.IeeJavaFoldingPreferenceBlock">
-      </provider>
-   </extension>
   
 
 </plugin>
