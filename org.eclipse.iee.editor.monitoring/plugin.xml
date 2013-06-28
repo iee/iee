@@ -61,12 +61,6 @@
       </category>
    </extension>
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.eclipse.iee.editor.monitoring.perspectives.EarlyStartup">
-      </startup>
-   </extension>
-   <extension
          point="org.eclipse.ui.commandImages">
       <image
             commandId="org.eclipse.iee.editor.monitoring.pfdExport"

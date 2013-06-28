@@ -77,10 +77,7 @@ public class ContainerManager extends EventManager {
 	}
 	State fState = State.READY;
 	
-	
-	
 	/* Getters */
-
 	
 	public Object[] getElements() {
 		return fContainers.toArray();

@@ -9,8 +9,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
@@ -21,7 +19,6 @@ public class UserInteractionManager {
 	private final ContainerManager fContainerManager;
 	
 	private Container fSelectedContainer;
-	
 	private Container fActiveContainer;
 	
 	public UserInteractionManager(ContainerManager containerManager) {
@@ -31,6 +28,10 @@ public class UserInteractionManager {
 		fSelectedContainer = null;
 		
 		initListeners();
+	}
+	
+	public Container getSelectedContainer() {
+		return fSelectedContainer;
 	}
 	
 	public void moveCaretTo(int offset) {

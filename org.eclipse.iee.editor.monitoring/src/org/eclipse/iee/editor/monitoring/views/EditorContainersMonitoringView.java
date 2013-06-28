@@ -1,11 +1,18 @@
 package org.eclipse.iee.editor.monitoring.views;
 
+import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.ContainerManager;
+import org.eclipse.iee.editor.core.container.UserInteractionManager;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -20,7 +27,6 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-
 public class EditorContainersMonitoringView extends ViewPart {
 
 	/**
@@ -31,21 +37,29 @@ public class EditorContainersMonitoringView extends ViewPart {
 	private IWorkbenchPart fCurrentPadEditor;
 	private IPropertyListener fCurrentPadEditorPropertyListener;
 	private IPartListener fWorkbenchPartListener;
-	
+
 	private TableViewer fContainersTableViewer;
 
-	
+	private static final Logger logger = Logger
+			.getLogger(EditorContainersMonitoringView.class);
+
 	class ContainerContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(Object parent) {
 			return (Object[]) parent;
 		}
-		@Override public void dispose() {}
-		@Override public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
 	}
-	
-	class ContainersLabelProvider
-		extends LabelProvider implements ITableLabelProvider {
+
+	class ContainersLabelProvider extends LabelProvider implements
+			ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -58,28 +72,27 @@ public class EditorContainersMonitoringView extends ViewPart {
 			switch (columnIndex) {
 			case 0:
 				return container.getContainerID();
-				
+
 			case 1:
 				return String.format("%d", container.getPosition().getOffset());
-			
-			case 2:	
+
+			case 2:
 				return "" + container.getLineNumber();
-				
+
 			default:
 				return "unknown " + columnIndex;
 			}
 		}
 	}
-	
 
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
 		initContainerTableView(parent);
 		parent.pack();
-		
+
 		/* Linking with editor */
-		
+
 		fCurrentPadEditorPropertyListener = new IPropertyListener() {
 			@Override
 			public void propertyChanged(Object source, int propId) {
@@ -88,12 +101,12 @@ public class EditorContainersMonitoringView extends ViewPart {
 				}
 			}
 		};
-		
+
 		fWorkbenchPartListener = new IPartListener() {
 			@Override
 			public void partBroughtToTop(IWorkbenchPart part) {
 				if (part instanceof IEditorPart) {
-					if (part instanceof IPadEditor){
+					if (part instanceof IPadEditor) {
 						linkEditor(part);
 					} else {
 						unlinkEditor();
@@ -107,82 +120,127 @@ public class EditorContainersMonitoringView extends ViewPart {
 					unlinkEditor();
 				}
 			}
-			
-			@Override public void partDeactivated(IWorkbenchPart part) {}
-			@Override public void partOpened(IWorkbenchPart part) {}
-			@Override public void partActivated(IWorkbenchPart part) {}
+
+			@Override
+			public void partDeactivated(IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partOpened(IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partActivated(IWorkbenchPart part) {
+			}
 		};
-		
+
 		getSite().getPage().addPartListener(fWorkbenchPartListener);
-		
-		
+
 		/* Check current editor */
-		
+
 		IWorkbenchPart part = getSite().getPage().getActiveEditor();
 		if (part instanceof IPadEditor) {
 			linkEditor(part);
 		}
 	}
-	
-	protected void initContainerTableView(Composite parent) {		
-		fContainersTableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+
+	protected void initContainerTableView(Composite parent) {
+		fContainersTableViewer = new TableViewer(parent, SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.BORDER);
 
 		final Table table = fContainersTableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
-		String[] columnNames = new String[] { "Container ID", "Offset", "Line number"};
+
+		String[] columnNames = new String[] { "Container ID", "Offset",
+				"Line number" };
 		int[] columnWidths = new int[] { 300, 100, 100 };
-		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT};
-		
+		int[] columnAlignments = new int[] { SWT.LEFT, SWT.LEFT, SWT.LEFT };
+
 		for (int i = 0; i < columnNames.length; i++) {
-			TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
+			TableColumn tableColumn = new TableColumn(table,
+					columnAlignments[i]);
 			tableColumn.setText(columnNames[i]);
 			tableColumn.setWidth(columnWidths[i]);
 		}
-		
-		fContainersTableViewer.setContentProvider(new ContainerContentProvider());
+
+		fContainersTableViewer
+				.setContentProvider(new ContainerContentProvider());
 		fContainersTableViewer.setLabelProvider(new ContainersLabelProvider());
+		fContainersTableViewer
+				.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						if (event.getSelection().isEmpty()) {
+							return;
+						}
+						if (event.getSelection() instanceof IStructuredSelection) {
+							IStructuredSelection selection = (IStructuredSelection) event
+									.getSelection();
+							for (Iterator<?> iterator = selection.iterator(); iterator
+									.hasNext();) {
+
+								Container selectedContainer = (Container) iterator
+										.next();
+								ContainerManager containerManager = selectedContainer
+										.getContainerManager();
+								UserInteractionManager uiManager = containerManager
+										.getUserInteractionManager();
+
+								Container prevSelectedContainer = containerManager
+										.getUserInteractionManager()
+										.getSelectedContainer();
+
+								uiManager.deactivateContainer(prevSelectedContainer);
+								uiManager.activateContainer(selectedContainer);
+							}
+						}
+					}
+				});
 	}
-	
+
 	protected void linkEditor(IWorkbenchPart part) {
 		if (fCurrentPadEditor != null) {
-			fCurrentPadEditor.removePropertyListener(fCurrentPadEditorPropertyListener);
+			fCurrentPadEditor
+					.removePropertyListener(fCurrentPadEditorPropertyListener);
 		}
-		
-		fCurrentPadEditor = part;			
-		fCurrentPadEditor.addPropertyListener(fCurrentPadEditorPropertyListener);
-		
+
+		fCurrentPadEditor = part;
+		fCurrentPadEditor
+				.addPropertyListener(fCurrentPadEditorPropertyListener);
+
 		updateViewerInput();
 	}
-	
+
 	protected void unlinkEditor() {
 		if (fCurrentPadEditor != null) {
-			fCurrentPadEditor.removePropertyListener(fCurrentPadEditorPropertyListener);
+			fCurrentPadEditor
+					.removePropertyListener(fCurrentPadEditorPropertyListener);
 		}
 		fCurrentPadEditor = null;
 		fContainersTableViewer.setInput(null);
 	}
-	
+
 	protected void updateViewerInput() {
-		fContainersTableViewer.setInput(
-			((IPadEditor)fCurrentPadEditor).getElements()
-		);
+		fContainersTableViewer.setInput(((IPadEditor) fCurrentPadEditor)
+				.getElements());
 	}
-		
+
 	@Override
 	public void dispose() {
-		
+
 		/* Remove container monitoring */
-		
+
 		getSite().getPage().removePartListener(fWorkbenchPartListener);
 		if (fCurrentPadEditor != null) {
-			fCurrentPadEditor.removePropertyListener(fCurrentPadEditorPropertyListener);
+			fCurrentPadEditor
+					.removePropertyListener(fCurrentPadEditorPropertyListener);
 		}
 
 		super.dispose();
-    }
-	
+	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
