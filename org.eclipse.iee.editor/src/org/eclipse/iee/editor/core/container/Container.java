@@ -105,7 +105,7 @@ public class Container {
 			return fDocument.getLineOfOffset(fPosition.offset);
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 			return -1;
 		}
 	}

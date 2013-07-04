@@ -55,7 +55,7 @@ public class SymbolicEngine {
 			logger.debug("result: " + output);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			return "";
 		}
 

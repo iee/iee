@@ -199,7 +199,7 @@ public class FormulaPad extends Pad {
 		} catch (Exception e) {
 			generated = "";
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		getContainer().setTextContent(generated);

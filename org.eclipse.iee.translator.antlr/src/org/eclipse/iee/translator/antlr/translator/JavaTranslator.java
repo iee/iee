@@ -215,7 +215,7 @@ public class JavaTranslator {
 
 					}
 				} catch (JavaModelException e) {
-					e.printStackTrace();
+					logger.error(e);
 				}
 
 			} else if (fInnerClasses.contains(firstLetterUpperCase(name))) {
@@ -238,7 +238,7 @@ public class JavaTranslator {
 							fDeterminedFunctionVariables.add(fieldName);
 					}
 				} catch (JavaModelException e) {
-					e.printStackTrace();
+					logger.error(e);
 				}
 
 			} else if (fOtherSourceClasses.contains(firstLetterUpperCase(name))) {
@@ -710,7 +710,7 @@ public class JavaTranslator {
 			fCompilationUnit = compilationUnit.getWorkingCopy(null);
 			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		parse();
@@ -1008,7 +1008,7 @@ public class JavaTranslator {
 								}
 							}
 						} catch (JavaModelException e) {
-							e.printStackTrace();
+							logger.error(e);
 						}
 
 						return true;
@@ -1018,7 +1018,7 @@ public class JavaTranslator {
 			}
 
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		if (fClass != null) {
@@ -1075,7 +1075,7 @@ public class JavaTranslator {
 			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
 
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		logger.debug("Type: " + fVariableTypeString);

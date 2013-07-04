@@ -93,7 +93,7 @@ public class PdfExportHandler implements IHandler {
 				javaSource = containerManager.getDocument().get(lastOffset,
 						offset - lastOffset);
 			} catch (BadLocationException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 
 			fLatex += convertJavaSource(javaSource);
@@ -108,7 +108,7 @@ public class PdfExportHandler implements IHandler {
 			javaSource = containerManager.getDocument().get(lastOffset,
 					containerManager.getDocument().getLength() - lastOffset);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		fLatex += convertJavaSource(javaSource);
