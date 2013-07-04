@@ -46,17 +46,11 @@ public class GraphElementPresenenter {
 	}
 	
 	public void save() {
-		double fDomainMax = Double.parseDouble(composite.getTotext().getText());
-		double fDomainMin = Double.parseDouble(composite.getFromText().getText());
 		getGraphElement().setfDomainCardinality(Integer.parseInt(composite.getPointsText().getText()));
-		getGraphElement().setfDomainMax(Math.max(fDomainMax, fDomainMin));
-		getGraphElement().setfDomainMin(Math.min(fDomainMax, fDomainMin));
 		getGraphElement().setfFunction(composite.getFormulaText().getText());
 	}
 	
 	public void restore() {
-		composite.getTotext().setText(String.valueOf(getGraphElement().getfDomainMax()));
-		composite.getFromText().setText(String.valueOf(getGraphElement().getfDomainMin()));
 		composite.getPointsText().setText(String.valueOf(getGraphElement().getfDomainCardinality()));
 		if (getGraphElement().getfFunction() !=  null) {
 			composite.getFormulaText().setText(getGraphElement().getfFunction());

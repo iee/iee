@@ -7,8 +7,7 @@ public class GraphElement implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String fFunction;
-	private double fDomainMin;
-	private double fDomainMax;
+
 	private int fDomainCardinality;
 
 	public String getfFunction() {
@@ -17,22 +16,6 @@ public class GraphElement implements Serializable {
 
 	public void setfFunction(String fFunction) {
 		this.fFunction = fFunction;
-	}
-
-	public double getfDomainMin() {
-		return fDomainMin;
-	}
-
-	public void setfDomainMin(double fDomainMin) {
-		this.fDomainMin = fDomainMin;
-	}
-
-	public double getfDomainMax() {
-		return fDomainMax;
-	}
-
-	public void setfDomainMax(double fDomainMax) {
-		this.fDomainMax = fDomainMax;
 	}
 
 	public int getfDomainCardinality() {

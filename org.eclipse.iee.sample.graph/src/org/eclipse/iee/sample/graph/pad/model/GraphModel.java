@@ -10,8 +10,18 @@ import java.util.List;
 public class GraphModel implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private Double minX;
+
+	private Double maxX;
+
+	private Double minY;
+
+	private Double maxY;
+
 	private List<GraphElement> elements;
+
+	private List<String> variables;
 
 	public List<GraphElement> getElements() {
 		if (elements == null) {
@@ -23,7 +33,15 @@ public class GraphModel implements Serializable, Cloneable {
 	public void setElements(List<GraphElement> elements) {
 		this.elements = elements;
 	}
-	
+
+	public List<String> getVariables() {
+		return variables;
+	}
+
+	public void setVariables(List<String> variables) {
+		this.variables = variables;
+	}
+
 	@Override
 	public GraphModel clone() {
 		try {
@@ -31,6 +49,38 @@ public class GraphModel implements Serializable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public Double getMinX() {
+		return minX;
+	}
+
+	public void setMinX(Double minX) {
+		this.minX = minX;
+	}
+
+	public Double getMaxX() {
+		return maxX;
+	}
+
+	public void setMaxX(Double maxX) {
+		this.maxX = maxX;
+	}
+
+	public Double getMinY() {
+		return minY;
+	}
+
+	public void setMinY(Double minY) {
+		this.minY = minY;
+	}
+
+	public Double getMaxY() {
+		return maxY;
+	}
+
+	public void setMaxY(Double maxY) {
+		this.maxY = maxY;
 	}
 
 }

@@ -16,8 +16,6 @@ import org.eclipse.swt.layout.GridData;
 public class GraphElementComposite extends Composite {
 	private Text text;
 	private Text text_1;
-	private Text text_2;
-	private Text text_3;
 	private Button button;
 	private Button button_1;
 
@@ -27,11 +25,12 @@ public class GraphElementComposite extends Composite {
 	 * @param style
 	 */
 	public GraphElementComposite(Composite parent, int style) {
-		super(parent, SWT.EMBEDDED);
-		setLayout(new GridLayout(10, false));
-		
-		Label label = new Label(this, SWT.NONE);
-		label.setText("f(x) = ");
+		super(parent, style);
+		GridLayout layout = new GridLayout(5, false);
+		layout.verticalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginBottom = 0;
+		setLayout(layout);
 		
 		text = new Text(this, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -45,24 +44,6 @@ public class GraphElementComposite extends Composite {
 		gd_text_1.widthHint = 30;
 		text_1.setLayoutData(gd_text_1);
 		text_1.setText("100");
-		
-		Label label_2 = new Label(this, SWT.NONE);
-		label_2.setText("From");
-		
-		text_2 = new Text(this, SWT.BORDER | SWT.RIGHT);
-		GridData gd_text_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_2.widthHint = 30;
-		text_2.setLayoutData(gd_text_2);
-		text_2.setText("-100");
-		
-		Label label_3 = new Label(this, SWT.NONE);
-		label_3.setText("To");
-		
-		text_3 = new Text(this, SWT.BORDER);
-		GridData gd_text_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_3.widthHint = 30;
-		text_3.setLayoutData(gd_text_3);
-		text_3.setText("100");
 		
 		button = new Button(this, SWT.NONE);
 		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -88,12 +69,6 @@ public class GraphElementComposite extends Composite {
 	}
 	public Text getPointsText() {
 		return text_1;
-	}
-	public Text getFromText() {
-		return text_2;
-	}
-	public Text getTotext() {
-		return text_3;
 	}
 	public Button getPlusButton() {
 		return button;
