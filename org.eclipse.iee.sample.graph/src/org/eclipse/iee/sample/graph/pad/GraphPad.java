@@ -117,12 +117,21 @@ public class GraphPad extends Pad implements Serializable {
 			graphModelPresenter.save();
 			if (plot.getDomainAxis().isAutoRange()) {
 				model.setMinX(null);
-				model.setMinY(null);
+				model.setMaxX(null);
 			} else {
 				Range range = plot.getDomainAxis().getRange();
 				model.setMinX(range.getLowerBound());
-				model.setMinY(range.getUpperBound());
+				model.setMaxX(range.getUpperBound());
 			}
+			if (plot.getRangeAxis().isAutoRange()) {
+				model.setMinY(null);
+				model.setMaxY(null);
+			} else {
+				Range range = plot.getRangeAxis().getRange();
+				model.setMinY(range.getLowerBound());
+				model.setMaxY(range.getUpperBound());
+			}
+			
 			
 			processInput(model);
 		}
@@ -157,6 +166,18 @@ public class GraphPad extends Pad implements Serializable {
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, Color.black);
 
+		if (model.getMaxX() != null && model.getMinX() != null) {
+			plot.getDomainAxis().setRange(model.getMinX(), model.getMaxX());
+		} else {
+			plot.getDomainAxis().setAutoRange(true);
+		}
+		
+		if (model.getMaxY() != null && model.getMinY() != null) {
+			plot.getRangeAxis().setRange(model.getMinY(), model.getMaxY());
+		} else {
+			plot.getRangeAxis().setAutoRange(true);
+		}
+		
 		return chart;
 	}
 
