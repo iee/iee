@@ -127,8 +127,8 @@ public class FileMessager extends EventManager {
 		String line = null;
 		try {
 			line = FileUtils.readFileToString(file);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			logger.error(e);
 		}
 
 		String id = file.getName();

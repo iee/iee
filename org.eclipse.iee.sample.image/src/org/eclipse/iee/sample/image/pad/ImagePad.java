@@ -177,7 +177,7 @@ public class ImagePad extends Pad implements Serializable {
 		} catch (Exception e) {
 
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 
 			/* Switch to error state */
 

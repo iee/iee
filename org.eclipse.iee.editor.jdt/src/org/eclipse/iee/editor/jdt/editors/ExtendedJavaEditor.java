@@ -165,7 +165,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 	}

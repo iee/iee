@@ -183,7 +183,13 @@ public class ContainerManager extends EventManager {
 			fDocument.replace(offset, 0, containerEmbeddedRegion);
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
+			
+			logger.error("method: RequestContainerAllocation");
+			logger.error("fDocument: " + fDocument);
+			logger.error("offset: " + offset);
+			logger.error("containerEmbeddedRegion: " + containerEmbeddedRegion);
+						
 		}
 	}
 	
@@ -337,13 +343,13 @@ public class ContainerManager extends EventManager {
 				}
 			} catch (BadLocationException e) {
 				logger.error(e.getMessage());
-				e.printStackTrace();
+				logger.error(e);
 			} catch (BadPartitioningException e) {
 				logger.error(e.getMessage());
-				e.printStackTrace();
+				logger.error(e);
 			} catch (RuntimeException e) {
 				logger.error(e.getMessage());
-				e.printStackTrace();
+				logger.error(e);
 			}
 
 			fChangedPartitioningRegion = null;
@@ -592,7 +598,7 @@ public class ContainerManager extends EventManager {
 		    }
 		    return new Container(position, type, params, value, this);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 			throw new RuntimeException(e);
 		}
 	}

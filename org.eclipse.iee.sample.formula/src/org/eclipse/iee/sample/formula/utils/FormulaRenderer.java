@@ -50,7 +50,7 @@ public class FormulaRenderer {
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 			return null;
 		}
 	}
@@ -72,7 +72,7 @@ public class FormulaRenderer {
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 			return null;
 		}
 	}

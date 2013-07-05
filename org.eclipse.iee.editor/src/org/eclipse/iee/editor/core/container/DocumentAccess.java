@@ -137,7 +137,12 @@ public class DocumentAccess {
 			
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error("method: writeContentToTextRegion");
+			logger.error("fDocument: " + fDocument);
+			logger.error("from: " + from + ", length: " + length);
+			logger.error("payload: " + payload.toString());
+						
+			logger.error(e);
 		}
 
 	}
@@ -152,7 +157,11 @@ public class DocumentAccess {
 			fDocument.replace(position.getOffset(), position.getLength() - 1, "");
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error("method: releaseTextRegion");
+			logger.error("fDocument: " + fDocument);
+			logger.error("position: " + position.toString());
+			
+			logger.error(e);
 		}
 	}
 	
@@ -181,6 +190,9 @@ public class DocumentAccess {
 			return textRegion.substring(from, to);
 		} catch (IndexOutOfBoundsException e) {
 			logger.error(e.getMessage());
+			logger.error("method: getContainerIDFromTextRegion");
+			logger.error("textRegion: " + textRegion);
+			logger.error("from: " + from + ", to: " + to);
 			return null;
 		}
 	}
