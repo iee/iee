@@ -254,7 +254,7 @@ public class GraphPad extends Pad implements Serializable {
 					variable = variables.get(variables.size() - 1);
 				}
 				if (variable != null && variable.length() > 0) {
-					String function = graphElement.getfFunction();
+					String function = graphElement.getFunction();
 					if (function != null && function.trim().length() > 0) {
 						String translateElement =  JavaTranslator.translate(function,
 								getContainer().getContainerManager().getCompilationUnit(),
@@ -269,7 +269,7 @@ public class GraphPad extends Pad implements Serializable {
 						.append("; ").append(variable).append(" += Math.abs((")
 						.append(minX).append(" - ")
 						.append(maxX).append(") / ")
-						.append(graphElement.getfDomainCardinality())
+						.append(graphElement.getNumberOfPoints())
 						.append(")) {");
 						generatedText.append("double __grpVal = ").append(translateElement)
 						.append(";");

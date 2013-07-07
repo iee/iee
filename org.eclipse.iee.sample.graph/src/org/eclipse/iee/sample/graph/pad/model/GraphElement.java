@@ -6,24 +6,24 @@ public class GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String fFunction;
+	private String function;
 
-	private int fDomainCardinality;
+	private int numberOfPoints;
 
-	public String getfFunction() {
-		return fFunction;
+	public String getFunction() {
+		return function;
 	}
 
-	public void setfFunction(String fFunction) {
-		this.fFunction = fFunction;
+	public void setFunction(String fFunction) {
+		this.function = fFunction;
 	}
 
-	public int getfDomainCardinality() {
-		return fDomainCardinality;
+	public int getNumberOfPoints() {
+		return numberOfPoints;
 	}
 
-	public void setfDomainCardinality(int fDomainCardinality) {
-		this.fDomainCardinality = fDomainCardinality;
+	public void setNumberOfPoints(int fDomainCardinality) {
+		this.numberOfPoints = fDomainCardinality;
 	}
 
 }

@@ -1,9 +1,15 @@
 package org.eclipse.iee.sample.graph.pad;
 
 import org.eclipse.iee.sample.graph.pad.model.GraphElement;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class GraphElementPresenenter {
 
@@ -13,7 +19,7 @@ public class GraphElementPresenenter {
 
 	private GraphElement graphElement;
 
-	public GraphElementPresenenter(GraphElementComposite composite,
+	public GraphElementPresenenter(final GraphElementComposite composite,
 			GraphModelPresenter modelPresenter, GraphElement graphElement) {
 		super();
 		this.composite = composite;
@@ -34,6 +40,34 @@ public class GraphElementPresenenter {
 				GraphElementPresenenter.this.modelPresenter.removeElement(GraphElementPresenenter.this);
 			}
 		});
+		Label inputView = composite.getfFormulaImageLabel();
+		inputView.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				composite.toggleInputText();
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+		});
+		composite.getFormulaText().getControl().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				composite.toggleFormulaImage();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
+		
 		restore();
 	}
 	
@@ -46,16 +80,16 @@ public class GraphElementPresenenter {
 	}
 	
 	public void save() {
-		getGraphElement().setfDomainCardinality(Integer.parseInt(composite.getPointsText().getText()));
-		getGraphElement().setfFunction(composite.getFormulaText().getText());
+		getGraphElement().setNumberOfPoints(Integer.parseInt(composite.getPointsText().getText()));
+		getGraphElement().setFunction(composite.getFormulaText().getDocument().get());
 	}
 	
 	public void restore() {
-		composite.getPointsText().setText(String.valueOf(getGraphElement().getfDomainCardinality()));
-		if (getGraphElement().getfFunction() !=  null) {
-			composite.getFormulaText().setText(getGraphElement().getfFunction());
+		composite.getPointsText().setText(String.valueOf(getGraphElement().getNumberOfPoints()));
+		if (getGraphElement().getFunction() !=  null) {
+			composite.getFormulaText().getDocument().set(getGraphElement().getFunction());
 		} else {
-			composite.getFormulaText().setText("");
+			composite.getFormulaText().getDocument().set("");
 		}
 	}
 	

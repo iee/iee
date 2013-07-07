@@ -49,7 +49,7 @@ public class GraphModelPresenter {
 	
 	public void addNewElement() {
 		GraphElement newElement = new GraphElement();
-		newElement.setfDomainCardinality(100);
+		newElement.setNumberOfPoints(100);
 		model.getElements().add(newElement);
 		addElementComposite(model, newElement, composite);
 		graphPad.processInput(model);

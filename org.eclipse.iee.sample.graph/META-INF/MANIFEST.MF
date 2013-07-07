@@ -17,6 +17,8 @@ Bundle-ClassPath: .,
  lib/jep-2.4.0.jar,
  lib/gson-2.2.4.jar
 Import-Package: org.eclipse.iee.sample.formula.pad,
+ org.eclipse.iee.sample.formula.pad.hover,
+ org.eclipse.iee.sample.formula.utils,
  org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.jdt.core,

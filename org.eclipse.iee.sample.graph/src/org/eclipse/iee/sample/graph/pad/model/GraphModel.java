@@ -19,9 +19,9 @@ public class GraphModel implements Serializable, Cloneable {
 
 	private Double maxY;
 
-	private List<GraphElement> elements;
+	private List<GraphElement> elements = new ArrayList<GraphElement>();
 
-	private List<String> variables;
+	private List<String> variables = new ArrayList<String>();
 
 	public List<GraphElement> getElements() {
 		if (elements == null) {
