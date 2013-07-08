@@ -1,6 +1,5 @@
 package org.eclipse.iee.sample.graph.pad;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.Reader;
@@ -12,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessageEvent;
-import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessager;
-import org.eclipse.iee.editor.core.utils.runtime.console.IConsoleMessageListener;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
@@ -35,6 +31,7 @@ import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.util.PaintUtilities;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -93,7 +90,7 @@ public class GraphPad extends Pad implements Serializable {
 	}
 
 	public void initModelView(GraphComposite parent, GraphModel model) {
-		graphModelPresenter = new GraphModelPresenter(this, parent, model);
+		graphModelPresenter = new GraphModelPresenter(this, parent, model, plot);
 	}
 
 	protected GraphPad(String containerID) {
@@ -152,7 +149,7 @@ public class GraphPad extends Pad implements Serializable {
 
 		JFreeChart chart = ChartFactory.createXYLineChart(null, null,
 				null, dataset, PlotOrientation.HORIZONTAL, false, false, false);
-		
+
 		chart.setBackgroundPaint(Color.white);
 		chart.setBorderVisible(true);
 		chart.setBorderPaint(Color.BLACK);
@@ -165,7 +162,7 @@ public class GraphPad extends Pad implements Serializable {
 		plot.getRangeAxis().setFixedDimension(15.0);
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, Color.black);
-
+		
 		if (model.getMaxX() != null && model.getMinX() != null) {
 			plot.getDomainAxis().setRange(model.getMinX(), model.getMaxX());
 		} else {
@@ -313,6 +310,18 @@ public class GraphPad extends Pad implements Serializable {
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				XYItemRenderer renderer = plot.getRenderer();
+				List<GraphElement> elements = model.getElements();
+				for (int i = 0; i < elements.size(); i++) {
+					GraphElement element = elements.get(i);
+					String color = element.getColor();
+					if (color == null) {
+						color = PaintUtilities.colorToString((Color) plot.getDrawingSupplier().getNextPaint());
+					}
+					renderer.setSeriesPaint(i, PaintUtilities.stringToColor(color));
+					
+				}
+				
 				plot.datasetChanged(new DatasetChangeEvent(this, dataset));
 			}
 		});

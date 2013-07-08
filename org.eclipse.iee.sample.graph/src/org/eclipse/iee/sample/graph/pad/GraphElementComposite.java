@@ -1,5 +1,7 @@
 package org.eclipse.iee.sample.graph.pad;
 
+import java.awt.BasicStroke;
+
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
 import org.eclipse.iee.sample.formula.utils.FormulaRenderer;
@@ -11,30 +13,39 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.jfree.experimental.swt.SWTGraphics2D;
 
 public class GraphElementComposite extends Composite {
-	private Text text_1;
-	private Button button;
-	private Button button_1;
 	private Composite fInputView;
 	private TextViewer fViewer;
 	private Document fDocument;
 	private Composite fResultView;
 	private Label fFormulaImageLabel;
 	private HoverShell fHoverShell;
-	private String fLastValidText;
-	
+	private String fLastValidText = "";
+	private boolean editInProgress = false;
+	private java.awt.Color color = java.awt.Color.BLACK;
+	private int width = 1;
+	private Canvas stokeCanvas;
+	private MenuItem addItem;
+	private MenuItem removeItem;
+	private MenuItem propertiesItem;
 	
 	/**
 	 * Create the composite.
@@ -43,7 +54,7 @@ public class GraphElementComposite extends Composite {
 	 */
 	public GraphElementComposite(Composite parent, int style) {
 		super(parent, style);
-		GridLayout layout = new GridLayout(5, false);
+		GridLayout layout = new GridLayout(1, false);
 		layout.verticalSpacing = 0;
 		layout.marginHeight = 0;
 		layout.marginBottom = 0;
@@ -58,7 +69,7 @@ public class GraphElementComposite extends Composite {
 		fInputView = new Composite(sashForm, SWT.NONE);
 		fInputView.setBackground(new Color(null, 255, 255, 255));
 		fInputView.setLayout(new FillLayout());
-
+		
 		fViewer = new TextViewer(fInputView, SWT.NONE);
 		fDocument = new Document();
 		fViewer.setDocument(fDocument);
@@ -67,9 +78,7 @@ public class GraphElementComposite extends Composite {
 		fViewer.setUndoManager(defaultUndoManager);
 		defaultUndoManager.connect(fViewer);
 
-		TextViewerSupport fViewerSupport = new TextViewerSupport(fViewer);
-
-		/* Result View */
+		new TextViewerSupport(fViewer);
 
 		fResultView = new Composite(sashForm, SWT.NONE);
 		fResultView.setBackground(new Color(null, 255, 255, 255));
@@ -85,30 +94,28 @@ public class GraphElementComposite extends Composite {
 				true);
 		formulaImageGridData.minimumWidth = 40;
 		fFormulaImageLabel.setLayoutData(formulaImageGridData);
+		fFormulaImageLabel.setMenu(createPopupMenu(parent));
 
 		addTextListener();
 		
-		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("#(points): ");
+		stokeCanvas = new Canvas(this, SWT.NONE);
+		stokeCanvas.addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				GC gc = e.gc;
+				SWTGraphics2D graphics2d = new SWTGraphics2D(gc);
+				graphics2d.setStroke(new BasicStroke(width));
+				graphics2d.setColor(color);
+				graphics2d.drawLine(0, e.height/2, e.width, e.height/2);
+				
+			}
+		});
+		GridData canvasGD = new GridData(SWT.FILL, SWT.FILL, true, true);
+		canvasGD.heightHint = 5;
+		stokeCanvas.setLayoutData(canvasGD);
 		
-		text_1 = new Text(this, SWT.BORDER | SWT.RIGHT);
-		GridData gd_text_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_1.widthHint = 30;
-		text_1.setLayoutData(gd_text_1);
-		text_1.setText("100");
 		
-		button = new Button(this, SWT.NONE);
-		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_button.widthHint = 20;
-		button.setLayoutData(gd_button);
-		button.setText("+");
-		
-		button_1 = new Button(this, SWT.NONE);
-		GridData gd_button_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_button_1.widthHint = 20;
-		button_1.setLayoutData(gd_button_1);
-		button_1.setText("-");
-
 	}
 
 	@Override
@@ -125,22 +132,16 @@ public class GraphElementComposite extends Composite {
 	public Label getfFormulaImageLabel() {
 		return fFormulaImageLabel;
 	}
-	public Text getPointsText() {
-		return text_1;
-	}
-	public Button getPlusButton() {
-		return button;
-	}
-	public Button getMinusButton() {
-		return button_1;
-	}
-	
+
 	public void addTextListener() {
 		fViewer.addTextListener(new ITextListener() {
 
 			@Override
 			public void textChanged(TextEvent event) {
-
+				if (!editInProgress) {
+					return;
+				}
+				
 				if (fDocument.get() != "") {
 
 					if (fHoverShell != null) {
@@ -151,16 +152,7 @@ public class GraphElementComposite extends Composite {
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
-							String fTexExpression = translateToLatex(fDocument.get());
-							Image image = FormulaRenderer
-									.getFormulaImage(fTexExpression);
-							if (image == null) {
-								fTexExpression = translateToLatex(fLastValidText);
-								image = FormulaRenderer
-										.getFormulaImage(fTexExpression);
-							} else {
-								fLastValidText = fDocument.get();
-							}
+							Image image = createImage();
 							fHoverShell = new HoverShell(GraphElementComposite.this, image);
 						}
 					});
@@ -175,7 +167,7 @@ public class GraphElementComposite extends Composite {
 	}
 	
 	public void toggleInputText() {
-
+		editInProgress = true;
 		// OFF
 		fResultView.setVisible(false);
 
@@ -188,6 +180,7 @@ public class GraphElementComposite extends Composite {
 	}
 
 	public void toggleFormulaImage() {
+		editInProgress = false;
 		processInput();
 		// OFF
 		fInputView.setVisible(false);
@@ -228,10 +221,60 @@ public class GraphElementComposite extends Composite {
 	
 	public void processInput() {
 		/* Set formula image */
-		String fTexExpression = translateToLatex(fViewer.getDocument().get());
-		Image image = FormulaRenderer.getFormulaImage(fTexExpression);
+		Image image = createImage();
 
 		fFormulaImageLabel.setImage(image);
 	}
 
+	private Image createImage() {
+		String fTexExpression = translateToLatex(fDocument.get());
+		Image image = null;
+		if (fTexExpression != null) {
+			image = FormulaRenderer.getFormulaImage(fTexExpression);
+		}
+		if (image == null) {
+			fTexExpression = translateToLatex(fLastValidText);
+			image = FormulaRenderer
+					.getFormulaImage(fTexExpression);
+		} else {
+			fLastValidText = fDocument.get();
+		}
+		return image;
+	}
+	
+	public void setColor(java.awt.Color color) {
+		this.color = color;
+		stokeCanvas.redraw();
+	}
+	
+	public void setWidth(int width) {
+		this.width = width;
+		stokeCanvas.redraw();
+	}
+	
+	private Menu createPopupMenu(org.eclipse.swt.widgets.Control parent) {
+		Menu menu = new Menu(parent);
+
+		addItem = new MenuItem(menu, SWT.PUSH);
+		addItem.setText("Add function");
+		removeItem = new MenuItem(menu, SWT.PUSH);
+		removeItem.setText("Remove function");
+		propertiesItem = new MenuItem(menu, SWT.PUSH);
+		propertiesItem.setText("Properties");
+
+		return menu;
+	}
+
+	public MenuItem getAddItem() {
+		return addItem;
+	}
+
+	public MenuItem getRemoveItem() {
+		return removeItem;
+	}
+
+	public MenuItem getPropertiesItem() {
+		return propertiesItem;
+	}
+	
 }

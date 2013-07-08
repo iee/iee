@@ -10,6 +10,10 @@ public class GraphElement implements Serializable {
 
 	private int numberOfPoints;
 
+	private String color;
+	
+	private int width;
+	
 	public String getFunction() {
 		return function;
 	}
@@ -26,4 +30,20 @@ public class GraphElement implements Serializable {
 		this.numberOfPoints = fDomainCardinality;
 	}
 
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
 }
