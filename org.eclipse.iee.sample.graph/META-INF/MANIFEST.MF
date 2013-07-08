@@ -22,7 +22,9 @@ Import-Package: org.eclipse.iee.sample.formula.pad,
  org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.jdt.core,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.ui.forms.widgets,
+ org.eclipse.jface.dialogs
 Export-Package: org.eclipse.iee.sample.graph,
  org.eclipse.iee.sample.graph.pad,
  org.eclipse.iee.sample.graph.pad.model

@@ -1,6 +1,8 @@
 package org.eclipse.iee.sample.graph.pad;
 
 import org.eclipse.iee.sample.graph.pad.model.GraphElement;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -8,9 +10,14 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.jfree.experimental.swt.SWTUtils;
 import org.jfree.util.PaintUtilities;
 
 public class GraphElementPresenenter {
@@ -22,7 +29,7 @@ public class GraphElementPresenenter {
 	private GraphElement graphElement;
 
 	public GraphElementPresenenter(final GraphElementComposite composite,
-			GraphModelPresenter modelPresenter, GraphElement graphElement) {
+			GraphModelPresenter modelPresenter, final GraphElement graphElement) {
 		super();
 		this.composite = composite;
 		this.modelPresenter = modelPresenter;
@@ -76,6 +83,39 @@ public class GraphElementPresenenter {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				GraphElementPresenenter.this.modelPresenter.removeElement(GraphElementPresenenter.this);
+			}
+		});
+		composite.getPropertiesItem().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				Dialog dialog = new Dialog(composite.getShell()) {
+					
+					private ElementProperties elementProperties;
+
+					@Override
+					protected Control createDialogArea(Composite parent) {
+						elementProperties = new ElementProperties(parent, SWT.NONE);
+						elementProperties.getWidthSpinner().setSelection(graphElement.getWidth());
+						elementProperties.getColorSelector().setColorValue(SWTUtils.toSwtColor(e.display, PaintUtilities.stringToColor(graphElement.getColor())).getRGB());
+						elementProperties.getPointsText().setText(StringConverter.asString(graphElement.getNumberOfPoints()));
+						return elementProperties;
+					}
+					
+					@Override
+					protected void okPressed() {
+						int width = elementProperties.getWidthSpinner().getSelection();
+						graphElement.setWidth(width);
+						RGB colorValue = elementProperties.getColorSelector().getColorValue();
+						java.awt.Color awtColor = SWTUtils.toAwtColor(new Color(e.display, colorValue));
+						graphElement.setColor(PaintUtilities.colorToString(awtColor));
+						graphElement.setNumberOfPoints(StringConverter.asInt(elementProperties.getPointsText().getText()));
+						super.okPressed();
+						composite.setColor(awtColor);
+						composite.setWidth(width);
+					}
+					
+				};
+				dialog.open();
 			}
 		});
 		

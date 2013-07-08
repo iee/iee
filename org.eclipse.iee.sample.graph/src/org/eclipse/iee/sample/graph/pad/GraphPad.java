@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.graph.pad;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.Reader;
@@ -319,7 +320,11 @@ public class GraphPad extends Pad implements Serializable {
 						color = PaintUtilities.colorToString((Color) plot.getDrawingSupplier().getNextPaint());
 					}
 					renderer.setSeriesPaint(i, PaintUtilities.stringToColor(color));
-					
+					int width = element.getWidth();
+					if (width < 1) {
+						width = 1;
+					}
+					renderer.setSeriesStroke(i, new BasicStroke(width));
 				}
 				
 				plot.datasetChanged(new DatasetChangeEvent(this, dataset));
