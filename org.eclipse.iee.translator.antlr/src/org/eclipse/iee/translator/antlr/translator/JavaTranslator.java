@@ -496,14 +496,21 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
 
-			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
-					&& getType(fPosition, "myTmp=" + right + ";").matches(
-							"Matrix")) {
-				// XXX: temporary solution
-				fMatrixExpression = true;
+			String leftExprType = getType(fPosition, "myTmp=" + left + ";");
+			String rightExprType = getType(fPosition, "myTmp=" + right + ";");
 
-				if (sign.matches(Pattern.quote("*")))
-					return left + ".times(" + right + ")";
+			// XXX: temporary solution
+			fMatrixExpression = leftExprType.matches("Matrix")
+					| rightExprType.matches("Matrix");
+
+			if (fMatrixExpression && sign.matches(Pattern.quote("*"))) {
+				if (leftExprType.matches("double")) {
+					String swap = left;
+					left = right;
+					right = swap;
+				}
+
+				return left + ".times(" + right + ")";
 			}
 
 			return "(" + left + ")" + sign + "(" + right + ")";
