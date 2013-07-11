@@ -98,6 +98,9 @@ public class PadManager extends EventManager {
 	}
 
 	public void savePadsInEditor(String containerManagerID) {
+		
+		logger.debug("savePadsInEditor");
+		
 		String[] containerIDs = fContainerManagers.get(containerManagerID)
 				.getContainerIDs();
 

@@ -96,8 +96,8 @@ class StyledTextManager {
 		int bottomVisibleOffset = fStyledText.getOffsetAtLine(bottomLineIndex)
 				+ fStyledText.getLine(bottomLineIndex).length();
 
-		logger.debug("topVisibleOffset: " + topVisibleOffset );
-		logger.debug("bottomVisibleOffset: " + bottomVisibleOffset);
+//		logger.debug("topVisibleOffset: " + topVisibleOffset );
+//		logger.debug("bottomVisibleOffset: " + bottomVisibleOffset);
 		
 		for (Container c : fContainerManager.getContainers()) {
 			boolean isVisible = false;
@@ -109,7 +109,7 @@ class StyledTextManager {
 			}
 			c.setVisible(isVisible);
 			if (isVisible) {
-				logger.debug("set container visible: " + c.toString());
+				//logger.debug("set container visible: " + c.toString());
 				c.updatePresentation();
 			}
 			else

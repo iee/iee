@@ -44,6 +44,7 @@ public class Container {
 		fTextContent = content;
 		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
+	
 	public void setPadParam(String name, String value) {
 		if (fPadParams == null) {
 			fPadParams = new HashMap<String, String>();

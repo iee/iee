@@ -80,6 +80,8 @@ public class DocumentAccess {
 	 * This function is called by ContainerManager which puts Container data to Document
 	 */
 	protected void writeContentToTextRegion(Container container) {
+		logger.debug("writeContentToTextRegion: " + container);
+		
 		Position position = container.getPosition();
 		String textContent = container.getTextContent();
 			
@@ -133,12 +135,13 @@ public class DocumentAccess {
 			- fContainerManager.getConfig().EMBEDDED_REGION_END.length();
 
 		try {
+			logger.debug("payload: " + payload.toString());
 			fDocument.replace(from, length, payload.toString());
 			
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
 			logger.error("method: writeContentToTextRegion");
-			logger.error("fDocument: " + fDocument);
+			logger.error("fDocument: " + fDocument.get());
 			logger.error("from: " + from + ", length: " + length);
 			logger.error("payload: " + payload.toString());
 						

@@ -207,11 +207,11 @@ public class FormulaPad extends Pad {
 	}
 
 	protected String generateCode() {
-		return JavaTranslator.translate(fTranslatingExpression,
-				getContainer().getContainerManager().getCompilationUnit(),
-				getContainer().getPosition().getOffset(), getContainerID(),
-				getContainer().getContainerManager().getStoragePath(),
-				FileMessager.getInstance().getRuntimeDirectoryName());
+		return JavaTranslator.translate(fTranslatingExpression, getContainer()
+				.getContainerManager().getCompilationUnit(), getContainer()
+				.getPosition().getOffset(), getContainerID(), getContainer()
+				.getContainerManager().getStoragePath(), FileMessager
+				.getInstance().getRuntimeDirectoryName());
 	}
 
 	public void updateLastResult(String result) {
