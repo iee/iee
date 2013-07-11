@@ -1,5 +1,6 @@
 package org.eclipse.iee.sample.graph.pad;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.Reader;
@@ -11,26 +12,30 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessageEvent;
-import org.eclipse.iee.editor.core.utils.runtime.console.ConsoleMessager;
-import org.eclipse.iee.editor.core.utils.runtime.console.IConsoleMessageListener;
-import org.eclipse.iee.sample.formula.pad.Translator;
-import org.eclipse.iee.sample.graph.FileStorage;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
 import org.eclipse.iee.sample.graph.pad.model.GraphElement;
 import org.eclipse.iee.sample.graph.pad.model.GraphModel;
+import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.title.TextTitle;
+import org.jfree.data.Range;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.util.PaintUtilities;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class GraphPad extends Pad implements Serializable {
 
@@ -39,7 +44,6 @@ public class GraphPad extends Pad implements Serializable {
 	private GraphModel model;
 
 	private boolean fIsAdvancedMode;
-	private transient static FileStorage fFileStorage;
 
 	private transient GraphModelPresenter graphModelPresenter;
 	private transient XYPlot plot;
@@ -47,17 +51,17 @@ public class GraphPad extends Pad implements Serializable {
 	private Map<Integer, double[][]> results;
 	
 	public GraphPad() {
-		super();
+		this(new GraphModel());
+	}
+	public GraphPad(GraphModel model) {
 		fIsAdvancedMode = false;
-		model = new GraphModel();
-		model.getElements().add(new GraphElement());
-		save();
+		this.model = model;
 	}
 
-	private IConsoleMessageListener fConsoleMessageListener = new IConsoleMessageListener() {
+	private IFileMessageListener fFileMessageListener = new IFileMessageListener() {
+
 		@Override
-		public void messageReceived(ConsoleMessageEvent e) {
-			System.out.println("Message received:" + e.getMessage());
+		public void messageReceived(FileMessageEvent e) {
 			updateResult(e.getMessage());
 		}
 
@@ -65,6 +69,7 @@ public class GraphPad extends Pad implements Serializable {
 		public String getRequesterID() {
 			return getContainerID();
 		}
+
 	};
 
 	
@@ -81,22 +86,17 @@ public class GraphPad extends Pad implements Serializable {
 
 		initModelView(graphComposite, model);
 
-		ConsoleMessager.getInstance().addConsoleMessageListener(
-				fConsoleMessageListener);
+		FileMessager.getInstance().addFileMessageListener(fFileMessageListener, 
+				getContainer().getContainerManager().getStoragePath());
 	}
 
 	public void initModelView(GraphComposite parent, GraphModel model) {
-		graphModelPresenter = new GraphModelPresenter(this, parent, model);
+		graphModelPresenter = new GraphModelPresenter(this, parent, model, plot);
 	}
 
 	protected GraphPad(String containerID) {
 		super();
 		model = new GraphModel();
-		save();
-	}
-
-	public static void setStorage(FileStorage fStorage) {
-		GraphPad.fFileStorage = fStorage;
 	}
 
 	@Override
@@ -113,14 +113,30 @@ public class GraphPad extends Pad implements Serializable {
 	public void save() {
 		if (graphModelPresenter != null) {
 			graphModelPresenter.save();
+			if (plot.getDomainAxis().isAutoRange()) {
+				model.setMinX(null);
+				model.setMaxX(null);
+			} else {
+				Range range = plot.getDomainAxis().getRange();
+				model.setMinX(range.getLowerBound());
+				model.setMaxX(range.getUpperBound());
+			}
+			if (plot.getRangeAxis().isAutoRange()) {
+				model.setMinY(null);
+				model.setMaxY(null);
+			} else {
+				Range range = plot.getRangeAxis().getRange();
+				model.setMinY(range.getLowerBound());
+				model.setMaxY(range.getUpperBound());
+			}
+			
+			
 			processInput(model);
 		}
-		GraphPad.fFileStorage.saveToFile(this);
 	}
 
 	@Override
 	public void unsave() {
-		GraphPad.fFileStorage.removeFile(getContainerID());
 	}
 
 	/**
@@ -132,9 +148,9 @@ public class GraphPad extends Pad implements Serializable {
 
 		XYDataset dataset = createDataset("Series 1");
 
-		JFreeChart chart = ChartFactory.createXYLineChart(null, "X",
-				"Y", dataset, PlotOrientation.HORIZONTAL, false, false, false);
-		
+		JFreeChart chart = ChartFactory.createXYLineChart(null, null,
+				null, dataset, PlotOrientation.HORIZONTAL, false, false, false);
+
 		chart.setBackgroundPaint(Color.white);
 		chart.setBorderVisible(true);
 		chart.setBorderPaint(Color.BLACK);
@@ -147,7 +163,19 @@ public class GraphPad extends Pad implements Serializable {
 		plot.getRangeAxis().setFixedDimension(15.0);
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, Color.black);
-
+		
+		if (model.getMaxX() != null && model.getMinX() != null) {
+			plot.getDomainAxis().setRange(model.getMinX(), model.getMaxX());
+		} else {
+			plot.getDomainAxis().setAutoRange(true);
+		}
+		
+		if (model.getMaxY() != null && model.getMinY() != null) {
+			plot.getRangeAxis().setRange(model.getMinY(), model.getMaxY());
+		} else {
+			plot.getRangeAxis().setAutoRange(true);
+		}
+		
 		return chart;
 	}
 
@@ -205,47 +233,103 @@ public class GraphPad extends Pad implements Serializable {
 	public void processInput(GraphModel model) {
 
 		List<GraphElement> elements = model.getElements();
+		List<String> variables = model.getVariables();
 		StringBuilder generatedText = new StringBuilder();
 
-		int counter = 0;
-
-		for (GraphElement graphElement : elements) {
-			String function = graphElement.getfFunction();
-			if (function != null && function.trim().length() > 0) {
-				String translateElement = Translator.translateElement(function);
-				generatedText.append("StringBuilder sb").append(counter).append(" = new StringBuilder();");
-				generatedText.append("sb").append(counter).append(".append(\"{\");");
-				generatedText.append("for (double x = ")
-						.append(graphElement.getfDomainMin()).append("; x < ")
-						.append(graphElement.getfDomainMax())
-						.append("; x += Math.abs((")
-						.append(graphElement.getfDomainMax()).append(" - ")
-						.append(graphElement.getfDomainMin()).append(") / ")
-						.append(graphElement.getfDomainCardinality())
+		Range range = plot.getDomainAxis().getRange();
+		double minX = model.getMinX() != null ? model.getMinX() : range.getLowerBound();
+		double maxX = model.getMaxX() != null ? model.getMaxX() : range.getUpperBound();
+		
+		generatedText.append("{");
+		generatedText.append("StringBuilder result").append(" = new StringBuilder();");
+		if (variables.size() > 0) {
+			for (int i = 0; i < elements.size(); i++) {
+				GraphElement graphElement = elements.get(i);
+				String variable;
+				if (i < variables.size()) {
+					variable = variables.get(i);
+				} else {
+					variable = variables.get(variables.size() - 1);
+				}
+				if (variable != null && variable.length() > 0) {
+					String function = graphElement.getFunction();
+					if (function != null && function.trim().length() > 0) {
+						String translateElement =  JavaTranslator.translate(function,
+								getContainer().getContainerManager().getCompilationUnit(),
+								getContainer().getPosition().getOffset(), getContainerID(),
+								getContainer().getContainerManager().getStoragePath(),
+								FileMessager.getInstance().getRuntimeDirectoryName());
+						generatedText.append("StringBuilder sb").append(i).append(" = new StringBuilder();");
+						generatedText.append("sb").append(i).append(".append(\"{\");");
+						generatedText.append("for (double ").append(variable).append(" = ")
+						.append(minX).append("; ").append(variable).append(" < ")
+						.append(maxX)
+						.append("; ").append(variable).append(" += Math.abs((")
+						.append(minX).append(" - ")
+						.append(maxX).append(") / ")
+						.append(graphElement.getNumberOfPoints())
 						.append(")) {");
-				generatedText.append("double y = ").append(translateElement)
+						generatedText.append("double __grpVal = ").append(translateElement)
 						.append(";");
-				generatedText.append("sb").append(counter).append(".append(\"{\").append(x).append(\",\").append(y).append(\"},\");");
-				generatedText.append("}");
-				generatedText.append("sb").append(counter).append(".append(\"}\");");
-				generatedText.append("System.out.println(\"").append(getContainerID()).append(" ").append(counter).append(": \" + ").append("sb").append(counter).append(".toString()").append(");");
-				
+						generatedText.append("sb").append(i).append(".append(\"{\").append(").append(variable).append(").append(\",\").append(__grpVal).append(\"},\");");
+						generatedText.append("}");
+						generatedText.append("sb").append(i).append(".append(\"}\");");
+						generatedText.append("result.append(\"").append(i).append(": \" + ").append("sb").append(i).append(".toString()").append(");");
+						generatedText.append("result.append(\"\\n\");");
+					}
+				}
 			}
-			counter++;
 		}
+		generatedText.append("File file = new File(\"").append(getContainer().getContainerManager().getStoragePath() + "/" + FileMessager.getInstance().getRuntimeDirectoryName() + "/" + getContainerID()).append("\");");
+		generatedText.append("try {");
+		generatedText.append("FileUtils.writeStringToFile(file, result.toString());");
+		generatedText.append("}");
+		generatedText.append("catch(IOException e) {");
+		generatedText.append("e.printStackTrace();");
+		generatedText.append("}");
+		generatedText.append("}");
 
+		Gson gson = new GsonBuilder().create();
+		getContainer().setValue(gson.toJson(model));
 		getContainer().setTextContent(generatedText.toString());
 	}
 
 	public void updateResult(String result) {
-		String[] splited = result.split("\\:");
-		Integer number = Integer.valueOf(splited[0].trim());
-		try {
-			getResults().put(number, parseArray(splited[1].trim()));
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (result.isEmpty()) {
+			getResults().clear();
+			return;
 		}
-		plot.datasetChanged(new DatasetChangeEvent(this, dataset));
+		String[] items = result.split("\n");
+		for (String string : items) {
+			String[] splited = string.split("\\:");
+			Integer number = Integer.valueOf(splited[0].trim());
+			try {
+				getResults().put(number, parseArray(splited[1].trim()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				XYItemRenderer renderer = plot.getRenderer();
+				List<GraphElement> elements = model.getElements();
+				for (int i = 0; i < elements.size(); i++) {
+					GraphElement element = elements.get(i);
+					String color = element.getColor();
+					if (color == null) {
+						color = PaintUtilities.colorToString((Color) plot.getDrawingSupplier().getNextPaint());
+					}
+					renderer.setSeriesPaint(i, PaintUtilities.stringToColor(color));
+					int width = element.getWidth();
+					if (width < 1) {
+						width = 1;
+					}
+					renderer.setSeriesStroke(i, new BasicStroke(width));
+				}
+				
+				plot.datasetChanged(new DatasetChangeEvent(this, dataset));
+			}
+		});
 	}
 	
 	public Map<Integer, double[][]> getResults() {
@@ -334,19 +418,23 @@ public class GraphPad extends Pad implements Serializable {
 
 	@Override
 	public void onContainerAttached() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
+	public void updateData(Map<String, String> params, String value) {
+	}
+	
+	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Graph";
+	}
+
+	@Override
+	public String getTex() {
+		return "";
 	}
 }

@@ -6,41 +6,44 @@ public class GraphElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String fFunction;
-	private double fDomainMin;
-	private double fDomainMax;
-	private int fDomainCardinality;
+	private String function;
 
-	public String getfFunction() {
-		return fFunction;
+	private int numberOfPoints;
+
+	private String color;
+	
+	private int width;
+	
+	public String getFunction() {
+		return function;
 	}
 
-	public void setfFunction(String fFunction) {
-		this.fFunction = fFunction;
+	public void setFunction(String fFunction) {
+		this.function = fFunction;
 	}
 
-	public double getfDomainMin() {
-		return fDomainMin;
+	public int getNumberOfPoints() {
+		return numberOfPoints;
 	}
 
-	public void setfDomainMin(double fDomainMin) {
-		this.fDomainMin = fDomainMin;
+	public void setNumberOfPoints(int fDomainCardinality) {
+		this.numberOfPoints = fDomainCardinality;
 	}
 
-	public double getfDomainMax() {
-		return fDomainMax;
+	public String getColor() {
+		return color;
 	}
 
-	public void setfDomainMax(double fDomainMax) {
-		this.fDomainMax = fDomainMax;
+	public void setColor(String color) {
+		this.color = color;
 	}
 
-	public int getfDomainCardinality() {
-		return fDomainCardinality;
+	public int getWidth() {
+		return width;
 	}
 
-	public void setfDomainCardinality(int fDomainCardinality) {
-		this.fDomainCardinality = fDomainCardinality;
+	public void setWidth(int width) {
+		this.width = width;
 	}
-
+	
 }

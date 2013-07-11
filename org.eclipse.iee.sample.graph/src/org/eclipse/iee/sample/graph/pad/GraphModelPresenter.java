@@ -3,7 +3,9 @@
  */
 package org.eclipse.iee.sample.graph.pad;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.iee.sample.graph.pad.model.GraphElement;
@@ -11,8 +13,16 @@ import org.eclipse.iee.sample.graph.pad.model.GraphModel;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+import org.jfree.chart.plot.DrawingSupplier;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.util.PaintUtilities;
 
 /**
  * @author Efimchuk.A
@@ -27,28 +37,28 @@ public class GraphModelPresenter {
 	private GraphComposite composite;
 	
 	private GraphModel model;
+	
+	private XYPlot plot;
 
-	public GraphModelPresenter(GraphPad graphPad, GraphComposite composite, GraphModel model) {
+	public GraphModelPresenter(GraphPad graphPad, GraphComposite composite, GraphModel model, XYPlot plot) {
 		this.graphPad = graphPad;
 		this.composite = composite;
-		this.model = model;
-		List<GraphElement> elements = model.getElements();
-		for (GraphElement graphElement : elements) {
-			addElementComposite(model, graphElement, composite);
-		}
+		this.plot = plot;
+		setModel(model);
 	}
 	
 	private void addElementComposite(final GraphModel model,
 			final GraphElement graphElement, final GraphComposite parent) {
 		Composite composite = parent.getComposite();
-		final GraphElementComposite elementComposite = new GraphElementComposite(composite, SWT.EMBEDDED);
+		final GraphElementComposite elementComposite = new GraphElementComposite(composite, SWT.NONE);
 		presenenters.add(new GraphElementPresenenter(elementComposite, this, graphElement));
 		parent.layout();
 	}
 	
 	public void addNewElement() {
 		GraphElement newElement = new GraphElement();
-		newElement.setfDomainCardinality(100);
+		newElement.setNumberOfPoints(100);
+		newElement.setColor(getNextColor());
 		model.getElements().add(newElement);
 		addElementComposite(model, newElement, composite);
 		graphPad.processInput(model);
@@ -63,10 +73,45 @@ public class GraphModelPresenter {
 	}
 
 	public void save() {
+		String text = composite.getVariablesText().getText();
+		String[] variables = text.split(",");
+		model.setVariables(Arrays.asList(variables));
 		for (GraphElementPresenenter presenter : presenenters) {
 			presenter.save();
 		}
 	}
-	
+
+	public void setModel(GraphModel model) {
+		for (GraphElementPresenenter presenter : presenenters) {
+			presenter.remove();
+		}
+		presenenters.clear();
+		this.model = model;
+		List<GraphElement> elements = model.getElements();
+		for (GraphElement graphElement : elements) {
+			addElementComposite(model, graphElement, composite);
+		}
+		StringBuilder sb = new StringBuilder();
+		List<String> variables = model.getVariables();
+		for (String variable : variables) {
+			if (sb.length() > 0) {
+				sb.append(",");
+			}
+			sb.append(variable);
+		}
+		
+		Text variablesText = composite.getVariablesText();
+		variablesText.setText(sb.toString());
+		composite.layout();
+	}
+
+	public void pack() {
+		composite.pack();
+	}
+
+	public String getNextColor() {
+		DrawingSupplier drawingSupplier = plot.getDrawingSupplier();
+		return PaintUtilities.colorToString((Color) drawingSupplier.getNextPaint());
+	}
 	
 }

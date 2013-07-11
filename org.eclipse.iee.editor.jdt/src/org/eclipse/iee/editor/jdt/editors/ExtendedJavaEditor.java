@@ -19,6 +19,7 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.formula.FormulaPadFactory;
 import org.eclipse.iee.sample.formula.SymbolicPadFactory;
+import org.eclipse.iee.sample.graph.GraphPadFactory;
 import org.eclipse.iee.sample.image.ImagePadFactory;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.iee.sample.text.TextPadFactory;
@@ -188,6 +189,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		fPadManager.registerPadFactory(
 				fContainerManager.getContainerManagerID(), "Text",
 				new TextPadFactory());
+		fPadManager.registerPadFactory(
+				fContainerManager.getContainerManagerID(), "Graph",
+				new GraphPadFactory());
 	}
 
 	@Override

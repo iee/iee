@@ -20,7 +20,6 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	 * The constructor
 	 */
 	public Activator() {
-		GraphPad.setStorage(new FileStorage("D:\\GraphPads\\"));
 	}
 
 	/*

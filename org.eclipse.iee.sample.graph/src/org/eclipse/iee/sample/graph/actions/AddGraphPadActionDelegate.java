@@ -2,6 +2,8 @@ package org.eclipse.iee.sample.graph.actions;
 
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.sample.graph.pad.GraphPad;
+import org.eclipse.iee.sample.graph.pad.model.GraphElement;
+import org.eclipse.iee.sample.graph.pad.model.GraphModel;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -38,7 +40,9 @@ public class AddGraphPadActionDelegate implements IEditorActionDelegate {
 			return;
 		}
 
-		fPadEditor.createPad(new GraphPad(), fPadEditor.getCaretOffset());
+		GraphModel model = new GraphModel();
+		model.getElements().add(new GraphElement());
+		fPadEditor.createPad(new GraphPad(model), fPadEditor.getCaretOffset());
 	}
 
 	@Override
