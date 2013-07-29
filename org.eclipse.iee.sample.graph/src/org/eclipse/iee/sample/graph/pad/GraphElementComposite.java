@@ -1,25 +1,51 @@
 package org.eclipse.iee.sample.graph.pad;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import java.awt.BasicStroke;
+
+import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
+import org.eclipse.iee.sample.formula.pad.hover.HoverShell;
+import org.eclipse.iee.sample.formula.utils.FormulaRenderer;
+import org.eclipse.iee.translator.antlr.translator.TexTranslator;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.ITextListener;
+import org.eclipse.jface.text.TextEvent;
+import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.jfree.experimental.swt.SWTGraphics2D;
 
 public class GraphElementComposite extends Composite {
-	private Text text;
-	private Text text_1;
-	private Text text_2;
-	private Text text_3;
-	private Button button;
-	private Button button_1;
+	private Composite fInputView;
+	private TextViewer fViewer;
+	private Document fDocument;
+	private Composite fResultView;
+	private Label fFormulaImageLabel;
+	private HoverShell fHoverShell;
+	private String fLastValidText = "";
+	private boolean editInProgress = false;
+	private java.awt.Color color = java.awt.Color.BLACK;
+	private int width = 1;
+	private Canvas stokeCanvas;
+	private MenuItem addItem;
+	private MenuItem removeItem;
+	private MenuItem propertiesItem;
 
 	/**
 	 * Create the composite.
@@ -27,54 +53,68 @@ public class GraphElementComposite extends Composite {
 	 * @param style
 	 */
 	public GraphElementComposite(Composite parent, int style) {
-		super(parent, SWT.EMBEDDED);
-		setLayout(new GridLayout(10, false));
+		super(parent, style);
+		GridLayout layout = new GridLayout(1, false);
+		layout.verticalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginBottom = 0;
+		setLayout(layout);
 		
-		Label label = new Label(this, SWT.NONE);
-		label.setText("f(x) = ");
+		SashForm sashForm = new SashForm(this, SWT.FILL);
+		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
+
+		/* Input View */
+
+		fInputView = new Composite(sashForm, SWT.NONE);
+		fInputView.setBackground(new Color(null, 255, 255, 255));
+		fInputView.setLayout(new FillLayout());
 		
-		text = new Text(this, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		text.setText("");
+		fViewer = new TextViewer(fInputView, SWT.NONE);
+		fDocument = new Document();
+		fViewer.setDocument(fDocument);
 		
-		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("#(points): ");
+		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
+		fViewer.setUndoManager(defaultUndoManager);
+		defaultUndoManager.connect(fViewer);
 		
-		text_1 = new Text(this, SWT.BORDER | SWT.RIGHT);
-		GridData gd_text_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_1.widthHint = 30;
-		text_1.setLayoutData(gd_text_1);
-		text_1.setText("100");
+		new TextViewerSupport(fViewer);
 		
-		Label label_2 = new Label(this, SWT.NONE);
-		label_2.setText("From");
+		fResultView = new Composite(sashForm, SWT.NONE);
+		fResultView.setBackground(new Color(null, 255, 255, 255));
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
+		fResultView.setLayout(gridLayout);
+		fResultView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		text_2 = new Text(this, SWT.BORDER | SWT.RIGHT);
-		GridData gd_text_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_2.widthHint = 30;
-		text_2.setLayoutData(gd_text_2);
-		text_2.setText("-100");
+		fFormulaImageLabel = new Label(fResultView, SWT.NONE);
+		fFormulaImageLabel.setBackground(new Color(null, 255, 255, 255));
+		GridData formulaImageGridData = new GridData(SWT.FILL, SWT.FILL, true,
+				true);
+		formulaImageGridData.minimumWidth = 40;
+		fFormulaImageLabel.setLayoutData(formulaImageGridData);
+		fFormulaImageLabel.setMenu(createPopupMenu(parent));
 		
-		Label label_3 = new Label(this, SWT.NONE);
-		label_3.setText("To");
+		addTextListener();
 		
-		text_3 = new Text(this, SWT.BORDER);
-		GridData gd_text_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_3.widthHint = 30;
-		text_3.setLayoutData(gd_text_3);
-		text_3.setText("100");
+		stokeCanvas = new Canvas(this, SWT.NONE);
+		stokeCanvas.addPaintListener(new PaintListener() {
 		
-		button = new Button(this, SWT.NONE);
-		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_button.widthHint = 20;
-		button.setLayoutData(gd_button);
-		button.setText("+");
+			@Override
+			public void paintControl(PaintEvent e) {
+				GC gc = e.gc;
+				SWTGraphics2D graphics2d = new SWTGraphics2D(gc);
+				graphics2d.setStroke(new BasicStroke(width));
+				graphics2d.setColor(color);
+				graphics2d.drawLine(0, e.height/2, e.width, e.height/2);
 		
-		button_1 = new Button(this, SWT.NONE);
-		GridData gd_button_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_button_1.widthHint = 20;
-		button_1.setLayoutData(gd_button_1);
-		button_1.setText("-");
+			}
+		});
+		GridData canvasGD = new GridData(SWT.FILL, SWT.FILL, true, true);
+		canvasGD.heightHint = 5;
+		stokeCanvas.setLayoutData(canvasGD);
+		
 
 	}
 
@@ -83,22 +123,157 @@ public class GraphElementComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public Text getFormulaText() {
-		return text;
+	public TextViewer getFormulaText() {
+		return fViewer;
 	}
-	public Text getPointsText() {
-		return text_1;
+	public Composite getInputView() {
+		return fInputView;
 	}
-	public Text getFromText() {
-		return text_2;
+	public Label getfFormulaImageLabel() {
+		return fFormulaImageLabel;
 	}
-	public Text getTotext() {
-		return text_3;
+
+	public void addTextListener() {
+		fViewer.addTextListener(new ITextListener() {
+
+			@Override
+			public void textChanged(TextEvent event) {
+				if (!editInProgress) {
+					return;
+				}
+				
+				if (fDocument.get() != "") {
+
+					if (fHoverShell != null) {
+						fHoverShell.dispose();
+						fHoverShell = null;
+					}
+					// hack to paint hover image after widgets size
+					// recalculation.
+					Display.getCurrent().asyncExec(new Runnable() {
+						public void run() {
+							Image image = createImage();
+							fHoverShell = new HoverShell(GraphElementComposite.this, image);
+						}
+					});
+					/* Resize fInputText */
+					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
+							SWT.DEFAULT, false);
+					fViewer.getControl().setSize(size);
+					pack();
+				}
+			}
+		});
 	}
-	public Button getPlusButton() {
-		return button;
+	
+	public void toggleInputText() {
+		editInProgress = true;
+		// OFF
+		fResultView.setVisible(false);
+
+		// ON
+		fInputView.setVisible(true);
+
+		pack();
+
+		fViewer.getControl().forceFocus();
 	}
-	public Button getMinusButton() {
-		return button_1;
+
+	public void toggleFormulaImage() {
+		editInProgress = false;
+		processInput();
+		// OFF
+		fInputView.setVisible(false);
+
+		// ON
+		fResultView.setVisible(true);
+
+		if (fHoverShell != null) {
+			fHoverShell.dispose();
+			fHoverShell = null;
+		}
+		
+		pack();
+	}
+	
+	private String translateToLatex(String text) {
+		String latex = "";
+
+		if (text.isEmpty()) {
+			return "";
+		}
+		
+		/* Translating to Latex */
+		if (text.charAt(0) == '=') {
+			latex = TexTranslator.translate(text.substring(1));
+			latex = "=" + latex;
+		} else if (text.charAt(text.length() - 1) == '=') {
+			latex = TexTranslator
+					.translate(text.substring(0, text.length() - 1));
+			latex = latex + "=";
+		} else {
+			latex = TexTranslator.translate(text);
+		}
+
+		return latex;
+
+	}
+	
+	public void processInput() {
+		/* Set formula image */
+		Image image = createImage();
+
+		fFormulaImageLabel.setImage(image);
+	}
+
+	private Image createImage() {
+		String fTexExpression = translateToLatex(fDocument.get());
+		Image image = null;
+		if (fTexExpression != null) {
+			image = FormulaRenderer.getFormulaImage(fTexExpression);
+		}
+		if (image == null) {
+			fTexExpression = translateToLatex(fLastValidText);
+			image = FormulaRenderer
+					.getFormulaImage(fTexExpression);
+		} else {
+			fLastValidText = fDocument.get();
+		}
+		return image;
+	}
+	
+	public void setColor(java.awt.Color color) {
+		this.color = color;
+		stokeCanvas.redraw();
+	}
+	
+	public void setWidth(int width) {
+		this.width = width;
+		stokeCanvas.redraw();
+	}
+	
+	private Menu createPopupMenu(org.eclipse.swt.widgets.Control parent) {
+		Menu menu = new Menu(parent);
+
+		addItem = new MenuItem(menu, SWT.PUSH);
+		addItem.setText("Add function");
+		removeItem = new MenuItem(menu, SWT.PUSH);
+		removeItem.setText("Remove function");
+		propertiesItem = new MenuItem(menu, SWT.PUSH);
+		propertiesItem.setText("Properties");
+
+		return menu;
+	}
+
+	public MenuItem getAddItem() {
+		return addItem;
+	}
+
+	public MenuItem getRemoveItem() {
+		return removeItem;
+	}
+
+	public MenuItem getPropertiesItem() {
+		return propertiesItem;
 	}
 }

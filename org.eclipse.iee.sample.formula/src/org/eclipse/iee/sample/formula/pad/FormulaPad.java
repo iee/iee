@@ -86,7 +86,6 @@ public class FormulaPad extends Pad {
 
 		@Override
 		public void messageReceived(FileMessageEvent e) {
-			logger.debug("Message received:" + e.getMessage());
 			updateLastResult(e.getMessage());
 		}
 

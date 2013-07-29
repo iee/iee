@@ -14,5 +14,17 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Bundle-ClassPath: .,
  lib/jcommon-1.0.16.jar,
  lib/jfreechart-1.0.13.jar,
- lib/jep-2.4.0.jar
-Import-Package: org.eclipse.iee.sample.formula.pad
+ lib/jep-2.4.0.jar,
+ lib/gson-2.2.4.jar
+Import-Package: org.eclipse.iee.sample.formula.pad,
+ org.eclipse.iee.sample.formula.pad.hover,
+ org.eclipse.iee.sample.formula.utils,
+ org.eclipse.iee.translator.antlr.math,
+ org.eclipse.iee.translator.antlr.translator,
+ org.eclipse.jdt.core,
+ org.eclipse.jface.text,
+ org.eclipse.ui.forms.widgets,
+ org.eclipse.jface.dialogs
+Export-Package: org.eclipse.iee.sample.graph,
+ org.eclipse.iee.sample.graph.pad,
+ org.eclipse.iee.sample.graph.pad.model

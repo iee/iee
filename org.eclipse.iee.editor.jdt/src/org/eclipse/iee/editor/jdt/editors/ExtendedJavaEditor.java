@@ -20,11 +20,15 @@ import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.formula.FormulaPadFactory;
 import org.eclipse.iee.sample.formula.InputPadFactory;
 import org.eclipse.iee.sample.formula.SymbolicPadFactory;
+import org.eclipse.iee.sample.graph.GraphPadFactory;
 import org.eclipse.iee.sample.image.ImagePadFactory;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaSourceViewer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -49,9 +53,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	private static final Logger logger = Logger
 			.getLogger(ExtendedJavaEditor.class);
 
-	private static final String BUNDLE_FOR_CONSTRUCTED_KEYS= "org.eclipse.jdt.internal.ui.javaeditor.ConstructedJavaEditorMessages";//$NON-NLS-1$
-	private static ResourceBundle fgBundleForConstructedKeys= ResourceBundle.getBundle(BUNDLE_FOR_CONSTRUCTED_KEYS);
-	
+	private static final String BUNDLE_FOR_CONSTRUCTED_KEYS = "org.eclipse.jdt.internal.ui.javaeditor.ConstructedJavaEditorMessages";//$NON-NLS-1$
+	private static ResourceBundle fgBundleForConstructedKeys = ResourceBundle
+			.getBundle(BUNDLE_FOR_CONSTRUCTED_KEYS);
+
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
 
@@ -70,7 +75,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		initIeeEditorCore();
 
 		loadEditorPads();
-		
+
 		doSave(null);
 	};
 
@@ -145,7 +150,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			@Override
 			public void containerDeactivated(ContainerEvent containerEvent) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
 		fContainerManager
@@ -188,6 +193,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		fPadManager.registerPadFactory(
 				fContainerManager.getContainerManagerID(), "Text",
 				new TextPadFactory());
+		fPadManager.registerPadFactory(
+				fContainerManager.getContainerManagerID(), "Graph",
+				new GraphPadFactory());
 	}
 
 	@Override
@@ -217,6 +225,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	public void doSave(IProgressMonitor monitor) {
 		fPadManager.savePadsInEditor(fContainerManager.getContainerManagerID());
+
 		super.doSave(monitor);
 	}
 
@@ -224,8 +233,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		fPadManager.savePadsInEditor(fContainerManager.getContainerManagerID());
 		super.doSaveAs();
 	}
-	
-	//TODO move to separate class
+
+	// TODO move to separate class
 	@Override
 	protected ISourceViewer createJavaSourceViewer(Composite parent,
 			IVerticalRuler verticalRuler, IOverviewRuler overviewRuler,
@@ -250,12 +259,13 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 					super.doOperation(operation);
 				}
 			}
-			
+
 			private boolean paste() {
-				Clipboard clipboard= new Clipboard(getDisplay());
+				Clipboard clipboard = new Clipboard(getDisplay());
 				try {
 					ImageTransfer transfer = ImageTransfer.getInstance();
-					ImageData content = (ImageData) clipboard.getContents(transfer);
+					ImageData content = (ImageData) clipboard
+							.getContents(transfer);
 					if (content != null) {
 						ImagePad pad = new ImagePad();
 						createPad(pad, getTextWidget().getCaretOffset());
@@ -263,7 +273,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 						return true;
 					}
 					FileTransfer fileTransfer = FileTransfer.getInstance();
-					String[] files = (String[]) clipboard.getContents(fileTransfer);
+					String[] files = (String[]) clipboard
+							.getContents(fileTransfer);
 					if (files != null && files.length > 0) {
 						try {
 							new ImageData(files[0]);
@@ -271,21 +282,21 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 							createPad(pad, getTextWidget().getCaretOffset());
 							pad.setImageFile(files[0]);
 						} catch (Exception e) {
-							//not image
+							// not image
 						}
 					}
 				} finally {
 					clipboard.dispose();
 				}
-				
+
 				return false;
 			}
-			
+
 			private Display getDisplay() {
 				if (getTextWidget() == null || getTextWidget().isDisposed())
 					return null;
 
-				Display display= getTextWidget().getDisplay();
+				Display display = getTextWidget().getDisplay();
 				if (display != null && display.isDisposed())
 					return null;
 

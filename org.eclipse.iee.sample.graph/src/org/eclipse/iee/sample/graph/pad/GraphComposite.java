@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.RowData;
 public class GraphComposite extends Composite {
 	private ChartComposite frame;
 	private Composite composite;
+	private Text variablesText;
 
 	/**
 	 * Create the composite.
@@ -24,7 +25,7 @@ public class GraphComposite extends Composite {
 	public GraphComposite(Composite parent, int style) {
 		super(parent, style);
 		
-		GridLayout layout = new GridLayout(1,false);
+		GridLayout layout = new GridLayout(2,false);
 		layout.verticalSpacing = 5;
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
@@ -38,7 +39,6 @@ public class GraphComposite extends Composite {
 		gd_frame.exclude = false;
 		gd_frame.widthHint = 720;
 		gd_frame.heightHint = 300;
-		gd_frame.horizontalSpan = 2;
 		
 		frame = new ChartComposite(this, SWT.BORDER_DASH);
 		frame.setDisplayToolTips(false);
@@ -46,7 +46,12 @@ public class GraphComposite extends Composite {
 		frame.setVerticalAxisTrace(true);
 		frame.setLayoutData(gd_frame);
 		
+		Label label = new Label(this, SWT.NONE);
 
+		GridData xData = new GridData(SWT.CENTER, SWT.FILL, true, true);
+		xData.exclude = false;
+		variablesText = new Text(this, SWT.NONE);
+		variablesText.setLayoutData(xData);
 	}
 
 	@Override
@@ -58,5 +63,8 @@ public class GraphComposite extends Composite {
 	}
 	public Composite getComposite() {
 		return composite;
+	}
+	public Text getVariablesText() {
+		return variablesText;
 	}
 }

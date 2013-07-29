@@ -8,6 +8,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.LineStyleEvent;
@@ -23,9 +24,9 @@ class StyledTextManager {
 	private static final Logger logger = Logger
 			.getLogger(StyledTextManager.class);
 
-	/** left pad margin is necessary to show carret*/
+	/** left pad margin is necessary to show carret */
 	public static final int PAD_LEFT_MARGIN = 2;
-	
+
 	private final StyledText fStyledText;
 	private final ContainerManager fContainerManager;
 	private final ISourceViewer fSourceViewer;
@@ -54,11 +55,15 @@ class StyledTextManager {
 					@Override
 					public void applyTextPresentation(
 							TextPresentation textPresentation) {
+
+						IRegion changedRegion = textPresentation.getExtent();
+
 						logger.debug("applyTextPresentation start "
-								+ textPresentation.getExtent());
+								+ changedRegion);
+
 						injectStylesToTextPresentation(textPresentation,
-								getContainersStyleRanges(textPresentation
-										.getExtent()));
+								getContainersStyleRanges(changedRegion));
+
 					}
 				});
 		fStyledText.addPaintListener(new PaintListener() {
