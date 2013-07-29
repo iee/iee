@@ -1,4 +1,4 @@
-package org.eclipse.iee.editor.core.pad.result;
+package org.eclipse.iee.document.api.stub;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+
+import org.eclipse.iee.document.api.IResultContainer;
 
 public class FileResultContainer implements IResultContainer {
 

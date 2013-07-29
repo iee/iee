@@ -2,7 +2,7 @@ package org.eclipse.iee.web;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.eclipse.iee.editor.core.pad.result.IParameterProvider;
+import org.eclipse.iee.document.api.IParameterProvider;
 
 public class RequestParameterProvider implements IParameterProvider {
 

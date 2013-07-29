@@ -1,7 +1,9 @@
 /**
  * 
  */
-package org.eclipse.iee.editor.core.pad.result;
+package org.eclipse.iee.document.api.stub;
+
+import org.eclipse.iee.document.api.IParameterProvider;
 
 public class NullParameterProvider implements IParameterProvider {
 

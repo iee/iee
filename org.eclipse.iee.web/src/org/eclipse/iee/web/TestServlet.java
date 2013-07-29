@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.iee.document.api.EvaluationContextHolder;
+import org.eclipse.iee.document.api.IParameterProvider;
+import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.document.api.stub.FileResultContainer;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.editor.core.pad.result.FileResultContainer;
-import org.eclipse.iee.editor.core.pad.result.IParameterProvider;
-import org.eclipse.iee.editor.core.pad.result.IResultContainer;
-import org.eclipse.iee.editor.core.pad.result.EvaluationContextHolder;
 import org.eclipse.iee.web.document.Document;
 import org.eclipse.iee.web.document.DocumentPart;
 import org.eclipse.iee.web.document.PadDocumentPart;

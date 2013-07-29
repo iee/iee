@@ -10,8 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.iee.editor.core.pad.result.IParameterProvider;
-import org.eclipse.iee.editor.core.pad.result.IResultContainer;
+import org.eclipse.iee.document.api.IParameterProvider;
+import org.eclipse.iee.document.api.IResultContainer;
 import org.eclipse.iee.web.store.IDocumentStore;
 
 /**

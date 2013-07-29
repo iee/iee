@@ -2,8 +2,8 @@ package org.eclipse.iee.web.renderer;
 
 import java.util.Map;
 
-import org.eclipse.iee.editor.core.pad.result.IParameterProvider;
-import org.eclipse.iee.editor.core.pad.result.IResultContainer;
+import org.eclipse.iee.document.api.IParameterProvider;
+import org.eclipse.iee.document.api.IResultContainer;
 
 public interface IHTMLRendererContext {
 

@@ -1,4 +1,4 @@
-package org.eclipse.iee.editor.core.pad.result;
+package org.eclipse.iee.document.api;
 
 public interface IParameterProvider {
 

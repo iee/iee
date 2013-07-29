@@ -1,4 +1,7 @@
-package org.eclipse.iee.editor.core.pad.result;
+package org.eclipse.iee.document.api;
+
+import org.eclipse.iee.document.api.stub.FileResultContainer;
+import org.eclipse.iee.document.api.stub.NullParameterProvider;
 
 
 public class EvaluationContextHolder {

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.iee.editor.core.pad.result.IParameterProvider;
-import org.eclipse.iee.editor.core.pad.result.IResultContainer;
+import org.eclipse.iee.document.api.IParameterProvider;
+import org.eclipse.iee.document.api.IResultContainer;
 
 public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 
