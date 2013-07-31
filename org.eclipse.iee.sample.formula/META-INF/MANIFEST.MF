@@ -24,3 +24,6 @@ Export-Package: org.eclipse.iee.sample.formula,
  org.eclipse.iee.sample.formula.pad,
  org.eclipse.iee.sample.formula.pad.hover,
  org.eclipse.iee.sample.formula.utils
+Service-Component: OSGI-INF/org.eclipse.iee.sample.formula.FormulaPadFactory.xml,
+ OSGI-INF/org.eclipse.iee.sample.formula.InputPadFactory.xml,
+ OSGI-INF/org.eclipse.iee.sample.formula.SymbolicPadFactory.xml

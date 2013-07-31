@@ -17,5 +17,10 @@ public class TextPadFactory implements IPadFactory {
 		textPad.setText(value);
 		return textPad;
 	}
-
+	
+	@Override
+	public String getType() {
+		return "Text";
+	}
+	
 }

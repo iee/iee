@@ -236,7 +236,6 @@ public class PadManager extends EventManager {
 			public void containerCreated(ContainerEvent event) {
 				Container container = event.getContainer();
 				String containerID = container.getContainerID();
-
 				if (fSuspendedPads.contains(containerID)) {
 					/*
 					 * Case 1: container corresponds to suspended pad. Attaching
@@ -277,14 +276,22 @@ public class PadManager extends EventManager {
 					fPads.put(pad.getContainerID(), pad);
 					return;
 				}
-
-				/*
-				 * Case 4: no corresponding pad. Creating new "loading" pad.
-				 */
-				Pad pad = new LoadingPad(containerID);
-				pad.attachContainer(container);
-				fTemporaryPads.add(containerID);
-				fPads.put(containerID, pad);
+				String padType = container.getPadType();
+				IPadFactory iPadFactory = fPadFactories.get(padType);
+				if (iPadFactory != null) {
+					Pad pad = iPadFactory.create(container.getPadParams(), container.getValue());
+					pad.setContainerID(containerID);
+					pad.attachContainer(container);
+					fPads.put(containerID, pad);
+				} else { 
+					/*
+					 * Case 4: no corresponding pad. Creating new "loading" pad.
+					 */
+					Pad pad = new LoadingPad(containerID);
+					pad.attachContainer(container);
+					fTemporaryPads.add(containerID);
+					fPads.put(containerID, pad);
+				}
 			}
 
 			@Override
@@ -405,25 +412,22 @@ public class PadManager extends EventManager {
 		}
 	}
 
-	public void registerPadFactory(String containerManagerId, String type,
-			IPadFactory factory) {
+	public void registerPadFactory(IPadFactory factory) {
+		String type = factory.getType();
 		fPadFactories.put(type, factory);
-		loadPads(containerManagerId, type, factory);
+		loadPads(type, factory);
 	}
 
-	public void loadPads(String containerManagerId, String type,
-			IPadFactory factory) {
+	public void loadPads(String type, IPadFactory factory) {
 		Map<Integer, Pad> loadPads = new HashMap<Integer, Pad>();
 		for (String temp : fTemporaryPads) {
 			Pad pad = fPads.get(temp);
 			Container container = pad.getContainer();
-			if (container.getContainerManagerID().equals(containerManagerId)
-					&& type.equals(container.getPadType())) {
+			if (type.equals(container.getPadType())) {
 				Pad create = factory.create(container.getPadParams(),
 						container.getValue());
 				create.setContainerID(container.getContainerID());
 				loadPads.put(container.getPosition().offset, create);
-
 			}
 		}
 

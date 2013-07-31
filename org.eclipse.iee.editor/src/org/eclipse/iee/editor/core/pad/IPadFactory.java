@@ -18,4 +18,6 @@ public interface IPadFactory {
 	 */
 	Pad create(Map<String, String> padParams, String value);
 
+	String getType();
+	
 }

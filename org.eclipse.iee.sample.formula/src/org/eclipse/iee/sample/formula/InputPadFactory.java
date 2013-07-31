@@ -19,5 +19,10 @@ public class InputPadFactory implements IPadFactory {
 		formulaPad.setTranslatingExpression(value);
 		return formulaPad;
 	}
+	
+	@Override
+	public String getType() {
+		return "Input";
+	}
 
 }

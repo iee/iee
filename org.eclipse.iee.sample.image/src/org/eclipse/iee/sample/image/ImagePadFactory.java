@@ -24,5 +24,10 @@ public class ImagePadFactory implements IPadFactory {
 		imagePad.setSize(width, height);
 		return imagePad;
 	}
+	
+	@Override
+	public String getType() {
+		return "Image";
+	}
 
 }
