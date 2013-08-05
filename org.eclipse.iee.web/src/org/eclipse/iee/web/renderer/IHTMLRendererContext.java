@@ -1,5 +1,8 @@
 package org.eclipse.iee.web.renderer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
 import java.util.Map;
 
 import org.eclipse.iee.document.api.IParameterProvider;
@@ -7,7 +10,7 @@ import org.eclipse.iee.document.api.IResultContainer;
 
 public interface IHTMLRendererContext {
 
-	public String createResourceURL(String padId, Map<String, String> params);
+	public String createResourceURL(String padId, String resourceId, Map<String, String> params);
 	
 	public String createURL(Map<String, String> params);
 	
@@ -16,5 +19,9 @@ public interface IHTMLRendererContext {
 	public IParameterProvider getParameterProvider();
 	
 	public boolean isEditMode();
+
+	InputStream getResourceAsStream(String string) throws IOException;
+
+	public Writer getWriter() throws IOException;
 	
 }

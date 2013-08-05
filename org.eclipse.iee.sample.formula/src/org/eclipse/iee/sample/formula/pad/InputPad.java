@@ -16,7 +16,7 @@ public class InputPad extends FormulaPad {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("double ").append(varName).append(";");
-		String result = "org.eclipse.iee.editor.core.pad.result.EvaluationContextHolder.getParameter(\"" + getContainerID() + "\")";
+		String result = "org.eclipse.iee.document.api.EvaluationContextHolder.getParameter(\"" + getContainerID() + "\")";
 		sb.append("if (").append(result).append(" != null) {");
 		sb.append(varName).append("= Double.parseDouble(").append(result).append(");");
 		sb.append("} else {");

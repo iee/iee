@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
+import org.eclipse.iee.web.renderer.GraphHTMLRenderer;
 import org.eclipse.iee.web.renderer.HTMLRendererManager;
 import org.eclipse.iee.web.renderer.ImageHTMLRenderer;
 import org.eclipse.iee.web.renderer.InputHTMLRenderer;
@@ -73,6 +74,7 @@ public class Activator implements BundleActivator {
 		rendererManager.registerPadHTMLRenderer("Symbolic", new SymbolicHTMLRenderer(new SymbolicEngine()));
 		rendererManager.registerPadHTMLRenderer("Image", new ImageHTMLRenderer());
 		rendererManager.registerPadHTMLRenderer("Text", new TextHTMLRenderer());
+		rendererManager.registerPadHTMLRenderer("Graph", new GraphHTMLRenderer());
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +72,7 @@ public class TestServlet extends HttpServlet {
 			params.put(nextElement, req.getParameter(nextElement));
 		}
 		if (parts.length == 3) {
-			IHTMLRendererContext htmlRendererContext = new DefaultHTMLRendererContext(docRoot, params, container, isEditMode, parameterProvider);
+			IHTMLRendererContext htmlRendererContext = new DefaultHTMLRendererContext(req, resp, docRoot, params, documentStore, projectLoc, clazz, container, isEditMode, parameterProvider);
 			PrintWriter writer = resp.getWriter();
 			writer.append("<html><head>");
 			documentRenderer.renderHTMLHead(document, writer, htmlRendererContext);
@@ -94,15 +95,30 @@ public class TestServlet extends HttpServlet {
 				writer.append("</form>");
 			}
 			writer.append("</body></html>");
-		} else if (parts.length == 4) {
+		} else if (parts.length > 3) {
 			IResourceRenderContext resourceRenderContext = new DefaultResourceRendererContext(docRoot, params, container, isEditMode, documentStore, req, resp, projectLoc, clazz, parameterProvider);
 			List<DocumentPart> children = document.getRoot().getChildren();
 			for (DocumentPart documentPart : children) {
 				if (documentPart instanceof PadDocumentPart) {
 					Pad pad = ((PadDocumentPart) documentPart).getPad();
 					if (parts[3].equals(pad.getContainerID())) {
+						String resourceId;
+						if (parts.length > 4) {
+							String[] copyOfRange = Arrays.copyOfRange(parts, 4, parts.length);
+							StringBuilder sb = new StringBuilder();
+							for (int i = 0; i < copyOfRange.length; i++) {
+								if (i > 0) {
+									sb.append("/");
+								}
+								sb.append(copyOfRange[i]);
+							}
+							resourceId = sb.toString();
+						} else {
+							resourceId = "";
+						}
+						
 						IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
-						renderer.renderResource(pad, resourceRenderContext);
+						renderer.renderResource(pad, resourceId, resourceRenderContext);
 					}
 				}
 			}

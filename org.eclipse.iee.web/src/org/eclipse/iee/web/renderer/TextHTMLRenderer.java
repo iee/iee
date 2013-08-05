@@ -15,13 +15,14 @@ import org.eclipse.iee.sample.text.pad.TextPad;
 public class TextHTMLRenderer implements IHTMLRenderer<TextPad> {
 
 	@Override
-	public void renderPad(TextPad pad, Writer writer,
+	public void renderPad(TextPad pad,
 			IHTMLRendererContext context) throws IOException {
+		Writer writer = context.getWriter();
 		writer.append("<span class='pad pad-text' style='display:inline-block;'>").append(pad.getText()).append("</span>");
 	}
 
 	@Override
-	public void renderResource(TextPad pad, IResourceRenderContext context)
+	public void renderResource(TextPad pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 	}
 

@@ -50,7 +50,7 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 		if (documentPart instanceof PadDocumentPart) {
 			Pad pad = ((PadDocumentPart) documentPart).getPad();
 			IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
-			renderer.renderPad(pad, writer, context);
+			renderer.renderPad(pad, context);
 		} else if (documentPart instanceof TextDocumentPart) {
 			String type = ((TextDocumentPart) documentPart).getType();
 			if ("Ws".equals(type)) {

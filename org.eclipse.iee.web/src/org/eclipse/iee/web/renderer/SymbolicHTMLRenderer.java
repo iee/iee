@@ -2,6 +2,7 @@ package org.eclipse.iee.web.renderer;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 
@@ -23,20 +24,19 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
 	}
 
 	@Override
-	public void renderPad(SymbolicPad pad, Writer writer,
+	public void renderPad(SymbolicPad pad,
 			IHTMLRendererContext context) throws IOException {
-			
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), new HashMap<String, String>())).append("' />");
+		Writer writer = context.getWriter();
+		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "formula", new HashMap<String, String>())).append("' />");
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("type", "result");
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), params)).append("' />");
+		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "result", params)).append("' />");
 	}
 
 	@Override
-	public void renderResource(SymbolicPad pad, IResourceRenderContext context)
+	public void renderResource(SymbolicPad pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 		BufferedImage image;
-		if (!"result".equals(context.getRequest().getParameter("type"))) {
+		if (!"result".equals(resourceId)) {
 			image = (BufferedImage) TeXFormula.createBufferedImage(SymbolicPad.translateToLatex(pad.getTranslatingExpression()),
 					TeXConstants.STYLE_TEXT, 20,
 					new java.awt.Color(63, 127, 95), null);
@@ -53,8 +53,8 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
 					TeXConstants.STYLE_TEXT, 20,
 					new java.awt.Color(63, 127, 95), null);
 		}
-		context.getResponse().setContentType("image/png");
-		ServletOutputStream outputStream = context.getResponse().getOutputStream();
+		context.setContentType("image/png");
+		OutputStream outputStream = context.getOutputStream();
 		try {
 			ImageIO.write(image, "png", outputStream);
 		} finally {

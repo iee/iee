@@ -15,12 +15,12 @@ import org.eclipse.iee.editor.core.pad.Pad;
 public class DefaultHTMLRenderer implements IHTMLRenderer<Pad> {
 
 	@Override
-	public void renderPad(Pad pad, Writer writer, IHTMLRendererContext context) throws IOException {
-		writer.write("Unknown pad here");
+	public void renderPad(Pad pad, IHTMLRendererContext context) throws IOException {
+		context.getWriter().write("Unknown pad here");
 	}
 
 	@Override
-	public void renderResource(Pad pad, IResourceRenderContext context)
+	public void renderResource(Pad pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 	}
 

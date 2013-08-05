@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,40 +21,23 @@ import org.eclipse.iee.web.store.IDocumentStore;
  */
 public class DefaultResourceRendererContext extends DefaultHTMLRendererContext implements IResourceRenderContext {
 
-	private HttpServletRequest request;
-	
-	private HttpServletResponse response;
-	
-	private IDocumentStore documentStore;
-	
-	private String bundle;
-	
-	private String document;
-	
+
 	public DefaultResourceRendererContext(String docUrl, Map<String, String> params,
 			IResultContainer fResultContainer, boolean isEditMode, IDocumentStore documentStore, 
 			HttpServletRequest request, HttpServletResponse response, String bundle, String document, IParameterProvider parameterProvider) {
-		super(docUrl, params, fResultContainer, isEditMode, parameterProvider);
+		super(request, response, docUrl, params, documentStore, bundle, document, fResultContainer, isEditMode, parameterProvider);
 		this.request = request;
 		this.response = response;
-		this.documentStore = documentStore;
-		this.bundle = bundle;
-		this.document = document;
 	}
 
 	@Override
-	public HttpServletRequest getRequest() {
-		return request;
+	public void setContentType(String string) {
+		response.setContentType(string);
 	}
 
 	@Override
-	public HttpServletResponse getResponse() {
-		return response;
-	}
-
-	@Override
-	public InputStream getResourceAsStream(String string) throws IOException {
-		return documentStore.getResourceAsStream(bundle, document, string);
+	public ServletOutputStream getOutputStream() throws IOException {
+		return response.getOutputStream();
 	}
 
 }

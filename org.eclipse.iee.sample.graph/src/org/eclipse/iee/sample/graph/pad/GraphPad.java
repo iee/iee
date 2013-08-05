@@ -278,13 +278,7 @@ public class GraphPad extends Pad implements Serializable {
 				}
 			}
 		}
-		generatedText.append("File file = new File(\"").append(getContainer().getContainerManager().getStoragePath() + "/" + FileMessager.getInstance().getRuntimeDirectoryName() + "/" + getContainerID()).append("\");");
-		generatedText.append("try {");
-		generatedText.append("FileUtils.writeStringToFile(file, result.toString());");
-		generatedText.append("}");
-		generatedText.append("catch(IOException e) {");
-		generatedText.append("e.printStackTrace();");
-		generatedText.append("}");
+		generatedText.append("org.eclipse.iee.document.api.EvaluationContextHolder.putResult(\"").append(getContainerID()).append("\", result.toString());");
 		generatedText.append("}");
 
 		Gson gson = new GsonBuilder().create();
@@ -435,4 +429,9 @@ public class GraphPad extends Pad implements Serializable {
 	public String getTex() {
 		return "";
 	}
+	
+	public GraphModel getModel() {
+		return model;
+	}
+	
 }

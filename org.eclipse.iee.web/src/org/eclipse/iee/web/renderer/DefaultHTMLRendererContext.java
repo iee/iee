@@ -1,11 +1,18 @@
 package org.eclipse.iee.web.renderer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.eclipse.iee.document.api.IParameterProvider;
 import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.web.store.IDocumentStore;
 
 public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 
@@ -19,8 +26,30 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 	
 	private IParameterProvider parameterProvider;
 	
-	public DefaultHTMLRendererContext(String docUrl, Map<String, String> params, IResultContainer fResultContainer, boolean isEditMode,  IParameterProvider parameterProvider) {
+	private String bundle;
+	
+	private String document;
+	
+	private IDocumentStore documentStore;
+	
+	protected HttpServletRequest request;
+	
+	protected HttpServletResponse response;
+	
+	public DefaultHTMLRendererContext(
+			HttpServletRequest request, 
+			HttpServletResponse response, 
+			String docUrl, 
+			Map<String, String> params,
+			IDocumentStore documentStore,
+			String bundle,
+			String document,
+			IResultContainer fResultContainer, 
+			boolean isEditMode,  
+			IParameterProvider parameterProvider) {
 		super();
+		this.request = request;
+		this.response = response;
 		this.fResultContainer = fResultContainer;
 		this.docUrl = docUrl;
 		this.params = params;
@@ -29,11 +58,12 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 	}
 
 	@Override
-	public String createResourceURL(String padId, Map<String, String> params) {
+	public String createResourceURL(String padId, String resourceId, Map<String, String> params) {
 		Map<String, String> mergedParams = new HashMap<String, String>(this.params);
 		mergedParams.putAll(params);
 		StringBuilder sb = new StringBuilder(docUrl);
 		sb.append("/").append(padId);
+		sb.append("/").append(resourceId);
 		boolean first = true;
 		for (Entry<String, String> entry : mergedParams.entrySet()) {
 			if (first) {
@@ -82,6 +112,16 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 	@Override
 	public IParameterProvider getParameterProvider() {
 		return parameterProvider;
+	}
+	
+	@Override
+	public InputStream getResourceAsStream(String string) throws IOException {
+		return documentStore.getResourceAsStream(bundle, document, string);
+	}
+	
+	@Override
+	public Writer getWriter() throws IOException {
+		return response.getWriter();
 	}
 	
 }

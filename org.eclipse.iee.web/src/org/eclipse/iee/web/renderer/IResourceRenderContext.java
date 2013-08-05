@@ -5,7 +5,9 @@ package org.eclipse.iee.web.renderer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,10 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface IResourceRenderContext extends IHTMLRendererContext {
 
-	HttpServletRequest getRequest();
-	
-	HttpServletResponse getResponse();
+	void setContentType(String string);
 
-	InputStream getResourceAsStream(String string) throws IOException;
+	OutputStream getOutputStream() throws IOException;
 	
 }
