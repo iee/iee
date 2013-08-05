@@ -50,7 +50,9 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 		if (documentPart instanceof PadDocumentPart) {
 			Pad pad = ((PadDocumentPart) documentPart).getPad();
 			IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
+			writer.append("<div style='display:inline-block;'>");
 			renderer.renderPad(pad, context);
+			writer.append("</div>");
 		} else if (documentPart instanceof TextDocumentPart) {
 			String type = ((TextDocumentPart) documentPart).getType();
 			if ("Ws".equals(type)) {

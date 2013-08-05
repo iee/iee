@@ -41,7 +41,7 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPad> {
 		writer.append("</td>").append("<td>");
 		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "graph", new HashMap<String, String>())).append("' />");
 		writer.append("</td>").append("</tr>");
-		writer.append("<tr>").append("<td>").append("</td>").append("<td>");
+		writer.append("<tr>").append("<td>").append("</td>").append("<td style='text-align:center'>");
 		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "variables", new HashMap<String, String>())).append("' />");
 		writer.append("</td>").append("</tr>").append("</table>");
 	}
