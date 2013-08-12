@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.eclipse.iee.pad.fem3d.contextJava"
+            targetID="#CompilationUnitEditorContext">
+         <action
+               class="org.eclipse.iee.pad.fem3d.ui.handler.AddFem3DPadActionDelegate"
+               id="org.eclipse.iee.pad.fem3d.ui.handler.AddFem3DPadActionDelegate"
+               label="Insert 3D" 
+               icon="icons/3d.png" 
+               menubarPath="additions"
+               tooltip="Insert 3D">
+         </action>
+      </viewerContribution>
+	  <viewerContribution
+            id="org.eclipse.iee.pad.fem3d.contextSample"
+            targetID="#TextEditorContext">
+         <action
+               class="org.eclipse.iee.pad.fem3d.ui.handler.AddFem3DPadActionDelegate"
+               id="org.eclipse.iee.pad.fem3d.ui.handler.AddFem3DPadActionDelegate"
+               label="Insert 3D" 
+               icon="icons/3d.png" 
+               menubarPath="additions"
+               tooltip="Insert 3D">
+         </action>
+      </viewerContribution>
+   </extension>
+
+	<extension
+    	point = "org.eclipse.ui.editorActions">
+		<editorContribution 
+        	id="org.eclipse.iee.pad.fem3d.toolbarJava" 
+         	targetID="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor">        
+			<action id="org.eclipse.iee.pad.fem3d.add" 
+	        	label="Insert 3D" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/3d.png" 
+	            tooltip="Insert 3D" 
+	            class="org.eclipse.iee.pad.fem3d.ui.handler.AddFem3DPadActionDelegate"
+	            definitionId="org.eclipse.iee.pad.fem3d.add"
+	        /> 
+    	</editorContribution>
+		<editorContribution 
+        	id="org.eclipse.iee.pad.fem3d.toolbarSample" 
+         	targetID="org.eclipse.iee.editor.sample.SampleExtendedEditor">        
+			<action id="org.eclipse.iee.pad.fem3d.add" 
+	        	label="Insert 3D" 
+	            toolbarPath="TextEditor" 
+	            icon="icons/3d.png" 
+	            tooltip="Insert 3D" 
+	            class="org.eclipse.iee.pad.fem3d.ui.handler.AddFem3DPadActionDelegate"
+	            definitionId="org.eclipse.iee.pad.fem3d.add"
+	        /> 
+    	</editorContribution>
+	</extension>
+
+	
+</plugin>
