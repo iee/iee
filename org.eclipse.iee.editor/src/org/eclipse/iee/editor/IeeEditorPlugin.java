@@ -1,5 +1,7 @@
 package org.eclipse.iee.editor;
 
+import javax.inject.Inject;
+
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -8,6 +10,7 @@ import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -45,24 +48,11 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
-		fPadManager = new PadManager();
-		
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		workbench.addWorkbenchListener(new IWorkbenchListener() {
-			
-			@Override
-			public boolean preShutdown(IWorkbench workbench, boolean forced) {
-				return true;
-			}
-			
-			@Override
-			public void postShutdown(IWorkbench workbench) {
-			}
-		});
-		
+		ServiceReference<PadManager> serviceReference = (ServiceReference<PadManager>) context.getServiceReference(PadManager.class.getName());
+		fPadManager = context.getService(serviceReference);
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)

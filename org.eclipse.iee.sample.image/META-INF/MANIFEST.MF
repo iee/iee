@@ -17,3 +17,4 @@ Bundle-ClassPath: libs/commons-io-2.4.jar,
  .,
  libs/log4j-1.2.17.jar
 Export-Package: org.eclipse.iee.sample.image, org.eclipse.iee.sample.image.pad
+Service-Component: OSGI-INF/org.eclipse.iee.sample.image.ImagePadFactory.xml

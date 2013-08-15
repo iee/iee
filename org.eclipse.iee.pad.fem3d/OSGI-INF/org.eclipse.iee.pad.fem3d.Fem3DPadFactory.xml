@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.iee.pad.fem3d.Fem3DPadFactory">
+   <implementation class="org.eclipse.iee.pad.fem3d.Fem3DPadFactory"/>
+   <service>
+      <provide interface="org.eclipse.iee.editor.core.pad.IPadFactory"/>
+   </service>
+</scr:component>

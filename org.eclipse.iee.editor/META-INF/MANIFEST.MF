@@ -55,3 +55,4 @@ Import-Package: org.apache.commons.io,
  org.eclipse.core.expressions,
  org.eclipse.iee.document.api,
  org.eclipse.ui.console
+Service-Component: OSGI-INF/org.eclipse.iee.editor.core.pad.PadManager.xml

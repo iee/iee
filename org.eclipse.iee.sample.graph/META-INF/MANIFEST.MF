@@ -29,3 +29,4 @@ Export-Package: org.eclipse.iee.sample.graph,
  org.eclipse.iee.sample.graph.pad,
  org.eclipse.iee.sample.graph.pad.model,
  org.jfree.chart
+Service-Component: OSGI-INF/org.eclipse.iee.sample.graph.GraphPadFactory.xml

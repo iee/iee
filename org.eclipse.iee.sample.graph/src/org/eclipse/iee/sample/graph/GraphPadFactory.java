@@ -23,5 +23,10 @@ public class GraphPadFactory implements IPadFactory {
 		GraphPad graphPad = new GraphPad(model);
 		return graphPad;
 	}
+	
+	@Override
+	public String getType() {
+		return "Graph";
+	}
 
 }

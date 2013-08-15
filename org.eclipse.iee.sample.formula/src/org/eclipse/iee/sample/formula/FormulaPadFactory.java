@@ -19,4 +19,9 @@ public class FormulaPadFactory implements IPadFactory {
 		return formulaPad;
 	}
 
+	@Override
+	public String getType() {
+		return "Formula";
+	}
+	
 }

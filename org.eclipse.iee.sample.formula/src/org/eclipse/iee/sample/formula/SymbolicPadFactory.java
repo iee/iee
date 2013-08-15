@@ -19,4 +19,9 @@ public class SymbolicPadFactory implements IPadFactory {
 		return formulaPad;
 	}
 
+	@Override
+	public String getType() {
+		return "Symbolic";
+	}
+	
 }

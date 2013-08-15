@@ -17,18 +17,9 @@ import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.sample.formula.FormulaPadFactory;
-import org.eclipse.iee.sample.formula.InputPadFactory;
-import org.eclipse.iee.sample.formula.SymbolicPadFactory;
-import org.eclipse.iee.sample.graph.GraphPadFactory;
-import org.eclipse.iee.sample.image.ImagePadFactory;
 import org.eclipse.iee.sample.image.pad.ImagePad;
-import org.eclipse.iee.sample.text.TextPadFactory;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaSourceViewer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -73,8 +64,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		logger.debug("Create ExtendedJavaEditor");
 
 		initIeeEditorCore();
-
-		loadEditorPads();
 
 		doSave(null);
 	};
@@ -173,29 +162,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			e.printStackTrace();
 		}
 
-	}
-
-	private void loadEditorPads() {
-		logger.debug("loadEditorPads");
-
-		fPadManager.registerPadFactory(
-				fContainerManager.getContainerManagerID(), "Formula",
-				new FormulaPadFactory());
-		fPadManager.registerPadFactory(
-				fContainerManager.getContainerManagerID(), "Input",
-				new InputPadFactory());
-		fPadManager.registerPadFactory(
-				fContainerManager.getContainerManagerID(), "Symbolic",
-				new SymbolicPadFactory());
-		fPadManager.registerPadFactory(
-				fContainerManager.getContainerManagerID(), "Image",
-				new ImagePadFactory());
-		fPadManager.registerPadFactory(
-				fContainerManager.getContainerManagerID(), "Text",
-				new TextPadFactory());
-		fPadManager.registerPadFactory(
-				fContainerManager.getContainerManagerID(), "Graph",
-				new GraphPadFactory());
 	}
 
 	@Override
