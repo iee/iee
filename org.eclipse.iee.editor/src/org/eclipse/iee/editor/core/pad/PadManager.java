@@ -286,6 +286,7 @@ public class PadManager extends EventManager {
 					Pad pad = iPadFactory.create(container.getPadParams(), container.getValue());
 					pad.setContainerID(containerID);
 					pad.attachContainer(container);
+					fActivePads.add(containerID);
 					fPads.put(containerID, pad);
 				} else { 
 					/*
@@ -343,18 +344,6 @@ public class PadManager extends EventManager {
 			}
 		};
 
-		DebugPlugin.getDefault().addDebugEventListener(
-				new IDebugEventSetListener() {
-
-					@Override
-					public void handleDebugEvents(DebugEvent[] events) {
-						for (DebugEvent e : events) {
-							if (e.getKind() == DebugEvent.TERMINATE)
-								FileMessager.getInstance().checkRuntimeValues();
-						}
-					}
-				});
-
 	}
 
 	/* Internal functions */
@@ -369,8 +358,9 @@ public class PadManager extends EventManager {
 				+ containerID;
 
 		File runtimeFile = new File(runtimePath);
-		if (runtimeFile.exists())
-			FileUtils.deleteQuietly(runtimeFile);
+		if (runtimeFile.exists()) {
+			runtimeFile.delete();
+		}
 
 		if (fActivePads.contains(containerID)) {
 			pad.detachContainer();

@@ -1,19 +1,24 @@
-package org.eclipse.iee.web;
+package org.eclipse.iee.web.ui;
 
 import java.util.Hashtable;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
+import org.eclipse.iee.web.parser.DefaultDocumentParser;
+import org.eclipse.iee.web.renderer.DefaultHTMLDocumentRenderer;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
+import org.eclipse.iee.web.renderer.FormulaImageRenderer;
 import org.eclipse.iee.web.renderer.GraphHTMLRenderer;
 import org.eclipse.iee.web.renderer.HTMLRendererManager;
 import org.eclipse.iee.web.renderer.ImageHTMLRenderer;
 import org.eclipse.iee.web.renderer.InputHTMLRenderer;
 import org.eclipse.iee.web.renderer.SymbolicHTMLRenderer;
 import org.eclipse.iee.web.renderer.TextHTMLRenderer;
+import org.eclipse.iee.web.servlet.TestServlet;
+import org.eclipse.iee.web.store.InMemoryEvaluationContextStore;
+import org.eclipse.iee.web.ui.store.DevDocumentStore;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -53,7 +58,13 @@ public class Activator implements BundleActivator {
 		ServletContextHandler ctx = new ServletContextHandler();
 		ctx.setContextPath("/test");
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		ctx.addServlet(new ServletHolder(new TestServlet(workspace.getRoot().getLocation().toFile(), IeeEditorPlugin.getPadManager(), rendererManager)),"/doc/*");
+		DefaultDocumentParser parser = new DefaultDocumentParser(IeeEditorPlugin.getPadManager());
+		DevDocumentStore documentStore = new DevDocumentStore(workspace.getRoot().getLocation().toFile(), parser);
+		TestServlet servlet = new TestServlet();
+		servlet.setDocumentRenderer(new DefaultHTMLDocumentRenderer(registerRenderer(new HTMLRendererManager())));
+		servlet.setDocumentStore(documentStore);
+		servlet.setEvaluationContextStore(new InMemoryEvaluationContextStore());
+		ctx.addServlet(new ServletHolder(servlet),"/doc/*");
         server.setHandler(ctx);
         server.start();
 	}
@@ -68,13 +79,15 @@ public class Activator implements BundleActivator {
 		server = null;
 	}
 
-	private void registerRenderer(HTMLRendererManager rendererManager) {
-		rendererManager.registerPadHTMLRenderer("Formula", new FormulaHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer("Input", new InputHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer("Symbolic", new SymbolicHTMLRenderer(new SymbolicEngine()));
+	private HTMLRendererManager registerRenderer(HTMLRendererManager rendererManager) {
+		FormulaImageRenderer formulaImageRenderer = new FormulaImageRenderer();
+		rendererManager.registerPadHTMLRenderer("Formula", new FormulaHTMLRenderer(formulaImageRenderer));
+		rendererManager.registerPadHTMLRenderer("Input", new InputHTMLRenderer(formulaImageRenderer));
+		rendererManager.registerPadHTMLRenderer("Symbolic", new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
 		rendererManager.registerPadHTMLRenderer("Image", new ImageHTMLRenderer());
 		rendererManager.registerPadHTMLRenderer("Text", new TextHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer("Graph", new GraphHTMLRenderer());
+		rendererManager.registerPadHTMLRenderer("Graph", new GraphHTMLRenderer(formulaImageRenderer));
+		return rendererManager;
 	}
 	
 	/**

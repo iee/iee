@@ -7,8 +7,10 @@ import org.eclipse.iee.web.document.Document;
 
 public interface IHTMLDocumentRenderer {
 	
-	void renderHTMLHead(Document document, Writer writer, IHTMLRendererContext context) throws IOException;
+	void renderHTMLHead(Document document, IHTMLRendererContext context) throws IOException;
 	
-	void renderHTMLBody(Document document, Writer writer, IHTMLRendererContext context) throws IOException;
+	void renderHTMLBody(Document document, IHTMLRendererContext context) throws IOException;
+	
+	void renderResource(Document document, String padId, String resourceId, IResourceRenderContext context) throws IOException;
 	
 }

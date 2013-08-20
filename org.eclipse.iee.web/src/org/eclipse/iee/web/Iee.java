@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
  * IEE is more than maths plus programming. Synergy in action!
  */
 
-class Iee {
+public class Iee {
     public static void main(String[] args) {
 
     	/*<Formula("id"="b8fe85ef-3938-412e-bfb6-c9f9b51424e6"):h=2+2<*/double h=(2)+(2);/*>>*/

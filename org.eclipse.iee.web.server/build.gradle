@@ -1,0 +1,150 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+
+
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+war {
+	def originalClasspath = classpath
+	classpath = files {
+		def uniqueFiles = []
+		originalClasspath.each { input ->
+			if (uniqueFiles.find({it.name == input.name }) == null) {
+				uniqueFiles << input
+			}
+		}
+		return uniqueFiles
+	}
+}
+
+allprojects {
+	repositories {
+		mavenCentral()
+	}
+	
+	ext.eclipseDir = '/home/aefimchuk/java/rcp4.3'
+}
+
+subprojects {
+	apply plugin: 'java'
+	
+	sourceSets {
+		main {
+			java {
+				srcDir 'src/'
+			}
+			resources {
+				srcDir 'src/'
+			}
+		}
+	}
+	
+	dependencies {
+		compile 'log4j:log4j:1.2.17'
+		compile 'commons-io:commons-io:2.4'
+		compile 'commons-codec:commons-codec:1.8'
+		compile fileTree(dir: './lib', include: '*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.equinox.common*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.equinox.registry*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.swt*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.jface*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.text*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.debug.core*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.jdt.core*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.runtime*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.commands*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.expressions*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.workbench*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.console*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.editors*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.forms*.jar', exclude: '*source*.jar')
+		compile 'org.eclipse.tycho:org.eclipse.osgi:3.9.0.v20130529-1710'
+	}
+}
+
+project(':org.eclipse.iee.pad.fem3d') {
+	dependencies {
+		compile project(':org.eclipse.iee.editor')
+	}
+}
+
+project(':org.eclipse.iee.sample.formula') {
+	dependencies {
+		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.translator.antlr')
+	}
+}
+
+project(':org.eclipse.iee.sample.graph') {
+	dependencies {
+		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.sample.formula')
+		compile project(':org.eclipse.iee.translator.antlr')
+	}
+}
+
+project(':org.eclipse.iee.sample.image') {
+	dependencies {
+		compile project(':org.eclipse.iee.editor')
+	}
+}
+
+project(':org.eclipse.iee.sample.text') {
+	dependencies {
+		compile project(':org.eclipse.iee.editor')
+	}
+}
+
+project(':org.eclipse.iee.web') {
+	dependencies {
+		compile 'javax:javaee-api:6.0'
+		compile 'org.apache.commons:commons-lang3:3.1'
+		compile project(':org.eclipse.iee.document.api')
+		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.pad.fem3d')
+		compile project(':org.eclipse.iee.sample.formula')
+		compile project(':org.eclipse.iee.sample.graph')
+		compile project(':org.eclipse.iee.sample.image')
+		compile project(':org.eclipse.iee.sample.text')
+		compile project(':org.eclipse.iee.translator.antlr')
+	}
+}
+
+dependencies {
+	compile 'org.eclipse.tycho:org.eclipse.osgi:3.9.0.v20130529-1710'
+	compile 'com.google.guava:guava:14.0.1'
+	compile 'org.apache.commons:commons-lang3:3.1'
+	compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.commands*.jar', exclude: '*source*.jar')
+	compile project(':org.eclipse.iee.document.api')
+	compile project(':org.eclipse.iee.editor')
+	compile project(':org.eclipse.iee.pad.fem3d')
+	compile project(':org.eclipse.iee.sample.formula')
+	compile project(':org.eclipse.iee.sample.graph')
+	compile project(':org.eclipse.iee.sample.image')
+	compile project(':org.eclipse.iee.sample.text')
+	compile project(':org.eclipse.iee.translator.antlr')
+	compile project(':org.eclipse.iee.web')
+	providedCompile "javax:javaee-api:6.0"
+	testCompile 'junit:junit:4.11'
+	testCompile 'org.eclipse.jetty:jetty-webapp:9.0.4.v20130625'
+	testCompile 'org.eclipse.jetty:jetty-annotations:9.0.4.v20130625'
+}
+
+eclipse {
+	wtp {
+	  facet {
+		file {
+		  whenMerged { wtpFacet ->
+			def installedJstFacet = wtpFacet.facets.find { facet ->
+			  facet.name == 'jst.web' && facet.type == org.gradle.plugins.ide.eclipse.model.Facet.FacetType.installed
+			}
+			installedJstFacet.version = '3.0'
+		  }
+		}
+	  }
+	}
+  }

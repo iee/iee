@@ -7,7 +7,6 @@ import java.io.Writer;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 
 import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
@@ -19,8 +18,11 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
 
 	private SymbolicEngine symbolicEngine;
 	
-	public SymbolicHTMLRenderer(SymbolicEngine symbolicEngine) {
+	private FormulaImageRenderer formulaImageRenderer;
+	
+	public SymbolicHTMLRenderer(SymbolicEngine symbolicEngine, FormulaImageRenderer formulaImageRenderer) {
 		this.symbolicEngine = symbolicEngine;
+		this.formulaImageRenderer = formulaImageRenderer;
 	}
 
 	@Override
@@ -35,11 +37,9 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
 	@Override
 	public void renderResource(SymbolicPad pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
-		BufferedImage image;
+		String text;
 		if (!"result".equals(resourceId)) {
-			image = (BufferedImage) TeXFormula.createBufferedImage(SymbolicPad.translateToLatex(pad.getTranslatingExpression()),
-					TeXConstants.STYLE_TEXT, 20,
-					new java.awt.Color(63, 127, 95), null);
+			text = pad.getTranslatingExpression();
 		} else {
 			String variable = pad.getTranslatingExpression();
 			char lastVariable = variable.charAt(variable.length() - 1);
@@ -49,10 +49,9 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
 			if (result == null) {
 				result = "";
 			}
-			image = (BufferedImage) TeXFormula.createBufferedImage(SymbolicPad.translateToLatex(result),
-					TeXConstants.STYLE_TEXT, 20,
-					new java.awt.Color(63, 127, 95), null);
+			text = result;
 		}
+		BufferedImage image = formulaImageRenderer.getFormulaImage(text, new java.awt.Color(63, 127, 95), null);
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
 		try {

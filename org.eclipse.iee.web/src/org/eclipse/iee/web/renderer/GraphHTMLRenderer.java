@@ -22,6 +22,12 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class GraphHTMLRenderer implements IHTMLRenderer<GraphPad> {
 
+	private FormulaImageRenderer formulaImageRenderer;
+	
+	public GraphHTMLRenderer(FormulaImageRenderer formulaImageRenderer) {
+		this.formulaImageRenderer = formulaImageRenderer;
+	}
+	
 	@Override
 	public void renderPad(GraphPad pad,
 			IHTMLRendererContext context) throws IOException {
@@ -55,9 +61,7 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPad> {
 			GraphModel model = pad.getModel();
 			List<GraphElement> elements = model.getElements();
 			GraphElement graphElement = elements.get(number);
-			BufferedImage image = (BufferedImage) TeXFormula.createBufferedImage(FormulaPad.translateToLatex(graphElement.getFunction()),
-						TeXConstants.STYLE_TEXT, 20,
-						java.awt.Color.black, null);
+			BufferedImage image = formulaImageRenderer.getFormulaImage(graphElement.getFunction(), java.awt.Color.black, null);
 			writeImage(context, image);
 		} else if ("graph".equals(resourceId)) {
 			JFreeChart chart = pad.createChart();
@@ -76,9 +80,7 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPad> {
 				}
 				sb.append(variable);
 			}
-			BufferedImage image = (BufferedImage) TeXFormula.createBufferedImage(FormulaPad.translateToLatex(sb.toString()),
-					TeXConstants.STYLE_TEXT, 20,
-					java.awt.Color.black, null);
+			BufferedImage image = formulaImageRenderer.getFormulaImage(sb.toString(), java.awt.Color.black, null);
 			writeImage(context, image);
 		}
 	}

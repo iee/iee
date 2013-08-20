@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.eclipse.iee.editor.core.pad.IPadFactory;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.iee.sample.graph.pad.GraphPad;
 import org.eclipse.iee.sample.graph.pad.model.GraphModel;
 

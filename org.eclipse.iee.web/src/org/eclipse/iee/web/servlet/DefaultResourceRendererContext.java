@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.eclipse.iee.web.renderer;
+package org.eclipse.iee.web.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.iee.document.api.IParameterProvider;
 import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.web.renderer.IResourceRenderContext;
 import org.eclipse.iee.web.store.IDocumentStore;
 
 /**
@@ -22,10 +23,10 @@ import org.eclipse.iee.web.store.IDocumentStore;
 public class DefaultResourceRendererContext extends DefaultHTMLRendererContext implements IResourceRenderContext {
 
 
-	public DefaultResourceRendererContext(String docUrl, Map<String, String> params,
+	public DefaultResourceRendererContext(String evaluationId, String docUrl, Map<String, String> params,
 			IResultContainer fResultContainer, boolean isEditMode, IDocumentStore documentStore, 
 			HttpServletRequest request, HttpServletResponse response, String bundle, String document, IParameterProvider parameterProvider) {
-		super(request, response, docUrl, params, documentStore, bundle, document, fResultContainer, isEditMode, parameterProvider);
+		super(evaluationId, request, response, docUrl, params, documentStore, bundle, document, fResultContainer, isEditMode, parameterProvider);
 		this.request = request;
 		this.response = response;
 	}

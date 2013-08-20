@@ -3,18 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Web
 Bundle-SymbolicName: org.eclipse.iee.web;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.eclipse.iee.web.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: javax.servlet;version="2.6.0",
- javax.servlet.http;version="2.6.0",
+Import-Package: javax.servlet,
+ javax.servlet.http,
  org.apache.commons.lang3;version="3.1.0",
  org.eclipse.core.resources,
  org.eclipse.iee.document.api,
  org.eclipse.iee.document.api.stub,
- org.eclipse.iee.editor,
  org.eclipse.iee.editor.core.pad,
  org.eclipse.iee.editor.core.utils.symbolic,
  org.eclipse.iee.sample.formula.pad,
@@ -24,18 +20,15 @@ Import-Package: javax.servlet;version="2.6.0",
  org.eclipse.iee.sample.image.pad,
  org.eclipse.iee.sample.text,
  org.eclipse.iee.sample.text.pad,
- org.eclipse.jdt.core,
- org.eclipse.jdt.ui,
- org.eclipse.jetty.server;version="8.1.3",
- org.eclipse.jetty.server.handler;version="8.1.3",
- org.eclipse.jetty.servlet;version="8.1.3",
- org.eclipse.jetty.util.component;version="8.1.3",
- org.eclipse.jetty.webapp;version="8.1.3",
- org.eclipse.ui.ide,
- org.jfree.chart,
- org.osgi.service.http;version="1.2.1"
+ org.jfree.chart
 Bundle-ClassPath: lib/commons-io-2.4.jar,
  .,
  lib/antlr-4.0-complete.jar,
  lib/jlatexmath-embedded-fop-1.0.2.jar,
- lib/jfreechart-1.0.13.jar
+ lib/jfreechart-1.0.13.jar,
+ lib/guava-14.0.1.jar
+Export-Package: org.eclipse.iee.web.document,
+ org.eclipse.iee.web.parser,
+ org.eclipse.iee.web.renderer,
+ org.eclipse.iee.web.servlet,
+ org.eclipse.iee.web.store

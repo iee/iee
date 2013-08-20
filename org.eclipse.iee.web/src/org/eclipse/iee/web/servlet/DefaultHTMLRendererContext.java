@@ -1,4 +1,4 @@
-package org.eclipse.iee.web.renderer;
+package org.eclipse.iee.web.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.iee.document.api.IParameterProvider;
 import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.web.renderer.IHTMLRendererContext;
 import org.eclipse.iee.web.store.IDocumentStore;
 
 public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 
+	private String evaluationId;
+	
 	private IResultContainer fResultContainer;
 
 	private String docUrl;
@@ -37,6 +40,7 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 	protected HttpServletResponse response;
 	
 	public DefaultHTMLRendererContext(
+			String evaluationId,
 			HttpServletRequest request, 
 			HttpServletResponse response, 
 			String docUrl, 
@@ -48,6 +52,7 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 			boolean isEditMode,  
 			IParameterProvider parameterProvider) {
 		super();
+		this.evaluationId = evaluationId;
 		this.request = request;
 		this.response = response;
 		this.fResultContainer = fResultContainer;
@@ -57,10 +62,15 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 		this.parameterProvider = parameterProvider;
 	}
 
+	public String getEvaluationId() {
+		return evaluationId;
+	}
+	
 	@Override
 	public String createResourceURL(String padId, String resourceId, Map<String, String> params) {
 		Map<String, String> mergedParams = new HashMap<String, String>(this.params);
 		mergedParams.putAll(params);
+		mergedParams.put("evalId", getEvaluationId());
 		StringBuilder sb = new StringBuilder(docUrl);
 		sb.append("/").append(padId);
 		sb.append("/").append(resourceId);

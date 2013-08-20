@@ -7,13 +7,16 @@ import java.io.Writer;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 
 import org.eclipse.iee.sample.formula.pad.FormulaPad;
-import org.scilab.forge.jlatexmath.TeXConstants;
-import org.scilab.forge.jlatexmath.TeXFormula;
 
 public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPad> {
+
+	private FormulaImageRenderer formulaImageRenderer;
+	
+	public FormulaHTMLRenderer(FormulaImageRenderer formulaImageRenderer) {
+		this.formulaImageRenderer = formulaImageRenderer;
+	}
 
 	@Override
 	public void renderPad(FormulaPad pad,
@@ -30,20 +33,17 @@ public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPad> {
 	@Override
 	public void renderResource(FormulaPad pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
-		BufferedImage image;
+		String text;
 		if (!"result".equals(resourceId)) {
-			image = (BufferedImage) TeXFormula.createBufferedImage(FormulaPad.translateToLatex(pad.getTranslatingExpression()),
-					TeXConstants.STYLE_TEXT, 20,
-					java.awt.Color.black, null);
+			text = pad.getTranslatingExpression();
 		} else {
 			String result = context.getResultContainer().getResult(pad.getContainerID());
 			if (result == null) {
 				result = "";
 			}
-			image = (BufferedImage) TeXFormula.createBufferedImage(FormulaPad.translateToLatex(result),
-					TeXConstants.STYLE_TEXT, 20,
-					java.awt.Color.black, null);
+			text = result;
 		}
+		BufferedImage image = formulaImageRenderer.getFormulaImage(text, java.awt.Color.black, null);
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
 		try {

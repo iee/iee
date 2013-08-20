@@ -205,7 +205,7 @@ public class Fem3DPad extends Pad implements Serializable {
 		generatedText.append("com.ieecloud.viewer.Java3DViewer.print(").append(modelVariable).append(", file, path + \"_img\");");
 		generatedText.append("	byte[] bar = org.apache.commons.io.FileUtils.readFileToByteArray(new File(path + \"/\" + file));");
 		generatedText.append("String encoded = org.apache.commons.codec.binary.Base64.encodeBase64String(bar);");
-		generatedText.append("org.apache.commons.io.FileUtils.write(new File(path + \"/\" + file), encoded);");
+		generatedText.append("org.eclipse.iee.document.api.EvaluationContextHolder.putResult(\"").append(getContainerID()).append("\", String.valueOf(variable))");
 		generatedText.append("} catch (IOException e) {");
 		generatedText.append("e.printStackTrace();");
 		generatedText.append("}");

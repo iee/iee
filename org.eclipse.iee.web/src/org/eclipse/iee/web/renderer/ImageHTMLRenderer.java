@@ -6,8 +6,6 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 
-import javax.servlet.ServletOutputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 

@@ -1,4 +1,4 @@
-package org.eclipse.iee.web.store;
+package org.eclipse.iee.web.ui.store;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,7 @@ import java.net.URLClassLoader;
 
 import org.eclipse.iee.web.document.Document;
 import org.eclipse.iee.web.parser.DefaultDocumentParser;
+import org.eclipse.iee.web.store.IDocumentStore;
 
 public class DevDocumentStore implements IDocumentStore {
 
@@ -29,9 +30,9 @@ public class DevDocumentStore implements IDocumentStore {
 	}
 
 	@Override
-	public ClassLoader getDocumentClassLoader(String bundle, String name) throws IOException {
+	public Class<?> getDocumentClass(String bundle, String name) throws IOException, ClassNotFoundException {
 		URLClassLoader classLoader = new URLClassLoader(new URL[] {new File(getBundlePath(bundle), "bin").toURL()}, getClass().getClassLoader());
-		return classLoader;
+		return classLoader.loadClass(name);
 	}
 
 	@Override

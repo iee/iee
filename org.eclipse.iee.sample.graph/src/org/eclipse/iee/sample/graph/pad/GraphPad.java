@@ -287,7 +287,7 @@ public class GraphPad extends Pad implements Serializable {
 	}
 
 	public void updateResult(String result) {
-		if (result.isEmpty()) {
+		if (result == null || result.isEmpty()) {
 			getResults().clear();
 			return;
 		}

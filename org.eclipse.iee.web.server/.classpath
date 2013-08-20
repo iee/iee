@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.document.api"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.editor"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.pad.fem3d"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.sample.formula"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.sample.graph"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.sample.image"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.sample.text"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.translator.antlr"/>
+	<classpathentry exported="true" kind="src" path="/org.eclipse.iee.web"/>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/com.google.guava/guava/14.0.1/bundle/69e12f4c6aeac392555f1ea86fab82b5e5e31ad4/guava-14.0.1.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/com.google.guava/guava/14.0.1/source/169f11e28e3ed9a64e9fa895eaafb579e6a5aa6c/guava-14.0.1-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/javax/javaee-api/6.0/jar/d6f416983ea13c334d5c599a9045414ecaf5d66d/javaee-api-6.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/junit/junit/4.11/jar/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/junit/junit/4.11/source/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.apache.commons/commons-lang3/3.1/jar/905075e6c80f206bbe6cf1e809d2caa69f420c76/commons-lang3-3.1.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.apache.commons/commons-lang3/3.1/source/8d30b90ae8bda4fbac8363161c8a9b5a99e23baf/commons-lang3-3.1-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.activation/1.1.0.v201105071233/orbit/b394a9fbf664ca835452b3ced452710bcf79fd81/javax.activation-1.1.0.v201105071233.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.activation/1.1.0.v201105071233/source/350bd9b2a184ff0b1981809a299d9a663c2e9895/javax.activation-1.1.0.v201105071233-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.annotation/1.1.0.v201108011116/orbit/964b4bd5e4f40d6497fd302e2e66c4a4257138b3/javax.annotation-1.1.0.v201108011116.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.annotation/1.1.0.v201108011116/source/374b74f795300b6ea4d9950589b80ddcac509d5b/javax.annotation-1.1.0.v201108011116-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.mail.glassfish/1.4.1.v201005082020/orbit/b707c39fc080529c4a9ffc1df4eac58421133aaf/javax.mail.glassfish-1.4.1.v201005082020.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.mail.glassfish/1.4.1.v201005082020/source/b12c43ddc708b244291f62c55a440dc272a947ff/javax.mail.glassfish-1.4.1.v201005082020-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.servlet/3.0.0.v201112011016/orbit/aaaa85845fb5c59da00193f06b8e5278d8bf3f8/javax.servlet-3.0.0.v201112011016.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.servlet/3.0.0.v201112011016/source/15c914135cf30177b83c321250c458396289cd37/javax.servlet-3.0.0.v201112011016-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.transaction/1.1.1.v201105210645/orbit/68e61aa115bbff4e1e2ae4b16feb27d9f805eb6/javax.transaction-1.1.1.v201105210645.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/javax.transaction/1.1.1.v201105210645/source/2e00625b8dd34693188882f421b736efece2b8e/javax.transaction-1.1.1.v201105210645-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/org.objectweb.asm/3.1.0.v200803061910/orbit/bf952ae43613f460f11ce5f8727cc9e4a7f8d33d/org.objectweb.asm-3.1.0.v200803061910.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty.orbit/org.objectweb.asm/3.1.0.v200803061910/source/bb8b0f120a53c9275cb2b684ccfc8762a2fc505a/org.objectweb.asm-3.1.0.v200803061910-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-annotations/9.0.4.v20130625/jar/6295080a3d486fd62e88c2f202409643a21373d0/jetty-annotations-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-annotations/9.0.4.v20130625/source/e4bed68042fea5b7a8ebeaf8bed708d01bf24488/jetty-annotations-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-http/9.0.4.v20130625/jar/37ecf56edb2142a74cfcc5291fa80060d7a871ed/jetty-http-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-http/9.0.4.v20130625/source/c72513d7d93e570649a06c095a23ce00670e9ab5/jetty-http-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-io/9.0.4.v20130625/jar/dcbdb2e0729121ccad7936d67fa40cd0530758d/jetty-io-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-io/9.0.4.v20130625/source/41924f787da5046bbe15a6e0a7eca6f7e59d301c/jetty-io-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-jndi/9.0.4.v20130625/jar/3583c51e37dfdbf858843b4d9a0d1bc2e021b5b6/jetty-jndi-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-jndi/9.0.4.v20130625/source/f45ac97a2e8f326a7c2ae0f3483cad487a4bb6a7/jetty-jndi-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-plus/9.0.4.v20130625/jar/fdc823d1c99cac470c48be948472673045486abf/jetty-plus-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-plus/9.0.4.v20130625/source/6dc2b21858d7983e1e66143e8b3e54607a7e131/jetty-plus-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-security/9.0.4.v20130625/jar/5f2fb07dca12660e0680452a9bb3e1a77eed4205/jetty-security-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-security/9.0.4.v20130625/source/dabe286b2444cc90bb93f55ec0be1f6d0bacd0a0/jetty-security-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-server/9.0.4.v20130625/jar/64ac312bb641da49c73491e8c176bc1efdcd3857/jetty-server-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-server/9.0.4.v20130625/source/2c67e20c58925047f5e25eaf0d9fab92f7c5da16/jetty-server-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-servlet/9.0.4.v20130625/jar/210b94552b164f56264b23ff9c980d639e948512/jetty-servlet-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-servlet/9.0.4.v20130625/source/600a31ec730b0f54f7f474473a46b01869db3669/jetty-servlet-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-util/9.0.4.v20130625/jar/44df7fafd6f3c483f598b2f9f7f715bcb8495724/jetty-util-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-util/9.0.4.v20130625/source/107a62a6362805e321e967e7ce1ebd1775915131/jetty-util-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-webapp/9.0.4.v20130625/jar/9f4b93779ba65cb679156289054fd53f1cc460a0/jetty-webapp-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-webapp/9.0.4.v20130625/source/6afd5151602e8a081c33a807810bfbf28af88ded/jetty-webapp-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-xml/9.0.4.v20130625/jar/fc7269247ba0f37187823d8e6f3df21fdebf5519/jetty-xml-9.0.4.v20130625.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.jetty/jetty-xml/9.0.4.v20130625/source/22de6879f53022d8807914cfcb96c344f8e73019/jetty-xml-9.0.4.v20130625-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.tycho/org.eclipse.osgi/3.9.0.v20130529-1710/jar/db671f837d6fd97ddb1cd293d57875d92e07d64a/org.eclipse.osgi-3.9.0.v20130529-1710.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.eclipse.tycho/org.eclipse.osgi/3.9.0.v20130529-1710/source/3b5a6cc8154af508895202c458a077a364f48a01/org.eclipse.osgi-3.9.0.v20130529-1710-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.hamcrest/hamcrest-core/1.3/jar/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" sourcepath="/home/aefimchuk/.gradle/caches/artifacts-23/filestore/org.hamcrest/hamcrest-core/1.3/source/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/home/aefimchuk/java/rcp4.3/plugins/org.eclipse.core.commands_3.6.100.v20130515-1857.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.springsource.ide.eclipse.gradle.dsld.classpathcontainer"/>
+	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
+	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

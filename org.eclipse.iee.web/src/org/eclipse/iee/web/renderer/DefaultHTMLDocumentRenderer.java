@@ -2,6 +2,7 @@ package org.eclipse.iee.web.renderer;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -20,14 +21,16 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 	}
 
 	@Override
-	public void renderHTMLHead(Document document, Writer writer, IHTMLRendererContext context) throws IOException {
+	public void renderHTMLHead(Document document, IHTMLRendererContext context) throws IOException {
+		Writer writer = context.getWriter();
 		writer.append("<style type='text/css'>");
 		writer.append(appendStyles());
 		writer.append("</style>");
 	}
 
 	@Override
-	public void renderHTMLBody(Document document, Writer writer, IHTMLRendererContext context) throws IOException {
+	public void renderHTMLBody(Document document, IHTMLRendererContext context) throws IOException {
+		Writer writer = context.getWriter();
 		writer.append("<div class='source'><pre>");
 		List<DocumentPart> children = document.getRoot().getChildren();
 		for (DocumentPart documentPart : children) {
@@ -59,6 +62,20 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 				writer.write(((TextDocumentPart) documentPart).getText());
 			} else {
 				writer.append("<span class = '").append(type.toLowerCase()).append("' >").append(StringEscapeUtils.escapeHtml4(((TextDocumentPart) documentPart).getText())).append("</span>");
+			}
+		}
+	}
+
+	@Override
+	public void renderResource(Document document, String padId, String resourceId, IResourceRenderContext context)
+			throws IOException {
+		for (DocumentPart documentPart : document.getRoot().getChildren()) {
+			if (documentPart instanceof PadDocumentPart) {
+				Pad pad = ((PadDocumentPart) documentPart).getPad();
+				if (padId.equals(pad.getContainerID())) {
+					IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
+					renderer.renderResource(pad, resourceId, context);
+				}
 			}
 		}
 	}

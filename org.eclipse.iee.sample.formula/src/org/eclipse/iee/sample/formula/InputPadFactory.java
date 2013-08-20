@@ -5,7 +5,6 @@ import java.util.Map;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.sample.formula.pad.InputPad;
-import org.eclipse.iee.sample.formula.pad.SymbolicPad;
 
 /**
  * {@link IPadFactory} implementation. Creates instance of formula pad.
