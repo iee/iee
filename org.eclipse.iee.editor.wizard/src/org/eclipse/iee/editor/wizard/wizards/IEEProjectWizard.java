@@ -4,8 +4,11 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -30,11 +33,33 @@ import org.eclipse.jdt.launching.LibraryLocation;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.pde.core.IEditableModel;
+import org.eclipse.pde.core.build.IBuildEntry;
+import org.eclipse.pde.core.build.IBuildModelFactory;
+import org.eclipse.pde.core.plugin.IPlugin;
+import org.eclipse.pde.core.plugin.IPluginImport;
+import org.eclipse.pde.core.plugin.IPluginModel;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.PluginRegistry;
+import org.eclipse.pde.internal.core.ClasspathComputer;
+import org.eclipse.pde.internal.core.build.WorkspaceBuildModel;
+import org.eclipse.pde.internal.core.bundle.WorkspaceBundlePluginModel;
+import org.eclipse.pde.internal.core.ibundle.IBundle;
+import org.eclipse.pde.internal.core.ibundle.IBundleModel;
+import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase;
+import org.eclipse.pde.internal.core.ibundle.IManifestHeader;
+import org.eclipse.pde.internal.core.natures.PDE;
+import org.eclipse.pde.internal.core.project.PDEProject;
+import org.eclipse.pde.internal.core.text.bundle.BundleClasspathHeader;
+import org.eclipse.pde.internal.core.text.bundle.ImportPackageHeader;
+import org.eclipse.pde.internal.core.util.CoreUtility;
+import org.eclipse.pde.internal.ui.wizards.plugin.NewProjectCreationOperation;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
+import org.osgi.framework.Constants;
 
 public class IEEProjectWizard extends Wizard implements INewWizard,
 		IExecutableExtension {
@@ -83,7 +108,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 				.newProjectDescription(projectHandle.getName());
 
 		desc.setLocationURI(projectURI);
-
+		
 		/*
 		 * Just like the ExampleWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -148,6 +173,10 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			 * before updating the perspective.
 			 */
 			IJavaProject javaProject = JavaCore.create(proj);
+			if (!proj.hasNature(PDE.PLUGIN_NATURE))
+				CoreUtility.addNatureToProject(proj, PDE.PLUGIN_NATURE, null);
+			if (!proj.hasNature(JavaCore.NATURE_ID))
+				CoreUtility.addNatureToProject(proj, JavaCore.NATURE_ID, null);
 
 			/*
 			 * Add the bin folder
@@ -173,6 +202,26 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			addFileToProject(proj, new Path("src/Iee.java"),
 					GeneralIEEWizard.openContentStream(), monitor);
 
+			IFile fragmentXml = PDEProject.getFragmentXml(proj);
+			IFile pluginXml = PDEProject.getPluginXml(proj);
+			IFile manifest = PDEProject.getManifest(proj);
+			WorkspaceBundlePluginModel model = new WorkspaceBundlePluginModel(manifest, pluginXml);
+
+			if (model != null && (model instanceof IBundlePluginModelBase)) {
+
+				IBundlePluginModelBase bundlePModel = (IBundlePluginModelBase) model;
+				IBundleModel bundleModel = bundlePModel.getBundleModel();
+				IBundle bundle = bundleModel.getBundle();
+				bundle.setHeader(Constants.BUNDLE_MANIFESTVERSION, "2");
+				bundle.setHeader(Constants.BUNDLE_SYMBOLICNAME, proj.getName());
+				bundle.setHeader(Constants.BUNDLE_VERSION, "1.0.0.qualifier");
+				bundle.setHeader(Constants.IMPORT_PACKAGE, "org.apache.commons.io");
+				bundle.setHeader(Constants.BUNDLE_CLASSPATH, "., lib/Jama-1.0.2.jar, lib/commons-io-2.4.jar, lib/ieeutils.jar");
+			}
+			((IEditableModel) model).save();
+			createBuildPropertiesFile(proj);
+			entries.add(ClasspathComputer.createContainerEntry());
+			
 			/* Add the lib folder */
 			final IFolder libFolder = proj.getFolder(new Path("lib"));
 			libFolder.create(false, true, monitor);
@@ -192,10 +241,6 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 				addFileToProject(proj, new Path("lib/" + libName), input,
 						monitor);
 
-				IPath entry = new Path(file.getLocation().toString());
-
-				entries.add(JavaCore.newLibraryEntry(entry, null, null));
-
 			}
 
 			// add libs to project class path
@@ -210,11 +255,32 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			newEntries[oldEntries.length] = JavaCore.newSourceEntry(root
 					.getPath());
 			javaProject.setRawClasspath(newEntries, null);
+			
+			ClasspathComputer.setClasspath(proj, model);
 		} finally {
 			monitor.done();
 		}
 	}
 
+	private void createBuildPropertiesFile(IProject project) throws CoreException {
+		IFile file = PDEProject.getBuildProperties(project);
+		if (!file.exists()) {
+			WorkspaceBuildModel model = new WorkspaceBuildModel(file);
+			IBuildModelFactory factory = model.getFactory();
+			IBuildEntry binEntry = factory.createEntry(IBuildEntry.BIN_INCLUDES);
+			binEntry.addToken(".");
+			binEntry.addToken("META-INF/");
+			model.getBuild().add(binEntry);
+			IBuildEntry sourceEntry = factory.createEntry("source..");
+			sourceEntry.addToken("src/");
+			model.getBuild().add(sourceEntry);
+			IBuildEntry outputEntry = factory.createEntry("output..");
+			outputEntry.addToken("bin/");
+			model.getBuild().add(outputEntry);
+			model.save();
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
