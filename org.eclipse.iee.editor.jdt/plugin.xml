@@ -75,6 +75,21 @@
                   commandId="org.eclipse.iee.editor.monitoring.pfdExport"
                   id="org.eclipse.iee.editor.monitoring.toolbar.pfdExport"
                   style="push">
+                  <visibleWhen checkEnabled="false">
+                  	<with variable="activePartId">
+ 					 <equals value="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor" />
+					</with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.iee.sample.graph.addCommand"
+                  id="org.eclipse.iee.sample.graph.toolbar.addCommand"
+                  style="push">
+               <visibleWhen checkEnabled="false">
+                  	<with variable="activePartId">
+ 					 <equals value="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor" />
+					</with>
+               </visibleWhen>
             </command>
          </toolbar>
       </menuContribution>
