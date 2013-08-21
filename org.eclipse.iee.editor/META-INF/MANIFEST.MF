@@ -51,8 +51,7 @@ Export-Package: org.eclipse.iee.editor;
    org.eclipse.iee.editor.core.pad,
    org.eclipse.swt.widgets,
    org.eclipse.ui.editors.text"
-Import-Package: org.apache.commons.io,
- org.eclipse.core.expressions,
+Import-Package: org.eclipse.core.expressions,
  org.eclipse.iee.document.api,
  org.eclipse.ui.console
 Service-Component: OSGI-INF/org.eclipse.iee.editor.core.pad.PadManager.xml
