@@ -94,7 +94,11 @@ public class FileMessager extends EventManager {
 		if (!fObservers.containsKey(path)) {
 			String runtime = path + getRuntimeDirectoryName();
 			try {
-				Paths.get(runtime).register(watcher, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+				Path runtimeDir = Paths.get(runtime);
+				if (!Files.exists(runtimeDir)) {
+					Files.createDirectories(runtimeDir);
+				}
+				runtimeDir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
 			} catch (IOException e) {
 				Throwables.propagate(e);
 			}
