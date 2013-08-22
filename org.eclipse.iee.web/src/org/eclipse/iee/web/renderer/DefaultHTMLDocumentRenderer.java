@@ -51,6 +51,7 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 		sb.append(".source .comment {color: #3F7F5F;}");
 		sb.append(".source .javadoc {color: #3F5FBF;}");
 		sb.append(".source .stringliteral {color: #2A00FF;}");
+		sb.append(".source .hidden-block {display:none}");
 		return sb.toString();
 	}
 
@@ -76,7 +77,9 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 		} else if (documentPart instanceof DirectiveBlock) {
 			String directive = ((DirectiveBlock) documentPart).getDirective();
 			if ("hide".equals(directive)) {
-				//skip hidden text
+				writer.append("<div class='hidden-block'>");
+				appendChildren(context, documentPart.getChildren());
+				writer.append("</div>");
 			} else {
 				appendChildren(context, documentPart.getChildren());
 			}
