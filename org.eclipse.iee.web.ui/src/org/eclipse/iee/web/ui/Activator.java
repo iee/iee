@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.iee.editor.IeeEditorPlugin;
+import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.iee.web.parser.DefaultDocumentParser;
 import org.eclipse.iee.web.renderer.DefaultHTMLDocumentRenderer;
@@ -24,6 +25,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -58,7 +60,9 @@ public class Activator implements BundleActivator {
 		ServletContextHandler ctx = new ServletContextHandler();
 		ctx.setContextPath("/test");
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		DefaultDocumentParser parser = new DefaultDocumentParser(IeeEditorPlugin.getPadManager());
+		ServiceReference<PadManager> serviceReference = context.getServiceReference(PadManager.class);
+		
+		DefaultDocumentParser parser = new DefaultDocumentParser(context.getService(serviceReference));
 		DevDocumentStore documentStore = new DevDocumentStore(workspace.getRoot().getLocation().toFile(), parser);
 		TestServlet servlet = new TestServlet();
 		servlet.setDocumentRenderer(new DefaultHTMLDocumentRenderer(registerRenderer(new HTMLRendererManager())));
