@@ -6,10 +6,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.iee.web.document.Document;
 import org.eclipse.iee.web.parser.DefaultDocumentParser;
 import org.eclipse.iee.web.store.IDocumentStore;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.ui.internal.Workbench;
 
 public class DevDocumentStore implements IDocumentStore {
 
@@ -31,8 +42,19 @@ public class DevDocumentStore implements IDocumentStore {
 
 	@Override
 	public Class<?> getDocumentClass(String bundle, String name) throws IOException, ClassNotFoundException {
-		URLClassLoader classLoader = new URLClassLoader(new URL[] {new File(getBundlePath(bundle), "bin").toURL()}, getClass().getClassLoader());
-		return classLoader.loadClass(name);
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(bundle);
+		IJavaProject javaProject = JavaCore.create(project);
+		try {
+			String[] computeDefaultRuntimeClassPath = JavaRuntime.computeDefaultRuntimeClassPath(javaProject);
+			List<URL> urls = new ArrayList<>();
+			for (String iClasspathEntry : computeDefaultRuntimeClassPath) {
+				urls.add(new File(iClasspathEntry).toURL());
+			}
+			URLClassLoader classLoader = new URLClassLoader((URL[]) urls.toArray(new URL[urls.size()]), getClass().getClassLoader());
+			return classLoader.loadClass(name);
+		}  catch (CoreException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

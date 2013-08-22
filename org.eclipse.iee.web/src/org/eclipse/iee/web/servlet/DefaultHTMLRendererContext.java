@@ -60,6 +60,9 @@ public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 		this.params = params;
 		this.isEditMode = isEditMode;
 		this.parameterProvider = parameterProvider;
+		this.documentStore = documentStore;
+		this.bundle = bundle;
+		this.document = document;
 	}
 
 	public String getEvaluationId() {

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.web.document.DirectiveBlock;
 import org.eclipse.iee.web.document.Document;
 import org.eclipse.iee.web.document.DocumentPart;
 import org.eclipse.iee.web.document.PadDocumentPart;
@@ -33,10 +34,14 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 		Writer writer = context.getWriter();
 		writer.append("<div class='source'><pre>");
 		List<DocumentPart> children = document.getRoot().getChildren();
-		for (DocumentPart documentPart : children) {
-			appendPart(documentPart, writer, context);
-		}
+		appendChildren(context, children);
 		writer.append("</pre></div>");
+	}
+
+	private void appendChildren(IHTMLRendererContext context, List<DocumentPart> children) throws IOException {
+		for (DocumentPart documentPart : children) {
+			appendPart(documentPart, context);
+		}
 	}
 
 	private String appendStyles() {
@@ -49,12 +54,17 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 		return sb.toString();
 	}
 
-	private void appendPart(DocumentPart documentPart, Writer writer, IHTMLRendererContext context) throws IOException {
+	private void appendPart(DocumentPart documentPart, IHTMLRendererContext context) throws IOException {
+		Writer writer = context.getWriter();
 		if (documentPart instanceof PadDocumentPart) {
 			Pad pad = ((PadDocumentPart) documentPart).getPad();
 			IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
 			writer.append("<div style='display:inline-block;'>");
-			renderer.renderPad(pad, context);
+			if (renderer != null) {
+				renderer.renderPad(pad, context);
+			} else {
+				writer.append("Unknow pad type " + pad.getClass());
+			}
 			writer.append("</div>");
 		} else if (documentPart instanceof TextDocumentPart) {
 			String type = ((TextDocumentPart) documentPart).getType();
@@ -62,6 +72,13 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 				writer.write(((TextDocumentPart) documentPart).getText());
 			} else {
 				writer.append("<span class = '").append(type.toLowerCase()).append("' >").append(StringEscapeUtils.escapeHtml4(((TextDocumentPart) documentPart).getText())).append("</span>");
+			}
+		} else if (documentPart instanceof DirectiveBlock) {
+			String directive = ((DirectiveBlock) documentPart).getDirective();
+			if ("hide".equals(directive)) {
+				//skip hidden text
+			} else {
+				appendChildren(context, documentPart.getChildren());
 			}
 		}
 	}
