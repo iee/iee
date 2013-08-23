@@ -7,7 +7,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javax.servlet,
  javax.servlet.http,
- org.apache.commons.lang3;version="3.1.0",
  org.eclipse.core.resources,
  org.eclipse.iee.document.api,
  org.eclipse.iee.document.api.stub,
@@ -26,7 +25,8 @@ Bundle-ClassPath: lib/commons-io-2.4.jar,
  lib/antlr-4.0-complete.jar,
  lib/jlatexmath-embedded-fop-1.0.2.jar,
  lib/jfreechart-1.0.13.jar,
- lib/guava-14.0.1.jar
+ lib/guava-14.0.1.jar,
+ lib/commons-lang3-3.1.jar
 Export-Package: org.eclipse.iee.web.document,
  org.eclipse.iee.web.parser,
  org.eclipse.iee.web.renderer,
