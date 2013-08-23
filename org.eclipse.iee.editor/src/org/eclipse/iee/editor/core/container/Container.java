@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 public class Container {
 
 	private static final Logger logger = Logger.getLogger(Container.class);
-	
+
 	private String fPadType;
 	private Map<String, String> fPadParams;
 	private String fValue;
@@ -41,32 +41,43 @@ public class Container {
 	}
 
 	public void setTextContent(String content) {
-		fTextContent = content;
-		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+		if (fTextContent != content) {
+			fTextContent = content;
+			fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+		}
 	}
+
 	public void setPadParam(String name, String value) {
 		if (fPadParams == null) {
 			fPadParams = new HashMap<String, String>();
 		}
-		fPadParams.put(name, value);
-		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+
+		String currentParam = fPadParams.get(name);
+		if (currentParam == null || currentParam != value) {
+			fPadParams.put(name, value);
+			// fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+		}
 	}
-	
-	public void setPadType(String fPadType) {
-		this.fPadType = fPadType;
-		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+
+	public void setPadType(String padType) {
+		if (fPadType != padType) {
+			fPadType = padType;
+			// fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+		}
 	}
-	
-	public void setValue(String fValue) {
-		this.fValue = fValue;
-		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+
+	public void setValue(String value) {
+		if (fValue != value) {
+			fValue = value;
+			fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
+		}
 	}
-	
+
 	public void updateSilently(Map<String, String> params, String value) {
 		fPadParams = params;
 		fValue = value;
 	}
-	
+
 	/* Getters */
 
 	public Map<String, String> getPadParams() {
@@ -75,11 +86,11 @@ public class Container {
 		}
 		return fPadParams;
 	}
-	
+
 	public String getContainerID() {
 		return getPadParams().get("id");
 	}
-	
+
 	public String getPadType() {
 		return fPadType;
 	}
@@ -113,11 +124,11 @@ public class Container {
 	public String getContainerManagerID() {
 		return fContainerManager.getContainerManagerID();
 	}
-	
+
 	public ContainerManager getContainerManager() {
 		return fContainerManager;
 	}
-		
+
 	/* FUNCTIONS USED IN PAD MANAGER: */
 
 	/**
@@ -125,6 +136,10 @@ public class Container {
 	 */
 	public void reset() {
 		this.recreateComposite();
+	}
+
+	public void updateDocument() {
+		fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
 	}
 
 	/**
@@ -153,18 +168,19 @@ public class Container {
 
 		initListeners();
 	}
-	
-	public Container(Position position, String type, Map<String, String> params, String value,
+
+	public Container(Position position, String type,
+			Map<String, String> params, String value,
 			ContainerManager containerManager) {
 		fPosition = position;
-		fPadType = type;		
+		fPadType = type;
 		fPadParams = params;
 		fValue = value;
 		fContainerManager = containerManager;
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fDocument = containerManager.getDocument();
 		fStyledText = containerManager.getStyledText();
-		
+
 		fComposite = new Composite(fStyledText, SWT.NONE);
 
 		initListeners();
@@ -182,13 +198,15 @@ public class Container {
 	 * This function causes container's SWT-composite get into proper position.
 	 */
 	boolean updatePresentation() {
-		//logger.debug("Updated container's position");
+		// logger.debug("Updated container's position");
 
 		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
 		int height = fStyledText.getLineHeight(fPosition.getOffset());
 		Point gabarit = fComposite.getSize();
 		int heightOffset = height - gabarit.y;
-		Rectangle newBounds = new Rectangle(point.x + StyledTextManager.PAD_LEFT_MARGIN, point.y + heightOffset, gabarit.x, gabarit.y);
+		Rectangle newBounds = new Rectangle(point.x
+				+ StyledTextManager.PAD_LEFT_MARGIN, point.y + heightOffset,
+				gabarit.x, gabarit.y);
 		if (!fComposite.getBounds().equals(newBounds)) {
 			fComposite.setBounds(newBounds);
 			return true;

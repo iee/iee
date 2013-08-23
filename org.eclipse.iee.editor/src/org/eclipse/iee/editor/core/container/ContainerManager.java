@@ -282,6 +282,7 @@ public class ContainerManager extends EventManager {
 		@Override
 		public void documentChanged(DocumentEvent event) {
 			logger.debug("documentChanged start " + event);
+
 			// XXX
 			//StopWatch padsPositionsCalculationSW = new LoggingStopWatch("padsPositionsCalculation");
 					
@@ -317,7 +318,10 @@ public class ContainerManager extends EventManager {
 			}
 
 			try {
-				if (fChangedPartitioningRegion != null) {
+				if (fChangedPartitioningRegion != null
+						) {
+
+					logger.debug("fDocument:" + fDocument.get());
 
 					/*
 					 * Case 1: Document partitioning is changed, so updating the
@@ -378,6 +382,9 @@ public class ContainerManager extends EventManager {
 				int unmodifiedOffset) throws BadLocationException,
 				BadPartitioningException {
 
+			logger.debug("onPartitioning changed. unmodifiedOffset: "
+					+ unmodifiedOffset);
+
 			/* Scanning for new containers */
 
 			int offset = Math.max(event.getOffset(),
@@ -421,6 +428,9 @@ public class ContainerManager extends EventManager {
 
 		private void onChangesInsidePad(Container container, DocumentEvent event)
 				throws BadLocationException, BadPartitioningException {
+
+			logger.debug("onChangesInsidePad. container: " + container);
+
 			ITypedRegion region = ((IDocumentExtension3) fDocument)
 					.getPartition(PartitioningManager.PARTITIONING_ID,
 							event.getOffset(), false);

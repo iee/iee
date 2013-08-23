@@ -254,6 +254,9 @@ public class FormulaPad extends Pad {
 	public static String translateToLatex(String text) {
 		String latex = "";
 
+		if (text.length() == 0)
+			return latex;
+		
 		/* Translating to Latex */
 		if (text.charAt(0) == '=') {
 			latex = TexTranslator.translate(text.substring(1));

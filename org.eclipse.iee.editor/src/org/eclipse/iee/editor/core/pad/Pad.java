@@ -16,12 +16,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class Pad {
-	
+
 	private static final Logger logger = Logger.getLogger(Pad.class);
-	
+
 	private String fContainerID;
 	private Container fContainer;
-	
+
 	private Color fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 
 	public Pad() {
@@ -50,66 +50,64 @@ public abstract class Pad {
 	public Container getContainer() {
 		return fContainer;
 	}
-		
+
 	public void setSelected(boolean isSelected) {
-		fBorderColor = (isSelected)
-			? IPadConfiguration.BORDER_COLOR_SELECTED
-			: IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
+		fBorderColor = (isSelected) ? IPadConfiguration.BORDER_COLOR_SELECTED
+				: IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 		if (fContainer != null) {
 			fContainer.getComposite().setBackground(fBorderColor);
 		}
 	}
-	
+
 	public void moveCaretToCurrentPad() {
 		int containerOffset = fContainer.getPosition().getOffset();
-		fContainer
-			.getContainerManager()
-			.getUserInteractionManager()
-			.moveCaretTo(containerOffset);
+		fContainer.getContainerManager().getUserInteractionManager()
+				.moveCaretTo(containerOffset);
 	}
 
 	public void attachContainer(Container container) {
 		Assert.isNotNull(container);
 		Assert.isLegal(!isContainerAttached(),
-			"Another container is already attached");
+				"Another container is already attached");
 
 		container.setContainerID(fContainerID);
 		if (!(this instanceof LoadingPad)) {
 			container.setPadType(getType());
 		}
-		fContainer = container;		
+		container.updateDocument();
+
+		fContainer = container;
 		final Composite parent = fContainer.getComposite();
-		
-		/* Create Pad's border and content area */ 
+
+		/* Create Pad's border and content area */
 		FillLayout layout = new FillLayout();
 		layout.marginHeight = IPadConfiguration.BORDER_WIDTH;
 		layout.marginWidth = IPadConfiguration.BORDER_WIDTH;
 		parent.setLayout(layout);
 
 		parent.setBackground(fBorderColor);
-		
+
 		final Composite content = new Composite(parent, SWT.NONE);
 		parent.pack();
-				
+
 		content.addControlListener(new ControlListener() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				parent.setSize(
-					content.getSize().x + 2 * IPadConfiguration.BORDER_WIDTH,
-					content.getSize().y + 2 * IPadConfiguration.BORDER_WIDTH
-				);
+				parent.setSize(content.getSize().x + 2
+						* IPadConfiguration.BORDER_WIDTH, content.getSize().y
+						+ 2 * IPadConfiguration.BORDER_WIDTH);
 			}
-			
+
 			@Override
 			public void controlMoved(ControlEvent e) {
 			}
 		});
-		
+
 		createPartControl(content);
 		fContainer.getComposite().pack();
-		
+
 		addMouseListeners(parent);
-		
+
 		onContainerAttached();
 	}
 
@@ -119,11 +117,11 @@ public abstract class Pad {
 		control.addMouseMoveListener(mouseManager);
 		control.addMouseListener(mouseManager);
 	}
-	
+
 	public void detachContainer() {
 		Assert.isLegal(isContainerAttached(), "No container attached");
 		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
-		
+
 		fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 		fContainer = null;
 	}
@@ -136,10 +134,10 @@ public abstract class Pad {
 	public abstract void createPartControl(Composite parent);
 
 	public abstract void activate();
-	
+
 	public void deactivate() {
 	}
-	
+
 	/**
 	 * Copy pad with @param containerID
 	 * 
@@ -156,25 +154,24 @@ public abstract class Pad {
 	 * Remove pad's storage
 	 */
 	public abstract void unsave();
-	
+
 	/**
 	 * Called when container is attached
 	 */
 	public abstract void onContainerAttached();
 
 	public abstract String getType();
-	
+
 	public abstract String getTex();
-	
+
 	public void updateData(Map<String, String> params, String value) {
 	}
 
 	protected void moveCaretToContainerTail() {
 		Container c = getContainer();
 		ContainerManager containerManager = c.getContainerManager();
-		containerManager.getUserInteractionManager()
-			.moveCaretTo(c.getPosition().getOffset() + c.getPosition().getLength());
+		containerManager.getUserInteractionManager().moveCaretTo(
+				c.getPosition().getOffset() + c.getPosition().getLength());
 	}
-
 
 }

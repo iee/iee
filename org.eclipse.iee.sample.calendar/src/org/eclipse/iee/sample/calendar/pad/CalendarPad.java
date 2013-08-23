@@ -56,5 +56,11 @@ public class CalendarPad extends Pad {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getTex() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
