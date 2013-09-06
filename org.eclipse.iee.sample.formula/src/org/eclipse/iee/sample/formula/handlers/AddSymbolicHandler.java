@@ -6,7 +6,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
 import org.eclipse.iee.sample.formula.pad.SymbolicPad;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;

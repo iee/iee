@@ -11,17 +11,10 @@ import java.util.List;
 import org.eclipse.iee.sample.graph.pad.model.GraphElement;
 import org.eclipse.iee.sample.graph.pad.model.GraphModel;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.util.PaintUtilities;
 
 /**

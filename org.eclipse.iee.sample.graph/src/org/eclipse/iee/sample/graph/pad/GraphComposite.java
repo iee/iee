@@ -3,14 +3,11 @@ package org.eclipse.iee.sample.graph.pad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jfree.experimental.chart.swt.ChartComposite;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowData;
 
 public class GraphComposite extends Composite {
 	private ChartComposite frame;

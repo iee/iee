@@ -16,12 +16,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
@@ -31,7 +28,6 @@ import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
-import org.eclipse.jface.text.Position;
 
 public class PadManager extends EventManager {
 
@@ -283,12 +279,13 @@ public class PadManager extends EventManager {
 				String padType = container.getPadType();
 				IPadFactory iPadFactory = fPadFactories.get(padType);
 				if (iPadFactory != null) {
-					Pad pad = iPadFactory.create(container.getPadParams(), container.getValue());
+					Pad pad = iPadFactory.create(container.getPadParams(),
+							container.getValue());
 					pad.setContainerID(containerID);
 					pad.attachContainer(container);
 					fActivePads.add(containerID);
 					fPads.put(containerID, pad);
-				} else { 
+				} else {
 					/*
 					 * Case 4: no corresponding pad. Creating new "loading" pad.
 					 */
@@ -448,27 +445,27 @@ public class PadManager extends EventManager {
 
 	public Pad parsePad(String text) {
 		try {
-		    StringReader r = new StringReader(text);
+			StringReader r = new StringReader(text);
 			StreamTokenizer st = new StreamTokenizer(r);
-		    String type = readString(st);
-		    if("----".equals(type)) {
-		    	type = null;
-		    }
-		    Map<String, String> params = readParams(st);
-		    int nextToken = st.nextToken();
-		    String value;
-		    if (nextToken == ':') {
-		        StringBuilder sb = new StringBuilder();
-		        int c;
-		        while ((c = r.read()) != -1) {
-		            sb.append((char)c);
-		        }
-		        value = sb.toString();
-		    } else {
-		        value = "";
-		    }
-		    Pad pad = fPadFactories.get(type).create(params, value);
-		    pad.setContainerID(params.get("id"));
+			String type = readString(st);
+			if ("----".equals(type)) {
+				type = null;
+			}
+			Map<String, String> params = readParams(st);
+			int nextToken = st.nextToken();
+			String value;
+			if (nextToken == ':') {
+				StringBuilder sb = new StringBuilder();
+				int c;
+				while ((c = r.read()) != -1) {
+					sb.append((char) c);
+				}
+				value = sb.toString();
+			} else {
+				value = "";
+			}
+			Pad pad = fPadFactories.get(type).create(params, value);
+			pad.setContainerID(params.get("id"));
 			return pad;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -479,59 +476,60 @@ public class PadManager extends EventManager {
 	/**
 	 * @param st
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	private static Map<String, String> readParams(StreamTokenizer st) throws IOException {
-	    Map<String, String> params = new HashMap<String, String>();
-	    int nextToken = st.nextToken();
-	    if ((char) nextToken == '(') {
-	        while (true) {
-	            parseParam(st, params);
-	            nextToken = st.nextToken();
-	            if ((char) nextToken == ')') {
-	               break;
-	            } else if ((char) nextToken == ',') {
-	                
-	            } else {
-	                throw new IllegalArgumentException("failed to parse: " + st);
-	            }
-	        }
-	    } else {
-	        st.pushBack();
-	    }
-	    return params;
+	private static Map<String, String> readParams(StreamTokenizer st)
+			throws IOException {
+		Map<String, String> params = new HashMap<String, String>();
+		int nextToken = st.nextToken();
+		if ((char) nextToken == '(') {
+			while (true) {
+				parseParam(st, params);
+				nextToken = st.nextToken();
+				if ((char) nextToken == ')') {
+					break;
+				} else if ((char) nextToken == ',') {
+
+				} else {
+					throw new IllegalArgumentException("failed to parse: " + st);
+				}
+			}
+		} else {
+			st.pushBack();
+		}
+		return params;
 	}
-	
+
 	/**
 	 * @param st
 	 * @param params
 	 * @throws IOException
 	 */
-	private static void parseParam(StreamTokenizer st, Map<String, String> params) throws IOException {
-	    int nextToken;
-	    String param = readString(st);
-	    nextToken = st.nextToken();
-	    if ((char) nextToken != '=') {
-	        throw new IllegalArgumentException("failed to parse: " + st);
-	    }
-	    String value = readString(st);
-	    params.put(param, value);
+	private static void parseParam(StreamTokenizer st,
+			Map<String, String> params) throws IOException {
+		int nextToken;
+		String param = readString(st);
+		nextToken = st.nextToken();
+		if ((char) nextToken != '=') {
+			throw new IllegalArgumentException("failed to parse: " + st);
+		}
+		String value = readString(st);
+		params.put(param, value);
 	}
-	
-	
+
 	/**
 	 * @param st
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private static String readString(StreamTokenizer st) throws IOException {
-	    int nextToken = st.nextToken();
-	    if (nextToken == StreamTokenizer.TT_WORD || nextToken == 34) {
-	        return st.sval;
-	    } else if (nextToken == StreamTokenizer.TT_NUMBER) {
-	        return String.valueOf(st.nval);
-	    }
-	    throw new IllegalArgumentException("failed to parse: " + st);
+		int nextToken = st.nextToken();
+		if (nextToken == StreamTokenizer.TT_WORD || nextToken == 34) {
+			return st.sval;
+		} else if (nextToken == StreamTokenizer.TT_NUMBER) {
+			return String.valueOf(st.nval);
+		}
+		throw new IllegalArgumentException("failed to parse: " + st);
 	}
 
 }

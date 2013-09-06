@@ -8,18 +8,15 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.custom.LineStyleEvent;
-import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
 
-class StyledTextManager {
+public class StyledTextManager {
 
 	private static final Logger logger = Logger
 			.getLogger(StyledTextManager.class);
@@ -76,7 +73,7 @@ class StyledTextManager {
 
 	}
 
-	protected void updateContainerPresentations() {
+	public void updateContainerPresentations() {
 		int topLineIndex = fSourceViewer.getTopIndex();
 		if (topLineIndex > 0) {
 			topLineIndex--;

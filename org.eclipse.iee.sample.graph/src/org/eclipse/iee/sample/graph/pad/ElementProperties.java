@@ -10,7 +10,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
-import org.jfree.experimental.swt.SWTPaintCanvas;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;

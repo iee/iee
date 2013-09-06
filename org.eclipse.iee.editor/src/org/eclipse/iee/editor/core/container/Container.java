@@ -213,6 +213,10 @@ public class Container {
 		}
 		return false;
 	}
+	
+	public void updateStyles() {
+		fContainerManager.getStyledTextManager().updateStyles(this);
+	}
 
 	/**
 	 * Sets container's SWT-composite visibility.
