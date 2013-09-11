@@ -206,6 +206,7 @@ public class ImagePad extends Pad implements Serializable {
 						.getImageData().scaledTo(fImageWidth, fImageHeigth));
 
 				label.setImage(fResizedImage);
+				getContainer().updateDocument();
 				fParent.redraw();
 			}
 
