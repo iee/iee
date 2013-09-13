@@ -74,6 +74,7 @@ public abstract class Pad {
 		if (!(this instanceof LoadingPad)) {
 			container.setPadType(getType());
 		}
+		container.updateDocument();
 
 		fContainer = container;
 		final Composite parent = fContainer.getComposite();
@@ -108,8 +109,6 @@ public abstract class Pad {
 		addMouseListeners(parent);
 
 		onContainerAttached();
-
-		container.updateStyles();
 
 	}
 

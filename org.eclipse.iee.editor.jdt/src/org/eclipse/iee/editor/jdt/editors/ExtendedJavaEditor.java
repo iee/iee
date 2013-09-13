@@ -20,8 +20,12 @@ import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.sample.image.pad.ImagePad;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jdt.internal.ui.javaeditor.JavaSourceViewer;
+import org.eclipse.jdt.ui.text.IJavaPartitions;
+import org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration;
+import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -206,6 +210,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			IVerticalRuler verticalRuler, IOverviewRuler overviewRuler,
 			boolean isOverviewRulerVisible, int styles, IPreferenceStore store) {
 		return new JavaSourceViewer(parent, verticalRuler, overviewRuler,
+
 				isOverviewRulerVisible, styles, store) {
 
 			public void doOperation(int operation) {
@@ -271,6 +276,13 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		};
 	}
 
+	@Override
+	protected JavaSourceViewerConfiguration createJavaSourceViewerConfiguration() {
+		JavaTextTools textTools= JavaPlugin.getDefault().getJavaTextTools();
+		return new ExtendedJavaSourceViewerConfiguration(textTools.getColorManager(), getPreferenceStore(), this, IJavaPartitions.JAVA_PARTITIONING);
+	}
+	
+	
 	public PadManager getPadManager() {
 		return fPadManager;
 	}
