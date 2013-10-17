@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Graph Pad UI
+Bundle-SymbolicName: org.eclipse.iee.pad.graph.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.eclipse.iee.core.document,
+ org.eclipse.iee.editor.core.pad,
+ org.eclipse.iee.pad.graph,
+ org.eclipse.iee.pad.graph.model,
+ org.eclipse.iee.pad.graph.utils,
+ org.eclipse.iee.translator.antlr.translator,
+ org.eclipse.jface.text,
+ org.slf4j
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/org.eclipse.iee.graph.ui.GraphPadFactory.xml
+Require-Bundle: org.eclipse.swt,
+ org.eclipse.ui.forms,
+ org.eclipse.jface,
+ org.eclipse.iee.editor,
+ org.eclipse.iee.pad.formula.ui,
+ org.eclipse.ui.workbench
+Bundle-ClassPath: lib/jfreechart-1.0.13.jar,
+ .,
+ lib/jcommon-1.0.16.jar

@@ -3,12 +3,12 @@
  */
 package org.eclipse.iee.editor.core.pad;
 
-import java.util.Map;
+import org.eclipse.iee.core.document.PadDocumentPart;
 
 /**
  * Interface of pad factory
  */
-public interface IPadFactory {
+public interface IPadFactory<T extends PadDocumentPart> {
 
 	/**
 	 * Creates new pad instance using provided parameters
@@ -16,8 +16,6 @@ public interface IPadFactory {
 	 * @param value pad value
 	 * @return new pad instance
 	 */
-	Pad create(Map<String, String> padParams, String value);
+	Pad create(T documentPart);
 
-	String getType();
-	
 }

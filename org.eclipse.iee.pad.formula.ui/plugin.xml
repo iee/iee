@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+
+ <extension
+       point="org.eclipse.ui.commandImages">
+    <image
+          commandId="org.eclipse.iee.pad.formula.ui.addCommand"
+          icon="icons/math.jpg">
+    </image>
+ </extension>
+ <extension
+       point="org.eclipse.ui.commandImages">
+    <image
+          commandId="org.eclipse.iee.pad.formula.ui.addSymbolicCommand"
+          icon="icons/symbolic.jpg">
+    </image>
+    <image
+          commandId="org.eclipse.iee.pad.formula.ui.addInputCommand"
+          icon="icons/input.png">
+    </image>
+ </extension> 
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          id="org.eclipse.iee.pad.formula.ui.addCommand"
+          name="Add Formula">
+    </command>
+ </extension>
+  <extension
+       point="org.eclipse.ui.commands">
+    <command
+          id="org.eclipse.iee.pad.formula.ui.addSymbolicCommand"
+          name="Add Symbolic">
+    </command>
+    <command
+          id="org.eclipse.iee.pad.formula.ui.addInputCommand"
+          name="Add Input">
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+          class="org.eclipse.iee.pad.formula.ui.handlers.AddFormulaHandler"
+          commandId="org.eclipse.iee.pad.formula.ui.addCommand">
+    </handler>
+ </extension>
+  <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+          class="org.eclipse.iee.pad.formula.ui.handlers.AddSymbolicHandler"
+          commandId="org.eclipse.iee.pad.formula.ui.addSymbolicCommand">
+    </handler>
+    <handler
+          class="org.eclipse.iee.pad.formula.ui.handlers.AddInputHandler"
+          commandId="org.eclipse.iee.pad.formula.ui.addInputCommand">
+    </handler>
+ </extension>
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="org.eclipse.iee.pad.formula.ui.addCommand"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M3+N">
+     </key>
+     <key
+           commandId="org.eclipse.iee.pad.formula.ui.addSymbolicCommand"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M3+S">
+     </key>
+  </extension>
+
+	
+</plugin>

@@ -9,18 +9,17 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.eclipse.iee.document.api.IResultContainer;
-import org.eclipse.iee.document.api.stub.InMemoryResultContainer;
-import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
-import org.eclipse.iee.pad.fem3d.Fem3DPadFactory;
-import org.eclipse.iee.sample.formula.FormulaPadFactory;
-import org.eclipse.iee.sample.formula.InputPadFactory;
-import org.eclipse.iee.sample.formula.SymbolicPadFactory;
-import org.eclipse.iee.sample.graph.GraphPadFactory;
-import org.eclipse.iee.sample.image.ImagePadFactory;
-import org.eclipse.iee.sample.text.TextPadFactory;
-import org.eclipse.iee.web.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.IResultContainer;
+import org.eclipse.iee.core.InMemoryResultContainer;
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.store.InMemoryEvaluationContextStore;
+import org.eclipse.iee.pad.formula.FormulaPadParser;
+import org.eclipse.iee.pad.formula.InputPadParser;
+import org.eclipse.iee.pad.formula.SymbolicEngine;
+import org.eclipse.iee.pad.formula.SymbolicPadParser;
+import org.eclipse.iee.pad.graph.GraphPadParser;
+import org.eclipse.iee.pad.image.ImagePadParser;
+import org.eclipse.iee.pad.text.TextPadParser;
 import org.eclipse.iee.web.renderer.DefaultHTMLDocumentRenderer;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
 import org.eclipse.iee.web.renderer.FormulaImageRenderer;
@@ -32,7 +31,6 @@ import org.eclipse.iee.web.renderer.SymbolicHTMLRenderer;
 import org.eclipse.iee.web.renderer.TextHTMLRenderer;
 import org.eclipse.iee.web.server.store.OSGIContainerDocumentStore;
 import org.eclipse.iee.web.servlet.TestServlet;
-import org.eclipse.iee.web.store.InMemoryEvaluationContextStore;
 
 /**
  * @author aefimchuk
@@ -49,25 +47,23 @@ public class DocumentServlet extends TestServlet {
 		if (!file.exists()) {
 			file.mkdirs();
 		}
-		PadManager padManager = new PadManager();
-		padManager.registerPadFactory(new FormulaPadFactory());
-		padManager.registerPadFactory(new InputPadFactory());
-		padManager.registerPadFactory(new SymbolicPadFactory());
-		padManager.registerPadFactory(new TextPadFactory());
-		padManager.registerPadFactory(new GraphPadFactory());
-		padManager.registerPadFactory(new ImagePadFactory());
-		padManager.registerPadFactory(new Fem3DPadFactory());
-		DefaultDocumentParser documentParser = new DefaultDocumentParser(padManager);
+		DefaultDocumentParser documentParser = new DefaultDocumentParser();
+		documentParser.registerPadParser(new InputPadParser());
+		documentParser.registerPadParser(new FormulaPadParser());
+		documentParser.registerPadParser(new SymbolicPadParser());
+		documentParser.registerPadParser(new TextPadParser());
+		documentParser.registerPadParser(new GraphPadParser());
+		documentParser.registerPadParser(new ImagePadParser());
 		containerStore = new OSGIContainerDocumentStore(ieeFolder, documentParser);	
 		setDocumentStore(containerStore);
 		FormulaImageRenderer formulaImageRenderer = new FormulaImageRenderer();
 		HTMLRendererManager manager = new HTMLRendererManager();
-		manager.registerPadHTMLRenderer("Formula", new FormulaHTMLRenderer(formulaImageRenderer));
-		manager.registerPadHTMLRenderer("Input", new InputHTMLRenderer(formulaImageRenderer));
-		manager.registerPadHTMLRenderer("Symbolic", new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
-		manager.registerPadHTMLRenderer("Image", new ImageHTMLRenderer());
-		manager.registerPadHTMLRenderer("Text", new TextHTMLRenderer());
-		manager.registerPadHTMLRenderer("Graph", new GraphHTMLRenderer(formulaImageRenderer));
+		manager.registerPadHTMLRenderer(new FormulaHTMLRenderer(formulaImageRenderer));
+		manager.registerPadHTMLRenderer(new InputHTMLRenderer(formulaImageRenderer));
+		manager.registerPadHTMLRenderer(new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
+		manager.registerPadHTMLRenderer(new ImageHTMLRenderer());
+		manager.registerPadHTMLRenderer(new TextHTMLRenderer());
+		manager.registerPadHTMLRenderer(new GraphHTMLRenderer(formulaImageRenderer));
 		setDocumentRenderer(new DefaultHTMLDocumentRenderer(manager));
 		setEvaluationContextStore(new InMemoryEvaluationContextStore());
 	}

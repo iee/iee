@@ -13,3 +13,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
  lib/jlatexmath-embedded-fop-0.9.6.jar,
  lib/xstream-1.4.2.jar
+Import-Package: org.eclipse.iee.core.document,
+ org.slf4j

@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.util.Map;
 
-import org.eclipse.iee.document.api.IParameterProvider;
-import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.core.IParameterProvider;
+import org.eclipse.iee.core.IResultContainer;
 
 public interface IHTMLRendererContext {
 

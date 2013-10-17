@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.iee.core.document.writer.DefaultDocumentWriter">
+   <implementation class="org.eclipse.iee.core.document.writer.DefaultDocumentWriter"/>
+   <service>
+      <provide interface="org.eclipse.iee.core.document.writer.DefaultDocumentWriter"/>
+   </service>
+   <reference bind="registerPadWriter" cardinality="0..n" interface="org.eclipse.iee.core.document.writer.IPadWriter" name="IPadWriter" policy="dynamic" unbind="unregisterPadWriter"/>
+   <reference bind="registerSourceGenerator" cardinality="0..n" interface="org.eclipse.iee.core.document.source.ISourceGenerator" name="ISourceGenerator" policy="dynamic"  unbind="unregisterSourceGenerator"/>
+</scr:component>

@@ -25,7 +25,7 @@ matrix(type, id, variable, path) ::= <<
 					matrix += ",";
 			}
 			matrix += "}";
-			org.eclipse.iee.document.api.EvaluationContextHolder.putResult("<id>", String.valueOf(matrix));
+			org.eclipse.iee.core.EvaluationContextHolder.putResult("<id>", String.valueOf(matrix));
 		}
 	}.init(<variable>).run();
 >>

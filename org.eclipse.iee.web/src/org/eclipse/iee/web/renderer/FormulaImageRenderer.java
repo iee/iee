@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
+import org.eclipse.iee.pad.formula.FormulaPart;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 
@@ -26,7 +26,7 @@ public class FormulaImageRenderer {
 					//jlatexmath has threadsafety issues on image rendering
 					synchronized (TeXFormula.class) {
 						return (BufferedImage) TeXFormula.createBufferedImage(
-								FormulaPad.translateToLatex(formula),
+								FormulaPart.translateToLatex(formula),
 								TeXConstants.STYLE_TEXT, 
 								20,
 								fg, 

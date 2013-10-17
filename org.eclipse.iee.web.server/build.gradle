@@ -48,54 +48,47 @@ subprojects {
 		compile 'commons-io:commons-io:2.4'
 		compile 'commons-codec:commons-codec:1.8'
 		compile fileTree(dir: './lib', include: '*.jar')
+	}
+}
+
+project(':org.eclipse.iee.translator.antlr') {
+	dependencies {
 		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.equinox.common*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.equinox.registry*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.swt*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.jface*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.text*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.debug.core*.jar', exclude: '*source*.jar')
+		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.resources*.jar', exclude: '*source*.jar')
 		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.jdt.core*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.runtime*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.commands*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.expressions*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.workbench*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.console*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.editors*.jar', exclude: '*source*.jar')
-		compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.ui.forms*.jar', exclude: '*source*.jar')
-		compile 'org.eclipse.tycho:org.eclipse.osgi:3.9.0.v20130529-1710'
 	}
 }
 
 project(':org.eclipse.iee.pad.fem3d') {
 	dependencies {
-		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.core')
 	}
 }
 
-project(':org.eclipse.iee.sample.formula') {
+project(':org.eclipse.iee.pad.formula') {
 	dependencies {
-		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.core')
 		compile project(':org.eclipse.iee.translator.antlr')
 	}
 }
 
-project(':org.eclipse.iee.sample.graph') {
+project(':org.eclipse.iee.pad.graph') {
 	dependencies {
-		compile project(':org.eclipse.iee.editor')
-		compile project(':org.eclipse.iee.sample.formula')
+		compile project(':org.eclipse.iee.core')
+		compile project(':org.eclipse.iee.pad.formula')
 		compile project(':org.eclipse.iee.translator.antlr')
 	}
 }
 
-project(':org.eclipse.iee.sample.image') {
+project(':org.eclipse.iee.pad.image') {
 	dependencies {
-		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.core')
 	}
 }
 
-project(':org.eclipse.iee.sample.text') {
+project(':org.eclipse.iee.pad.text') {
 	dependencies {
-		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.core')
 	}
 }
 
@@ -103,13 +96,12 @@ project(':org.eclipse.iee.web') {
 	dependencies {
 		compile 'javax:javaee-api:6.0'
 		compile 'org.apache.commons:commons-lang3:3.1'
-		compile project(':org.eclipse.iee.document.api')
-		compile project(':org.eclipse.iee.editor')
+		compile project(':org.eclipse.iee.core')
 		compile project(':org.eclipse.iee.pad.fem3d')
-		compile project(':org.eclipse.iee.sample.formula')
-		compile project(':org.eclipse.iee.sample.graph')
-		compile project(':org.eclipse.iee.sample.image')
-		compile project(':org.eclipse.iee.sample.text')
+		compile project(':org.eclipse.iee.pad.formula')
+		compile project(':org.eclipse.iee.pad.graph')
+		compile project(':org.eclipse.iee.pad.image')
+		compile project(':org.eclipse.iee.pad.text')
 		compile project(':org.eclipse.iee.translator.antlr')
 	}
 }
@@ -118,14 +110,12 @@ dependencies {
 	compile 'org.eclipse.tycho:org.eclipse.osgi:3.9.0.v20130529-1710'
 	compile 'com.google.guava:guava:14.0.1'
 	compile 'org.apache.commons:commons-lang3:3.1'
-	compile fileTree(dir: ext.eclipseDir + '/plugins/', include: 'org.eclipse.core.commands*.jar', exclude: '*source*.jar')
-	compile project(':org.eclipse.iee.document.api')
-	compile project(':org.eclipse.iee.editor')
+	compile project(':org.eclipse.iee.core')
 	compile project(':org.eclipse.iee.pad.fem3d')
-	compile project(':org.eclipse.iee.sample.formula')
-	compile project(':org.eclipse.iee.sample.graph')
-	compile project(':org.eclipse.iee.sample.image')
-	compile project(':org.eclipse.iee.sample.text')
+	compile project(':org.eclipse.iee.pad.formula')
+	compile project(':org.eclipse.iee.pad.graph')
+	compile project(':org.eclipse.iee.pad.image')
+	compile project(':org.eclipse.iee.pad.text')
 	compile project(':org.eclipse.iee.translator.antlr')
 	compile project(':org.eclipse.iee.web')
 	providedCompile "javax:javaee-api:6.0"

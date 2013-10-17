@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.pad.common;
 
+import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -7,7 +8,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class LoadingPad extends Pad {
+public class LoadingPad extends Pad<PadDocumentPart> {
 
 	@Override
 	public String getType() {
@@ -24,13 +25,8 @@ public class LoadingPad extends Pad {
 		return fOriginalContainerID;
 	}
 
-	public LoadingPad() {
-		super();
-	}
-	
-	public LoadingPad(String containerID) {
-		super();
-		setContainerID(containerID);
+	public LoadingPad(PadDocumentPart part) {
+		super(part);
 	}
 
 	@Override
@@ -46,7 +42,7 @@ public class LoadingPad extends Pad {
 
 	@Override
 	public Pad copy() {
-		return new LoadingPad();
+		return new LoadingPad(getDocumentPart().copy());
 	}
 
 	@Override

@@ -1,14 +1,9 @@
 package org.eclipse.iee.editor.core.container;
 
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -16,10 +11,13 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
+import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
-import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
@@ -31,10 +29,12 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioningListener;
 import org.eclipse.jface.text.IDocumentPartitioningListenerExtension2;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.widgets.Display;
 
 public class ContainerManager extends EventManager {
 
@@ -43,7 +43,9 @@ public class ContainerManager extends EventManager {
 
 	private final String fContainerManagerID;
 
-	private final ContainerManagerConfig fConfig;
+	private final DefaultDocumentParser fParser;
+	
+	private final DefaultDocumentWriter fWriter;
 
 	private final DocumentAccess fDocumentAccess;
 
@@ -64,8 +66,6 @@ public class ContainerManager extends EventManager {
 
 	private ICompilationUnit fCompilationUnit;
 
-	private SymbolicEngine fSymbolicEngine;
-
 	private String fStoragePath;
 
 	private final NavigableSet<Container> fContainers;
@@ -77,6 +77,8 @@ public class ContainerManager extends EventManager {
 	}
 
 	State fState = State.READY;
+
+	private boolean ignoreDocumentChanges;
 
 	/* Getters */
 
@@ -108,10 +110,10 @@ public class ContainerManager extends EventManager {
 		return fContainerManagerID;
 	}
 
-	public ContainerManagerConfig getConfig() {
-		return fConfig;
+	public DefaultDocumentWriter getWriter() {
+		return fWriter;
 	}
-
+	
 	public DocumentAccess getDocumentAccess() {
 		return fDocumentAccess;
 	}
@@ -144,27 +146,23 @@ public class ContainerManager extends EventManager {
 		this.fCompilationUnit = compilationUnit;
 	}
 
-	public SymbolicEngine getSymbolicEngine() {
-		return fSymbolicEngine;
-	}
-
 	/* INTERFACE FUNCTIONS */
 
-	public ContainerManager(ContainerManagerConfig config, IDocument document,
+	public ContainerManager(DefaultDocumentParser parser, DefaultDocumentWriter writer, IDocument document,
 			ISourceViewer sourceViewer, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
 
-		fConfig = config;
+		fParser = parser;
+		fWriter = writer;
 		fDocument = document;
 		fStyledText = styledText;
 		fSourceViewer = sourceViewer;
-		fSymbolicEngine = new SymbolicEngine();
 
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
 		fStyledTextManager = new StyledTextManager(this);
 		fUserInteractionManager = new UserInteractionManager(this);
-		fPartitioningManager = new PartitioningManager(this);
+		fPartitioningManager = new PartitioningManager(new DocumentStructureConfig(), fDocument);
 		fDocumentAccess = new DocumentAccess(this);
 
 		fState = State.READY;
@@ -176,15 +174,28 @@ public class ContainerManager extends EventManager {
 		removeDocumentListener();
 	}
 
-	public void RequestContainerAllocation(String type, String id, int offset) {
-		String containerEmbeddedRegion = fDocumentAccess.getInitialTextRegion(
-				type, id);
-		try {
-			fDocument.replace(offset, 0, containerEmbeddedRegion);
-		} catch (BadLocationException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+	public Container createContainer(PadDocumentPart part, int offset) {
+		if (part.getId() == null) {
+			part.setId(UUID.randomUUID().toString());
 		}
+		Container container = createContainer(new Position(offset, 0), part.getId());
+		container.setPadPart(part);
+		ignoreDocumentChanges = true;
+	    try {
+	    	container = fDocumentAccess.createContent(container);
+	    } finally {
+	    	ignoreDocumentChanges = false;
+	    }
+	    fContainers.add(container);
+		fireContainerCreated(container);
+		final Container ic = container;
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				getUserInteractionManager().activateContainer(ic);
+			}
+		});
+	    return container; 
 	}
 
 	public boolean isModificationAllowed() {
@@ -193,7 +204,7 @@ public class ContainerManager extends EventManager {
 
 	public void updateContainerPresentations(Container container) {
 		if (isModificationAllowed()) {
-			fStyledTextManager.updateStyles(container);
+			((ITextViewerExtension2)fSourceViewer).invalidateTextPresentation(container.getPosition().getOffset(), container.getPosition().getLength());
 		}
 	}
 
@@ -241,34 +252,27 @@ public class ContainerManager extends EventManager {
 	class DocumentListener implements IDocumentListener,
 			IDocumentPartitioningListener,
 			IDocumentPartitioningListenerExtension2 {
-		private IRegion fChangedPartitioningRegion;
 
 		public DocumentListener() {
-			fChangedPartitioningRegion = null;
 		}
 
 		@Override
 		public void documentPartitioningChanged(
 				DocumentPartitioningChangedEvent event) {
-			logger.debug("documentPartitioningChanged " + event);
-			assert (fChangedPartitioningRegion == null);
-
-			fChangedPartitioningRegion = event
-					.getChangedRegion(PartitioningManager.PARTITIONING_ID);
-
-			if (fChangedPartitioningRegion != null) {
-				String[] partitionings = event.getChangedPartitionings();
-
-				for (String partitioning : partitionings) {
-					logger.debug("Changed partitionings: " + partitioning);
-					logger.debug("Changed region: "
-							+ fChangedPartitioningRegion.toString());
-
-					if (partitioning
-							.equals(PartitioningManager.PARTITIONING_ID)) {
-						continue;
+			if (ignoreDocumentChanges) {
+				return;
+			}
+			try {
+				IRegion changedRegion = event.getChangedRegion(PartitioningManager.PARTITIONING_ID);
+				if (changedRegion!= null) { 
+					List<Container> containers = parseContainersFromDocumentRegion(fDocument, changedRegion);
+					for (Container container : containers) {
+						fContainers.add(container);
+						fireContainerCreated(container);
 					}
 				}
+			} catch (BadLocationException | BadPartitioningException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -276,66 +280,16 @@ public class ContainerManager extends EventManager {
 		public void documentChanged(DocumentEvent event) {
 			logger.debug("documentChanged start " + event);
 
-			// XXX
-			// StopWatch padsPositionsCalculationSW = new
-			// LoggingStopWatch("padsPositionsCalculation");
-
-			if (fState == State.READY) {
-				logger.debug("\n\n== Begin of document modification handling ==");
-				fState = State.DOCUMENT_CHANGES_HANDLING;
-			} else {
-				logger.debug("\n\n== Internal document modification ==");
-			}
-
-			/*
-			 * All pads which placed after 'unmodifiedOffset' are considered to
-			 * be just moved without any other modifications.
-			 * 
-			 * It's calculated according following equation 'unmodified offset'
-			 * = max('end of partitioning changed area', 'end of document
-			 * changed area') - 'moving_delta'
-			 */
-
-			int unmodifiedOffset;
-			final int movingDelta = event.getText().length()
-					- event.getLength();
-
-			if (fChangedPartitioningRegion != null) {
-				unmodifiedOffset = Math.max(event.getOffset()
-						+ event.getText().length(),
-						fChangedPartitioningRegion.getOffset()
-								+ fChangedPartitioningRegion.getLength());
-				unmodifiedOffset -= movingDelta;
-			} else {
-				unmodifiedOffset = event.getOffset() + event.getLength();
-			}
-
 			try {
-				if (fChangedPartitioningRegion != null) {
-
-					logger.debug("fDocument:" + fDocument.get());
-
-					/*
-					 * Case 1: Document partitioning is changed, so updating the
-					 * set of the pads
-					 */
-					onPartitioningChanged(event, unmodifiedOffset);
-
-				} else {
-					Container current = getContainerHavingOffset(event
-							.getOffset());
-					if (current != null) {
-
-						/*
-						 * Case 2: Changed text area is inside current pad's
-						 * area, updating it
-						 */
-						onChangesInsidePad(current, event);
-					}
+				Container current = getContainerHavingOffset(event
+						.getOffset());
+				if (current != null) {
 
 					/*
-					 * Case 3: No pad modified, do nothing.
+					 * Changed text area is inside current pad's
+					 * area, updating it
 					 */
+					onChangesInsidePad(current, event);
 				}
 			} catch (BadLocationException e) {
 				logger.error(e.getMessage());
@@ -348,9 +302,7 @@ public class ContainerManager extends EventManager {
 				e.printStackTrace();
 			}
 
-			fChangedPartitioningRegion = null;
-
-			if (!fDocumentAccess.processNextDocumentAccessRequest()) {
+			if (!fDocumentAccess.hasNextDocumentAccessRequest()) {
 
 				/* XXX Visibility */
 				// updateContainerVisibility(true);
@@ -369,54 +321,45 @@ public class ContainerManager extends EventManager {
 			logger.debug("documentChanged end ");
 		}
 
-		private void onPartitioningChanged(DocumentEvent event,
-				int unmodifiedOffset) throws BadLocationException,
-				BadPartitioningException {
-
-			logger.debug("onPartitioning changed. unmodifiedOffset: "
-					+ unmodifiedOffset);
-
-			/* Scanning for new containers */
-
-			int offset = Math.max(event.getOffset(),
-					fChangedPartitioningRegion.getOffset());
-			while (offset < fChangedPartitioningRegion.getOffset()
-					+ fChangedPartitioningRegion.getLength()) {
-				ITypedRegion region = ((IDocumentExtension3) fDocument)
-						.getPartition(PartitioningManager.PARTITIONING_ID,
-								offset, false);
-
-				if (region.getType().equals(
+		private List<Container> parseContainersFromDocumentRegion(IDocument document, IRegion region) 
+				throws BadLocationException, BadPartitioningException {
+			ITypedRegion[] regions = ((IDocumentExtension3) document)
+					.computePartitioning(PartitioningManager.PARTITIONING_ID, region.getOffset(), region.getLength(), false);
+			List<Container> result = new ArrayList<>();
+			for (ITypedRegion typedRegion : regions) {
+				if (typedRegion.getType().equals(
 						PartitioningManager.CONTENT_TYPE_EMBEDDED)) {
-
-					String containerTextRegion = fDocument.get(
-							region.getOffset(), region.getLength());
-
-					/* Adding container */
-					String containerID = fDocumentAccess
-							.getContainerIDFromTextRegion(containerTextRegion);
-
-					Container container;
-					if (containerID.matches("\\w*-\\w*-\\w*-\\w*-\\w*")) {
-						// old style
-						container = createContainer(
-								new Position(region.getOffset(),
-										region.getLength()), containerID);
-					} else {
-						// new style
-						container = parseContainer(
-								new Position(region.getOffset(),
-										region.getLength()), containerID);
-					}
-
-					/* XXX Visibility */
-					container.setVisible(false);
-
-					fContainers.add(container);
-					fireContainerCreated(container);
+					result.add(parseContainerFromDocumentRegion(document, typedRegion));
 				}
-				offset += region.getLength();
 			}
+			return result;
+		}
+		
+		private Container parseContainerFromDocumentRegion(IDocument document, IRegion region)
+				throws BadLocationException {
+			Container container;
+			String containerTextRegion = document.get(
+					region.getOffset(), region.getLength());
+
+			/* Adding container */
+			String containerID = fDocumentAccess
+					.getContainerIDFromTextRegion(containerTextRegion);
+
+			if (containerID.matches("\\w*-\\w*-\\w*-\\w*-\\w*")) {
+				// old style
+				container = createContainer(
+						new Position(region.getOffset(),
+								region.getLength()), containerID);
+			} else {
+				// new style
+				container = parseContainer(
+						new Position(region.getOffset(),
+								region.getLength()), containerID);
+			}
+
+			/* XXX Visibility */
+			container.setVisible(false);
+			return container;
 		}
 
 		private void onChangesInsidePad(Container container, DocumentEvent event)
@@ -430,16 +373,6 @@ public class ContainerManager extends EventManager {
 
 			Assert.isTrue(container.getPosition().getOffset() == region
 					.getOffset());
-
-			String containerTextRegion = fDocument.get(region.getOffset(),
-					region.getLength());
-
-			String content = fDocumentAccess
-					.getContainerIDFromTextRegion(containerTextRegion);
-
-			Container parsed = parseContainer(new Position(region.getOffset(),
-					region.getLength()), content);
-			container.updateSilently(parsed.getPadParams(), parsed.getValue());
 
 			/* Updating container */
 			container.updatePosition(region.getOffset(), region.getLength());
@@ -583,90 +516,10 @@ public class ContainerManager extends EventManager {
 	}
 
 	private Container parseContainer(Position position, String content) {
-		try {
-			StringReader r = new StringReader(content);
-			StreamTokenizer st = new StreamTokenizer(r);
-			String type = readString(st);
-			if ("----".equals(type)) {
-				type = null;
-			}
-			Map<String, String> params = readParams(st);
-			int nextToken = st.nextToken();
-			String value;
-			if (nextToken == ':') {
-				StringBuilder sb = new StringBuilder();
-				int c;
-				while ((c = r.read()) != -1) {
-					sb.append((char) c);
-				}
-				value = sb.toString();
-			} else {
-				value = "";
-			}
-			return new Container(position, type, params, value, this);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * @param st
-	 * @return
-	 * @throws IOException
-	 */
-	private static Map<String, String> readParams(StreamTokenizer st)
-			throws IOException {
-		Map<String, String> params = new HashMap<String, String>();
-		int nextToken = st.nextToken();
-		if ((char) nextToken == '(') {
-			while (true) {
-				parseParam(st, params);
-				nextToken = st.nextToken();
-				if ((char) nextToken == ')') {
-					break;
-				} else if ((char) nextToken == ',') {
-
-				} else {
-					throw new IllegalArgumentException("failed to parse: " + st);
-				}
-			}
-		} else {
-			st.pushBack();
-		}
-		return params;
-	}
-
-	/**
-	 * @param st
-	 * @param params
-	 * @throws IOException
-	 */
-	private static void parseParam(StreamTokenizer st,
-			Map<String, String> params) throws IOException {
-		int nextToken;
-		String param = readString(st);
-		nextToken = st.nextToken();
-		if ((char) nextToken != '=') {
-			throw new IllegalArgumentException("failed to parse: " + st);
-		}
-		String value = readString(st);
-		params.put(param, value);
-	}
-
-	/**
-	 * @param st
-	 * @return
-	 * @throws IOException
-	 */
-	private static String readString(StreamTokenizer st) throws IOException {
-		int nextToken = st.nextToken();
-		if (nextToken == StreamTokenizer.TT_WORD || nextToken == 34) {
-			return st.sval;
-		} else if (nextToken == StreamTokenizer.TT_NUMBER) {
-			return String.valueOf(st.nval);
-		}
-		throw new IllegalArgumentException("failed to parse: " + st);
+		PadDocumentPart part = fParser.parsePadPart(content);
+		Container container = new Container(position, this);
+		container.setPadPart(part);
+		return container;
 	}
 
 	public String getStoragePath() {

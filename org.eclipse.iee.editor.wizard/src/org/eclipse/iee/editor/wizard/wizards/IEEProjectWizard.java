@@ -211,7 +211,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 				bundle.setHeader(Constants.BUNDLE_MANIFESTVERSION, "2");
 				bundle.setHeader(Constants.BUNDLE_SYMBOLICNAME, proj.getName());
 				bundle.setHeader(Constants.BUNDLE_VERSION, "1.0.0.qualifier");
-				bundle.setHeader(Constants.IMPORT_PACKAGE, "org.eclipse.iee.document.api");
+				bundle.setHeader(Constants.IMPORT_PACKAGE, "org.eclipse.iee.core");
 				bundle.setHeader(Constants.BUNDLE_CLASSPATH, "., lib/Jama-1.0.2.jar, lib/commons-io-2.4.jar, lib/ieeutils.jar");
 			}
 			((IEditableModel) model).save();

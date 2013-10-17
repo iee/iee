@@ -4,10 +4,12 @@ import java.util.Hashtable;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
+import org.eclipse.iee.core.store.InMemoryEvaluationContextStore;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
-import org.eclipse.iee.web.parser.DefaultDocumentParser;
+import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.web.renderer.DefaultHTMLDocumentRenderer;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
 import org.eclipse.iee.web.renderer.FormulaImageRenderer;
@@ -18,7 +20,6 @@ import org.eclipse.iee.web.renderer.InputHTMLRenderer;
 import org.eclipse.iee.web.renderer.SymbolicHTMLRenderer;
 import org.eclipse.iee.web.renderer.TextHTMLRenderer;
 import org.eclipse.iee.web.servlet.TestServlet;
-import org.eclipse.iee.web.store.InMemoryEvaluationContextStore;
 import org.eclipse.iee.web.ui.store.DevDocumentStore;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -60,10 +61,8 @@ public class Activator implements BundleActivator {
 		ServletContextHandler ctx = new ServletContextHandler();
 		ctx.setContextPath("/test");
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		ServiceReference<PadManager> serviceReference = context.getServiceReference(PadManager.class);
 		
-		DefaultDocumentParser parser = new DefaultDocumentParser(context.getService(serviceReference));
-		DevDocumentStore documentStore = new DevDocumentStore(workspace.getRoot().getLocation().toFile(), parser);
+		DevDocumentStore documentStore = new DevDocumentStore(workspace.getRoot().getLocation().toFile(), IeeEditorPlugin.getDefault().getParser());
 		TestServlet servlet = new TestServlet();
 		servlet.setDocumentRenderer(new DefaultHTMLDocumentRenderer(registerRenderer(new HTMLRendererManager())));
 		servlet.setDocumentStore(documentStore);
@@ -85,12 +84,12 @@ public class Activator implements BundleActivator {
 
 	private HTMLRendererManager registerRenderer(HTMLRendererManager rendererManager) {
 		FormulaImageRenderer formulaImageRenderer = new FormulaImageRenderer();
-		rendererManager.registerPadHTMLRenderer("Formula", new FormulaHTMLRenderer(formulaImageRenderer));
-		rendererManager.registerPadHTMLRenderer("Input", new InputHTMLRenderer(formulaImageRenderer));
-		rendererManager.registerPadHTMLRenderer("Symbolic", new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
-		rendererManager.registerPadHTMLRenderer("Image", new ImageHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer("Text", new TextHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer("Graph", new GraphHTMLRenderer(formulaImageRenderer));
+		rendererManager.registerPadHTMLRenderer(new FormulaHTMLRenderer(formulaImageRenderer));
+		rendererManager.registerPadHTMLRenderer(new InputHTMLRenderer(formulaImageRenderer));
+		rendererManager.registerPadHTMLRenderer(new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
+		rendererManager.registerPadHTMLRenderer(new ImageHTMLRenderer());
+		rendererManager.registerPadHTMLRenderer(new TextHTMLRenderer());
+		rendererManager.registerPadHTMLRenderer(new GraphHTMLRenderer(formulaImageRenderer));
 		return rendererManager;
 	}
 	

@@ -22,8 +22,8 @@
                id="org.eclipse.iee.editor.addToolbar"
                label="Pads">
             <command
-                  commandId="org.eclipse.iee.sample.formula.addCommand"
-                  id="org.eclipse.iee.sample.formula.toolbar.addCommand"
+                  commandId="org.eclipse.iee.pad.formula.ui.addCommand"
+                  id="org.eclipse.iee.pad.formula.ui.toolbar.addCommand"
                   style="push">
                <visibleWhen checkEnabled="false">
                   	<with variable="activePartId">
@@ -32,8 +32,8 @@
                </visibleWhen>
             </command>
             <command
-                  commandId="org.eclipse.iee.sample.formula.addSymbolicCommand"
-                  id="org.eclipse.iee.sample.formula.toolbar.addCommand"
+                  commandId="org.eclipse.iee.pad.formula.ui.addSymbolicCommand"
+                  id="org.eclipse.iee.pad.formula.ui.toolbar.addCommand"
                   style="push">
                <visibleWhen checkEnabled="false">
                   	<with variable="activePartId">
@@ -42,8 +42,8 @@
                </visibleWhen>
             </command>
             <command
-                  commandId="org.eclipse.iee.sample.formula.addInputCommand"
-                  id="org.eclipse.iee.sample.formula.toolbar.addCommand"
+                  commandId="org.eclipse.iee.pad.formula.ui.addInputCommand"
+                  id="org.eclipse.iee.pad.formula.ui.toolbar.addCommand"
                   style="push">
                <visibleWhen checkEnabled="false">
                   	<with variable="activePartId">
@@ -62,8 +62,8 @@
            		</visibleWhen>
             </command>
             <command
-                  commandId="org.eclipse.iee.sample.image.addCommand"
-                  id="org.eclipse.iee.sample.image.toolbar.addCommand"
+                  commandId="org.eclipse.iee.pad.image.addCommand"
+                  id="org.eclipse.iee.pad.image.toolbar.addCommand"
                   style="push">
                 <visibleWhen checkEnabled="false">
                   	<with variable="activePartId">
@@ -82,8 +82,8 @@
                </visibleWhen>
             </command>
             <command
-                  commandId="org.eclipse.iee.sample.graph.addCommand"
-                  id="org.eclipse.iee.sample.graph.toolbar.addCommand"
+                  commandId="org.eclipse.iee.pad.graph.addCommand"
+                  id="org.eclipse.iee.pad.graph.toolbar.addCommand"
                   style="push">
                <visibleWhen checkEnabled="false">
                   	<with variable="activePartId">

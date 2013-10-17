@@ -7,19 +7,19 @@ import java.io.Writer;
 import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.iee.sample.image.pad.ImagePad;
+import org.eclipse.iee.pad.image.ImagePart;
 
-public class ImageHTMLRenderer implements IHTMLRenderer<ImagePad> {
+public class ImageHTMLRenderer implements IHTMLRenderer<ImagePart> {
 
 	@Override
-	public void renderPad(ImagePad pad,
+	public void renderPad(ImagePart pad,
 			IHTMLRendererContext context) throws IOException {
 		Writer writer = context.getWriter();
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "image", new HashMap<String, String>())).append("' />");
+		writer.append("<img src='").append(context.createResourceURL(pad.getId(), "image", new HashMap<String, String>())).append("' />");
 	}
 
 	@Override
-	public void renderResource(ImagePad pad, String resourceId, IResourceRenderContext context)
+	public void renderResource(ImagePart pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 		InputStream is = context.getResourceAsStream("image/" + pad.getImagePath());
 		context.setContentType("application/octet-stream");

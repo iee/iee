@@ -1,9 +1,6 @@
 package org.eclipse.iee.editor.core.pad;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,16 +12,20 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.iee.core.HandlerManager;
+import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.core.utils.ReflectionUtils;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
+import org.eclipse.iee.editor.core.pad.common.UnknownPart;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -37,10 +38,9 @@ public class PadManager extends EventManager {
 
 	private Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
-	private IDebugEventSetListener fDebugListener;
-
+	
 	/** Registered pad factories. */
-	private Map<String, IPadFactory> fPadFactories = new HashMap<String, IPadFactory>();
+	private HandlerManager<IPadFactory> fPadFactories = new HandlerManager<IPadFactory>(IPadFactory.class);
 
 	/* Pads */
 
@@ -199,23 +199,6 @@ public class PadManager extends EventManager {
 	}
 
 	/**
-	 * Used by external plug-in to insert new pad.
-	 * 
-	 * @param pad
-	 * @param location
-	 * @param containerManager
-	 */
-	public void insertPad(Pad pad, int location,
-			ContainerManager containerManager) {
-		Assert.isLegal(fContainerManagers.containsKey(containerManager
-				.getContainerManagerID()));
-		fSuspendedPads.add(pad.getContainerID());
-		fPads.put(pad.getContainerID(), pad);
-		containerManager.RequestContainerAllocation(pad.getType(),
-				pad.getContainerID(), location);
-	}
-
-	/**
 	 * Request pad removal.
 	 * 
 	 * @param pad
@@ -234,7 +217,7 @@ public class PadManager extends EventManager {
 
 			@Override
 			public void containerCreated(ContainerEvent event) {
-				Container container = event.getContainer();
+     			Container container = event.getContainer();
 				String containerID = container.getContainerID();
 				if (fSuspendedPads.contains(containerID)) {
 					/*
@@ -258,6 +241,7 @@ public class PadManager extends EventManager {
 					 */
 					Pad pad = fPads.get(containerID);
 					Pad clone = pad.copy();
+					clone.getDocumentPart().setId(UUID.randomUUID().toString());
 					clone.attachContainer(container);
 					fActivePads.add(clone.getContainerID());
 					fPads.put(clone.getContainerID(), clone);
@@ -269,19 +253,16 @@ public class PadManager extends EventManager {
 					 * Case 3: container with corresponding "Temporary" pad is
 					 * copied from another place. Creating loading pad.
 					 */
-					Pad pad = new LoadingPad();
+					Pad pad = new LoadingPad(container.getPadPart());
 					((LoadingPad) pad).setOriginalContainerID(containerID);
 					pad.attachContainer(container);
 					fTemporaryPads.add(pad.getContainerID());
 					fPads.put(pad.getContainerID(), pad);
 					return;
 				}
-				String padType = container.getPadType();
-				IPadFactory iPadFactory = fPadFactories.get(padType);
+				IPadFactory iPadFactory = fPadFactories.getHandler(container.getPadPart().getClass());
 				if (iPadFactory != null) {
-					Pad pad = iPadFactory.create(container.getPadParams(),
-							container.getValue());
-					pad.setContainerID(containerID);
+					Pad pad = iPadFactory.create(container.getPadPart());
 					pad.attachContainer(container);
 					fActivePads.add(containerID);
 					fPads.put(containerID, pad);
@@ -289,7 +270,7 @@ public class PadManager extends EventManager {
 					/*
 					 * Case 4: no corresponding pad. Creating new "loading" pad.
 					 */
-					Pad pad = new LoadingPad(containerID);
+					Pad pad = new LoadingPad(container.getPadPart());
 					pad.attachContainer(container);
 					fTemporaryPads.add(containerID);
 					fPads.put(containerID, pad);
@@ -329,8 +310,9 @@ public class PadManager extends EventManager {
 				Container container = containerEvent.getContainer();
 				Pad pad = fPads.get(container.getContainerID());
 				if (pad != null) {
-					pad.updateData(container.getPadParams(),
-							container.getValue());
+					//XXX
+//					pad.updateData(container.getPadParams(),
+//							container.getValue());
 				}
 			}
 
@@ -404,20 +386,17 @@ public class PadManager extends EventManager {
 	}
 
 	public void registerPadFactory(IPadFactory factory) {
-		String type = factory.getType();
-		fPadFactories.put(type, factory);
-		loadPads(type, factory);
+		fPadFactories.registerHandler(factory);
+		loadPads(ReflectionUtils.getGenericParameterClass(factory.getClass(), IPadFactory.class, 0), factory);
 	}
 
-	public void loadPads(String type, IPadFactory factory) {
+	public <T extends PadDocumentPart> void loadPads(Class<T> class1, IPadFactory<T> factory) {
 		Map<Integer, Pad> loadPads = new HashMap<Integer, Pad>();
 		for (String temp : fTemporaryPads) {
 			Pad pad = fPads.get(temp);
 			Container container = pad.getContainer();
-			if (type.equals(container.getPadType())) {
-				Pad create = factory.create(container.getPadParams(),
-						container.getValue());
-				create.setContainerID(container.getContainerID());
+			if (class1.equals(container.getPadPart().getClass())) {
+				Pad create = factory.create((T) container.getPadPart());
 				loadPads.put(container.getPosition().offset, create);
 			}
 		}
@@ -433,103 +412,7 @@ public class PadManager extends EventManager {
 	}
 
 	public void unregisterPadFactory(IPadFactory factory) {
-		Set<Entry<String, IPadFactory>> entrySet = fPadFactories.entrySet();
-		for (Iterator<Entry<String, IPadFactory>> iterator = entrySet
-				.iterator(); iterator.hasNext();) {
-			Entry<String, IPadFactory> entry = iterator.next();
-			if (entry.getValue() == factory) {
-				iterator.remove();
-			}
-		}
-	}
-
-	public Pad parsePad(String text) {
-		try {
-			StringReader r = new StringReader(text);
-			StreamTokenizer st = new StreamTokenizer(r);
-			String type = readString(st);
-			if ("----".equals(type)) {
-				type = null;
-			}
-			Map<String, String> params = readParams(st);
-			int nextToken = st.nextToken();
-			String value;
-			if (nextToken == ':') {
-				StringBuilder sb = new StringBuilder();
-				int c;
-				while ((c = r.read()) != -1) {
-					sb.append((char) c);
-				}
-				value = sb.toString();
-			} else {
-				value = "";
-			}
-			Pad pad = fPadFactories.get(type).create(params, value);
-			pad.setContainerID(params.get("id"));
-			return pad;
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * @param st
-	 * @return
-	 * @throws IOException
-	 */
-	private static Map<String, String> readParams(StreamTokenizer st)
-			throws IOException {
-		Map<String, String> params = new HashMap<String, String>();
-		int nextToken = st.nextToken();
-		if ((char) nextToken == '(') {
-			while (true) {
-				parseParam(st, params);
-				nextToken = st.nextToken();
-				if ((char) nextToken == ')') {
-					break;
-				} else if ((char) nextToken == ',') {
-
-				} else {
-					throw new IllegalArgumentException("failed to parse: " + st);
-				}
-			}
-		} else {
-			st.pushBack();
-		}
-		return params;
-	}
-
-	/**
-	 * @param st
-	 * @param params
-	 * @throws IOException
-	 */
-	private static void parseParam(StreamTokenizer st,
-			Map<String, String> params) throws IOException {
-		int nextToken;
-		String param = readString(st);
-		nextToken = st.nextToken();
-		if ((char) nextToken != '=') {
-			throw new IllegalArgumentException("failed to parse: " + st);
-		}
-		String value = readString(st);
-		params.put(param, value);
-	}
-
-	/**
-	 * @param st
-	 * @return
-	 * @throws IOException
-	 */
-	private static String readString(StreamTokenizer st) throws IOException {
-		int nextToken = st.nextToken();
-		if (nextToken == StreamTokenizer.TT_WORD || nextToken == 34) {
-			return st.sval;
-		} else if (nextToken == StreamTokenizer.TT_NUMBER) {
-			return String.valueOf(st.nval);
-		}
-		throw new IllegalArgumentException("failed to parse: " + st);
+		fPadFactories.unregisterHandler(factory);
 	}
 
 }

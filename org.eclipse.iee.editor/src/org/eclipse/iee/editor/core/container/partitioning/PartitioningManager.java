@@ -1,7 +1,8 @@
 package org.eclipse.iee.editor.core.container.partitioning;
 
+import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.ContainerManagerConfig;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentPartitioner;
@@ -21,10 +22,8 @@ public class PartitioningManager {
 	private IDocument fDocument;
 	private IDocumentPartitioner fDocumentPartitioner;
 	
-	public PartitioningManager(ContainerManager containerManager) {
-		fDocument = containerManager.getDocument();
-		
-		ContainerManagerConfig config = containerManager.getConfig();
+	public PartitioningManager(DocumentStructureConfig config, IDocument document) {
+		fDocument = document;
 		
 		fDocumentPartitioner = new FastPartitioner(
 			new PartitioningScanner(

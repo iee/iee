@@ -8,12 +8,9 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
-import org.eclipse.iee.sample.formula.pad.InputPad;
-import org.scilab.forge.jlatexmath.TeXConstants;
-import org.scilab.forge.jlatexmath.TeXFormula;
+import org.eclipse.iee.pad.formula.InputPart;
 
-public class InputHTMLRenderer implements IHTMLRenderer<InputPad> {
+public class InputHTMLRenderer implements IHTMLRenderer<InputPart> {
 
 	private FormulaImageRenderer formulaImageRenderer;
 	
@@ -22,24 +19,24 @@ public class InputHTMLRenderer implements IHTMLRenderer<InputPad> {
 	}
 	
 	@Override
-	public void renderPad(InputPad pad,
+	public void renderPad(InputPart pad,
 			IHTMLRendererContext context) throws IOException {
 		Writer writer = context.getWriter();
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "formula", new HashMap<String, String>())).append("' />");
+		writer.append("<img src='").append(context.createResourceURL(pad.getId(), "formula", new HashMap<String, String>())).append("' />");
 		if (!context.isEditMode()) {
 			HashMap<String, String> params = new HashMap<String, String>();
-			writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "result", params)).append("' />");
+			writer.append("<img src='").append(context.createResourceURL(pad.getId(), "result", params)).append("' />");
 		} else {
-			writer.append("<input name='").append(pad.getContainerID()).append("' type='text' value='").append(getValue(pad, context)).append("'/>");
+			writer.append("<input name='").append(pad.getId()).append("' type='text' value='").append(getValue(pad, context)).append("'/>");
 		}
 	}
 
 	@Override
-	public void renderResource(InputPad pad, String resourceId, IResourceRenderContext context)
+	public void renderResource(InputPart pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 		String text;
 		if (!"result".equals(resourceId)) {
-			text = pad.getVariableExpression();
+			text = pad.getVariable();
 		} else {
 			String result = getValue(pad, context);
 			text = result;
@@ -54,8 +51,8 @@ public class InputHTMLRenderer implements IHTMLRenderer<InputPad> {
 		}
 	}
 
-	private String getValue(InputPad pad, IHTMLRendererContext context) {
-		String result = context.getParameterProvider().getParameterValue(pad.getContainerID());
+	private String getValue(InputPart pad, IHTMLRendererContext context) {
+		String result = context.getParameterProvider().getParameterValue(pad.getId());
 		if (result == null) {
 			result = pad.getDefaultValue();
 		}

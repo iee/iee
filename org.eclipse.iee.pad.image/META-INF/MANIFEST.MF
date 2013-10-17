@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Image
+Bundle-SymbolicName: org.eclipse.iee.pad.image;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.iee.core.document,
+ org.eclipse.iee.core.document.parser,
+ org.eclipse.iee.core.document.writer,
+ org.eclipse.ui
+Export-Package: org.eclipse.iee.pad.image
+Service-Component: OSGI-INF/org.eclipse.iee.sample.image.ImagePadParser.xml,
+ OSGI-INF/org.eclipse.iee.sample.image.ImagePadWriter.xml
+

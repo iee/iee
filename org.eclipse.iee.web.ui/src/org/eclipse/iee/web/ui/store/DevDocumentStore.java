@@ -12,15 +12,14 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.iee.web.document.Document;
-import org.eclipse.iee.web.parser.DefaultDocumentParser;
-import org.eclipse.iee.web.store.IDocumentStore;
+import org.eclipse.iee.core.document.Document;
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.store.IDocumentStore;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.ui.internal.Workbench;
 
 public class DevDocumentStore implements IDocumentStore {
 

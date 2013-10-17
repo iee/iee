@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ui
+Bundle-SymbolicName: org.eclipse.iee.pad.text.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.eclipse.iee.core.document,
+ org.eclipse.iee.editor.core.pad,
+ org.eclipse.iee.pad.text,
+ org.slf4j
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/org.eclipse.iee.text.ui.TextPadFactory.xml
+Require-Bundle: org.eclipse.swt,
+ org.eclipse.iee.editor,
+ org.eclipse.jface.text,
+ org.eclipse.jface,
+ org.eclipse.ui.workbench

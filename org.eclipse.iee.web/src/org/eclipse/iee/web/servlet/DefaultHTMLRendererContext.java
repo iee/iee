@@ -10,10 +10,10 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.iee.document.api.IParameterProvider;
-import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.core.IParameterProvider;
+import org.eclipse.iee.core.IResultContainer;
+import org.eclipse.iee.core.store.IDocumentStore;
 import org.eclipse.iee.web.renderer.IHTMLRendererContext;
-import org.eclipse.iee.web.store.IDocumentStore;
 
 public class DefaultHTMLRendererContext implements IHTMLRendererContext {
 

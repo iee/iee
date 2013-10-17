@@ -1,5 +1,7 @@
 package org.eclipse.iee.editor;
 
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -20,6 +22,8 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	
 	// Single instance of PadManager
 	private static PadManager fPadManager;
+	private static DefaultDocumentParser fParser;
+	private static DefaultDocumentWriter fWriter;
 	private static IPadStorage fPadStorage;
 	
 	/**
@@ -32,6 +36,14 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 		return fPadManager;
 	}
 	
+	public static DefaultDocumentParser getParser() {
+		return fParser;
+	}
+
+	public static DefaultDocumentWriter getWriter() {
+		return fWriter;
+	}
+
 	public static IPadStorage getPadStorage() {
 		return fPadStorage;
 	}
@@ -43,8 +55,12 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		ServiceReference<DefaultDocumentParser> parserReference = (ServiceReference<DefaultDocumentParser>) context.getServiceReference(DefaultDocumentParser.class.getName());
+		ServiceReference<DefaultDocumentWriter> writerReference = (ServiceReference<DefaultDocumentWriter>) context.getServiceReference(DefaultDocumentWriter.class.getName());
 		ServiceReference<PadManager> serviceReference = (ServiceReference<PadManager>) context.getServiceReference(PadManager.class.getName());
 		fPadManager = context.getService(serviceReference);
+		fParser = context.getService(parserReference);
+		fWriter = context.getService(writerReference);
 	}
 
 	

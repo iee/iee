@@ -2,16 +2,14 @@ package org.eclipse.iee.web.renderer;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.web.document.DirectiveBlock;
-import org.eclipse.iee.web.document.Document;
-import org.eclipse.iee.web.document.DocumentPart;
-import org.eclipse.iee.web.document.PadDocumentPart;
-import org.eclipse.iee.web.document.TextDocumentPart;
+import org.eclipse.iee.core.document.DirectiveBlock;
+import org.eclipse.iee.core.document.Document;
+import org.eclipse.iee.core.document.DocumentPart;
+import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.core.document.TextDocumentPart;
 
 public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 
@@ -58,13 +56,12 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 	private void appendPart(DocumentPart documentPart, IHTMLRendererContext context) throws IOException {
 		Writer writer = context.getWriter();
 		if (documentPart instanceof PadDocumentPart) {
-			Pad pad = ((PadDocumentPart) documentPart).getPad();
-			IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
+			IHTMLRenderer<DocumentPart> renderer = manager.getPadHTMLRenderer(documentPart);
 			writer.append("<div style='display:inline-block;'>");
 			if (renderer != null) {
-				renderer.renderPad(pad, context);
+				renderer.renderPad(documentPart, context);
 			} else {
-				writer.append("Unknow pad type " + pad.getClass());
+				writer.append("Unknow pad type " + documentPart.getClass());
 			}
 			writer.append("</div>");
 		} else if (documentPart instanceof TextDocumentPart) {
@@ -91,10 +88,9 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 			throws IOException {
 		for (DocumentPart documentPart : document.getRoot().getChildren()) {
 			if (documentPart instanceof PadDocumentPart) {
-				Pad pad = ((PadDocumentPart) documentPart).getPad();
-				if (padId.equals(pad.getContainerID())) {
-					IHTMLRenderer<Pad> renderer = manager.getPadHTMLRenderer(pad.getType());
-					renderer.renderResource(pad, resourceId, context);
+				if (padId.equals(((PadDocumentPart)documentPart).getId())) {
+					IHTMLRenderer<DocumentPart> renderer = manager.getPadHTMLRenderer(documentPart);
+					renderer.renderResource(documentPart, resourceId, context);
 				}
 			}
 		}

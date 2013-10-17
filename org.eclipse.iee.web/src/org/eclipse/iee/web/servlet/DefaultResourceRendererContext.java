@@ -11,10 +11,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.iee.document.api.IParameterProvider;
-import org.eclipse.iee.document.api.IResultContainer;
+import org.eclipse.iee.core.IParameterProvider;
+import org.eclipse.iee.core.IResultContainer;
+import org.eclipse.iee.core.store.IDocumentStore;
 import org.eclipse.iee.web.renderer.IResourceRenderContext;
-import org.eclipse.iee.web.store.IDocumentStore;
 
 /**
  * @author Toxin

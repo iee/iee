@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.eclipse.iee.document.api.IParameterProvider;
+import org.eclipse.iee.core.IParameterProvider;
 
 public class RequestParameterProvider implements IParameterProvider {
 

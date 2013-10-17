@@ -8,7 +8,6 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -28,9 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 
-import org.eclipse.iee.web.document.Document;
-import org.eclipse.iee.web.parser.DefaultDocumentParser;
-import org.eclipse.iee.web.store.IDocumentStore;
+import org.eclipse.iee.core.document.Document;
+import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.store.IDocumentStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -58,7 +57,7 @@ public class OSGIContainerDocumentStore implements IDocumentStore {
 		
 		FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
 		Map<String, String> config = new HashMap<String, String>();
-		config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.eclipse.iee.document.api, com.ieecloud.ui.viewer, org.apache.commons.codec.binary; version=\"1.4.0\", org.apache.commons.io");
+		config.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, "org.eclipse.iee.core, com.ieecloud.ui.viewer, org.apache.commons.codec.binary; version=\"1.4.0\", org.apache.commons.io");
 		config.put(Constants.FRAMEWORK_STORAGE, folder + "/osgi-area");
 		config.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 

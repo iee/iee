@@ -8,13 +8,10 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import org.eclipse.iee.editor.core.utils.symbolic.SymbolicEngine;
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
-import org.eclipse.iee.sample.formula.pad.SymbolicPad;
-import org.scilab.forge.jlatexmath.TeXConstants;
-import org.scilab.forge.jlatexmath.TeXFormula;
+import org.eclipse.iee.pad.formula.SymbolicEngine;
+import org.eclipse.iee.pad.formula.SymbolicPart;
 
-public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
+public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPart> {
 
 	private SymbolicEngine symbolicEngine;
 	
@@ -26,22 +23,22 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPad> {
 	}
 
 	@Override
-	public void renderPad(SymbolicPad pad,
+	public void renderPad(SymbolicPart pad,
 			IHTMLRendererContext context) throws IOException {
 		Writer writer = context.getWriter();
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "formula", new HashMap<String, String>())).append("' />");
+		writer.append("<img src='").append(context.createResourceURL(pad.getId(), "formula", new HashMap<String, String>())).append("' />");
 		HashMap<String, String> params = new HashMap<String, String>();
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "result", params)).append("' />");
+		writer.append("<img src='").append(context.createResourceURL(pad.getId(), "result", params)).append("' />");
 	}
 
 	@Override
-	public void renderResource(SymbolicPad pad, String resourceId, IResourceRenderContext context)
+	public void renderResource(SymbolicPart pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 		String text;
 		if (!"result".equals(resourceId)) {
-			text = pad.getTranslatingExpression();
+			text = pad.getFormula();
 		} else {
-			String variable = pad.getTranslatingExpression();
+			String variable = pad.getFormula();
 			char lastVariable = variable.charAt(variable.length() - 1);
 			if (lastVariable == '=')
 				variable = variable.substring(0, variable.lastIndexOf('='));

@@ -1,14 +1,22 @@
 package org.eclipse.iee.editor.core.container;
 
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
+import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
+import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
+import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.internal.texteditor.SWTUtil;
+
+import com.google.common.base.Throwables;
 
 public class DocumentAccess {
 
@@ -19,9 +27,12 @@ public class DocumentAccess {
 	static final int RELEASE = 1;
 
 	private ContainerManager fContainerManager;
-	private ContainerManagerConfig fConfig;
 	private IDocument fDocument;
+	
+	private DocumentStructureConfig fConfig = new DocumentStructureConfig();
 
+	private DefaultDocumentWriter fWriter; 
+	
 	public class AccessAction {
 		AccessAction(int actionID, Container container) {
 			this.actionID = actionID;
@@ -36,8 +47,8 @@ public class DocumentAccess {
 
 	DocumentAccess(ContainerManager containerManager) {
 		fContainerManager = containerManager;
-		fConfig = containerManager.getConfig();
 		fDocument = containerManager.getDocument();
+		fWriter = containerManager.getWriter();
 	}
 
 	/**
@@ -46,9 +57,11 @@ public class DocumentAccess {
 	void requestAccessAction(int actionID, Container container) {
 		fContainerDocumentAccessQueue
 				.add(new AccessAction(actionID, container));
-		if (fContainerManager.isModificationAllowed()) {
-			processNextDocumentAccessRequest();
-		}
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				processNextDocumentAccessRequest();
+			}
+		});
 	}
 
 	/**
@@ -58,21 +71,20 @@ public class DocumentAccess {
 	boolean processNextDocumentAccessRequest() {
 		logger.debug("processNextDocumentAccessRequest");
 
-		AccessAction action = fContainerDocumentAccessQueue.poll();
-		if (action == null) {
-			return false;
+		AccessAction action;
+		while ((action = fContainerDocumentAccessQueue.poll()) != null) {
+			Container container = action.container;
+			switch (action.actionID) {
+			case WRITE:
+				writeContentToTextRegion(container);
+				break;
+			case RELEASE:
+				releaseTextRegion(container);
+				break;
+			}
 		}
-
-		Container container = action.container;
-		switch (action.actionID) {
-		case WRITE:
-			writeContentToTextRegion(container);
-			break;
-		case RELEASE:
-			releaseTextRegion(container);
-			break;
-		}
-		return true;
+		
+		return false;
 	}
 
 	/* Format */
@@ -81,68 +93,71 @@ public class DocumentAccess {
 	 * This function is called by ContainerManager which puts Container data to
 	 * Document
 	 */
-	protected void writeContentToTextRegion(Container container) {
+	public void writeContentToTextRegion(final Container container) {
+		
+		String payload = getPayload(container);
+		
 		Position position = container.getPosition();
-		String textContent = container.getTextContent();
 
-		/* Container ID */
-		StringBuilder payload = new StringBuilder();
+		int from = position.getOffset() + fWriter.getPrologue().length();
 
-		payload.append(container.getPadType() != null ? container.getPadType()
-				: "----");
-		Map<String, String> padParams = container.getPadParams();
-		if (padParams.size() > 0) {
-			payload.append('(');
-			boolean isFirst = true;
-			for (Entry<String, String> entry : padParams.entrySet()) {
-				if (!isFirst) {
-					payload.append(",");
-				}
-				payload.append('"');
-				payload.append(entry.getKey().replace("\"", "\\\""));
-				payload.append("\"=\"");
-				if (entry.getValue() != null) {
-					payload.append(entry.getValue().replace("\"", "\\\""));
-				}
-				payload.append('"');
-				isFirst = false;
-			}
-			payload.append(')');
-		}
-		if (container.getValue() != null && container.getValue().length() > 0) {
-			payload.append(':').append(container.getValue());
-		}
-
-		if (textContent != null && !textContent.isEmpty()) {
-			/* Payload if exists */
-
-			payload.append(fConfig.INNER_TEXT_BEGIN);
-
-			String[] lines = textContent.split("\n");
-			for (int i = 0; i < lines.length - 1; i++) {
-				payload.append(lines[i].trim()).append(fConfig.INNER_TEXT_BR);
-			}
-			payload.append(lines[lines.length - 1]).append(
-					fConfig.INNER_TEXT_END);
-		}
-
-		/* Old bounds */
-
-		int from = position.getOffset()
-				+ fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length();
-
-		int length = position.getLength()
-				- fContainerManager.getConfig().EMBEDDED_REGION_BEGIN.length()
-				- fContainerManager.getConfig().EMBEDDED_REGION_END.length();
-
+		int length = position.getLength() - fWriter.getPrologue().length() - fWriter.getEpilogue().length();
+		
 		try {
+			if (fDocument.get(from, length).equals(payload)) {
+				return;
+			}
 			fDocument.replace(from, length, payload.toString());
-
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 
+	}
+	
+	public Container createContent(final Container container) {
+		
+		String payload = getPayload(container);
+		
+		Position position = container.getPosition();
+
+		int from = position.getOffset();
+
+		int length = position.getLength();
+		
+		String text = fWriter.getPrologue() + payload + fWriter.getEpilogue();
+		
+		try {
+			container.updatePosition(from, text.length());
+			if (!fDocument.get(from, length).equals(text)) {
+				fDocument.replace(from, length, text);
+			}
+			return container;
+		} catch (BadLocationException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+	private String getPayload(final Container container) {
+		String payload = fWriter.writeInternalsToString(container.getPadPart(), new ISourceGeneratorContext() {
+			@Override
+			public String translateFunction(String function, String id) {
+				try {
+					return JavaTranslator.translate(function,
+							container.getContainerManager().getCompilationUnit(),
+							container.getPosition().getOffset(), container.getContainerID());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "";
+				}
+			}
+
+			@Override
+			public String getStoragePath() {
+				return container.getContainerManager().getStoragePath() + "/" +
+						FileMessager.getInstance().getRuntimeDirectoryName();
+			}});
+		return payload;
 	}
 
 	/**
@@ -159,17 +174,7 @@ public class DocumentAccess {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Generates initial text region
-	 * 
-	 * @param id
-	 */
-	String getInitialTextRegion(String type, String id) {
-		return fConfig.EMBEDDED_REGION_BEGIN + type + "(\"id\"=\"" + id + "\")"
-				+ fConfig.EMBEDDED_REGION_END;
-	}
-
+	
 	/**
 	 * Parses @param textRegion and returns container's id
 	 */
@@ -187,6 +192,10 @@ public class DocumentAccess {
 			logger.error(e.getMessage());
 			return null;
 		}
+	}
+
+	public boolean hasNextDocumentAccessRequest() {
+		return !fContainerDocumentAccessQueue.isEmpty();
 	}
 
 }

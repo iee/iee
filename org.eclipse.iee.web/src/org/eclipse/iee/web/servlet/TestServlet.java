@@ -16,17 +16,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.iee.document.api.EvaluationContextHolder;
-import org.eclipse.iee.document.api.IParameterProvider;
-import org.eclipse.iee.document.api.IResultContainer;
-import org.eclipse.iee.document.api.stub.FileResultContainer;
+import org.eclipse.iee.core.EvaluationContextHolder;
+import org.eclipse.iee.core.FileResultContainer;
+import org.eclipse.iee.core.IParameterProvider;
+import org.eclipse.iee.core.IResultContainer;
+import org.eclipse.iee.core.document.Document;
+import org.eclipse.iee.core.store.IDocumentStore;
+import org.eclipse.iee.core.store.IEvaluationContextStore;
 import org.eclipse.iee.web.RequestParameterProvider;
-import org.eclipse.iee.web.document.Document;
 import org.eclipse.iee.web.renderer.IHTMLDocumentRenderer;
 import org.eclipse.iee.web.renderer.IHTMLRendererContext;
 import org.eclipse.iee.web.renderer.IResourceRenderContext;
-import org.eclipse.iee.web.store.IDocumentStore;
-import org.eclipse.iee.web.store.IEvaluationContextStore;
 
 public class TestServlet extends HttpServlet {
 

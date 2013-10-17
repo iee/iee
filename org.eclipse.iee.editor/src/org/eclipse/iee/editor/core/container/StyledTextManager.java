@@ -38,13 +38,6 @@ public class StyledTextManager {
 		initListeners();
 	}
 
-	public void updateStyles(Container container) {
-		List<StyleRange> containerStyles = getContainerStyles(container);
-		for (StyleRange styleRange : containerStyles) {
-			fStyledText.setStyleRange(styleRange);
-		}
-	}
-
 	protected void initListeners() {
 
 		((ITextViewerExtension4) fSourceViewer)

@@ -19,5 +19,10 @@ Export-Package: org.eclipse.iee.editor.jdt,
  org.eclipse.iee.editor.jdt.editors
 Bundle-ClassPath: lib/log4j-1.2.17.jar,
  .
-Import-Package: org.eclipse.iee.sample.image.pad,
+Import-Package: org.apache.commons.io,
+ org.eclipse.iee.core.document,
+ org.eclipse.iee.core.document.parser,
+ org.eclipse.iee.core.document.writer,
+ org.eclipse.iee.pad.image,
+ org.eclipse.iee.pad.image.ui,
  org.eclipse.ui

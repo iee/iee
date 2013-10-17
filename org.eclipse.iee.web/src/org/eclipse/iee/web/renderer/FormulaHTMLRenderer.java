@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import org.eclipse.iee.sample.formula.pad.FormulaPad;
+import org.eclipse.iee.pad.formula.FormulaPart;
 
-public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPad> {
+public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPart> {
 
 	private FormulaImageRenderer formulaImageRenderer;
 	
@@ -19,25 +19,25 @@ public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPad> {
 	}
 
 	@Override
-	public void renderPad(FormulaPad pad,
+	public void renderPad(FormulaPart pad,
 			IHTMLRendererContext context) throws IOException {
 		Writer writer = context.getWriter();
-		writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "formula", new HashMap<String, String>())).append("' />");
-		String result = context.getResultContainer().getResult(pad.getContainerID());
+		writer.append("<img src='").append(context.createResourceURL(pad.getId(), "formula", new HashMap<String, String>())).append("' />");
+		String result = context.getResultContainer().getResult(pad.getId());
 		if (result != null) {
 			HashMap<String, String> params = new HashMap<String, String>();
-			writer.append("<img src='").append(context.createResourceURL(pad.getContainerID(), "result", params)).append("' />");
+			writer.append("<img src='").append(context.createResourceURL(pad.getId(), "result", params)).append("' />");
 		}
 	}
 
 	@Override
-	public void renderResource(FormulaPad pad, String resourceId, IResourceRenderContext context)
+	public void renderResource(FormulaPart pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
 		String text;
 		if (!"result".equals(resourceId)) {
-			text = pad.getTranslatingExpression();
+			text = pad.getFormula();
 		} else {
-			String result = context.getResultContainer().getResult(pad.getContainerID());
+			String result = context.getResultContainer().getResult(pad.getId());
 			if (result == null) {
 				result = "";
 			}

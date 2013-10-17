@@ -1,11 +1,10 @@
 package org.eclipse.iee.web.renderer;
 
 import java.io.IOException;
-import java.io.Writer;
 
-import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.core.document.DocumentPart;
 
-public interface IHTMLRenderer<T extends Pad> {
+public interface IHTMLRenderer<T extends DocumentPart> {
 
 	void renderPad(T pad, IHTMLRendererContext context) throws IOException;
 	

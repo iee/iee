@@ -1,9 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
+import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -14,16 +11,15 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Container {
 
-	private static final Logger logger = Logger.getLogger(Container.class);
+	private static final Logger logger = LoggerFactory.getLogger(Container.class);
 
-	private String fPadType;
-	private Map<String, String> fPadParams;
-	private String fValue;
-	private String fTextContent;
-
+	private PadDocumentPart padPart;
+	
 	private Position fPosition;
 	private Composite fComposite;
 
@@ -36,71 +32,8 @@ public class Container {
 
 	/* Setters */
 
-	public void setContainerID(String containerID) {
-		setPadParam("id", containerID);
-	}
-
-	public void setTextContent(String content) {
-		if (fTextContent != content) {
-			fTextContent = content;
-			fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
-		}
-	}
-
-	public void setPadParam(String name, String value) {
-		if (fPadParams == null) {
-			fPadParams = new HashMap<String, String>();
-		}
-
-		String currentParam = fPadParams.get(name);
-		if (currentParam == null || currentParam != value) {
-			fPadParams.put(name, value);
-			// fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
-		}
-	}
-
-	public void setPadType(String padType) {
-		if (fPadType != padType) {
-			fPadType = padType;
-			// fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
-		}
-	}
-
-	public void setValue(String value) {
-		if (fValue != value) {
-			fValue = value;
-			fDocumentAccess.requestAccessAction(DocumentAccess.WRITE, this);
-		}
-	}
-
-	public void updateSilently(Map<String, String> params, String value) {
-		fPadParams = params;
-		fValue = value;
-	}
-
-	/* Getters */
-
-	public Map<String, String> getPadParams() {
-		if (fPadParams == null) {
-			fPadParams = new HashMap<String, String>();
-		}
-		return fPadParams;
-	}
-
 	public String getContainerID() {
-		return getPadParams().get("id");
-	}
-
-	public String getPadType() {
-		return fPadType;
-	}
-
-	public String getValue() {
-		return fValue;
-	}
-
-	public String getTextContent() {
-		return fTextContent;
+		return getPadPart().getId();
 	}
 
 	public Position getPosition() {
@@ -119,6 +52,14 @@ public class Container {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+	
+	public PadDocumentPart getPadPart() {
+		return padPart;
+	}
+
+	public void setPadPart(PadDocumentPart padPart) {
+		this.padPart = padPart;
 	}
 
 	public String getContainerManagerID() {
@@ -157,7 +98,6 @@ public class Container {
 	Container(Position position, String containerID,
 			ContainerManager containerManager) {
 		fPosition = position;
-		setContainerID(containerID);
 
 		fContainerManager = containerManager;
 		fDocumentAccess = containerManager.getDocumentAccess();
@@ -169,13 +109,8 @@ public class Container {
 		initListeners();
 	}
 
-	public Container(Position position, String type,
-			Map<String, String> params, String value,
-			ContainerManager containerManager) {
+	public Container(Position position, ContainerManager containerManager) {
 		fPosition = position;
-		fPadType = type;
-		fPadParams = params;
-		fValue = value;
 		fContainerManager = containerManager;
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fDocument = containerManager.getDocument();
@@ -214,10 +149,6 @@ public class Container {
 		return false;
 	}
 	
-	public void updateStyles() {
-		fContainerManager.getStyledTextManager().updateStyles(this);
-	}
-
 	/**
 	 * Sets container's SWT-composite visibility.
 	 */

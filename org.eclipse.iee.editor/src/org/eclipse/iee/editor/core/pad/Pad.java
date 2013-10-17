@@ -1,39 +1,32 @@
 package org.eclipse.iee.editor.core.pad;
 
 import java.util.Map;
-import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class Pad {
+public abstract class Pad<T extends PadDocumentPart> {
 
-	private static final Logger logger = Logger.getLogger(Pad.class);
+	private static final Logger logger = LoggerFactory.getLogger(Pad.class);
 
-	private String fContainerID;
 	private Container fContainer;
 
+	private T fDocumentPart;
+	
 	private Color fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 
-	public Pad() {
-		fContainerID = UUID.randomUUID().toString();
-	}
-
-	public void setContainerID(String containerID) {
-		fContainerID = containerID;
-	}
-
-	public String getContainerID() {
-		return fContainerID;
+	public Pad(T documentPart) {
+		fDocumentPart = documentPart;
 	}
 
 	public String getContainerManagerID() {
@@ -70,10 +63,6 @@ public abstract class Pad {
 		Assert.isLegal(!isContainerAttached(),
 				"Another container is already attached");
 
-		container.setContainerID(fContainerID);
-		if (!(this instanceof LoadingPad)) {
-			container.setPadType(getType());
-		}
 		container.updateDocument();
 
 		fContainer = container;
@@ -121,7 +110,6 @@ public abstract class Pad {
 
 	public void detachContainer() {
 		Assert.isLegal(isContainerAttached(), "No container attached");
-		Assert.isLegal(fContainerID.equals(fContainer.getContainerID()));
 
 		fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 		fContainer = null;
@@ -173,6 +161,14 @@ public abstract class Pad {
 		ContainerManager containerManager = c.getContainerManager();
 		containerManager.getUserInteractionManager().moveCaretTo(
 				c.getPosition().getOffset() + c.getPosition().getLength());
+	}
+	
+	public T getDocumentPart() {
+		return fDocumentPart;
+	}
+
+	public String getContainerID() {
+		return getDocumentPart().getId();
 	}
 
 }
