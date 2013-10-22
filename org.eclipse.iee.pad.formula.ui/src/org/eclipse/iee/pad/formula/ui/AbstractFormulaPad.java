@@ -302,7 +302,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 					switchToResultView();
 					moveCaretToContainerTail();
 					break;
-
 				case SWT.ESC:
 					switchToResultView();
 					moveCaretToContainerTail();
@@ -408,12 +407,13 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
 							fTexExpression = FormulaPart.translateToLatex(fDocument.get());
-							Image image = FormulaRenderer
-									.getFormulaImage(fTexExpression);
+							Image image = createImage(fTexExpression);
 							if (image == null) {
 								fTexExpression = FormulaPart.translateToLatex(fLastValidText);
-								image = FormulaRenderer
-										.getFormulaImage(fTexExpression);
+								image = createImage(fTexExpression);
+							}
+							if (fHoverShell != null) {
+								fHoverShell.dispose();
 							}
 							fHoverShell = new HoverShell(fParent, image);
 						}
@@ -429,6 +429,10 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 		});
 	}
 
+	protected Image createImage(String formula) {
+		return FormulaRenderer.getFormulaImage(fTexExpression);
+	}
+	
 	@Override
 	public void createPartControl(final Composite parent) {
 

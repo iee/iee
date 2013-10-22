@@ -133,44 +133,9 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
 	}
 
-	public void addTextListener() {
-
-		fViewer.addTextListener(new ITextListener() {
-
-			@Override
-			public void textChanged(TextEvent event) {
-
-				if (fDocument.get() != "") {
-
-					validateInput();
-
-					if (fHoverShell != null) {
-						fHoverShell.dispose();
-						fHoverShell = null;
-					}
-					// hack to paint hover image after widgets size
-					// recalculation.
-					Display.getCurrent().asyncExec(new Runnable() {
-						public void run() {
-							fTexExpression = translateToLatex(fDocument.get());
-							Image image = FormulaRenderer
-									.getSymbolicImage(fTexExpression);
-							if (image == null) {
-								fTexExpression = translateToLatex(fLastValidText);
-								image = FormulaRenderer
-										.getSymbolicImage(fTexExpression);
-							}
-							fHoverShell = new HoverShell(fParent, image);
-						}
-					});
-					/* Resize fInputText */
-					Point size = fViewer.getControl().computeSize(SWT.DEFAULT,
-							SWT.DEFAULT, false);
-					fViewer.getControl().setSize(size);
-					fParent.pack();
-				}
-			}
-		});
+	@Override
+	protected Image createImage(String formula) {
+		return FormulaRenderer.getSymbolicImage(formula);
 	}
 	
 	@Override
