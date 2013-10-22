@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.ui.console
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6, JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.eclipse.iee.editor.jdt,
  org.eclipse.iee.editor.jdt.editors
 Bundle-ClassPath: lib/log4j-1.2.17.jar,

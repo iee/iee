@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.jdt.core,
  org.eclipse.jdt.launching
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6, JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.pde.core,
  org.eclipse.pde.core.build,
