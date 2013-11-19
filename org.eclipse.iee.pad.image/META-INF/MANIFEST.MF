@@ -7,8 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.iee.core.document,
  org.eclipse.iee.core.document.parser,
- org.eclipse.iee.core.document.writer,
- org.eclipse.ui
+ org.eclipse.iee.core.document.writer
 Export-Package: org.eclipse.iee.pad.image
 Service-Component: OSGI-INF/org.eclipse.iee.sample.image.ImagePadParser.xml,
  OSGI-INF/org.eclipse.iee.sample.image.ImagePadWriter.xml
