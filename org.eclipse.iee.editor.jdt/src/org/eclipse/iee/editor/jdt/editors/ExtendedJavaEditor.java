@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -51,12 +48,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.io.Closeables;
+import com.google.common.io.Files;
 
 @SuppressWarnings("restriction")
 public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		IPadEditor {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(ExtendedJavaEditor.class);
 
 	private static final String BUNDLE_FOR_CONSTRUCTED_KEYS = "org.eclipse.jdt.internal.ui.javaeditor.ConstructedJavaEditorMessages";//$NON-NLS-1$
@@ -272,7 +274,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 						} catch (FileNotFoundException e) {
 							throw new RuntimeException(e);
 						} finally {
-							IOUtils.closeQuietly(stream);
+							Closeables.closeQuietly(stream);
 						}
 						ImagePart imagePart = new ImagePart();
 						imagePart.setImagePath(imageName);
@@ -343,7 +345,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				.getStoragePath() + "image/" + imageSrc.getName());
 		if (!imageDst.exists()) {
 			try {
-				FileUtils.copyFile(imageSrc, imageDst);
+				Files.copy(imageSrc, imageDst);
 			} catch (IOException e1) {
 			}
 		}

@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.apache.log4j.Logger;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
@@ -31,13 +30,15 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
 
 public class JavaTranslator {
 
-	private static final Logger logger = Logger.getLogger(JavaTranslator.class);
+	private static final Logger logger = LoggerFactory.getLogger(JavaTranslator.class);
 
 	public enum VariableType {
 		INT, DOUBLE, MATRIX, OTHER
@@ -114,7 +115,7 @@ public class JavaTranslator {
 			logger.debug("funcDef DeterminedFunctionVariables: "
 					+ fDeterminedFunctionVariables.toString());
 
-			STGroup group = new STGroupDir("/templates");
+			STGroup group = createSTGroup();
 			ST template = group.getInstanceOf("function");
 			template.add("name", name);
 			template.add("params", fDeterminedFunctionParams);
@@ -258,7 +259,7 @@ public class JavaTranslator {
 			if (new_.isEmpty())
 				isFunctionClass = false;
 
-			STGroup group = new STGroupDir("/templates");
+			STGroup group = createSTGroup();
 			ST template = group.getInstanceOf("functionCall");
 			template.add("new", new_);
 			template.add("name", name_);
@@ -350,7 +351,7 @@ public class JavaTranslator {
 			if (ctx.name.getText().matches("Sqrt")) {
 				function = "Math.sqrt(" + value + ")";
 			} else {
-				STGroup group = new STGroupDir("/templates");
+				STGroup group = createSTGroup();
 				ST template = group.getInstanceOf("anonymousFunction");
 				template.add("param", params.get(0));
 				template.add("value", value);
@@ -786,7 +787,7 @@ public class JavaTranslator {
 			}
 
 			logger.debug("Type:" + varType.toString());
-			STGroup group = new STGroupDir("/templates");
+			STGroup group = createSTGroup();
 
 			if (varType != VariableType.MATRIX) {
 
@@ -819,6 +820,17 @@ public class JavaTranslator {
 			}
 		} else {
 			return "";
+		}
+	}
+
+	private static STGroup createSTGroup() {
+		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+		try {
+			Thread.currentThread().setContextClassLoader(JavaTranslator.class.getClassLoader());
+			STGroup group = new STGroupDir("/templates");
+			return group;
+		} finally {
+			Thread.currentThread().setContextClassLoader(oldCL);
 		}
 	}
 

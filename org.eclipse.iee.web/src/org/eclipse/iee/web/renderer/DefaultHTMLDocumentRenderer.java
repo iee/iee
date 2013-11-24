@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.iee.core.document.DirectiveBlock;
 import org.eclipse.iee.core.document.Document;
 import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.TextDocumentPart;
+
+import com.google.common.html.HtmlEscapers;
 
 public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 
@@ -69,7 +70,7 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 			if ("Ws".equals(type)) {
 				writer.write(((TextDocumentPart) documentPart).getText());
 			} else {
-				writer.append("<span class = '").append(type.toLowerCase()).append("' >").append(StringEscapeUtils.escapeHtml4(((TextDocumentPart) documentPart).getText())).append("</span>");
+				writer.append("<span class = '").append(type.toLowerCase()).append("' >").append(HtmlEscapers.htmlEscaper().escape(((TextDocumentPart) documentPart).getText())).append("</span>");
 			}
 		} else if (documentPart instanceof DirectiveBlock) {
 			String directive = ((DirectiveBlock) documentPart).getDirective();

@@ -12,11 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: lib/xstream-1.4.2.jar,
- lib/perf4j-0.9.16.jar,
- .,
- lib/log4j-1.2.17.jar,
- lib/commons-io-2.4.jar
+Bundle-ClassPath: lib/perf4j-0.9.16.jar,
+ .
 Export-Package: org.eclipse.iee.editor;
   uses:="org.eclipse.jface.resource,
    org.eclipse.iee.editor.core.storage,
@@ -50,6 +47,8 @@ Export-Package: org.eclipse.iee.editor;
    org.eclipse.swt.widgets,
    org.eclipse.ui.editors.text"
 Import-Package: com.google.common.base,
+ com.google.common.io;version="15.0.0",
+ org.apache.commons.io.monitor;version="2.0.1",
  org.eclipse.core.expressions,
  org.eclipse.iee.core,
  org.eclipse.iee.core.document,

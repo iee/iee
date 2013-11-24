@@ -8,7 +8,6 @@
 		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../org.eclipse.iee.parent/pom.xml</relativePath>
 	</parent>
-	<groupId>org.eclipse.iee</groupId>
 	<artifactId>org.eclipse.iee.pad.image.ui</artifactId>
 
 	<packaging>eclipse-plugin</packaging>

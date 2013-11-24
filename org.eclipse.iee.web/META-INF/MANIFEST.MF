@@ -5,8 +5,13 @@ Bundle-SymbolicName: org.eclipse.iee.web;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: javax.servlet,
+Import-Package: com.google.common.base;version="15.0.0",
+ com.google.common.cache;version="15.0.0",
+ com.google.common.escape;version="15.0.0",
+ com.google.common.html;version="15.0.0",
+ javax.servlet,
  javax.servlet.http,
+ org.apache.commons.io;version="2.0.1",
  org.eclipse.core.resources,
  org.eclipse.iee.core,
  org.eclipse.iee.core.document,
@@ -16,13 +21,16 @@ Import-Package: javax.servlet,
  org.eclipse.iee.pad.graph.model,
  org.eclipse.iee.pad.graph.utils,
  org.eclipse.iee.pad.image,
- org.eclipse.iee.pad.text
-Bundle-ClassPath: lib/commons-io-2.4.jar,
- .,
- lib/jlatexmath-embedded-fop-1.0.2.jar,
- lib/jfreechart-1.0.13.jar,
- lib/guava-14.0.1.jar,
- lib/commons-lang3-3.1.jar,
- lib/jcommon-1.0.16.jar
+ org.eclipse.iee.pad.text,
+ org.jfree.chart,
+ org.jfree.chart.axis,
+ org.jfree.chart.plot,
+ org.jfree.chart.renderer.xy,
+ org.jfree.data.general,
+ org.jfree.data.xy,
+ org.jfree.ui,
+ org.jfree.util
+Bundle-ClassPath: .,
+ lib/jlatexmath-embedded-fop-1.0.2.jar
 Export-Package: org.eclipse.iee.web.renderer,
  org.eclipse.iee.web.servlet

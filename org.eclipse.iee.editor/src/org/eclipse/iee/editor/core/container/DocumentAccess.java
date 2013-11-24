@@ -3,7 +3,6 @@ package org.eclipse.iee.editor.core.container;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Logger;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
 import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
@@ -12,15 +11,15 @@ import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.internal.texteditor.SWTUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Throwables;
 
 public class DocumentAccess {
 
-	private static final Logger logger = Logger.getLogger(DocumentAccess.class);
+	private static final Logger logger = LoggerFactory.getLogger(DocumentAccess.class);
 
 	/* Access actions IDs */
 	static final int WRITE = 0;

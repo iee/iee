@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001 XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.iee</groupId>
+		<artifactId>org.eclipse.iee.parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../org.eclipse.iee.parent/pom.xml</relativePath>
+	</parent>
+	<artifactId>org.eclipse.iee.p2-repo</artifactId>
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.reficio</groupId>
+				<artifactId>p2-maven-plugin</artifactId>
+				<version>1.0.3-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>default-cli</id>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<id>org.apache.commons:commons-lang3:3.1</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>com.google.guava:guava:15.0</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>org.antlr:antlr4-runtime:4.0</id>
+									<source>true</source>
+									<excludes>
+										<exclude>org.abego.treelayout:org.abego.treelayout.core:</exclude>
+									</excludes>
+								</artifact>
+								<artifact>
+									<id>org.antlr:ST4:4.0.7</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>com.google.code.gson:gson:2.2.4</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>org.jfree:jfreechart:1.0.15</id>
+									<source>true</source>
+								</artifact>			
+								<artifact>
+									<id>org.jsoup:jsoup:1.7.2</id>
+									<source>true</source>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.5.v20120716</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<webAppSourceDirectory>${basedir}/target/repository/</webAppSourceDirectory>
+					<webApp>
+						<contextPath>/site</contextPath>
+					</webApp>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>reficio</id>
+			<url>http://repo.reficio.org/maven/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

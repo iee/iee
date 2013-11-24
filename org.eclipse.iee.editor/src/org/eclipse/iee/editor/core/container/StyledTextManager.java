@@ -3,7 +3,6 @@ package org.eclipse.iee.editor.core.container;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
@@ -15,10 +14,12 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StyledTextManager {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(StyledTextManager.class);
 
 	/** left pad margin is necessary to show carret */

@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.core.HandlerManager;
@@ -25,14 +22,15 @@ import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
-import org.eclipse.iee.editor.core.pad.common.UnknownPart;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PadManager extends EventManager {
 
-	private static final Logger logger = Logger.getLogger(PadManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(PadManager.class);
 
 	/* ContainerManagers */
 

@@ -6,6 +6,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,18 +19,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Throwables;
 
 public class FileMessager extends EventManager {
 
-	private static final Logger logger = Logger.getLogger(FileMessager.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileMessager.class);
 
 	private Map<String, FileAlterationObserver> fObservers;
 
@@ -176,7 +177,7 @@ public class FileMessager extends EventManager {
 	protected void sendFileContent(File file) {
 		String line = null;
 		try {
-			line = FileUtils.readFileToString(file);
+			line = com.google.common.io.Files.toString(file, Charset.defaultCharset());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -3,24 +3,21 @@ package org.eclipse.iee.editor.sample;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.core.document.PadDocumentPart;
-import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
-import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
+
+import com.google.common.io.Files;
 
 public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 
@@ -164,7 +161,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 				.getStoragePath() + "image/" + imageSrc.getName());
 		if (!imageDst.exists()) {
 			try {
-				FileUtils.copyFile(imageSrc, imageDst);
+				Files.copy(imageSrc, imageDst);
 			} catch (IOException e1) {
 			}
 		}

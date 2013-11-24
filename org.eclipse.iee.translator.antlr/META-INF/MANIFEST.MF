@@ -11,7 +11,9 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator
-Bundle-ClassPath: .,
- lib/log4j-1.2.17.jar,
- lib/antlr-4.0-complete.jar,
- lib/ST-4.0.7.jar
+Import-Package: org.antlr.v4.runtime,
+ org.antlr.v4.runtime.atn,
+ org.antlr.v4.runtime.dfa,
+ org.antlr.v4.runtime.tree,
+ org.slf4j;version="1.7.2",
+ org.stringtemplate.v4

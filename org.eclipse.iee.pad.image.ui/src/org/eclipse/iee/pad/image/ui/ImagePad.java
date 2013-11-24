@@ -1,13 +1,8 @@
 package org.eclipse.iee.pad.image.ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.swt.SWT;
@@ -17,8 +12,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
@@ -27,6 +20,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.io.Files;
 
 public class ImagePad extends Pad<ImagePart> {
 
@@ -257,7 +252,7 @@ public class ImagePad extends Pad<ImagePart> {
 	}
 
 	@Override
-	public Pad copy() {
+	public Pad<ImagePart> copy() {
 		return new ImagePad(getDocumentPart().copy());
 	}
 
@@ -300,7 +295,7 @@ public class ImagePad extends Pad<ImagePart> {
 				.getStoragePath() + "image/" + imageSrc.getName());
 		if (!imageDst.exists()) {
 			try {
-				FileUtils.copyFile(imageSrc, imageDst);
+				Files.copy(imageSrc, imageDst);
 			} catch (IOException e1) {
 			}
 		}

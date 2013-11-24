@@ -8,7 +8,6 @@ import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.core.document.PadDocumentPart;
@@ -35,10 +34,12 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ContainerManager extends EventManager {
 
-	private static final Logger logger = Logger
+	private static final Logger logger = LoggerFactory
 			.getLogger(ContainerManager.class);
 
 	private final String fContainerManagerID;

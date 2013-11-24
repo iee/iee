@@ -3,7 +3,6 @@ package org.eclipse.iee.editor.core.utils.runtime.console;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.text.DocumentEvent;
@@ -14,10 +13,12 @@ import org.eclipse.ui.console.IConsoleListener;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.IOConsole;
 import org.eclipse.ui.console.MessageConsole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConsoleMessager extends EventManager {
 
-	private static final Logger logger = Logger.getLogger(ConsoleMessager.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConsoleMessager.class);
 	
 	private static ConsoleMessager fConsoleMessager = new ConsoleMessager();
 	public static ConsoleMessager getInstance() {

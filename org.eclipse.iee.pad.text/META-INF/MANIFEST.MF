@@ -9,8 +9,6 @@ Import-Package: org.eclipse.core.expressions,
  org.eclipse.iee.core.document.parser,
  org.eclipse.iee.core.document.writer,
  org.slf4j
-Bundle-ClassPath: lib/jsoup-1.6.3.jar,
- .
 Export-Package: org.eclipse.iee.pad.text
 Service-Component: OSGI-INF/org.eclipse.iee.sample.text.TextPadParser.xml,
  OSGI-INF/org.eclipse.iee.sample.text.TextPadWriter.xml
