@@ -12,6 +12,14 @@
             id="org.eclipse.iee.editor.jdt.editors.ExtendedJavaEditor"
             name="IEE Editor">
       </editor>
+      <editor
+            class="org.eclipse.iee.editor.jdt.editors.TestJavaEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="java"
+            icon="icons/iee_logo.png"
+            id="org.eclipse.iee.editor.jdt.editors.TestJavaEditor"
+            name="Test IEE Editor">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
