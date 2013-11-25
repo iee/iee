@@ -3,9 +3,11 @@ package org.eclipse.iee.editor.core.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextPresentationListener;
 import org.eclipse.jface.text.ITextViewerExtension4;
+import org.eclipse.jface.text.JFaceTextUtil;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -16,6 +18,8 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GlyphMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Throwables;
 
 public class StyledTextManager {
 
@@ -68,28 +72,20 @@ public class StyledTextManager {
 	}
 
 	public void updateContainerPresentations() {
-		int topLineIndex = fSourceViewer.getTopIndex();
-		if (topLineIndex > 0) {
-			topLineIndex--;
-		}
+		int topLineIndex = JFaceTextUtil.getPartialTopIndex(fStyledText);
 
-		int bottomLineIndex = fSourceViewer.getBottomIndex();
-		if (bottomLineIndex < fStyledText.getLineCount() - 1) {
-			bottomLineIndex++;
-		}
-
-		int topVisibleOffset = fStyledText.getOffsetAtLine(topLineIndex);
-		int bottomVisibleOffset = fStyledText.getOffsetAtLine(bottomLineIndex)
-				+ fStyledText.getLine(bottomLineIndex).length();
-
+		int bottomLineIndex = JFaceTextUtil.getPartialBottomIndex(fStyledText);
+		
 		for (Container c : fContainerManager.getContainers()) {
-			boolean isVisible = false;
-			if (c.getPosition().getOffset() >= topVisibleOffset) {
-				isVisible = true;
+			int offset = c.getPosition().getOffset();
+			int line;
+			try {
+				line = fSourceViewer.getDocument().getLineOfOffset(offset);
+			} catch (BadLocationException e) {
+				throw Throwables.propagate(e);
 			}
-			if (c.getPosition().getOffset() + c.getPosition().getLength() > bottomVisibleOffset) {
-				isVisible = false;
-			}
+			int widgetLine = JFaceTextUtil.modelLineToWidgetLine(fSourceViewer, line);
+			boolean isVisible = widgetLine != -1 && widgetLine >= topLineIndex && widgetLine <= bottomLineIndex;
 			c.setVisible(isVisible);
 			if (isVisible) {
 				c.updatePresentation();
