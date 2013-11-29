@@ -1,5 +1,6 @@
 package org.eclipse.iee.pad.text;
 
+import java.awt.Color;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,8 @@ import org.eclipse.iee.pad.text.elements.Node;
 import org.eclipse.iee.pad.text.elements.NodeVisitor;
 import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
+
+import com.google.common.base.Strings;
 
 /**
  * {@link IPadWriter} implementation. Writes instance of text pad.
@@ -41,6 +44,16 @@ public class TextPadWriter implements IPadWriter<TextPart> {
 					}
 					if (span.getFontSize().isPresent()) {
 						sw.append("font-size:").append(String.valueOf(span.getFontSize().get())).append(';');
+					}
+					if (span.getFgColor().isPresent()) {
+						String hexColor = Integer.toHexString(span.getFgColor().get().getRGB());
+						hexColor = hexColor.substring(2, hexColor.length());
+						sw.append("color:#").append(hexColor).append(';');
+					}
+					if (span.getBgColor().isPresent()) {
+						String hexColor = Integer.toHexString(span.getBgColor().get().getRGB());
+						hexColor = hexColor.substring(2, hexColor.length());
+						sw.append("background-color:#").append(hexColor).append(';');
 					}
 					sw.append("'>");
 				} else if (node instanceof TextNode) {

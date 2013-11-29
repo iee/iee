@@ -1,5 +1,6 @@
 package org.eclipse.iee.pad.text;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Deque;
@@ -13,7 +14,9 @@ import org.eclipse.iee.pad.text.elements.TextNode;
 import org.jsoup.Jsoup;
 import org.jsoup.select.NodeVisitor;
 import org.w3c.css.sac.InputSource;
+import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSStyleDeclaration;
+import org.w3c.dom.css.RGBColor;
 
 import com.google.common.base.Strings;
 import com.steadystate.css.parser.CSSOMParser;
@@ -71,6 +74,24 @@ public class TextPadParser implements IPadParser {
 							}
 							if (!Strings.isNullOrEmpty(styleDecl.getPropertyValue("font-size"))) {
 								span.setFontSize(new Integer(styleDecl.getPropertyValue("font-size")));
+							}
+							if (!Strings.isNullOrEmpty(styleDecl.getPropertyValue("color"))) {
+								RGBColor rgbColorValue = ((CSSPrimitiveValue)styleDecl.getPropertyCSSValue("color")).getRGBColorValue();
+								Color fg = new Color(
+										(int) rgbColorValue.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER), 
+										(int) rgbColorValue.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER), 
+										(int) rgbColorValue.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER)
+										);
+								span.setFgColor(fg);
+							}
+							if (!Strings.isNullOrEmpty(styleDecl.getPropertyValue("background-color"))) {
+								RGBColor rgbColorValue = ((CSSPrimitiveValue)styleDecl.getPropertyCSSValue("background-color")).getRGBColorValue();
+								Color bg = new Color(
+										(int) rgbColorValue.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER), 
+										(int) rgbColorValue.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER), 
+										(int) rgbColorValue.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER)
+										);
+								span.setBgColor(bg);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.Pad;
@@ -14,7 +13,7 @@ import org.eclipse.iee.pad.text.elements.Node;
 import org.eclipse.iee.pad.text.elements.NodeVisitor;
 import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
-import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -25,8 +24,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -37,6 +34,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -50,8 +48,10 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FontDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 
 public class TextPad extends Pad<TextPart> {
 
@@ -64,6 +64,7 @@ public class TextPad extends Pad<TextPart> {
 	private boolean fTextChanged;
 
 	private Image iBold;
+	private Image iFont;
 	private Image iItalic;
 	private Image iUnderline;
 	private Image iStrikeout;
@@ -73,13 +74,15 @@ public class TextPad extends Pad<TextPart> {
 	private Image iTextForeground;
 	private Image iTextBackground;
 
-	private Font font, textFont;
-	MenuItem boldControl, italicControl;
+	private Font textFont;
+	
+	private MenuItem fontControl, boldControl, italicControl;
 	private Color textForeground, textBackground;
 	private int styleState;
 	static final int BOLD = SWT.BOLD;
 	static final int ITALIC = SWT.ITALIC;
 	static final int FONT_STYLE = BOLD | ITALIC;
+	static final int FONT = 1 << 3;
 	static final int FOREGROUND = 1 << 4;
 	static final int BACKGROUND = 1 << 5;
 	
@@ -120,18 +123,6 @@ public class TextPad extends Pad<TextPart> {
 			}
 		});
 
-		fViewer.getControl().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				getContainer().getContainerManager().getUserInteractionManager().deactivateContainer(getContainer());
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-		});
-
 		((StyledText)fViewer.getControl()).addModifyListener(new ModifyListener() {
 			
 			@Override
@@ -141,8 +132,6 @@ public class TextPad extends Pad<TextPart> {
 				
 			}
 		});
-
-		
 		
 		fViewer.addTextListener(new ITextListener() {
 
@@ -269,6 +258,42 @@ public class TextPad extends Pad<TextPart> {
 
 		new MenuItem (menu, SWT.SEPARATOR);
 		
+		fontControl = new MenuItem(menu, SWT.PUSH);
+		fontControl.setImage(iFont);
+		fontControl.setText("Font");
+		fontControl.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				StyledText textWidget = fViewer.getTextWidget();
+				Shell shell = textWidget.getShell();
+				FontDialog dlg = new FontDialog(shell);
+
+				if (textFont != null) {
+					dlg.setFontList(textFont.getFontData());
+				}
+				if (textForeground != null) {
+					dlg.setRGB(textForeground.getRGB());
+				}
+
+				if (dlg.open() != null) {
+					if (textFont != null) {
+						textFont.dispose();
+					}
+					if (textForeground != null)
+						textForeground.dispose();
+
+					textFont = new Font(shell.getDisplay(), dlg.getFontList());
+					setStyle(FONT);
+
+					RGB rgb = dlg.getRGB();
+					if (rgb != null) {
+						textForeground = new Color(shell.getDisplay(), rgb);
+						setStyle(FOREGROUND);
+					}
+				}
+				fParent.pack();
+			}
+		});
+		
 		boldControl = new MenuItem(menu, SWT.PUSH);
 		boldControl.setImage(iBold);
 		boldControl.setText("Bold");
@@ -370,6 +395,7 @@ public class TextPad extends Pad<TextPart> {
 	}
 	
 	void initResources() {
+		iFont= loadImage(Display.getDefault(), "font_big.ico"); 
 		iBold = loadImage(Display.getDefault(), "bold.ico"); 
 		iItalic = loadImage(Display.getDefault(), "italic.ico"); 
 		iUnderline = loadImage(Display.getDefault(), "underline.ico"); 
@@ -420,9 +446,9 @@ public class TextPad extends Pad<TextPart> {
 		
 		/* Create new style range */
 		StyleRange newRange = new StyleRange();
-//		if ((style & FONT) != 0) {
-//			newRange.font = textFont;
-//		}
+		if ((style & FONT) != 0) {
+			newRange.font = textFont;
+		}
 		if ((style & FONT_STYLE) != 0) {
 			newRange.fontStyle = style & FONT_STYLE;
 		}
@@ -459,6 +485,10 @@ public class TextPad extends Pad<TextPart> {
 			StyleRange mergedRange = new StyleRange(range);
 			//Note: fontStyle is not copied by the constructor
 			mergedRange.fontStyle = range.fontStyle;
+			
+			if ((style & FONT) != 0) {
+				mergedRange.font = textFont;
+			}
 			if ((style & FONT_STYLE) != 0) {
 				mergedRange.fontStyle =  range.fontStyle ^ newRange.fontStyle;
 			}
@@ -591,6 +621,17 @@ public class TextPad extends Pad<TextPart> {
 					Boolean bold = span.isBold().or(Boolean.FALSE);
 					Boolean italic = span.isItalic().or(Boolean.FALSE);
 					styleRange.fontStyle = 0xFF & ((bold ? SWT.BOLD : 0) | (italic ? SWT.ITALIC : 0));
+					StyledText textWidget = fViewer.getTextWidget();
+					Display display = textWidget.getDisplay();
+					styleRange.foreground = toSwtColor(display, span.getFgColor().or(java.awt.Color.BLACK));
+					styleRange.background = toSwtColor(display, span.getBgColor().or(java.awt.Color.WHITE));
+					if (span.getFont().isPresent()) {
+						FontData[] fontData = JFaceResources.getFontRegistry().getFontData(span.getFont().get());
+						if (span.getFontSize().isPresent()) {
+							fontData[0].setHeight(span.getFontSize().get());
+						}
+						styleRange.font = new Font(display, fontData);
+					}
 					srs.add(styleRange);
 					offset += length;
 					length = 0;
@@ -614,7 +655,7 @@ public class TextPad extends Pad<TextPart> {
 		
 		String text = document.get();
 		for (int i = 0; i < text.length(); i++) {
-			StringBuilder spanText = new StringBuilder(text.charAt(i)); 
+			StringBuilder spanText = new StringBuilder().append(text.charAt(i)); 
 			StyleRange styleRange = textWidget.getStyleRangeAtOffset(i);
 			while (i + 1 < text.length()
 					&& isSimilarTo(styleRange, textWidget.getStyleRangeAtOffset(i + 1))) {
@@ -628,6 +669,12 @@ public class TextPad extends Pad<TextPart> {
 				}
 				if ((styleRange.fontStyle & SWT.ITALIC) > 0) {
 					span.setItalic(true);
+				}
+				if (styleRange.foreground != null) {
+					span.setFgColor(toAwtColor(styleRange.foreground));
+				}
+				if (styleRange.background != null) {
+					span.setBgColor(toAwtColor(styleRange.background));
 				}
 				Font font = styleRange.font;
 				if (font != null) {
@@ -651,5 +698,29 @@ public class TextPad extends Pad<TextPart> {
 		}
 		return false;
 	}
+	
+    public static java.awt.Color toAwtColor(Color color) { 
+        return new java.awt.Color(color.getRed(), color.getGreen(),  
+                color.getBlue()); 
+    } 
+     
+    public static Color toSwtColor(Device device, java.awt.Paint paint) { 
+        java.awt.Color color; 
+        if (paint instanceof java.awt.Color) { 
+            color = (java.awt.Color) paint; 
+        } 
+        else { 
+            try { 
+                throw new Exception("only color is supported at present... "  
+                        + "setting paint to uniform black color" ); 
+            }  
+            catch (Exception e) { 
+                e.printStackTrace(); 
+                color = new java.awt.Color(0, 0, 0); 
+            } 
+        } 
+        return new org.eclipse.swt.graphics.Color(device, 
+                color.getRed(), color.getGreen(), color.getBlue()); 
+    } 
 	
 }

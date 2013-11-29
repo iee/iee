@@ -42,6 +42,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.ImageTransfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Composite;
@@ -176,6 +178,18 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			e.printStackTrace();
 		}
 
+		getSourceViewer().getTextWidget().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				getContainerManager().getUserInteractionManager().activateContainer(null);
+			}
+		});
+		
 	}
 
 	@Override
