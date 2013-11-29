@@ -34,9 +34,12 @@ public class UserInteractionManager {
 	public void moveCaretTo(int offset) {
 		setSelectedContainer(null);
 		fStyledText.setCaretOffset(offset);
-		fStyledText.forceFocus();
 	}
 
+	public void focusOnMainEditor() {
+		fStyledText.forceFocus();
+	}
+	
 	public void updateCaretSelection() {
 	}
 
@@ -69,6 +72,7 @@ public class UserInteractionManager {
 
 	public void deactivateContainer(Container container) {
 		activateContainer(null);
+		fStyledText.forceFocus();
 	}
 
 	protected void initListeners() {

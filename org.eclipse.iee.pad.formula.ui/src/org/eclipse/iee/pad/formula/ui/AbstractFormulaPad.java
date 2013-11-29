@@ -224,6 +224,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 	private void switchToResultView() {
 		processInput();
 		moveCaretToCurrentPad();
+		focusOnMainEditor();
 
 		if (fTranslatingExpression != "")
 			toggleFormulaImage();
@@ -308,9 +309,11 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 					break;
 				case SWT.ARROW_UP:
 					moveCaretToCurrentPad();
+					focusOnMainEditor();
 					break;
 				case SWT.ARROW_DOWN:
 					moveCaretToCurrentPad();
+					focusOnMainEditor();
 					break;
 				case SWT.ARROW_LEFT:
 					if (fCaretOffset == 0 && fPreviousCaretOffset == 0)
@@ -323,8 +326,8 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 					int expressionLength = fOriginalExpression.length();
 					if (fCaretOffset == expressionLength
 							&& fPreviousCaretOffset == expressionLength) {
-						switchToResultView();
 						moveCaretToContainerTail();
+						switchToResultView();
 					} else
 						fPreviousCaretOffset = fCaretOffset;
 					break;

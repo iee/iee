@@ -53,6 +53,10 @@
 									<id>org.jsoup:jsoup:1.7.2</id>
 									<source>true</source>
 								</artifact>
+								<artifact>
+									<id>net.sourceforge.cssparser:cssparser:0.9.11</id>
+									<source>true</source>
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>

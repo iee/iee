@@ -57,6 +57,11 @@ public abstract class Pad<T extends PadDocumentPart> {
 		fContainer.getContainerManager().getUserInteractionManager()
 				.moveCaretTo(containerOffset);
 	}
+	
+	public void focusOnMainEditor() {
+		fContainer.getContainerManager().getUserInteractionManager()
+				.focusOnMainEditor();
+	}
 
 	public void attachContainer(Container container) {
 		Assert.isNotNull(container);

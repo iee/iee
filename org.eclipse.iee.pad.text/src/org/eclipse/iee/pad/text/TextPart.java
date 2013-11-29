@@ -1,22 +1,26 @@
 package org.eclipse.iee.pad.text;
 
 import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.pad.text.elements.Node;
 
 public class TextPart extends PadDocumentPart {
 
-	private String fText;
+	private Node root;
 
-	public String getText() {
-		return fText != null ? fText : "";
+	public Node getRoot() {
+		if (root == null) {
+			return new Node();
+		}
+		return root;
 	}
 
-	public void setText(String text) {
-		fText = text;
+	public void setRoot(Node root) {
+		this.root = root;
 	}
 
 	public TextPart copy() {
 		TextPart clone = new TextPart();
-		clone.setText(getText());
+		clone.setRoot(getRoot());
 		return clone;
 	}
 

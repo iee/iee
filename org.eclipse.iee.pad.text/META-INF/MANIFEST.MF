@@ -4,12 +4,19 @@ Bundle-Name: TextPad
 Bundle-SymbolicName: org.eclipse.iee.pad.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.eclipse.core.expressions,
+Import-Package: com.google.common.base;version="15.0.0",
+ com.steadystate.css.parser,
+ org.eclipse.core.expressions,
  org.eclipse.iee.core.document,
  org.eclipse.iee.core.document.parser,
  org.eclipse.iee.core.document.writer,
- org.slf4j
-Export-Package: org.eclipse.iee.pad.text
+ org.jsoup;version="1.7.2",
+ org.jsoup.nodes;version="1.7.2",
+ org.jsoup.select;version="1.7.2",
+ org.slf4j,
+ org.w3c.css.sac;version="1.3.0"
+Export-Package: org.eclipse.iee.pad.text,
+ org.eclipse.iee.pad.text.elements
 Service-Component: OSGI-INF/org.eclipse.iee.sample.text.TextPadParser.xml,
  OSGI-INF/org.eclipse.iee.sample.text.TextPadWriter.xml
 Bundle-ActivationPolicy: lazy

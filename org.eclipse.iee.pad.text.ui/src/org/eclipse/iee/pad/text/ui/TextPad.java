@@ -2,10 +2,19 @@ package org.eclipse.iee.pad.text.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.text.TextPart;
+import org.eclipse.iee.pad.text.elements.Node;
+import org.eclipse.iee.pad.text.elements.NodeVisitor;
+import org.eclipse.iee.pad.text.elements.Span;
+import org.eclipse.iee.pad.text.elements.TextNode;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -88,7 +97,8 @@ public class TextPad extends Pad<TextPart> {
 
 	public void toggleViewMode() {
 //		fViewer.setEditable(false);
-
+		getContainer().updateDocument();
+		focusOnMainEditor();
 		fParent.pack();
 	}
 
@@ -141,7 +151,7 @@ public class TextPad extends Pad<TextPart> {
 				System.out.println(event);
 				fTextChanged = true;
 				String newText = fDocument.get();
-				getDocumentPart().setText(newText);
+				getDocumentPart().setRoot(toRoot(fDocument));
 				getContainer().updateDocument();
 				if (newText != "") {
 					/* Resize fInputText */
@@ -209,8 +219,9 @@ public class TextPad extends Pad<TextPart> {
 
 		fViewer = new TextViewer(fInputView, SWT.MULTI);
 		fViewer.getControl().setSize(50, 100);
-		fDocument = new Document(getDocumentPart().getText());
+		fDocument = new Document(rootToString(getDocumentPart().getRoot()));
 		fViewer.setDocument(fDocument);
+		fViewer.getTextWidget().setStyleRanges(rootToStyleRanges(getDocumentPart().getRoot()));
 		fTextChanged = false;
 
 		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
@@ -540,8 +551,105 @@ public class TextPad extends Pad<TextPart> {
 	
 	@Override
 	public String getTex() {
-		return this.getDocumentPart().getText().replaceAll(" ", " \\\\ ")
+		return rootToString(this.getDocumentPart().getRoot()).replaceAll(" ", " \\\\ ")
 				.replaceAll("\r\n", " \\\\\\\\ ")
 				.replaceAll("\t", " \\\\quad ");
 	}
+	
+	public String rootToString(Node root) {
+		final StringWriter sw = new StringWriter();
+		root.traverse(new NodeVisitor() {
+			
+			@Override
+			public void tail(Node node, int depth) {
+			}
+			
+			@Override
+			public void head(Node node, int depth) {
+				if (node instanceof TextNode) {
+					sw.append(((TextNode) node).getText());
+				}
+			}
+		});
+		
+		return sw.toString();
+	}
+	
+	public StyleRange[] rootToStyleRanges(Node root) {
+		final List<StyleRange> srs = new ArrayList<>();
+		root.traverse(new NodeVisitor() {
+			private int offset = 0;
+			private int length = 0;
+			
+			@Override
+			public void tail(Node node, int depth) {
+				if (node instanceof Span) {
+					Span span = (Span) node;
+					StyleRange styleRange = new StyleRange();
+					styleRange.start = offset;
+					styleRange.length = length;
+					Boolean bold = span.isBold().or(Boolean.FALSE);
+					Boolean italic = span.isItalic().or(Boolean.FALSE);
+					styleRange.fontStyle = 0xFF & ((bold ? SWT.BOLD : 0) | (italic ? SWT.ITALIC : 0));
+					srs.add(styleRange);
+					offset += length;
+					length = 0;
+				}
+			}
+			
+			@Override
+			public void head(Node node, int depth) {
+				if (node instanceof TextNode) {
+					length = ((TextNode) node).getText().length();
+				}
+			}
+		});
+		
+		return (StyleRange[]) srs.toArray(new StyleRange[srs.size()]);
+	}
+	
+	public Node toRoot(Document document) {
+		Node root = new Node();
+		StyledText textWidget = fViewer.getTextWidget();
+		
+		String text = document.get();
+		for (int i = 0; i < text.length(); i++) {
+			StringBuilder spanText = new StringBuilder(text.charAt(i)); 
+			StyleRange styleRange = textWidget.getStyleRangeAtOffset(i);
+			while (i + 1 < text.length()
+					&& isSimilarTo(styleRange, textWidget.getStyleRangeAtOffset(i + 1))) {
+				i++;
+				spanText.append(text.charAt(i));
+			}
+			Span span = new Span();
+			if (styleRange != null) {
+				if ((styleRange.fontStyle & SWT.BOLD) > 0) {
+					span.setBold(true);
+				}
+				if ((styleRange.fontStyle & SWT.ITALIC) > 0) {
+					span.setItalic(true);
+				}
+				Font font = styleRange.font;
+				if (font != null) {
+					span.setFont(font.getFontData()[0].getName());
+					span.setFontSize(font.getFontData()[0].getHeight());
+				}
+			}
+			span.appendChild(new TextNode().setText(spanText.toString()));
+			root.appendChild(span);
+		}
+		return root;
+	}
+
+	private boolean isSimilarTo(StyleRange sr1, StyleRange sr2) {
+		if (sr1 == null && sr2 == null) {
+			return true;
+		} else if (sr1 == sr2) {
+			return true;
+		} else if (sr1 != null && sr2 != null && sr1.similarTo(sr2)) {
+			return true;
+		}
+		return false;
+	}
+	
 }
