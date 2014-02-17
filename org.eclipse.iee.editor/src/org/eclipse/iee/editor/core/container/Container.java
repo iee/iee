@@ -3,7 +3,10 @@ package org.eclipse.iee.editor.core.container;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
@@ -28,7 +31,7 @@ public class Container {
 	private ContainerManager fContainerManager;
 	private DocumentAccess fDocumentAccess;
 	protected IDocument fDocument;
-	private StyledText fStyledText;
+	private ISourceViewer fSourceViewer;
 
 	/* Setters */
 
@@ -102,9 +105,9 @@ public class Container {
 		fContainerManager = containerManager;
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fDocument = containerManager.getDocument();
-		fStyledText = containerManager.getStyledText();
+		fSourceViewer = containerManager.getSourceViewer();
 
-		fComposite = new Composite(fStyledText, SWT.NONE);
+		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
 
 		initListeners();
 	}
@@ -114,9 +117,9 @@ public class Container {
 		fContainerManager = containerManager;
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fDocument = containerManager.getDocument();
-		fStyledText = containerManager.getStyledText();
+		fSourceViewer = containerManager.getSourceViewer();
 
-		fComposite = new Composite(fStyledText, SWT.NONE);
+		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
 
 		initListeners();
 	}
@@ -135,8 +138,11 @@ public class Container {
 	boolean updatePresentation() {
 		// logger.debug("Updated container's position");
 
-		Point point = fStyledText.getLocationAtOffset(fPosition.getOffset());
-		int height = fStyledText.getLineHeight(fPosition.getOffset());
+		ITextViewerExtension5 ext5 = (ITextViewerExtension5) fSourceViewer;
+		int offset = ext5.modelOffset2WidgetOffset(fPosition.getOffset());
+		StyledText textWidget = fSourceViewer.getTextWidget();
+		Point point = textWidget.getLocationAtOffset(offset);
+		int height = textWidget.getLineHeight(offset);
 		Point gabarit = fComposite.getSize();
 		int heightOffset = height - gabarit.y;
 		Rectangle newBounds = new Rectangle(point.x
@@ -192,7 +198,7 @@ public class Container {
 	private void recreateComposite() {
 		releaseListeners();
 		fComposite.dispose();
-		fComposite = new Composite(fStyledText, SWT.NONE);
+		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
 		setListeners();
 	}
 

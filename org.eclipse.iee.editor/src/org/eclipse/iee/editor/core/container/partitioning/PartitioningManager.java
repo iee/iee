@@ -36,4 +36,11 @@ public class PartitioningManager {
 			
 		fDocumentPartitioner.connect(fDocument);
 	}
+
+	public void dispose() {
+		((IDocumentExtension3) fDocument).setDocumentPartitioner(
+				PartitioningManager.PARTITIONING_ID, null);
+		fDocumentPartitioner.disconnect();
+		fDocumentPartitioner = null;
+	}
 }

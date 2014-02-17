@@ -1,11 +1,12 @@
 package org.eclipse.iee.editor.core.container;
 
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.ST;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -15,7 +16,7 @@ import org.eclipse.swt.graphics.Point;
 
 public class UserInteractionManager {
 
-	private final StyledText fStyledText;
+	private final ISourceViewer fSourceViewer;
 	private final ContainerManager fContainerManager;
 
 	private Container fSelectedContainer;
@@ -24,7 +25,7 @@ public class UserInteractionManager {
 
 	public UserInteractionManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
-		fStyledText = containerManager.getStyledText();
+		fSourceViewer = containerManager.getSourceViewer();
 
 		fSelectedContainer = null;
 
@@ -33,11 +34,16 @@ public class UserInteractionManager {
 
 	public void moveCaretTo(int offset) {
 		setSelectedContainer(null);
-		fStyledText.setCaretOffset(offset);
+		ITextViewerExtension5 ext5 = getExt5();
+		fSourceViewer.getTextWidget().setCaretOffset(ext5.modelOffset2WidgetOffset(offset));
+	}
+
+	private ITextViewerExtension5 getExt5() {
+		return (ITextViewerExtension5) fSourceViewer;
 	}
 
 	public void focusOnMainEditor() {
-		fStyledText.forceFocus();
+		fSourceViewer.getTextWidget().forceFocus();
 	}
 	
 	public void updateCaretSelection() {
@@ -72,21 +78,23 @@ public class UserInteractionManager {
 
 	public void deactivateContainer(Container container) {
 		activateContainer(null);
-		fStyledText.forceFocus();
+		fSourceViewer.getTextWidget().forceFocus();
 	}
 
 	protected void initListeners() {
 		/* 1) Disallow modification within Container's text region */
-		fStyledText.addVerifyListener(new VerifyListener() {
+		fSourceViewer.getTextWidget().addVerifyListener(new VerifyListener() {
 			@Override
 			public void verifyText(VerifyEvent e) {
+				int start = getExt5().widgetOffset2ModelOffset(e.start);
+				int end = getExt5().widgetOffset2ModelOffset(e.end);
 				Container atStart = fContainerManager
-						.getContainerHavingOffset(e.start);
+						.getContainerHavingOffset(start);
 				Container atEnd = fContainerManager
-						.getContainerHavingOffset(e.end);
+						.getContainerHavingOffset(end);
 
 				/* Text replaced */
-				if ((atStart != null && e.start != atStart.getPosition()
+				if ((atStart != null && start != atStart.getPosition()
 						.getOffset())
 						|| (atEnd != null && e.end != atEnd.getPosition()
 								.getOffset())) {
@@ -99,10 +107,10 @@ public class UserInteractionManager {
 			}
 		});
 
-		fStyledText.addVerifyKeyListener(new VerifyKeyListener() {
+		fSourceViewer.getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {
 			@Override
 			public void verifyKey(VerifyEvent event) {
-				int action = fStyledText.getKeyBinding(event.keyCode
+				int action = fSourceViewer.getTextWidget().getKeyBinding(event.keyCode
 						| event.stateMask);
 				if (action == SWT.NULL) {
 					if (event.character == SWT.DEL) {
@@ -110,12 +118,14 @@ public class UserInteractionManager {
 					}
 				}
 				if (action != SWT.NULL) {
-					int caretOffset = fStyledText.getCaretOffset();
+					int caretOffset = getExt5().widgetOffset2ModelOffset(fSourceViewer.getTextWidget().getCaretOffset());
 					switch (action) {
 					case ST.COLUMN_PREVIOUS:
+					case ST.SELECT_COLUMN_PREVIOUS:
 						event.doit = caretPositionChange(caretOffset, false);
 						break;
 					case ST.COLUMN_NEXT:
+					case ST.SELECT_COLUMN_NEXT:	
 						event.doit = caretPositionChange(caretOffset, true);
 						break;
 					case ST.DELETE_NEXT:
@@ -135,14 +145,14 @@ public class UserInteractionManager {
 			}
 		});
 
-		fStyledText.addKeyListener(new KeyListener() {
+		fSourceViewer.getTextWidget().addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				/*
 				 * CTRL + ALT causes pad activation
 				 */
 				if ((e.stateMask & SWT.CTRL) != 0 && e.keyCode == SWT.ALT) {
-					int caretOffset = fStyledText.getCaretOffset();
+					int caretOffset = getExt5().widgetOffset2ModelOffset(fSourceViewer.getTextWidget().getCaretOffset());
 					Container container = fContainerManager
 							.getContainerHavingOffset(caretOffset);
 					if (container != null
@@ -170,19 +180,20 @@ public class UserInteractionManager {
 		 * If caret is inside Container's text region, moving it to the end of
 		 * line
 		 */
-		fStyledText.addCaretListener(new CaretListener() {
+		fSourceViewer.getTextWidget().addCaretListener(new CaretListener() {
 			@Override
 			public void caretMoved(CaretEvent e) {
-				Point selection = fStyledText.getSelection();
-				if (selection.y - selection.x == 0) {
+				Point selection = fSourceViewer.getSelectedRange();
+				if (selection.y == 0) {
+					int caretOffset = getExt5().widgetOffset2ModelOffset(e.caretOffset);
 					Container container = fContainerManager
-							.getContainerHavingOffset(e.caretOffset);
+							.getContainerHavingOffset(caretOffset);
 					if (container != null) {
 						Position position = container.getPosition();
-						if (e.caretOffset != position.getOffset()) {
+						if (caretOffset != position.getOffset()) {
 							/* Move caret to the Pad's border */
-							fStyledText.setCaretOffset(position.getOffset()
-									+ position.getLength());
+							fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
+									+ position.getLength()));
 							setSelectedContainer(null);
 						}
 					}
@@ -193,19 +204,19 @@ public class UserInteractionManager {
 	}
 
 	private boolean caretPositionChange(int x, boolean caretMovesForward) {
-		Point selection = fStyledText.getSelection();
-		if (selection.y - selection.x == 0) {
+		Point selection = fSourceViewer.getSelectedRange();
+		if (selection.y == 0) {
 			Container container = fContainerManager
 					.getContainerHavingOffset(caretMovesForward ? x : x - 1);
 			if (container != null) {
 				Position position = container.getPosition();
 				if (caretMovesForward) {
 					activateContainer(container);
-					fStyledText.setCaretOffset(position.getOffset()
-							+ position.getLength());
+					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
+							+ position.getLength()));
 				} else {
 					activateContainer(container);
-					fStyledText.setCaretOffset(position.getOffset());
+					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()));
 				}
 				return false;
 			}

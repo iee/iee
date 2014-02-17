@@ -31,11 +31,14 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Throwables;
 
 public class ContainerManager extends EventManager {
 
@@ -169,10 +172,16 @@ public class ContainerManager extends EventManager {
 		fState = State.READY;
 
 		initDocumentListener();
+		
+		List<Container> containers = parseContainersFromDocumentRegion(document, new Region(0, fDocument.getLength()));
+		for (Container container : containers) {
+			fContainers.add(container);
+		}
 	}
 
 	public void dispose() {
 		removeDocumentListener();
+		fPartitioningManager.dispose();
 	}
 
 	public Container createContainer(PadDocumentPart part, int offset) {
@@ -263,17 +272,13 @@ public class ContainerManager extends EventManager {
 			if (ignoreDocumentChanges) {
 				return;
 			}
-			try {
-				IRegion changedRegion = event.getChangedRegion(PartitioningManager.PARTITIONING_ID);
-				if (changedRegion!= null) { 
-					List<Container> containers = parseContainersFromDocumentRegion(fDocument, changedRegion);
-					for (Container container : containers) {
-						fContainers.add(container);
-						fireContainerCreated(container);
-					}
+			IRegion changedRegion = event.getChangedRegion(PartitioningManager.PARTITIONING_ID);
+			if (changedRegion!= null) { 
+				List<Container> containers = parseContainersFromDocumentRegion(fDocument, changedRegion);
+				for (Container container : containers) {
+					fContainers.add(container);
+					fireContainerCreated(container);
 				}
-			} catch (BadLocationException | BadPartitioningException e) {
-				e.printStackTrace();
 			}
 		}
 
@@ -320,47 +325,6 @@ public class ContainerManager extends EventManager {
 				// padsPositionsCalculationSW.stop();
 			}
 			logger.debug("documentChanged end ");
-		}
-
-		private List<Container> parseContainersFromDocumentRegion(IDocument document, IRegion region) 
-				throws BadLocationException, BadPartitioningException {
-			ITypedRegion[] regions = ((IDocumentExtension3) document)
-					.computePartitioning(PartitioningManager.PARTITIONING_ID, region.getOffset(), region.getLength(), false);
-			List<Container> result = new ArrayList<>();
-			for (ITypedRegion typedRegion : regions) {
-				if (typedRegion.getType().equals(
-						PartitioningManager.CONTENT_TYPE_EMBEDDED)) {
-					result.add(parseContainerFromDocumentRegion(document, typedRegion));
-				}
-			}
-			return result;
-		}
-		
-		private Container parseContainerFromDocumentRegion(IDocument document, IRegion region)
-				throws BadLocationException {
-			Container container;
-			String containerTextRegion = document.get(
-					region.getOffset(), region.getLength());
-
-			/* Adding container */
-			String containerID = fDocumentAccess
-					.getContainerIDFromTextRegion(containerTextRegion);
-
-			if (containerID.matches("\\w*-\\w*-\\w*-\\w*-\\w*")) {
-				// old style
-				container = createContainer(
-						new Position(region.getOffset(),
-								region.getLength()), containerID);
-			} else {
-				// new style
-				container = parseContainer(
-						new Position(region.getOffset(),
-								region.getLength()), containerID);
-			}
-
-			/* XXX Visibility */
-			container.setVisible(false);
-			return container;
 		}
 
 		private void onChangesInsidePad(Container container, DocumentEvent event)
@@ -529,6 +493,51 @@ public class ContainerManager extends EventManager {
 
 	public void setStoragePath(String storagePath) {
 		this.fStoragePath = storagePath;
+	}
+	
+	private List<Container> parseContainersFromDocumentRegion(IDocument document, IRegion region) {
+		try {
+			ITypedRegion[] regions;
+			regions = ((IDocumentExtension3) document)
+					.computePartitioning(PartitioningManager.PARTITIONING_ID, region.getOffset(), region.getLength(), false);
+			List<Container> result = new ArrayList<>();
+			for (ITypedRegion typedRegion : regions) {
+				if (typedRegion.getType().equals(
+						PartitioningManager.CONTENT_TYPE_EMBEDDED)) {
+					result.add(parseContainerFromDocumentRegion(document, typedRegion));
+				}
+			}
+			return result;
+		} catch (BadLocationException | BadPartitioningException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+	
+	private Container parseContainerFromDocumentRegion(IDocument document, IRegion region)
+			throws BadLocationException {
+		Container container;
+		String containerTextRegion = document.get(
+				region.getOffset(), region.getLength());
+
+		/* Adding container */
+		String containerID = fDocumentAccess
+				.getContainerIDFromTextRegion(containerTextRegion);
+
+		if (containerID.matches("\\w*-\\w*-\\w*-\\w*-\\w*")) {
+			// old style
+			container = createContainer(
+					new Position(region.getOffset(),
+							region.getLength()), containerID);
+		} else {
+			// new style
+			container = parseContainer(
+					new Position(region.getOffset(),
+							region.getLength()), containerID);
+		}
+
+		/* XXX Visibility */
+		container.setVisible(false);
+		return container;
 	}
 
 }

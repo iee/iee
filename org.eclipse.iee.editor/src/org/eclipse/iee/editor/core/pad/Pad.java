@@ -68,6 +68,7 @@ public abstract class Pad<T extends PadDocumentPart> {
 		Assert.isLegal(!isContainerAttached(),
 				"Another container is already attached");
 
+		container.setPadPart(getDocumentPart());
 		container.updateDocument();
 
 		fContainer = container;

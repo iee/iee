@@ -1,7 +1,9 @@
 package org.eclipse.iee.translator.antlr.translator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -44,40 +46,40 @@ public class JavaTranslator {
 		INT, DOUBLE, MATRIX, OTHER
 	}
 
-	private static ICompilationUnit fCompilationUnit;
-	private static IType fClass;
-	private static IMethod fMethod;
+	private ICompilationUnit fCompilationUnit;
+	private IType fClass;
+	private IMethod fMethod;
 
-	private static int fPosition;
+	private int fPosition;
 
-	private static List<String> fDoubleFields = new ArrayList<>();
+	private List<String> fDoubleFields = new ArrayList<>();
 
-	private static List<String> fIntegerFields = new ArrayList<>();
+	private List<String> fIntegerFields = new ArrayList<>();
 
-	private static List<String> fMatrixFields = new ArrayList<>();
+	private List<String> fMatrixFields = new ArrayList<>();
 
-	private static List<String> fOtherFields = new ArrayList<>();
+	private List<String> fOtherFields = new ArrayList<>();
 
-	private static List<String> fOtherSourceClasses = new ArrayList<>();
-	private static List<String> fMethodClasses = new ArrayList<>();
-	private static List<String> fInnerClasses = new ArrayList<>();
+	private Set<String> fOtherSourceClasses = new HashSet<>();
+	private Set<String> fMethodClasses = new HashSet<>();
+	private Set<String> fInnerClasses = new HashSet<>();
 
-	private static List<String> fFunctionVariables = new ArrayList<>();
+	private List<String> fFunctionVariables = new ArrayList<>();
 
-	private static VariableType fVariableType = null;
-	private static String fVariableTypeString = "";
+	private VariableType fVariableType = null;
+	private String fVariableTypeString = "";
 
-	private static boolean fNewVariable;
-	private static boolean fVariableAssignment;
+	private boolean fNewVariable;
+	private boolean fVariableAssignment;
 
-	private static boolean fFunctionDefinition;
-	private static List<String> fDeterminedFunctionParams = new ArrayList<>();
-	private static List<String> fDeterminedFunctionVariables = new ArrayList<>();
+	private boolean fFunctionDefinition;
+	private List<String> fDeterminedFunctionParams = new ArrayList<>();
+	private List<String> fDeterminedFunctionVariables = new ArrayList<>();
 
-	private static List<String> fFoundedVariables = new ArrayList<>();
-	private static List<String> fInternalFunctionsParams = new ArrayList<>();
+	private List<String> fFoundedVariables = new ArrayList<>();
+	private List<String> fInternalFunctionsParams = new ArrayList<>();
 
-	private static class JavaMathVisitor extends MathBaseVisitor<String> {
+	private class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
 
 		/*
@@ -670,6 +672,12 @@ public class JavaTranslator {
 	}
 
 	public static String translate(String expression) {
+		String result = new JavaTranslator().translateIntl(expression);
+
+		return result;
+	}
+
+	private String translateIntl(String expression) {
 		String result = "";
 
 		ANTLRInputStream input = new ANTLRInputStream(expression);
@@ -681,7 +689,6 @@ public class JavaTranslator {
 
 		JavaMathVisitor mathVisitor = new JavaMathVisitor();
 		result = mathVisitor.visit(tree);
-
 		return result;
 	}
 
@@ -694,6 +701,16 @@ public class JavaTranslator {
 		if (inputExpression.trim().isEmpty())
 			return "";
 
+		String result =  new JavaTranslator().translateIntl(inputExpression, compilationUnit, position,
+				containerId);
+
+		logger.debug("Translate. Output: " + result);
+
+		return result;
+	}
+
+	private String translateIntl(String inputExpression,
+			ICompilationUnit compilationUnit, int position, String containerId) {
 		String result = "";
 		String expression = "";
 
@@ -704,13 +721,11 @@ public class JavaTranslator {
 			expression = inputExpression;
 		}
 
-		clear();
-
 		fPosition = position;
 
 		try {
 			fCompilationUnit = compilationUnit.getWorkingCopy(null);
-			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
+			fCompilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, null);
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
@@ -718,7 +733,7 @@ public class JavaTranslator {
 		parse();
 
 		logger.debug("expr: " + expression);
-		result = translate(expression);
+		result = translateIntl(expression);
 
 		/*
 		 * Try get recognize variable type from expression
@@ -744,13 +759,10 @@ public class JavaTranslator {
 				result += output;
 			}
 		}
-
-		logger.debug("Translate. Output: " + result);
-
 		return result;
 	}
 
-	public static String generateOutputCode(String expression,
+	private String generateOutputCode(String expression,
 			String containerId, boolean isInputExpression) {
 		String expr = expression;
 
@@ -834,35 +846,7 @@ public class JavaTranslator {
 		}
 	}
 
-	private static void clear() {
-		fCompilationUnit = null;
-		fClass = null;
-		fMethod = null;
-		fPosition = 0;
-
-		fVariableType = null;
-		fVariableTypeString = "";
-		fNewVariable = false;
-		fVariableAssignment = false;
-		fFunctionDefinition = false;
-
-		fMatrixFields.clear();
-		fDoubleFields.clear();
-		fIntegerFields.clear();
-		fOtherFields.clear();
-
-		fMethodClasses.clear();
-		fInnerClasses.clear();
-
-		fDeterminedFunctionParams.clear();
-		fDeterminedFunctionVariables.clear();
-
-		fFoundedVariables.clear();
-		fInternalFunctionsParams.clear();
-		fOtherSourceClasses.clear();
-	}
-
-	private static CompilationUnit createAST(ICompilationUnit unit) {
+	private CompilationUnit createAST(ICompilationUnit unit) {
 		ASTParser parser = ASTParser.newParser(AST.JLS4);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(unit);
@@ -872,7 +856,7 @@ public class JavaTranslator {
 		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
-	private static void parse() {
+	private void parse() {
 		try {
 
 			IType[] types = fCompilationUnit.getTypes();
@@ -883,11 +867,11 @@ public class JavaTranslator {
 					int classOffset = classSourceRange.getOffset();
 					if (fPosition > classOffset
 							&& fPosition <= (classOffset + classSourceRange
-									.getLength()))
+									.getLength())) {
 						fClass = type;
-					else if (!fOtherSourceClasses.contains(type
-							.getElementName()))
+					} else {
 						fOtherSourceClasses.add(type.getElementName());
+					}
 				}
 			}
 
@@ -909,8 +893,7 @@ public class JavaTranslator {
 					IType type = innerTypes[i];
 					String name = type.getElementName();
 					if (type.isClass()) {
-						if (!fInnerClasses.contains(name))
-							fInnerClasses.add(name);
+						fInnerClasses.add(name);
 					}
 				}
 
@@ -971,8 +954,7 @@ public class JavaTranslator {
 					IType type = (IType) innerElements[i];
 					String name = type.getElementName();
 					if (type.isClass()) {
-						if (!fMethodClasses.contains(name))
-							fMethodClasses.add(name);
+						fMethodClasses.add(name);
 					}
 				}
 
@@ -1046,14 +1028,14 @@ public class JavaTranslator {
 
 	}
 
-	private static String getType(final int position, final String assignment) {
+	private String getType(final int position, final String assignment) {
 		fVariableTypeString = "double";
 
 		try {
 
 			IBuffer buffer = fCompilationUnit.getBuffer();
 			buffer.replace(position, 0, assignment);
-			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
+			fCompilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, null);
 
 			// logger.debug("CopySource" + copy.getSource());
 

@@ -223,7 +223,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 
 	private void switchToResultView() {
 		processInput();
-		moveCaretToCurrentPad();
 		focusOnMainEditor();
 
 		if (fTranslatingExpression != "")

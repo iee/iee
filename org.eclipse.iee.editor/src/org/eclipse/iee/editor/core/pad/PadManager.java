@@ -75,6 +75,10 @@ public class PadManager extends EventManager {
 	 * @param containerManager
 	 */
 	public void registerContainerManager(ContainerManager containerManager) {
+		List<Container> containers = containerManager.getContainers();
+		for (Container container : containers) {
+			onContainerCreated(container);
+		}
 		containerManager.addContainerManagerListener(fContainerManagerListener);
 		fContainerManagers.put(containerManager.getContainerManagerID(),
 				containerManager);
@@ -216,63 +220,7 @@ public class PadManager extends EventManager {
 			@Override
 			public void containerCreated(ContainerEvent event) {
      			Container container = event.getContainer();
-				String containerID = container.getContainerID();
-				if (fSuspendedPads.contains(containerID)) {
-					/*
-					 * Case 1: container corresponds to suspended pad. Attaching
-					 * container to pad.
-					 */
-					Pad pad = fPads.get(containerID);
-
-					Assert.isLegal(pad.getContainerID().equals(containerID));
-					pad.attachContainer(container);
-					fSuspendedPads.remove(containerID);
-					fActivePads.add(containerID);
-					fPads.put(containerID, pad);
-					return;
-				}
-
-				if (fActivePads.contains(containerID)) {
-					/*
-					 * Case 2: container is copied from another place. Copying
-					 * pad and attaching container.
-					 */
-					Pad pad = fPads.get(containerID);
-					Pad clone = pad.copy();
-					clone.getDocumentPart().setId(UUID.randomUUID().toString());
-					clone.attachContainer(container);
-					fActivePads.add(clone.getContainerID());
-					fPads.put(clone.getContainerID(), clone);
-					return;
-				}
-
-				if (fTemporaryPads.contains(containerID)) {
-					/*
-					 * Case 3: container with corresponding "Temporary" pad is
-					 * copied from another place. Creating loading pad.
-					 */
-					Pad pad = new LoadingPad(container.getPadPart());
-					((LoadingPad) pad).setOriginalContainerID(containerID);
-					pad.attachContainer(container);
-					fTemporaryPads.add(pad.getContainerID());
-					fPads.put(pad.getContainerID(), pad);
-					return;
-				}
-				IPadFactory iPadFactory = fPadFactories.getHandler(container.getPadPart().getClass());
-				if (iPadFactory != null) {
-					Pad pad = iPadFactory.create(container.getPadPart());
-					pad.attachContainer(container);
-					fActivePads.add(containerID);
-					fPads.put(containerID, pad);
-				} else {
-					/*
-					 * Case 4: no corresponding pad. Creating new "loading" pad.
-					 */
-					Pad pad = new LoadingPad(container.getPadPart());
-					pad.attachContainer(container);
-					fTemporaryPads.add(containerID);
-					fPads.put(containerID, pad);
-				}
+				onContainerCreated(container);
 			}
 
 			@Override
@@ -356,6 +304,66 @@ public class PadManager extends EventManager {
 		Assert.isLegal(false);
 	}
 
+	private void onContainerCreated(Container container) {
+		String containerID = container.getContainerID();
+		if (fSuspendedPads.contains(containerID)) {
+			/*
+			 * Case 1: container corresponds to suspended pad. Attaching
+			 * container to pad.
+			 */
+			Pad pad = fPads.get(containerID);
+
+			Assert.isLegal(pad.getContainerID().equals(containerID));
+			pad.attachContainer(container);
+			fSuspendedPads.remove(containerID);
+			fActivePads.add(containerID);
+			fPads.put(containerID, pad);
+			return;
+		}
+
+		if (fActivePads.contains(containerID)) {
+			/*
+			 * Case 2: container is copied from another place. Copying
+			 * pad and attaching container.
+			 */
+			Pad pad = fPads.get(containerID);
+			Pad clone = pad.copy();
+			clone.getDocumentPart().setId(UUID.randomUUID().toString());
+			clone.attachContainer(container);
+			fActivePads.add(clone.getContainerID());
+			fPads.put(clone.getContainerID(), clone);
+			return;
+		}
+
+		if (fTemporaryPads.contains(containerID)) {
+			/*
+			 * Case 3: container with corresponding "Temporary" pad is
+			 * copied from another place. Creating loading pad.
+			 */
+			Pad pad = new LoadingPad(container.getPadPart());
+			((LoadingPad) pad).setOriginalContainerID(containerID);
+			pad.attachContainer(container);
+			fTemporaryPads.add(pad.getContainerID());
+			fPads.put(pad.getContainerID(), pad);
+			return;
+		}
+		IPadFactory iPadFactory = fPadFactories.getHandler(container.getPadPart().getClass());
+		if (iPadFactory != null) {
+			Pad pad = iPadFactory.create(container.getPadPart());
+			pad.attachContainer(container);
+			fActivePads.add(containerID);
+			fPads.put(containerID, pad);
+		} else {
+			/*
+			 * Case 4: no corresponding pad. Creating new "loading" pad.
+			 */
+			Pad pad = new LoadingPad(container.getPadPart());
+			pad.attachContainer(container);
+			fTemporaryPads.add(containerID);
+			fPads.put(containerID, pad);
+		}
+	}
+	
 	protected void onContainerRemoved(String containerID) {
 		clearPadSetsAndRuntime(containerID, true);
 	}

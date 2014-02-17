@@ -35,6 +35,7 @@ import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
@@ -163,21 +164,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		fPadManager.registerContainerManager(fContainerManager);
 
-		/*
-		 * Update document partitioning.
-		 * 
-		 * TODO: find smarter way.
-		 */
-		try {
-			String text = document.get();
-			document.replace(0, text.length(), "");
-			document.set(text);
-
-		} catch (BadLocationException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		}
-
 		getSourceViewer().getTextWidget().addFocusListener(new FocusListener() {
 			
 			@Override
@@ -212,7 +198,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	@Override
 	public int getCaretOffset() {
-		return getSourceViewer().getTextWidget().getCaretOffset();
+		ISourceViewer sourceViewer = getSourceViewer();
+		ITextViewerExtension5 ext5 = (ITextViewerExtension5) sourceViewer;
+		return ext5.widgetOffset2ModelOffset(sourceViewer.getTextWidget().getCaretOffset());
 	}
 
 	@Override
