@@ -33,7 +33,7 @@ public class InputPad extends AbstractFormulaPad<InputPart> {
 	public String getVariableExpression() {
 		String[] expressions = fTranslatingExpression.split("=");
 		String varName = expressions[0];
-		return varName + "=";
+		return varName;
 	}
 
 	public String getDefaultValue() {

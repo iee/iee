@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.iee.core.EvaluationContextHolder;
 import org.eclipse.iee.core.FileResultContainer;
+import org.eclipse.iee.core.IDocumentEvaluator;
 import org.eclipse.iee.core.IParameterProvider;
 import org.eclipse.iee.core.IResultContainer;
 import org.eclipse.iee.core.document.Document;
@@ -27,6 +28,8 @@ import org.eclipse.iee.web.RequestParameterProvider;
 import org.eclipse.iee.web.renderer.IHTMLDocumentRenderer;
 import org.eclipse.iee.web.renderer.IHTMLRendererContext;
 import org.eclipse.iee.web.renderer.IResourceRenderContext;
+
+import com.google.common.base.Throwables;
 
 public class TestServlet extends HttpServlet {
 
@@ -133,35 +136,53 @@ public class TestServlet extends HttpServlet {
 	protected IResultContainer evaluateDocument(String projectLoc,
 			String clazz, IParameterProvider parameterProvider)
 			throws IOException {
-		IResultContainer container = createResultContainer();
-		EvaluationContextHolder.setResultContainer(container);
-		EvaluationContextHolder.setParameterProvider(parameterProvider);
-		try {
-			Class<?> loadClass = documentStore.getDocumentClass(projectLoc,
-					clazz);
-			Method main = loadClass.getMethod("main", String[].class);
-			main.invoke(null, (Object) new String[] {});
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} finally {
-			EvaluationContextHolder.cleanContext();
-		}
+		Document document = documentStore.getDocument(projectLoc, clazz);
+		IResultContainer container = getDocumentEvaluator().evaluate(document, parameterProvider);
 		return container;
 	}
 
 	protected IResultContainer createResultContainer() {
 		return new FileResultContainer();
+	}
+	
+	protected IDocumentEvaluator getDocumentEvaluator() {
+		return new IDocumentEvaluator() {
+			@Override
+			public IResultContainer evaluate(Document document, IParameterProvider parameterProvider) {
+				IResultContainer container = createResultContainer();
+				EvaluationContextHolder.setResultContainer(container);
+				EvaluationContextHolder.setParameterProvider(parameterProvider);
+				try {
+					Class<?> loadClass = documentStore.getDocumentClass(document.getBundle(), document.getName());
+					initialize(loadClass, parameterProvider);
+					Method main = loadClass.getMethod("main", String[].class);
+					main.invoke(null, (Object) new String[] {});
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				} finally {
+					EvaluationContextHolder.cleanContext();
+				}
+				return container;
+			}
+			
+			private void initialize(Class<?> cls, IParameterProvider prd) {
+				Method[] methods = cls.getMethods();
+				for (Method method : methods) {
+					if (method.getName().endsWith("FromProvider") &&
+							method.getParameterTypes().length == 1 &&
+							method.getParameterTypes()[0].isAssignableFrom(IParameterProvider.class)) {
+						try {
+							method.invoke(null, new Object[] {prd});
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							Throwables.propagate(e);
+						}
+					}
+				}
+				
+			}
+		};
 	}
 
 	public IHTMLDocumentRenderer getDocumentRenderer() {

@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.eclipse.iee.translator.antlr.java.JavaLexer;
+import org.eclipse.iee.translator.antlr.java.JavaParser;
+import org.eclipse.iee.translator.antlr.java.JavaParser.CompilationUnitContext;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
@@ -1104,6 +1107,15 @@ public class JavaTranslator {
 			result = firstLetter;
 
 		return result;
+	}
+
+	public CompilationUnitContext createTree(String source) {
+		ANTLRInputStream input = new ANTLRInputStream(source);
+		JavaLexer lexer = new JavaLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		JavaParser parser = new JavaParser(tokens);
+		parser.setBuildParseTree(true);
+		return parser.compilationUnit();
 	}
 
 }

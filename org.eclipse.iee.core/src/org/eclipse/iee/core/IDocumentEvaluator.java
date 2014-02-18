@@ -4,6 +4,6 @@ import org.eclipse.iee.core.document.Document;
 
 public interface IDocumentEvaluator {
 
-	IResultContainer evaluate(Document document);
+	IResultContainer evaluate(Document document, IParameterProvider parameterProvider);
 	
 }

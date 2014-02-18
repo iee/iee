@@ -36,7 +36,7 @@ public class InputHTMLRenderer implements IHTMLRenderer<InputPart> {
 			throws IOException {
 		String text;
 		if (!"result".equals(resourceId)) {
-			text = pad.getVariable();
+			text = pad.getVariable() + "=";
 		} else {
 			String result = getValue(pad, context);
 			text = result;

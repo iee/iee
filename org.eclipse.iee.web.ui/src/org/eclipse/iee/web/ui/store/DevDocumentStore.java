@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.iee.core.EvaluationContextHolder;
 import org.eclipse.iee.core.document.Document;
 import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
 import org.eclipse.iee.core.store.IDocumentStore;
@@ -36,7 +37,7 @@ public class DevDocumentStore implements IDocumentStore {
 	public Document getDocument(String bundle, String name) throws IOException {
 		InputStream resource = new FileInputStream(new File(getBundlePath(bundle), "src/"
 				+ name.replace(".", "/") + ".java"));
-		return parser.parseDocument(resource);
+		return new Document(bundle, name, parser.parseDocument(resource));
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class DevDocumentStore implements IDocumentStore {
 			for (String iClasspathEntry : computeDefaultRuntimeClassPath) {
 				urls.add(new File(iClasspathEntry).toURL());
 			}
-			URLClassLoader classLoader = new URLClassLoader((URL[]) urls.toArray(new URL[urls.size()]), getClass().getClassLoader());
+			URLClassLoader classLoader = new URLClassLoader((URL[]) urls.toArray(new URL[urls.size()]), EvaluationContextHolder.class.getClassLoader());
 			return classLoader.loadClass(name);
 		}  catch (CoreException e) {
 			throw new RuntimeException(e);

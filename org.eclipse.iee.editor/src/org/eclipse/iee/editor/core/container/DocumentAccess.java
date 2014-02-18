@@ -3,11 +3,19 @@ package org.eclipse.iee.editor.core.container;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.RuleNode;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
 import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.eclipse.iee.translator.antlr.java.JavaBaseVisitor;
+import org.eclipse.iee.translator.antlr.java.JavaParser.ClassBodyContext;
+import org.eclipse.iee.translator.antlr.java.JavaParser.CompilationUnitContext;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -32,6 +40,28 @@ public class DocumentAccess {
 
 	private DefaultDocumentWriter fWriter; 
 	
+	private final class FindByOffset extends JavaBaseVisitor<Boolean> {
+		private RuleNode node;
+		private int offset;
+
+		private FindByOffset(Container container) {
+			offset = container.getPosition().getOffset();
+		}
+
+		@Override
+		public Boolean visitChildren(RuleNode node) {
+			ParserRuleContext ctx = (ParserRuleContext) node;
+			if (ctx.getStart().getStartIndex()<= offset && ctx.getStop().getStopIndex() > offset) {
+				this.node = node;
+			}
+			return super.visitChildren(node);
+		}
+
+		public RuleNode getNode() {
+			return node;
+		}
+	}
+
 	public class AccessAction {
 		AccessAction(int actionID, Container container) {
 			this.actionID = actionID;
@@ -138,6 +168,19 @@ public class DocumentAccess {
 	}
 
 	private String getPayload(final Container container) {
+
+		ICompilationUnit compilationUnit = container.getContainerManager().getCompilationUnit();
+		
+		CompilationUnitContext ctx;
+		try {
+			ctx = new JavaTranslator().createTree(compilationUnit.getSource());
+		} catch (JavaModelException e1) {
+			throw Throwables.propagate(e1);
+		}
+		FindByOffset visitor = new FindByOffset(container);
+		ctx.accept(visitor);
+		final RuleNode node = visitor.getNode();
+		
 		String payload = fWriter.writeInternalsToString(container.getPadPart(), new ISourceGeneratorContext() {
 			@Override
 			public String translateFunction(String function, String id) {
@@ -155,6 +198,11 @@ public class DocumentAccess {
 			public String getStoragePath() {
 				return container.getContainerManager().getStoragePath() + "/" +
 						FileMessager.getInstance().getRuntimeDirectoryName();
+			}
+
+			@Override
+			public boolean isInClassBody() {
+				return node instanceof ClassBodyContext;
 			}});
 		return payload;
 	}

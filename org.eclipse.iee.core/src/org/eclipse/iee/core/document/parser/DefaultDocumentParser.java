@@ -28,11 +28,11 @@ public class DefaultDocumentParser {
 	public DefaultDocumentParser() {
 	}
 
-	public Document parseDocument(InputStream is) throws IOException {
+	public DocumentPart parseDocument(InputStream is) throws IOException {
 		ANTLRInputStream st = new ANTLRInputStream(is);
 		JavaLexer lexer = new JavaLexer(st);
 		List<DocumentPart> children = parseChildren(lexer);
-		return new Document(new DocumentPart(children));
+		return new DocumentPart(children);
 	}
 
 	private List<DocumentPart> parseChildren(JavaLexer lexer) {

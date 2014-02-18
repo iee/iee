@@ -6,4 +6,6 @@ public interface ISourceGeneratorContext {
 
 	String getStoragePath();
 
+	boolean isInClassBody();
+	
 }
