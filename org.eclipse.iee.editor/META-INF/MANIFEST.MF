@@ -9,7 +9,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
  org.eclipse.jdt.core,
- org.eclipse.debug.core
+ org.eclipse.debug.core,
+ org.antlr.4-annotations;bundle-version="4.2.0",
+ org.antlr.4-runtime;bundle-version="4.2.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: lib/perf4j-0.9.16.jar,
@@ -56,7 +58,9 @@ Import-Package: com.google.common.base;version="16.0.1",
  org.eclipse.iee.core.document.source,
  org.eclipse.iee.core.document.writer,
  org.eclipse.iee.core.utils,
+ org.eclipse.iee.editor.core.container,
  org.eclipse.iee.pad.image,
+ org.eclipse.iee.translator.antlr.java,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.ui.console,
  org.slf4j;version="1.7.2"

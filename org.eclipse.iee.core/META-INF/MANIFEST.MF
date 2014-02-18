@@ -12,10 +12,8 @@ Export-Package: org.eclipse.iee.core,
  org.eclipse.iee.core.store,
  org.eclipse.iee.core.utils
 Import-Package: com.google.common.cache;version="16.0.1",
- javax.annotation,
- org.antlr.v4.runtime,
- org.antlr.v4.runtime.atn,
- org.antlr.v4.runtime.dfa
+ javax.annotation
 Service-Component: OSGI-INF/org.eclipse.iee.core.document.parser.DefaultDocumentParser.xml,
  OSGI-INF/org.eclipse.iee.core.document.writer.DefaultDocumentWriter.xml
 Bundle-ActivationPolicy: lazy
+Require-Bundle: org.antlr.4-runtime;bundle-version="4.2.0"

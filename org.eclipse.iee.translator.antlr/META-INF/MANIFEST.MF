@@ -6,16 +6,13 @@ Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.junit,
  org.eclipse.jdt.core,
  org.eclipse.core.resources,
- org.eclipse.equinox.common
+ org.eclipse.equinox.common,
+ org.antlr.4-annotations;bundle-version="4.2.0",
+ org.antlr.4-runtime;bundle-version="4.2.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.eclipse.iee.translator.antlr.java,
  org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator
-Import-Package: org.antlr.v4.runtime,
- org.antlr.v4.runtime.atn,
- org.antlr.v4.runtime.dfa,
- org.antlr.v4.runtime.misc,
- org.antlr.v4.runtime.tree,
- org.slf4j;version="1.7.2",
+Import-Package: org.slf4j;version="1.7.2",
  org.stringtemplate.v4
