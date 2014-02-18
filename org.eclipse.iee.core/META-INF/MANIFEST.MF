@@ -11,7 +11,7 @@ Export-Package: org.eclipse.iee.core,
  org.eclipse.iee.core.document.writer,
  org.eclipse.iee.core.store,
  org.eclipse.iee.core.utils
-Import-Package: com.google.common.cache;version="15.0.0",
+Import-Package: com.google.common.cache;version="16.0.1",
  javax.annotation,
  org.antlr.v4.runtime,
  org.antlr.v4.runtime.atn,

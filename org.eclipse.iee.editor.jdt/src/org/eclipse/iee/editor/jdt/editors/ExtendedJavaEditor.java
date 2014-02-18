@@ -54,6 +54,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Throwables;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
@@ -269,14 +270,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 						String imageName = UUID.randomUUID().toString() + ".png";
 						File imageDst = new File(getContainerManager()
 								.getStoragePath() + "image/" + imageName);
-						FileOutputStream stream = null;
-						try {
-							stream = new FileOutputStream(imageDst);
+						try (FileOutputStream stream = new FileOutputStream(imageDst)) {
 							loader.save(stream, SWT.IMAGE_PNG);
-						} catch (FileNotFoundException e) {
-							throw new RuntimeException(e);
-						} finally {
-							Closeables.closeQuietly(stream);
+						} catch (IOException e) {
+							throw Throwables.propagate(e);
 						}
 						ImagePart imagePart = new ImagePart();
 						imagePart.setImagePath(imageName);

@@ -4,7 +4,7 @@ Bundle-Name: TextPad
 Bundle-SymbolicName: org.eclipse.iee.pad.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: com.google.common.base;version="15.0.0",
+Import-Package: com.google.common.base;version="16.0.1",
  com.steadystate.css.parser,
  org.eclipse.core.expressions,
  org.eclipse.iee.core.document,

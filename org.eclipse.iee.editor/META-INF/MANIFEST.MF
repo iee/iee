@@ -46,8 +46,8 @@ Export-Package: org.eclipse.iee.editor;
    org.eclipse.iee.editor.core.pad,
    org.eclipse.swt.widgets,
    org.eclipse.ui.editors.text"
-Import-Package: com.google.common.base,
- com.google.common.io;version="15.0.0",
+Import-Package: com.google.common.base;version="16.0.1",
+ com.google.common.io;version="16.0.1",
  org.apache.commons.io.monitor;version="2.0.1",
  org.eclipse.core.expressions,
  org.eclipse.iee.core,
