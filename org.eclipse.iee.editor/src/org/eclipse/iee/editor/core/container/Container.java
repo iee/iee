@@ -6,7 +6,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
@@ -95,23 +94,6 @@ public class Container {
 
 	/* FUNCTION USED IN CONTAINER MANAGER: */
 
-	/**
-	 * Creates new container.
-	 */
-	Container(Position position, String containerID,
-			ContainerManager containerManager) {
-		fPosition = position;
-
-		fContainerManager = containerManager;
-		fDocumentAccess = containerManager.getDocumentAccess();
-		fDocument = containerManager.getDocument();
-		fSourceViewer = containerManager.getSourceViewer();
-
-		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
-
-		initListeners();
-	}
-
 	public Container(Position position, ContainerManager containerManager) {
 		fPosition = position;
 		fContainerManager = containerManager;
@@ -122,14 +104,6 @@ public class Container {
 		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
 
 		initListeners();
-	}
-
-	/**
-	 * Sets container's position.
-	 */
-	void updatePosition(int offset, int length) {
-		fPosition.setOffset(offset);
-		fPosition.setLength(length);
 	}
 
 	/**

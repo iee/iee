@@ -188,7 +188,12 @@ public class ContainerManager extends EventManager {
 		if (part.getId() == null) {
 			part.setId(UUID.randomUUID().toString());
 		}
-		Container container = createContainer(new Position(offset, 0), part.getId());
+		try {
+			fDocument.replace(offset, 0, "/**/");
+		} catch (BadLocationException e) {
+			throw Throwables.propagate(e);
+		}
+		Container container = createContainer(new Position(offset, 4));
 		container.setPadPart(part);
 		ignoreDocumentChanges = true;
 	    try {
@@ -231,8 +236,13 @@ public class ContainerManager extends EventManager {
 		fDocument.removeDocumentListener(fDocumentListener);
 	}
 
-	protected Container createContainer(Position position, String containerID) {
-		return new Container(position, containerID, this);
+	protected Container createContainer(Position position) {
+		try {
+			fDocument.addPosition(position);
+		} catch (BadLocationException e) {
+			throw Throwables.propagate(e);
+		}
+		return new Container(position, this);
 	}
 
 	protected Container getContainerHavingOffset(int offset) {
@@ -329,36 +339,7 @@ public class ContainerManager extends EventManager {
 
 		private void onChangesInsidePad(Container container, DocumentEvent event)
 				throws BadLocationException, BadPartitioningException {
-
-			logger.debug("onChangesInsidePad. container: " + container);
-
-			ITypedRegion region = ((IDocumentExtension3) fDocument)
-					.getPartition(PartitioningManager.PARTITIONING_ID,
-							event.getOffset(), false);
-
-			Assert.isTrue(container.getPosition().getOffset() == region
-					.getOffset());
-
-			/* Updating container */
-			container.updatePosition(region.getOffset(), region.getLength());
 			fireContainerUpdated(container);
-		}
-
-		private void moveUnmodifiedPads(int offset, int delta) {
-			Container from = fContainers.ceiling(Container.atOffset(offset));
-			if (from == null)
-				return;
-
-			NavigableSet<Container> tail = fContainers.tailSet(from, true);
-			Iterator<Container> it = tail.iterator();
-			while (it.hasNext()) {
-				Container container = it.next();
-				Position position = container.getPosition();
-
-				/* Updating container */
-				container.updatePosition(position.getOffset() + delta,
-						position.getLength());
-			}
 		}
 
 		@Override
@@ -394,7 +375,6 @@ public class ContainerManager extends EventManager {
 			}
 
 			int delta = event.getText().length() - event.getLength();
-			moveUnmodifiedPads(event.getOffset(), delta);
 		}
 	}
 
@@ -482,7 +462,7 @@ public class ContainerManager extends EventManager {
 
 	private Container parseContainer(Position position, String content) {
 		PadDocumentPart part = fParser.parsePadPart(content);
-		Container container = new Container(position, this);
+		Container container = createContainer(position);
 		container.setPadPart(part);
 		return container;
 	}
@@ -527,7 +507,7 @@ public class ContainerManager extends EventManager {
 			// old style
 			container = createContainer(
 					new Position(region.getOffset(),
-							region.getLength()), containerID);
+							region.getLength()));
 		} else {
 			// new style
 			container = parseContainer(

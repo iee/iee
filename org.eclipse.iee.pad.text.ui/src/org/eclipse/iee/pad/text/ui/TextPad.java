@@ -127,9 +127,6 @@ public class TextPad extends Pad<TextPart> {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				System.out.println(e);
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -137,7 +134,6 @@ public class TextPad extends Pad<TextPart> {
 
 			@Override
 			public void textChanged(TextEvent event) {
-				System.out.println(event);
 				fTextChanged = true;
 				String newText = fDocument.get();
 				getDocumentPart().setRoot(toRoot(fDocument));
@@ -147,7 +143,7 @@ public class TextPad extends Pad<TextPart> {
 					Point size = fViewer.getControl().computeSize(
 							SWT.DEFAULT, SWT.DEFAULT, false);
 					fViewer.getControl().setSize(size);
-						fParent.pack();
+					fParent.pack();
 				}
 			}
 		});

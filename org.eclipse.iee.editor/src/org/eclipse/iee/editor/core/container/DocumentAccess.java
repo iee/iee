@@ -157,7 +157,6 @@ public class DocumentAccess {
 		String text = fWriter.getPrologue() + payload + fWriter.getEpilogue();
 		
 		try {
-			container.updatePosition(from, text.length());
 			if (!fDocument.get(from, length).equals(text)) {
 				fDocument.replace(from, length, text);
 			}

@@ -1,7 +1,10 @@
 package org.eclipse.iee.pad.image.ui;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.image.ImagePart;
@@ -137,11 +140,10 @@ public class ImagePad extends Pad<ImagePart> {
 	protected void initImageView() {
 		logger.debug("initImageView");
 
-		try {
-			fOriginalImage = new Image(fParent.getDisplay(), getContainer()
-					.getContainerManager().getStoragePath()
-					+ "image/"
-					+ getDocumentPart().getImagePath());
+		String imageFile = getContainer().getContainerManager().getStoragePath()
+				+ "image/" + getDocumentPart().getImagePath();
+		try(InputStream is = new FileInputStream(imageFile)) {
+			fOriginalImage = new Image(fParent.getDisplay(), imageFile);
 			if (getDocumentPart().getImageWidth() > 0 && getDocumentPart().getImageHeigth() > 0) {
 				fResizedImage = new Image(fParent.getDisplay(), fOriginalImage
 						.getImageData().scaledTo(getDocumentPart().getImageWidth(), getDocumentPart().getImageHeigth()));
@@ -149,13 +151,12 @@ public class ImagePad extends Pad<ImagePart> {
 				fResizedImage = fOriginalImage;
 			}
 
+		} catch (FileNotFoundException e) {
+			logger.error("Image file {} is absent", imageFile);
+			fCurrentState = STATE_ERROR;
+			initView(fParent);
 		} catch (Exception e) {
-
-			logger.error(e.getMessage());
-			e.printStackTrace();
-
-			/* Switch to error state */
-
+			logger.error("Failed to initialize image", e);
 			fCurrentState = STATE_ERROR;
 			initView(fParent);
 		}

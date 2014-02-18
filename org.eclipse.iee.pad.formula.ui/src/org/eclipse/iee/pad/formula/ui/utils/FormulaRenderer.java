@@ -31,7 +31,7 @@ public class FormulaRenderer {
 	}
 
 	public static Image getFormulaImage(String text) {
-		if (text.trim().isEmpty())
+		if (text == null || text.trim().isEmpty())
 			return null;
 		Image cachedImage = fCachedImages.get(text);
 
