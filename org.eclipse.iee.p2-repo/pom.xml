@@ -31,7 +31,7 @@
 									<source>true</source>
 								</artifact>
 								<artifact>
-									<id>org.antlr:antlr4-runtime:4.0</id>
+									<id>org.antlr:antlr4-runtime:4.2</id>
 									<source>true</source>
 									<excludes>
 										<exclude>org.abego.treelayout:org.abego.treelayout.core:</exclude>
