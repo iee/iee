@@ -12,7 +12,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.iee.editor,
  org.eclipse.core.resources,
- org.eclipse.ui.console
+ org.eclipse.ui.console,
+ org.eclipse.ui.views,
+ org.eclipse.ui.ide
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.eclipse.iee.editor.jdt,
@@ -24,5 +26,4 @@ Import-Package: com.google.common.base;version="16.0.1",
  org.eclipse.iee.core.document.writer,
  org.eclipse.iee.pad.image,
  org.eclipse.iee.pad.image.ui,
- org.eclipse.ui,
  org.slf4j;version="1.7.2"

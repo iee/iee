@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.beans.Introspector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +27,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import com.google.common.base.Converter;
 import com.google.common.primitives.Ints;
 
-final class ContainerPropertySource implements IPropertySource2 {
+public class ContainerPropertySource implements IPropertySource2 {
 	private static final String TEXT = "TEXT";
 
 	private Container fContainer;
@@ -52,7 +53,7 @@ final class ContainerPropertySource implements IPropertySource2 {
 		Field[] declaredFields = clz.getDeclaredFields();
 		for (Field field : declaredFields) {
 			if (isProperty(field)) {
-				propertyFields.put(field.getName(), field);
+				propertyFields.put(getPropertyNameFromField(field), field);
 			}
 		}
 		Method[] declaredMethods = clz.getDeclaredMethods();
@@ -116,6 +117,14 @@ final class ContainerPropertySource implements IPropertySource2 {
 		return (IPropertyDescriptor[]) descriptors.toArray(new IPropertyDescriptor[descriptors.size()]);
 	}
 	
+	private String getPropertyNameFromField(Field field) {
+		String name = field.getName();
+		if (name.length() > 1 && name.startsWith("f") && Character.isUpperCase(name.charAt(1))) {
+			name = Introspector.decapitalize(name.substring(1));
+		}
+		return name;
+	}
+
 	private <A extends Annotation> A getPropertyAnnotation(String string, Class<A> clz) {
 		Field field = getPropertyField(string);
 		if (field != null) {
@@ -178,7 +187,7 @@ final class ContainerPropertySource implements IPropertySource2 {
 	private String getPropertyNameFromSetter(Method method) {
 		String name = method.getName();
 		if (name.startsWith("set")) {
-			return name.substring(3);
+			return Introspector.decapitalize(name.substring(3));
 		} 
 		throw new IllegalArgumentException("Method is not setter:" + method);
 	}
@@ -186,9 +195,9 @@ final class ContainerPropertySource implements IPropertySource2 {
 	private String getPropertyNameFromGetter(Method method) {
 		String name = method.getName();
 		if (name.startsWith("get")) {
-			return name.substring(3);
+			return Introspector.decapitalize(name.substring(3));
 		} else if (name.startsWith("is")) {
-			return name.substring(2);
+			return Introspector.decapitalize(name.substring(2));
 		}
 		throw new IllegalArgumentException("Method is not getter:" + method);
 	}

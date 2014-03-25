@@ -23,7 +23,9 @@ public class ImagePart extends PadDocumentPart {
 	}
 
 	public void setImageWidth(int imageWidth) {
+		int oldValue = fImageWidth;
 		fImageWidth = imageWidth;
+		getPropertyChangeSupport().firePropertyChange("imageWidth", oldValue, imageWidth);
 	}
 
 	@Property(name = "Height", description = "Image height")
@@ -32,7 +34,9 @@ public class ImagePart extends PadDocumentPart {
 	}
 
 	public void setImageHeigth(int imageHeigth) {
+		int oldValue = fImageHeigth;
 		fImageHeigth = imageHeigth;
+		getPropertyChangeSupport().firePropertyChange("imageWidth", oldValue, imageHeigth);
 	}
 
 	public void setSize(int width, int height) {

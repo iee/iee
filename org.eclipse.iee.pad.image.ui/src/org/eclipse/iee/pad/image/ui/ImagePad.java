@@ -1,5 +1,7 @@
 package org.eclipse.iee.pad.image.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,8 +48,20 @@ public class ImagePad extends Pad<ImagePart> {
 
 	private Composite fCurrent;
 
+	private PropertyChangeListener fListener;
+
 	public ImagePad(ImagePart imagePart) {
 		super(imagePart);
+		fListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if ("imageWidth".equals(evt.getPropertyName())
+						|| "imageHeight".equals(evt.getPropertyName())) {
+					updateResizedImage();
+				}
+			}
+		};
+		imagePart.addPropertyChangeListener(fListener);
 	}
 
 	@Override
@@ -172,15 +186,9 @@ public class ImagePad extends Pad<ImagePart> {
 			@Override
 			public void controlResized(ControlEvent e) {
 				Point size = fParent.getSize();
-				
 				getDocumentPart().setImageWidth(size.x);
 				getDocumentPart().setImageHeigth(size.y);
-				fResizedImage = new Image(fParent.getDisplay(), fOriginalImage
-						.getImageData().scaledTo(getDocumentPart().getImageWidth(), getDocumentPart().getImageHeigth()));
-
-				label.setImage(fResizedImage);
 				getContainer().updateDocument();
-				fParent.redraw();
 			}
 
 			@Override
@@ -297,6 +305,21 @@ public class ImagePad extends Pad<ImagePart> {
 		return "\\includegraphics{"
 				+ getContainer().getContainerManager().getStoragePath()
 				+ "image/" + getDocumentPart().getImagePath() + "}";
+	}
+	
+	private void updateResizedImage() {
+		int imageWidth = getDocumentPart().getImageWidth();
+		int imageHeigth = getDocumentPart().getImageHeigth();
+		fResizedImage = new Image(fParent.getDisplay(), fOriginalImage
+				.getImageData().scaledTo(imageWidth, imageHeigth));
+		label.setImage(fResizedImage);
+		fParent.pack();
+		fParent.redraw();
+	}
+
+	@Override
+	public void dispose() {
+		getDocumentPart().removePropertyChangeListener(fListener);
 	}
 
 }

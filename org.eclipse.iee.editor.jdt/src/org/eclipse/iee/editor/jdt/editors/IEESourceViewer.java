@@ -3,6 +3,7 @@ package org.eclipse.iee.editor.jdt.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
@@ -26,7 +27,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-public class IEESourceViewer extends JavaSourceViewer {
+public class IEESourceViewer extends JavaSourceViewer implements IAdaptable {
 	
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
@@ -160,5 +161,10 @@ public class IEESourceViewer extends JavaSourceViewer {
 				l.selectionChanged(event);
 			}
 		}
+	}
+	
+	@Override
+	public Object getAdapter(Class adapter) {
+		return null;
 	}
 }

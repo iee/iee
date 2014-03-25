@@ -1,5 +1,7 @@
 package org.eclipse.iee.editor.jdt.editors;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,14 +12,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
+import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -53,6 +56,9 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetEntry;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +67,7 @@ import com.google.common.io.Files;
 
 @SuppressWarnings("restriction")
 public class ExtendedJavaEditor extends CompilationUnitEditor implements
-		IPadEditor {
+		IPadEditor, IAdaptable {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ExtendedJavaEditor.class);
@@ -72,6 +78,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	private final PadManager fPadManager = IeeEditorPlugin.getDefault()
 			.getPadManager();
+
+	private PropertySheetPage fPropertySheetPage;
 
 	public ExtendedJavaEditor() {
 		super();
@@ -453,6 +461,52 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			}
 		}
 		
+	}
+	
+	@Override
+	public Object getAdapter(Class required) {
+		if (IPropertySheetPage.class.equals(required)) {
+			fPropertySheetPage = new PropertySheetPage();
+			fPropertySheetPage.setRootEntry(new PropertySheetEntry(){
+				
+				java.beans.PropertyChangeListener listener = new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						refreshFromRoot();
+					}
+				};
+				
+				@Override
+				public void setValues(Object[] objects) {
+					if (getValues() != null) {
+						for (Object object : getValues()) {
+							if (object instanceof Container) {
+								((Container) object).getPadPart().removePropertyChangeListener(listener);
+							}
+						}
+					}
+					super.setValues(objects);
+					for (Object object : objects) {
+						if (object instanceof Container) {
+							((Container) object).getPadPart().addPropertyChangeListener(listener);
+						}
+					}
+				}
+
+				@Override
+				public void dispose() {
+					super.dispose();
+					for (Object object : getValues()) {
+						if (object instanceof Container) {
+							((Container) object).getPadPart().removePropertyChangeListener(listener);
+						}
+					}
+				}
+				
+			});
+			return fPropertySheetPage;
+		}
+		return super.getAdapter(required);
 	}
 	
 }
