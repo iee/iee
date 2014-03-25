@@ -124,24 +124,6 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 		FileMessager.getInstance().addFileMessageListener(fFileMessageListener,
 				getContainer().getContainerManager().getStoragePath());
 
-		fFormulaImageLabel.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				moveCaretToCurrentPad();
-				getContainer().getContainerManager()
-						.getUserInteractionManager()
-						.activateContainer(getContainer());
-			}
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
-		});
-
 		fViewer.getControl().addFocusListener(new FocusListener() {
 
 			@Override

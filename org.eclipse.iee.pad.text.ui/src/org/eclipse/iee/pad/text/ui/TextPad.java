@@ -107,29 +107,6 @@ public class TextPad extends Pad<TextPart> {
 
 	public void setListeners() {
 
-		fViewer.getControl().addMouseListener(new MouseListener() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				moveCaretToCurrentPad();
-				getContainer().getContainerManager().getUserInteractionManager().activateContainer(getContainer());
-			}
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
-		});
-
-		((StyledText)fViewer.getControl()).addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-			}
-		});
-		
 		fViewer.addTextListener(new ITextListener() {
 
 			@Override

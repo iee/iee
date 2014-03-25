@@ -27,10 +27,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-public class IEESourceViewer extends JavaSourceViewer implements IAdaptable {
+public class IEESourceViewer extends JavaSourceViewer {
 	
 	private ContainerManager fContainerManager;
-	private IContainerManagerListener fContainerManagerListener;
 	private Listener fMouseListener;
 	private List<ISelectionChangedListener> fPostSelectionChangedListeners;
 	
@@ -71,11 +70,10 @@ public class IEESourceViewer extends JavaSourceViewer implements IAdaptable {
 					if (isOurChild) {
 						Container c = fContainerManager.getContainerAtPoint(styledTextPoint);
 						if (c != null) {
-							System.out.println(c + "" + event.x + ":" + event.y + "..." + c.getComposite().getBounds());
 							int containerOffset = c.getPosition().getOffset();
-							c.getContainerManager().getUserInteractionManager()
-									.moveCaretTo(containerOffset);
+							c.getContainerManager().getUserInteractionManager().moveCaretTo(containerOffset);
 							select(c);
+							c.getContainerManager().getUserInteractionManager().activateContainer(c);
 						} else {
 							select(null);
 						}
@@ -94,9 +92,9 @@ public class IEESourceViewer extends JavaSourceViewer implements IAdaptable {
 	@Override
 	protected void handleDispose() {
 		getTextWidget().getDisplay().removeFilter(SWT.MouseUp, fMouseListener);
+		super.handleDispose();
 		getContainerManager().dispose();
 		fContainerManager = null;
-		super.handleDispose();
 	}
 	
 	@Override
@@ -163,8 +161,4 @@ public class IEESourceViewer extends JavaSourceViewer implements IAdaptable {
 		}
 	}
 	
-	@Override
-	public Object getAdapter(Class adapter) {
-		return null;
-	}
 }
