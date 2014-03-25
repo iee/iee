@@ -38,10 +38,6 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	public void initIeeEditorCore() {
 		IDocument document = getSourceViewer().getDocument();
 
-		fContainerManager = new ContainerManager(IeeEditorPlugin.getDefault().getParser(),
-				IeeEditorPlugin.getDefault().getWriter(), document,
-				getSourceViewer(), getSourceViewer().getTextWidget());
-
 		fContainerManagerListener = new IContainerManagerListener() {
 			@Override
 			public void debugNotification(ContainerEvent event) {

@@ -34,6 +34,7 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,13 +59,13 @@ public class ContainerManager extends EventManager {
 	private final UserInteractionManager fUserInteractionManager;
 
 	@SuppressWarnings("unused")
-	private final PartitioningManager fPartitioningManager;
+	private PartitioningManager fPartitioningManager;
 
 	private final ISourceViewer fSourceViewer;
 
 	private final StyledText fStyledText;
 
-	private final IDocument fDocument;
+	private IDocument fDocument;
 
 	private DocumentListener fDocumentListener;
 
@@ -75,12 +76,6 @@ public class ContainerManager extends EventManager {
 	private final NavigableSet<Container> fContainers;
 
 	private static ContainerComparator fContainerComparator = new ContainerComparator();
-
-	private enum State {
-		READY, DOCUMENT_CHANGES_HANDLING
-	}
-
-	State fState = State.READY;
 
 	private boolean ignoreDocumentChanges;
 
@@ -152,13 +147,11 @@ public class ContainerManager extends EventManager {
 
 	/* INTERFACE FUNCTIONS */
 
-	public ContainerManager(DefaultDocumentParser parser, DefaultDocumentWriter writer, IDocument document,
-			ISourceViewer sourceViewer, StyledText styledText) {
+	public ContainerManager(DefaultDocumentParser parser, DefaultDocumentWriter writer, ISourceViewer sourceViewer, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
 
 		fParser = parser;
 		fWriter = writer;
-		fDocument = document;
 		fStyledText = styledText;
 		fSourceViewer = sourceViewer;
 
@@ -166,13 +159,21 @@ public class ContainerManager extends EventManager {
 
 		fStyledTextManager = new StyledTextManager(this);
 		fUserInteractionManager = new UserInteractionManager(this);
-		fPartitioningManager = new PartitioningManager(new DocumentStructureConfig(), fDocument);
 		fDocumentAccess = new DocumentAccess(this);
 
-		fState = State.READY;
-
+	}
+	
+	public void setDocument(IDocument document) {
+		fContainers.clear();
+		if (fDocument != null) {
+			removeDocumentListener();
+		}
+		if (fPartitioningManager != null) {
+			fPartitioningManager.dispose();
+		}
+		fDocument = document;
 		initDocumentListener();
-		
+		fPartitioningManager = new PartitioningManager(new DocumentStructureConfig(), fDocument);
 		List<Container> containers = parseContainersFromDocumentRegion(document, new Region(0, fDocument.getLength()));
 		for (Container container : containers) {
 			fContainers.add(container);
@@ -214,7 +215,7 @@ public class ContainerManager extends EventManager {
 	}
 
 	public boolean isModificationAllowed() {
-		return fState == State.READY;
+		return true;
 	}
 
 	public void updateContainerPresentations(Container container) {
@@ -326,7 +327,6 @@ public class ContainerManager extends EventManager {
 				fUserInteractionManager.updateCaretSelection();
 
 				logger.debug("== End of document modification handling ==\n\n");
-				fState = State.READY;
 
 				/* For debug */
 				fireDebugNotification();
@@ -518,6 +518,24 @@ public class ContainerManager extends EventManager {
 		/* XXX Visibility */
 		container.setVisible(false);
 		return container;
+	}
+
+	public Container getContainerAtPoint(int x, int y) {
+		for(Container container : getContainers()) {
+			if (container.getComposite().getBounds().contains(x, y)) {
+				return container;
+			}
+		}
+		return null;
+	}
+
+	public Container getContainerAtPoint(Point styledTextPoint) {
+		for(Container container : getContainers()) {
+			if (container.getComposite().getBounds().contains(styledTextPoint)) {
+				return container;
+			}
+		}
+		return null;
 	}
 
 }

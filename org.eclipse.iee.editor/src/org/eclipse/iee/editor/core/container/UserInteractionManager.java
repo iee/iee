@@ -33,7 +33,7 @@ public class UserInteractionManager {
 	}
 
 	public void moveCaretTo(int offset) {
-		setSelectedContainer(null);
+		selectContainer(null);
 		ITextViewerExtension5 ext5 = getExt5();
 		fSourceViewer.getTextWidget().setCaretOffset(ext5.modelOffset2WidgetOffset(offset));
 	}
@@ -49,7 +49,7 @@ public class UserInteractionManager {
 	public void updateCaretSelection() {
 	}
 
-	private void setSelectedContainer(Container container) {
+	public void selectContainer(Container container) {
 		if (container != null && container.equals(fSelectedContainer)) {
 			return;
 		}
@@ -73,7 +73,7 @@ public class UserInteractionManager {
 		if (fActiveContainer != null) {
 			fContainerManager.fireContainerActivated(fActiveContainer);
 		}
-		setSelectedContainer(container);
+		selectContainer(container);
 	}
 
 	public void deactivateContainer(Container container) {
@@ -194,7 +194,7 @@ public class UserInteractionManager {
 							/* Move caret to the Pad's border */
 							fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
 									+ position.getLength()));
-							setSelectedContainer(null);
+							selectContainer(null);
 						}
 					}
 				}
@@ -223,5 +223,5 @@ public class UserInteractionManager {
 		}
 		return true;
 	}
-
+	
 }

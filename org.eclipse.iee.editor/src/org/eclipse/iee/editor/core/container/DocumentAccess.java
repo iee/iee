@@ -34,7 +34,6 @@ public class DocumentAccess {
 	static final int RELEASE = 1;
 
 	private ContainerManager fContainerManager;
-	private IDocument fDocument;
 	
 	private DocumentStructureConfig fConfig = new DocumentStructureConfig();
 
@@ -76,7 +75,6 @@ public class DocumentAccess {
 
 	DocumentAccess(ContainerManager containerManager) {
 		fContainerManager = containerManager;
-		fDocument = containerManager.getDocument();
 		fWriter = containerManager.getWriter();
 	}
 
@@ -133,10 +131,10 @@ public class DocumentAccess {
 		int length = position.getLength() - fWriter.getPrologue().length() - fWriter.getEpilogue().length();
 		
 		try {
-			if (fDocument.get(from, length).equals(payload)) {
+			if (getDocument().get(from, length).equals(payload)) {
 				return;
 			}
-			fDocument.replace(from, length, payload.toString());
+			getDocument().replace(from, length, payload.toString());
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
@@ -157,8 +155,8 @@ public class DocumentAccess {
 		String text = fWriter.getPrologue() + payload + fWriter.getEpilogue();
 		
 		try {
-			if (!fDocument.get(from, length).equals(text)) {
-				fDocument.replace(from, length, text);
+			if (!getDocument().get(from, length).equals(text)) {
+				getDocument().replace(from, length, text);
 			}
 			return container;
 		} catch (BadLocationException e) {
@@ -213,7 +211,7 @@ public class DocumentAccess {
 	protected void releaseTextRegion(Container container) {
 		Position position = container.getPosition();
 		try {
-			fDocument.replace(position.getOffset(), position.getLength(),
+			getDocument().replace(position.getOffset(), position.getLength(),
 					"");
 		} catch (BadLocationException e) {
 			logger.error(e.getMessage());
@@ -242,6 +240,10 @@ public class DocumentAccess {
 
 	public boolean hasNextDocumentAccessRequest() {
 		return !fContainerDocumentAccessQueue.isEmpty();
+	}
+
+	private IDocument getDocument() {
+		return fContainerManager.getDocument();
 	}
 
 }

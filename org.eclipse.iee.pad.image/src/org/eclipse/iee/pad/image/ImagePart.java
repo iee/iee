@@ -1,6 +1,7 @@
 package org.eclipse.iee.pad.image;
 
 import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.core.document.Property;
 
 public class ImagePart extends PadDocumentPart {
 
@@ -16,6 +17,7 @@ public class ImagePart extends PadDocumentPart {
 		fImagePath = imagePath;
 	}
 
+	@Property(name = "Width", description = "Image width")
 	public int getImageWidth() {
 		return fImageWidth;
 	}
@@ -24,6 +26,7 @@ public class ImagePart extends PadDocumentPart {
 		fImageWidth = imageWidth;
 	}
 
+	@Property(name = "Height", description = "Image height")
 	public int getImageHeigth() {
 		return fImageHeigth;
 	}

@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -13,10 +14,11 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Container {
+public class Container implements IAdaptable {
 
 	private static final Logger logger = LoggerFactory.getLogger(Container.class);
 
@@ -198,5 +200,13 @@ public class Container {
 	@Override
 	public String toString() {
 		return "[" + getContainerID() + ", " + fPosition + "]";
+	}
+
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (IPropertySource.class.equals(adapter)) {
+			return new ContainerPropertySource(this);
+		} 
+		return null;
 	}
 }

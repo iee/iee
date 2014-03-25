@@ -187,25 +187,6 @@ public class ImagePad extends Pad<ImagePart> {
 			public void controlMoved(ControlEvent e) {
 			}
 		});
-
-		label.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				moveCaretToCurrentPad();
-				getContainer().getContainerManager()
-						.getUserInteractionManager()
-						.activateContainer(getContainer());
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-			}
-		});
 	}
 
 	protected void initErrorView() {

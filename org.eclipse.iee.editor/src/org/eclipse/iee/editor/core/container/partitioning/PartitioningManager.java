@@ -31,10 +31,10 @@ public class PartitioningManager {
 				config.EMBEDDED_REGION_END),
 			new String[] { CONTENT_TYPE_EMBEDDED });
 	
+		fDocumentPartitioner.connect(fDocument);
 		((IDocumentExtension3) fDocument).setDocumentPartitioner(
 				PartitioningManager.PARTITIONING_ID, fDocumentPartitioner);
 			
-		fDocumentPartitioner.connect(fDocument);
 	}
 
 	public void dispose() {
