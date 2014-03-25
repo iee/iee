@@ -10,6 +10,7 @@
 		<module>../org.eclipse.iee.site</module>
 		<module>../org.eclipse.iee.feature</module>
 		<module>../org.eclipse.iee.core</module>
+		<module>../org.eclipse.iee.export</module>
 		<module>../org.eclipse.iee.editor</module>
 		<module>../org.eclipse.iee.editor.jdt</module>
 		<module>../org.eclipse.iee.editor.monitoring</module>
