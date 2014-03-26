@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            class="org.eclipse.iee.export.ui.IEECloudExportWizard"
+            id="org.eclipse.iee.export.ui.ieecloud"
+            name="IEECloud Export Wizard">
+         <selection
+               class="org.eclipse.core.resources.IFile"
+               name="*.java">
+               
+         </selection>
+      </wizard>
+   </extension>
+
+</plugin>

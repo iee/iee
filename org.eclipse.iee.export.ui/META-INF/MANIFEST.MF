@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Export UI
+Bundle-SymbolicName: org.eclipse.iee.export.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.ide,
+ org.eclipse.core.filesystem
+Bundle-ActivationPolicy: lazy
+Import-Package: com.google.common.io;version="16.0.1",
+ com.google.common.primitives
