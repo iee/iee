@@ -8,4 +8,8 @@ public abstract class Field {
 		this.type = type;
 	}
 	
+	public String getType() {
+		return type;
+	}
+	
 }

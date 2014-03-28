@@ -10,13 +10,11 @@ import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.TextDocumentPart;
 
-import com.google.common.html.HtmlEscapers;
-
 public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 
-	private HTMLRendererManager manager;
+	private final IHTMLRendererManager manager;
 
-	public DefaultHTMLDocumentRenderer(HTMLRendererManager manager) {
+	public DefaultHTMLDocumentRenderer(IHTMLRendererManager manager) {
 		this.manager = manager;
 	}
 
@@ -66,12 +64,7 @@ public class DefaultHTMLDocumentRenderer implements IHTMLDocumentRenderer {
 			}
 			writer.append("</div>");
 		} else if (documentPart instanceof TextDocumentPart) {
-			String type = ((TextDocumentPart) documentPart).getType();
-			if ("Ws".equals(type)) {
-				writer.write(((TextDocumentPart) documentPart).getText());
-			} else {
-				writer.append("<span class = '").append(type.toLowerCase()).append("' >").append(HtmlEscapers.htmlEscaper().escape(((TextDocumentPart) documentPart).getText())).append("</span>");
-			}
+			new DefaultTextRenderer().renderPad((TextDocumentPart) documentPart, context);
 		} else if (documentPart instanceof DirectiveBlock) {
 			String directive = ((DirectiveBlock) documentPart).getDirective();
 			if ("hide".equals(directive)) {

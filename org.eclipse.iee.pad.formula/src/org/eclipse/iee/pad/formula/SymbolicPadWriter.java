@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.iee.core.document.writer.IPadWriter;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * {@link IPadWriter} implementation. Creates instance of symbolic pad.
  */
+@Component
 public class SymbolicPadWriter implements IPadWriter<SymbolicPart> {
 
 	@Override

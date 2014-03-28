@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
-import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
+import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.translator.antlr.java.JavaBaseVisitor;
 import org.eclipse.iee.translator.antlr.java.JavaParser.ClassBodyContext;
@@ -37,7 +37,7 @@ public class DocumentAccess {
 	
 	private DocumentStructureConfig fConfig = new DocumentStructureConfig();
 
-	private DefaultDocumentWriter fWriter; 
+	private IDocumentWriter fWriter; 
 	
 	private final class FindByOffset extends JavaBaseVisitor<Boolean> {
 		private RuleNode node;

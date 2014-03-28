@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.iee.core.document.writer.IPadWriter;
+import org.osgi.service.component.annotations.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@Component
 public class GraphPadWriter implements IPadWriter<GraphPart> {
 
 	@Override

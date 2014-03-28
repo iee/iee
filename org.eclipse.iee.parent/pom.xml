@@ -32,7 +32,7 @@
 	<properties>
 		<tycho-version>0.20.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<repositories>
@@ -69,6 +69,8 @@
 	</repositories>
 
 	<build>
+		<sourceDirectory>src</sourceDirectory>
+	
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -80,6 +82,37 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
+				<version>1.15.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.felix</groupId>
+						<artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+						<version>1.2.4</version>
+					</dependency>
+					<dependency>
+						<groupId>org.osgi</groupId>
+						<artifactId>org.osgi.compendium</artifactId>
+						<version>4.3.1</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>generate-scr-scrdescriptor</id>
+						<goals>
+							<goal>scr</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<supportedProjectTypes>
+						<supportedProjectType>eclipse-plugin</supportedProjectType>
+					</supportedProjectTypes>
+					<outputDirectory>.</outputDirectory>
+				</configuration>
 			</plugin>
 		</plugins>
 
@@ -171,5 +204,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 </project> 

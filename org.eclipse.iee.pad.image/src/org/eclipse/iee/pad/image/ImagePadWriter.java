@@ -3,13 +3,14 @@ package org.eclipse.iee.pad.image;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.IPadParser;
 import org.eclipse.iee.core.document.writer.IPadWriter;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * {@link IPadParser} implementation. Creates instance of image pad.
  */
+@Component
 public class ImagePadWriter implements IPadWriter<ImagePart> {
 
 	@Override

@@ -9,6 +9,7 @@ Import-Package: com.google.common.base;version="16.0.1",
  com.google.common.cache;version="16.0.1",
  com.google.common.escape;version="16.0.1",
  com.google.common.html;version="16.0.1",
+ com.google.common.reflect;version="16.0.1",
  javax.servlet,
  javax.servlet.http,
  org.apache.commons.io;version="2.0.1",
@@ -30,8 +31,10 @@ Import-Package: com.google.common.base;version="16.0.1",
  org.jfree.data.general,
  org.jfree.data.xy,
  org.jfree.ui,
- org.jfree.util
+ org.jfree.util,
+ org.osgi.service.component.annotations;version="1.2.0"
 Bundle-ClassPath: .,
  lib/jlatexmath-embedded-fop-1.0.2.jar
 Export-Package: org.eclipse.iee.web.renderer,
  org.eclipse.iee.web.servlet
+Service-Component: OSGI-INF/*.xml

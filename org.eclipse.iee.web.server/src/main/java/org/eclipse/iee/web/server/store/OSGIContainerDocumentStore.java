@@ -7,7 +7,6 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -28,7 +27,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import org.eclipse.iee.core.document.Document;
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.store.IDocumentStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -47,11 +46,11 @@ public class OSGIContainerDocumentStore implements IDocumentStore {
 
 	private Framework framework;
 
-	private DefaultDocumentParser documentParser;
+	private IDocumentParser documentParser;
 
 	private Thread watchThread;
 	
-	public OSGIContainerDocumentStore(String folder, DefaultDocumentParser documentParser) {
+	public OSGIContainerDocumentStore(String folder, IDocumentParser documentParser) {
 		this.documentParser = documentParser;
 		
 		

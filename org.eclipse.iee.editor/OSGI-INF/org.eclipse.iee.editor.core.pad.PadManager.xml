@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.iee.editor.core.pad.PadManager">
-   <implementation class="org.eclipse.iee.editor.core.pad.PadManager"/>
-   <service>
-      <provide interface="org.eclipse.iee.editor.core.pad.PadManager"/>
-   </service>
-   <reference bind="registerPadFactory" cardinality="0..n" interface="org.eclipse.iee.editor.core.pad.IPadFactory" name="IPadFactory" policy="dynamic" unbind="unregisterPadFactory"/>
-</scr:component>
+<?xml version="1.0" encoding="UTF-8"?><components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <scr:component name="org.eclipse.iee.editor.core.pad.PadManager">
+        <implementation class="org.eclipse.iee.editor.core.pad.PadManager"/>
+        <service servicefactory="false">
+            <provide interface="org.eclipse.iee.editor.core.pad.IPadManager"/>
+        </service>
+        <reference name="registerPadFactory" interface="org.eclipse.iee.editor.core.pad.IPadFactory" cardinality="0..n" policy="dynamic" bind="registerPadFactory" unbind="unregisterPadFactory"/>
+    </scr:component>
+</components>

@@ -6,8 +6,9 @@ import org.eclipse.iee.core.document.source.ISourceGenerator;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
-import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
+import org.osgi.service.component.annotations.Component;
 
+@Component
 public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 
 	@Override

@@ -1,6 +1,5 @@
 package org.eclipse.iee.pad.text;
 
-import java.awt.Color;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +9,12 @@ import org.eclipse.iee.pad.text.elements.Node;
 import org.eclipse.iee.pad.text.elements.NodeVisitor;
 import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
-
-import com.google.common.base.Strings;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * {@link IPadWriter} implementation. Writes instance of text pad.
  */
+@Component
 public class TextPadWriter implements IPadWriter<TextPart> {
 
 	@Override

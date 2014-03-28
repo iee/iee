@@ -1,71 +1,38 @@
 package org.eclipse.iee.export.ui;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.WizardExportResourcesPage;
 
-public class IEECloudOptionsPage extends WizardPage {
+public class IEECloudOptionsPage extends WizardExportResourcesPage {
 	private Text fDestinationText;
 
 	/**
 	 * Create the wizard.
 	 */
 	public IEECloudOptionsPage(IStructuredSelection selection) {
-		super("wizardPage");
+		super("wizardPage", selection);
 		setTitle("Wizard Page title");
 		setDescription("Wizard Page description");
 	}
 
-	@Override
-	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NULL);
-		setControl(container);
-		container.setLayout(new FormLayout());
-		
-		Label lblSelectDestinationJar = new Label(container, SWT.NONE);
-		FormData fd_lblSelectDestinationJar = new FormData();
-		fd_lblSelectDestinationJar.bottom = new FormAttachment(100, -261);
-		fd_lblSelectDestinationJar.top = new FormAttachment(0, 6);
-		fd_lblSelectDestinationJar.left = new FormAttachment(0);
-		lblSelectDestinationJar.setLayoutData(fd_lblSelectDestinationJar);
-		lblSelectDestinationJar.setText("Select destination JAR:");
-		
-		fDestinationText = new Text(container, SWT.BORDER);
-		FormData fd_text = new FormData();
-		fd_text.top = new FormAttachment(0, 3);
-		fd_text.left = new FormAttachment(lblSelectDestinationJar, 6);
-		fDestinationText.setLayoutData(fd_text);
-		
-		Button btnBrowse = new Button(container, SWT.NONE);
-		btnBrowse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleDestinationBrowseButtonPressed();
-			}
-		});
-		fd_text.right = new FormAttachment(btnBrowse, -6);
-		FormData fd_btnBrowse = new FormData();
-		fd_btnBrowse.top = new FormAttachment(lblSelectDestinationJar, -5, SWT.TOP);
-		fd_btnBrowse.right = new FormAttachment(100);
-		btnBrowse.setLayoutData(fd_btnBrowse);
-		btnBrowse.setText("Browse...");
-	}
 	
 	protected void handleDestinationBrowseButtonPressed() {
 		FileDialog dialog= new FileDialog(getContainer().getShell(), SWT.SAVE);
@@ -101,5 +68,45 @@ public class IEECloudOptionsPage extends WizardPage {
 	
 	protected String getOutputSuffix() {
 		return ".zip";
+	}
+
+	@Override
+	public List getSelectedResources() {
+		return super.getSelectedResources();
+	}
+	
+	@Override
+	public void handleEvent(Event event) {
+	}
+
+	@Override
+	protected void createDestinationGroup(Composite parent) {
+		initializeDialogUnits(parent);
+
+		// destination specification group
+		Composite destinationSelectionGroup= new Composite(parent, SWT.NONE);
+		GridLayout layout= new GridLayout();
+		layout.numColumns= 3;
+		destinationSelectionGroup.setLayout(layout);
+		destinationSelectionGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
+
+		String label = "Select destination JAR:";
+		new Label(destinationSelectionGroup, SWT.NONE).setText(label);
+
+		fDestinationText = new Text(destinationSelectionGroup, SWT.SINGLE | SWT.BORDER);
+		GridData data= new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		data.widthHint= SIZING_TEXT_FIELD_WIDTH;
+		data.horizontalSpan= label == null ? 2 : 1;
+		fDestinationText.setLayoutData(data);
+
+		Button btnBrowse = new Button(destinationSelectionGroup,SWT.PUSH);
+		btnBrowse.setText("Browse...");
+		btnBrowse.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		btnBrowse.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleDestinationBrowseButtonPressed();
+			}
+		});
 	}
 }

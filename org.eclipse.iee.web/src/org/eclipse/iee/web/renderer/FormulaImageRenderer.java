@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.iee.pad.formula.FormulaPart;
+import org.osgi.service.component.annotations.Component;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 
@@ -14,9 +15,10 @@ import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
+@Component(service = FormulaImageRenderer.class)
 public class FormulaImageRenderer {
 
-	private Cache<String, BufferedImage> images = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+	private final Cache<String, BufferedImage> images = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 	
 	public BufferedImage getFormulaImage(final String formula, final Color fg, final Color bg) {
 		try {

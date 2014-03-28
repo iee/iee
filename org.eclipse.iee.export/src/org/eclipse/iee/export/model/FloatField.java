@@ -42,7 +42,7 @@ public class FloatField extends Field {
 		return sampleValue;
 	}
 
-	public void setSampeleValue(double sampeleValue) {
+	public void setSampleValue(double sampeleValue) {
 		this.sampleValue = sampeleValue;
 	}
 	

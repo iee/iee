@@ -10,10 +10,12 @@ import org.matheclipse.core.expression.F;
 import org.matheclipse.core.form.output.OutputFormFactory;
 import org.matheclipse.core.form.output.StringBufferWriter;
 import org.matheclipse.core.interfaces.IExpr;
+import org.osgi.service.component.annotations.Component;
 
+@Component(service = SymbolicEngine.class)
 public class SymbolicEngine {
 
-	private EvalUtilities fUtil;
+	private final EvalUtilities fUtil;
 
 	private static final Logger logger = Logger.getLogger(SymbolicEngine.class);
 

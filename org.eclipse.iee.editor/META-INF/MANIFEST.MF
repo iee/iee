@@ -66,5 +66,6 @@ Import-Package: com.google.common.base;version="16.0.1",
  org.eclipse.iee.pad.image,
  org.eclipse.iee.translator.antlr.java,
  org.eclipse.iee.translator.antlr.translator,
+ org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j;version="1.7.2"
-Service-Component: OSGI-INF/org.eclipse.iee.editor.core.pad.PadManager.xml
+Service-Component: OSGI-INF/*.xml

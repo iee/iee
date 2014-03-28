@@ -11,9 +11,9 @@ import java.util.UUID;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.core.document.PadDocumentPart;
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
-import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
+import org.eclipse.iee.core.document.parser.IDocumentParser;
+import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
@@ -48,9 +48,9 @@ public class ContainerManager extends EventManager {
 
 	private final String fContainerManagerID;
 
-	private final DefaultDocumentParser fParser;
+	private final IDocumentParser fParser;
 	
-	private final DefaultDocumentWriter fWriter;
+	private final IDocumentWriter fWriter;
 
 	private final DocumentAccess fDocumentAccess;
 
@@ -109,7 +109,7 @@ public class ContainerManager extends EventManager {
 		return fContainerManagerID;
 	}
 
-	public DefaultDocumentWriter getWriter() {
+	public IDocumentWriter getWriter() {
 		return fWriter;
 	}
 	
@@ -147,7 +147,7 @@ public class ContainerManager extends EventManager {
 
 	/* INTERFACE FUNCTIONS */
 
-	public ContainerManager(DefaultDocumentParser parser, DefaultDocumentWriter writer, ISourceViewer sourceViewer, StyledText styledText) {
+	public ContainerManager(IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
 
 		fParser = parser;
@@ -166,23 +166,24 @@ public class ContainerManager extends EventManager {
 	public void setDocument(IDocument document) {
 		fContainers.clear();
 		if (fDocument != null) {
-			removeDocumentListener();
+			removeDocumentListener(fDocument);
 		}
 		if (fPartitioningManager != null) {
 			fPartitioningManager.dispose();
 		}
 		fDocument = document;
-		initDocumentListener();
-		fPartitioningManager = new PartitioningManager(new DocumentStructureConfig(), fDocument);
-		List<Container> containers = parseContainersFromDocumentRegion(document, new Region(0, fDocument.getLength()));
-		for (Container container : containers) {
-			fContainers.add(container);
+		if (document != null) {
+			initDocumentListener();
+			fPartitioningManager = new PartitioningManager(new DocumentStructureConfig(), fDocument);
+			List<Container> containers = parseContainersFromDocumentRegion(document, new Region(0, fDocument.getLength()));
+			for (Container container : containers) {
+				fContainers.add(container);
+			}
 		}
 	}
 
 	public void dispose() {
-		removeDocumentListener();
-		fPartitioningManager.dispose();
+		setDocument(null);
 	}
 
 	public Container createContainer(PadDocumentPart part, int offset) {
@@ -232,9 +233,9 @@ public class ContainerManager extends EventManager {
 		fDocument.addDocumentListener(fDocumentListener);
 	}
 
-	protected void removeDocumentListener() {
-		fDocument.removeDocumentPartitioningListener(fDocumentListener);
-		fDocument.removeDocumentListener(fDocumentListener);
+	protected void removeDocumentListener(IDocument document) {
+		document.removeDocumentPartitioningListener(fDocumentListener);
+		document.removeDocumentListener(fDocumentListener);
 	}
 
 	protected Container createContainer(Position position) {

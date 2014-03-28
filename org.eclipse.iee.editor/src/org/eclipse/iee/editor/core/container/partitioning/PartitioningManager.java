@@ -1,8 +1,6 @@
 package org.eclipse.iee.editor.core.container.partitioning;
 
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
-import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentPartitioner;
@@ -19,8 +17,9 @@ public class PartitioningManager {
 	public final static String CONENT_TYPE_PLAINTEXT = "__plaintext";
 	
 	
-	private IDocument fDocument;
+	private final IDocument fDocument;
 	private IDocumentPartitioner fDocumentPartitioner;
+	private boolean disposed = false;
 	
 	public PartitioningManager(DocumentStructureConfig config, IDocument document) {
 		fDocument = document;
@@ -38,9 +37,12 @@ public class PartitioningManager {
 	}
 
 	public void dispose() {
-		((IDocumentExtension3) fDocument).setDocumentPartitioner(
-				PartitioningManager.PARTITIONING_ID, null);
-		fDocumentPartitioner.disconnect();
-		fDocumentPartitioner = null;
+		if (!disposed) {
+			((IDocumentExtension3) fDocument).setDocumentPartitioner(
+					PartitioningManager.PARTITIONING_ID, null);
+			fDocumentPartitioner.disconnect();
+			fDocumentPartitioner = null;
+			disposed = true;
+		}
 	}
 }

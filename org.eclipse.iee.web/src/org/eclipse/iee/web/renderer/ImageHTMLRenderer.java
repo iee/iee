@@ -8,7 +8,9 @@ import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.iee.pad.image.ImagePart;
+import org.osgi.service.component.annotations.Component;
 
+@Component
 public class ImageHTMLRenderer implements IHTMLRenderer<ImagePart> {
 
 	@Override

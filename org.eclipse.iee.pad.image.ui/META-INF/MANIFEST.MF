@@ -8,8 +8,9 @@ Import-Package: com.google.common.io;version="16.0.1",
  org.eclipse.iee.core.document,
  org.eclipse.iee.editor.core.pad,
  org.eclipse.iee.pad.image,
+ org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j;version="1.7.2"
-Service-Component: OSGI-INF/org.eclipse.iee.image.ui.ImagePadFactory.xml
+Service-Component: OSGI-INF/*.xml
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.swt,
  org.eclipse.iee.editor,

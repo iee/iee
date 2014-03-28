@@ -1,24 +1,11 @@
 package org.eclipse.iee.web.ui;
 
-import java.util.Hashtable;
-
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
-import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.store.InMemoryEvaluationContextStore;
 import org.eclipse.iee.editor.IeeEditorPlugin;
-import org.eclipse.iee.editor.core.pad.PadManager;
-import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.web.renderer.DefaultHTMLDocumentRenderer;
-import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
-import org.eclipse.iee.web.renderer.FormulaImageRenderer;
-import org.eclipse.iee.web.renderer.GraphHTMLRenderer;
-import org.eclipse.iee.web.renderer.HTMLRendererManager;
-import org.eclipse.iee.web.renderer.ImageHTMLRenderer;
-import org.eclipse.iee.web.renderer.InputHTMLRenderer;
-import org.eclipse.iee.web.renderer.SymbolicHTMLRenderer;
-import org.eclipse.iee.web.renderer.TextHTMLRenderer;
+import org.eclipse.iee.web.renderer.IHTMLRendererManager;
 import org.eclipse.iee.web.servlet.TestServlet;
 import org.eclipse.iee.web.ui.store.DevDocumentStore;
 import org.eclipse.jetty.server.Server;
@@ -51,20 +38,19 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
-		HTMLRendererManager rendererManager = new HTMLRendererManager();
-		registerRenderer(rendererManager);
-		context.registerService(HTMLRendererManager.class, 
-				new HTMLRendererManager(), new Hashtable<String, Object>());
 		plugin = this;
 		server = new Server(8080);
 		ServletContextHandler ctx = new ServletContextHandler();
 		ctx.setContextPath("/test");
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		
+		
 		DevDocumentStore documentStore = new DevDocumentStore(workspace.getRoot().getLocation().toFile(), IeeEditorPlugin.getDefault().getParser());
 		TestServlet servlet = new TestServlet();
-		servlet.setDocumentRenderer(new DefaultHTMLDocumentRenderer(registerRenderer(new HTMLRendererManager())));
+		ServiceReference<IHTMLRendererManager> serviceReference = context.getServiceReference(IHTMLRendererManager.class);
+		servlet.setDocumentRenderer(new DefaultHTMLDocumentRenderer(context.getService(serviceReference)));
 		servlet.setDocumentStore(documentStore);
 		servlet.setEvaluationContextStore(new InMemoryEvaluationContextStore());
 		ctx.addServlet(new ServletHolder(servlet),"/doc/*");
@@ -76,23 +62,13 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		server.stop();
 		server = null;
 	}
 
-	private HTMLRendererManager registerRenderer(HTMLRendererManager rendererManager) {
-		FormulaImageRenderer formulaImageRenderer = new FormulaImageRenderer();
-		rendererManager.registerPadHTMLRenderer(new FormulaHTMLRenderer(formulaImageRenderer));
-		rendererManager.registerPadHTMLRenderer(new InputHTMLRenderer(formulaImageRenderer));
-		rendererManager.registerPadHTMLRenderer(new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
-		rendererManager.registerPadHTMLRenderer(new ImageHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer(new TextHTMLRenderer());
-		rendererManager.registerPadHTMLRenderer(new GraphHTMLRenderer(formulaImageRenderer));
-		return rendererManager;
-	}
-	
 	/**
 	 * Returns the shared instance
 	 *

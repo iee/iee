@@ -13,6 +13,7 @@ import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
 import org.jsoup.Jsoup;
 import org.jsoup.select.NodeVisitor;
+import org.osgi.service.component.annotations.Component;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSStyleDeclaration;
@@ -24,6 +25,7 @@ import com.steadystate.css.parser.CSSOMParser;
 /**
  * {@link IPadParser} implementation. Creates instance of text pad.
  */
+@Component
 public class TextPadParser implements IPadParser {
 
 	@Override

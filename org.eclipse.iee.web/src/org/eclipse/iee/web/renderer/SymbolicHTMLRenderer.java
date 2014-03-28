@@ -10,18 +10,17 @@ import javax.imageio.ImageIO;
 
 import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.pad.formula.SymbolicPart;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
+@Component
 public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPart> {
 
 	private SymbolicEngine symbolicEngine;
 	
 	private FormulaImageRenderer formulaImageRenderer;
 	
-	public SymbolicHTMLRenderer(SymbolicEngine symbolicEngine, FormulaImageRenderer formulaImageRenderer) {
-		this.symbolicEngine = symbolicEngine;
-		this.formulaImageRenderer = formulaImageRenderer;
-	}
-
 	@Override
 	public void renderPad(SymbolicPart pad,
 			IHTMLRendererContext context) throws IOException {
@@ -56,6 +55,24 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPart> {
 		} finally {
 			outputStream.close();
 		}
+	}
+	
+	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)
+	public void bindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = renderer;
+	}
+	
+	public void unbindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = null;
+	}
+	
+	@Reference(unbind = "unbindSymbolicEngine", policy = ReferencePolicy.DYNAMIC)
+	public void bindSymbolicEngine(SymbolicEngine engine) {
+		symbolicEngine = engine;
+	}
+	
+	public void unbindSymbolicEngine(SymbolicEngine engine) {
+		symbolicEngine = null;
 	}
 
 }

@@ -25,9 +25,10 @@ Import-Package: org.eclipse.iee.core.document,
  org.jfree.data.xy,
  org.jfree.ui,
  org.jfree.util,
+ org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.iee.graph.ui.GraphPadFactory.xml
+Service-Component: OSGI-INF/*.xml
 Require-Bundle: org.eclipse.swt,
  org.eclipse.ui.forms,
  org.eclipse.jface,

@@ -15,19 +15,27 @@ import java.util.Set;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.iee.core.document.DirectiveBlock;
-import org.eclipse.iee.core.document.Document;
 import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.TextDocumentPart;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
-public class DefaultDocumentParser {
+@Component
+public class DefaultDocumentParser implements IDocumentParser {
 
 	/** Registered pad factories. */
-	private Map<String, IPadParser> fPadParsers = new HashMap<String, IPadParser>();
+	private final Map<String, IPadParser> fPadParsers = new HashMap<String, IPadParser>();
 
 	public DefaultDocumentParser() {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.parser.IDocumentParser#parseDocument(java.io.InputStream)
+	 */
+	@Override
 	public DocumentPart parseDocument(InputStream is) throws IOException {
 		ANTLRInputStream st = new ANTLRInputStream(is);
 		JavaLexer lexer = new JavaLexer(st);
@@ -65,6 +73,7 @@ public class DefaultDocumentParser {
 		return pad;
 	};
 	
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, unbind = "unregisterPadParser", policy = ReferencePolicy.DYNAMIC)
 	public void registerPadParser(IPadParser parser) {
 		String type = parser.getType();
 		fPadParsers.put(type, parser);

@@ -14,7 +14,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.iee.core.EvaluationContextHolder;
 import org.eclipse.iee.core.document.Document;
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
+import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.store.IDocumentStore;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -24,11 +24,11 @@ import org.eclipse.jdt.launching.JavaRuntime;
 
 public class DevDocumentStore implements IDocumentStore {
 
-	private DefaultDocumentParser parser;
+	private IDocumentParser parser;
 
 	private File root;
 	
-	public DevDocumentStore(File root, DefaultDocumentParser parser) {
+	public DevDocumentStore(File root, IDocumentParser parser) {
 		this.parser = parser;
 		this.root = root;
 	}

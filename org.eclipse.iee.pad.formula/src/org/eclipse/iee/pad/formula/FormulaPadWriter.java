@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.eclipse.iee.core.document.parser.IPadParser;
 import org.eclipse.iee.core.document.writer.IPadWriter;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * {@link IPadParser} implementation. Writer instance of formula pad.
  */
+@Component
 public class FormulaPadWriter implements IPadWriter<FormulaPart> {
 
 	@Override

@@ -3,7 +3,7 @@ package org.eclipse.iee.editor;
 
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.core.pad.IPadManager;
 
 public interface IPadEditor {
 	
@@ -21,7 +21,7 @@ public interface IPadEditor {
 	
 	public Object[] getElements();
 	
-	public PadManager getPadManager();
+	public IPadManager getPadManager();
 	
 	public ContainerManager getContainerManager();
 }

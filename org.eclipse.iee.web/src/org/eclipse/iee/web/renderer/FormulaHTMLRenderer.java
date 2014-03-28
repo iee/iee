@@ -9,15 +9,15 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import org.eclipse.iee.pad.formula.FormulaPart;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
+@Component
 public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPart> {
 
 	private FormulaImageRenderer formulaImageRenderer;
 	
-	public FormulaHTMLRenderer(FormulaImageRenderer formulaImageRenderer) {
-		this.formulaImageRenderer = formulaImageRenderer;
-	}
-
 	@Override
 	public void renderPad(FormulaPart pad,
 			IHTMLRendererContext context) throws IOException {
@@ -51,6 +51,15 @@ public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPart> {
 		} finally {
 			outputStream.close();
 		}
+	}
+	
+	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)
+	public void bindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = renderer;
+	}
+	
+	public void unbindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = null;
 	}
 
 }

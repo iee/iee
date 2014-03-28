@@ -1,8 +1,8 @@
 package org.eclipse.iee.editor;
 
-import org.eclipse.iee.core.document.parser.DefaultDocumentParser;
-import org.eclipse.iee.core.document.writer.DefaultDocumentWriter;
-import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.core.document.parser.IDocumentParser;
+import org.eclipse.iee.core.document.writer.IDocumentWriter;
+import org.eclipse.iee.editor.core.pad.IPadManager;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -21,9 +21,6 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	private static IeeEditorPlugin plugin;
 	
 	// Single instance of PadManager
-	private static PadManager fPadManager;
-	private static DefaultDocumentParser fParser;
-	private static DefaultDocumentWriter fWriter;
 	private static IPadStorage fPadStorage;
 	
 	/**
@@ -32,16 +29,22 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public IeeEditorPlugin() {
 	}
 	
-	public static PadManager getPadManager() {
-		return fPadManager;
-	}
-	
-	public static DefaultDocumentParser getParser() {
-		return fParser;
+	public static IPadManager getPadManager() {
+		return getService(IPadManager.class);
 	}
 
-	public static DefaultDocumentWriter getWriter() {
-		return fWriter;
+	private static <T> T getService(Class<T> clazz) {
+		BundleContext context = getDefault().getBundle().getBundleContext();
+		ServiceReference<T> sr = context.getServiceReference(clazz);
+		return context.getService(sr);
+	}
+	
+	public static IDocumentParser getParser() {
+		return getService(IDocumentParser.class);
+	}
+
+	public static IDocumentWriter getWriter() {
+		return getService(IDocumentWriter.class);
 	}
 
 	public static IPadStorage getPadStorage() {
@@ -52,22 +55,17 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		ServiceReference<DefaultDocumentParser> parserReference = (ServiceReference<DefaultDocumentParser>) context.getServiceReference(DefaultDocumentParser.class.getName());
-		ServiceReference<DefaultDocumentWriter> writerReference = (ServiceReference<DefaultDocumentWriter>) context.getServiceReference(DefaultDocumentWriter.class.getName());
-		ServiceReference<PadManager> serviceReference = (ServiceReference<PadManager>) context.getServiceReference(PadManager.class.getName());
-		fPadManager = context.getService(serviceReference);
-		fParser = context.getService(parserReference);
-		fWriter = context.getService(writerReference);
 	}
 
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);

@@ -9,14 +9,15 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import org.eclipse.iee.pad.formula.InputPart;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
+@Component
 public class InputHTMLRenderer implements IHTMLRenderer<InputPart> {
 
 	private FormulaImageRenderer formulaImageRenderer;
 	
-	public InputHTMLRenderer(FormulaImageRenderer formulaImageRenderer) {
-		this.formulaImageRenderer = formulaImageRenderer;
-	}
 	
 	@Override
 	public void renderPad(InputPart pad,
@@ -41,7 +42,7 @@ public class InputHTMLRenderer implements IHTMLRenderer<InputPart> {
 			String result = getValue(pad, context);
 			text = result;
 		}
-		BufferedImage image = (BufferedImage) formulaImageRenderer.getFormulaImage(text, java.awt.Color.black, null);
+		BufferedImage image = formulaImageRenderer.getFormulaImage(text, java.awt.Color.black, null);
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
 		try {
@@ -59,4 +60,13 @@ public class InputHTMLRenderer implements IHTMLRenderer<InputPart> {
 		return result;
 	}
 
+	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)
+	public void bindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = renderer;
+	}
+	
+	public void unbindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = renderer;
+	}
+	
 }

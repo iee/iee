@@ -11,8 +11,8 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
+import org.eclipse.iee.editor.core.pad.IPadManager;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.pad.PadManager;
 import org.eclipse.iee.editor.monitoring.utils.Convert;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -75,7 +75,7 @@ public class PdfExportHandler implements IHandler {
 		int lastOffset = 0;
 		String javaSource = "";
 
-		PadManager padManager = fPadEditor.getPadManager();
+		IPadManager padManager = fPadEditor.getPadManager();
 		ContainerManager containerManager = fPadEditor.getContainerManager();
 
 		for (Container c : containerManager.getContainers()) {

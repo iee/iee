@@ -21,6 +21,7 @@ import org.eclipse.iee.pad.graph.GraphPadParser;
 import org.eclipse.iee.pad.image.ImagePadParser;
 import org.eclipse.iee.pad.text.TextPadParser;
 import org.eclipse.iee.web.renderer.DefaultHTMLDocumentRenderer;
+import org.eclipse.iee.web.renderer.DefaultTextRenderer;
 import org.eclipse.iee.web.renderer.FormulaHTMLRenderer;
 import org.eclipse.iee.web.renderer.FormulaImageRenderer;
 import org.eclipse.iee.web.renderer.GraphHTMLRenderer;
@@ -63,6 +64,7 @@ public class DocumentServlet extends TestServlet {
 		manager.registerPadHTMLRenderer(new SymbolicHTMLRenderer(new SymbolicEngine(), formulaImageRenderer));
 		manager.registerPadHTMLRenderer(new ImageHTMLRenderer());
 		manager.registerPadHTMLRenderer(new TextHTMLRenderer());
+		manager.registerPadHTMLRenderer(new DefaultTextRenderer());
 		manager.registerPadHTMLRenderer(new GraphHTMLRenderer(formulaImageRenderer));
 		setDocumentRenderer(new DefaultHTMLDocumentRenderer(manager));
 		setEvaluationContextStore(new InMemoryEvaluationContextStore());

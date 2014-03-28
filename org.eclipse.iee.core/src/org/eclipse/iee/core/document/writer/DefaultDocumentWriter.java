@@ -7,20 +7,24 @@ import java.util.Map.Entry;
 import org.eclipse.iee.core.HandlerManager;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
-import org.eclipse.iee.core.document.parser.IPadParser;
 import org.eclipse.iee.core.document.source.ISourceGenerator;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
-public class DefaultDocumentWriter {
+@Component
+public class DefaultDocumentWriter implements IDocumentWriter {
 
+	private final HandlerManager<IPadWriter> fWritersManager = new HandlerManager<>(IPadWriter.class);
 	
-	private HandlerManager<IPadWriter> fWritersManager = new HandlerManager<>(IPadWriter.class);
-	
-	private HandlerManager<ISourceGenerator> fSourceGeneratorsManager = new HandlerManager<>(ISourceGenerator.class);
+	private final HandlerManager<ISourceGenerator> fSourceGeneratorsManager = new HandlerManager<>(ISourceGenerator.class);
 	
 	public DefaultDocumentWriter() {
 	}
 	
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, unbind = "unregisterPadWriter", policy = ReferencePolicy.DYNAMIC)
 	public void registerPadWriter(IPadWriter parser) {
 		fWritersManager.registerHandler(parser);
 	}
@@ -29,6 +33,7 @@ public class DefaultDocumentWriter {
 		fWritersManager.unregisterHandler(parser);
 	}
 	
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, unbind = "unregisterSourceGenerator", policy = ReferencePolicy.DYNAMIC)
 	public void registerSourceGenerator(ISourceGenerator generator) {
 		fSourceGeneratorsManager.registerHandler(generator);
 	}
@@ -37,22 +42,42 @@ public class DefaultDocumentWriter {
 		fSourceGeneratorsManager.unregisterHandler(generator);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.writer.IDocumentWriter#getWriterSupport(T)
+	 */
+	@Override
 	public <T extends PadDocumentPart> IPadWriter<T> getWriterSupport(T partType) {
 		return fWritersManager.getHandler(partType.getClass());
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.writer.IDocumentWriter#getSourceGenerator(T)
+	 */
+	@Override
 	public <T extends PadDocumentPart> ISourceGenerator<T> getSourceGenerator(T part) {
 		return fSourceGeneratorsManager.getHandler(part.getClass());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.writer.IDocumentWriter#getPrologue()
+	 */
+	@Override
 	public String getPrologue() {
 		return DocumentStructureConfig.EMBEDDED_REGION_BEGIN;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.writer.IDocumentWriter#getEpilogue()
+	 */
+	@Override
 	public String getEpilogue() {
 		return DocumentStructureConfig.EMBEDDED_REGION_END;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.writer.IDocumentWriter#writeInternalsToString(org.eclipse.iee.core.document.PadDocumentPart, org.eclipse.iee.core.document.source.ISourceGeneratorContext)
+	 */
+	@Override
 	public String writeInternalsToString(PadDocumentPart part, ISourceGeneratorContext context) {
 		
 		IPadWriter<PadDocumentPart> writerSupport = getWriterSupport(part);

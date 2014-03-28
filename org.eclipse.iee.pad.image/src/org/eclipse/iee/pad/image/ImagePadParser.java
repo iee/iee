@@ -4,10 +4,12 @@ import java.util.Map;
 
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.IPadParser;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * {@link IPadParser} implementation. Creates instance of image pad.
  */
+@Component
 public class ImagePadParser implements IPadParser {
 
 	@Override

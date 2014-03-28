@@ -21,7 +21,7 @@ import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.core.pad.IPadManager;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
@@ -76,9 +76,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	private static ResourceBundle fgBundleForConstructedKeys = ResourceBundle
 			.getBundle(BUNDLE_FOR_CONSTRUCTED_KEYS);
 
-	private final PadManager fPadManager = IeeEditorPlugin.getDefault()
-			.getPadManager();
-
 	private PropertySheetPage fPropertySheetPage;
 
 	public ExtendedJavaEditor() {
@@ -102,7 +99,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		DocumentStructureConfig config = new DocumentStructureConfig();
 
-		IEditorPart editor = (IEditorPart) this;
+		IEditorPart editor = this;
 		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
 		IFile file = input.getFile();
 		IProject project = file.getProject();
@@ -127,7 +124,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		logger.debug("storagePath = " + storagePath);
 		getContainerManager().setStoragePath(storagePath);
 
-		fPadManager.registerContainerManager(getContainerManager());
+		getPadManager().registerContainerManager(getContainerManager());
 
 		getSourceViewer().getTextWidget().addFocusListener(new FocusListener() {
 			
@@ -146,7 +143,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	@Override
 	public void dispose() {
 		logger.debug("dispose() called");
-		fPadManager.removeContainerManager(getContainerManager());
+		getPadManager().removeContainerManager(getContainerManager());
 		super.dispose();
 	}
 
@@ -169,14 +166,14 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		fPadManager.savePadsInEditor(getContainerManager().getContainerManagerID());
+		getPadManager().savePadsInEditor(getContainerManager().getContainerManagerID());
 
 		super.doSave(monitor);
 	}
 
 	@Override
 	public void doSaveAs() {
-		fPadManager.savePadsInEditor(getContainerManager().getContainerManagerID());
+		getPadManager().savePadsInEditor(getContainerManager().getContainerManagerID());
 		super.doSaveAs();
 	}
 
@@ -215,8 +212,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	}
 	
 	@Override
-	public PadManager getPadManager() {
-		return fPadManager;
+	public IPadManager getPadManager() {
+		return IeeEditorPlugin.getPadManager();
 	}
 
 	@Override
@@ -315,7 +312,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	
 	private class DelegateAction implements IAction, IUpdate {
 		
-		private IAction action;
+		private final IAction action;
 		
 		private IUpdate update;
 		
@@ -326,135 +323,168 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			}
 		}
 
+		@Override
 		public void addPropertyChangeListener(IPropertyChangeListener listener) {
 			action.addPropertyChangeListener(listener);
 		}
 
+		@Override
 		public int getAccelerator() {
 			return action.getAccelerator();
 		}
 
+		@Override
 		public String getActionDefinitionId() {
 			return action.getActionDefinitionId();
 		}
 
+		@Override
 		public String getDescription() {
 			return action.getDescription();
 		}
 
+		@Override
 		public ImageDescriptor getDisabledImageDescriptor() {
 			return action.getDisabledImageDescriptor();
 		}
 
+		@Override
 		public HelpListener getHelpListener() {
 			return action.getHelpListener();
 		}
 
+		@Override
 		public ImageDescriptor getHoverImageDescriptor() {
 			return action.getHoverImageDescriptor();
 		}
 
+		@Override
 		public String getId() {
 			return action.getId();
 		}
 
+		@Override
 		public ImageDescriptor getImageDescriptor() {
 			return action.getImageDescriptor();
 		}
 
+		@Override
 		public IMenuCreator getMenuCreator() {
 			return action.getMenuCreator();
 		}
 
+		@Override
 		public int getStyle() {
 			return action.getStyle();
 		}
 
+		@Override
 		public String getText() {
 			return action.getText();
 		}
 
+		@Override
 		public String getToolTipText() {
 			return action.getToolTipText();
 		}
 
+		@Override
 		public boolean isChecked() {
 			return action.isChecked();
 		}
 
+		@Override
 		public boolean isEnabled() {
 			return action.isEnabled();
 		}
 
+		@Override
 		public boolean isHandled() {
 			return action.isHandled();
 		}
 
+		@Override
 		public void removePropertyChangeListener(
 				IPropertyChangeListener listener) {
 			action.removePropertyChangeListener(listener);
 		}
 
+		@Override
 		public void run() {
 			action.run();
 		}
 
+		@Override
 		public void runWithEvent(Event event) {
 			action.runWithEvent(event);
 		}
 
+		@Override
 		public void setActionDefinitionId(String id) {
 			action.setActionDefinitionId(id);
 		}
 
+		@Override
 		public void setChecked(boolean checked) {
 			action.setChecked(checked);
 		}
 
+		@Override
 		public void setDescription(String text) {
 			action.setDescription(text);
 		}
 
+		@Override
 		public void setDisabledImageDescriptor(ImageDescriptor newImage) {
 			action.setDisabledImageDescriptor(newImage);
 		}
 
+		@Override
 		public void setEnabled(boolean enabled) {
 			action.setEnabled(enabled);
 		}
 
+		@Override
 		public void setHelpListener(HelpListener listener) {
 			action.setHelpListener(listener);
 		}
 
+		@Override
 		public void setHoverImageDescriptor(ImageDescriptor newImage) {
 			action.setHoverImageDescriptor(newImage);
 		}
 
+		@Override
 		public void setId(String id) {
 			action.setId(id);
 		}
 
+		@Override
 		public void setImageDescriptor(ImageDescriptor newImage) {
 			action.setImageDescriptor(newImage);
 		}
 
+		@Override
 		public void setMenuCreator(IMenuCreator creator) {
 			action.setMenuCreator(creator);
 		}
 
+		@Override
 		public void setText(String text) {
 			action.setText(text);
 		}
 
+		@Override
 		public void setToolTipText(String text) {
 			action.setToolTipText(text);
 		}
 
+		@Override
 		public void setAccelerator(int keycode) {
 			action.setAccelerator(keycode);
 		}
 
+		@Override
 		public void update() {
 			if (update != null) {
 				update.update();

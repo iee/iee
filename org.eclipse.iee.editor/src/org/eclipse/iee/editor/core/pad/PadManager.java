@@ -25,40 +25,45 @@ import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
 import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PadManager extends EventManager {
+@Component
+public class PadManager extends EventManager implements IPadManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(PadManager.class);
 
 	/* ContainerManagers */
 
-	private Map<String, ContainerManager> fContainerManagers;
+	private final Map<String, ContainerManager> fContainerManagers;
 	private IContainerManagerListener fContainerManagerListener;
 	
 	/** Registered pad factories. */
-	private HandlerManager<IPadFactory> fPadFactories = new HandlerManager<IPadFactory>(IPadFactory.class);
+	private final HandlerManager<IPadFactory> fPadFactories = new HandlerManager<IPadFactory>(IPadFactory.class);
 
 	/* Pads */
 
-	private Map<String, Pad> fPads = new TreeMap<String, Pad>();
+	private final Map<String, Pad> fPads = new TreeMap<String, Pad>();
 
 	/** Pads which are visible by user (have attached container) */
-	private Set<String> fActivePads = new TreeSet<String>();
+	private final Set<String> fActivePads = new TreeSet<String>();
 
 	/**
 	 * Pads which are stored in memory and temporarily not visible by user
 	 * (don't have attached container)
 	 */
-	private Set<String> fSuspendedPads = new TreeSet<String>();
+	private final Set<String> fSuspendedPads = new TreeSet<String>();
 
 	/**
 	 * Temporary pads which are attached to existent container until
 	 * corresponding pad is loaded. This pads are intended to show some loading
 	 * animation or error message to user.
 	 */
-	private Set<String> fTemporaryPads = new TreeSet<String>();
+	private final Set<String> fTemporaryPads = new TreeSet<String>();
 
 	/* Constructor */
 
@@ -69,11 +74,10 @@ public class PadManager extends EventManager {
 
 	/* Public interface */
 
-	/**
-	 * Called by editor to make connection with it's ContainerManager
-	 * 
-	 * @param containerManager
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#registerContainerManager(org.eclipse.iee.editor.core.container.ContainerManager)
 	 */
+	@Override
 	public void registerContainerManager(ContainerManager containerManager) {
 		List<Container> containers = containerManager.getContainers();
 		for (Container container : containers) {
@@ -84,11 +88,10 @@ public class PadManager extends EventManager {
 				containerManager);
 	}
 
-	/**
-	 * Called by editor to disconnect it's ContainerManager
-	 * 
-	 * @param containerManager
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#removeContainerManager(org.eclipse.iee.editor.core.container.ContainerManager)
 	 */
+	@Override
 	public void removeContainerManager(ContainerManager containerManager) {
 		containerManager
 				.removeContainerManagerListener(fContainerManagerListener);
@@ -99,6 +102,10 @@ public class PadManager extends EventManager {
 		firePadManagerEvent(new PadManagerEvent());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#savePadsInEditor(java.lang.String)
+	 */
+	@Override
 	public void savePadsInEditor(String containerManagerID) {
 		String[] containerIDs = fContainerManagers.get(containerManagerID)
 				.getContainerIDs();
@@ -111,6 +118,10 @@ public class PadManager extends EventManager {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPadsByType(java.lang.String)
+	 */
+	@Override
 	public List<Pad> selectPadsByType(String type) {
 		List<Pad> result = new ArrayList<Pad>();
 		for (String id : fActivePads) {
@@ -122,17 +133,29 @@ public class PadManager extends EventManager {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPadsOfCategory(java.lang.String)
+	 */
+	@Override
 	public Collection<Pad> selectPadsOfCategory(String category) {
 
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPadsInContainerManager(java.lang.String)
+	 */
+	@Override
 	public Collection<Pad> selectPadsInContainerManager(
 			String containerManagerID) {
 
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPads(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public Collection<Pad> selectPads(String containerManager, String category) {
 
 		return null;
@@ -140,14 +163,26 @@ public class PadManager extends EventManager {
 
 	/* Functions used by monitoring plug-in */
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#getActivePads()
+	 */
+	@Override
 	public Object[] getActivePads() {
 		return fActivePads.toArray();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#getSuspendedPads()
+	 */
+	@Override
 	public Object[] getSuspendedPads() {
 		return fSuspendedPads.toArray();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#getTemporaryPads()
+	 */
+	@Override
 	public Object[] getTemporaryPads() {
 		return fTemporaryPads.toArray();
 	}
@@ -155,15 +190,18 @@ public class PadManager extends EventManager {
 	/*
 	 * Gets pad using its id
 	 */
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#getPadById(java.lang.String)
+	 */
+	@Override
 	public Pad getPadById(String id) {
 		return fPads.get(id);
 	}
 
-	/**
-	 * Called when external plug-in needs to load pad that was created before.
-	 * 
-	 * @param pad
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#loadPad(org.eclipse.iee.editor.core.pad.Pad)
 	 */
+	@Override
 	public void loadPad(Pad pad) {
 		String containerID = pad.getContainerID();
 
@@ -200,12 +238,10 @@ public class PadManager extends EventManager {
 		fPads.put(containerID, pad);
 	}
 
-	/**
-	 * Request pad removal.
-	 * 
-	 * @param pad
-	 * @param containerManager
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#deletePad(org.eclipse.iee.editor.core.pad.Pad, org.eclipse.iee.editor.core.container.ContainerManager)
 	 */
+	@Override
 	public void deletePad(Pad pad, ContainerManager containerManager) {
 		if (pad.isContainerAttached()) {
 			pad.getContainer().destroy();
@@ -374,11 +410,19 @@ public class PadManager extends EventManager {
 
 	/* For observers */
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#addPadManagerListener(org.eclipse.iee.editor.core.pad.event.IPadManagerListener)
+	 */
+	@Override
 	public void addPadManagerListener(IPadManagerListener listener) {
 		Assert.isNotNull(listener);
 		addListenerObject(listener);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#removePadManagerListener(org.eclipse.iee.editor.core.pad.event.IPadManagerListener)
+	 */
+	@Override
 	public void removePadManagerListener(IPadManagerListener listener) {
 		Assert.isNotNull(listener);
 		removeListenerObject(listener);
@@ -391,11 +435,16 @@ public class PadManager extends EventManager {
 		}
 	}
 
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, unbind = "unregisterPadFactory", policy = ReferencePolicy.DYNAMIC)
 	public void registerPadFactory(IPadFactory factory) {
 		fPadFactories.registerHandler(factory);
 		loadPads(ReflectionUtils.getGenericParameterClass(factory.getClass(), IPadFactory.class, 0), factory);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.editor.core.pad.IPadManager#loadPads(java.lang.Class, org.eclipse.iee.editor.core.pad.IPadFactory)
+	 */
+	@Override
 	public <T extends PadDocumentPart> void loadPads(Class<T> class1, IPadFactory<T> factory) {
 		Map<Integer, Pad> loadPads = new HashMap<Integer, Pad>();
 		for (String temp : fTemporaryPads) {

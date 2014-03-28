@@ -10,13 +10,10 @@ Import-Package: com.google.gson;version="2.2.4",
  org.eclipse.iee.core.document.parser,
  org.eclipse.iee.core.document.source,
  org.eclipse.iee.core.document.writer,
- org.eclipse.iee.pad.formula.ui.hover,
- org.eclipse.iee.pad.formula.ui.utils,
  org.eclipse.iee.translator.antlr.math,
- org.eclipse.iee.translator.antlr.translator
+ org.eclipse.iee.translator.antlr.translator,
+ org.osgi.service.component.annotations;version="1.2.0"
 Export-Package: org.eclipse.iee.pad.graph,
  org.eclipse.iee.pad.graph.model,
  org.eclipse.iee.pad.graph.utils
-Service-Component: OSGI-INF/org.eclipse.iee.sample.graph.GraphPadParser.xml,
- OSGI-INF/org.eclipse.iee.sample.graph.GraphPadWriter.xml,
- OSGI-INF/org.eclipse.iee.sample.graph.GraphPadSourceGenerator.xml
+Service-Component: OSGI-INF/*.xml

@@ -29,14 +29,14 @@ import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.PaintUtilities;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
+@Component
 public class GraphHTMLRenderer implements IHTMLRenderer<GraphPart> {
 
 	private FormulaImageRenderer formulaImageRenderer;
-	
-	public GraphHTMLRenderer(FormulaImageRenderer formulaImageRenderer) {
-		this.formulaImageRenderer = formulaImageRenderer;
-	}
 	
 	@Override
 	public void renderPad(GraphPart pad,
@@ -214,6 +214,15 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPart> {
 		};
 
 		return dataset;
+	}
+	
+	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)
+	public void bindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = renderer;
+	}
+	
+	public void unbindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = null;
 	}
 
 }

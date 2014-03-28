@@ -11,5 +11,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.core.filesystem
 Bundle-ActivationPolicy: lazy
-Import-Package: com.google.common.io;version="16.0.1",
- com.google.common.primitives
+Import-Package: com.google.common.base;version="16.0.1",
+ com.google.common.io;version="16.0.1",
+ com.google.common.primitives,
+ com.google.gson;version="2.2.4",
+ org.eclipse.iee.core.document,
+ org.eclipse.iee.core.document.parser,
+ org.eclipse.iee.export,
+ org.eclipse.iee.export.model,
+ org.eclipse.iee.web.renderer

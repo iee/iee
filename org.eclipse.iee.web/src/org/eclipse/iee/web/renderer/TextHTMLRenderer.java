@@ -11,11 +11,13 @@ import org.eclipse.iee.pad.text.elements.Node;
 import org.eclipse.iee.pad.text.elements.NodeVisitor;
 import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Toxin
  *
  */
+@Component
 public class TextHTMLRenderer implements IHTMLRenderer<TextPart> {
 
 	@Override

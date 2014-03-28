@@ -10,7 +10,7 @@ import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
-import org.eclipse.iee.editor.core.pad.PadManager;
+import org.eclipse.iee.editor.core.pad.IPadManager;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -24,7 +24,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	private ContainerManager fContainerManager;
 	private IContainerManagerListener fContainerManagerListener;
 
-	private final PadManager fPadManager = IeeEditorPlugin.getDefault()
+	private final IPadManager fPadManager = IeeEditorPlugin.getDefault()
 			.getPadManager();
 
 	@Override
@@ -132,7 +132,7 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	}
 
 	@Override
-	public PadManager getPadManager() {
+	public IPadManager getPadManager() {
 		return fPadManager;
 	}
 

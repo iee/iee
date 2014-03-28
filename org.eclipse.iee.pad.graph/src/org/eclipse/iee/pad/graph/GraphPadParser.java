@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.iee.core.document.parser.IPadParser;
 import org.eclipse.iee.pad.graph.model.GraphModel;
+import org.osgi.service.component.annotations.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +12,7 @@ import com.google.gson.GsonBuilder;
 /**
  * {@link IPadParser} implementation. Creates instance of graph pad.
  */
+@Component
 public class GraphPadParser implements IPadParser {
 
 	@Override

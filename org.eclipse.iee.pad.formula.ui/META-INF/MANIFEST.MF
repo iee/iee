@@ -7,6 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.eclipse.iee.core.document,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.jdt.core,
+ org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j
 Require-Bundle: org.eclipse.core.commands,
  org.eclipse.ui.workbench,
@@ -23,7 +24,5 @@ Bundle-ClassPath: lib/jlatexmath-embedded-fop-1.0.2.jar,
 Export-Package: org.eclipse.iee.pad.formula.ui.hover,
  org.eclipse.iee.pad.formula.ui.utils
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.iee.formula.ui.FormulaPadFactory.xml,
- OSGI-INF/org.eclipse.iee.formula.ui.InputPadFactory.xml,
- OSGI-INF/org.eclipse.iee.formula.ui.SymbolicPadFactory.xml
+Service-Component: OSGI-INF/*.xml
 
