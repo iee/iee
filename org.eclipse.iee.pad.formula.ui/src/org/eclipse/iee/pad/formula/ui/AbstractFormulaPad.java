@@ -13,7 +13,6 @@ import org.eclipse.iee.pad.formula.FormulaPart;
 import org.eclipse.iee.pad.formula.ui.hover.HoverShell;
 import org.eclipse.iee.pad.formula.ui.utils.FormulaRenderer;
 import org.eclipse.iee.pad.formula.ui.utils.Function;
-import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -64,7 +63,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 	protected String fResult;
 
 	protected TextViewer fViewer;
-	private TextViewerSupport fViewerSupport;
 
 	protected Document fDocument;
 
@@ -176,11 +174,11 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 		if (fIsInputValid) {
 			if (!fDocument.get().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
-				Collection<Pad> following = FormulaPadManager
+				Collection<Pad<?>> following = FormulaPadManager
 						.getFollowingPads(this);
 
-				for (Pad pad : following) {
-					((AbstractFormulaPad) pad).updateLastResult("");
+				for (Pad<?> pad : following) {
+					((AbstractFormulaPad<?>) pad).updateLastResult("");
 				}
 			}
 		}
@@ -430,7 +428,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 		fViewer.setUndoManager(defaultUndoManager);
 		defaultUndoManager.connect(fViewer);
 
-		fViewerSupport = new TextViewerSupport(fViewer);
+		new TextViewerSupport(fViewer);
 
 		/* Result View */
 

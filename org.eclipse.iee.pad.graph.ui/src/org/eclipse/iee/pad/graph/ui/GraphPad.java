@@ -3,10 +3,7 @@ package org.eclipse.iee.pad.graph.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Serializable;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +81,7 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	}
 
 	@Override
-	public Pad copy() {
+	public GraphPad copy() {
 		GraphPad newPad = new GraphPad(getDocumentPart().copy());
 		newPad.results = this.results;
 		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
@@ -193,7 +190,7 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 			}
 
 			@Override
-			public Comparable getSeriesKey(int arg0) {
+			public Comparable<Integer> getSeriesKey(int arg0) {
 				return Integer.valueOf(arg0);
 			}
 

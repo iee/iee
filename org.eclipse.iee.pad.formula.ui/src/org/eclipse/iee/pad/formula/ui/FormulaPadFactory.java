@@ -4,7 +4,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import org.eclipse.iee.editor.core.pad.IPadFactory;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.formula.FormulaPart;
 import org.osgi.service.component.annotations.Component;
 
@@ -15,7 +14,7 @@ import org.osgi.service.component.annotations.Component;
 public class FormulaPadFactory implements IPadFactory<FormulaPart> {
 
 	@Override
-	public Pad create(FormulaPart part) {
+	public FormulaPad create(FormulaPart part) {
 		FormulaPad formulaPad = new FormulaPad(part);
 		return formulaPad;
 	}

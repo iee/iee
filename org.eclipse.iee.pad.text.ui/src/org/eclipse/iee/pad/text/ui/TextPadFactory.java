@@ -9,7 +9,7 @@ import org.osgi.service.component.annotations.Component;
 public class TextPadFactory implements IPadFactory<TextPart> {
 
 	@Override
-	public Pad create(TextPart documentPart) {
+	public TextPad create(TextPart documentPart) {
 		return new TextPad(documentPart);
 	}
 

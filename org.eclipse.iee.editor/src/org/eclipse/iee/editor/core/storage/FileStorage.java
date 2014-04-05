@@ -10,7 +10,7 @@ public abstract class FileStorage implements IPadStorage {
 	public FileStorage(String directoryPath) {
 	}
 	
-	public abstract void saveToFile(Pad pad);
+	public abstract void saveToFile(Pad<?> pad);
 
 	public abstract void removeFile(String containerID);
 

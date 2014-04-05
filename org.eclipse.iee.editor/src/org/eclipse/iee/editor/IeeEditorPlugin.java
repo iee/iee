@@ -29,25 +29,25 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public IeeEditorPlugin() {
 	}
 	
-	public static IPadManager getPadManager() {
+	public IPadManager getPadManager() {
 		return getService(IPadManager.class);
 	}
 
-	private static <T> T getService(Class<T> clazz) {
+	private <T> T getService(Class<T> clazz) {
 		BundleContext context = getDefault().getBundle().getBundleContext();
 		ServiceReference<T> sr = context.getServiceReference(clazz);
 		return context.getService(sr);
 	}
 	
-	public static IDocumentParser getParser() {
+	public IDocumentParser getParser() {
 		return getService(IDocumentParser.class);
 	}
 
-	public static IDocumentWriter getWriter() {
+	public IDocumentWriter getWriter() {
 		return getService(IDocumentWriter.class);
 	}
 
-	public static IPadStorage getPadStorage() {
+	public IPadStorage getPadStorage() {
 		return fPadStorage;
 	}
 

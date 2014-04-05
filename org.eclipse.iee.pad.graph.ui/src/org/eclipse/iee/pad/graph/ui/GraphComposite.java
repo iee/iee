@@ -43,7 +43,7 @@ public class GraphComposite extends Composite {
 		frame.setVerticalAxisTrace(true);
 		frame.setLayoutData(gd_frame);
 		
-		Label label = new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 
 		GridData xData = new GridData(SWT.CENTER, SWT.FILL, true, true);
 		xData.exclude = false;

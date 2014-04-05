@@ -121,16 +121,16 @@ public class SWTGraphics2D extends Graphics2D {
     private java.awt.Composite composite;
 
     /** A HashMap to store the Swt color resources. */
-    private Map colorsPool = new HashMap();
+    private Map<Integer, org.eclipse.swt.graphics.Color> colorsPool = new HashMap<>();
 
     /** A HashMap to store the Swt font resources. */
-    private Map fontsPool = new HashMap();
+    private Map<Font, org.eclipse.swt.graphics.Font> fontsPool = new HashMap<>();
 
     /** A HashMap to store the Swt transform resources. */
-    private Map transformsPool = new HashMap();
+    private Map<AffineTransform, Transform> transformsPool = new HashMap<>();
 
     /** A List to store the Swt resources. */
-    private List resourcePool = new ArrayList();
+    private List<Resource> resourcePool = new ArrayList<Resource>();
 
     /**
      * Creates a new instance.
@@ -211,7 +211,7 @@ public class SWTGraphics2D extends Graphics2D {
      *
      * @see #setRenderingHints(Map)
      */
-    public void addRenderingHints(Map hints) {
+    public void addRenderingHints(Map<?,?> hints) {
         this.hints.putAll(hints);
     }
 
@@ -223,11 +223,12 @@ public class SWTGraphics2D extends Graphics2D {
      *
      * @see #addRenderingHints(Map)
      */
-    public void setRenderingHints(Map hints) {
+    @SuppressWarnings("unchecked")
+	public void setRenderingHints(Map<?,?> hints) {
         if (hints == null) {
             throw new NullPointerException("Null 'hints' argument.");
         }
-        this.hints = new RenderingHints(hints);
+        this.hints = new RenderingHints((Map<Key, ?>) hints);
     }
 
     /**
@@ -1245,8 +1246,8 @@ public class SWTGraphics2D extends Graphics2D {
      * Dispose the resource pool.
      */
     private void disposeResourcePool() {
-        for (Iterator it = this.resourcePool.iterator(); it.hasNext();) {
-            Resource resource = (Resource) it.next();
+        for (Iterator<Resource> it = this.resourcePool.iterator(); it.hasNext();) {
+            Resource resource = it.next();
             resource.dispose();
         }
         this.fontsPool.clear();
@@ -1266,8 +1267,7 @@ public class SWTGraphics2D extends Graphics2D {
      * @return The SWT font instance.
      */
     private org.eclipse.swt.graphics.Font getSwtFontFromPool(Font font) {
-        org.eclipse.swt.graphics.Font swtFont = (org.eclipse.swt.graphics.Font)
-        this.fontsPool.get(font);
+        org.eclipse.swt.graphics.Font swtFont = this.fontsPool.get(font);
         if (swtFont == null) {
             swtFont = new org.eclipse.swt.graphics.Font(this.gc.getDevice(),
                     SWTUtils.toSwtFontData(this.gc.getDevice(), font, true));
@@ -1289,11 +1289,10 @@ public class SWTGraphics2D extends Graphics2D {
      */
     private org.eclipse.swt.graphics.Color getSwtColorFromPool(Color awtColor) {
         org.eclipse.swt.graphics.Color swtColor =
-                (org.eclipse.swt.graphics.Color)
                 // we can't use the following valueOf() method, because it
-                // won't compile with JDK1.4
-                // this.colorsPool.get(Integer.valueOf(awtColor.getRGB()));
-                this.colorsPool.get(new Integer(awtColor.getRGB()));
+		// won't compile with JDK1.4
+		// this.colorsPool.get(Integer.valueOf(awtColor.getRGB()));
+		this.colorsPool.get(new Integer(awtColor.getRGB()));
         if (swtColor == null) {
             swtColor = SWTUtils.toSwtColor(this.gc.getDevice(), awtColor);
             addToResourcePool(swtColor);
@@ -1315,7 +1314,7 @@ public class SWTGraphics2D extends Graphics2D {
      * @return A SWT transform instance.
      */
     private Transform getSwtTransformFromPool(AffineTransform awtTransform) {
-        Transform t = (Transform) this.transformsPool.get(awtTransform);
+        Transform t = this.transformsPool.get(awtTransform);
         if (t == null) {
             t = new Transform(this.gc.getDevice());
             double[] matrix = new double[6];

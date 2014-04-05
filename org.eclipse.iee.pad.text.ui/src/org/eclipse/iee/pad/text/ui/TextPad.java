@@ -26,10 +26,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
@@ -340,7 +336,7 @@ public class TextPad extends Pad<TextPart> {
 	}
 	
 	@Override
-	public Pad copy() {
+	public TextPad copy() {
 		TextPad newPad = new TextPad(getDocumentPart().copy());
 		return newPad;
 	}

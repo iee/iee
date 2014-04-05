@@ -194,7 +194,7 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPart> {
 			}
 
 			@Override
-			public Comparable getSeriesKey(int arg0) {
+			public Comparable<Integer> getSeriesKey(int arg0) {
 				return Integer.valueOf(arg0);
 			}
 

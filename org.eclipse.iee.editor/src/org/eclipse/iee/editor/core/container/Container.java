@@ -203,6 +203,7 @@ public class Container implements IAdaptable {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class adapter) {
 		if (IPropertySource.class.equals(adapter)) {
 			return new ContainerPropertySource(this);

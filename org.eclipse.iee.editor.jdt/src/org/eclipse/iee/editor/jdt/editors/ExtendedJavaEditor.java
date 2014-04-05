@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
@@ -16,7 +15,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.iee.core.document.PadDocumentPart;
-import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.Container;
@@ -34,7 +32,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -72,10 +69,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	private static final Logger logger = LoggerFactory
 			.getLogger(ExtendedJavaEditor.class);
 
-	private static final String BUNDLE_FOR_CONSTRUCTED_KEYS = "org.eclipse.jdt.internal.ui.javaeditor.ConstructedJavaEditorMessages";//$NON-NLS-1$
-	private static ResourceBundle fgBundleForConstructedKeys = ResourceBundle
-			.getBundle(BUNDLE_FOR_CONSTRUCTED_KEYS);
-
 	private PropertySheetPage fPropertySheetPage;
 
 	public ExtendedJavaEditor() {
@@ -95,10 +88,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	@Override
 	public void initIeeEditorCore() {
-		IDocument document = getSourceViewer().getDocument();
-
-		DocumentStructureConfig config = new DocumentStructureConfig();
-
 		IEditorPart editor = this;
 		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
 		IFile file = input.getFile();
@@ -213,7 +202,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	
 	@Override
 	public IPadManager getPadManager() {
-		return IeeEditorPlugin.getPadManager();
+		return IeeEditorPlugin.getDefault().getPadManager();
 	}
 
 	@Override
@@ -494,6 +483,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	}
 	
 	@Override
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class required) {
 		if (IPropertySheetPage.class.equals(required)) {
 			fPropertySheetPage = new PropertySheetPage();

@@ -58,7 +58,6 @@ public class ContainerManager extends EventManager {
 
 	private final UserInteractionManager fUserInteractionManager;
 
-	@SuppressWarnings("unused")
 	private PartitioningManager fPartitioningManager;
 
 	private final ISourceViewer fSourceViewer;
@@ -374,8 +373,6 @@ public class ContainerManager extends EventManager {
 					}
 				}
 			}
-
-			int delta = event.getText().length() - event.getLength();
 		}
 	}
 

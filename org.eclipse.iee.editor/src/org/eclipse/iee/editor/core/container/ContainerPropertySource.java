@@ -22,13 +22,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.google.common.base.Converter;
 import com.google.common.primitives.Ints;
 
 public class ContainerPropertySource implements IPropertySource2 {
-	private static final String TEXT = "TEXT";
 
 	private Container fContainer;
 	private IPropertyDescriptor[] fDescriptors; 

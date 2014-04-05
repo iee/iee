@@ -16,10 +16,8 @@ import org.eclipse.iee.core.EvaluationContextHolder;
 import org.eclipse.iee.core.document.Document;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.store.IDocumentStore;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 public class DevDocumentStore implements IDocumentStore {
@@ -48,10 +46,11 @@ public class DevDocumentStore implements IDocumentStore {
 			String[] computeDefaultRuntimeClassPath = JavaRuntime.computeDefaultRuntimeClassPath(javaProject);
 			List<URL> urls = new ArrayList<>();
 			for (String iClasspathEntry : computeDefaultRuntimeClassPath) {
-				urls.add(new File(iClasspathEntry).toURL());
+				urls.add(new File(iClasspathEntry).toURI().toURL());
 			}
-			URLClassLoader classLoader = new URLClassLoader((URL[]) urls.toArray(new URL[urls.size()]), EvaluationContextHolder.class.getClassLoader());
-			return classLoader.loadClass(name);
+			try (URLClassLoader classLoader = new URLClassLoader((URL[]) urls.toArray(new URL[urls.size()]), EvaluationContextHolder.class.getClassLoader())) {
+				return classLoader.loadClass(name);
+			}
 		}  catch (CoreException e) {
 			throw new RuntimeException(e);
 		}

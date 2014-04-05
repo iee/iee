@@ -27,14 +27,14 @@ public interface IPadManager {
 
 	public abstract void savePadsInEditor(String containerManagerID);
 
-	public abstract List<Pad> selectPadsByType(String type);
+	public abstract List<Pad<?>> selectPadsByType(String type);
 
-	public abstract Collection<Pad> selectPadsOfCategory(String category);
+	public abstract Collection<Pad<?>> selectPadsOfCategory(String category);
 
-	public abstract Collection<Pad> selectPadsInContainerManager(
+	public abstract Collection<Pad<?>> selectPadsInContainerManager(
 			String containerManagerID);
 
-	public abstract Collection<Pad> selectPads(String containerManager,
+	public abstract Collection<Pad<?>> selectPads(String containerManager,
 			String category);
 
 	public abstract Object[] getActivePads();
@@ -46,14 +46,14 @@ public interface IPadManager {
 	/*
 	 * Gets pad using its id
 	 */
-	public abstract Pad getPadById(String id);
+	public abstract Pad<?> getPadById(String id);
 
 	/**
 	 * Called when external plug-in needs to load pad that was created before.
 	 * 
 	 * @param pad
 	 */
-	public abstract void loadPad(Pad pad);
+	public abstract void loadPad(Pad<?> pad);
 
 	/**
 	 * Request pad removal.
@@ -61,7 +61,7 @@ public interface IPadManager {
 	 * @param pad
 	 * @param containerManager
 	 */
-	public abstract void deletePad(Pad pad, ContainerManager containerManager);
+	public abstract void deletePad(Pad<?> pad, ContainerManager containerManager);
 
 	public abstract void addPadManagerListener(IPadManagerListener listener);
 

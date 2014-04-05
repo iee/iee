@@ -13,12 +13,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
-
-	private static final Logger logger = LoggerFactory.getLogger(Pad.class);
 
 	private Container fContainer;
 
@@ -139,7 +135,7 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 	 * 
 	 * @return
 	 */
-	public abstract Pad copy();
+	public abstract Pad<T> copy();
 
 	/**
 	 * Save pad

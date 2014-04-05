@@ -4,17 +4,14 @@
 package org.eclipse.iee.editor.jdt.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
+@SuppressWarnings("restriction")
 public class TestJavaEditor extends MultiPageEditorPart {
 
-	
-	
 	private CompilationUnitEditor editor;
 
 	@Override

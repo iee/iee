@@ -41,7 +41,7 @@ public class LoadingPad extends Pad<PadDocumentPart> {
 	}
 
 	@Override
-	public Pad copy() {
+	public LoadingPad copy() {
 		return new LoadingPad(getDocumentPart().copy());
 	}
 

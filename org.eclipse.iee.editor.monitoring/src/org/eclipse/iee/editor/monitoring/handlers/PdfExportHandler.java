@@ -92,7 +92,7 @@ public class PdfExportHandler implements IHandler {
 
 			fLatex += convertJavaSource(javaSource);
 
-			Pad pad = padManager.getPadById(c.getContainerID());
+			Pad<?> pad = padManager.getPadById(c.getContainerID());
 			fLatex += pad.getTex();
 
 			lastOffset = offset + length;

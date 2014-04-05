@@ -4,7 +4,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
@@ -35,8 +34,6 @@ public class DocumentAccess {
 
 	private ContainerManager fContainerManager;
 	
-	private DocumentStructureConfig fConfig = new DocumentStructureConfig();
-
 	private IDocumentWriter fWriter; 
 	
 	private final class FindByOffset extends JavaBaseVisitor<Boolean> {
@@ -223,11 +220,11 @@ public class DocumentAccess {
 	 * Parses @param textRegion and returns container's id
 	 */
 	String getContainerIDFromTextRegion(String textRegion) {
-		int from = fConfig.EMBEDDED_REGION_BEGIN.length();
+		int from = DocumentStructureConfig.EMBEDDED_REGION_BEGIN.length();
 
-		int to = textRegion.indexOf(fConfig.INNER_TEXT_BEGIN);
+		int to = textRegion.indexOf(DocumentStructureConfig.INNER_TEXT_BEGIN);
 		if (to == -1) {
-			to = textRegion.indexOf(fConfig.EMBEDDED_REGION_END);
+			to = textRegion.indexOf(DocumentStructureConfig.EMBEDDED_REGION_END);
 		}
 
 		try {

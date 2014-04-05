@@ -67,8 +67,6 @@ public class JavaTranslator {
 	private Set<String> fMethodClasses = new HashSet<>();
 	private Set<String> fInnerClasses = new HashSet<>();
 
-	private List<String> fFunctionVariables = new ArrayList<>();
-
 	private VariableType fVariableType = null;
 	private String fVariableTypeString = "";
 

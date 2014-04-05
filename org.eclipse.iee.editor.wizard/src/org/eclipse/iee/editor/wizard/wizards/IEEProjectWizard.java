@@ -33,22 +33,14 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.pde.core.IEditableModel;
 import org.eclipse.pde.core.build.IBuildEntry;
 import org.eclipse.pde.core.build.IBuildModelFactory;
-import org.eclipse.pde.core.plugin.IPlugin;
-import org.eclipse.pde.core.plugin.IPluginImport;
-import org.eclipse.pde.core.plugin.IPluginModel;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.internal.core.ClasspathComputer;
 import org.eclipse.pde.internal.core.build.WorkspaceBuildModel;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundlePluginModel;
 import org.eclipse.pde.internal.core.ibundle.IBundle;
 import org.eclipse.pde.internal.core.ibundle.IBundleModel;
 import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase;
-import org.eclipse.pde.internal.core.ibundle.IManifestHeader;
 import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.pde.internal.core.project.PDEProject;
-import org.eclipse.pde.internal.core.text.bundle.BundleClasspathHeader;
-import org.eclipse.pde.internal.core.text.bundle.ImportPackageHeader;
 import org.eclipse.pde.internal.core.util.CoreUtility;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -57,6 +49,7 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.osgi.framework.Constants;
 
+@SuppressWarnings("restriction")
 public class IEEProjectWizard extends Wizard implements INewWizard,
 		IExecutableExtension {
 
@@ -198,7 +191,6 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			addFileToProject(proj, new Path("src/Iee.java"),
 					GeneralIEEWizard.openContentStream(), monitor);
 
-			IFile fragmentXml = PDEProject.getFragmentXml(proj);
 			IFile pluginXml = PDEProject.getPluginXml(proj);
 			IFile manifest = PDEProject.getManifest(proj);
 			WorkspaceBundlePluginModel model = new WorkspaceBundlePluginModel(manifest, pluginXml);
@@ -232,7 +224,6 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 
 				InputStream input = IEEProjectWizard.class
 						.getResourceAsStream("templates/" + libName);
-				final IFile file = proj.getFile("lib/" + libName);
 				/* Add an java file */
 				addFileToProject(proj, new Path("lib/" + libName), input,
 						monitor);

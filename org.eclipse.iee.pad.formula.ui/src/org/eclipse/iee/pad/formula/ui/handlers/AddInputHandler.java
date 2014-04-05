@@ -6,7 +6,6 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.pad.formula.InputPart;
-import org.eclipse.iee.pad.formula.ui.InputPad;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;

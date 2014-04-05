@@ -26,8 +26,8 @@ public class PartitioningManager {
 		
 		fDocumentPartitioner = new FastPartitioner(
 			new PartitioningScanner(
-				config.EMBEDDED_REGION_BEGIN, 
-				config.EMBEDDED_REGION_END),
+				DocumentStructureConfig.EMBEDDED_REGION_BEGIN, 
+				DocumentStructureConfig.EMBEDDED_REGION_END),
 			new String[] { CONTENT_TYPE_EMBEDDED });
 	
 		fDocumentPartitioner.connect(fDocument);

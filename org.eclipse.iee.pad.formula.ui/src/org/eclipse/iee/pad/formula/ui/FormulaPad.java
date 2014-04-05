@@ -3,6 +3,7 @@ package org.eclipse.iee.pad.formula.ui;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.formula.FormulaPart;
 
+@SuppressWarnings("unused")
 public class FormulaPad extends AbstractFormulaPad<FormulaPart> {
 
 	public FormulaPad(FormulaPart part) {
@@ -19,7 +20,7 @@ public class FormulaPad extends AbstractFormulaPad<FormulaPart> {
 	}
 	
 	@Override
-	public Pad copy() {
+	public FormulaPad copy() {
 		FormulaPad newPad = new FormulaPad(getDocumentPart().copy());
 		return newPad;
 	}

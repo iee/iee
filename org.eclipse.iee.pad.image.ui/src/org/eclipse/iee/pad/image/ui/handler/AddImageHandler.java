@@ -5,8 +5,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.iee.editor.IPadEditor;
-import org.eclipse.iee.pad.image.ImagePart;
-import org.eclipse.iee.pad.image.ui.ImagePad;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;

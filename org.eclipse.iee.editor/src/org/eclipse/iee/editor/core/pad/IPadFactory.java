@@ -16,6 +16,6 @@ public interface IPadFactory<T extends PadDocumentPart> {
 	 * @param value pad value
 	 * @return new pad instance
 	 */
-	Pad create(T documentPart);
+	Pad<T> create(T documentPart);
 
 }

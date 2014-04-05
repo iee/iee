@@ -1,7 +1,6 @@
 package org.eclipse.iee.web.renderer;
 
 import java.io.IOException;
-import java.io.Writer;
 
 import org.eclipse.iee.core.document.Document;
 

@@ -5,11 +5,10 @@ Bundle-SymbolicName: org.eclipse.iee.pad.fem3d.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.apache.commons.codec.binary;version="1.4.0",
- org.eclipse.iee.core.document,
- org.slf4j
-Require-Bundle: org.eclipse.jface,
- org.eclipse.jface.text,
+ org.eclipse.iee.core.document
+Require-Bundle: org.eclipse.jface.text,
  org.eclipse.iee.editor,
  org.eclipse.iee.pad.fem3d,
- org.eclipse.ui.workbench
+ org.eclipse.ui,
+ org.eclipse.core.expressions
 Bundle-ActivationPolicy: lazy

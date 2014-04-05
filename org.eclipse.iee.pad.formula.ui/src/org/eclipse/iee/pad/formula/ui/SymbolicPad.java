@@ -3,18 +3,11 @@ package org.eclipse.iee.pad.formula.ui;
 import java.util.Collection;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.pad.formula.InputPart;
 import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.pad.formula.SymbolicPart;
-import org.eclipse.iee.pad.formula.ui.hover.HoverShell;
 import org.eclipse.iee.pad.formula.ui.utils.FormulaRenderer;
 import org.eclipse.iee.pad.formula.ui.utils.Function;
-import org.eclipse.jface.text.ITextListener;
-import org.eclipse.jface.text.TextEvent;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,10 +46,10 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 		if (fIsInputValid) {
 			if (!fDocument.get().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
-				Collection<Pad> following = FormulaPadManager
+				Collection<Pad<?>> following = FormulaPadManager
 						.getFollowingPads(this);
 
-				for (Pad pad : following) {
+				for (Pad<?> pad : following) {
 					((SymbolicPad) pad).updateLastResult("");
 				}
 			}

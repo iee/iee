@@ -1,7 +1,6 @@
 package org.eclipse.iee.pad.formula.ui;
 
 import org.eclipse.iee.editor.core.pad.IPadFactory;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.formula.InputPart;
 import org.osgi.service.component.annotations.Component;
 
@@ -12,7 +11,7 @@ import org.osgi.service.component.annotations.Component;
 public class InputPadFactory implements IPadFactory<InputPart> {
 
 	@Override
-	public Pad create(InputPart part) {
+	public InputPad create(InputPart part) {
 		InputPad formulaPad = new InputPad(part);
 		return formulaPad;
 	}

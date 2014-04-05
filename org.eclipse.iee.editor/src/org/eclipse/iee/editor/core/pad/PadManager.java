@@ -29,13 +29,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 public class PadManager extends EventManager implements IPadManager {
-
-	private static final Logger logger = LoggerFactory.getLogger(PadManager.class);
 
 	/* ContainerManagers */
 
@@ -43,11 +39,12 @@ public class PadManager extends EventManager implements IPadManager {
 	private IContainerManagerListener fContainerManagerListener;
 	
 	/** Registered pad factories. */
+	@SuppressWarnings("rawtypes")
 	private final HandlerManager<IPadFactory> fPadFactories = new HandlerManager<IPadFactory>(IPadFactory.class);
 
 	/* Pads */
 
-	private final Map<String, Pad> fPads = new TreeMap<String, Pad>();
+	private final Map<String, Pad<?>> fPads = new TreeMap<String, Pad<?>>();
 
 	/** Pads which are visible by user (have attached container) */
 	private final Set<String> fActivePads = new TreeSet<String>();
@@ -122,10 +119,10 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPadsByType(java.lang.String)
 	 */
 	@Override
-	public List<Pad> selectPadsByType(String type) {
-		List<Pad> result = new ArrayList<Pad>();
+	public List<Pad<?>> selectPadsByType(String type) {
+		List<Pad<?>> result = new ArrayList<Pad<?>>();
 		for (String id : fActivePads) {
-			Pad pad = fPads.get(id);
+			Pad<?> pad = fPads.get(id);
 			if (pad.getType().equals(type)) {
 				result.add(pad);
 			}
@@ -137,7 +134,7 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPadsOfCategory(java.lang.String)
 	 */
 	@Override
-	public Collection<Pad> selectPadsOfCategory(String category) {
+	public Collection<Pad<?>> selectPadsOfCategory(String category) {
 
 		return null;
 	}
@@ -146,7 +143,7 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPadsInContainerManager(java.lang.String)
 	 */
 	@Override
-	public Collection<Pad> selectPadsInContainerManager(
+	public Collection<Pad<?>> selectPadsInContainerManager(
 			String containerManagerID) {
 
 		return null;
@@ -156,7 +153,7 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#selectPads(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<Pad> selectPads(String containerManager, String category) {
+	public Collection<Pad<?>> selectPads(String containerManager, String category) {
 
 		return null;
 	}
@@ -194,7 +191,7 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#getPadById(java.lang.String)
 	 */
 	@Override
-	public Pad getPadById(String id) {
+	public Pad<?> getPadById(String id) {
 		return fPads.get(id);
 	}
 
@@ -202,7 +199,7 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#loadPad(org.eclipse.iee.editor.core.pad.Pad)
 	 */
 	@Override
-	public void loadPad(Pad pad) {
+	public void loadPad(Pad<?> pad) {
 		String containerID = pad.getContainerID();
 
 		if (fActivePads.contains(containerID))
@@ -214,7 +211,7 @@ public class PadManager extends EventManager implements IPadManager {
 			/*
 			 * Case 1: container with corresponding id already exists
 			 */
-			Pad temporary = fPads.get(containerID);
+			Pad<?> temporary = fPads.get(containerID);
 			Container container = temporary.getContainer();
 
 			/* Remove 'loading' pad */
@@ -242,7 +239,7 @@ public class PadManager extends EventManager implements IPadManager {
 	 * @see org.eclipse.iee.editor.core.pad.IPadManager#deletePad(org.eclipse.iee.editor.core.pad.Pad, org.eclipse.iee.editor.core.container.ContainerManager)
 	 */
 	@Override
-	public void deletePad(Pad pad, ContainerManager containerManager) {
+	public void deletePad(Pad<?> pad, ContainerManager containerManager) {
 		if (pad.isContainerAttached()) {
 			pad.getContainer().destroy();
 		}
@@ -271,26 +268,26 @@ public class PadManager extends EventManager implements IPadManager {
 
 			@Override
 			public void containerSelected(ContainerEvent event) {
-				Pad selected = fPads.get(event.getContainer().getContainerID());
+				Pad<?> selected = fPads.get(event.getContainer().getContainerID());
 				selected.setSelected(true);
 			}
 
 			@Override
 			public void containerLostSelection(ContainerEvent event) {
-				Pad selected = fPads.get(event.getContainer().getContainerID());
+				Pad<?> selected = fPads.get(event.getContainer().getContainerID());
 				selected.setSelected(false);
 			}
 
 			@Override
 			public void containerActivated(ContainerEvent event) {
-				Pad pad = fPads.get(event.getContainer().getContainerID());
+				Pad<?> pad = fPads.get(event.getContainer().getContainerID());
 				pad.activate();
 			}
 
 			@Override
 			public void containerUpdated(ContainerEvent containerEvent) {
 				Container container = containerEvent.getContainer();
-				Pad pad = fPads.get(container.getContainerID());
+				Pad<?> pad = fPads.get(container.getContainerID());
 				if (pad != null) {
 					//XXX
 //					pad.updateData(container.getPadParams(),
@@ -300,7 +297,7 @@ public class PadManager extends EventManager implements IPadManager {
 
 			@Override
 			public void containerDeactivated(ContainerEvent event) {
-				Pad pad = fPads.get(event.getContainer().getContainerID());
+				Pad<?> pad = fPads.get(event.getContainer().getContainerID());
 				pad.deactivate();
 			}
 		};
@@ -310,7 +307,7 @@ public class PadManager extends EventManager implements IPadManager {
 	/* Internal functions */
 	private void clearPadSetsAndRuntime(String containerID,
 			boolean addToSuspended) {
-		Pad pad = fPads.get(containerID);
+		Pad<?> pad = fPads.get(containerID);
 
 		String runtimePath = pad.getContainer().getContainerManager()
 				.getStoragePath()
@@ -340,6 +337,7 @@ public class PadManager extends EventManager implements IPadManager {
 		Assert.isLegal(false);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void onContainerCreated(Container container) {
 		String containerID = container.getContainerID();
 		if (fSuspendedPads.contains(containerID)) {
@@ -347,7 +345,7 @@ public class PadManager extends EventManager implements IPadManager {
 			 * Case 1: container corresponds to suspended pad. Attaching
 			 * container to pad.
 			 */
-			Pad pad = fPads.get(containerID);
+			Pad<?> pad = fPads.get(containerID);
 
 			Assert.isLegal(pad.getContainerID().equals(containerID));
 			pad.attachContainer(container);
@@ -362,8 +360,8 @@ public class PadManager extends EventManager implements IPadManager {
 			 * Case 2: container is copied from another place. Copying
 			 * pad and attaching container.
 			 */
-			Pad pad = fPads.get(containerID);
-			Pad clone = pad.copy();
+			Pad<?> pad = fPads.get(containerID);
+			Pad<?> clone = pad.copy();
 			clone.getDocumentPart().setId(UUID.randomUUID().toString());
 			clone.attachContainer(container);
 			fActivePads.add(clone.getContainerID());
@@ -376,16 +374,16 @@ public class PadManager extends EventManager implements IPadManager {
 			 * Case 3: container with corresponding "Temporary" pad is
 			 * copied from another place. Creating loading pad.
 			 */
-			Pad pad = new LoadingPad(container.getPadPart());
+			Pad<?> pad = new LoadingPad(container.getPadPart());
 			((LoadingPad) pad).setOriginalContainerID(containerID);
 			pad.attachContainer(container);
 			fTemporaryPads.add(pad.getContainerID());
 			fPads.put(pad.getContainerID(), pad);
 			return;
 		}
-		IPadFactory iPadFactory = fPadFactories.getHandler(container.getPadPart().getClass());
+		IPadFactory<PadDocumentPart> iPadFactory = fPadFactories.getHandler(container.getPadPart().getClass());
 		if (iPadFactory != null) {
-			Pad pad = iPadFactory.create(container.getPadPart());
+			Pad<?> pad = iPadFactory.create(container.getPadPart());
 			pad.attachContainer(container);
 			fActivePads.add(containerID);
 			fPads.put(containerID, pad);
@@ -393,7 +391,7 @@ public class PadManager extends EventManager implements IPadManager {
 			/*
 			 * Case 4: no corresponding pad. Creating new "loading" pad.
 			 */
-			Pad pad = new LoadingPad(container.getPadPart());
+			Pad<?> pad = new LoadingPad(container.getPadPart());
 			pad.attachContainer(container);
 			fTemporaryPads.add(containerID);
 			fPads.put(containerID, pad);
@@ -436,9 +434,10 @@ public class PadManager extends EventManager implements IPadManager {
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, unbind = "unregisterPadFactory", policy = ReferencePolicy.DYNAMIC)
-	public void registerPadFactory(IPadFactory factory) {
+	@SuppressWarnings("unchecked")
+	public <T extends PadDocumentPart> void registerPadFactory(IPadFactory<T> factory) {
 		fPadFactories.registerHandler(factory);
-		loadPads(ReflectionUtils.getGenericParameterClass(factory.getClass(), IPadFactory.class, 0), factory);
+		loadPads((Class<T>) ReflectionUtils.getGenericParameterClass(factory.getClass(), IPadFactory.class, 0), factory);
 	}
 
 	/* (non-Javadoc)
@@ -446,12 +445,12 @@ public class PadManager extends EventManager implements IPadManager {
 	 */
 	@Override
 	public <T extends PadDocumentPart> void loadPads(Class<T> class1, IPadFactory<T> factory) {
-		Map<Integer, Pad> loadPads = new HashMap<Integer, Pad>();
+		Map<Integer, Pad<?>> loadPads = new HashMap<Integer, Pad<?>>();
 		for (String temp : fTemporaryPads) {
-			Pad pad = fPads.get(temp);
+			Pad<?> pad = fPads.get(temp);
 			Container container = pad.getContainer();
 			if (class1.equals(container.getPadPart().getClass())) {
-				Pad create = factory.create((T) container.getPadPart());
+				Pad<?> create = factory.create(class1.cast(container.getPadPart()));
 				loadPads.put(container.getPosition().offset, create);
 			}
 		}
@@ -466,7 +465,7 @@ public class PadManager extends EventManager implements IPadManager {
 
 	}
 
-	public void unregisterPadFactory(IPadFactory factory) {
+	public void unregisterPadFactory(IPadFactory<?> factory) {
 		fPadFactories.unregisterHandler(factory);
 	}
 
