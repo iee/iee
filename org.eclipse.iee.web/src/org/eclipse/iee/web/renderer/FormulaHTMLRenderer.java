@@ -46,11 +46,7 @@ public class FormulaHTMLRenderer implements IHTMLRenderer<FormulaPart> {
 		BufferedImage image = formulaImageRenderer.getFormulaImage(text, java.awt.Color.black, null);
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
-		try {
-			ImageIO.write(image, "png", outputStream);
-		} finally {
-			outputStream.close();
-		}
+		ImageIO.write(image, "png", outputStream);
 	}
 	
 	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)

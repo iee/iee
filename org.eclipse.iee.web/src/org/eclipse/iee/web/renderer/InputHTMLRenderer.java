@@ -45,11 +45,7 @@ public class InputHTMLRenderer implements IHTMLRenderer<InputPart> {
 		BufferedImage image = formulaImageRenderer.getFormulaImage(text, java.awt.Color.black, null);
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
-		try {
-			ImageIO.write(image, "png", outputStream);
-		} finally {
-			outputStream.close();
-		}
+		ImageIO.write(image, "png", outputStream);
 	}
 
 	private String getValue(InputPart pad, IHTMLRendererContext context) {

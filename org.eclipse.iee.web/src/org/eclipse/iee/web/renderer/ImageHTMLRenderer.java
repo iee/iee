@@ -23,15 +23,11 @@ public class ImageHTMLRenderer implements IHTMLRenderer<ImagePart> {
 	@Override
 	public void renderResource(ImagePart pad, String resourceId, IResourceRenderContext context)
 			throws IOException {
-		InputStream is = context.getResourceAsStream("image/" + pad.getImagePath());
 		context.setContentType("application/octet-stream");
 		OutputStream outputStream = context.getOutputStream();
-		try {
+		try (InputStream is = context.getResourceAsStream("image/" + pad.getImagePath())) {
 			IOUtils.copy(is, outputStream);
-		} finally {
-			is.close();
-			outputStream.close();
-		}
+		} 
 	}
 
 }

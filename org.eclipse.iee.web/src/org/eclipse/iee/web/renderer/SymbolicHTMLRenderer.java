@@ -50,11 +50,7 @@ public class SymbolicHTMLRenderer implements IHTMLRenderer<SymbolicPart> {
 		BufferedImage image = formulaImageRenderer.getFormulaImage(text, new java.awt.Color(63, 127, 95), null);
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
-		try {
-			ImageIO.write(image, "png", outputStream);
-		} finally {
-			outputStream.close();
-		}
+		ImageIO.write(image, "png", outputStream);
 	}
 	
 	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)

@@ -99,11 +99,7 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPart> {
 			throws IOException {
 		context.setContentType("image/png");
 		OutputStream outputStream = context.getOutputStream();
-		try {
-			ImageIO.write(image, "png", outputStream);
-		} finally {
-			outputStream.close();
-		}
+		ImageIO.write(image, "png", outputStream);
 	}
 	
 	private JFreeChart createChart(GraphModel model, Map<Integer, double[][]> results) {

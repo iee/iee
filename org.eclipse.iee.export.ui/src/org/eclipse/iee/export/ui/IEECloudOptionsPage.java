@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -70,8 +71,8 @@ public class IEECloudOptionsPage extends WizardExportResourcesPage {
 		return ".zip";
 	}
 
-	@Override
-	public List getSelectedResources() {
+	@SuppressWarnings("unchecked")
+	public List<IResource> getSelectedResources() {
 		return super.getSelectedResources();
 	}
 	

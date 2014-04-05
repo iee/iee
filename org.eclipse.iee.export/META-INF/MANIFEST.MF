@@ -6,9 +6,11 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.common.base;version="16.0.1",
+ com.google.gson;version="2.2.4",
  com.google.gson.annotations,
  org.eclipse.iee.core,
  org.eclipse.iee.core.document,
+ org.eclipse.iee.core.store,
  org.eclipse.iee.pad.formula,
  org.eclipse.iee.web.renderer,
  org.osgi.service.component.annotations;version="1.2.0"

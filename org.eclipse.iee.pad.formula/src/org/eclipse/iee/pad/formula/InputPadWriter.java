@@ -6,6 +6,8 @@ import java.util.Map;
 import org.eclipse.iee.core.document.writer.IPadWriter;
 import org.osgi.service.component.annotations.Component;
 
+import com.google.gson.Gson;
+
 /**
  * {@link IPadWriter} implementation. Writes instance of input pad.
  */
@@ -24,7 +26,9 @@ public class InputPadWriter implements IPadWriter<InputPart> {
 
 	@Override
 	public Map<String, String> getParams(InputPart part) {
-		return new HashMap<>();
+		HashMap<String, String> hashMap = new HashMap<>();
+		hashMap.put("validation", new Gson().toJson(part.getValidation()));
+		return hashMap;
 	}
 
 }

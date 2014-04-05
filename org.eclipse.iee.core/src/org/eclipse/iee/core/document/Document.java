@@ -6,13 +6,14 @@ public class Document {
 	
 	private String fName;
 	
-	private DocumentPart fRoot;
+	private RootDocumentPart fRoot;
 
-	public Document(String bundle, String name, DocumentPart root) {
+	public Document(String bundle, String name, RootDocumentPart root) {
 		super();
 		fBundle = bundle;
 		fName = name;
 		fRoot = root;
+		root.setDocument(this);
 	}
 	
 	public DocumentPart getRoot() {

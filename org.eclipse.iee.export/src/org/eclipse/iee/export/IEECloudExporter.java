@@ -16,8 +16,10 @@ import org.eclipse.iee.core.InMemoryResultContainer;
 import org.eclipse.iee.core.NullParameterProvider;
 import org.eclipse.iee.core.document.Document;
 import org.eclipse.iee.core.document.DocumentPart;
+import org.eclipse.iee.core.store.IDocumentStore;
 import org.eclipse.iee.export.model.Field;
 import org.eclipse.iee.export.model.FloatField;
+import org.eclipse.iee.export.model.FloatValidation;
 import org.eclipse.iee.export.model.HTMLField;
 import org.eclipse.iee.export.model.Worksheet;
 import org.eclipse.iee.pad.formula.InputPart;
@@ -35,41 +37,49 @@ public class IEECloudExporter {
 
 	private final IHTMLRendererManager manager;
 
-	public IEECloudExporter(IHTMLRendererManager manager) {
+	private final IDocumentStore documentStore;
+	
+	public IEECloudExporter(IHTMLRendererManager manager, IDocumentStore documentStore) {
 		this.manager = manager;
+		this.documentStore = documentStore;
 	}
 
-	public Worksheet export(Document document) {
+	public PackageBuilder export(Document document) {
+		PackageBuilder builder = new PackageBuilder();
 		Worksheet ws = new Worksheet();
 		DocumentPart root = document.getRoot();
 		List<DocumentPart> children = root.getChildren();
 		for (DocumentPart documentPart : children) {
-			ws.addField(export(documentPart));
+			ws.addField(export(builder, documentPart));
 		}
-		return ws;
+		return builder.setWorksheet(ws);
 	}
 
-	private Field export(DocumentPart documentPart) {
+	private Field export(PackageBuilder builder, DocumentPart documentPart) {
 		Field f;
 		if (documentPart instanceof InputPart) {
 			FloatField flt = new FloatField();
 			flt.setName(((InputPart) documentPart).getVariable());
 			flt.setSampleValue(Double.parseDouble(((InputPart) documentPart).getDefaultValue()));
+			FloatValidation validation = new FloatValidation();
+			validation.setMax(validation.getMax());
+			validation.setMin(validation.getMin());
 			f = flt;
 		} else {
 			IHTMLRenderer<DocumentPart> padHTMLRenderer = manager
 					.getPadHTMLRenderer(documentPart);
 			HTMLField html = new HTMLField();
-			html.setHtml(getHTMLString(documentPart, padHTMLRenderer));
-			f = html; 
+			html.setHtml(getHTMLString(builder, documentPart, padHTMLRenderer));
+			f = html;
 		}
 		return f;
 	}
 
-	private String getHTMLString(DocumentPart documentPart,
-			IHTMLRenderer<DocumentPart> padHTMLRenderer) {
+	private String getHTMLString(final PackageBuilder packageBuilder,
+			final DocumentPart documentPart,
+			final IHTMLRenderer<DocumentPart> padHTMLRenderer) {
 		try (final StringWriter writer = new StringWriter()) {
-			padHTMLRenderer.renderPad(documentPart, new IHTMLRendererContext() {
+			IHTMLRendererContext context = new IHTMLRendererContext() {
 				@Override
 				public boolean isEditMode() {
 					return false;
@@ -104,19 +114,20 @@ public class IEECloudExporter {
 				@Override
 				public String createResourceURL(String padId,
 						String resourceId, Map<String, String> params) {
-					return "img/" + resourceId;
+					String resourcePath = padId + "/" + resourceId;
+					packageBuilder.addResource(
+							resourcePath, 
+							new PackageResourceProvider(manager, documentStore, resourcePath, documentPart)
+							);
+					
+					return "img/" + resourcePath;
 				}
-			});
+			};
+			padHTMLRenderer.renderPad(documentPart, context);
 			return writer.toString();
 		} catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
-	}
-
-	private Field createUnknownField(DocumentPart documentPart) {
-		HTMLField f = new HTMLField();
-		f.setHtml("Unknown field");
-		return f;
 	}
 
 }

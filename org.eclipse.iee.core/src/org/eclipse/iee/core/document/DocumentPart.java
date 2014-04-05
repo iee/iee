@@ -5,9 +5,11 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DocumentPart {
+public abstract class DocumentPart {
 
 	private final PropertyChangeSupport fpcs = new PropertyChangeSupport(this);
+	
+	private DocumentPart parent;
 	
 	private List<DocumentPart> children;
 
@@ -17,9 +19,31 @@ public class DocumentPart {
 	
 	public DocumentPart(List<DocumentPart> children) {
 		super();
-		this.children = children;
+		for (DocumentPart documentPart : children) {
+			addPart(documentPart);
+		}
 	}
 	
+	private void addPart(DocumentPart documentPart) {
+		if (documentPart.getParent() != null) {
+			documentPart.getParent().removePart(documentPart);
+		}
+		if (children == null) {
+			children = new ArrayList<>();
+		}
+		children.add(documentPart);
+		documentPart.setParent(this);
+	}
+	
+	private void removePart(DocumentPart documentPart) {
+		if (children != null) {
+			children.remove(documentPart);
+		}
+		if (documentPart.getParent() == this) {
+			documentPart.setParent(null);
+		}
+	}
+
 	public List<DocumentPart> getChildren() {
 		return children;
 	}
@@ -35,5 +59,20 @@ public class DocumentPart {
 	protected PropertyChangeSupport getPropertyChangeSupport() {
 		return fpcs;
 	}
+	
+	public Document getDocument() {
+		return parent.getDocument();
+	}
+	
+	public DocumentPart getParent() {
+		return parent;
+	}
+	
+	void setParent(DocumentPart parent) {
+		DocumentPart oldValue = this.parent;
+		this.parent = parent;
+		getPropertyChangeSupport().firePropertyChange("parent", oldValue, parent);
+	}
+
 	
 }

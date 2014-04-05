@@ -5,6 +5,9 @@ import java.util.Map;
 import org.eclipse.iee.core.document.parser.IPadParser;
 import org.osgi.service.component.annotations.Component;
 
+import com.google.common.base.Strings;
+import com.google.gson.Gson;
+
 /**
  * {@link IPadParser} implementation. Creates instance of formula pad.
  */
@@ -21,6 +24,10 @@ public class InputPadParser implements IPadParser {
 		if (expressions.length > 1) {
 			String defValue = expressions[1];
 			inputPad.setDefaultValue(defValue);
+		}
+		String validationParam = padParams.get("validation");
+		if (!Strings.isNullOrEmpty(validationParam)) {
+			inputPad.setValidation(new Gson().fromJson(validationParam, InputValidation.class));
 		}
 		return inputPad;
 	}

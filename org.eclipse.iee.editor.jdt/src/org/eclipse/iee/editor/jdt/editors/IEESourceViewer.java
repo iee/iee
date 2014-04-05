@@ -90,7 +90,7 @@ public class IEESourceViewer extends JavaSourceViewer {
 	
 	@Override
 	protected void handleDispose() {
-		getTextWidget().getDisplay().removeFilter(SWT.MouseUp, fMouseListener);
+		getTextWidget().getDisplay().removeFilter(SWT.MouseDown, fMouseListener);
 		super.handleDispose();
 		getContainerManager().dispose();
 		fContainerManager = null;

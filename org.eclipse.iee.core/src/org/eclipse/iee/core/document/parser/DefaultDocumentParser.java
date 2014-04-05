@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.Token;
 import org.eclipse.iee.core.document.DirectiveBlock;
 import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.core.document.RootDocumentPart;
 import org.eclipse.iee.core.document.TextDocumentPart;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -36,11 +37,11 @@ public class DefaultDocumentParser implements IDocumentParser {
 	 * @see org.eclipse.iee.core.document.parser.IDocumentParser#parseDocument(java.io.InputStream)
 	 */
 	@Override
-	public DocumentPart parseDocument(InputStream is) throws IOException {
+	public RootDocumentPart parseDocument(InputStream is) throws IOException {
 		ANTLRInputStream st = new ANTLRInputStream(is);
 		JavaLexer lexer = new JavaLexer(st);
 		List<DocumentPart> children = parseChildren(lexer);
-		return new DocumentPart(children);
+		return new RootDocumentPart(children);
 	}
 
 	private List<DocumentPart> parseChildren(JavaLexer lexer) {

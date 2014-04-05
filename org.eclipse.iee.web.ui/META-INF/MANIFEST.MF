@@ -32,3 +32,4 @@ Import-Package: javax.servlet,
  org.eclipse.jetty.util.component,
  org.eclipse.jetty.webapp
 Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.iee.web.ui.store

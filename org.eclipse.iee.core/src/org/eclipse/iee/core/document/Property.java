@@ -14,6 +14,6 @@ public @interface Property {
 
 	String name();
 
-	String description();
+	String description() default "";
 
 }
