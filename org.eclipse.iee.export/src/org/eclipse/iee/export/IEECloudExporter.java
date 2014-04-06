@@ -52,6 +52,8 @@ public class IEECloudExporter {
 		for (DocumentPart documentPart : children) {
 			ws.addField(export(builder, documentPart));
 		}
+		builder.setBundleName(document.getBundle());
+		builder.setBundleDescription(document.getVersion());
 		return builder.setWorksheet(ws);
 	}
 

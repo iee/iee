@@ -19,6 +19,11 @@ import org.eclipse.iee.core.store.IDocumentStore;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.pde.core.project.IBundleProjectDescription;
+import org.eclipse.pde.core.project.IBundleProjectService;
+import org.eclipse.ui.PlatformUI;
+
+import com.google.common.base.Throwables;
 
 public class DevDocumentStore implements IDocumentStore {
 
@@ -33,9 +38,19 @@ public class DevDocumentStore implements IDocumentStore {
 
 	@Override
 	public Document getDocument(String bundle, String name) throws IOException {
-		InputStream resource = new FileInputStream(new File(getBundlePath(bundle), "src/"
-				+ name.replace(".", "/") + ".java"));
-		return new Document(bundle, name, parser.parseDocument(resource));
+		File file = new File(getBundlePath(bundle), "src/" + name.replace(".", "/") + ".java");
+		try (InputStream resource = new FileInputStream(file)) {
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(bundle);
+			IBundleProjectService service = (IBundleProjectService) PlatformUI.getWorkbench().getService(IBundleProjectService.class);
+			String version = null;
+			IBundleProjectDescription description = service.getDescription(project);
+			if (description != null) {
+				version = description.getBundleVersion().toString();
+			}
+			return new Document(bundle, name, version, parser.parseDocument(resource));
+		} catch (CoreException e) {
+			throw Throwables.propagate(e);
+		}
 	}
 
 	@Override

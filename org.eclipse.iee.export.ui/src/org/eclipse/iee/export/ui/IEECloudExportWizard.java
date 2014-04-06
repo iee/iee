@@ -83,17 +83,7 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 					try (FileOutputStream fos = new FileOutputStream(destinationFile);
 							ZipOutputStream zos = new ZipOutputStream(fos)) {
 						
-						String manifest = "Manifest-Version: 1.0\r\n" + 
-								"Bundle-Version: 2.0.0.v2012091404418\r\n" + 
-								"name: com.ieecloud.ws.settlement.rigid.stamp\r\n" + 
-								"description: Settlement of rigid stamp\r\n" + 
-								"type: fixed";
-						
-						ZipEntry manifestEntry = new ZipEntry("META-INF.MF");
-						zos.putNextEntry(manifestEntry);
-						zos.write(manifest.getBytes());
-			    		zos.closeEntry();
-			    		Bundle bundle = Platform.getBundle("org.eclipse.iee.export.ui");
+						Bundle bundle = Platform.getBundle("org.eclipse.iee.export.ui");
 			    		Enumeration<URL> entries = bundle.findEntries("/META-INF/resources/zip", null, true);
 			    		while (entries.hasMoreElements()){
 			    			URL url = entries.nextElement();

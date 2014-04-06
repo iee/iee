@@ -6,13 +6,16 @@ public class Document {
 	
 	private String fName;
 	
+	private String fVersion;
+	
 	private RootDocumentPart fRoot;
 
-	public Document(String bundle, String name, RootDocumentPart root) {
+	public Document(String bundle, String name, String version, RootDocumentPart root) {
 		super();
 		fBundle = bundle;
 		fName = name;
 		fRoot = root;
+		fVersion = version;
 		root.setDocument(this);
 	}
 	
@@ -24,16 +27,12 @@ public class Document {
 		return fBundle;
 	}
 
-	public void setBundle(String bundle) {
-		this.fBundle = bundle;
-	}
-
 	public String getName() {
 		return fName;
 	}
 
-	public void setName(String name) {
-		this.fName = name;
+	public String getVersion() {
+		return fVersion;
 	}
 	
 	
