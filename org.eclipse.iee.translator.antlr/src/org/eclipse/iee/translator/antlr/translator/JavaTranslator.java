@@ -502,14 +502,21 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
 
-			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
-					&& getType(fPosition, "myTmp=" + right + ";").matches(
-							"Matrix")) {
+			boolean leftMatrix = getType(fPosition, "myTmp=" + left + ";").matches("Matrix");
+			boolean rightMatrix = getType(fPosition, "myTmp=" + right + ";").matches("Matrix");
+			if (leftMatrix || rightMatrix) {
 				// XXX: temporary solution
 				fMatrixExpression = true;
 
-				if (sign.matches(Pattern.quote("*")))
+				if (!leftMatrix && rightMatrix) {
+					String tmp = right;
+					right = left;
+					left = tmp;
+				}
+				
+				if (sign.matches(Pattern.quote("*"))) {
 					return left + ".times(" + right + ")";
+				}
 			}
 
 			return "(" + left + ")" + sign + "(" + right + ")";
