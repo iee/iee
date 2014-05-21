@@ -13,6 +13,7 @@
 		<module>../org.eclipse.iee.core.feature</module>
 		<module>../org.eclipse.iee.export</module>
 		<module>../org.eclipse.iee.export.ui</module>
+		<module>../org.eclipse.iee.export.feature</module>
 		<module>../org.eclipse.iee.editor</module>
 		<module>../org.eclipse.iee.editor.feature</module>
 		<module>../org.eclipse.iee.editor.jdt</module>

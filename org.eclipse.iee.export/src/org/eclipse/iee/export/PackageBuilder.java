@@ -66,12 +66,6 @@ public class PackageBuilder {
 		}
 		zos.write("type: fixed".getBytes());
 		zos.closeEntry();
-		ZipEntry viewEntry = new ZipEntry("schema/view.json");
-		zos.putNextEntry(viewEntry);
-		OutputStreamWriter writer = new OutputStreamWriter(zos, Charsets.UTF_8);
-		new Gson().toJson(ws, writer);
-		writer.flush();
-		zos.closeEntry();
 		for (Entry<String, PackageResourceProvider> entry : resources
 				.entrySet()) {
 			String path = entry.getKey();

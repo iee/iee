@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.iee.core.document.Document;
@@ -74,6 +75,7 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 					output.getProject().getName(), 
 					JavaCore.createCompilationUnitFrom(output).findPrimaryType().getFullyQualifiedName()
 					);
+			final IFile finalOutput = output;
 			getContainer().run(true, true, new IRunnableWithProgress(){
 
 				@Override
@@ -83,24 +85,19 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 					try (FileOutputStream fos = new FileOutputStream(destinationFile);
 							ZipOutputStream zos = new ZipOutputStream(fos)) {
 						
-						Bundle bundle = Platform.getBundle("org.eclipse.iee.export.ui");
-			    		Enumeration<URL> entries = bundle.findEntries("/META-INF/resources/zip", null, true);
-			    		while (entries.hasMoreElements()){
-			    			URL url = entries.nextElement();
-			    			String name = url.getPath().replace("/META-INF/resources/zip", "");
-							if (!name.endsWith("/")) {
-				    			try (InputStream is = url.openStream()) {
-				    				ZipEntry entry = new ZipEntry(name);
-				    				zos.putNextEntry(entry);
-				    				ByteStreams.copy(is, zos);
-				    				zos.closeEntry();
-				    			}
-			    			}
-		    			}
-			    		
+						try (InputStream is = finalOutput.getContents()) {
+							ZipEntry viewEntry = new ZipEntry("schema/" + finalOutput.getName());
+							zos.putNextEntry(viewEntry);
+		    				ByteStreams.copy(finalOutput.getContents(), zos);
+		    				zos.closeEntry();
+						}
+						
 			    		PackageBuilder export = new IEECloudExporter(htmlRendererManager, documentStore).export(document);
 			    		export.writeToStream(zos);
 					} catch (IOException e) {
+						e.printStackTrace();
+						throw new InvocationTargetException(e);
+					} catch (CoreException e) {
 						e.printStackTrace();
 						throw new InvocationTargetException(e);
 					} 

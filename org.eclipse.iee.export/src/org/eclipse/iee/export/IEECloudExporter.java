@@ -116,7 +116,7 @@ public class IEECloudExporter {
 				@Override
 				public String createResourceURL(String padId,
 						String resourceId, Map<String, String> params) {
-					String resourcePath = padId + "/" + resourceId;
+					String resourcePath = padId + ".png";
 					packageBuilder.addResource(
 							resourcePath, 
 							new PackageResourceProvider(manager, documentStore, resourcePath, documentPart)

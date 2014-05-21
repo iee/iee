@@ -62,8 +62,6 @@
       <import plugin="org.eclipse.jetty.server"/>
       <import plugin="org.eclipse.jetty.servlet"/>
       <import plugin="org.eclipse.jetty.util"/>
-      <import plugin="com.google.gson"/>
-      <import plugin="org.eclipse.core.filesystem"/>
    </requires>
 
    <plugin
@@ -131,20 +129,6 @@
 
    <plugin
          id="org.eclipse.iee.web"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.iee.export"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.iee.export.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
