@@ -185,12 +185,15 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 
 		fTranslatingExpression = fLastValidText;
 
-		/* Set formula image */
+		updateFormulaImage();
+
+	}
+
+	private void updateFormulaImage() {
 		fTexExpression = FormulaPart.translateToLatex(fTranslatingExpression);
 		Image image = FormulaRenderer.getFormulaImage(fTexExpression);
 
 		fFormulaImageLabel.setImage(image);
-
 	}
 
 	public void updateLastResult(String result) {
@@ -458,7 +461,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 
 		if (fTranslatingExpression != "" && fDocument.get() != "") {
 			validateInput();
-			processInput();
+			updateFormulaImage();
 			toggleFormulaImage();
 		} else {
 			getContainer().getComposite().setVisible(true);

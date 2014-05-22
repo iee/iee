@@ -66,7 +66,6 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 				"Another container is already attached");
 
 		container.setPadPart(getDocumentPart());
-		container.updateDocument();
 
 		fContainer = container;
 		final Composite parent = fContainer.getComposite();
