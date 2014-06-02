@@ -1,6 +1,5 @@
-package org.eclipse.iee.editor.core.pad.common;
+package org.eclipse.iee.core.document;
 
-import org.eclipse.iee.core.document.PadDocumentPart;
 
 public class UnknownPart extends PadDocumentPart {
 

@@ -19,6 +19,7 @@ import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.RootDocumentPart;
 import org.eclipse.iee.core.document.TextDocumentPart;
+import org.eclipse.iee.core.document.UnknownPart;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -116,7 +117,14 @@ public class DefaultDocumentParser implements IDocumentParser {
 			} else {
 				value = "";
 			}
-			PadDocumentPart pad = fPadParsers.get(type).create(params, value);
+			IPadParser padParser = fPadParsers.get(type);
+			PadDocumentPart pad;
+			if (padParser != null) {
+				pad = padParser.create(params, value);
+			} else {
+				pad = new UnknownPart();
+				pad.setId(params.get("id"));
+			}
 			return pad;
 		} catch (IOException e) {
 			e.printStackTrace();
