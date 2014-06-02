@@ -59,6 +59,7 @@ public class IEECloudExporter {
 
 	private Field export(PackageBuilder builder, DocumentPart documentPart) {
 		Field f;
+		IHTMLRenderer<DocumentPart> padHTMLRenderer = manager.getPadHTMLRenderer(documentPart);
 		if (documentPart instanceof InputPart) {
 			FloatField flt = new FloatField();
 			flt.setName(((InputPart) documentPart).getVariable());
@@ -66,10 +67,9 @@ public class IEECloudExporter {
 			FloatValidation validation = new FloatValidation();
 			validation.setMax(validation.getMax());
 			validation.setMin(validation.getMin());
+			getHTMLString(builder, documentPart, padHTMLRenderer);
 			f = flt;
 		} else {
-			IHTMLRenderer<DocumentPart> padHTMLRenderer = manager
-					.getPadHTMLRenderer(documentPart);
 			HTMLField html = new HTMLField();
 			html.setHtml(getHTMLString(builder, documentPart, padHTMLRenderer));
 			f = html;
