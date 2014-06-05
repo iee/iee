@@ -1,5 +1,7 @@
 package org.eclipse.iee.export;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -56,7 +58,13 @@ public class PackageResourceProvider {
 			@Override
 			public InputStream getResourceAsStream(String string) throws IOException {
 				Document document = documentPart.getDocument();
-				return documentStore.getResourceAsStream(document.getBundle(), document.getName(), string);
+				InputStream stream;
+				try {
+					stream = documentStore.getResourceAsStream(document.getBundle(), document.getName(), string);
+				} catch (FileNotFoundException e) {
+					stream = new ByteArrayInputStream(new byte[]{});
+				}
+				return stream;
 			}
 			
 			@Override
