@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -53,11 +54,16 @@ public class UserInteractionManager {
 		if (container != null && container.equals(fSelectedContainer)) {
 			return;
 		}
+		
 		if (fSelectedContainer != null) {
+			Pad<?> selected = fContainerManager.getPadById(fSelectedContainer.getContainerID());
+			selected.setSelected(false);
 			fContainerManager.fireContainerLostSelection(fSelectedContainer);
 		}
 		fSelectedContainer = container;
 		if (fSelectedContainer != null) {
+			Pad<?> selected = fContainerManager.getPadById(container.getContainerID());
+			selected.setSelected(true);
 			fContainerManager.fireContainerSelected(fSelectedContainer);
 		}
 	}
@@ -67,10 +73,14 @@ public class UserInteractionManager {
 			return;
 		}
 		if (fActiveContainer != null) {
+			Pad<?> pad = fContainerManager.getPadById(fActiveContainer.getContainerID());
+			pad.deactivate();
 			fContainerManager.fireContainerDeactivated(fActiveContainer);
 		}
 		fActiveContainer = container;
 		if (fActiveContainer != null) {
+			Pad<?> pad = fContainerManager.getPadById(fActiveContainer.getContainerID());
+			pad.activate();
 			fContainerManager.fireContainerActivated(fActiveContainer);
 		}
 		selectContainer(container);

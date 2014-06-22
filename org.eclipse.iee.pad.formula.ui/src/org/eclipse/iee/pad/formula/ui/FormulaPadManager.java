@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -59,7 +58,7 @@ public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
 	}
 
 	public static List<Pad<?>> getFollowingPads(Pad<?> pad) {		
-		List<Pad<?>> pads = IeeEditorPlugin.getDefault().getPadManager().selectPadsByType(pad.getType());
+		List<Pad<?>> pads = pad.getContainer().getContainerManager().selectPadsByType(pad.getType());
 		
 		Collections.sort(pads, new Comparator<Pad<?>>() {
 			@Override

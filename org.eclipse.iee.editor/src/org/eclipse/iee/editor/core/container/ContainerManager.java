@@ -1,14 +1,18 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
 
 import org.eclipse.core.commands.common.EventManager;
+import org.eclipse.core.filebuffers.manipulation.ContainerCreator;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
@@ -17,6 +21,11 @@ import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
+import org.eclipse.iee.editor.core.pad.IPadFactory;
+import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
+import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.common.LoadingPad;
+import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
@@ -78,7 +87,15 @@ public class ContainerManager extends EventManager {
 
 	private boolean ignoreDocumentChanges;
 
+	private final Map<String, Pad<?>> fPads = new TreeMap<String, Pad<?>>();
+	
+	private IPadFactoryManager fPadFactoryManager;
+	
 	/* Getters */
+	
+	public Pad<?> getPadById(String id) {
+		return fPads.get(id);
+	}
 
 	public Object[] getElements() {
 		return fContainers.toArray();
@@ -146,9 +163,10 @@ public class ContainerManager extends EventManager {
 
 	/* INTERFACE FUNCTIONS */
 
-	public ContainerManager(IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer, StyledText styledText) {
+	public ContainerManager(IPadFactoryManager padFactoryManager, IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer, StyledText styledText) {
 		fContainerManagerID = UUID.randomUUID().toString();
 
+		fPadFactoryManager = padFactoryManager;
 		fParser = parser;
 		fWriter = writer;
 		fStyledText = styledText;
@@ -203,7 +221,7 @@ public class ContainerManager extends EventManager {
 	    	ignoreDocumentChanges = false;
 	    }
 	    fContainers.add(container);
-		fireContainerCreated(container);
+		containerCreated(container);
 		final Container ic = container;
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
@@ -288,7 +306,7 @@ public class ContainerManager extends EventManager {
 				List<Container> containers = parseContainersFromDocumentRegion(fDocument, changedRegion);
 				for (Container container : containers) {
 					fContainers.add(container);
-					fireContainerCreated(container);
+					containerCreated(container);
 				}
 			}
 		}
@@ -368,12 +386,26 @@ public class ContainerManager extends EventManager {
 							/* Removing container */
 
 							container.dispose();
+							String containerID = container.getContainerID();
+							clearPadSetsAndRuntime(containerID);
+							fPads.remove(containerID);
 							fireContainerRemoved(container);
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	protected void containerCreated(Container c) {
+		String containerID = c.getContainerID();
+		if (fPads.containsKey(containerID)) {
+			c.getPadPart().setId(UUID.randomUUID().toString());
+		}
+		Pad<PadDocumentPart> pad = fPadFactoryManager.createPad(c.getPadPart());
+		pad.attachContainer(c);
+		fPads.put(containerID, pad);
+		fireContainerCreated(c);
 	}
 
 	/* FUNCTIONS FOR OBSERVERS */
@@ -536,4 +568,38 @@ public class ContainerManager extends EventManager {
 		return null;
 	}
 
+	private void clearPadSetsAndRuntime(String containerID) {
+		Pad<?> pad = fPads.get(containerID);
+
+		String runtimePath = pad.getContainer().getContainerManager()
+				.getStoragePath()
+				+ FileMessager.getInstance().getRuntimeDirectoryName()
+				+ "/"
+				+ containerID;
+
+		File runtimeFile = new File(runtimePath);
+		if (runtimeFile.exists()) {
+			runtimeFile.delete();
+		}
+		pad.detachContainer();
+	}
+	
+	public void savePads() {
+		String[] containerIDs = getContainerIDs();
+		for (String containerID : containerIDs) {
+			fPads.get(containerID).save();
+		}
+	}
+	
+	public List<Pad<?>> selectPadsByType(String type) {
+		List<Pad<?>> result = new ArrayList<Pad<?>>();
+		for(Pad<?> pad : fPads.values()) {
+			if (pad.getType().equals(type)) {
+				result.add(pad);
+			}
+		}
+		return result;
+	}
+
+	
 }

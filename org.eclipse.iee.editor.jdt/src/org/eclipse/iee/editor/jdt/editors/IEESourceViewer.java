@@ -42,7 +42,7 @@ public class IEESourceViewer extends JavaSourceViewer {
 	@Override
 	protected void createControl(Composite parent, int styles) {
 		super.createControl(parent, styles);
-		fContainerManager = new ContainerManager(IeeEditorPlugin.getDefault().getParser(), 
+		fContainerManager = new ContainerManager(IeeEditorPlugin.getDefault().getPadFactoryManager(), IeeEditorPlugin.getDefault().getParser(), 
 				IeeEditorPlugin.getDefault().getWriter(), this, getTextWidget());
 		final StyledText textWidget = getTextWidget();
 		fMouseListener = new Listener() {

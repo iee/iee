@@ -2,9 +2,7 @@ package org.eclipse.iee.editor.monitoring.views;
 
 
 import org.eclipse.iee.editor.IeeEditorPlugin;
-import org.eclipse.iee.editor.core.pad.event.IPadManagerListener;
-import org.eclipse.iee.editor.core.pad.event.PadManagerEvent;
-import org.eclipse.iee.editor.core.pad.IPadManager;
+import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -19,14 +17,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
 
-public class PadsMonitoringView extends ViewPart implements IPadManagerListener {
+public class PadsMonitoringView extends ViewPart {
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "org.eclipse.iee.editor.monitoring.views.PadsMonitoringView";
 	
-	private final IPadManager fPadManager = IeeEditorPlugin.getDefault().getPadManager();
+	private final IPadFactoryManager fPadManager = IeeEditorPlugin.getDefault().getPadFactoryManager();
 	
 	private TableViewer fActivePadsTableViewer;
 	private TableViewer fSuspendedPadsTableViewer;
@@ -56,7 +54,7 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 			case 0:
 				return (String) element;
 			case 1:
-				return fPadManager.getPadById((String) element).getType();
+//				return fPadManager.getPadById((String) element).getType();
 			default:
 				return "unknown " + columnIndex;
 			}
@@ -73,22 +71,12 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		
 		parent.pack();
 		
-		fPadManager.addPadManagerListener(this);
 	}
 	
 	public void dispose() {
-		fPadManager.removePadManagerListener(this);
 		super.dispose();
 	}
 	
-	@Override
-	public void padManagerUpdate(PadManagerEvent event) {
-		fActivePadsTableViewer.setInput(fPadManager.getActivePads());
-		fSuspendedPadsTableViewer.setInput(fPadManager.getSuspendedPads());
-		fTemporaryPadsTableViewer.setInput(fPadManager.getTemporaryPads());
-	}
-	
-
 	protected void initActivePadsTableView(Composite parent) {
 		fActivePadsTableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 
@@ -109,7 +97,7 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		fActivePadsTableViewer.setContentProvider(new PadsContentProvider());
 		fActivePadsTableViewer.setLabelProvider(new PadsLabelProvider());
 		
-		fActivePadsTableViewer.setInput(fPadManager.getActivePads());
+//		fActivePadsTableViewer.setInput(fPadManager.getActivePads());
 	}
 	
 	protected void initSuspendedPadsTableView(Composite parent) {
@@ -132,7 +120,7 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		fSuspendedPadsTableViewer.setContentProvider(new PadsContentProvider());
 		fSuspendedPadsTableViewer.setLabelProvider(new PadsLabelProvider());
 		
-		fSuspendedPadsTableViewer.setInput(fPadManager.getSuspendedPads());
+//		fSuspendedPadsTableViewer.setInput(fPadManager.getSuspendedPads());
 	}
 	
 	protected void initTemporaryPadsTableView(Composite parent) {
@@ -154,7 +142,7 @@ public class PadsMonitoringView extends ViewPart implements IPadManagerListener 
 		
 		fTemporaryPadsTableViewer.setContentProvider(new PadsContentProvider());
 		fTemporaryPadsTableViewer.setLabelProvider(new PadsLabelProvider());
-		fTemporaryPadsTableViewer.setInput(fPadManager.getTemporaryPads());
+//		fTemporaryPadsTableViewer.setInput(fPadManager.getTemporaryPads());
 	}
 
 	/**

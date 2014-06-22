@@ -2,7 +2,7 @@ package org.eclipse.iee.editor;
 
 import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
-import org.eclipse.iee.editor.core.pad.IPadManager;
+import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -29,8 +29,8 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public IeeEditorPlugin() {
 	}
 	
-	public IPadManager getPadManager() {
-		return getService(IPadManager.class);
+	public IPadFactoryManager getPadFactoryManager() {
+		return getService(IPadFactoryManager.class);
 	}
 
 	private <T> T getService(Class<T> clazz) {

@@ -11,7 +11,7 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.pad.IPadManager;
+import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.monitoring.utils.Convert;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -75,7 +75,7 @@ public class PdfExportHandler implements IHandler {
 		int lastOffset = 0;
 		String javaSource = "";
 
-		IPadManager padManager = fPadEditor.getPadManager();
+		IPadFactoryManager padManager = fPadEditor.getPadManager();
 		ContainerManager containerManager = fPadEditor.getContainerManager();
 
 		for (Container c : containerManager.getContainers()) {
@@ -92,7 +92,7 @@ public class PdfExportHandler implements IHandler {
 
 			fLatex += convertJavaSource(javaSource);
 
-			Pad<?> pad = padManager.getPadById(c.getContainerID());
+			Pad<?> pad = containerManager.getPadById(c.getContainerID());
 			fLatex += pad.getTex();
 
 			lastOffset = offset + length;

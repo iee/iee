@@ -19,7 +19,7 @@ import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.pad.IPadManager;
+import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
@@ -113,8 +113,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		logger.debug("storagePath = " + storagePath);
 		getContainerManager().setStoragePath(storagePath);
 
-		getPadManager().registerContainerManager(getContainerManager());
-
 		getSourceViewer().getTextWidget().addFocusListener(new FocusListener() {
 			
 			@Override
@@ -132,7 +130,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	@Override
 	public void dispose() {
 		logger.debug("dispose() called");
-		getPadManager().removeContainerManager(getContainerManager());
 		super.dispose();
 	}
 
@@ -155,14 +152,13 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		getPadManager().savePadsInEditor(getContainerManager().getContainerManagerID());
-
+		getContainerManager().savePads();
 		super.doSave(monitor);
 	}
 
 	@Override
 	public void doSaveAs() {
-		getPadManager().savePadsInEditor(getContainerManager().getContainerManagerID());
+		getContainerManager().savePads();
 		super.doSaveAs();
 	}
 
@@ -201,8 +197,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	}
 	
 	@Override
-	public IPadManager getPadManager() {
-		return IeeEditorPlugin.getDefault().getPadManager();
+	public IPadFactoryManager getPadManager() {
+		return IeeEditorPlugin.getDefault().getPadFactoryManager();
 	}
 
 	@Override
