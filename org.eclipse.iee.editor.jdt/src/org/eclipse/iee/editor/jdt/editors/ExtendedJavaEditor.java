@@ -91,28 +91,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		IEditorPart editor = this;
 		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
 		IFile file = input.getFile();
-		IProject project = file.getProject();
 		ICompilationUnit compilationUnit = JavaCore
 				.createCompilationUnitFrom(file);
 		getContainerManager().setCompilationUnit(compilationUnit);
-
-		IPath rawLocation = project.getRawLocation();
-
-		String storagePath = "";
-
-		if (rawLocation != null) {
-			storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
-		} else {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IPath workspaceDirectory = workspace.getRoot().getLocation();
-			storagePath = workspaceDirectory.toString()
-					+ project.getFullPath().makeAbsolute().toString()
-					+ "/pads/";
-		}
-
-		logger.debug("storagePath = " + storagePath);
-		getContainerManager().setStoragePath(storagePath);
-
 		getSourceViewer().getTextWidget().addFocusListener(new FocusListener() {
 			
 			@Override
@@ -124,7 +105,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				getContainerManager().getUserInteractionManager().activateContainer(null);
 			}
 		});
-		
 	}
 
 	@Override
@@ -166,8 +146,32 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	protected ISourceViewer createJavaSourceViewer(Composite parent,
 			IVerticalRuler verticalRuler, IOverviewRuler overviewRuler,
 			boolean isOverviewRulerVisible, int styles, IPreferenceStore store) {
-		return new IEESourceViewer(parent, verticalRuler, overviewRuler, isOverviewRulerVisible, styles,
-				store);
+		IEESourceViewer ieeSourceViewer = new IEESourceViewer(parent, verticalRuler, overviewRuler, isOverviewRulerVisible, styles,
+						store);
+		
+		IEditorPart editor = this;
+		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+		IFile file = input.getFile();
+		IProject project = file.getProject();
+
+		IPath rawLocation = project.getRawLocation();
+
+		String storagePath = "";
+
+		if (rawLocation != null) {
+			storagePath = rawLocation.makeAbsolute().toString() + "/pads/";
+		} else {
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IPath workspaceDirectory = workspace.getRoot().getLocation();
+			storagePath = workspaceDirectory.toString()
+					+ project.getFullPath().makeAbsolute().toString()
+					+ "/pads/";
+		}
+
+		logger.debug("storagePath = " + storagePath);
+		ieeSourceViewer.setStoragePath(storagePath);
+		
+		return ieeSourceViewer;
 	}
 
 	@Override

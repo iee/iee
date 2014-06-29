@@ -18,6 +18,24 @@ public class ArrayUtils {
 			throw Throwables.propagate(e);
 		}
 	}
+
+	public static double[][][] parseTrippleArray(StringReader reader) throws IOException {
+		StreamTokenizer st = new StreamTokenizer(reader);
+		readChar(st, '[');
+		List<double[][]> arrs = Lists.newArrayList();
+		arrs.add(parseArray(reader));
+		while (readOptionalChar(st, ',')) {
+			arrs.add(parseArray(reader));
+		}
+		readChar(st, ']');
+		
+		double[][][] result = new double[arrs.size()][][];
+		for (int i = 0; i < arrs.size(); i++) {
+			result[i] = arrs.get(i);
+		}
+		return result;
+	}
+
 	
 	public static double[][] parseArray(StringReader reader) throws IOException {
 		StreamTokenizer st = new StreamTokenizer(reader);

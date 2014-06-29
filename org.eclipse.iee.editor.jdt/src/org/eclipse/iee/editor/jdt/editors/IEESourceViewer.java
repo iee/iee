@@ -159,5 +159,9 @@ public class IEESourceViewer extends JavaSourceViewer {
 			}
 		}
 	}
+
+	public void setStoragePath(String storagePath) {
+		fContainerManager.setStoragePath(storagePath);
+	}
 	
 }

@@ -4,10 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.iee.core.utils.ArrayUtils;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -15,7 +17,6 @@ import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
 import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
-import org.eclipse.iee.pad.graph.utils.GraphUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -221,15 +222,15 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 			getResults().clear();
 			return;
 		}
-		String[] items = result.split("\n");
-		for (String string : items) {
-			String[] splited = string.split("\\:");
-			Integer number = Integer.valueOf(splited[0].trim());
-			try {
-				getResults().put(number, GraphUtils.parseArray(splited[1].trim()));
-			} catch (IOException e) {
-				e.printStackTrace();
+		double[][][] parseTrippleArray;
+		try {
+			parseTrippleArray = ArrayUtils.parseTrippleArray(new StringReader(result));
+			for (int i = 0; i < parseTrippleArray.length; i++) {
+				getResults().put(i, parseTrippleArray[i]);
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {

@@ -38,8 +38,10 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 					String function = graphElement.getFunction();
 					if (function != null && function.trim().length() > 0) {
 						String translateElement = context.translateFunction(function, part.getId());
+						generatedText.append("{");
 						generatedText.append("StringBuilder sb").append(i).append(" = new StringBuilder();");
-						generatedText.append("sb").append(i).append(".append(\"{\");");
+						generatedText.append("boolean first = true;");
+						generatedText.append("sb").append(i).append(".append(\"[\");");
 						generatedText.append("for (double ").append(variable).append(" = ")
 						.append(minX).append("; ").append(variable).append(" < ")
 						.append(maxX)
@@ -50,11 +52,13 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 						.append(")) {");
 						generatedText.append("double __grpVal = ").append(translateElement)
 						.append(";");
-						generatedText.append("sb").append(i).append(".append(\"{\").append(").append(variable).append(").append(\",\").append(__grpVal).append(\"},\");");
+						generatedText.append("if (!first) {").append("sb").append(i).append(".append(\",\");} else {first=false;}");
+						generatedText.append("sb").append(i).append(".append(\"[\").append(").append(variable).append(").append(\",\").append(__grpVal).append(\"]\");");
 						generatedText.append("}");
-						generatedText.append("sb").append(i).append(".append(\"}\");");
-						generatedText.append("result.append(\"").append(i).append(": \" + ").append("sb").append(i).append(".toString()").append(");");
-						generatedText.append("result.append(\"\\n\");");
+						generatedText.append("sb").append(i).append(".append(\"]\");");
+						generatedText.append("result.append(\"[\" + ").append("sb").append(i).append(".toString()").append(");");
+						generatedText.append("result.append(\"]\");");
+						generatedText.append("}");
 					}
 				}
 			}

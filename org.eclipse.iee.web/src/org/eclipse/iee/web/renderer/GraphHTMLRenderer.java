@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.eclipse.iee.core.IResultContainer;
+import org.eclipse.iee.core.utils.ArrayUtils;
 import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
-import org.eclipse.iee.pad.graph.utils.GraphUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -156,15 +157,14 @@ public class GraphHTMLRenderer implements IHTMLRenderer<GraphPart> {
 	
 	public Map<Integer, double[][]> parseResult(String result) {
 		Map<Integer, double[][]> results = new HashMap<>();
-		String[] items = result.split("\n");
-		for (String string : items) {
-			String[] splited = string.split("\\:");
-			Integer number = Integer.valueOf(splited[0].trim());
-			try {
-				results.put(number, GraphUtils.parseArray(splited[1].trim()));
-			} catch (IOException e) {
-				e.printStackTrace();
+		double[][][] parseTrippleArray;
+		try {
+			parseTrippleArray = ArrayUtils.parseTrippleArray(new StringReader(result));
+			for (int i = 0; i < parseTrippleArray.length; i++) {
+				results.put(i, parseTrippleArray[i]);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return results;
 	}
