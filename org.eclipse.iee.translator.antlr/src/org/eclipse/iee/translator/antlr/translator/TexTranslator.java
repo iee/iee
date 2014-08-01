@@ -70,9 +70,8 @@ public class TexTranslator {
 			return visitStandardFunction(ctx.name) + "=" + visit(ctx.value);
 		}
 
-		public String visitVariableAssignment(
-				MathParser.VariableAssignmentContext ctx) {
-			return visit(ctx.name) + "=" + visit(ctx.value);
+		public String visitVariableAssignment(MathParser.VariableAssignmentContext ctx) {
+			return translateName(ctx.name.getText()) + "=" + visit(ctx.value);
 		}
 
 		public String visitLogicComparison(MathParser.LogicComparisonContext ctx) {

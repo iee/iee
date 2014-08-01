@@ -57,6 +57,10 @@
 									<id>net.sourceforge.cssparser:cssparser:0.9.11</id>
 									<source>true</source>
 								</artifact>
+								<artifact>
+									<id>gov.nist.math:jama:1.0.3</id>
+									<source>true</source>
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>

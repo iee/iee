@@ -1,8 +1,10 @@
 package org.eclipse.iee.translator.antlr.translator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -16,8 +18,10 @@ import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.PrimaryExprContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
-import org.eclipse.jdt.core.IBuffer;
+import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -29,10 +33,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.slf4j.Logger;
@@ -40,6 +41,8 @@ import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupDir;
+
+import Jama.Matrix;
 
 public class JavaTranslator {
 
@@ -50,47 +53,41 @@ public class JavaTranslator {
 	}
 
 	private ICompilationUnit fCompilationUnit;
+	
 	private IType fClass;
+	
 	private IMethod fMethod;
 
 	private int fPosition;
 
-	private List<String> fDoubleFields = new ArrayList<>();
-
-	private List<String> fIntegerFields = new ArrayList<>();
-
-	private List<String> fMatrixFields = new ArrayList<>();
-
-	private List<String> fOtherFields = new ArrayList<>();
+	private Map<String, String> fFields = new HashMap<>();
 
 	private Set<String> fOtherSourceClasses = new HashSet<>();
+	
 	private Set<String> fMethodClasses = new HashSet<>();
+	
 	private Set<String> fInnerClasses = new HashSet<>();
 
-	private VariableType fVariableType = null;
-	private String fVariableTypeString = "";
-
-	private boolean fNewVariable;
-	private boolean fVariableAssignment;
-
-	private boolean fFunctionDefinition;
-	private List<String> fDeterminedFunctionParams = new ArrayList<>();
-	private List<String> fDeterminedFunctionVariables = new ArrayList<>();
-
-	private List<String> fFoundedVariables = new ArrayList<>();
-	private List<String> fInternalFunctionsParams = new ArrayList<>();
-
-	private class JavaMathVisitor extends MathBaseVisitor<String> {
+	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
 
 		/*
 		 * Help variables
 		 */
+		private boolean fFunctionDefinition;
+		private List<String> fDeterminedFunctionParams = new ArrayList<>();
+		private List<String> fDeterminedFunctionVariables = new ArrayList<>();
+		
+		private List<String> fFoundedVariables = new ArrayList<>();
+		private List<String> fInternalFunctionsParams = new ArrayList<>();
 
-		Boolean fVisitVariableName = false;
-		Boolean fVisitedMatrixElement = false;
-		Boolean fNewMatrix = false;
-		Boolean fMatrixExpression = false;
+		private ExternalTranslationContext fExternalContext;
+		private TypeVisitior fTypeVisitor; 
+		
+		public JavaMathVisitor(ExternalTranslationContext externalContext) {
+			fExternalContext = externalContext;
+			fTypeVisitor = new TypeVisitior(fExternalContext);
+		}
 
 		public String visitFunctionDefinition(
 				MathParser.FunctionDefinitionContext ctx) {
@@ -133,49 +130,24 @@ public class JavaTranslator {
 		public String visitVariableAssignment(
 				MathParser.VariableAssignmentContext ctx) {
 
-			fVariableAssignment = true;
-
-			fVisitVariableName = true;
-			String name = visit(ctx.name);
-			fVisitVariableName = false;
-
 			String value = visit(ctx.value);
-
-			if (fVisitedMatrixElement) {
-				fVariableType = VariableType.DOUBLE;
-				return name += value + ");";
+			
+			if (ctx.name instanceof PrimaryExprContext
+					&& ((PrimaryExprContext) ctx.name).primary() instanceof MatrixElementContext) {
+				MatrixElementContext elt = (MatrixElementContext) ((PrimaryExprContext) ctx.name).primary();
+				String rowIndex = visit(elt.rowIdx).replaceAll("\\.0", "");
+				String columnIndex = visit(elt.columnIdx).replaceAll("\\.0", "");
+				return translateName(elt.name.getText()) + ".set(" + rowIndex + "," + columnIndex + "," + value + ")";
 			}
-
-			if (fClass == null)
-				return name + "=" + value + ";";
-
+			
+			
+			String name = translateName(ctx.name.getText());
+			
 			String assignment = "";
 
-			if (fDoubleFields.contains(name) || fMatrixFields.contains(name)
-					|| fIntegerFields.contains(name)) {
-				if (fDoubleFields.contains(name))
-					fVariableType = VariableType.DOUBLE;
-				else if (fMatrixFields.contains(name))
-					fVariableType = VariableType.MATRIX;
-				else if (fIntegerFields.contains(name))
-					fVariableType = VariableType.INT;
-				else if (fOtherFields.contains(name))
-					fVariableType = VariableType.OTHER;
+			assignment += name + "=" + value;
 
-				assignment += name + "=" + value + ";";
-			} else {
-				if ((fNewMatrix || fMatrixExpression || (fMatrixFields
-						.contains(value)) && !name.matches(value))) {
-					assignment += "Matrix ";
-					fVariableType = VariableType.MATRIX;
-				} else {
-					fNewVariable = true;
-				}
-				assignment += name + "=";
-				assignment += value + ";";
-
-			}
-
+			
 			return assignment;
 		}
 
@@ -200,11 +172,11 @@ public class JavaTranslator {
 			List<String> fieldsNames = new ArrayList<>();
 			List<String> params = new ArrayList<>();
 
-			if (fMethodClasses.contains(firstLetterUpperCase(name))) {
+			if (fExternalContext.containsMethod(name)) {
 				new_ = "new ";
 				name_ = firstLetterUpperCase(name);
 
-				IType type = fMethod.getType(firstLetterUpperCase(name), 1);
+				IType type = fExternalContext.getMethodType(name);
 				try {
 					IField[] fields = type.getFields();
 					for (int i = 0; i < fields.length; i++) {
@@ -224,11 +196,11 @@ public class JavaTranslator {
 					e.printStackTrace();
 				}
 
-			} else if (fInnerClasses.contains(firstLetterUpperCase(name))) {
+			} else if (fExternalContext.containsClass(name)) {
 				new_ = "this.new ";
 				name_ = firstLetterUpperCase(name);
 
-				IType type = fClass.getType(firstLetterUpperCase(name), 1);
+				IType type = fExternalContext.getClassType(name);
 				try {
 					IField[] fields = type.getFields();
 					for (int i = 0; i < fields.length; i++) {
@@ -247,7 +219,7 @@ public class JavaTranslator {
 					e.printStackTrace();
 				}
 
-			} else if (fOtherSourceClasses.contains(firstLetterUpperCase(name))) {
+			} else if (fExternalContext.containsOtherSourceClass(name)) {
 				new_ = "new ";
 				name_ = firstLetterUpperCase(name);
 
@@ -482,12 +454,11 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
 
-			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
-					&& getType(fPosition, "myTmp=" + right + ";").matches(
-							"Matrix")) {
-				// XXX: temporary solution
-				fMatrixExpression = true;
-
+			
+			VariableType leftType = ctx.left.accept(fTypeVisitor);
+			VariableType rightType = ctx.right.accept(fTypeVisitor);
+			
+			if (leftType.equals(VariableType.MATRIX) && rightType.equals(VariableType.MATRIX)) {
 				if (sign.matches(Pattern.quote("+")))
 					return left + ".plus(" + right + ")";
 				if (sign.matches(Pattern.quote("-")))
@@ -502,12 +473,11 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
 
-			boolean leftMatrix = getType(fPosition, "myTmp=" + left + ";").matches("Matrix");
-			boolean rightMatrix = getType(fPosition, "myTmp=" + right + ";").matches("Matrix");
+			VariableType leftType = ctx.left.accept(fTypeVisitor);
+			VariableType rightType = ctx.right.accept(fTypeVisitor);
+			boolean leftMatrix = leftType.equals(VariableType.MATRIX);
+			boolean rightMatrix = rightType.equals(VariableType.MATRIX);
 			if (leftMatrix || rightMatrix) {
-				// XXX: temporary solution
-				fMatrixExpression = true;
-
 				if (!leftMatrix && rightMatrix) {
 					String tmp = right;
 					right = left;
@@ -546,11 +516,8 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 
-			if (getType(fPosition, "myTmp=" + left + ";").matches("Matrix")
-					&& right.matches("T")) {
-				// XXX: temporary solution
-				fMatrixExpression = true;
-
+			VariableType type = ctx.left.accept(fTypeVisitor);
+			if (type.equals(VariableType.MATRIX) && right.matches("T")) {
 				return left + ".transpose()";
 			}
 
@@ -558,13 +525,10 @@ public class JavaTranslator {
 		}
 
 		public String visitMatrix(MathParser.MatrixContext ctx) {
-
-			fNewMatrix = true;
-
 			String matrix = "";
 			int i;
 
-			matrix += "new Matrix(new double[][]{";
+			matrix += "new Jama.Matrix(new double[][]{";
 			int rowsCount = ctx.rows.size();
 
 			for (i = 0; i < rowsCount; i++) {
@@ -640,7 +604,7 @@ public class JavaTranslator {
 		}
 
 		public String visitIntNumber(MathParser.IntNumberContext ctx) {
-			return ctx.getText() + ".0";
+			return ctx.getText();
 		}
 
 		public String visitMatrixDefinition(
@@ -653,14 +617,8 @@ public class JavaTranslator {
 			String rowIndex = visit(ctx.rowIdx).replaceAll("\\.0", "");
 			String columnIndex = visit(ctx.columnIdx).replaceAll("\\.0", "");
 
-			if (fVisitVariableName) {
-				fVisitedMatrixElement = true;
-
-				return translateName(ctx.name.getText()) + ".set(" + rowIndex
-						+ "," + columnIndex + ",";
-			} else
-				return translateName(ctx.name.getText()) + ".get(" + rowIndex
-						+ "," + columnIndex + ")";
+			return translateName(ctx.name.getText()) + ".get(" + rowIndex
+					+ "," + columnIndex + ")";
 		}
 
 		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
@@ -686,18 +644,80 @@ public class JavaTranslator {
 	}
 
 	private String translateIntl(String expression) {
-		String result = "";
+		ParserRuleContext tree = parseTree(expression);
 
+		return treeToString(tree);
+	}
+
+	private ParserRuleContext parseTree(String expression) {
 		ANTLRInputStream input = new ANTLRInputStream(expression);
 		MathLexer lexer = new MathLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		MathParser parser = new MathParser(tokens);
 		parser.setBuildParseTree(true);
 		ParserRuleContext tree = parser.statement();
+		return tree;
+	}
 
-		JavaMathVisitor mathVisitor = new JavaMathVisitor();
+	private String treeToString(ParserRuleContext tree) {
+		String result;
+		JavaMathVisitor mathVisitor = createVisitor();
 		result = mathVisitor.visit(tree);
 		return result;
+	}
+
+	private JavaMathVisitor createVisitor() {
+		JavaMathVisitor mathVisitor = new JavaMathVisitor(createContext());
+		return mathVisitor;
+	}
+
+	private ExternalTranslationContext createContext() {
+		return new ExternalTranslationContext() {
+			
+			@Override
+			public boolean containsMethod(String name) {
+				return fMethodClasses.contains(firstLetterUpperCase(name));
+			}
+
+			@Override
+			public IType getMethodType(String name) {
+				return fMethod.getType(firstLetterUpperCase(name), 1);
+			}
+
+			@Override
+			public boolean containsClass(String name) {
+				return fInnerClasses.contains(firstLetterUpperCase(name));
+			}
+
+			@Override
+			public IType getClassType(String name) {
+				return fClass.getType(firstLetterUpperCase(name), 1);
+			}
+
+			@Override
+			public boolean containsOtherSourceClass(String name) {
+				return fOtherSourceClasses.contains(firstLetterUpperCase(name));
+			}
+
+			@Override
+			public String translateName(String text) {
+				return JavaTranslator.translateName(text);
+			}
+
+			@Override
+			public VariableType getVariableType(String variable) {
+				String type = fFields.get(variable);
+				if ("double".equals(type)) {
+					return VariableType.DOUBLE;
+				} else if (Matrix.class.getName().equals(type)) {
+					return VariableType.MATRIX;
+				} else if ("int".equals(type)) {
+					return VariableType.INT;
+				} else {
+					return VariableType.OTHER;
+				}
+			}
+		};
 	}
 
 	public static String translate(String inputExpression,
@@ -741,105 +761,59 @@ public class JavaTranslator {
 		parse();
 
 		logger.debug("expr: " + expression);
-		result = translateIntl(expression);
+		ParserRuleContext tree = parseTree(expression);
+		result = treeToString(tree);
 
-		/*
-		 * Try get recognize variable type from expression
-		 */
-
-		if (fNewVariable) {
-			result = getType(fPosition, result) + " " + result;
+		String name = null;
+		if (tree.getChild(0) instanceof VariableAssignmentContext) {
+			VariableAssignmentContext assignment = (VariableAssignmentContext) tree.getChild(0);
+			name = translateName(assignment.name.getText());
 		}
-
-		if (!fVariableAssignment)
-			getType(position, "myTmp=" + result + ";");
-
+		
 		/*
 		 * Generate output code, if necessary
 		 */
+		VariableType type = tree.accept(new TypeVisitior(createContext()));
 		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
-			if (!fVariableAssignment) {
-				String output = generateOutputCode(result, containerId, false);
-				result = output;
+			String output = generateOutputCode(type, result, containerId);
+			if (name != null && !fFields.containsKey(name)) {
+				result = getName(type) + " " + name + ";" + output;
 			} else {
-				String output = generateOutputCode(inputExpression,
-						containerId, true);
-				result += output;
+				result = output;
 			}
-		}
+		} else {
+			if (name != null && !fFields.containsKey(name)) {
+				result = getName(type) + " " + result + ";";
+			}
+		} 
 		return result;
 	}
 
-	private String generateOutputCode(String expression,
-			String containerId, boolean isInputExpression) {
-		String expr = expression;
-
-		String[] parts;
-
-		if (isInputExpression) {
-			parts = expr.replaceAll(Pattern.quote("{"), "")
-					.replaceAll(Pattern.quote("}"), "").split("=");
-		} else
-			parts = expr.split("=");
-
-		if (parts.length >= 1) {
-			String variable = expression;
-			if (parts.length > 1 && isInputExpression)
-				variable = expression.substring(0, expression.indexOf('='));
-
-			variable = variable.trim();
-			if (isInputExpression) {
-				variable = variable.replaceAll(Pattern.quote("{"), "");
-				variable = variable.replaceAll(Pattern.quote("}"), "");
-			}
-
-			VariableType varType = fVariableType;
-
-			if (varType == null) {
-				if (fDoubleFields.contains(variable))
-					varType = VariableType.DOUBLE;
-				else if (fIntegerFields.contains(variable))
-					varType = VariableType.INT;
-				else if (fMatrixFields.contains(variable))
-					varType = VariableType.MATRIX;
-				else
-					return "";
-			}
-
-			logger.debug("Type:" + varType.toString());
+	private String generateOutputCode(VariableType type, String expression, String containerId) {
 			STGroup group = createSTGroup();
-
-			if (varType != VariableType.MATRIX) {
-
-				String type = "";
-				if (varType == VariableType.DOUBLE)
-					type = "double";
-				else if (varType == VariableType.INT)
-					type = "int";
-
-				ST template = group.getInstanceOf("variable");
-
-				template.add("type", type);
-				template.add("id", containerId);
-				template.add("variable", variable);
-
-				return template.render(1).trim().replaceAll("\r\n", "")
-						.replaceAll("\t", " ");
-
-			} else {
-
-				String type = "Matrix";
-
+			if (VariableType.MATRIX.equals(type)) {
 				ST template = group.getInstanceOf("matrix");
-				template.add("type", type);
 				template.add("id", containerId);
-				template.add("variable", variable);
-
-				return template.render(1).trim().replaceAll("\r\n", "")
-						.replaceAll("\t", " ");
+				template.add("variable", expression);
+				return template.render(1).trim().replaceAll("\r\n", "").replaceAll("\t", " ");
+			} else {
+				ST template = group.getInstanceOf("variable");
+				template.add("id", containerId);
+				template.add("variable", expression);
+				return template.render(1).trim().replaceAll("\r\n", "").replaceAll("\t", " ");
 			}
-		} else {
-			return "";
+	}
+
+	private String getName(VariableType type) {
+		switch (type) {
+		case DOUBLE:
+			return "double";
+		case INT:
+			return "int";
+		case MATRIX:
+			return "Jama.Matrix";
+		default:
+			return null;
 		}
 	}
 
@@ -917,19 +891,7 @@ public class JavaTranslator {
 					int fieldOffset = fieldSourceRange.getOffset();
 
 					if (fPosition > fieldOffset) {
-						if (type.matches("D")) {
-							if (!fDoubleFields.contains(name))
-								fDoubleFields.add(name);
-						} else if (type.matches("QMatrix;")) {
-							if (!fMatrixFields.contains(name))
-								fMatrixFields.add(name);
-						} else if (type.matches("I")) {
-							if (!fIntegerFields.contains(name))
-								fIntegerFields.add(name);
-						} else {
-							if (!fOtherFields.contains(name))
-								fOtherFields.add(name);
-						}
+						fFields.put(name, type);
 					}
 				}
 			}
@@ -940,21 +902,7 @@ public class JavaTranslator {
 					ILocalVariable param = methodParams[i];
 					String name = param.getElementName();
 					String type = param.getTypeSignature();
-
-					if (type.matches("D")) {
-						if (!fDoubleFields.contains(name))
-							fDoubleFields.add(name);
-					} else if (type.matches("QMatrix;")) {
-						if (!fMatrixFields.contains(name))
-							fMatrixFields.add(name);
-					} else if (type.matches("I")) {
-						if (!fIntegerFields.contains(name))
-							fIntegerFields.add(name);
-					} else {
-						if (!fOtherFields.contains(name))
-							fOtherFields.add(name);
-					}
-
+					fFields.put(name, type);
 				}
 
 				IJavaElement[] innerElements = fMethod.getChildren();
@@ -990,20 +938,7 @@ public class JavaTranslator {
 									VariableDeclarationFragment fragment = (VariableDeclarationFragment) fragments
 											.get(i);
 									String name = fragment.getName().toString();
-
-									if (type.matches("double")) {
-										if (!fDoubleFields.contains(name))
-											fDoubleFields.add(name);
-									} else if (type.matches("Matrix")) {
-										if (!fMatrixFields.contains(name))
-											fMatrixFields.add(name);
-									} else if (type.matches("int")) {
-										if (!fIntegerFields.contains(name))
-											fIntegerFields.add(name);
-									} else {
-										if (!fOtherFields.contains(name))
-											fOtherFields.add(name);
-									}
+									fFields.put(name, type);
 								}
 							}
 						} catch (JavaModelException e) {
@@ -1029,71 +964,8 @@ public class JavaTranslator {
 			logger.debug("fMethod: " + fMethod.getElementName());
 			logger.debug("fMethodClasses: " + fMethodClasses.toString());
 		}
-		logger.debug("fMatrixFields: " + fMatrixFields.toString());
-		logger.debug("fDoubleFields: " + fDoubleFields.toString());
-		logger.debug("fIntegerFields: " + fIntegerFields.toString());
-		logger.debug("fOtherFields: " + fOtherFields.toString());
+		logger.debug("fFields: " + fFields.toString());
 
-	}
-
-	private String getType(final int position, final String assignment) {
-		fVariableTypeString = "double";
-
-		try {
-
-			IBuffer buffer = fCompilationUnit.getBuffer();
-			buffer.replace(position, 0, assignment);
-			fCompilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, null);
-
-			// logger.debug("CopySource" + copy.getSource());
-
-			CompilationUnit unit = (CompilationUnit) createAST(fCompilationUnit);
-			unit.accept(new ASTVisitor() {
-				@Override
-				public boolean visit(Assignment node) {
-					int startPosition = node.getStartPosition();
-					if (startPosition >= position
-							&& startPosition < (position + assignment.length())) {
-						Expression rightSide = node.getRightHandSide();
-						logger.debug("expr: " + rightSide.toString());
-						ITypeBinding typeBinding = rightSide
-								.resolveTypeBinding();
-						if (typeBinding != null) {
-							fVariableTypeString = rightSide
-									.resolveTypeBinding().getName();
-							logger.debug("expr type: " + fVariableTypeString);
-						} else
-							logger.debug("expr type: undefined variable");
-					}
-
-					return true;
-				}
-			});
-
-			buffer.replace(position, assignment.length(), "");
-			fCompilationUnit.reconcile(AST.JLS4, false, null, null);
-
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
-
-		logger.debug("Type: " + fVariableTypeString);
-
-		if (fVariableTypeString.matches("double"))
-			fVariableType = VariableType.DOUBLE;
-		else if (fVariableTypeString.matches("int")) {
-			/*
-			 * If user want's use integer variables, he should define it before
-			 */
-			// fVariableType = VariableType.INT;
-			fVariableTypeString = "double";
-			fVariableType = VariableType.DOUBLE;
-		} else if (fVariableTypeString.matches("Matrix"))
-			fVariableType = VariableType.MATRIX;
-		else
-			fVariableType = VariableType.OTHER;
-
-		return fVariableTypeString;
 	}
 
 	private static String translateName(String name) {
