@@ -13,7 +13,10 @@ import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.VectorContext;
 
 import com.google.common.base.Joiner;
 
@@ -244,7 +247,7 @@ public class TexTranslator {
 				matrix += "c";
 			matrix += "}";
 			for (i = 0; i < rowsCount; i++) {
-				matrix += visitMatrixRow(ctx.rows.get(i));
+				matrix += visitVector(ctx.rows.get(i));
 				if (i != rowsCount - 1)
 					matrix += "\\\\";
 			}
@@ -274,7 +277,7 @@ public class TexTranslator {
 			return '(' + visit(ctx.bracketedExpr) + ')';
 		}
 
-		public String visitMatrixRow(MathParser.MatrixRowContext ctx) {
+		public String visitVector(VectorContext ctx) {
 			String row = "";
 
 			for (int i = 0; i < ctx.elements.size(); i++) {
@@ -304,12 +307,24 @@ public class TexTranslator {
 				MathParser.MatrixDefinitionContext ctx) {
 			return visitChildren(ctx);
 		}
+		
+		
 
-		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
-			return translateName(ctx.name.getText()) + "_{" + visit(ctx.rowIdx)
-					+ "," + visit(ctx.columnIdx) + "}";
+		@Override
+		public String visitMatrixRow(MatrixRowContext ctx) {
+			StringBuilder sb = new StringBuilder(translateName(ctx.container.getText()));
+			sb.append("_{").append(visit(ctx.rowId)).append("}");
+			return sb.toString();
 		}
-
+		
+		
+		@Override
+		public String visitMatrixElement(MatrixElementContext ctx) {
+			StringBuilder sb = new StringBuilder(translateName(ctx.container.getText()));
+			sb.append("_{").append(visit(ctx.rowId)).append(",").append(visit(ctx.columnId)).append("}");
+			return sb.toString();
+		}
+		
 		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
 			return visitFunction(ctx.function());
 		}

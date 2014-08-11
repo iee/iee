@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.translator.antlr.java.JavaLexer;
 import org.eclipse.iee.translator.antlr.java.JavaParser;
 import org.eclipse.iee.translator.antlr.java.JavaParser.CompilationUnitContext;
@@ -19,9 +20,10 @@ import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
-import org.eclipse.iee.translator.antlr.math.MathParser.PrimaryExprContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.VectorContext;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -47,10 +49,6 @@ import Jama.Matrix;
 public class JavaTranslator {
 
 	private static final Logger logger = LoggerFactory.getLogger(JavaTranslator.class);
-
-	public enum VariableType {
-		INT, DOUBLE, MATRIX, OTHER
-	}
 
 	private ICompilationUnit fCompilationUnit;
 	
@@ -132,21 +130,18 @@ public class JavaTranslator {
 
 			String value = visit(ctx.value);
 			
-			if (ctx.name instanceof PrimaryExprContext
-					&& ((PrimaryExprContext) ctx.name).primary() instanceof MatrixElementContext) {
-				MatrixElementContext elt = (MatrixElementContext) ((PrimaryExprContext) ctx.name).primary();
-				String rowIndex = visit(elt.rowIdx).replaceAll("\\.0", "");
-				String columnIndex = visit(elt.columnIdx).replaceAll("\\.0", "");
-				return translateName(elt.name.getText()) + ".set(" + rowIndex + "," + columnIndex + "," + value + ")";
+			if (ctx.name instanceof MatrixElementContext) {
+				MatrixElementContext elt = (MatrixElementContext) ctx.name;
+				String rowIndex = visit(elt.rowId).replaceAll("\\.0", "");
+				String columnIndex = visit(elt.columnId).replaceAll("\\.0", "");
+				return translateName(ctx.name.getText()) + ".set(" + rowIndex + "," + columnIndex + "," + value + ")";
 			}
-			
 			
 			String name = translateName(ctx.name.getText());
 			
 			String assignment = "";
 
 			assignment += name + "=" + value;
-
 			
 			return assignment;
 		}
@@ -532,9 +527,10 @@ public class JavaTranslator {
 			int rowsCount = ctx.rows.size();
 
 			for (i = 0; i < rowsCount; i++) {
-				matrix += visitMatrixRow(ctx.rows.get(i));
-				if (i != rowsCount - 1)
+				matrix += visitVector(ctx.rows.get(i));
+				if (i != rowsCount - 1) {
 					matrix += ",";
+				}
 			}
 
 			matrix += "})";
@@ -568,7 +564,7 @@ public class JavaTranslator {
 			return '(' + visit(ctx.bracketedExpr) + ')';
 		}
 
-		public String visitMatrixRow(MathParser.MatrixRowContext ctx) {
+		public String visitVector(VectorContext ctx) {
 			String row = "";
 			row += "{";
 
@@ -614,11 +610,18 @@ public class JavaTranslator {
 
 		public String visitMatrixElement(MathParser.MatrixElementContext ctx) {
 
-			String rowIndex = visit(ctx.rowIdx).replaceAll("\\.0", "");
-			String columnIndex = visit(ctx.columnIdx).replaceAll("\\.0", "");
+			String rowIndex = visit(ctx.rowId).replaceAll("\\.0", "");
+			String columnIndex = visit(ctx.columnId).replaceAll("\\.0", "");
 
-			return translateName(ctx.name.getText()) + ".get(" + rowIndex
-					+ "," + columnIndex + ")";
+			return translateName(ctx.container.getText()) + ".get(" + rowIndex + "," + columnIndex + ")";
+		}
+		
+		@Override
+		public String visitMatrixRow(MatrixRowContext ctx) {
+			String rowIndex = visit(ctx.rowId).replaceAll("\\.0", "");
+
+			String mtx = translateName(ctx.container.getText());
+			return mtx + ".getMatrix(" + rowIndex + "," + rowIndex + ",0 , " + mtx + ".getColumnDimension() - 1)";
 		}
 
 		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
@@ -635,18 +638,6 @@ public class JavaTranslator {
 					+ translateName(ctx.objProperty.getText());
 		}
 
-	}
-
-	public static String translate(String expression) {
-		String result = new JavaTranslator().translateIntl(expression);
-
-		return result;
-	}
-
-	private String translateIntl(String expression) {
-		ParserRuleContext tree = parseTree(expression);
-
-		return treeToString(tree);
 	}
 
 	private ParserRuleContext parseTree(String expression) {
@@ -739,30 +730,8 @@ public class JavaTranslator {
 
 	private String translateIntl(String inputExpression,
 			ICompilationUnit compilationUnit, int position, String containerId) {
-		String result = "";
-		String expression = "";
-
-		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
-			expression = inputExpression.substring(0,
-					inputExpression.length() - 1);
-		} else {
-			expression = inputExpression;
-		}
-
-		fPosition = position;
-
-		try {
-			fCompilationUnit = compilationUnit.getWorkingCopy(null);
-			fCompilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, null);
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
-
-		parse();
-
-		logger.debug("expr: " + expression);
-		ParserRuleContext tree = parseTree(expression);
-		result = treeToString(tree);
+		ParserRuleContext tree = parseTree(inputExpression, compilationUnit, position);
+		String result = treeToString(tree);
 
 		String name = null;
 		if (tree.getChild(0) instanceof VariableAssignmentContext) {
@@ -789,6 +758,33 @@ public class JavaTranslator {
 			}
 		} 
 		return result;
+	}
+
+	private ParserRuleContext parseTree(String inputExpression,
+			ICompilationUnit compilationUnit, int position) {
+		String expression = "";
+
+		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
+			expression = inputExpression.substring(0,
+					inputExpression.length() - 1);
+		} else {
+			expression = inputExpression;
+		}
+
+		fPosition = position;
+
+		try {
+			fCompilationUnit = compilationUnit.getWorkingCopy(null);
+			fCompilationUnit.reconcile(ICompilationUnit.NO_AST, false, null, null);
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+		}
+
+		parse();
+
+		logger.debug("expr: " + expression);
+		ParserRuleContext tree = parseTree(expression);
+		return tree;
 	}
 
 	private String generateOutputCode(VariableType type, String expression, String containerId) {
@@ -996,5 +992,16 @@ public class JavaTranslator {
 		parser.setBuildParseTree(true);
 		return parser.compilationUnit();
 	}
+
+	public static VariableType getType(String expression, ICompilationUnit iCompilationUnit, int i, String string) {
+		return new JavaTranslator()._getType(expression, iCompilationUnit, i);
+	}
+	
+	public VariableType _getType(String expression, ICompilationUnit iCompilationUnit, int i) {
+		ParserRuleContext tree = parseTree(expression, iCompilationUnit, i);
+		return tree.accept(new TypeVisitior(createContext()));
+	}
+	
+	
 
 }

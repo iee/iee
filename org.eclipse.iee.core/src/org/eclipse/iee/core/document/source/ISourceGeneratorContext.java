@@ -7,5 +7,7 @@ public interface ISourceGeneratorContext {
 	String getStoragePath();
 
 	boolean isInClassBody();
+
+	VariableType getExpressionType(String function);
 	
 }

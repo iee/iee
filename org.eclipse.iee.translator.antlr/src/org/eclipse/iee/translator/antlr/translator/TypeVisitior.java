@@ -1,13 +1,14 @@
 package org.eclipse.iee.translator.antlr.translator;
 
+import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathParser.FloatNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.InternalFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.RangeExprContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.StandardFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableContext;
-import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
 
 public class TypeVisitior extends MathBaseVisitor<VariableType> {
 
@@ -47,6 +48,11 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	@Override
 	public VariableType visitInternalFunction(InternalFunctionContext ctx) {
 		return VariableType.DOUBLE;
+	}
+	
+	@Override
+	public VariableType visitRangeExpr(RangeExprContext ctx) {
+		return VariableType.RANGE;
 	}
 	
 	@Override

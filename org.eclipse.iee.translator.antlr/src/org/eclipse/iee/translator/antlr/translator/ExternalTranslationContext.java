@@ -1,6 +1,6 @@
 package org.eclipse.iee.translator.antlr.translator;
 
-import org.eclipse.iee.translator.antlr.translator.JavaTranslator.VariableType;
+import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.jdt.core.IType;
 
 public interface ExternalTranslationContext {

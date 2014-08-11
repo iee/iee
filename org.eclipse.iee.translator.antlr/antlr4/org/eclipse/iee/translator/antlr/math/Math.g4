@@ -32,9 +32,10 @@ variableAssignment:
 
 expression
 	: primary #PrimaryExpr
-	| container = expression '[' index = expression ']' #IndexedExpr
-	| vector #VectorDefinition
-	| begin = expresion (',' next = expression)? '..' end = expression #RangeExpr
+	| container = expression '[' rowId = expression ']' '[' columnId = expression ']' #MatrixElement
+	| container = expression '[' rowId = expression ']' #MatrixRow
+	| matrix #MatrixDefinition
+	| begin = expression (',' next = expression)? '..' end = expression #RangeExpr
 	| left=expression '^'<assoc=right> right=expression #Power 
 	| sign=('+'|'-') unaryExpr=expression #Unary 
 	| left=expression sign=('*'|'/'|'%') right=expression #Mult 
@@ -68,6 +69,9 @@ parameter:
     variable=MATH_NAME #ValueParameter |
     variable=MATH_NAME '=' min=expression INTERVAL max=expression #IntervalParameter
 ;
+
+matrix:
+	'{' rows+=vector (',' rows+=vector)* ','? '}';
 
 vector:
 	'{' (elements+=expression (',' elements+=expression)* ','?)? '}';

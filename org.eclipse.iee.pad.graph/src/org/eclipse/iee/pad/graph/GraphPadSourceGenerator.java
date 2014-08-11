@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.iee.core.document.source.ISourceGenerator;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
+import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.osgi.service.component.annotations.Component;
@@ -37,23 +38,38 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 				if (variable != null && variable.length() > 0) {
 					String function = graphElement.getFunction();
 					if (function != null && function.trim().length() > 0) {
-						String translateElement = context.translateFunction(function, part.getId());
 						generatedText.append("{");
 						generatedText.append("StringBuilder sb").append(i).append(" = new StringBuilder();");
 						generatedText.append("boolean first = true;");
 						generatedText.append("sb").append(i).append(".append(\"[\");");
-						generatedText.append("for (double ").append(variable).append(" = ")
-						.append(minX).append("; ").append(variable).append(" < ")
-						.append(maxX)
-						.append("; ").append(variable).append(" += Math.abs((")
-						.append(minX).append(" - ")
-						.append(maxX).append(") / ")
-						.append(graphElement.getNumberOfPoints())
-						.append(")) {");
-						generatedText.append("double __grpVal = ").append(translateElement)
-						.append(";");
+						VariableType xType = context.getExpressionType(variable);
+						if (xType == VariableType.MATRIX) {
+							String translateFunction = context.translateFunction(variable, part.getId());
+							generatedText.append("Jama.Matrix __tmpX = ").append(translateFunction);
+							
+							generatedText.append("for (int __tmp = 0; __tmp < ").append("__tmpX.getColumnDimension(); __tmp ++) {");
+							generatedText.append("double __grpVar = __tmpX.get(0,__tmp);");
+						} else {
+							generatedText.append("for (double ").append(variable).append(" = ")
+							.append(minX).append("; ").append(variable).append(" < ")
+							.append(maxX)
+							.append("; ").append(variable).append(" += Math.abs((")
+							.append(minX).append(" - ")
+							.append(maxX).append(") / ")
+							.append(graphElement.getNumberOfPoints())
+							.append(")) {");
+							generatedText.append("double __grpVar = ").append(variable).append(";");
+						}
+						VariableType yType = context.getExpressionType(function);
+						String translateElement = context.translateFunction(function, part.getId());
+						if (yType == VariableType.MATRIX) {
+							generatedText.append("Jama.Matrix __tmpY = ").append(translateElement);
+							generatedText.append("double __grpVal = __tmpY.get(0,__tmp);");
+						} else {
+							generatedText.append("double __grpVal = ").append(translateElement).append(";");
+						}
 						generatedText.append("if (!first) {").append("sb").append(i).append(".append(\",\");} else {first=false;}");
-						generatedText.append("sb").append(i).append(".append(\"[\").append(").append(variable).append(").append(\",\").append(__grpVal).append(\"]\");");
+						generatedText.append("sb").append(i).append(".append(\"[\").append( __grpVar).append(\",\").append(__grpVal).append(\"]\");");
 						generatedText.append("}");
 						generatedText.append("sb").append(i).append(".append(\"]\");");
 						generatedText.append("result.append(\"[\" + ").append("sb").append(i).append(".toString()").append(");");
@@ -65,6 +81,7 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 		}
 		generatedText.append("org.eclipse.iee.core.EvaluationContextHolder.putResult(\"").append(part.getId()).append("\", result.toString());");
 		generatedText.append("}");
+		
 
 		return generatedText.toString();
 	}

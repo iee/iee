@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
+import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.translator.antlr.java.JavaBaseVisitor;
@@ -197,6 +198,13 @@ public class DocumentAccess {
 			@Override
 			public boolean isInClassBody() {
 				return node instanceof ClassBodyContext;
+			}
+
+			@Override
+			public VariableType getExpressionType(String expression) {
+				return JavaTranslator.getType(expression,
+						container.getContainerManager().getCompilationUnit(),
+						container.getPosition().getOffset(), container.getContainerID());
 			}});
 		return payload;
 	}
