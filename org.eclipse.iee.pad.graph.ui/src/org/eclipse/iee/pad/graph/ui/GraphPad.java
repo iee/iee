@@ -9,18 +9,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.iee.core.utils.ArrayUtils;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -44,8 +49,11 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	private transient XYDataset dataset;
 	private Map<Integer, double[][]> results;
 	
-	public GraphPad(GraphPart part) {
+	private UIFormulaRenderer formulaRenderer;
+	
+	public GraphPad(GraphPart part, UIFormulaRenderer formulaRenderer) {
 		super(part);
+		this.formulaRenderer = formulaRenderer;
 		fIsAdvancedMode = false;
 	}
 
@@ -63,27 +71,44 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 
 	};
 
+	private Shell shell;
+
+	private Canvas canvas;
+
 	@Override
 	public void createPartControl(final Composite parent) {
-		parent.setLayout(new FillLayout());
-		GraphComposite graphComposite = new GraphComposite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(2,false);
+		layout.verticalSpacing = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		parent.setLayout(layout);
 
+		GridData gd_frame = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd_frame.exclude = false;
+		gd_frame.widthHint = 720;
+		gd_frame.heightHint = 300;
+		shell = parent.getShell();
+		canvas = new Canvas(parent, SWT.NONE);
+		canvas.setLayoutData(gd_frame);
+		LightweightSystem lws = new LightweightSystem(canvas);
 		JFreeChart chart = createChart();
-		graphComposite.getGraphComposite().setChart(chart);
+		GraphFigure root = new GraphFigure(chart, canvas);
+		lws.setContents(root);
 
-		initModelView(graphComposite, getDocumentPart().getModel());
+		initModelView(root, getDocumentPart().getModel());
 
 		FileMessager.getInstance().addFileMessageListener(fFileMessageListener, 
 				getContainer().getContainerManager().getStoragePath());
 	}
 
-	public void initModelView(GraphComposite parent, GraphModel model) {
-		graphModelPresenter = new GraphModelPresenter(this, parent, model, plot);
+
+	public void initModelView(GraphFigure root, GraphModel model) {
+		graphModelPresenter = new GraphModelPresenter(this, root, model, plot, formulaRenderer);
 	}
 
 	@Override
 	public GraphPad copy() {
-		GraphPad newPad = new GraphPad(getDocumentPart().copy());
+		GraphPad newPad = new GraphPad(getDocumentPart().copy(), formulaRenderer);
 		newPad.results = this.results;
 		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
 		return newPad;
@@ -283,6 +308,16 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	@Override
 	public String getTex() {
 		return "";
+	}
+
+
+	public Shell getShell() {
+		return shell;
+	}
+
+
+	public Canvas getCanvas() {
+		return canvas;
 	}
 	
 }

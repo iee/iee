@@ -1,4 +1,4 @@
-package org.eclipse.iee.web.renderer;
+package org.eclipse.iee.pad.formula.image;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -25,10 +25,16 @@ public class FormulaImageRenderer {
 			return images.get(formula, new Callable<BufferedImage>() {
 				@Override
 				public BufferedImage call() throws Exception {
+					String translateToLatex;
+					try {
+						translateToLatex = FormulaPart.translateToLatex(formula);
+					} catch (Exception e) {
+						translateToLatex = formula;
+					}
 					//jlatexmath has threadsafety issues on image rendering
 					synchronized (TeXFormula.class) {
 						return (BufferedImage) TeXFormula.createBufferedImage(
-								FormulaPart.translateToLatex(formula),
+								translateToLatex,
 								TeXConstants.STYLE_TEXT, 
 								20,
 								fg, 

@@ -4,8 +4,7 @@ import java.awt.BasicStroke;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.pad.formula.ui.hover.HoverShell;
-import org.eclipse.iee.pad.formula.ui.utils.FormulaRenderer;
-import org.eclipse.iee.translator.antlr.translator.TexTranslator;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -46,13 +45,16 @@ public class GraphElementComposite extends Composite {
 	private MenuItem removeItem;
 	private MenuItem propertiesItem;
 
+	private UIFormulaRenderer formulaRenderer;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public GraphElementComposite(Composite parent, int style) {
+	public GraphElementComposite(Composite parent, int style, UIFormulaRenderer formulaRenderer) {
 		super(parent, style);
+		this.formulaRenderer = formulaRenderer;
 		GridLayout layout = new GridLayout(1, false);
 		layout.verticalSpacing = 0;
 		layout.marginHeight = 0;
@@ -195,29 +197,6 @@ public class GraphElementComposite extends Composite {
 		pack();
 	}
 	
-	private String translateToLatex(String text) {
-		String latex = "";
-
-		if (text.isEmpty()) {
-			return "";
-		}
-		
-		/* Translating to Latex */
-		if (text.charAt(0) == '=') {
-			latex = TexTranslator.translate(text.substring(1));
-			latex = "=" + latex;
-		} else if (text.charAt(text.length() - 1) == '=') {
-			latex = TexTranslator
-					.translate(text.substring(0, text.length() - 1));
-			latex = latex + "=";
-		} else {
-			latex = TexTranslator.translate(text);
-		}
-
-		return latex;
-
-	}
-	
 	public void processInput() {
 		/* Set formula image */
 		Image image = createImage();
@@ -226,15 +205,14 @@ public class GraphElementComposite extends Composite {
 	}
 
 	private Image createImage() {
-		String fTexExpression = translateToLatex(fDocument.get());
+		String fTexExpression = fDocument.get();
 		Image image = null;
 		if (fTexExpression != null) {
-			image = FormulaRenderer.getFormulaImage(fTexExpression);
+			image = formulaRenderer.getFormulaImage(fTexExpression);
 		}
 		if (image == null) {
-			fTexExpression = translateToLatex(fLastValidText);
-			image = FormulaRenderer
-					.getFormulaImage(fTexExpression);
+			fTexExpression = fLastValidText;
+			image = formulaRenderer.getFormulaImage(fTexExpression);
 		} else {
 			fLastValidText = fDocument.get();
 		}

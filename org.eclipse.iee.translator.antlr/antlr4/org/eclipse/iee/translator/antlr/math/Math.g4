@@ -30,17 +30,20 @@ variableAssignment:
 	name=MATH_NAME '=' value=expression
 ;
 
-expression:
-	left=expression '^'<assoc=right> right=expression #Power |
-	sign=('+'|'-') unaryExpr=expression #Unary |
-	left=expression sign=('*'|'/'|'%') right=expression #Mult |
-	left=expression sign=('+'|'-') right=expression #Add |
-        left=expression sign=('<<'|'>>'|'>>>') right=expression #Shift |
-        left=expression '&' right=expression #BitwiseAdd |
-        left=expression XOR right=expression #Xor |
-        left=expression '|' right=expression #BitwiseOr |
-	'(' bracketedExpr=expression ')' #ExprBrackets |
-	primary	#PrimaryExpr
+expression
+	: primary #PrimaryExpr
+	| container = expression '[' index = expression ']' #IndexedExpr
+	| vector #VectorDefinition
+	| begin = expresion (',' next = expression)? '..' end = expression #RangeExpr
+	| left=expression '^'<assoc=right> right=expression #Power 
+	| sign=('+'|'-') unaryExpr=expression #Unary 
+	| left=expression sign=('*'|'/'|'%') right=expression #Mult 
+	| left=expression sign=('+'|'-') right=expression #Add 
+	| left=expression sign=('<<'|'>>'|'>>>') right=expression #Shift 
+	| left=expression '&' right=expression #BitwiseAdd 
+	| left=expression XOR right=expression #Xor 
+	| left=expression '|' right=expression #BitwiseOr 
+	| '(' bracketedExpr=expression ')' #ExprBrackets
 ;
 
 logicalExpression:
@@ -56,8 +59,6 @@ primary:
 	MATH_NAME #Variable |
 	FLOAT #FloatNumber |
 	INT #IntNumber |
-	matrix #MatrixDefinition |
-	name=MATH_NAME '[' rowIdx=expression ']' '[' columnIdx=expression ']' #MatrixElement | 
 	function #PrimaryFunction |
 	objName=MATH_NAME '.' objFunction=function #MethodCall |
 	objName=MATH_NAME '.' objProperty=MATH_NAME #Property 
@@ -68,10 +69,7 @@ parameter:
     variable=MATH_NAME '=' min=expression INTERVAL max=expression #IntervalParameter
 ;
 
-matrix:
-	'{' (rows+=matrixRow (',' rows+=matrixRow)* ','?)? '}';
-
-matrixRow:
+vector:
 	'{' (elements+=expression (',' elements+=expression)* ','?)? '}';
 
 INTERNAL_FUNCTION_NAME:

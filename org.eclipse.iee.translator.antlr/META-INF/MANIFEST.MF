@@ -16,6 +16,7 @@ Export-Package: org.eclipse.iee.translator.antlr.java,
  org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator
 Import-Package: Jama,
+ com.google.common.base;version="16.0.1",
  com.google.common.collect;version="16.0.1",
  org.slf4j;version="1.7.2",
  org.stringtemplate.v4

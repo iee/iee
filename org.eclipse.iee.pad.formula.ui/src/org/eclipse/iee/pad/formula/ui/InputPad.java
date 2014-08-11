@@ -1,11 +1,12 @@
 package org.eclipse.iee.pad.formula.ui;
 
 import org.eclipse.iee.pad.formula.InputPart;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 
 public class InputPad extends AbstractFormulaPad<InputPart> {
 
-	public InputPad(InputPart part) {
-		super(part);
+	public InputPad(InputPart part, UIFormulaRenderer formulaRenderer) {
+		super(part, formulaRenderer);
 		String expression = "";
 		if (!part.getVariable().isEmpty()) {
 			expression += part.getVariable();
@@ -43,7 +44,7 @@ public class InputPad extends AbstractFormulaPad<InputPart> {
 	
 	@Override
 	public InputPad copy() {
-		InputPad newPad = new InputPad(getDocumentPart().copy());
+		InputPad newPad = new InputPad(getDocumentPart().copy(), getFormulaRenderer());
 		return newPad;
 	}
 	

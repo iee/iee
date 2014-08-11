@@ -11,7 +11,7 @@ import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
 import org.eclipse.iee.pad.formula.FormulaPart;
 import org.eclipse.iee.pad.formula.ui.hover.HoverShell;
-import org.eclipse.iee.pad.formula.ui.utils.FormulaRenderer;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.formula.ui.utils.Function;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
@@ -52,6 +52,8 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractFormulaPad.class);
 
+	private UIFormulaRenderer formulaRenderer;
+	
 	Composite fParent;
 
 	private Composite fInputView;
@@ -95,6 +97,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 
 	};
 
+	
 	/*
 	 * Getters/Setters
 	 */
@@ -115,10 +118,15 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 		fTranslatingExpression = expression;
 	}
 
-	public AbstractFormulaPad(T part) {
+	public AbstractFormulaPad(T part, UIFormulaRenderer formulaRenderer) {
 		super(part);
+		this.formulaRenderer = formulaRenderer;
 	}
 
+	public UIFormulaRenderer getFormulaRenderer() {
+		return formulaRenderer;
+	}
+	
 	public void asyncUIUpdate(final Function function) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
@@ -190,8 +198,8 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 	}
 
 	private void updateFormulaImage() {
-		fTexExpression = FormulaPart.translateToLatex(fTranslatingExpression);
-		Image image = FormulaRenderer.getFormulaImage(fTexExpression);
+		fTexExpression = fTranslatingExpression;
+		Image image = formulaRenderer.getFormulaImage(fTexExpression);
 
 		fFormulaImageLabel.setImage(image);
 	}
@@ -202,9 +210,9 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 		if (result == "")
 			image = null;
 		else {
-			String latex = FormulaPart.translateToLatex(result);
+			String latex = result;
 			fTexExpression += latex;
-			image = FormulaRenderer.getFormulaImage(latex);
+			image = formulaRenderer.getFormulaImage(latex);
 		}
 
 		Function updateImage = new Function() {
@@ -371,10 +379,10 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
-							fTexExpression = FormulaPart.translateToLatex(fDocument.get());
+							fTexExpression = fDocument.get();
 							Image image = createImage(fTexExpression);
 							if (image == null) {
-								fTexExpression = FormulaPart.translateToLatex(fLastValidText);
+								fTexExpression = fLastValidText;
 								image = createImage(fTexExpression);
 							}
 							if (fHoverShell != null) {
@@ -395,7 +403,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 	}
 
 	protected Image createImage(String formula) {
-		return FormulaRenderer.getFormulaImage(fTexExpression);
+		return formulaRenderer.getFormulaImage(fTexExpression);
 	}
 	
 	@Override

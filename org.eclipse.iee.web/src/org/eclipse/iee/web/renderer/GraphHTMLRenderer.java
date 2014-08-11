@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 
 import org.eclipse.iee.core.IResultContainer;
 import org.eclipse.iee.core.utils.ArrayUtils;
+import org.eclipse.iee.pad.formula.image.FormulaImageRenderer;
 import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;

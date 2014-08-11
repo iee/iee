@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.pad.formula.SymbolicPart;
+import org.eclipse.iee.pad.formula.image.FormulaImageRenderer;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;

@@ -4,12 +4,17 @@ Bundle-Name: Graph Pad UI
 Bundle-SymbolicName: org.eclipse.iee.pad.graph.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.eclipse.iee.core.document,
+Import-Package: com.google.common.base;version="16.0.1",
+ org.eclipse.draw2d,
+ org.eclipse.draw2d.geometry,
+ org.eclipse.draw2d.text,
+ org.eclipse.iee.core.document,
  org.eclipse.iee.core.utils,
  org.eclipse.iee.editor.core.pad,
+ org.eclipse.iee.pad.formula.ui.hover,
+ org.eclipse.iee.pad.formula.ui.utils,
  org.eclipse.iee.pad.graph,
  org.eclipse.iee.pad.graph.model,
- org.eclipse.iee.translator.antlr.translator,
  org.eclipse.jface.text,
  org.jfree.chart,
  org.jfree.chart.axis,
@@ -33,5 +38,4 @@ Require-Bundle: org.eclipse.swt,
  org.eclipse.ui.forms,
  org.eclipse.jface,
  org.eclipse.iee.editor,
- org.eclipse.iee.pad.formula.ui,
  org.eclipse.ui.workbench

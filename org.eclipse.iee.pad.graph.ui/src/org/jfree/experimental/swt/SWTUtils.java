@@ -372,6 +372,34 @@ public class SWTUtils {
                 event.time, modifiers, event.x, event.y, 1, false, button);
         return awtMouseEvent;
     }
+    
+    /**
+     * Creates an AWT <code>MouseEvent</code> from a swt event.
+     * This method helps passing SWT mouse event to awt components.
+     * @param event The swt event.
+     * @return A AWT mouse event based on the given SWT event.
+     */
+    public static MouseEvent toAwtMouseEvent(org.eclipse.draw2d.MouseEvent event) {
+        int button = MouseEvent.NOBUTTON;
+        switch (event.button) {
+        case 1: button = MouseEvent.BUTTON1; break;
+        case 2: button = MouseEvent.BUTTON2; break;
+        case 3: button = MouseEvent.BUTTON3; break;
+        }
+        int modifiers = 0;
+        if ((event.getState() & SWT.CTRL) != 0) {
+            modifiers |= InputEvent.CTRL_DOWN_MASK;
+        }
+        if ((event.getState() & SWT.SHIFT) != 0) {
+            modifiers |= InputEvent.SHIFT_DOWN_MASK;
+        }
+        if ((event.getState() & SWT.ALT) != 0) {
+            modifiers |= InputEvent.ALT_DOWN_MASK;
+        }
+        MouseEvent awtMouseEvent = new MouseEvent(DUMMY_PANEL, event.hashCode(),
+                System.currentTimeMillis(), modifiers, event.x, event.y, 1, false, button);
+        return awtMouseEvent;
+    }
 
     /**
      * Converts an AWT image to SWT.

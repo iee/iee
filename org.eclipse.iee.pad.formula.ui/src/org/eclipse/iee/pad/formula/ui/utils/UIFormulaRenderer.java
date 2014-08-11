@@ -7,30 +7,34 @@ import java.awt.image.WritableRaster;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.iee.pad.formula.image.FormulaImageRenderer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.scilab.forge.jlatexmath.TeXConstants;
-import org.scilab.forge.jlatexmath.TeXFormula;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FormulaRenderer {
+@Component(service = UIFormulaRenderer.class)
+public class UIFormulaRenderer {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(FormulaRenderer.class);
+	private static final Logger logger = LoggerFactory.getLogger(UIFormulaRenderer.class);
 
 	protected static Display fDisplay;
 
 	protected static Map<String, Image> fCachedImages = new TreeMap<String, Image>();
 
+	private FormulaImageRenderer formulaImageRenderer;
+	
 	public static void setDisplay(Display display) {
 		fDisplay = display;
 	}
 
-	public static Image getFormulaImage(String text) {
+	public Image getFormulaImage(String text) {
 		if (text == null || text.trim().isEmpty())
 			return null;
 		Image cachedImage = fCachedImages.get(text);
@@ -40,8 +44,7 @@ public class FormulaRenderer {
 		}
 
 		try {
-			java.awt.Image awtImage = TeXFormula.createBufferedImage(text,
-					TeXConstants.STYLE_TEXT, 20, java.awt.Color.black,
+			java.awt.Image awtImage = formulaImageRenderer.getFormulaImage(text, java.awt.Color.black,
 					java.awt.Color.white);
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
 			Image formulaImage = new Image(fDisplay, swtImageData);
@@ -55,15 +58,12 @@ public class FormulaRenderer {
 		}
 	}
 
-	public static Image getSymbolicImage(String text) {
+	public Image getSymbolicImage(String text) {
 		if (text.trim().isEmpty())
 			return null;
 
 		try {
-
-			java.awt.Image awtImage = TeXFormula.createBufferedImage(text,
-					TeXConstants.STYLE_TEXT, 20,
-					new java.awt.Color(63, 127, 95), java.awt.Color.white);
+			java.awt.Image awtImage = formulaImageRenderer.getFormulaImage(text, new java.awt.Color(63, 127, 95), java.awt.Color.white);
 
 			ImageData swtImageData = convertToSWT((BufferedImage) awtImage);
 			Image formulaImage = new Image(fDisplay, swtImageData);
@@ -129,5 +129,13 @@ public class FormulaRenderer {
 			return data;
 		}
 		return null;
+	}
+	@Reference(unbind = "unbindFormulaImageRenderer", policy = ReferencePolicy.DYNAMIC)
+	public void bindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = renderer;
+	}
+	
+	public void unbindFormulaImageRenderer(FormulaImageRenderer renderer) {
+		formulaImageRenderer = null;
 	}
 }

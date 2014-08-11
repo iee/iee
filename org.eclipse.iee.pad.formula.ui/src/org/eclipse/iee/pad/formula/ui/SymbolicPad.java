@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.pad.formula.SymbolicPart;
-import org.eclipse.iee.pad.formula.ui.utils.FormulaRenderer;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.formula.ui.utils.Function;
 import org.eclipse.swt.graphics.Image;
 import org.slf4j.Logger;
@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 
 public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
-	private static final Logger logger = LoggerFactory.getLogger(FormulaPad.class);
+	private static final Logger logger = LoggerFactory.getLogger(SymbolicPad.class);
 
 	private SymbolicEngine fSymbolicEngine;
-	
-	public SymbolicPad(SymbolicPart part) {
-		super(part);
+
+	public SymbolicPad(SymbolicPart part, UIFormulaRenderer formulaRenderer) {
+		super(part, formulaRenderer);
 		setTranslatingExpression(part.getFormula());
 		setOriginalExpression(part.getFormula());
 		fSymbolicEngine = new SymbolicEngine();
@@ -59,7 +59,7 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
 		/* Set formula image */
 		fTexExpression = translateToLatex(fTranslatingExpression);
-		Image image = FormulaRenderer.getSymbolicImage(fTexExpression);
+		Image image = getFormulaRenderer().getSymbolicImage(fTexExpression);
 		fFormulaImageLabel.setImage(image);
 
 		/* Generate code */
@@ -93,7 +93,7 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 		else {
 			String latex = translateToLatex(result);
 			fTexExpression += latex;
-			image = FormulaRenderer.getSymbolicImage(latex);
+			image = getFormulaRenderer().getSymbolicImage(latex);
 		}
 		Function updateImage = new Function() {
 
@@ -128,12 +128,12 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
 	@Override
 	protected Image createImage(String formula) {
-		return FormulaRenderer.getSymbolicImage(formula);
+		return getFormulaRenderer().getSymbolicImage(formula);
 	}
 	
 	@Override
 	public SymbolicPad copy() {
-		SymbolicPad newPad = new SymbolicPad(getDocumentPart().copy());
+		SymbolicPad newPad = new SymbolicPad(getDocumentPart().copy(), getFormulaRenderer());
 		return newPad;
 	}
 

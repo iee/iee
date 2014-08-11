@@ -458,7 +458,7 @@ public class JavaTranslator {
 			VariableType leftType = ctx.left.accept(fTypeVisitor);
 			VariableType rightType = ctx.right.accept(fTypeVisitor);
 			
-			if (leftType.equals(VariableType.MATRIX) && rightType.equals(VariableType.MATRIX)) {
+			if (VariableType.MATRIX.equals(leftType) && VariableType.MATRIX.equals(rightType)) {
 				if (sign.matches(Pattern.quote("+")))
 					return left + ".plus(" + right + ")";
 				if (sign.matches(Pattern.quote("-")))
@@ -517,7 +517,7 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 
 			VariableType type = ctx.left.accept(fTypeVisitor);
-			if (type.equals(VariableType.MATRIX) && right.matches("T")) {
+			if (VariableType.MATRIX.equals(type) && right.matches("T")) {
 				return left + ".transpose()";
 			}
 
@@ -784,6 +784,8 @@ public class JavaTranslator {
 		} else {
 			if (name != null && !fFields.containsKey(name)) {
 				result = getName(type) + " " + result + ";";
+			} else {
+				result = result + ";";
 			}
 		} 
 		return result;

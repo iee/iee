@@ -4,89 +4,83 @@ import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.jfree.experimental.swt.SWTUtils;
 import org.jfree.util.PaintUtilities;
 
 public class GraphElementPresenenter {
 
-	private GraphElementComposite composite;
+	private GraphElementFigure fFigure;
 
-	private GraphModelPresenter modelPresenter;
+	private GraphModelPresenter fModelPresenter;
 
-	private GraphElement graphElement;
+	private GraphElement fGraphElement;
 
-	public GraphElementPresenenter(final GraphElementComposite composite,
+	public GraphElementPresenenter(final GraphElementFigure figure,
 			GraphModelPresenter modelPresenter, final GraphElement graphElement) {
 		super();
-		this.composite = composite;
-		this.modelPresenter = modelPresenter;
-		this.graphElement = graphElement;
+		this.fFigure = figure;
+		this.fModelPresenter = modelPresenter;
+		this.fGraphElement = graphElement;
 		
-		Label inputView = composite.getfFormulaImageLabel();
-		inputView.addMouseListener(new MouseListener() {
+		figure.addMouseListener(new org.eclipse.draw2d.MouseListener() {
 			
 			@Override
-			public void mouseUp(MouseEvent e) {
-				if (e.button == 1) {
-					composite.toggleInputText();
+			public void mouseReleased(org.eclipse.draw2d.MouseEvent me) {
+				if (me.button == 1) {
+					figure.toggleInputText();
 				}
 			}
 			
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mousePressed(org.eclipse.draw2d.MouseEvent me) {
 			}
 			
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
+			public void mouseDoubleClicked(org.eclipse.draw2d.MouseEvent me) {
 			}
 		});
-		composite.getFormulaText().getControl().addFocusListener(new FocusListener() {
-			
+		figure.addFocusListener(new org.eclipse.draw2d.FocusListener() {
+
 			@Override
-			public void focusLost(FocusEvent e) {
-				composite.toggleFormulaImage();
-				GraphElementPresenenter.this.modelPresenter.pack();
+			public void focusGained(org.eclipse.draw2d.FocusEvent fe) {
 			}
-			
+
 			@Override
-			public void focusGained(FocusEvent e) {
-			}
-		});
-		composite.toggleFormulaImage();
+			public void focusLost(org.eclipse.draw2d.FocusEvent fe) {
+				figure.toggleFormulaImage();
+				GraphElementPresenenter.this.fModelPresenter.pack();
+				
+			}});
+		figure.toggleFormulaImage();
 		String color = graphElement.getColor();
 		if (color == null) {
 			color = modelPresenter.getNextColor();
 			graphElement.setColor(color);
 		}
-		composite.setColor(PaintUtilities.stringToColor(color));
-		composite.setWidth(graphElement.getWidth());
-		composite.getAddItem().addSelectionListener(new SelectionAdapter() {
+		figure.setColor(PaintUtilities.stringToColor(color));
+		figure.setWidth(graphElement.getWidth());
+		figure.addAddClickListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				GraphElementPresenenter.this.modelPresenter.addNewElement();
+				GraphElementPresenenter.this.fModelPresenter.addNewElement();
 			}
 		});
-		composite.getRemoveItem().addSelectionListener(new SelectionAdapter() {
+		figure.addRemoveClickListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				GraphElementPresenenter.this.modelPresenter.removeElement(GraphElementPresenenter.this);
+				GraphElementPresenenter.this.fModelPresenter.removeElement(GraphElementPresenenter.this);
 			}
 		});
-		composite.getPropertiesItem().addSelectionListener(new SelectionAdapter() {
+		figure.addPropertiesClickListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				Dialog dialog = new Dialog(composite.getShell()) {
+				Dialog dialog = new Dialog(fModelPresenter.getShell()) {
 					
 					private ElementProperties elementProperties;
 
@@ -108,8 +102,8 @@ public class GraphElementPresenenter {
 						graphElement.setColor(PaintUtilities.colorToString(awtColor));
 						graphElement.setNumberOfPoints(StringConverter.asInt(elementProperties.getPointsText().getText()));
 						super.okPressed();
-						composite.setColor(awtColor);
-						composite.setWidth(width);
+						figure.setColor(awtColor);
+						figure.setWidth(width);
 					}
 					
 				};
@@ -121,25 +115,23 @@ public class GraphElementPresenenter {
 	}
 	
 	public GraphElement getGraphElement() {
-		return graphElement;
+		return fGraphElement;
 	}
 	
 	public void remove() {
-		composite.dispose();
 	}
 	
 	public void save() {
 		getGraphElement().setNumberOfPoints(100);
-		getGraphElement().setFunction(composite.getFormulaText().getDocument().get());
+		getGraphElement().setFunction(fFigure.getFormulaText());
 	}
 	
 	public void restore() {
 		if (getGraphElement().getFunction() !=  null) {
-			composite.getFormulaText().getDocument().set(getGraphElement().getFunction());
+			fFigure.setFormulaText(getGraphElement().getFunction());
 		} else {
-			composite.getFormulaText().getDocument().set("");
+			fFigure.setFormulaText("");
 		}
-		composite.processInput();
 	}
 	
 

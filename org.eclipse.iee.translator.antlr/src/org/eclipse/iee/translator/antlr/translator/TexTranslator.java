@@ -8,11 +8,14 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
+
+import com.google.common.base.Joiner;
 
 public class TexTranslator {
 
@@ -321,6 +324,16 @@ public class TexTranslator {
 					+ translateName(ctx.objProperty.getText());
 		}
 
+		@Override
+		public String visitErrorNode(ErrorNode node) {
+			return node.getText();
+		}
+		
+		@Override
+		protected String aggregateResult(String aggregate, String nextResult) {
+			return Joiner.on("").skipNulls().join(aggregate, nextResult);
+		}
+		
 	}
 
 	public static String translate(String expression) {

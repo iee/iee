@@ -5,57 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.ui.IStartup;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
 
-/**
- * The activator class controls the plug-in life cycle
- */
-public class FormulaPadManager extends AbstractUIPlugin implements IStartup {
-
-	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.iee.pad.formula.ui"; //$NON-NLS-1$
-
-	// The shared instance
-	private static FormulaPadManager plugin;
-
-	/**
-	 * The constructor
-	 */
-	public FormulaPadManager() {
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static FormulaPadManager getDefault() {
-		return plugin;
-	}
-
-	@Override
-	public void earlyStartup() {
-	}
+public class FormulaPadManager {
 
 	public static List<Pad<?>> getFollowingPads(Pad<?> pad) {		
 		List<Pad<?>> pads = pad.getContainer().getContainerManager().selectPadsByType(pad.getType());

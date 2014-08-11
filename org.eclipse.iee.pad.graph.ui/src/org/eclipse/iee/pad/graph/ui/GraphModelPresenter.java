@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.draw2d.Figure;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.XYPlot;
@@ -27,25 +31,27 @@ public class GraphModelPresenter {
 	
 	private GraphPad graphPad;
 	
-	private GraphComposite composite;
+	private GraphFigure root;
 	
 	private GraphModel model;
 
 	private XYPlot plot;
 
-	public GraphModelPresenter(GraphPad graphPad, GraphComposite composite, GraphModel model, XYPlot plot) {
+	private UIFormulaRenderer formulaRenderer;
+	
+	public GraphModelPresenter(GraphPad graphPad, GraphFigure root, GraphModel model, XYPlot plot, UIFormulaRenderer formulaRenderer) {
 		this.graphPad = graphPad;
-		this.composite = composite;
+		this.root = root;
 		this.plot = plot;
+		this.formulaRenderer = formulaRenderer;
 		setModel(model);
 	}
 	
 	private void addElementComposite(final GraphModel model,
-			final GraphElement graphElement, final GraphComposite parent) {
-		Composite composite = parent.getComposite();
-		final GraphElementComposite elementComposite = new GraphElementComposite(composite, SWT.NONE);
+			final GraphElement graphElement, final SeriesFigure figure) {
+		GraphElementFigure elementComposite = new GraphElementFigure(new Caret(graphPad.getCanvas(), SWT.NONE), formulaRenderer);
+		figure.addElement(elementComposite);
 		presenenters.add(new GraphElementPresenenter(elementComposite, this, graphElement));
-		parent.layout();
 	}
 	
 	public void addNewElement() {
@@ -53,7 +59,7 @@ public class GraphModelPresenter {
 		newElement.setNumberOfPoints(100);
 		newElement.setColor(getNextColor());
 		model.getElements().add(newElement);
-		addElementComposite(model, newElement, composite);
+		addElementComposite(model, newElement, root.getSeriesFigure());
 		graphPad.processInput(model);
 	}
 	
@@ -62,11 +68,10 @@ public class GraphModelPresenter {
 		model.getElements().remove(elementPresenenter.getGraphElement());
 		elementPresenenter.remove();
 		graphPad.processInput(model);
-		composite.layout();
 	}
 
 	public void save() {
-		String text = composite.getVariablesText().getText();
+		String text = root.getVariablesFigure().getVarsText();
 		String[] variables = text.split(",");
 		model.setVariables(Arrays.asList(variables));
 		for (GraphElementPresenenter presenter : presenenters) {
@@ -80,9 +85,10 @@ public class GraphModelPresenter {
 		}
 		presenenters.clear();
 		this.model = model;
+		SeriesFigure seriesFigure = root.getSeriesFigure();
 		List<GraphElement> elements = model.getElements();
 		for (GraphElement graphElement : elements) {
-			addElementComposite(model, graphElement, composite);
+			addElementComposite(model, graphElement, seriesFigure);
 		}
 		StringBuilder sb = new StringBuilder();
 		List<String> variables = model.getVariables();
@@ -93,18 +99,24 @@ public class GraphModelPresenter {
 			sb.append(variable);
 		}
 		
-		Text variablesText = composite.getVariablesText();
-		variablesText.setText(sb.toString());
-		composite.layout();
+		VariablesFigure variablesFigure = root.getVariablesFigure();
+		variablesFigure.setMinXText(model.getMinX() != null ? String.valueOf(model.getMinX()) : "");
+		variablesFigure.setVarsText(sb.toString());
+		variablesFigure.setMaxXText(model.getMaxX() != null ? String.valueOf(model.getMaxX()) : "");
+		seriesFigure.setMinYText(model.getMinY() != null ? String.valueOf(model.getMinY()) : "");
+		seriesFigure.setMaxYText(model.getMaxY() != null ? String.valueOf(model.getMaxY()) : "");
 	}
 
 	public void pack() {
-		composite.pack();
 	}
 
 	public String getNextColor() {
 		DrawingSupplier drawingSupplier = plot.getDrawingSupplier();
 		return PaintUtilities.colorToString((Color) drawingSupplier.getNextPaint());
+	}
+
+	public Shell getShell() {
+		return graphPad.getShell();
 	}
 	
 }

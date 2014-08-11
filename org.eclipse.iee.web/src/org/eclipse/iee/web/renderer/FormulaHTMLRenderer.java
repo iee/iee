@@ -9,6 +9,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import org.eclipse.iee.pad.formula.FormulaPart;
+import org.eclipse.iee.pad.formula.image.FormulaImageRenderer;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferencePolicy;
