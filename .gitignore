@@ -3,3 +3,4 @@
 */bin/*
 */.gradle/*
 .metadata/
+org.eclipse.gef.examples.text/

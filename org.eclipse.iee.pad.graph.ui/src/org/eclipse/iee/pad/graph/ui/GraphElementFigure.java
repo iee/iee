@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Display;
 import org.jfree.experimental.swt.SWTUtils;
 
+import com.google.common.base.Strings;
+
 public class GraphElementFigure extends Figure {
 
 	private ImageFigure fFormulaImage;
@@ -95,6 +97,9 @@ public class GraphElementFigure extends Figure {
 	
 	private Image createImage() {
 		String fTexExpression = fTextFigure.getText();
+		if (Strings.isNullOrEmpty(fTexExpression)) {
+			fTexExpression = "o";
+		}
 		Image image = null;
 		if (fTexExpression != null) {
 			image = formulaRenderer.getFormulaImage(fTexExpression);

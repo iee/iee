@@ -1,6 +1,5 @@
 package org.eclipse.iee.pad.graph.ui;
 
-import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
@@ -20,10 +19,12 @@ public class GraphFigure extends Figure {
 	private ChartFigure chartFigure;
 
 	public GraphFigure(JFreeChart chart, final Canvas canvas) {
+		Caret caret = new Caret(canvas, SWT.NONE);
+		canvas.setCaret(caret);
 		GridLayout manager = new GridLayout();
 		manager.numColumns = 2;
 		setLayoutManager(manager);
-		seriesFigure = new SeriesFigure(new Caret(canvas, SWT.NONE));
+		seriesFigure = new SeriesFigure(caret);
 		GridData seriesData = new GridData(GridData.VERTICAL_ALIGN_FILL
                 | GridData.GRAB_VERTICAL);
 		add(seriesFigure, seriesData);
@@ -39,7 +40,7 @@ public class GraphFigure extends Figure {
                 | GridData.GRAB_VERTICAL);
 		add(chartFigure, chartData);
 		add(new Figure());
-		variablesFigure = new VariablesFigure(new Caret(canvas, SWT.NONE));
+		variablesFigure = new VariablesFigure(caret);
 		GridData varsData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
                 | GridData.GRAB_HORIZONTAL);
 		
