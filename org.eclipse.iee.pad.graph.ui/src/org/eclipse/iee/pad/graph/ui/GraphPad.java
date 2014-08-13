@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.iee.core.utils.ArrayUtils;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
@@ -19,12 +22,29 @@ import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -102,7 +122,38 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	}
 
 
-	public void initModelView(GraphFigure root, GraphModel model) {
+	public void initModelView(final GraphFigure root, GraphModel model) {
+		final MenuManager menuManager = new MenuManager();
+		final Menu menu = menuManager.createContextMenu(canvas);
+		canvas.addMouseListener(new org.eclipse.swt.events.MouseListener() {
+			
+			@Override
+			public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(org.eclipse.swt.events.MouseEvent e) {
+				if (e.button== 3) {
+					 IFigure findMouseEventTargetAt = root.findMouseEventTargetAt(e.x, e.y);
+					 menuManager.removeAll();
+					 while (findMouseEventTargetAt != null) {
+						 if (findMouseEventTargetAt instanceof IMenuContributor) {
+							 IMenuContributor contributor = (IMenuContributor) findMouseEventTargetAt;
+							 contributor.contribute(menuManager);
+						 }
+						 findMouseEventTargetAt = findMouseEventTargetAt.getParent();
+					 }
+					 menuManager.update(false);
+					 Point display = canvas.toDisplay(e.x, e.y);
+					 menu.setLocation(display.x, display.y);
+				     menu.setVisible(true);
+				}
+			}
+			
+			@Override
+			public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
+			}
+		});
 		graphModelPresenter = new GraphModelPresenter(this, root, model, plot, formulaRenderer);
 	}
 

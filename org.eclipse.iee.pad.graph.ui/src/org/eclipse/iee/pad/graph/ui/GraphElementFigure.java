@@ -6,17 +6,28 @@ import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Caret;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ToolBar;
 import org.jfree.experimental.swt.SWTUtils;
 
 import com.google.common.base.Strings;
 
-public class GraphElementFigure extends Figure {
+public class GraphElementFigure extends Figure implements IMenuContributor {
 
 	private ImageFigure fFormulaImage;
 	private TextFigure fTextFigure;
@@ -115,6 +126,13 @@ public class GraphElementFigure extends Figure {
 	@Override
 	public void removeFocusListener(FocusListener listener) {
 		fTextFigure.removeFocusListener(listener);
+	}
+
+	@Override
+	public void contribute(MenuManager menuManager) {
+		menuManager.add(new ActionContributionItem(new Action("Add function") {}));
+		menuManager.add(new ActionContributionItem(new Action("Remove function") {}));
+		menuManager.add(new ActionContributionItem(new Action("Properties") {}));
 	}
 
 }
