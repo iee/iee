@@ -2,6 +2,8 @@ package org.eclipse.iee.pad.graph.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
@@ -11,8 +13,6 @@ import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
 import org.eclipse.iee.core.utils.ArrayUtils;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
@@ -22,32 +22,21 @@ import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuCreator;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.HelpListener;
-import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.event.AxisChangeEvent;
+import org.jfree.chart.event.AxisChangeListener;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -70,6 +59,10 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	private Map<Integer, double[][]> results;
 	
 	private UIFormulaRenderer formulaRenderer;
+	
+	private AxisChangeListener fDomainAxisListener;
+	
+	private AxisChangeListener fRangeAxisListener;
 	
 	public GraphPad(GraphPart part, UIFormulaRenderer formulaRenderer) {
 		super(part);
@@ -94,6 +87,8 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	private Shell shell;
 
 	private Canvas canvas;
+
+	private PropertyChangeListener fModelListener;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -221,8 +216,47 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, Color.black);
 		
-		GraphModel model = getDocumentPart().getModel();
+		final GraphModel model = getDocumentPart().getModel();
 		
+		updateAxes();
+		
+		fDomainAxisListener = new AxisChangeListener() {
+			@Override
+			public void axisChanged(AxisChangeEvent event) {
+				ValueAxis axis = (ValueAxis) event.getAxis();
+				updateXAxis(axis);
+			}
+		};
+		fRangeAxisListener = new AxisChangeListener() {
+			@Override
+			public void axisChanged(AxisChangeEvent event) {
+				ValueAxis axis = (ValueAxis) event.getAxis();
+				updateYAxis(axis);
+			}
+		};
+		plot.getDomainAxis().addChangeListener(fDomainAxisListener);
+		plot.getRangeAxis().addChangeListener(fRangeAxisListener);
+		
+		fModelListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String propertyName = evt.getPropertyName();
+				if ("maxX".equals(propertyName) 
+						|| "minX".equals(propertyName)
+						|| "maxY".equals(propertyName)
+						|| "minY".equals(propertyName)) {
+					updateAxes();
+				}
+			}
+		};
+		model.addPropertyChangeListener(fModelListener);
+		
+		return chart;
+	}
+
+
+	private void updateAxes() {
+		final GraphModel model = getDocumentPart().getModel();
 		if (model.getMaxX() != null && model.getMinX() != null) {
 			plot.getDomainAxis().setRange(model.getMinX(), model.getMaxX());
 		} else {
@@ -234,10 +268,30 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 		} else {
 			plot.getRangeAxis().setAutoRange(true);
 		}
-		
-		return chart;
 	}
 
+	private void updateXAxis(ValueAxis axis) {
+		GraphModel model = getDocumentPart().getModel();
+		if (axis.isAutoRange()) {
+			model.setMinX(null);
+			model.setMaxX(null);
+		} else {
+			model.setMinX(axis.getRange().getLowerBound());
+			model.setMaxX(axis.getRange().getUpperBound());
+		}
+	}
+	
+	private void updateYAxis(ValueAxis axis) {
+		GraphModel model = getDocumentPart().getModel();
+		if (axis.isAutoRange()) {
+			model.setMinY(null);
+			model.setMaxY(null);
+		} else {
+			model.setMinY(axis.getRange().getLowerBound());
+			model.setMaxY(axis.getRange().getUpperBound());
+		}
+	}
+	
 	/**
 	 * Creates a sample dataset.
 	 * 
@@ -369,6 +423,14 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 
 	public Canvas getCanvas() {
 		return canvas;
+	}
+	
+	@Override
+	public void dispose() {
+		plot.getDomainAxis().removeChangeListener(fDomainAxisListener);
+		plot.getRangeAxis().removeChangeListener(fRangeAxisListener);
+		getDocumentPart().getModel().addPropertyChangeListener(fModelListener);
+		graphModelPresenter.dispose();
 	}
 	
 }

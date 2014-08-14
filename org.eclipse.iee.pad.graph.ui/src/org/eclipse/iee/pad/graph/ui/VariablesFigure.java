@@ -1,8 +1,8 @@
 package org.eclipse.iee.pad.graph.ui;
 
 
-import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.swt.widgets.Caret;
@@ -53,6 +53,14 @@ public class VariablesFigure extends Figure {
 
 	public String getMaxXText() {
 		return fMaxX.getText();
+	}
+
+	public void addMinXFocusListener(FocusListener focusListener) {
+		fMinX.addFocusListener(focusListener);
+	}
+
+	public void addMaxXFocusListener(FocusListener focusListener) {
+		fMaxX.addFocusListener(focusListener);
 	}
 
 }

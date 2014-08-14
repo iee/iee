@@ -1,6 +1,7 @@
 package org.eclipse.iee.pad.graph.ui;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.ToolbarLayout;
@@ -16,18 +17,17 @@ public class SeriesFigure extends Figure {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
 		setLayoutManager(layout);
-		fMinY = new TextFigure(caret);
-		GridData minXdata = new GridData();
-		add(fMinY, minXdata);
+		fMaxY = new TextFigure(caret);
+		GridData maxXdata = new GridData();
+		add(fMaxY, maxXdata);
 		fSeries = new Figure();
 		fSeries.setLayoutManager(new ToolbarLayout(false));
 		GridData seriesData = new GridData(GridData.GRAB_VERTICAL 
 				| GridData.VERTICAL_ALIGN_CENTER);
 		add(fSeries, seriesData);
-		fMaxY = new TextFigure(caret);
-		GridData maxXdata = new GridData();
-		maxXdata.horizontalAlignment = GridData.END;
-		add(fMaxY, maxXdata);
+		fMinY = new TextFigure(caret);
+		GridData minXdata = new GridData();
+		add(fMinY, minXdata);
 	}
 
 	public void addElement(GraphElementFigure elementComposite) {
@@ -48,6 +48,14 @@ public class SeriesFigure extends Figure {
 
 	public String getMaxYText() {
 		return fMaxY.getText();
+	}
+
+	public void addMinYFocusListener(FocusListener focusListener) {
+		fMinY.addFocusListener(focusListener);
+	}
+
+	public void addMaxYFocusListener(FocusListener focusListener) {
+		fMaxY.addFocusListener(focusListener);
 	}
 
 }
