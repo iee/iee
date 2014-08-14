@@ -119,6 +119,7 @@ public class GraphElementPresenenter {
 	}
 	
 	public void remove() {
+		fFigure.getParent().remove(fFigure);
 	}
 	
 	public void save() {

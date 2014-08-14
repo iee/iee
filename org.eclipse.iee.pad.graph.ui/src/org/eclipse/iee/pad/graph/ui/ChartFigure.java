@@ -2,7 +2,6 @@ package org.eclipse.iee.pad.graph.ui;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
@@ -11,7 +10,6 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.util.EventListener;
 import java.util.ResourceBundle;
 
 import javax.swing.event.EventListenerList;
@@ -22,24 +20,13 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.HelpListener;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
@@ -64,12 +51,11 @@ import org.jfree.chart.plot.ValueAxisPlot;
 import org.jfree.chart.plot.Zoomable;
 import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.experimental.chart.swt.editor.SWTChartEditor;
-import org.jfree.experimental.swt.SWTGraphics2D;
 import org.jfree.experimental.swt.SWTUtils;
 
 public class ChartFigure extends Figure implements ChartChangeListener,
-		ChartProgressListener, SelectionListener, MouseListener,
-		MouseMotionListener, Printable {
+		ChartProgressListener, MouseListener,
+		MouseMotionListener, Printable, IMenuContributor {
 
     /** Default setting for buffer usage. */
     public static final boolean DEFAULT_BUFFER_USED = false;
@@ -94,42 +80,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
 
     /** The minimum size required to perform a zoom on a rectangle */
     public static final int DEFAULT_ZOOM_TRIGGER_DISTANCE = 10;
-
-    /** Properties action command. */
-    public static final String PROPERTIES_COMMAND = "PROPERTIES";
-
-    /** Save action command. */
-    public static final String SAVE_COMMAND = "SAVE";
-
-    /** Print action command. */
-    public static final String PRINT_COMMAND = "PRINT";
-
-    /** Zoom in (both axes) action command. */
-    public static final String ZOOM_IN_BOTH_COMMAND = "ZOOM_IN_BOTH";
-
-    /** Zoom in (domain axis only) action command. */
-    public static final String ZOOM_IN_DOMAIN_COMMAND = "ZOOM_IN_DOMAIN";
-
-    /** Zoom in (range axis only) action command. */
-    public static final String ZOOM_IN_RANGE_COMMAND = "ZOOM_IN_RANGE";
-
-    /** Zoom out (both axes) action command. */
-    public static final String ZOOM_OUT_BOTH_COMMAND = "ZOOM_OUT_BOTH";
-
-    /** Zoom out (domain axis only) action command. */
-    public static final String ZOOM_OUT_DOMAIN_COMMAND = "ZOOM_DOMAIN_BOTH";
-
-    /** Zoom out (range axis only) action command. */
-    public static final String ZOOM_OUT_RANGE_COMMAND = "ZOOM_RANGE_BOTH";
-
-    /** Zoom reset (both axes) action command. */
-    public static final String ZOOM_RESET_BOTH_COMMAND = "ZOOM_RESET_BOTH";
-
-    /** Zoom reset (domain axis only) action command. */
-    public static final String ZOOM_RESET_DOMAIN_COMMAND = "ZOOM_RESET_DOMAIN";
-
-    /** Zoom reset (range axis only) action command. */
-    public static final String ZOOM_RESET_RANGE_COMMAND = "ZOOM_RESET_RANGE";
 
     /** The chart that is displayed in the panel. */
     private JFreeChart chart;
@@ -268,6 +218,16 @@ public class ChartFigure extends Figure implements ChartChangeListener,
 
 	private Label fTooltip;
 
+	private boolean properties;
+
+	private boolean save;
+
+	private boolean zoom;
+
+	private boolean tooltips;
+
+	private boolean print;
+
     /**
      * Constructs a panel that displays the specified chart.
      *
@@ -403,7 +363,13 @@ public class ChartFigure extends Figure implements ChartChangeListener,
             boolean zoom,
             boolean tooltips,
             IShellProvider shellProvider) {
-        setChart(jfreechart);
+        this.properties = properties;
+		this.save = save;
+		this.print = print;
+		this.zoom = zoom;
+		this.tooltips = tooltips;
+        
+		setChart(jfreechart);
         this.shellProvider = shellProvider;
         this.chartMouseListeners = new EventListenerList();
         this.info = new ChartRenderingInfo();
@@ -417,11 +383,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
         // create the canvas and add the required listeners
         addMouseListener(this);
         addMouseMotionListener(this);
-
-        // set up popup menu...
-        this.popup = null;
-        if (properties || save || print || zoom)
-            this.popup = createPopupMenu(properties, save, print, zoom);
 
         this.enforceFileExtensions = true;
         
@@ -1173,205 +1134,144 @@ public class ChartFigure extends Figure implements ChartChangeListener,
         }
     }
 
-    /**
-     * Creates a popup menu for the canvas.
-     *
-     * @param properties  include a menu item for the chart property editor.
-     * @param save  include a menu item for saving the chart.
-     * @param print  include a menu item for printing the chart.
-     * @param zoom  include menu items for zooming.
-     *
-     * @return The popup menu.
-     */
-    protected Menu createPopupMenu(boolean properties, boolean save,
-            boolean print, boolean zoom) {
-
-        Menu result = new Menu(shellProvider.getShell());
+    @Override
+    public void contribute(MenuManager menuManager) {
         boolean separator = false;
 
         if (properties) {
-            MenuItem propertiesItem = new MenuItem(result, SWT.PUSH);
-            propertiesItem.setText(localizationResources.getString(
-                    "Properties..."));
-            propertiesItem.setData(PROPERTIES_COMMAND);
-            propertiesItem.addSelectionListener(this);
+        	menuManager.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Properties...")) {
+        		@Override
+        		public void run() {
+        			attemptEditChartProperties();
+        		}
+        	}));
             separator = true;
         }
         if (save) {
             if (separator) {
-                new MenuItem(result, SWT.SEPARATOR);
+            	menuManager.add(new Separator());
                 separator = false;
             }
-            MenuItem saveItem = new MenuItem(result, SWT.NONE);
-            saveItem.setText(localizationResources.getString("Save_as..."));
-            saveItem.setData(SAVE_COMMAND);
-            saveItem.addSelectionListener(this);
+            menuManager.add(new ActionContributionItem(new Action(localizationResources.getString("Save_as...")) {
+        		@Override
+        		public void run() {
+        			try {
+						doSaveAs();
+					} catch (IOException e) {
+					}
+        		}
+        	}));
             separator = true;
         }
         if (print) {
-            if (separator) {
-                new MenuItem(result, SWT.SEPARATOR);
+        	if (separator) {
+            	menuManager.add(new Separator());
                 separator = false;
             }
-            MenuItem printItem = new MenuItem(result, SWT.NONE);
-            printItem.setText(localizationResources.getString("Print..."));
-            printItem.setData(PRINT_COMMAND);
-            printItem.addSelectionListener(this);
+        	menuManager.add(new ActionContributionItem(new Action(localizationResources.getString("Print...")) {
+        		@Override
+        		public void run() {
+        			createChartPrintJob();
+        		}
+        	}));
             separator = true;
         }
+        
         if (zoom) {
-            if (separator) {
-                new MenuItem(result, SWT.SEPARATOR);
+        	if (separator) {
+            	menuManager.add(new Separator());
                 separator = false;
             }
 
-            Menu zoomInMenu = new Menu(result);
-            MenuItem zoomInMenuItem = new MenuItem(result, SWT.CASCADE);
-            zoomInMenuItem.setText(localizationResources.getString("Zoom_In"));
-            zoomInMenuItem.setMenu(zoomInMenu);
+        	MenuManager zoomInMenu = new MenuManager(localizationResources.getString("Zoom_In"));
+			menuManager.add(zoomInMenu);
+        	
+			zoomInMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "All_Axes")) {
+					@Override
+					public void runWithEvent(Event e) {
+						zoomInBoth(e.x, e.y);
+					}
+        	}));
+			zoomInMenu.add(new Separator());
+			
+			zoomInMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Domain_Axis")) {
+					@Override
+					public void runWithEvent(Event e) {
+						zoomInDomain(e.x, e.y);
+					}
+        	}));
+			zoomInMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Range_Axis")) {
+					@Override
+					public void runWithEvent(Event e) {
+						zoomInRange(e.x, e.y);
+					}
+        	}));
+        	
+			MenuManager zoomOutMenu = new MenuManager(localizationResources.getString("Zoom_Out"));
+			menuManager.add(zoomOutMenu);
+			
+			zoomOutMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "All_Axes")) {
+					@Override
+					public void runWithEvent(Event e) {
+						zoomOutBoth(e.x, e.y);
+					}
+        	}));
+			
+			zoomOutMenu.add(new Separator());
+			
+			zoomOutMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Domain_Axis")) {
+					@Override
+					public void runWithEvent(Event e) {
+						zoomOutDomain(e.x, e.y);
+					}
+        	}));
+			zoomOutMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Range_Axis")) {
+					@Override
+					public void runWithEvent(Event e) {
+						zoomOutRange(e.x, e.y);
+					}
+        	}));
+			
+			MenuManager zoomResetMenu = new MenuManager(localizationResources.getString("Auto_Range"));
+			menuManager.add(zoomResetMenu);
+			
+			zoomResetMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "All_Axes")) {
+					@Override
+					public void runWithEvent(Event e) {
+						restoreAutoBounds();
+					}
+        	}));
+			
+			zoomResetMenu.add(new Separator());
 
-            this.zoomInBothMenuItem = new MenuItem(zoomInMenu, SWT.PUSH);
-            this.zoomInBothMenuItem.setText(localizationResources.getString(
-                    "All_Axes"));
-            this.zoomInBothMenuItem.setData(ZOOM_IN_BOTH_COMMAND);
-            this.zoomInBothMenuItem.addSelectionListener(this);
+			zoomResetMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Domain_Axis")) {
+					@Override
+					public void runWithEvent(Event e) {
+						restoreAutoDomainBounds();
+					}
+        	}));
+			
+			zoomResetMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
+                    "Range_Axis")) {
+					@Override
+					public void runWithEvent(Event e) {
+						restoreAutoRangeBounds();
+					}
+        	}));
 
-            new MenuItem(zoomInMenu, SWT.SEPARATOR);
-
-            this.zoomInDomainMenuItem = new MenuItem(zoomInMenu, SWT.PUSH);
-            this.zoomInDomainMenuItem.setText(localizationResources.getString(
-                    "Domain_Axis"));
-            this.zoomInDomainMenuItem.setData(ZOOM_IN_DOMAIN_COMMAND);
-            this.zoomInDomainMenuItem.addSelectionListener(this);
-
-            this.zoomInRangeMenuItem = new MenuItem(zoomInMenu, SWT.PUSH);
-            this.zoomInRangeMenuItem.setText(localizationResources.getString(
-                    "Range_Axis"));
-            this.zoomInRangeMenuItem.setData(ZOOM_IN_RANGE_COMMAND);
-            this.zoomInRangeMenuItem.addSelectionListener(this);
-
-            Menu zoomOutMenu = new Menu(result);
-            MenuItem zoomOutMenuItem = new MenuItem(result, SWT.CASCADE);
-            zoomOutMenuItem.setText(localizationResources.getString(
-                    "Zoom_Out"));
-            zoomOutMenuItem.setMenu(zoomOutMenu);
-
-            this.zoomOutBothMenuItem = new MenuItem(zoomOutMenu, SWT.PUSH);
-            this.zoomOutBothMenuItem.setText(localizationResources.getString(
-                    "All_Axes"));
-            this.zoomOutBothMenuItem.setData(ZOOM_OUT_BOTH_COMMAND);
-            this.zoomOutBothMenuItem.addSelectionListener(this);
-
-            new MenuItem(zoomOutMenu, SWT.SEPARATOR);
-
-            this.zoomOutDomainMenuItem = new MenuItem(zoomOutMenu, SWT.PUSH);
-            this.zoomOutDomainMenuItem.setText(localizationResources.getString(
-                    "Domain_Axis"));
-            this.zoomOutDomainMenuItem.setData(ZOOM_OUT_DOMAIN_COMMAND);
-            this.zoomOutDomainMenuItem.addSelectionListener(this);
-
-            this.zoomOutRangeMenuItem = new MenuItem(zoomOutMenu, SWT.PUSH);
-            this.zoomOutRangeMenuItem.setText(
-                    localizationResources.getString("Range_Axis"));
-            this.zoomOutRangeMenuItem.setData(ZOOM_OUT_RANGE_COMMAND);
-            this.zoomOutRangeMenuItem.addSelectionListener(this);
-
-            Menu autoRangeMenu = new Menu(result);
-            MenuItem autoRangeMenuItem = new MenuItem(result, SWT.CASCADE);
-            autoRangeMenuItem.setText(localizationResources.getString(
-                    "Auto_Range"));
-            autoRangeMenuItem.setMenu(autoRangeMenu);
-
-            this.zoomResetBothMenuItem = new MenuItem(autoRangeMenu, SWT.PUSH);
-            this.zoomResetBothMenuItem.setText(localizationResources.getString(
-                    "All_Axes"));
-            this.zoomResetBothMenuItem.setData(ZOOM_RESET_BOTH_COMMAND);
-            this.zoomResetBothMenuItem.addSelectionListener(this);
-
-            new MenuItem(autoRangeMenu, SWT.SEPARATOR);
-
-            this.zoomResetDomainMenuItem = new MenuItem(autoRangeMenu,
-                    SWT.PUSH);
-            this.zoomResetDomainMenuItem.setText(
-                    localizationResources.getString("Domain_Axis"));
-            this.zoomResetDomainMenuItem.setData(ZOOM_RESET_DOMAIN_COMMAND);
-            this.zoomResetDomainMenuItem.addSelectionListener(this);
-
-            this.zoomResetRangeMenuItem = new MenuItem(autoRangeMenu, SWT.PUSH);
-            this.zoomResetRangeMenuItem.setText(
-                    localizationResources.getString("Range_Axis"));
-            this.zoomResetRangeMenuItem.setData(ZOOM_RESET_RANGE_COMMAND);
-            this.zoomResetRangeMenuItem.addSelectionListener(this);
         }
 
-        return result;
     }
-
-    /**
-     * Handles action events generated by the popup menu.
-     *
-     * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(
-     * org.eclipse.swt.events.SelectionEvent)
-     */
-    public void widgetDefaultSelected(SelectionEvent e) {
-        widgetSelected(e);
-    }
-
-    /**
-     * Handles action events generated by the popup menu.
-     *
-     * @see org.eclipse.swt.events.SelectionListener#widgetSelected(
-     * org.eclipse.swt.events.SelectionEvent)
-     */
-    public void widgetSelected(SelectionEvent e) {
-        String command = (String) ((MenuItem) e.getSource()).getData();
-        if (command.equals(PROPERTIES_COMMAND)) {
-            attemptEditChartProperties();
-        }
-        else if (command.equals(SAVE_COMMAND)) {
-            try {
-                doSaveAs();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        else if (command.equals(PRINT_COMMAND)) {
-            createChartPrintJob();
-        }
-        /* in the next zoomPoint.x and y replace by e.x and y for now.
-         * this helps to handle the mouse events and besides,
-         * those values are unused AFAIK. */
-        else if (command.equals(ZOOM_IN_BOTH_COMMAND)) {
-            zoomInBoth(e.x, e.y);
-        }
-        else if (command.equals(ZOOM_IN_DOMAIN_COMMAND)) {
-            zoomInDomain(e.x, e.y);
-        }
-        else if (command.equals(ZOOM_IN_RANGE_COMMAND)) {
-            zoomInRange(e.x, e.y);
-        }
-        else if (command.equals(ZOOM_OUT_BOTH_COMMAND)) {
-            zoomOutBoth(e.x, e.y);
-        }
-        else if (command.equals(ZOOM_OUT_DOMAIN_COMMAND)) {
-            zoomOutDomain(e.x, e.y);
-        }
-        else if (command.equals(ZOOM_OUT_RANGE_COMMAND)) {
-            zoomOutRange(e.x, e.y);
-        }
-        else if (command.equals(ZOOM_RESET_BOTH_COMMAND)) {
-            restoreAutoBounds();
-        }
-        else if (command.equals(ZOOM_RESET_DOMAIN_COMMAND)) {
-            restoreAutoDomainBounds();
-        }
-        else if (command.equals(ZOOM_RESET_RANGE_COMMAND)) {
-            restoreAutoRangeBounds();
-        }
-        this.forceRedraw();
-    }
-
+    
     /**
      * Not implemented.
      *
