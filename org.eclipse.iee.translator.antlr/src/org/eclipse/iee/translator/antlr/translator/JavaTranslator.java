@@ -930,7 +930,7 @@ public class JavaTranslator {
 									&& fPosition > variableAssignmentOffset) {
 
 								List<?> fragments = node.fragments();
-								String type = node.getType().toString();
+								String type = node.getType().resolveBinding().getQualifiedName();
 
 								for (int i = 0; i < fragments.size(); i++) {
 									VariableDeclarationFragment fragment = (VariableDeclarationFragment) fragments

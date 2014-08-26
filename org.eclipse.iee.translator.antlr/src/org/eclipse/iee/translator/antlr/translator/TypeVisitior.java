@@ -6,6 +6,7 @@ import org.eclipse.iee.translator.antlr.math.MathParser.FloatNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.InternalFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.PowerContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.RangeExprContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.StandardFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableContext;
@@ -31,6 +32,17 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	@Override
 	public VariableType visitMatrix(MatrixContext ctx) {
 		return VariableType.MATRIX;
+	}
+	
+	@Override
+	public VariableType visitPower(PowerContext ctx) {
+		VariableType left = visit(ctx.left);
+		String right = ctx.right.getText();
+		if (VariableType.MATRIX.equals(left) && right.matches("T")) {
+			return VariableType.MATRIX;
+		} else {
+			return VariableType.DOUBLE;
+		}
 	}
 	
 	@Override

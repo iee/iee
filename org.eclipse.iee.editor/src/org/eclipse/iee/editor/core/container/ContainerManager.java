@@ -587,7 +587,12 @@ public class ContainerManager extends EventManager {
 	public void savePads() {
 		String[] containerIDs = getContainerIDs();
 		for (String containerID : containerIDs) {
-			fPads.get(containerID).save();
+			Pad<?> pad = fPads.get(containerID);
+			if (pad != null) {
+				pad.save();
+			} else {
+				logger.error("Failed to find pad with id = {}", containerID);
+			}
 		}
 	}
 	
