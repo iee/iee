@@ -734,7 +734,8 @@ public class JavaTranslator {
 		String result = treeToString(tree);
 
 		String name = null;
-		if (tree.getChild(0) instanceof VariableAssignmentContext) {
+		boolean variableAssignment = tree.getChild(0) instanceof VariableAssignmentContext;
+		if (variableAssignment) {
 			VariableAssignmentContext assignment = (VariableAssignmentContext) tree.getChild(0);
 			name = translateName(assignment.name.getText());
 		}
@@ -753,7 +754,8 @@ public class JavaTranslator {
 		} else {
 			if (name != null && !fFields.containsKey(name)) {
 				result = getName(type) + " " + result + ";";
-			} else {
+			} 
+			if (variableAssignment) {
 				result = result + ";";
 			}
 		} 

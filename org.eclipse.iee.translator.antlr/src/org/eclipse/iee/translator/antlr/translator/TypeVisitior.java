@@ -3,6 +3,7 @@ package org.eclipse.iee.translator.antlr.translator;
 import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathParser.FloatNumberContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.FunctionDefinitionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.InternalFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixContext;
@@ -68,6 +69,11 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	}
 	
 	@Override
+	public VariableType visitFunctionDefinition(FunctionDefinitionContext ctx) {
+		return visit(ctx.value);
+	}
+	
+	@Override
 	protected VariableType aggregateResult(VariableType aggregate,
 			VariableType nextResult) {
 		if (nextResult == aggregate) {
@@ -83,7 +89,7 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 				|| ((VariableType.DOUBLE.equals(nextResult) || VariableType.INT.equals(nextResult)) && VariableType.MATRIX.equals(aggregate))) {
 			return VariableType.MATRIX;
 		}
-		throw new UnsupportedOperationException();
+		return VariableType.OTHER;
 	}
 	
 }

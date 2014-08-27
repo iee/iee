@@ -184,7 +184,7 @@ public class DocumentAccess {
 							container.getContainerManager().getCompilationUnit(),
 							container.getPosition().getOffset(), container.getContainerID());
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Failed to translate expression " + function, e);
 					return "";
 				}
 			}
