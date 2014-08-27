@@ -698,11 +698,11 @@ public class JavaTranslator {
 			@Override
 			public VariableType getVariableType(String variable) {
 				String type = fFields.get(variable);
-				if ("double".equals(type)) {
+				if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
 					return VariableType.DOUBLE;
 				} else if (Matrix.class.getName().equals(type)) {
 					return VariableType.MATRIX;
-				} else if ("int".equals(type)) {
+				} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
 					return VariableType.INT;
 				} else {
 					return VariableType.OTHER;
