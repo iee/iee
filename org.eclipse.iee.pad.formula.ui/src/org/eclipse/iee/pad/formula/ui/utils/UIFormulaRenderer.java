@@ -52,8 +52,7 @@ public class UIFormulaRenderer {
 			return formulaImage;
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error("Failed create formula image: " + text, e);
 			return null;
 		}
 	}
@@ -71,8 +70,7 @@ public class UIFormulaRenderer {
 			return formulaImage;
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error("Failed create formula image: " + text, e);
 			return null;
 		}
 	}

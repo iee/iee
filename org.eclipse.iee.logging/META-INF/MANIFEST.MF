@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Logging
+Bundle-SymbolicName: org.eclipse.iee.logging;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: slf4j.api;bundle-version="1.7.7";visibility:=reexport,
+ ch.qos.logback.classic;bundle-version="1.1.2";visibility:=reexport,
+ ch.qos.logback.core;bundle-version="1.1.2";visibility:=reexport

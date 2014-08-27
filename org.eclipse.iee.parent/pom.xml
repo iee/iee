@@ -11,6 +11,8 @@
 		<module>../org.eclipse.iee.feature</module>
 		<module>../org.eclipse.iee.core</module>
 		<module>../org.eclipse.iee.core.feature</module>
+		<module>../org.eclipse.iee.logging</module>
+		<module>../org.eclipse.iee.logging.configuration</module>
 		<module>../org.eclipse.iee.export</module>
 		<module>../org.eclipse.iee.export.ui</module>
 		<module>../org.eclipse.iee.export.feature</module>

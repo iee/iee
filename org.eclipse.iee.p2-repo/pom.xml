@@ -27,7 +27,7 @@
 									<source>true</source>
 								</artifact>
 								<artifact>
-									<id>com.google.guava:guava:16.0.1</id>
+									<id>com.google.guava:guava:17.0</id>
 									<source>true</source>
 								</artifact>
 								<artifact>
@@ -59,6 +59,14 @@
 								</artifact>
 								<artifact>
 									<id>gov.nist.math:jama:1.0.3</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>org.slf4j:slf4j-api:1.7.7</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>ch.qos.logback:logback-classic:1.1.2</id>
 									<source>true</source>
 								</artifact>
 							</artifacts>
