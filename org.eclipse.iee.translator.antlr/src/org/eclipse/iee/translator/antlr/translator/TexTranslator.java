@@ -124,7 +124,6 @@ public class TexTranslator {
 
 			switch (ctx.name.getText()) {
 			case "Integrate":
-				function += "\\[";
 				for (int i = ctx.params.size() - 1; i >= 0; i--) {
 					function += "\\int_";
 
@@ -147,10 +146,8 @@ public class TexTranslator {
 						function += "\\,";
 				}
 
-				function += "\\]";
 				break;
 			case "Sum":
-				function += "\\[";
 				for (int i = ctx.params.size() - 1; i >= 0; i--) {
 					function += "\\sum_";
 
@@ -161,20 +158,17 @@ public class TexTranslator {
 					function += "^{" + visit(paramCtx.max) + "}";
 
 				}
-				function += "(" + visit(ctx.func) + ")" + "\\]";
+				function += "(" + visit(ctx.func) + ")";
 				break;
 			case "Diff":
-				function += "\\[";
-
 				ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params
 						.get(0);
 				function += "\\frac{d}{d" + valueParamCtx.variable.getText()
 						+ "}";
 
-				function += "(" + visit(ctx.func) + ")" + "\\]";
+				function += "(" + visit(ctx.func) + ")";
 				break;
 			case "Product":
-				function += "\\[";
 				for (int i = ctx.params.size() - 1; i >= 0; i--) {
 					function += "\\prod_";
 
@@ -185,7 +179,7 @@ public class TexTranslator {
 					function += "^{" + visit(paramCtx.max) + "}";
 
 				}
-				function += "(" + visit(ctx.func) + ")" + "\\]";
+				function += "(" + visit(ctx.func) + ")";
 				break;
 			case "Sqrt":
 				function += "\\sqrt{" + visit(ctx.func) + "}";
