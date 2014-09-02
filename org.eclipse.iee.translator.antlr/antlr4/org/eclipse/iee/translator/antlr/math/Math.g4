@@ -27,7 +27,7 @@ standardFunction:
                 ;
 	
 variableAssignment:
-	name=MATH_NAME '=' value=expression
+	name=expression '=' value=expression
 ;
 
 expression

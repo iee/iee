@@ -18,6 +18,7 @@ import org.eclipse.iee.translator.antlr.java.JavaParser.CompilationUnitContext;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
+import org.eclipse.iee.translator.antlr.math.MathParser.ExpressionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
@@ -27,26 +28,16 @@ import org.eclipse.iee.translator.antlr.math.MathParser.VectorContext;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import org.eclipse.jdt.internal.core.LocalVariable;
-import org.eclipse.jdt.internal.core.SourceRefElement;
-import org.eclipse.jdt.internal.core.util.ASTNodeFinder;
-import org.eclipse.jdt.internal.core.util.DOMFinder;
-import org.eclipse.jdt.internal.core.util.LocalVariableAttribute;
+import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.internal.corext.dom.ScopeAnalyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
@@ -143,7 +134,7 @@ public class JavaTranslator {
 				MatrixElementContext elt = (MatrixElementContext) ctx.name;
 				String rowIndex = visit(elt.rowId).replaceAll("\\.0", "");
 				String columnIndex = visit(elt.columnId).replaceAll("\\.0", "");
-				return translateName(ctx.name.getText()) + ".set(" + rowIndex + "," + columnIndex + "," + value + ")";
+				return translateName(elt.container.getText()) + ".set(" + rowIndex + "," + columnIndex + "," + value + ")";
 			}
 			
 			String name = translateName(ctx.name.getText());
@@ -609,7 +600,7 @@ public class JavaTranslator {
 		}
 
 		public String visitIntNumber(MathParser.IntNumberContext ctx) {
-			return ctx.getText();
+			return ctx.getText() + ".0";
 		}
 
 		public String visitMatrixDefinition(
@@ -709,7 +700,7 @@ public class JavaTranslator {
 				String type = fFields.get(variable);
 				if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
 					return VariableType.DOUBLE;
-				} else if (Matrix.class.getName().equals(type)) {
+				} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
 					return VariableType.MATRIX;
 				} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
 					return VariableType.INT;
@@ -746,7 +737,14 @@ public class JavaTranslator {
 		boolean variableAssignment = tree.getChild(0) instanceof VariableAssignmentContext;
 		if (variableAssignment) {
 			VariableAssignmentContext assignment = (VariableAssignmentContext) tree.getChild(0);
-			name = translateName(assignment.name.getText());
+			ExpressionContext nameCtx = assignment.name;
+			if (nameCtx instanceof MatrixElementContext) {
+				name = translateName(((MatrixElementContext)nameCtx).container.getText());
+			} else if (nameCtx instanceof MatrixRowContext) {
+				name = translateName(((MatrixRowContext)nameCtx).container.getText());
+			} else {
+				name = translateName(nameCtx.getText());
+			}
 		}
 		
 		/*
@@ -891,34 +889,9 @@ public class JavaTranslator {
 					}
 				}
 
-				IField[] classFields = null;
-
-				classFields = fClass.getFields();
-				for (int i = 0; i < classFields.length; i++) {
-					IField field = classFields[i];
-					String name = field.getElementName();
-
-					ISourceRange fieldSourceRange = field.getSourceRange();
-					int fieldOffset = fieldSourceRange.getOffset();
-
-					SourceRefElement refElement = (SourceRefElement) field;
-					FieldDeclaration findNode = (FieldDeclaration) refElement.findNode(unit);
-					if (fPosition > fieldOffset) {
-						String qualifiedName = findNode.getType().resolveBinding().getQualifiedName();
-						fFields.put(name, qualifiedName);
-					}
-				}
 			}
 
 			if (fMethod != null) {
-				ILocalVariable[] methodParams = fMethod.getParameters();
-				for (int i = 0; i < methodParams.length; i++) {
-					ILocalVariable param = methodParams[i];
-					String name = param.getElementName();
-					String qualifiedName = param.getTypeSignature();
-					fFields.put(name, qualifiedName);
-				}
-
 				IJavaElement[] innerElements = fMethod.getChildren();
 				for (int i = 0; i < innerElements.length; i++) {
 					IType type = (IType) innerElements[i];
@@ -927,49 +900,24 @@ public class JavaTranslator {
 						fMethodClasses.add(name);
 					}
 				}
-
-				
-				unit.accept(new ASTVisitor() {
-					
-					@Override
-					public boolean visit(VariableDeclarationStatement node) {
-						try {
-							ISourceRange methodSourceRange = fMethod
-									.getSourceRange();
-							int methodOffset = methodSourceRange.getOffset();
-
-							int variableAssignmentOffset = node
-									.getStartPosition();
-
-							if (variableAssignmentOffset > methodOffset
-									&& variableAssignmentOffset <= (methodOffset + methodSourceRange
-											.getLength())
-									&& fPosition > variableAssignmentOffset) {
-
-								List<?> fragments = node.fragments();
-								String type = node.getType().resolveBinding().getQualifiedName();
-
-								for (int i = 0; i < fragments.size(); i++) {
-									VariableDeclarationFragment fragment = (VariableDeclarationFragment) fragments
-											.get(i);
-									String name = fragment.getName().toString();
-									fFields.put(name, type);
-								}
-							}
-						} catch (JavaModelException e) {
-							e.printStackTrace();
-						}
-
-						return true;
-					}
-
-				});
 			}
-
+			
+			ScopeAnalyzer sa = new ScopeAnalyzer(unit);
+			IBinding[] declarationsInScope = sa.getDeclarationsInScope(fPosition, ScopeAnalyzer.VARIABLES);
+			for (IBinding iBinding : declarationsInScope) {
+				if (iBinding instanceof IVariableBinding) {
+					IVariableBinding variableBinding = (IVariableBinding) iBinding;
+					fFields.put(variableBinding.getName(), variableBinding.getType().getQualifiedName());
+				}
+			}
+			
+			
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
 
+		
+		
 		if (fClass != null) {
 			logger.debug("fClass: " + fClass.getElementName());
 			logger.debug("fSourceClasses: " + fOtherSourceClasses.toString());

@@ -7,9 +7,12 @@ import org.eclipse.iee.translator.antlr.math.MathParser.FunctionDefinitionContex
 import org.eclipse.iee.translator.antlr.math.MathParser.IntNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.InternalFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.PowerContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.RangeExprContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.StandardFunctionContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableContext;
 
 public class TypeVisitior extends MathBaseVisitor<VariableType> {
@@ -20,6 +23,11 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 		this.fExternalContext = fExternalContext;
 	}
 
+	@Override
+	public VariableType visitVariableAssignment(VariableAssignmentContext ctx) {
+		return visit(ctx.value);
+	}
+	
 	@Override
 	public VariableType visitIntNumber(IntNumberContext ctx) {
 		return VariableType.INT;
@@ -32,6 +40,16 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	
 	@Override
 	public VariableType visitMatrix(MatrixContext ctx) {
+		return VariableType.MATRIX;
+	}
+	
+	@Override
+	public VariableType visitMatrixElement(MatrixElementContext ctx) {
+		return VariableType.DOUBLE;
+	}
+	
+	@Override
+	public VariableType visitMatrixRow(MatrixRowContext ctx) {
 		return VariableType.MATRIX;
 	}
 	
