@@ -45,7 +45,7 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 						VariableType xType = context.getExpressionType(variable);
 						if (xType == VariableType.MATRIX) {
 							String translateFunction = context.translateFunction(variable, part.getId());
-							generatedText.append("Jama.Matrix __tmpX = ").append(translateFunction);
+							generatedText.append("Jama.Matrix __tmpX = ").append(translateFunction).append(";");
 							
 							generatedText.append("for (int __tmp = 0; __tmp < ").append("__tmpX.getColumnDimension(); __tmp ++) {");
 							generatedText.append("double __grpVar = __tmpX.get(0,__tmp);");
@@ -63,7 +63,7 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 						VariableType yType = context.getExpressionType(function);
 						String translateElement = context.translateFunction(function, part.getId());
 						if (yType == VariableType.MATRIX) {
-							generatedText.append("Jama.Matrix __tmpY = ").append(translateElement);
+							generatedText.append("Jama.Matrix __tmpY = ").append(translateElement).append(";");
 							generatedText.append("double __grpVal = __tmpY.get(0,__tmp);");
 						} else {
 							generatedText.append("double __grpVal = ").append(translateElement).append(";");

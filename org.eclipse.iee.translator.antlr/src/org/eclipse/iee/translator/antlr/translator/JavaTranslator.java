@@ -31,13 +31,22 @@ import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.internal.core.LocalVariable;
+import org.eclipse.jdt.internal.core.SourceRefElement;
+import org.eclipse.jdt.internal.core.util.ASTNodeFinder;
+import org.eclipse.jdt.internal.core.util.DOMFinder;
+import org.eclipse.jdt.internal.core.util.LocalVariableAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
@@ -841,6 +850,9 @@ public class JavaTranslator {
 	private void parse() {
 		try {
 
+			CompilationUnit unit = (CompilationUnit) createAST(fCompilationUnit);
+			
+			
 			IType[] types = fCompilationUnit.getTypes();
 			for (int i = 0; i < types.length; i++) {
 				IType type = types[i];
@@ -885,13 +897,15 @@ public class JavaTranslator {
 				for (int i = 0; i < classFields.length; i++) {
 					IField field = classFields[i];
 					String name = field.getElementName();
-					String type = field.getTypeSignature();
 
 					ISourceRange fieldSourceRange = field.getSourceRange();
 					int fieldOffset = fieldSourceRange.getOffset();
 
+					SourceRefElement refElement = (SourceRefElement) field;
+					FieldDeclaration findNode = (FieldDeclaration) refElement.findNode(unit);
 					if (fPosition > fieldOffset) {
-						fFields.put(name, type);
+						String qualifiedName = findNode.getType().resolveBinding().getQualifiedName();
+						fFields.put(name, qualifiedName);
 					}
 				}
 			}
@@ -901,8 +915,8 @@ public class JavaTranslator {
 				for (int i = 0; i < methodParams.length; i++) {
 					ILocalVariable param = methodParams[i];
 					String name = param.getElementName();
-					String type = param.getTypeSignature();
-					fFields.put(name, type);
+					String qualifiedName = param.getTypeSignature();
+					fFields.put(name, qualifiedName);
 				}
 
 				IJavaElement[] innerElements = fMethod.getChildren();
@@ -914,8 +928,9 @@ public class JavaTranslator {
 					}
 				}
 
-				CompilationUnit unit = (CompilationUnit) createAST(fCompilationUnit);
+				
 				unit.accept(new ASTVisitor() {
+					
 					@Override
 					public boolean visit(VariableDeclarationStatement node) {
 						try {
