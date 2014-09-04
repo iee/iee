@@ -759,11 +759,12 @@ public class JavaTranslator {
 				result = output;
 			}
 		} else {
-			if (name != null && !fFields.containsKey(name)) {
-				result = getName(type) + " " + result + ";";
-			} 
 			if (variableAssignment) {
-				result = result + ";";
+				if (name != null && !fFields.containsKey(name)) {
+					result = getName(type) + " " + result + ";";
+				} else { 
+					result = result + ";";
+				}
 			}
 		} 
 		return result;

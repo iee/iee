@@ -30,7 +30,7 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	
 	@Override
 	public VariableType visitIntNumber(IntNumberContext ctx) {
-		return VariableType.INT;
+		return VariableType.DOUBLE;
 	}
 	
 	@Override
