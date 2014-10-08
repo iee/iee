@@ -18,7 +18,7 @@ public class PackageBuilder {
 
 	private Worksheet ws;
 
-	private Map<String, PackageResourceProvider> resources = new HashMap<>();
+	private Map<String, IResourceProvider> resources = new HashMap<>();
 
 	private String bundleName;
 
@@ -47,30 +47,16 @@ public class PackageBuilder {
 	}
 
 	public void addResource(String resourcePath,
-			PackageResourceProvider packageResourceProvider) {
+			IResourceProvider packageResourceProvider) {
 		resources.put(resourcePath, packageResourceProvider);
 	}
 
 	public void writeToStream(ZipOutputStream zos) throws IOException {
-		ZipEntry manifestEntry = new ZipEntry("META-INF.MF");
-		zos.putNextEntry(manifestEntry);
-		zos.write("Manifest-Version: 1.0\r\n".getBytes());
-		if (!Strings.isNullOrEmpty(bundleVersion)) {
-			zos.write(("Bundle-Version: " + bundleVersion + "\r\n").getBytes());
-		}
-		if (!Strings.isNullOrEmpty(bundleName)) {
-			zos.write(("name: " + bundleName + "\r\n").getBytes());
-		}
-		if (!Strings.isNullOrEmpty(bundleDescription)) {
-			zos.write(("description: " + bundleDescription + "\r\n").getBytes());
-		}
-		zos.write("type: fixed".getBytes());
-		zos.closeEntry();
-		for (Entry<String, PackageResourceProvider> entry : resources
+		for (Entry<String, IResourceProvider> entry : resources
 				.entrySet()) {
 			String path = entry.getKey();
-			PackageResourceProvider provider = entry.getValue();
-			ZipEntry resourceEntry = new ZipEntry("img/" + path);
+			IResourceProvider provider = entry.getValue();
+			ZipEntry resourceEntry = new ZipEntry(path);
 			zos.putNextEntry(resourceEntry);
 			provider.writeToStream(zos);
 			zos.closeEntry();

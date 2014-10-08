@@ -18,7 +18,7 @@ import org.eclipse.iee.web.renderer.IHTMLRenderer;
 import org.eclipse.iee.web.renderer.IHTMLRendererManager;
 import org.eclipse.iee.web.renderer.IResourceRenderContext;
 
-public class PackageResourceProvider {
+public class PackageResourceProvider implements IResourceProvider {
 
 	private IHTMLRendererManager manager;
 	
