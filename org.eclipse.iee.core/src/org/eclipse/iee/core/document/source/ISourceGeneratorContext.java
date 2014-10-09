@@ -8,6 +8,6 @@ public interface ISourceGeneratorContext {
 
 	boolean isInClassBody();
 
-	VariableType getExpressionType(String function);
+	IVariableType getExpressionType(String function);
 	
 }

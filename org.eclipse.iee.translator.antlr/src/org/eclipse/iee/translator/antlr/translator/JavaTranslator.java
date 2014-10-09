@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.eclipse.iee.core.document.source.IVariableType;
 import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.translator.antlr.java.JavaLexer;
 import org.eclipse.iee.translator.antlr.java.JavaParser;
@@ -22,6 +23,7 @@ import org.eclipse.iee.translator.antlr.math.MathParser.ExpressionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.PrimaryFunctionsContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VectorContext;
@@ -36,6 +38,8 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.internal.corext.dom.ScopeAnalyzer;
 import org.slf4j.Logger;
@@ -58,7 +62,7 @@ public class JavaTranslator {
 
 	private int fPosition;
 
-	private Map<String, String> fFields = new HashMap<>();
+	private Map<String, ITypeBinding> fFields = new HashMap<>();
 
 	private Set<String> fOtherSourceClasses = new HashSet<>();
 	
@@ -450,8 +454,8 @@ public class JavaTranslator {
 			String sign = ctx.sign.getText();
 
 			
-			VariableType leftType = ctx.left.accept(fTypeVisitor);
-			VariableType rightType = ctx.right.accept(fTypeVisitor);
+			IVariableType leftType = ctx.left.accept(fTypeVisitor);
+			IVariableType rightType = ctx.right.accept(fTypeVisitor);
 			
 			if (VariableType.MATRIX.equals(leftType) && VariableType.MATRIX.equals(rightType)) {
 				if (sign.matches(Pattern.quote("+")))
@@ -468,8 +472,8 @@ public class JavaTranslator {
 			String right = visit(ctx.right);
 			String sign = ctx.sign.getText();
 
-			VariableType leftType = ctx.left.accept(fTypeVisitor);
-			VariableType rightType = ctx.right.accept(fTypeVisitor);
+			IVariableType leftType = ctx.left.accept(fTypeVisitor);
+			IVariableType rightType = ctx.right.accept(fTypeVisitor);
 			boolean leftMatrix = leftType.equals(VariableType.MATRIX);
 			boolean rightMatrix = rightType.equals(VariableType.MATRIX);
 			if (leftMatrix || rightMatrix) {
@@ -511,7 +515,7 @@ public class JavaTranslator {
 			String left = visit(ctx.left);
 			String right = visit(ctx.right);
 
-			VariableType type = ctx.left.accept(fTypeVisitor);
+			IVariableType type = ctx.left.accept(fTypeVisitor);
 			if (VariableType.MATRIX.equals(type) && right.matches("T")) {
 				return left + ".transpose()";
 			}
@@ -623,19 +627,21 @@ public class JavaTranslator {
 			String mtx = translateName(ctx.container.getText());
 			return mtx + ".getMatrix(" + rowIndex + "," + rowIndex + ",0 , " + mtx + ".getColumnDimension() - 1)";
 		}
-
-		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
+		
+		@Override
+		public String visitPrimaryFunctions(PrimaryFunctionsContext ctx) {
 			return visitFunction(ctx.function());
 		}
 
+
 		public String visitMethodCall(MathParser.MethodCallContext ctx) {
-			return translateName(ctx.objName.getText()) + "."
-					+ visitFunction(ctx.objFunction);
+			return translateName(ctx.container.getText()) + "."
+					+ visitStandardFunction(ctx.func);
 		}
 
 		public String visitProperty(MathParser.PropertyContext ctx) {
-			return translateName(ctx.objName.getText()) + "."
-					+ translateName(ctx.objProperty.getText());
+			return translateName(ctx.container.getText()) + "."
+					+ translateName(ctx.property.getText());
 		}
 
 	}
@@ -696,8 +702,10 @@ public class JavaTranslator {
 			}
 
 			@Override
-			public VariableType getVariableType(String variable) {
-				String type = fFields.get(variable);
+			public IVariableType getVariableType(String variable) {
+				final ITypeBinding typeBinding = fFields.get(variable);
+				
+				final String type = typeBinding.getQualifiedName();
 				if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
 					return VariableType.DOUBLE;
 				} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
@@ -705,8 +713,35 @@ public class JavaTranslator {
 				} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
 					return VariableType.INT;
 				} else {
-					return VariableType.OTHER;
+					return createType(typeBinding);
 				}
+			}
+
+			private IVariableType createType(final ITypeBinding typeBinding) {
+				return new IVariableType() {
+					
+					@Override
+					public String getJavaQualifiedName() {
+						return typeBinding.getQualifiedName();
+					}
+
+					@Override
+					public IVariableType getMethodType(String name) {
+						IMethodBinding[] declaredMethods = typeBinding.getDeclaredMethods();
+						for (IMethodBinding iMethodBinding : declaredMethods) {
+							if (iMethodBinding.getName().equals(name)) {
+								return createType(iMethodBinding.getReturnType());
+							}
+						}
+						return null;
+					}
+				};
+			}
+			
+			@Override
+			public IVariableType getFunctionType(String text) {
+				IType methodType = getMethodType(text);
+				return null;
 			}
 		};
 	}
@@ -750,7 +785,7 @@ public class JavaTranslator {
 		/*
 		 * Generate output code, if necessary
 		 */
-		VariableType type = tree.accept(new TypeVisitior(createContext()));
+		IVariableType type = tree.accept(new TypeVisitior(createContext()));
 		if (inputExpression.charAt(inputExpression.length() - 1) == '=') {
 			String output = generateOutputCode(type, result, containerId);
 			if (name != null && !fFields.containsKey(name)) {
@@ -797,7 +832,7 @@ public class JavaTranslator {
 		return tree;
 	}
 
-	private String generateOutputCode(VariableType type, String expression, String containerId) {
+	private String generateOutputCode(IVariableType type, String expression, String containerId) {
 			STGroup group = createSTGroup();
 			if (VariableType.MATRIX.equals(type)) {
 				ST template = group.getInstanceOf("matrix");
@@ -812,17 +847,8 @@ public class JavaTranslator {
 			}
 	}
 
-	private String getName(VariableType type) {
-		switch (type) {
-		case DOUBLE:
-			return "double";
-		case INT:
-			return "int";
-		case MATRIX:
-			return "Jama.Matrix";
-		default:
-			return null;
-		}
+	private String getName(IVariableType type) {
+		return type.getJavaQualifiedName();
 	}
 
 	private static STGroup createSTGroup() {
@@ -908,7 +934,7 @@ public class JavaTranslator {
 			for (IBinding iBinding : declarationsInScope) {
 				if (iBinding instanceof IVariableBinding) {
 					IVariableBinding variableBinding = (IVariableBinding) iBinding;
-					fFields.put(variableBinding.getName(), variableBinding.getType().getQualifiedName());
+					fFields.put(variableBinding.getName(), variableBinding.getType());
 				}
 			}
 			
@@ -959,11 +985,11 @@ public class JavaTranslator {
 		return parser.compilationUnit();
 	}
 
-	public static VariableType getType(String expression, ICompilationUnit iCompilationUnit, int i, String string) {
+	public static IVariableType getType(String expression, ICompilationUnit iCompilationUnit, int i, String string) {
 		return new JavaTranslator()._getType(expression, iCompilationUnit, i);
 	}
 	
-	public VariableType _getType(String expression, ICompilationUnit iCompilationUnit, int i) {
+	public IVariableType _getType(String expression, ICompilationUnit iCompilationUnit, int i) {
 		ParserRuleContext tree = parseTree(expression, iCompilationUnit, i);
 		return tree.accept(new TypeVisitior(createContext()));
 	}

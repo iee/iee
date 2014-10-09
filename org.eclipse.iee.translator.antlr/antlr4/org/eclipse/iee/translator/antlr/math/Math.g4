@@ -32,8 +32,11 @@ variableAssignment:
 
 expression
 	: primary #PrimaryExpr
+	| function #PrimaryFunctions
 	| container = expression '[' rowId = expression ']' '[' columnId = expression ']' #MatrixElement
-	| container = expression '[' rowId = expression ']' #MatrixRow
+	| container = expression '[' rowId = expression 'ˇ]' #MatrixRow
+	| container = expression '.' func = standardFunction #MethodCall
+	| container = expression '.' property = MATH_NAME #Property
 	| matrix #MatrixDefinition
 	| begin = expression (',' next = expression)? '..' end = expression #RangeExpr
 	| left=expression '^'<assoc=right> right=expression #Power 
@@ -56,13 +59,10 @@ logicalExpression:
         right=expression #LogicComparison
 ;
 
-primary:
-	MATH_NAME #Variable |
-	FLOAT #FloatNumber |
-	INT #IntNumber |
-	function #PrimaryFunction |
-	objName=MATH_NAME '.' objFunction=function #MethodCall |
-	objName=MATH_NAME '.' objProperty=MATH_NAME #Property 
+primary
+	: MATH_NAME #Variable 
+	| FLOAT #FloatNumber 
+	| INT #IntNumber
 ;
 
 parameter: 

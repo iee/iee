@@ -319,18 +319,14 @@ public class TexTranslator {
 			return sb.toString();
 		}
 		
-		public String visitPrimaryFunction(MathParser.PrimaryFunctionContext ctx) {
-			return visitFunction(ctx.function());
-		}
-
 		public String visitMethodCall(MathParser.MethodCallContext ctx) {
-			return translateName(ctx.objName.getText()) + "."
-					+ visitFunction(ctx.objFunction);
+			return translateName(ctx.container.getText()) + "."
+					+ visitStandardFunction(ctx.func);
 		}
 
 		public String visitProperty(MathParser.PropertyContext ctx) {
-			return translateName(ctx.objName.getText()) + "."
-					+ translateName(ctx.objProperty.getText());
+			return translateName(ctx.container.getText()) + "."
+					+ translateName(ctx.property.getText());
 		}
 
 		@Override

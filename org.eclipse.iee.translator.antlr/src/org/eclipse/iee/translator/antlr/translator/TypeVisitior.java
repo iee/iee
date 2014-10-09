@@ -1,7 +1,9 @@
 package org.eclipse.iee.translator.antlr.translator;
 
+import org.eclipse.iee.core.document.source.IVariableType;
 import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
+import org.eclipse.iee.translator.antlr.math.MathParser.ExpressionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.FloatNumberContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.FunctionDefinitionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.IntNumberContext;
@@ -9,13 +11,14 @@ import org.eclipse.iee.translator.antlr.math.MathParser.InternalFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.MethodCallContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.PowerContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.RangeExprContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.StandardFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableContext;
 
-public class TypeVisitior extends MathBaseVisitor<VariableType> {
+public class TypeVisitior extends MathBaseVisitor<IVariableType> {
 
 	private ExternalTranslationContext fExternalContext;
 
@@ -24,38 +27,38 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	}
 
 	@Override
-	public VariableType visitVariableAssignment(VariableAssignmentContext ctx) {
+	public IVariableType visitVariableAssignment(VariableAssignmentContext ctx) {
 		return visit(ctx.value);
 	}
 	
 	@Override
-	public VariableType visitIntNumber(IntNumberContext ctx) {
+	public IVariableType visitIntNumber(IntNumberContext ctx) {
 		return VariableType.DOUBLE;
 	}
 	
 	@Override
-	public VariableType visitFloatNumber(FloatNumberContext ctx) {
+	public IVariableType visitFloatNumber(FloatNumberContext ctx) {
 		return VariableType.DOUBLE;
 	}
 	
 	@Override
-	public VariableType visitMatrix(MatrixContext ctx) {
+	public IVariableType visitMatrix(MatrixContext ctx) {
 		return VariableType.MATRIX;
 	}
 	
 	@Override
-	public VariableType visitMatrixElement(MatrixElementContext ctx) {
+	public IVariableType visitMatrixElement(MatrixElementContext ctx) {
 		return VariableType.DOUBLE;
 	}
 	
 	@Override
-	public VariableType visitMatrixRow(MatrixRowContext ctx) {
+	public IVariableType visitMatrixRow(MatrixRowContext ctx) {
 		return VariableType.MATRIX;
 	}
 	
 	@Override
-	public VariableType visitPower(PowerContext ctx) {
-		VariableType left = visit(ctx.left);
+	public IVariableType visitPower(PowerContext ctx) {
+		IVariableType left = visit(ctx.left);
 		String right = ctx.right.getText();
 		if (VariableType.MATRIX.equals(left) && right.matches("T")) {
 			return VariableType.MATRIX;
@@ -65,35 +68,42 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 	}
 	
 	@Override
-	public VariableType visitVariable(VariableContext ctx) {
+	public IVariableType visitVariable(VariableContext ctx) {
 		String text = ctx.getText();
 		String name = fExternalContext.translateName(text);
 		return fExternalContext.getVariableType(name);
 	}
 	
 	@Override
-	public VariableType visitStandardFunction(StandardFunctionContext ctx) {
+	public IVariableType visitStandardFunction(StandardFunctionContext ctx) {
+		return fExternalContext.getFunctionType(ctx.name.getText());
+	}
+	
+	@Override
+	public IVariableType visitInternalFunction(InternalFunctionContext ctx) {
 		return VariableType.DOUBLE;
 	}
 	
 	@Override
-	public VariableType visitInternalFunction(InternalFunctionContext ctx) {
-		return VariableType.DOUBLE;
-	}
-	
-	@Override
-	public VariableType visitRangeExpr(RangeExprContext ctx) {
+	public IVariableType visitRangeExpr(RangeExprContext ctx) {
 		return VariableType.RANGE;
 	}
 	
 	@Override
-	public VariableType visitFunctionDefinition(FunctionDefinitionContext ctx) {
+	public IVariableType visitFunctionDefinition(FunctionDefinitionContext ctx) {
 		return visit(ctx.value);
 	}
 	
 	@Override
-	protected VariableType aggregateResult(VariableType aggregate,
-			VariableType nextResult) {
+	public IVariableType visitMethodCall(MethodCallContext ctx) {
+		ExpressionContext container = ctx.container;
+		IVariableType containerType = visit(container);
+		String text = ctx.func.name.getText();
+		return containerType.getMethodType(text);
+	}
+	
+	@Override
+	protected IVariableType aggregateResult(IVariableType aggregate, IVariableType nextResult) {
 		if (nextResult == aggregate) {
 			return aggregate;
 		} else if (nextResult == null) {
@@ -107,7 +117,7 @@ public class TypeVisitior extends MathBaseVisitor<VariableType> {
 				|| ((VariableType.DOUBLE.equals(nextResult) || VariableType.INT.equals(nextResult)) && VariableType.MATRIX.equals(aggregate))) {
 			return VariableType.MATRIX;
 		}
-		return VariableType.OTHER;
+		throw new RuntimeException();
 	}
 	
 }

@@ -1,6 +1,6 @@
 package org.eclipse.iee.translator.antlr.translator;
 
-import org.eclipse.iee.core.document.source.VariableType;
+import org.eclipse.iee.core.document.source.IVariableType;
 import org.eclipse.jdt.core.IType;
 
 public interface ExternalTranslationContext {
@@ -17,6 +17,8 @@ public interface ExternalTranslationContext {
 
 	String translateName(String text);
 
-	VariableType getVariableType(String variable);
+	IVariableType getVariableType(String variable);
+
+	IVariableType getFunctionType(String text);
 
 }
