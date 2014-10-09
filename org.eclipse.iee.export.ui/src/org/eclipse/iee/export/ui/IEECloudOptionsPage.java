@@ -2,6 +2,8 @@ package org.eclipse.iee.export.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IContainer;
@@ -10,6 +12,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -167,8 +170,6 @@ public class IEECloudOptionsPage extends WizardPage {
 
 	protected void initializeViewer() {
 		Object[] elems = fSelection.toArray();
-		ArrayList<IProject> checked = new ArrayList<IProject>(elems.length);
-
 		for (int i = 0; i < elems.length; i++) {
 			Object elem = elems[i];
 			IProject project = null;
@@ -180,15 +181,19 @@ public class IEECloudOptionsPage extends WizardPage {
 				project = (IProject) elem;
 			}
 			if (project != null) {
-				checked.add(project);
+				fProjectsTable.setChecked(project, true);
 			}
 		}
-		fProjectsTable.setSelection(new StructuredSelection(checked), true);
 	}
 
 	public java.util.List<IProject> getSelectedProjects() {
-		IStructuredSelection selection = (IStructuredSelection) fProjectsTable
-				.getSelection();
-		return selection.toList();
+		Object[] checkedElements = fProjectsTable.getCheckedElements();
+		List<IProject> result = new ArrayList<IProject>();
+		for (Object object : checkedElements) {
+			if (object instanceof IProject) {
+				result.add((IProject) object);
+			}
+		}
+		return result;
 	}
 }
