@@ -704,16 +704,19 @@ public class JavaTranslator {
 			@Override
 			public IVariableType getVariableType(String variable) {
 				final ITypeBinding typeBinding = fFields.get(variable);
-				
-				final String type = typeBinding.getQualifiedName();
-				if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
-					return VariableType.DOUBLE;
-				} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
-					return VariableType.MATRIX;
-				} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
-					return VariableType.INT;
+				if (typeBinding != null) {
+					final String type = typeBinding.getQualifiedName();
+					if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
+						return VariableType.DOUBLE;
+					} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
+						return VariableType.MATRIX;
+					} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
+						return VariableType.INT;
+					} else {
+						return createType(typeBinding);
+					}
 				} else {
-					return createType(typeBinding);
+					throw new IllegalArgumentException("Unknown variable " + variable);
 				}
 			}
 
@@ -740,8 +743,7 @@ public class JavaTranslator {
 			
 			@Override
 			public IVariableType getFunctionType(String text) {
-				IType methodType = getMethodType(text);
-				return null;
+				return VariableType.DOUBLE;
 			}
 		};
 	}

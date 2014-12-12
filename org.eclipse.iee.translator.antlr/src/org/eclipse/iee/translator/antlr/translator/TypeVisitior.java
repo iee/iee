@@ -71,12 +71,21 @@ public class TypeVisitior extends MathBaseVisitor<IVariableType> {
 	public IVariableType visitVariable(VariableContext ctx) {
 		String text = ctx.getText();
 		String name = fExternalContext.translateName(text);
-		return fExternalContext.getVariableType(name);
+		IVariableType variableType = fExternalContext.getVariableType(name);
+		if (variableType == null) {
+			throw new IllegalArgumentException("Unknown variable " +  text);
+		}
+		return variableType;
 	}
 	
 	@Override
 	public IVariableType visitStandardFunction(StandardFunctionContext ctx) {
-		return fExternalContext.getFunctionType(ctx.name.getText());
+		String text = ctx.name.getText();
+		IVariableType functionType = fExternalContext.getFunctionType(text);
+		if (functionType == null) {
+			throw new IllegalArgumentException("Unknown function " +  text);
+		}
+		return functionType;
 	}
 	
 	@Override
@@ -99,7 +108,11 @@ public class TypeVisitior extends MathBaseVisitor<IVariableType> {
 		ExpressionContext container = ctx.container;
 		IVariableType containerType = visit(container);
 		String text = ctx.func.name.getText();
-		return containerType.getMethodType(text);
+		IVariableType methodType = containerType.getMethodType(text);
+		if (methodType == null) {
+			throw new IllegalArgumentException("Unknown method " +  text);
+		}
+		return methodType;
 	}
 	
 	@Override
