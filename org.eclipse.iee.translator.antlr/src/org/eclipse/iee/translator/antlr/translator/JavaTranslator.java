@@ -705,22 +705,26 @@ public class JavaTranslator {
 			public IVariableType getVariableType(String variable) {
 				final ITypeBinding typeBinding = fFields.get(variable);
 				if (typeBinding != null) {
-					final String type = typeBinding.getQualifiedName();
-					if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
-						return VariableType.DOUBLE;
-					} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
-						return VariableType.MATRIX;
-					} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
-						return VariableType.INT;
-					} else {
-						return createType(typeBinding);
-					}
+					return createType(typeBinding);
 				} else {
 					throw new IllegalArgumentException("Unknown variable " + variable);
 				}
 			}
 
 			private IVariableType createType(final ITypeBinding typeBinding) {
+				final String type = typeBinding.getQualifiedName();
+				if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
+					return VariableType.DOUBLE;
+				} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
+					return VariableType.MATRIX;
+				} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
+					return VariableType.INT;
+				} else {
+					return createCustomType(typeBinding);
+				}
+			}
+
+			private IVariableType createCustomType(final ITypeBinding typeBinding) {
 				return new IVariableType() {
 					
 					@Override
