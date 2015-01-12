@@ -153,18 +153,8 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 											if (resource.getType() == IResource.FILE
 													&& JavaCore.isJavaLikeFileName(resource.getName())) {
 												final IFile file = (IFile) resource;
-												URI relativize = folder.getLocationURI().relativize(file.getLocationURI());
-												export.addResource(relativize.toString(), new IResourceProvider() {
-													
-													@Override
-													public void writeToStream(OutputStream zos) throws IOException {
-														try (InputStream is = file.getContents()) {
-															ByteStreams.copy(is, zos);
-														} catch (CoreException e) {
-															throw Throwables.propagate(e);
-														}
-													}
-												});
+												URI relativize = addResource(
+														export, folder, file);
 												try {
 													doFile(description.getSymbolicName(), relativize.toString(), version, export, file);
 												} catch (IOException e) {
@@ -173,6 +163,8 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 											}
 											return true;
 										}
+
+
 
 										private void doFile(String bundle, String name, String version, final PackageBuilder export, IFile file)
 												throws IOException,
@@ -233,10 +225,56 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 													padHTMLRenderer.renderPad(documentPart, context);
 												}
 											}
+										
 										}
+										
 									});
 								}
 							}
+							final IResource root = iProject;
+							final IFolder metaInfFolder = iProject.getFolder("META-INF");
+							if (metaInfFolder.exists()) {
+								metaInfFolder.accept(new IResourceVisitor() {
+									
+									@Override
+									public boolean visit(IResource resource) throws CoreException {
+										if (resource.getType() == IResource.FILE) {
+											final IFile file = (IFile) resource;
+											addResource(export, root, file);
+										}
+										return true;
+									}
+								});
+							}
+							final IFolder iconsFolder = iProject.getFolder("icons");
+							if (iconsFolder.exists()) {
+								iconsFolder.accept(new IResourceVisitor() {
+									
+									@Override
+									public boolean visit(IResource resource) throws CoreException {
+										if (resource.getType() == IResource.FILE) {
+											final IFile file = (IFile) resource;
+											addResource(export, root, file);
+										}
+										return true;
+									}
+								});
+							}
+							final IFolder texturesFolder = iProject.getFolder("textures");
+							if (texturesFolder.exists()) {
+								texturesFolder.accept(new IResourceVisitor() {
+									
+									@Override
+									public boolean visit(IResource resource) throws CoreException {
+										if (resource.getType() == IResource.FILE) {
+											final IFile file = (IFile) resource;
+											addResource(export, root, file);
+										}
+										return true;
+									}
+								});
+							}
+							
 							
 							export.writeToStream(zos);
 							
@@ -274,6 +312,25 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 		}
 		
 		return true;
+	}
+	
+	private URI addResource(
+			final PackageBuilder export,
+			final IResource root,
+			final IFile file) {
+		URI relativize = root.getLocationURI().relativize(file.getLocationURI());
+		export.addResource(relativize.toString(), new IResourceProvider() {
+			
+			@Override
+			public void writeToStream(OutputStream zos) throws IOException {
+				try (InputStream is = file.getContents()) {
+					ByteStreams.copy(is, zos);
+				} catch (CoreException e) {
+					throw Throwables.propagate(e);
+				}
+			}
+		});
+		return relativize;
 	}
 	
 	@Override
