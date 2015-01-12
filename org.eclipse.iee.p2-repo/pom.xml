@@ -16,7 +16,7 @@
 			<plugin>
 				<groupId>org.reficio</groupId>
 				<artifactId>p2-maven-plugin</artifactId>
-				<version>1.0.3-SNAPSHOT</version>
+				<version>1.1.2-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<id>default-cli</id>
@@ -67,6 +67,18 @@
 								</artifact>
 								<artifact>
 									<id>ch.qos.logback:logback-classic:1.1.2</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>com.ieecloud:com.ieecloud.store.ws.client:1.0.0.201501122008</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>com.ieecloud:com.ieecloud.common:1.0.0.201501122129</id>
+									<source>true</source>
+								</artifact>
+								<artifact>
+									<id>com.ieecloud:com.ieecloud.utils:1.0.0.201501122141</id>
 									<source>true</source>
 								</artifact>
 							</artifacts>

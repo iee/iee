@@ -1,6 +1,8 @@
 package org.eclipse.iee.export.ui;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +10,9 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
@@ -54,6 +58,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.google.common.base.Throwables;
 import com.google.common.io.ByteStreams;
+import com.ieecloud.store.ws.client.StoreWsClient;
 
 public class IEECloudExportWizard extends Wizard implements IExportWizard {
 
@@ -81,12 +86,34 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 	public boolean performFinish() {
 		final String destinationFile = fOptionsPage.getDestinationValue();
 		final List<IProject> selectedResources = fOptionsPage.getSelectedProjects();
+		final boolean uploadChecked = fOptionsPage.isUploadChecked();
+		final String password = fOptionsPage.getPassword();
+		final String username = fOptionsPage.getUsername();
+		final String urlStr = fOptionsPage.getUrl();
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress(){
 
 				@Override
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
+					
+					
+					StoreWsClient storeWsClient = null;
+					
+					if (uploadChecked) {
+						URL url;
+						try {
+							url = URI.create(urlStr).toURL();
+						} catch (MalformedURLException e2) {
+							throw new InvocationTargetException(e2);
+						}		
+						
+						try {
+							storeWsClient = new StoreWsClient("https".equals(url.getProtocol()), url.getHost(), String.valueOf(url.getPort()), password, username, null);
+						} catch (Exception e2) {
+							throw new InvocationTargetException(e2);
+						}
+					}
 					
 					for (IProject iProject : selectedResources) {
 						IJavaProject javaProject = JavaCore.create(iProject);
@@ -108,7 +135,8 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 //							version = description.getBundleVersion().toString();
 //						}
 						
-						try (FileOutputStream fos = new FileOutputStream(new File(destinationFile, iProject.getName() + ".zip"));
+						File zipFile = new File(destinationFile, iProject.getName() + ".zip");
+						try (FileOutputStream fos = new FileOutputStream(zipFile);
 								ZipOutputStream zos = new ZipOutputStream(fos)) {
 							
 							final PackageBuilder export = new PackageBuilder();
@@ -211,6 +239,7 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 							}
 							
 							export.writeToStream(zos);
+							
 						} catch (IOException e) {
 							e.printStackTrace();
 							throw new InvocationTargetException(e);
@@ -218,6 +247,21 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 							e.printStackTrace();
 							throw new InvocationTargetException(e);
 						} 
+						
+						if (uploadChecked) {
+							try(InputStream is = new FileInputStream(zipFile)) {
+								storeWsClient.uploadNewModel(zipFile.getName(), ByteStreams.toByteArray(is));
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+								throw new InvocationTargetException(e);
+							} catch (IOException e) {
+								e.printStackTrace();
+								throw new InvocationTargetException(e);
+							} catch (Exception e) {
+								e.printStackTrace();
+								throw new InvocationTargetException(e);
+							}
+						}
 					}
 				}});
 		} catch (InterruptedException e) {
@@ -228,6 +272,7 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	

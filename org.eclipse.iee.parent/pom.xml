@@ -42,6 +42,10 @@
 
 	<repositories>
 		<repository>
+			<id>my-local-repo</id>
+			<url>file://${basedir}/../local-repo</url>
+		</repository>
+		<repository>
 			<id>platform-e43</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/eclipse/updates/4.3/</url>

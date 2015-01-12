@@ -31,12 +31,20 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
 
 public class IEECloudOptionsPage extends WizardPage {
 	private Text fDestinationText;
 	private Table table;
 	private IStructuredSelection fSelection;
 	private CheckboxTableViewer fProjectsTable;
+	private Text fUrlText;
+	private Text fUsernameText;
+	private Text fPasswordText;
+	private Button fUploadCheck;
 
 	public IEECloudOptionsPage(IStructuredSelection selection) {
 		super("wizardPage");
@@ -79,7 +87,23 @@ public class IEECloudOptionsPage extends WizardPage {
 	public Text getDestinationText() {
 		return fDestinationText;
 	}
+	
+	public String getUrl() {
+		return fUrlText.getText();
+	}
 
+	public String getUsername() {
+		return fUsernameText.getText();
+	}
+
+	public String getPassword() {
+		return fPasswordText.getText();
+	}
+	
+	public boolean isUploadChecked() {
+		return fUploadCheck.getSelection();
+	}
+	
 	private void createViewer(Composite composite) {
 		fProjectsTable = CheckboxTableViewer.newCheckList(composite, SWT.BORDER
 				| SWT.FULL_SELECTION);
@@ -165,6 +189,37 @@ public class IEECloudOptionsPage extends WizardPage {
 		setErrorMessage(null);
 
 		setControl(composite);
+		
+		Group grpIeeCloud = new Group(composite, SWT.NONE);
+		grpIeeCloud.setLayout(new GridLayout(2, false));
+		grpIeeCloud.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		grpIeeCloud.setText("IEE Cloud");
+		
+		Label lblUploadModel = new Label(grpIeeCloud, SWT.NONE);
+		lblUploadModel.setText("Upload model");
+		
+		fUploadCheck = new Button(grpIeeCloud, SWT.CHECK);
+		
+		Label lblUrl = new Label(grpIeeCloud, SWT.NONE);
+		lblUrl.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblUrl.setText("Url");
+		
+		fUrlText = new Text(grpIeeCloud, SWT.BORDER);
+		fUrlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblUsername = new Label(grpIeeCloud, SWT.NONE);
+		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblUsername.setText("Username");
+		
+		fUsernameText = new Text(grpIeeCloud, SWT.BORDER);
+		fUsernameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblPassword = new Label(grpIeeCloud, SWT.NONE);
+		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPassword.setText("Password");
+		
+		fPasswordText = new Text(grpIeeCloud, SWT.BORDER);
+		fPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 	}
 
