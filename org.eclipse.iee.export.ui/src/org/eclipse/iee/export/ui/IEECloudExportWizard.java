@@ -36,6 +36,7 @@ import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.RootDocumentPart;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.store.IDocumentStore;
+import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.export.IResourceProvider;
 import org.eclipse.iee.export.PackageBuilder;
 import org.eclipse.iee.export.PackageResourceProvider;
@@ -47,6 +48,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -55,6 +57,7 @@ import org.eclipse.pde.core.project.IBundleProjectService;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.WorkbenchPlugin;
 
 import com.google.common.base.Throwables;
 import com.google.common.io.ByteStreams;
@@ -62,6 +65,7 @@ import com.ieecloud.store.ws.client.StoreWsClient;
 
 public class IEECloudExportWizard extends Wizard implements IExportWizard {
 
+	public static final String IEE_CLOUD_EXPORT_WIZARD = "IEECloudExportWizard";
 	private IEECloudOptionsPage fOptionsPage;
 	private IStructuredSelection fSelection;
 	private IDocumentParser parser;
@@ -69,6 +73,13 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 	private IDocumentStore documentStore;
 	
 	public IEECloudExportWizard() {
+		IDialogSettings workbenchSettings = IeeEditorPlugin.getDefault().getDialogSettings();
+        IDialogSettings section = workbenchSettings
+                .getSection(IEE_CLOUD_EXPORT_WIZARD);//$NON-NLS-1$
+        if (section == null) {
+			section = workbenchSettings.addNewSection(IEE_CLOUD_EXPORT_WIZARD);//$NON-NLS-1$
+		}
+        setDialogSettings(section);
 	}
 
 	@Override
@@ -84,6 +95,8 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		updateSettings(getDialogSettings());
+		
 		final String destinationFile = fOptionsPage.getDestinationValue();
 		final List<IProject> selectedResources = fOptionsPage.getSelectedProjects();
 		final boolean uploadChecked = fOptionsPage.isUploadChecked();
@@ -314,6 +327,10 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 		return true;
 	}
 	
+	private void updateSettings(IDialogSettings dialogSettings) {
+		fOptionsPage.updateSettings(dialogSettings);
+	}
+
 	private URI addResource(
 			final PackageBuilder export,
 			final IResource root,

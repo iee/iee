@@ -2,7 +2,6 @@ package org.eclipse.iee.export.ui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.filesystem.URIUtil;
@@ -11,12 +10,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -27,14 +25,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
+
+import com.google.common.base.Objects;
 
 public class IEECloudOptionsPage extends WizardPage {
 	private Text fDestinationText;
@@ -218,9 +214,11 @@ public class IEECloudOptionsPage extends WizardPage {
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPassword.setText("Password");
 		
-		fPasswordText = new Text(grpIeeCloud, SWT.BORDER);
+		fPasswordText = new Text(grpIeeCloud, SWT.BORDER | SWT.PASSWORD);
 		fPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
+		restoreWidgetStates();
+		
 	}
 
 	protected void initializeViewer() {
@@ -250,5 +248,22 @@ public class IEECloudOptionsPage extends WizardPage {
 			}
 		}
 		return result;
+	}
+
+	public void updateSettings(IDialogSettings dialogSettings) {
+		dialogSettings.put("upload", fUploadCheck.getSelection());
+		dialogSettings.put("destination", fDestinationText.getText());
+		dialogSettings.put("url", fUrlText.getText());
+		dialogSettings.put("username", fUsernameText.getText());
+		dialogSettings.put("password", fPasswordText.getText());
+	}
+	
+	private void restoreWidgetStates() {
+		IDialogSettings dialogSettings = getDialogSettings();
+		fUploadCheck.setSelection(dialogSettings.getBoolean("upload"));
+		fDestinationText.setText(Objects.firstNonNull(dialogSettings.get("destination"), ""));
+		fUrlText.setText(Objects.firstNonNull(dialogSettings.get("url"), ""));
+		fUsernameText.setText(Objects.firstNonNull(dialogSettings.get("username"), ""));
+		fPasswordText.setText(Objects.firstNonNull(dialogSettings.get("password"), ""));
 	}
 }
