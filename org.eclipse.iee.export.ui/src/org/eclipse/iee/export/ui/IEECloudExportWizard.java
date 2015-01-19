@@ -287,6 +287,20 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 									}
 								});
 							}
+							final IFolder imagesFolder = iProject.getFolder("pads/image");
+							if (imagesFolder.exists()) {
+								imagesFolder.accept(new IResourceVisitor() {
+									
+									@Override
+									public boolean visit(IResource resource) throws CoreException {
+										if (resource.getType() == IResource.FILE) {
+											final IFile file = (IFile) resource;
+											addResource(export, "img/" +  file.getName(), file);
+										}
+										return true;
+									}
+								});
+							}
 							
 							
 							export.writeToStream(zos);
@@ -336,7 +350,13 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 			final IResource root,
 			final IFile file) {
 		URI relativize = root.getLocationURI().relativize(file.getLocationURI());
-		export.addResource(relativize.toString(), new IResourceProvider() {
+		String fileName = relativize.toString();
+		addResource(export, fileName, file);
+		return relativize;
+	}
+
+	private void addResource(final PackageBuilder export, String fileName, final IFile file) {
+		export.addResource(fileName, new IResourceProvider() {
 			
 			@Override
 			public void writeToStream(OutputStream zos) throws IOException {
@@ -347,7 +367,6 @@ public class IEECloudExportWizard extends Wizard implements IExportWizard {
 				}
 			}
 		});
-		return relativize;
 	}
 	
 	@Override
