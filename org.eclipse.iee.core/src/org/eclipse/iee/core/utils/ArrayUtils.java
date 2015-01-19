@@ -89,12 +89,21 @@ public class ArrayUtils {
 		if (st.nextToken() != StreamTokenizer.TT_NUMBER) {
 			throw new IllegalArgumentException("Expected number");
 		}
-		return st.nval;
+		double result;
+		double m = st.nval;
+		if (st.nextToken() == StreamTokenizer.TT_WORD && st.sval.startsWith("E")) {
+			result = m * Math.pow(10, Long.parseLong(st.sval.substring(1)));
+		} else {
+			st.pushBack();
+			result = m;
+		}
+		
+		return result;
 	}
 	
 	
 	public static void main(String[] args) throws IOException {
-		double[][] parseArray = parseArray("[[1,2,3,8],[3,4,2],[3,4,2],[3,4,2],[3,4,2]]");
+		double[][] parseArray = parseArray("[[0.1E-12,2,3,8],[3,4,2],[3E-10,4,2],[3,4,2],[3,4,2]]");
 		for (int i = 0; i < parseArray.length; i++) {
 			System.out.print(i + ": {");
 			double[] inner = parseArray[i];
