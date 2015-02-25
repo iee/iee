@@ -8,6 +8,7 @@ import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -227,8 +228,8 @@ public class IEECloudOptionsPage extends WizardPage {
 			Object elem = elems[i];
 			IProject project = null;
 
-			if (elem instanceof IFile) {
-				IFile file = (IFile) elem;
+			if (elem instanceof IResource) {
+				IResource file = (IResource) elem;
 				project = file.getProject();
 			} else if (elem instanceof IProject) {
 				project = (IProject) elem;
