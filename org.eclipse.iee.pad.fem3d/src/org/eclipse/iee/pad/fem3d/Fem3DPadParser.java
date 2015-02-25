@@ -3,10 +3,12 @@ package org.eclipse.iee.pad.fem3d;
 import java.util.Map;
 
 import org.eclipse.iee.core.document.parser.IPadParser;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * {@link IPadParser} implementation. Creates instance of graph pad.
  */
+@Component
 public class Fem3DPadParser implements IPadParser {
 
 	@Override
@@ -18,7 +20,7 @@ public class Fem3DPadParser implements IPadParser {
 	
 	@Override
 	public String getType() {
-		return "Fem3D";
+		return "Threedview";
 	}
 
 }

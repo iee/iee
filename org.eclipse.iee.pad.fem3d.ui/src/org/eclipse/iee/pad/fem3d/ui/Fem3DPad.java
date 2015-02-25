@@ -165,7 +165,7 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 	public void processInput() {
 		String var = fDocument.get();
 		modelVariable = var;
-		
+		fFormulaImageLabel.setText(var);
 		
 		
 		getDocumentPart().setModelVariable(modelVariable);
@@ -205,7 +205,7 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 	
 	@Override
 	public String getType() {
-		return "Fem3D";
+		return "Threedview";
 	}
 
 	@Override

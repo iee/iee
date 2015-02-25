@@ -32,6 +32,9 @@
 		<module>../org.eclipse.iee.pad.graph</module>
 		<module>../org.eclipse.iee.pad.graph.ui</module>
 		<module>../org.eclipse.iee.translator.antlr</module>
+		<module>../org.eclipse.iee.pad.fem3d</module>
+		<module>../org.eclipse.iee.pad.fem3d.feature</module>
+		<module>../org.eclipse.iee.pad.fem3d.ui</module>
 	</modules>
 
 	<properties>
