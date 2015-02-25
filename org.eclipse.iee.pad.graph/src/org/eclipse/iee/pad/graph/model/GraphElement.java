@@ -12,7 +12,7 @@ public class GraphElement implements Serializable {
 
 	private String color;
 	
-	private int width;
+	private int width = 1;
 
 	public String getFunction() {
 		return function;
