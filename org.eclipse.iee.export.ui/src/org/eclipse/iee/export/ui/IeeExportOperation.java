@@ -56,98 +56,6 @@ import com.ieecloud.store.ws.client.StoreWsClient;
 
 final class IeeExportOperation implements IRunnableWithProgress {
 
-	private final class ResourceCopyVisitor implements IResourceVisitor {
-		private final IBundleProjectDescription description;
-		private final String version;
-		private final PackageBuilder export;
-		private final IFolder folder;
-
-		private ResourceCopyVisitor(IBundleProjectDescription description,
-				String version, PackageBuilder export, IFolder folder) {
-			this.description = description;
-			this.version = version;
-			this.export = export;
-			this.folder = folder;
-		}
-
-		@Override
-		public boolean visit(IResource resource) throws CoreException {
-			if (resource.getType() == IResource.FILE
-					&& JavaCore.isJavaLikeFileName(resource.getName())) {
-				final IFile file = (IFile) resource;
-				URI relativize = addResource(export, folder, file);
-				try {
-					doFile(description.getSymbolicName(),
-							relativize.toString(), version, export, file);
-				} catch (IOException e) {
-					throw Throwables.propagate(e);
-				}
-			}
-			return true;
-		}
-
-		private void doFile(String bundle, String name, String version,
-				final PackageBuilder export, IFile file) throws IOException,
-				CoreException {
-
-			try (InputStream is = file.getContents()) {
-				RootDocumentPart parsedDocument = parser.parseDocument(is);
-				new Document(bundle, name, version, parsedDocument);
-				List<DocumentPart> children = parsedDocument.getChildren();
-				for (final DocumentPart documentPart : children) {
-					IHTMLRendererContext context = new IHTMLRendererContext() {
-						@Override
-						public boolean isEditMode() {
-							return false;
-						}
-
-						@Override
-						public Writer getWriter() throws IOException {
-							return new StringWriter();
-						}
-
-						@Override
-						public IResultContainer getResultContainer() {
-							return new InMemoryResultContainer();
-						}
-
-						@Override
-						public InputStream getResourceAsStream(String string)
-								throws IOException {
-							return null;
-						}
-
-						@Override
-						public IParameterProvider getParameterProvider() {
-							return new NullParameterProvider();
-						}
-
-						@Override
-						public String createURL(Map<String, String> params) {
-							return null;
-						}
-
-						@Override
-						public String createResourceURL(String padId,
-								String resourceId, Map<String, String> params) {
-							String resourcePath = padId + ".png";
-							export.addResource("img/" + resourcePath,
-									new PackageResourceProvider(
-											htmlRendererManager, documentStore,
-											resourcePath, documentPart));
-
-							return "img/" + resourcePath;
-						}
-					};
-					IHTMLRenderer<DocumentPart> padHTMLRenderer = htmlRendererManager
-							.getPadHTMLRenderer(documentPart);
-					padHTMLRenderer.renderPad(documentPart, context);
-				}
-			}
-
-		}
-	}
-
 	private final IDocumentParser parser;
 	private final String destinationFile;
 	private final String password;
@@ -238,7 +146,7 @@ final class IeeExportOperation implements IRunnableWithProgress {
 									try {
 										doFile(description.getSymbolicName(), relativize.toString(), version, export, file);
 									} catch (IOException e) {
-										e.printStackTrace();
+										throw Throwables.propagate(e);
 									}
 								}
 								return true;
@@ -373,10 +281,8 @@ final class IeeExportOperation implements IRunnableWithProgress {
 				export.writeToStream(zos);
 				
 			} catch (IOException e) {
-				e.printStackTrace();
 				throw new InvocationTargetException(e);
 			} catch (CoreException e) {
-				e.printStackTrace();
 				throw new InvocationTargetException(e);
 			} 
 			
@@ -384,13 +290,10 @@ final class IeeExportOperation implements IRunnableWithProgress {
 				try(InputStream is = new FileInputStream(zipFile)) {
 					storeWsClient.uploadNewModel(zipFile.getName(), ByteStreams.toByteArray(is));
 				} catch (FileNotFoundException e) {
-					e.printStackTrace();
 					throw new InvocationTargetException(e);
 				} catch (IOException e) {
-					e.printStackTrace();
 					throw new InvocationTargetException(e);
 				} catch (Exception e) {
-					e.printStackTrace();
 					throw new InvocationTargetException(e);
 				}
 			}
