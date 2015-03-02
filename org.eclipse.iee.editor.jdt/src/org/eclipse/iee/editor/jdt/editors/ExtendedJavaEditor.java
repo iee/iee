@@ -528,5 +528,10 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		}
 		return super.getAdapter(required);
 	}
+
+	@Override
+	public void createPad(PadDocumentPart pad) {
+		createPad(pad, getCaretOffset());
+	}
 	
 }

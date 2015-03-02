@@ -399,8 +399,9 @@ public class ContainerManager extends EventManager {
 	
 	protected void containerCreated(Container c) {
 		String containerID = c.getContainerID();
-		if (fPads.containsKey(containerID)) {
-			c.getPadPart().setId(UUID.randomUUID().toString());
+		if (containerID == null || fPads.containsKey(containerID)) {
+			containerID = UUID.randomUUID().toString();
+			c.getPadPart().setId(containerID);
 		}
 		Pad<PadDocumentPart> pad = fPadFactoryManager.createPad(c.getPadPart());
 		pad.attachContainer(c);

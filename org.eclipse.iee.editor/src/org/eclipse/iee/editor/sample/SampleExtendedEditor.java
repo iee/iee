@@ -163,4 +163,9 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 		createPad(imagePart, location);
 	}
 
+	@Override
+	public void createPad(PadDocumentPart pad) {
+		createPad(pad, getCaretOffset());
+	}
+
 }

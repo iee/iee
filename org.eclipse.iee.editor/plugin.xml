@@ -12,5 +12,66 @@
             id="org.eclipse.iee.editor.sample.SampleExtendedEditor">
       </editor>
    </extension>
+   
+    <extension point="org.eclipse.ui.commands">
+      <command id="org.eclipse.iee.pad.collapaseBegin.addCommand" name="Add collapse begin"/>
+   </extension>
+   <extension point="org.eclipse.ui.commands">
+      <command id="org.eclipse.iee.pad.collapaseEnd.addCommand" name="Add collapse end"/>
+   </extension>
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.iee.editor.core.pad.common.ui.handler.AddCollapseBeginHandler"
+            commandId="org.eclipse.iee.pad.collapaseBegin.addCommand">
+      </handler>
+   </extension>
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.iee.editor.core.pad.common.ui.handler.AddCollapseEndHandler"
+            commandId="org.eclipse.iee.pad.collapaseEnd.addCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.pad.collapaseBegin.addCommand"
+            icon="icons/visibility-off.png">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.pad.collapaseEnd.addCommand"
+            icon="icons/visibility-on.png">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.iee.editor.addToolbar">
+         <command
+               commandId="org.eclipse.iee.pad.collapaseBegin.addCommand"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.iee.editor.addToolbar">
+         <command
+               commandId="org.eclipse.iee.pad.collapaseEnd.addCommand"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
 
 </plugin>

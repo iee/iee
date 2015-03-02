@@ -24,4 +24,6 @@ public interface IPadEditor {
 	public IPadFactoryManager getPadManager();
 	
 	public ContainerManager getContainerManager();
+
+	public void createPad(PadDocumentPart pad);
 }
