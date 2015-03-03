@@ -41,6 +41,9 @@ import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
+import org.eclipse.jdt.internal.corext.dom.ASTNodes;
 import org.eclipse.jdt.internal.corext.dom.ScopeAnalyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +72,8 @@ public class JavaTranslator {
 	private Set<String> fMethodClasses = new HashSet<>();
 	
 	private Set<String> fInnerClasses = new HashSet<>();
+
+	private CompilationUnit fUnit;
 
 	private static class JavaMathVisitor extends MathBaseVisitor<String> {
 		// statement rule
@@ -707,6 +712,18 @@ public class JavaTranslator {
 				if (typeBinding != null) {
 					return createType(typeBinding);
 				} else {
+					List<ImportDeclaration> imports= fUnit.imports();
+					for (int i= 0; i < imports.size(); i++) {
+						ImportDeclaration decl= imports.get(i);
+						if (decl.isStatic() && !decl.isOnDemand()) {
+							String nameIdentifier = ASTNodes.getSimpleNameIdentifier(decl.getName());
+							IBinding binding = decl.resolveBinding();
+							if (nameIdentifier.equals(variable) && binding instanceof IVariableBinding) {
+								IVariableBinding vBinding = (IVariableBinding) binding;
+								return createType(vBinding.getType());
+							}
+						}
+					}
 					throw new IllegalArgumentException("Unknown variable " + variable);
 				}
 			}
@@ -881,7 +898,7 @@ public class JavaTranslator {
 	private void parse() {
 		try {
 
-			CompilationUnit unit = (CompilationUnit) createAST(fCompilationUnit);
+			fUnit = (CompilationUnit) createAST(fCompilationUnit);
 			
 			
 			IType[] types = fCompilationUnit.getTypes();
@@ -935,7 +952,7 @@ public class JavaTranslator {
 				}
 			}
 			
-			ScopeAnalyzer sa = new ScopeAnalyzer(unit);
+			ScopeAnalyzer sa = new ScopeAnalyzer(fUnit);
 			IBinding[] declarationsInScope = sa.getDeclarationsInScope(fPosition, ScopeAnalyzer.VARIABLES);
 			for (IBinding iBinding : declarationsInScope) {
 				if (iBinding instanceof IVariableBinding) {
