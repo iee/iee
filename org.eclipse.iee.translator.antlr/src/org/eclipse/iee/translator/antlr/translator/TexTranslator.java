@@ -77,7 +77,7 @@ public class TexTranslator {
 		}
 
 		public String visitVariableAssignment(MathParser.VariableAssignmentContext ctx) {
-			return translateName(ctx.name.getText()) + "=" + visit(ctx.value);
+			return visit(ctx.name) + "=" + visit(ctx.value);
 		}
 
 		public String visitLogicComparison(MathParser.LogicComparisonContext ctx) {
