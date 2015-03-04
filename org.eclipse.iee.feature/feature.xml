@@ -30,8 +30,4 @@
          version="0.0.0"
          optional="true"/>
 
-   <includes
-         id="org.eclipse.iee.pad.fem3d.feature"
-         version="0.0.0"/>
-
 </feature>

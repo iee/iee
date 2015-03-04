@@ -33,12 +33,11 @@
 		<module>../org.eclipse.iee.pad.graph.ui</module>
 		<module>../org.eclipse.iee.translator.antlr</module>
 		<module>../org.eclipse.iee.pad.fem3d</module>
-		<module>../org.eclipse.iee.pad.fem3d.feature</module>
 		<module>../org.eclipse.iee.pad.fem3d.ui</module>
 	</modules>
 
 	<properties>
-		<tycho-version>0.20.0</tycho-version>
+		<tycho-version>0.22.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
