@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
-    <scr:component name="org.eclipse.iee.pad.fem3d.Fem3DSourceGenerator">
-        <implementation class="org.eclipse.iee.pad.fem3d.Fem3DSourceGenerator"/>
-        <service servicefactory="false">
-            <provide interface="org.eclipse.iee.core.document.source.ISourceGenerator"/>
-        </service>
-    </scr:component>
-</components>
