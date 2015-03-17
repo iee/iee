@@ -1,11 +1,11 @@
-package org.eclipse.iee.pad.fem3d.ui;
+package org.eclipse.iee.editor.core.pad.common.ui;
 
 import java.io.Serializable;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.pad.fem3d.Fem3DPart;
+import org.eclipse.iee.editor.core.pad.common.ProgressDocumentPart;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
@@ -15,35 +15,32 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
+public class ProgressPad extends Pad<ProgressDocumentPart> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String modelVariable;
-
 	private Composite fParent;
 	
-	private Fem3DComposite fComposite;
+	private ProgressComposite fComposite;
 	
-	private TextViewer fViewer;
-
-	public Fem3DPad(Fem3DPart part) {
+	public ProgressPad(ProgressDocumentPart part) {
 		super(part);
-		modelVariable = part.getModelVariable();
 	}
 
 	private Document fDocument;
+
+	private TextViewer fViewer;
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		fParent = parent;
 		parent.setLayout(new FillLayout());
 		
-		fComposite = new Fem3DComposite(parent, SWT.NONE);
+		fComposite = new ProgressComposite(parent, SWT.NONE);
 		
-		fViewer = fComposite.getTextBox();
 		fDocument = new Document();
-		fDocument.set(modelVariable);
+		fDocument.set(getDocumentPart().getStatus());
+		fViewer = fComposite.getTextBox();
 		fViewer.setDocument(fDocument);
 
 		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
@@ -80,8 +77,8 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 	}
 	
 	@Override
-	public Fem3DPad copy() {
-		Fem3DPad newPad = new Fem3DPad(getDocumentPart().copy());
+	public ProgressPad copy() {
+		ProgressPad newPad = new ProgressPad(getDocumentPart().copy());
 		return newPad;
 	}
 
@@ -106,8 +103,8 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 
 	public void processInput() {
 		String var = fDocument.get();
-		modelVariable = var;
-		getDocumentPart().setModelVariable(modelVariable);
+		getDocumentPart().setStatus(var);
+		getDocumentPart().setProgress(fComposite.getSpinner());
 		getContainer().updateDocument();
 	}
 
@@ -132,7 +129,7 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 	
 	@Override
 	public String getType() {
-		return "Threedview";
+		return "Progress";
 	}
 
 	@Override

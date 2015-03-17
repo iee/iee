@@ -11,6 +11,8 @@ Require-Bundle: org.eclipse.jface.text,
  org.eclipse.iee.editor,
  org.eclipse.iee.pad.fem3d,
  org.eclipse.ui,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml
+Bundle-ClassPath: .
