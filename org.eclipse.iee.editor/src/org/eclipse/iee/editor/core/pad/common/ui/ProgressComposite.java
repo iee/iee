@@ -27,7 +27,7 @@ public class ProgressComposite extends Composite {
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		image = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.iee.pad.fem3d.ui", "icons/3d.png").createImage();
+		image = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.iee.editor", "icons/progress.png").createImage();
 		lblNewLabel.setImage(image);
 		
 		fSpinner = new Spinner(composite, SWT.BORDER);
