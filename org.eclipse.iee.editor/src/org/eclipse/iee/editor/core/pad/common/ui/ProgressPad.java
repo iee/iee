@@ -42,6 +42,7 @@ public class ProgressPad extends Pad<ProgressDocumentPart> implements Serializab
 		fDocument.set(getDocumentPart().getStatus());
 		fViewer = fComposite.getTextBox();
 		fViewer.setDocument(fDocument);
+		fComposite.setSpinner(getDocumentPart().getProgress());
 
 		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
 		fViewer.setUndoManager(defaultUndoManager);

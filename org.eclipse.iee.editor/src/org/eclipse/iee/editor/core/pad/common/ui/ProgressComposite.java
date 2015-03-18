@@ -58,4 +58,8 @@ public class ProgressComposite extends Composite {
 	public int getSpinner() {
 		return fSpinner.getSelection();
 	}
+
+	public void setSpinner(int progress) {
+		fSpinner.setSelection(progress);
+	}
 }
