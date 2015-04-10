@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.eclipse.iee.core.document.source.IScope;
 import org.eclipse.iee.core.document.source.IVariableType;
 import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.translator.antlr.java.JavaLexer;
@@ -24,6 +25,7 @@ import org.eclipse.iee.translator.antlr.math.MathParser.IntervalParameterContext
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixElementContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.PrimaryFunctionsContext;
+import org.eclipse.iee.translator.antlr.math.MathParser.StandardFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.ValueParameterContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VectorContext;
@@ -91,9 +93,9 @@ public class JavaTranslator {
 		private ExternalTranslationContext fExternalContext;
 		private TypeVisitior fTypeVisitor; 
 		
-		public JavaMathVisitor(ExternalTranslationContext externalContext) {
+		public JavaMathVisitor(ExternalTranslationContext externalContext, TypeVisitior typeVisitior) {
 			fExternalContext = externalContext;
-			fTypeVisitor = new TypeVisitior(fExternalContext);
+			fTypeVisitor = typeVisitior;
 		}
 
 		public String visitFunctionDefinition(
@@ -622,7 +624,7 @@ public class JavaTranslator {
 			String rowIndex = visit(ctx.rowId).replaceAll("\\.0", "");
 			String columnIndex = visit(ctx.columnId).replaceAll("\\.0", "");
 
-			return translateName(ctx.container.getText()) + ".get(" + rowIndex + "," + columnIndex + ")";
+			return translateName(ctx.container.getText()) + ".get((int) java.lang.Math.round(" + rowIndex + "), (int) java.lang.Math.round(" + columnIndex + "))";
 		}
 		
 		@Override
@@ -663,13 +665,15 @@ public class JavaTranslator {
 
 	private String treeToString(ParserRuleContext tree) {
 		String result;
-		JavaMathVisitor mathVisitor = createVisitor();
+		TypeVisitior typeVisitior = new TypeVisitior(createContext());
+		typeVisitior.visit(tree);
+		JavaMathVisitor mathVisitor = createVisitor(typeVisitior);
 		result = mathVisitor.visit(tree);
 		return result;
 	}
 
-	private JavaMathVisitor createVisitor() {
-		JavaMathVisitor mathVisitor = new JavaMathVisitor(createContext());
+	private JavaMathVisitor createVisitor(TypeVisitior typeVisitor) {
+		JavaMathVisitor mathVisitor = new JavaMathVisitor(createContext(), typeVisitor);
 		return mathVisitor;
 	}
 
@@ -712,6 +716,7 @@ public class JavaTranslator {
 				if (typeBinding != null) {
 					return createType(typeBinding);
 				} else {
+					@SuppressWarnings("unchecked")
 					List<ImportDeclaration> imports= fUnit.imports();
 					for (int i= 0; i < imports.size(); i++) {
 						ImportDeclaration decl= imports.get(i);
@@ -726,40 +731,6 @@ public class JavaTranslator {
 					}
 					throw new IllegalArgumentException("Unknown variable " + variable);
 				}
-			}
-
-			private IVariableType createType(final ITypeBinding typeBinding) {
-				final String type = typeBinding.getQualifiedName();
-				if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
-					return VariableType.DOUBLE;
-				} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
-					return VariableType.MATRIX;
-				} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
-					return VariableType.INT;
-				} else {
-					return createCustomType(typeBinding);
-				}
-			}
-
-			private IVariableType createCustomType(final ITypeBinding typeBinding) {
-				return new IVariableType() {
-					
-					@Override
-					public String getJavaQualifiedName() {
-						return typeBinding.getQualifiedName();
-					}
-
-					@Override
-					public IVariableType getMethodType(String name) {
-						IMethodBinding[] declaredMethods = typeBinding.getDeclaredMethods();
-						for (IMethodBinding iMethodBinding : declaredMethods) {
-							if (iMethodBinding.getName().equals(name)) {
-								return createType(iMethodBinding.getReturnType());
-							}
-						}
-						return null;
-					}
-				};
 			}
 			
 			@Override
@@ -885,7 +856,7 @@ public class JavaTranslator {
 		}
 	}
 
-	private CompilationUnit createAST(ICompilationUnit unit) {
+	private static CompilationUnit createAST(ICompilationUnit unit) {
 		ASTParser parser = ASTParser.newParser(AST.JLS4);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(unit);
@@ -1016,7 +987,52 @@ public class JavaTranslator {
 		ParserRuleContext tree = parseTree(expression, iCompilationUnit, i);
 		return tree.accept(new TypeVisitior(createContext()));
 	}
+
+	public static IScope getScope(ICompilationUnit compilationUnit, int offset) {
+		Scope scope = new Scope(null);
+		ScopeAnalyzer sa = new ScopeAnalyzer((CompilationUnit) createAST(compilationUnit));
+		IBinding[] declarationsInScope = sa.getDeclarationsInScope(offset, ScopeAnalyzer.VARIABLES);
+		for (IBinding iBinding : declarationsInScope) {
+			if (iBinding instanceof IVariableBinding) {
+				IVariableBinding variableBinding = (IVariableBinding) iBinding;
+				scope.addVariable(variableBinding.getName(), createType(variableBinding.getType()));
+			}
+		}
+		return scope;
+	}
 	
+	private static IVariableType createType(final ITypeBinding typeBinding) {
+		final String type = typeBinding.getQualifiedName();
+		if ("D".equals(type) || "java.lang.Double".equals(type) || "double".equals(type)) {
+			return VariableType.DOUBLE;
+		} else if (Matrix.class.getName().equals(type) || "QMatrix;".equals(type)) {
+			return VariableType.MATRIX;
+		} else if ("I".equals(type) || "java.lang.Integer".equals(type) || "int".equals(type)) {
+			return VariableType.INT;
+		} else {
+			return createCustomType(typeBinding);
+		}
+	}
 	
+	private static IVariableType createCustomType(final ITypeBinding typeBinding) {
+		return new IVariableType() {
+			
+			@Override
+			public String getJavaQualifiedName() {
+				return typeBinding.getQualifiedName();
+			}
+
+			@Override
+			public IVariableType getMethodType(String name) {
+				IMethodBinding[] declaredMethods = typeBinding.getDeclaredMethods();
+				for (IMethodBinding iMethodBinding : declaredMethods) {
+					if (iMethodBinding.getName().equals(name)) {
+						return createType(iMethodBinding.getReturnType());
+					}
+				}
+				return null;
+			}
+		};
+	}
 
 }

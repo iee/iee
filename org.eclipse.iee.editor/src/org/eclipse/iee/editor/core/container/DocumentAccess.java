@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
+import org.eclipse.iee.core.document.source.IScope;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
 import org.eclipse.iee.core.document.source.IVariableType;
 import org.eclipse.iee.core.document.source.VariableType;
@@ -202,10 +203,16 @@ public class DocumentAccess {
 			}
 
 			@Override
-			public IVariableType getExpressionType(String expression) {
+			public IVariableType getExpressionType(String expression, IScope scope) {
 				return JavaTranslator.getType(expression,
 						container.getContainerManager().getCompilationUnit(),
 						container.getPosition().getOffset(), container.getContainerID());
+			}
+
+			@Override
+			public IScope getScope() {
+				return JavaTranslator.getScope(container.getContainerManager().getCompilationUnit(),
+						container.getPosition().getOffset());
 			}});
 		return payload;
 	}

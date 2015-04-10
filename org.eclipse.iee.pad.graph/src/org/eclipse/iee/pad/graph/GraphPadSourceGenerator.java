@@ -2,6 +2,7 @@ package org.eclipse.iee.pad.graph;
 
 import java.util.List;
 
+import org.eclipse.iee.core.document.source.IScope;
 import org.eclipse.iee.core.document.source.ISourceGenerator;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
 import org.eclipse.iee.core.document.source.IVariableType;
@@ -43,7 +44,13 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 						generatedText.append("StringBuilder sb").append(i).append(" = new StringBuilder();");
 						generatedText.append("boolean first = true;");
 						generatedText.append("sb").append(i).append(".append(\"[\");");
-						IVariableType xType = context.getExpressionType(variable);
+						IVariableType xType;
+						IScope scope = context.getScope();
+						if (scope.hasVariable(variable)) {
+							xType = context.getExpressionType(variable, scope);
+						} else {
+							xType = VariableType.DOUBLE;
+						}
 						if (xType == VariableType.MATRIX) {
 							String translateFunction = context.translateFunction(variable, part.getId());
 							generatedText.append("Jama.Matrix __tmpX = ").append(translateFunction).append(";");
@@ -61,7 +68,7 @@ public class GraphPadSourceGenerator implements ISourceGenerator<GraphPart> {
 							.append(")) {");
 							generatedText.append("double __grpVar = ").append(variable).append(";");
 						}
-						IVariableType yType = context.getExpressionType(function);
+						IVariableType yType = context.getExpressionType(function, scope);
 						String translateElement = context.translateFunction(function, part.getId());
 						if (yType == VariableType.MATRIX) {
 							generatedText.append("Jama.Matrix __tmpY = ").append(translateElement).append(";");
