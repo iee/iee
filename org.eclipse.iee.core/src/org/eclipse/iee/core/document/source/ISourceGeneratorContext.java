@@ -8,6 +8,8 @@ public interface ISourceGeneratorContext {
 
 	boolean isInClassBody();
 
-	IVariableType getExpressionType(String function);
+	IVariableType getExpressionType(String function, IScope scope);
+	
+	IScope getScope();
 	
 }
