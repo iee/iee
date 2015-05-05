@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -48,7 +49,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<T> {
+public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends CompositePad<T> {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractFormulaPad.class);
 
@@ -119,7 +120,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 	}
 
 	public AbstractFormulaPad(T part, UIFormulaRenderer formulaRenderer) {
-		super(part);
 		this.formulaRenderer = formulaRenderer;
 	}
 
@@ -253,7 +253,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 			@Override
 			public void focusLost(FocusEvent e) {
 				getContainer().getContainerManager()
-						.getUserInteractionManager()
 						.deactivateContainer(getContainer());
 			}
 
@@ -472,7 +471,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 			updateFormulaImage();
 			toggleFormulaImage();
 		} else {
-			getContainer().getComposite().setVisible(true);
+			getContainer().setVisible(true);
 			toggleInputText();
 		}
 
@@ -535,10 +534,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Pad<
 
 	@Override
 	public void unsave() {
-	}
-
-	@Override
-	public void onContainerAttached() {
 	}
 
 	@Override

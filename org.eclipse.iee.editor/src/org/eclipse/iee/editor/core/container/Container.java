@@ -1,39 +1,29 @@
 package org.eclipse.iee.editor.core.container;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Container implements IAdaptable {
 
-	private static final Logger logger = LoggerFactory.getLogger(Container.class);
-
-	private PadDocumentPart padPart;
+	private PadDocumentPart fPadPart;
 	
-	private Position fPosition;
-	private Composite fComposite;
+	private final Position fPosition;
 
-	private ControlListener fCompositeResizeListener;
-
-	private ContainerManager fContainerManager;
+	private final ContainerManager fContainerManager;
+	
 	private DocumentAccess fDocumentAccess;
-	protected IDocument fDocument;
-	private ISourceViewer fSourceViewer;
 
+	private final Pad<?> fPad;
+	
 	/* Setters */
 
 	public String getContainerID() {
@@ -44,26 +34,8 @@ public class Container implements IAdaptable {
 		return fPosition;
 	}
 
-	public Composite getComposite() {
-		return fComposite;
-	}
-
-	public int getLineNumber() {
-		try {
-			return fDocument.getLineOfOffset(fPosition.offset);
-		} catch (BadLocationException e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
-			return -1;
-		}
-	}
-	
 	public PadDocumentPart getPadPart() {
-		return padPart;
-	}
-
-	public void setPadPart(PadDocumentPart padPart) {
-		this.padPart = padPart;
+		return fPadPart;
 	}
 
 	public String getContainerManagerID() {
@@ -72,15 +44,6 @@ public class Container implements IAdaptable {
 
 	public ContainerManager getContainerManager() {
 		return fContainerManager;
-	}
-
-	/* FUNCTIONS USED IN PAD MANAGER: */
-
-	/**
-	 * Called when SWT-composite needs to be reloaded.
-	 */
-	public void reset() {
-		this.recreateComposite();
 	}
 
 	public void updateDocument() {
@@ -96,16 +59,13 @@ public class Container implements IAdaptable {
 
 	/* FUNCTION USED IN CONTAINER MANAGER: */
 
-	public Container(Position position, ContainerManager containerManager) {
+	public Container(Position position, ContainerManager containerManager, PadDocumentPart part, Pad<?> pad) {
 		fPosition = position;
 		fContainerManager = containerManager;
+		this.fPad = pad;
 		fDocumentAccess = containerManager.getDocumentAccess();
-		fDocument = containerManager.getDocument();
-		fSourceViewer = containerManager.getSourceViewer();
-
-		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
-
-		initListeners();
+		fPadPart = part;
+		pad.attachContainer(this);
 	}
 
 	/**
@@ -114,18 +74,18 @@ public class Container implements IAdaptable {
 	boolean updatePresentation() {
 		// logger.debug("Updated container's position");
 
-		ITextViewerExtension5 ext5 = (ITextViewerExtension5) fSourceViewer;
+		ITextViewerExtension5 ext5 = (ITextViewerExtension5) fContainerManager.getSourceViewer();
 		int offset = ext5.modelOffset2WidgetOffset(fPosition.getOffset());
-		StyledText textWidget = fSourceViewer.getTextWidget();
+		StyledText textWidget = fContainerManager.getStyledText();
 		Point point = textWidget.getLocationAtOffset(offset);
 		int height = textWidget.getLineHeight(offset);
-		Point gabarit = fComposite.getSize();
-		int heightOffset = height - gabarit.y;
+		Rectangle bounds = getBounds();
+		int heightOffset = height - bounds.height;
 		Rectangle newBounds = new Rectangle(point.x
 				+ StyledTextManager.PAD_LEFT_MARGIN, point.y + heightOffset,
-				gabarit.x, gabarit.y);
-		if (!fComposite.getBounds().equals(newBounds)) {
-			fComposite.setBounds(newBounds);
+				bounds.width, bounds.height);
+		if (!bounds.equals(newBounds)) {
+			fPad.setBounds(newBounds);
 			return true;
 		}
 		return false;
@@ -134,67 +94,15 @@ public class Container implements IAdaptable {
 	/**
 	 * Sets container's SWT-composite visibility.
 	 */
-	void setVisible(boolean isVisible) {
-		fComposite.setVisible(isVisible);
+	public void setVisible(boolean isVisible) {
+		fPad.setVisible(isVisible);
 	}
 
 	/**
 	 * Disposes containers's SWT-composite. Called from ContainerManager.
 	 */
 	void dispose() {
-		releaseListeners();
-		fComposite.dispose();
-	}
-
-	/* INTERNAL FUNCTIONS: */
-
-	private void initListeners() {
-		fCompositeResizeListener = new ControlListener() {
-
-			@Override
-			public void controlResized(ControlEvent e) {
-				fContainerManager.updateContainerPresentations(Container.this);
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
-			}
-		};
-		setListeners();
-	}
-
-	private void setListeners() {
-		fComposite.addControlListener(fCompositeResizeListener);
-	}
-
-	private void releaseListeners() {
-		fComposite.removeControlListener(fCompositeResizeListener);
-	}
-
-	private void recreateComposite() {
-		releaseListeners();
-		fComposite.dispose();
-		fComposite = new Composite(fSourceViewer.getTextWidget(), SWT.NONE);
-		setListeners();
-	}
-
-	/* Functions for comparator */
-
-	/**
-	 * Creates temporary container with position at @param offset, used for
-	 * comparison
-	 * 
-	 * @return Temporary container at @param offset
-	 */
-	static Container atOffset(int offset) {
-		return new Container(new Position(offset, 0));
-	}
-
-	/**
-	 * Private constructor for temporary containers, used for comparison
-	 */
-	private Container(Position position) {
-		fPosition = position;
+		fPad.dispose();
 	}
 
 	@Override
@@ -210,4 +118,25 @@ public class Container implements IAdaptable {
 		} 
 		return null;
 	}
+
+	public Rectangle getBounds() {
+		return fPad.getBounds();
+	}
+
+	public Composite getTextWidget() {
+		return fContainerManager.getStyledText();
+	}
+
+	public void setBounds(Rectangle bounds) {
+		updatePresentation();
+	}
+
+	public IFigure getMainFigure() {
+		return fContainerManager.getMainFigure();
+	}
+
+	public Pad<?> getPad() {
+		return fPad;
+	}
+
 }

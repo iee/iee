@@ -14,7 +14,7 @@ import java.util.Map;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.iee.core.utils.ArrayUtils;
-import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
@@ -47,7 +47,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.PaintUtilities;
 
-public class GraphPad extends Pad<GraphPart> implements Serializable {
+public class GraphPad extends CompositePad<GraphPart> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,7 +65,6 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 	private AxisChangeListener fRangeAxisListener;
 	
 	public GraphPad(GraphPart part, UIFormulaRenderer formulaRenderer) {
-		super(part);
 		this.formulaRenderer = formulaRenderer;
 		fIsAdvancedMode = false;
 	}
@@ -390,11 +389,6 @@ public class GraphPad extends Pad<GraphPart> implements Serializable {
 			results = new HashMap<Integer, double[][]>();
 		}
 		return results;
-	}
-	
-
-	@Override
-	public void onContainerAttached() {
 	}
 
 	@Override

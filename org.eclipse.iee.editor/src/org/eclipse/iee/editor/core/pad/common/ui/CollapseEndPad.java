@@ -3,6 +3,7 @@ package org.eclipse.iee.editor.core.pad.common.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.CollapseEndPart;
 import org.eclipse.swt.SWT;
@@ -13,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-public class CollapseEndPad extends Pad<CollapseEndPart> {
+public class CollapseEndPad extends CompositePad<CollapseEndPart> {
 
 	private PropertyChangeListener fListener;
 	private static Image image;
@@ -24,7 +25,6 @@ public class CollapseEndPad extends Pad<CollapseEndPart> {
 	
 	
 	public CollapseEndPad(CollapseEndPart imagePart) {
-		super(imagePart);
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -58,10 +58,6 @@ public class CollapseEndPad extends Pad<CollapseEndPart> {
 
 	@Override
 	public void unsave() {
-	}
-
-	@Override
-	public void onContainerAttached() {
 	}
 
 	@Override

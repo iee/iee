@@ -4,7 +4,8 @@ Bundle-Name: Formula UI
 Bundle-SymbolicName: org.eclipse.iee.pad.formula.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.eclipse.iee.core.document,
+Import-Package: org.eclipse.draw2d,
+ org.eclipse.iee.core.document,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.jdt.core,
  org.osgi.service.component.annotations;version="1.2.0",

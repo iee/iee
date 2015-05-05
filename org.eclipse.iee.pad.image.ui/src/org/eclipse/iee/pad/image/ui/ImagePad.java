@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.swt.SWT;
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 
-public class ImagePad extends Pad<ImagePart> {
+public class ImagePad extends CompositePad<ImagePart> {
 
 	private transient static final Logger logger = LoggerFactory
 			.getLogger(ImagePad.class);
@@ -51,7 +52,6 @@ public class ImagePad extends Pad<ImagePart> {
 	private PropertyChangeListener fListener;
 
 	public ImagePad(ImagePart imagePart) {
-		super(imagePart);
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -253,12 +253,7 @@ public class ImagePad extends Pad<ImagePart> {
 	@Override
 	public void unsave() {
 	}
-
-	@Override
-	public void onContainerAttached() {
-		// TODO Auto-generated method stub
-	}
-
+	
 	@Override
 	public void activate() {
 		// TODO Auto-generated method stub

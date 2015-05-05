@@ -12,8 +12,11 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 import org.eclipse.core.commands.common.EventManager;
-import org.eclipse.core.filebuffers.manipulation.ContainerCreator;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.XYLayout;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
@@ -21,10 +24,8 @@ import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.event.ContainerEvent;
 import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
-import org.eclipse.iee.editor.core.pad.IPadFactory;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.BadLocationException;
@@ -37,20 +38,35 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioningListener;
 import org.eclipse.jface.text.IDocumentPartitioningListenerExtension2;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 
-public class ContainerManager extends EventManager {
+public class ContainerManager extends EventManager implements IPostSelectionProvider {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ContainerManager.class);
@@ -90,6 +106,18 @@ public class ContainerManager extends EventManager {
 	private final Map<String, Pad<?>> fPads = new TreeMap<String, Pad<?>>();
 	
 	private IPadFactoryManager fPadFactoryManager;
+
+	private Listener fMouseListener;
+	
+	private List<ISelectionChangedListener> fSelectionChangedListeners;
+	
+	private List<ISelectionChangedListener> fPostSelectionChangedListeners;
+	
+	private Container fSelectedContainer;
+
+	private Container fActiveContainer;
+	
+	private IFigure fMainFigure;
 	
 	/* Getters */
 	
@@ -113,12 +141,6 @@ public class ContainerManager extends EventManager {
 			containerIDs[i++] = container.getContainerID();
 		}
 		return containerIDs;
-	}
-
-	public Collection<Container> getContainersInRange(int from, int to) {
-		/* XXX check sublist!!! */
-		return fContainers.subSet(Container.atOffset(from), true,
-				Container.atOffset(to), true);
 	}
 
 	public String getContainerManagerID() {
@@ -163,23 +185,90 @@ public class ContainerManager extends EventManager {
 
 	/* INTERFACE FUNCTIONS */
 
-	public ContainerManager(IPadFactoryManager padFactoryManager, IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer, StyledText styledText) {
+	public ContainerManager(IPadFactoryManager padFactoryManager, IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer) {
 		fContainerManagerID = UUID.randomUUID().toString();
 
 		fPadFactoryManager = padFactoryManager;
 		fParser = parser;
 		fWriter = writer;
-		fStyledText = styledText;
+		fStyledText = sourceViewer.getTextWidget();
 		fSourceViewer = sourceViewer;
 
+		LightweightSystem lightweightSystem = new LightweightSystem(fStyledText);
+		lightweightSystem.getRootFigure().setOpaque(false);
+		fMainFigure = new Figure();
+		fMainFigure.setLayoutManager(new XYLayout());
+		fMainFigure.setOpaque(false);
+		lightweightSystem.setContents(fMainFigure);
+		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
 		fStyledTextManager = new StyledTextManager(this);
 		fUserInteractionManager = new UserInteractionManager(this);
 		fDocumentAccess = new DocumentAccess(this);
 
+		initViewer(sourceViewer);
+		
 	}
 	
+	private void initViewer(ISourceViewer sourceViewer) {
+		fMouseListener = new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				if (event.type == SWT.MouseDown) {
+					if (!(event.widget instanceof Control))
+	                {
+	                    return;
+	                }
+
+	                boolean isOurChild = false;
+	                for (Control c = (Control) event.widget; c != null; c = c.getParent())
+	                {
+	                    if (c == fStyledText)
+	                    {
+	                        isOurChild = true;
+	                        break;
+	                    }
+	                }
+	                Control control = (Control) event.widget;
+	                Point displayPoint = control.toDisplay(event.x, event.y);
+	                Point styledTextPoint = fStyledText.toControl(displayPoint);
+					if (isOurChild) {
+						Container c = getContainerAtPoint(styledTextPoint);
+						if (c != null) {
+							int containerOffset = c.getPosition().getOffset();
+							c.getContainerManager().getUserInteractionManager().moveCaretTo(containerOffset);
+							select(c);
+							c.getContainerManager().activateContainer(c);
+						} else {
+							select(null);
+						}
+					}
+				}
+			}
+		};
+		fStyledText.getDisplay().addFilter(SWT.MouseDown, fMouseListener);
+		fStyledText.addDisposeListener(
+				new DisposeListener() {
+					public void widgetDisposed(DisposeEvent e) {
+						dispose();
+					}
+				}
+			);
+		sourceViewer.addTextInputListener(new ITextInputListener() {
+			
+			@Override
+			public void inputDocumentChanged(IDocument oldInput, IDocument newInput) {
+				setDocument(newInput);
+			}
+			
+			@Override
+			public void inputDocumentAboutToBeChanged(IDocument oldInput, IDocument newInput) {
+			}
+		});
+		
+	}
+
 	public void setDocument(IDocument document) {
 		fContainers.clear();
 		if (fDocument != null) {
@@ -200,6 +289,7 @@ public class ContainerManager extends EventManager {
 	}
 
 	public void dispose() {
+		fSourceViewer.getTextWidget().getDisplay().removeFilter(SWT.MouseDown, fMouseListener);
 		setDocument(null);
 	}
 
@@ -212,8 +302,7 @@ public class ContainerManager extends EventManager {
 		} catch (BadLocationException e) {
 			throw Throwables.propagate(e);
 		}
-		Container container = createContainer(new Position(offset, 4));
-		container.setPadPart(part);
+		Container container = createContainer(new Position(offset, 4), part);
 		ignoreDocumentChanges = true;
 	    try {
 	    	container = fDocumentAccess.createContent(container);
@@ -226,7 +315,7 @@ public class ContainerManager extends EventManager {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				getUserInteractionManager().activateContainer(ic);
+				activateContainer(ic);
 			}
 		});
 	    return container; 
@@ -255,21 +344,22 @@ public class ContainerManager extends EventManager {
 		document.removeDocumentListener(fDocumentListener);
 	}
 
-	protected Container createContainer(Position position) {
+	protected Container createContainer(Position position, PadDocumentPart part) {
 		try {
 			fDocument.addPosition(position);
 		} catch (BadLocationException e) {
 			throw Throwables.propagate(e);
 		}
-		return new Container(position, this);
+		Container container = new Container(position, this, part, createPad(part));
+		return container;
 	}
 
 	protected Container getContainerHavingOffset(int offset) {
-		if (offset < 0)
-			return null;
-		Container c = fContainers.floor(Container.atOffset(offset));
-		if (c != null && c.getPosition().includes(offset)) {
-			return c;
+		Preconditions.checkArgument(offset >= 0);
+		for (Container container : getContainers()) {
+			if (container.getPosition().includes(offset)) {
+				return container;
+			}
 		}
 		return null;
 	}
@@ -370,27 +460,19 @@ public class ContainerManager extends EventManager {
 			if (event.getLength() > 0) {
 				/* Remove all elements within changed area */
 
-				Container from = fContainers.ceiling(Container.atOffset(event
-						.getOffset()));
-				Container to = fContainers.lower(Container.atOffset(event
-						.getOffset() + event.getLength()));
+				int from = event.getOffset();
+				int to = from + event.getLength();
 
-				if (from != null && to != null
-						&& fContainerComparator.isNotDescending(from, to)) {
-					NavigableSet<Container> removeSet = fContainers.subSet(
-							from, true, to, true);
-					if (removeSet != null) {
-						Container container;
-						while ((container = removeSet.pollFirst()) != null) {
-
-							/* Removing container */
-
-							container.dispose();
-							String containerID = container.getContainerID();
-							clearPadSetsAndRuntime(containerID);
-							fPads.remove(containerID);
-							fireContainerRemoved(container);
-						}
+				for (Iterator<Container> iterator = fContainers.iterator(); iterator.hasNext();) {
+					Container container = iterator.next();
+					Position position = container.getPosition();
+					int cEnd = position.getOffset() + position.getLength();
+					if (position.getOffset() >= to && cEnd <= from) {
+						container.dispose();
+						String containerID = container.getContainerID();
+						clearPadSetsAndRuntime(containerID);
+						fPads.remove(containerID);
+						fireContainerRemoved(container);
 					}
 				}
 			}
@@ -399,14 +481,18 @@ public class ContainerManager extends EventManager {
 	
 	protected void containerCreated(Container c) {
 		String containerID = c.getContainerID();
+		PadDocumentPart padPart = c.getPadPart();
 		if (containerID == null || fPads.containsKey(containerID)) {
 			containerID = UUID.randomUUID().toString();
-			c.getPadPart().setId(containerID);
+			padPart.setId(containerID);
 		}
-		Pad<PadDocumentPart> pad = fPadFactoryManager.createPad(c.getPadPart());
-		pad.attachContainer(c);
-		fPads.put(containerID, pad);
+		fPads.put(containerID, c.getPad());
 		fireContainerCreated(c);
+	}
+
+	private Pad<PadDocumentPart> createPad(PadDocumentPart padPart) {
+		Pad<PadDocumentPart> pad = fPadFactoryManager.createPad(padPart);
+		return pad;
 	}
 
 	/* FUNCTIONS FOR OBSERVERS */
@@ -493,8 +579,7 @@ public class ContainerManager extends EventManager {
 
 	private Container parseContainer(Position position, String content) {
 		PadDocumentPart part = fParser.parsePadPart(content);
-		Container container = createContainer(position);
-		container.setPadPart(part);
+		Container container = createContainer(position, part);
 		return container;
 	}
 
@@ -533,27 +618,16 @@ public class ContainerManager extends EventManager {
 		/* Adding container */
 		String containerID = fDocumentAccess
 				.getContainerIDFromTextRegion(containerTextRegion);
-
-		if (containerID.matches("\\w*-\\w*-\\w*-\\w*-\\w*")) {
-			// old style
-			container = createContainer(
-					new Position(region.getOffset(),
-							region.getLength()));
-		} else {
-			// new style
 			container = parseContainer(
 					new Position(region.getOffset(),
 							region.getLength()), containerID);
-		}
-
-		/* XXX Visibility */
 		container.setVisible(false);
 		return container;
 	}
 
 	public Container getContainerAtPoint(int x, int y) {
 		for(Container container : getContainers()) {
-			if (container.getComposite().getBounds().contains(x, y)) {
+			if (container.getBounds().contains(x, y)) {
 				return container;
 			}
 		}
@@ -562,7 +636,7 @@ public class ContainerManager extends EventManager {
 
 	public Container getContainerAtPoint(Point styledTextPoint) {
 		for(Container container : getContainers()) {
-			if (container.getComposite().getBounds().contains(styledTextPoint)) {
+			if (container.getBounds().contains(styledTextPoint)) {
 				return container;
 			}
 		}
@@ -605,6 +679,155 @@ public class ContainerManager extends EventManager {
 			}
 		}
 		return result;
+	}
+	
+	public void select(Container c) {
+		selectContainer(c);
+		if (c != null) {
+			SelectionChangedEvent event = new SelectionChangedEvent(this, new StructuredSelection(c));
+			fireSelectionChanged(event);
+			firePostSelectionChanged(event);
+		}
+	}
+	
+	@Override
+	public void setSelection(ISelection selection) {
+		if (!(selection instanceof IStructuredSelection)) {
+			if (fSourceViewer instanceof ISelectionProvider) {
+				((ISelectionProvider) fSourceViewer).setSelection(selection);
+			}
+		}
+		Object selected = ((IStructuredSelection) selection).getFirstElement();
+		if (selected instanceof Container) {
+			select((Container) selected);
+		}
+	}
+	
+	@Override
+	public void addPostSelectionChangedListener(ISelectionChangedListener listener) {
+		if (fSourceViewer instanceof IPostSelectionProvider) {
+			((IPostSelectionProvider) fSourceViewer).addPostSelectionChangedListener(listener);
+		}
+		if (fPostSelectionChangedListeners == null) {
+			fPostSelectionChangedListeners = new ArrayList<>();
+		}
+		if (!fPostSelectionChangedListeners.contains(listener)) {
+			fPostSelectionChangedListeners.add(listener);
+		}
+	}
+	
+	@Override
+	public void removePostSelectionChangedListener(ISelectionChangedListener listener) {
+		if (fSourceViewer instanceof IPostSelectionProvider) {
+			((IPostSelectionProvider) fSourceViewer).removePostSelectionChangedListener(listener);
+		}
+		if (fPostSelectionChangedListeners != null)  {
+			fPostSelectionChangedListeners.remove(listener);
+			if (fPostSelectionChangedListeners.size() == 0) {
+				fPostSelectionChangedListeners=  null;
+			}
+		}
+	}
+
+	private void fireSelectionChanged(SelectionChangedEvent event) {
+		List<ISelectionChangedListener> listeners = fSelectionChangedListeners;
+		if (listeners != null) {
+			listeners = new ArrayList<>(listeners);
+			for (int i = 0; i < listeners.size(); i++) {
+				ISelectionChangedListener l= (ISelectionChangedListener) listeners.get(i);
+				l.selectionChanged(event);
+			}
+		}
+	}
+	
+	private void firePostSelectionChanged(SelectionChangedEvent event) {
+		List<ISelectionChangedListener> listeners = fPostSelectionChangedListeners;
+		if (listeners != null) {
+			listeners = new ArrayList<>(listeners);
+			for (int i = 0; i < listeners.size(); i++) {
+				ISelectionChangedListener l= (ISelectionChangedListener) listeners.get(i);
+				l.selectionChanged(event);
+			}
+		}
+	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		if (fSourceViewer instanceof ISelectionProvider) {
+			((ISelectionProvider) fSourceViewer).addSelectionChangedListener(listener);
+		}
+		if (fSelectionChangedListeners == null) {
+			fSelectionChangedListeners = new ArrayList<>();
+		}
+		if (!fSelectionChangedListeners.contains(listener)) {
+			fSelectionChangedListeners.add(listener);
+		}
+	}
+
+	@Override
+	public ISelection getSelection() {
+		if (fSourceViewer instanceof ISelectionProvider) {
+			return ((ISelectionProvider) fSourceViewer).getSelection();
+		}
+		return null;
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		if (fSourceViewer instanceof ISelectionProvider) {
+			((ISelectionProvider) fSourceViewer).removeSelectionChangedListener(listener);
+		}
+		if (fPostSelectionChangedListeners != null)  {
+			fPostSelectionChangedListeners.remove(listener);
+			if (fPostSelectionChangedListeners.size() == 0) {
+				fPostSelectionChangedListeners=  null;
+			}
+		}
+	}
+	
+	public void selectContainer(Container container) {
+		if (container != null && container.equals(fSelectedContainer)) {
+			return;
+		}
+		
+		if (fSelectedContainer != null) {
+			Pad<?> selected = getPadById(fSelectedContainer.getContainerID());
+			selected.setSelected(false);
+			fireContainerLostSelection(fSelectedContainer);
+		}
+		fSelectedContainer = container;
+		if (fSelectedContainer != null) {
+			Pad<?> selected = getPadById(container.getContainerID());
+			selected.setSelected(true);
+			fireContainerSelected(fSelectedContainer);
+		}
+	}
+
+	public void activateContainer(Container container) {
+		if (container != null && container.equals(fActiveContainer)) {
+			return;
+		}
+		if (fActiveContainer != null) {
+			Pad<?> pad = getPadById(fActiveContainer.getContainerID());
+			pad.deactivate();
+			fireContainerDeactivated(fActiveContainer);
+		}
+		fActiveContainer = container;
+		if (fActiveContainer != null) {
+			Pad<?> pad = getPadById(fActiveContainer.getContainerID());
+			pad.activate();
+			fireContainerActivated(fActiveContainer);
+		}
+		selectContainer(container);
+	}
+
+	public void deactivateContainer(Container container) {
+		activateContainer(null);
+		fSourceViewer.getTextWidget().forceFocus();
+	}
+
+	public IFigure getMainFigure() {
+		return fMainFigure;
 	}
 
 	

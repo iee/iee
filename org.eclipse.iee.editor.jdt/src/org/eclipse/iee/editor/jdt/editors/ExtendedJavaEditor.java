@@ -66,10 +66,11 @@ import com.google.common.io.Files;
 public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		IPadEditor, IAdaptable {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ExtendedJavaEditor.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExtendedJavaEditor.class);
 
 	private PropertySheetPage fPropertySheetPage;
+	
+	private ContainerManager fContainerManager;
 
 	public ExtendedJavaEditor() {
 		super();
@@ -102,7 +103,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			
 			@Override
 			public void focusGained(FocusEvent e) {
-				getContainerManager().getUserInteractionManager().activateContainer(null);
+				getContainerManager().activateContainer(null);
 			}
 		});
 	}
@@ -146,8 +147,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	protected ISourceViewer createJavaSourceViewer(Composite parent,
 			IVerticalRuler verticalRuler, IOverviewRuler overviewRuler,
 			boolean isOverviewRulerVisible, int styles, IPreferenceStore store) {
-		IEESourceViewer ieeSourceViewer = new IEESourceViewer(parent, verticalRuler, overviewRuler, isOverviewRulerVisible, styles,
-						store);
+		ISourceViewer viewer = super.createJavaSourceViewer(parent, verticalRuler, overviewRuler, isOverviewRulerVisible, styles, store);
+		fContainerManager = new ContainerManager(IeeEditorPlugin.getDefault().getPadFactoryManager(), IeeEditorPlugin.getDefault().getParser(), 
+				IeeEditorPlugin.getDefault().getWriter(), viewer);
 		
 		IEditorPart editor = this;
 		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
@@ -169,9 +171,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		}
 
 		logger.debug("storagePath = " + storagePath);
-		ieeSourceViewer.setStoragePath(storagePath);
+		fContainerManager.setStoragePath(storagePath);
 		
-		return ieeSourceViewer;
+		return viewer;
 	}
 
 	@Override
@@ -207,7 +209,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 	@Override
 	public ContainerManager getContainerManager() {
-		return ((IEESourceViewer) getViewer()).getContainerManager();
+		return fContainerManager;
 	}
 
 	private boolean paste() {

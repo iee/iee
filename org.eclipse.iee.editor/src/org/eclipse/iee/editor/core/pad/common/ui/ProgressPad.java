@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.ProgressDocumentPart;
 import org.eclipse.jface.text.Document;
@@ -15,7 +16,7 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class ProgressPad extends Pad<ProgressDocumentPart> implements Serializable {
+public class ProgressPad extends CompositePad<ProgressDocumentPart> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +25,6 @@ public class ProgressPad extends Pad<ProgressDocumentPart> implements Serializab
 	private ProgressComposite fComposite;
 	
 	public ProgressPad(ProgressDocumentPart part) {
-		super(part);
 	}
 
 	private Document fDocument;
@@ -66,7 +66,6 @@ public class ProgressPad extends Pad<ProgressDocumentPart> implements Serializab
 			@Override
 			public void focusLost(FocusEvent e) {
 				getContainer().getContainerManager()
-						.getUserInteractionManager()
 						.deactivateContainer(getContainer());
 			}
 
@@ -107,10 +106,6 @@ public class ProgressPad extends Pad<ProgressDocumentPart> implements Serializab
 		getDocumentPart().setStatus(var);
 		getDocumentPart().setProgress(fComposite.getSpinner());
 		getContainer().updateDocument();
-	}
-
-	@Override
-	public void onContainerAttached() {
 	}
 
 	@Override

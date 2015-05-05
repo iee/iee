@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
-import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.pad.text.TextPart;
 import org.eclipse.iee.pad.text.elements.Node;
 import org.eclipse.iee.pad.text.elements.NodeVisitor;
@@ -49,7 +49,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-public class TextPad extends Pad<TextPart> {
+public class TextPad extends CompositePad<TextPart> {
 
 	private TextViewer fViewer;
 	private Document fDocument;
@@ -83,7 +83,6 @@ public class TextPad extends Pad<TextPart> {
 	static final int BACKGROUND = 1 << 5;
 	
 	public TextPad(TextPart textPart) {
-		super(textPart);
 	}
 
 	public void toggleEditMode() {
@@ -348,10 +347,6 @@ public class TextPad extends Pad<TextPart> {
 
 	@Override
 	public void unsave() {
-	}
-
-	@Override
-	public void onContainerAttached() {
 	}
 
 	@Override

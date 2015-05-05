@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
+import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.fem3d.Fem3DPart;
 import org.eclipse.jface.text.Document;
@@ -15,7 +16,7 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
+public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +29,6 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 	private TextViewer fViewer;
 
 	public Fem3DPad(Fem3DPart part) {
-		super(part);
 		modelVariable = part.getModelVariable();
 	}
 
@@ -68,7 +68,6 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 			@Override
 			public void focusLost(FocusEvent e) {
 				getContainer().getContainerManager()
-						.getUserInteractionManager()
 						.deactivateContainer(getContainer());
 			}
 
@@ -109,10 +108,6 @@ public class Fem3DPad extends Pad<Fem3DPart> implements Serializable {
 		modelVariable = var;
 		getDocumentPart().setModelVariable(modelVariable);
 		getContainer().updateDocument();
-	}
-
-	@Override
-	public void onContainerAttached() {
 	}
 
 	@Override

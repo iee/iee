@@ -3,28 +3,25 @@ package org.eclipse.iee.editor.core.pad;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
 public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 
-	private Container fContainer;
+	protected Container fContainer;
 
-	private T fDocumentPart;
-	
-	private Color fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
+	private final RectangleFigure selectionFigure; 
 
-	public Pad(T documentPart) {
-		fDocumentPart = documentPart;
+	public Pad() {
+		selectionFigure = new RectangleFigure();
+		selectionFigure.setForegroundColor(IPadConfiguration.BORDER_COLOR_SELECTED);
+		selectionFigure.setLineWidth(1);
 	}
 
 	public String getContainerManagerID() {
@@ -43,11 +40,18 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 	}
 
 	public void setSelected(boolean isSelected) {
-		fBorderColor = (isSelected) ? IPadConfiguration.BORDER_COLOR_SELECTED
-				: IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
-		if (fContainer != null) {
-			fContainer.getComposite().setBackground(fBorderColor);
+		IFigure figure = fContainer.getMainFigure();
+		if (isSelected) {
+			Rectangle bounds = getBounds();
+			updateSelectionBounds(bounds);
+			figure.add(selectionFigure);
+		} else {
+			figure.remove(selectionFigure);
 		}
+	}
+
+	protected void updateSelectionBounds(Rectangle bounds) {
+		selectionFigure.setBounds(new org.eclipse.draw2d.geometry.Rectangle(bounds.x - 2, bounds.y - 2, bounds.width + 4, bounds.height + 4));
 	}
 
 	public void moveCaretToCurrentPad() {
@@ -61,49 +65,7 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 				.focusOnMainEditor();
 	}
 
-	public void attachContainer(Container container) {
-		Assert.isNotNull(container);
-		Assert.isLegal(!isContainerAttached(),
-				"Another container is already attached");
-
-		container.setPadPart(getDocumentPart());
-
-		fContainer = container;
-		final Composite parent = fContainer.getComposite();
-
-		/* Create Pad's border and content area */
-		FillLayout layout = new FillLayout();
-		layout.marginHeight = IPadConfiguration.BORDER_WIDTH;
-		layout.marginWidth = IPadConfiguration.BORDER_WIDTH;
-		parent.setLayout(layout);
-
-		parent.setBackground(fBorderColor);
-
-		final Composite content = new Composite(parent, SWT.NONE);
-		parent.pack();
-
-		content.addControlListener(new ControlListener() {
-			@Override
-			public void controlResized(ControlEvent e) {
-				Point size = content.getSize();
-				int width = size.x + 2 * IPadConfiguration.BORDER_WIDTH;
-				int height = size.y + 2 * IPadConfiguration.BORDER_WIDTH;
-				parent.setSize(width, height);
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
-			}
-		});
-
-		createPartControl(content);
-		fContainer.getComposite().pack();
-
-		addMouseListeners(parent);
-
-		onContainerAttached();
-
-	}
+	public abstract void attachContainer(Container container);
 
 	public void addMouseListeners(Composite control) {
 		MouseEventManager mouseManager = new MouseEventManager(control);
@@ -114,17 +76,8 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 
 	public void detachContainer() {
 		Assert.isLegal(isContainerAttached(), "No container attached");
-
-		fBorderColor = IPadConfiguration.BORDER_COLOR_NOT_SELECTED;
 		fContainer = null;
 	}
-
-	/* Abstract methods */
-
-	/**
-	 * Method is called when Container is attached to Pad
-	 */
-	public abstract void createPartControl(Composite parent);
 
 	public abstract void activate();
 
@@ -148,11 +101,6 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 	 */
 	public abstract void unsave();
 
-	/**
-	 * Called when container is attached
-	 */
-	public abstract void onContainerAttached();
-
 	public abstract String getType();
 
 	public abstract String getTex();
@@ -168,7 +116,7 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 	}
 	
 	public T getDocumentPart() {
-		return fDocumentPart;
+		return (T) fContainer.getPadPart();
 	}
 
 	public String getContainerID() {
@@ -177,4 +125,11 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 
 	public void dispose() {
 	}
+
+	public abstract Rectangle getBounds();
+
+	public abstract void setBounds(Rectangle newBounds);
+
+	public abstract void setVisible(boolean isVisible);
+	
 }

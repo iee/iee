@@ -1,6 +1,5 @@
 package org.eclipse.iee.editor.core.container;
 
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -18,23 +17,21 @@ import org.eclipse.swt.graphics.Point;
 public class UserInteractionManager {
 
 	private final ISourceViewer fSourceViewer;
+	
 	private final ContainerManager fContainerManager;
 
-	private Container fSelectedContainer;
-
-	private Container fActiveContainer;
 
 	public UserInteractionManager(ContainerManager containerManager) {
 		fContainerManager = containerManager;
 		fSourceViewer = containerManager.getSourceViewer();
 
-		fSelectedContainer = null;
-
+		fContainerManager.selectContainer(null);
+		
 		initListeners();
 	}
 
 	public void moveCaretTo(int offset) {
-		selectContainer(null);
+		fContainerManager.selectContainer(null);
 		ITextViewerExtension5 ext5 = getExt5();
 		fSourceViewer.getTextWidget().setCaretOffset(ext5.modelOffset2WidgetOffset(offset));
 	}
@@ -50,46 +47,7 @@ public class UserInteractionManager {
 	public void updateCaretSelection() {
 	}
 
-	public void selectContainer(Container container) {
-		if (container != null && container.equals(fSelectedContainer)) {
-			return;
-		}
-		
-		if (fSelectedContainer != null) {
-			Pad<?> selected = fContainerManager.getPadById(fSelectedContainer.getContainerID());
-			selected.setSelected(false);
-			fContainerManager.fireContainerLostSelection(fSelectedContainer);
-		}
-		fSelectedContainer = container;
-		if (fSelectedContainer != null) {
-			Pad<?> selected = fContainerManager.getPadById(container.getContainerID());
-			selected.setSelected(true);
-			fContainerManager.fireContainerSelected(fSelectedContainer);
-		}
-	}
 
-	public void activateContainer(Container container) {
-		if (container != null && container.equals(fActiveContainer)) {
-			return;
-		}
-		if (fActiveContainer != null) {
-			Pad<?> pad = fContainerManager.getPadById(fActiveContainer.getContainerID());
-			pad.deactivate();
-			fContainerManager.fireContainerDeactivated(fActiveContainer);
-		}
-		fActiveContainer = container;
-		if (fActiveContainer != null) {
-			Pad<?> pad = fContainerManager.getPadById(fActiveContainer.getContainerID());
-			pad.activate();
-			fContainerManager.fireContainerActivated(fActiveContainer);
-		}
-		selectContainer(container);
-	}
-
-	public void deactivateContainer(Container container) {
-		activateContainer(null);
-		fSourceViewer.getTextWidget().forceFocus();
-	}
 
 	protected void initListeners() {
 		/* 1) Disallow modification within Container's text region */
@@ -204,7 +162,7 @@ public class UserInteractionManager {
 							/* Move caret to the Pad's border */
 							fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
 									+ position.getLength()));
-							selectContainer(null);
+							fContainerManager.selectContainer(null);
 						}
 					}
 				}
@@ -221,11 +179,11 @@ public class UserInteractionManager {
 			if (container != null) {
 				Position position = container.getPosition();
 				if (caretMovesForward) {
-					activateContainer(container);
+					fContainerManager.activateContainer(container);
 					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
 							+ position.getLength()));
 				} else {
-					activateContainer(container);
+					fContainerManager.activateContainer(container);
 					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()));
 				}
 				return false;
