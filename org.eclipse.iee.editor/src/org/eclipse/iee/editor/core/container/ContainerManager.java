@@ -2,7 +2,6 @@ package org.eclipse.iee.editor.core.container;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,21 +10,26 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import org.antlr.v4.runtime.misc.Nullable;
 import org.eclipse.core.commands.common.EventManager;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
-import org.eclipse.iee.editor.core.container.event.ContainerEvent;
-import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
+import org.eclipse.iee.editor.core.pad.common.text.IContentTextPart;
+import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
+import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.text.BadLocationException;
@@ -55,7 +59,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -63,8 +71,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 
 public class ContainerManager extends EventManager implements IPostSelectionProvider {
 
@@ -113,13 +123,17 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private List<ISelectionChangedListener> fPostSelectionChangedListeners;
 	
-	private Container fSelectedContainer;
+	private ITextEditor<?> fSelectedEditor;
 
-	private Container fActiveContainer;
+	private ITextEditor<?> fActiveEditor;
 	
 	private IFigure fMainFigure;
+
+	private IFigure fFeedbackFigure;
 	
-	/* Getters */
+	private Map<IFigure, ITextEditor<?>> fFigureToEditor = Maps.newHashMap();
+	
+	private TextLocation fCursorPositon;
 	
 	public Pad<?> getPadById(String id) {
 		return fPads.get(id);
@@ -196,10 +210,20 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 		LightweightSystem lightweightSystem = new LightweightSystem(fStyledText);
 		lightweightSystem.getRootFigure().setOpaque(false);
+		Figure stack = new Figure();
+		stack.setLayoutManager(new StackLayout());
+		lightweightSystem.setContents(stack);
+		
 		fMainFigure = new Figure();
 		fMainFigure.setLayoutManager(new XYLayout());
 		fMainFigure.setOpaque(false);
-		lightweightSystem.setContents(fMainFigure);
+		stack.add(fMainFigure);
+		
+		fFeedbackFigure = new Figure();
+		fFeedbackFigure.setLayoutManager(new XYLayout());
+		fFeedbackFigure.setOpaque(false);
+		fFeedbackFigure.setEnabled(false);
+		stack.add(fFeedbackFigure);		
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
@@ -222,29 +246,49 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	                }
 
 	                boolean isOurChild = false;
-	                for (Control c = (Control) event.widget; c != null; c = c.getParent())
-	                {
-	                    if (c == fStyledText)
-	                    {
-	                        isOurChild = true;
-	                        break;
-	                    }
-	                }
 	                Control control = (Control) event.widget;
-	                Point displayPoint = control.toDisplay(event.x, event.y);
+	                while (control != null) {
+	                	if (control == fStyledText)
+	                	{
+	                		isOurChild = true;
+	                		break;
+	                	}
+	                	control = control.getParent();
+	                }
+	                
+	                Point displayPoint = ((Control) event.widget).toDisplay(event.x, event.y);
 	                Point styledTextPoint = fStyledText.toControl(displayPoint);
 					if (isOurChild) {
-						Container c = getContainerAtPoint(styledTextPoint);
-						if (c != null) {
-							int containerOffset = c.getPosition().getOffset();
-							c.getContainerManager().getUserInteractionManager().moveCaretTo(containerOffset);
-							select(c);
-							c.getContainerManager().activateContainer(c);
+						Optional<ITextEditor<?>> c = getEditorAt(styledTextPoint.x, styledTextPoint.y);
+						
+						c = getSelectableEditor(c);
+						
+						if (c.isPresent()) {
+							select(c.get());
+							activateEditor(c.get());
 						} else {
 							select(null);
+							activateEditor(null);
+						}
+						
+						Optional<ITextEditor<?>> editor = getEditorAt(styledTextPoint.x, styledTextPoint.y);
+						if (editor.isPresent()) {
+							TextLocation textLocation = editor.get().getTextLocation(styledTextPoint.x, styledTextPoint.y);
+							fCursorPositon = textLocation;
+							editor.get().acceptCaret(getCaret(), textLocation);
+						} else {
+							fCursorPositon = null;
 						}
 					}
 				}
+			}
+
+			private Optional<ITextEditor<?>> getSelectableEditor(
+					Optional<ITextEditor<?>> c) {
+				while (c.isPresent() && !c.get().isSelectable()) {
+					c = c.get().getParent();
+				}
+				return c;
 			}
 		};
 		fStyledText.getDisplay().addFilter(SWT.MouseDown, fMouseListener);
@@ -266,7 +310,27 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			public void inputDocumentAboutToBeChanged(IDocument oldInput, IDocument newInput) {
 			}
 		});
+		fStyledText.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				activateEditor(null);
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
 		
+	}
+	
+	public Caret getCaret() {
+		Canvas canvas = fStyledText;
+		Caret caret = canvas.getCaret();
+		if (caret == null) {
+			caret = new Caret(canvas, 0);
+		}
+		return caret;
 	}
 
 	public void setDocument(IDocument document) {
@@ -311,11 +375,11 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	    }
 	    fContainers.add(container);
 		containerCreated(container);
-		final Container ic = container;
+		final Pad<?> pad = container.getPad();
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				activateContainer(ic);
+				activateEditor(pad);
 			}
 		});
 	    return container; 
@@ -437,7 +501,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 				logger.debug("== End of document modification handling ==\n\n");
 
 				/* For debug */
-				fireDebugNotification();
 
 				// XXX
 				// padsPositionsCalculationSW.stop();
@@ -447,7 +510,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 		private void onChangesInsidePad(Container container, DocumentEvent event)
 				throws BadLocationException, BadPartitioningException {
-			fireContainerUpdated(container);
 		}
 
 		@Override
@@ -472,7 +534,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 						String containerID = container.getContainerID();
 						clearPadSetsAndRuntime(containerID);
 						fPads.remove(containerID);
-						fireContainerRemoved(container);
 					}
 				}
 			}
@@ -487,94 +548,11 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			padPart.setId(containerID);
 		}
 		fPads.put(containerID, c.getPad());
-		fireContainerCreated(c);
 	}
 
 	private Pad<PadDocumentPart> createPad(PadDocumentPart padPart) {
 		Pad<PadDocumentPart> pad = fPadFactoryManager.createPad(padPart);
 		return pad;
-	}
-
-	/* FUNCTIONS FOR OBSERVERS */
-
-	public void addContainerManagerListener(IContainerManagerListener listener) {
-		Assert.isNotNull(listener);
-		addListenerObject(listener);
-	}
-
-	public void removeContainerManagerListener(
-			IContainerManagerListener listener) {
-		Assert.isNotNull(listener);
-		removeListenerObject(listener);
-	}
-
-	protected void fireContainerCreated(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerCreated(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
-
-	protected void fireContainerUpdated(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerUpdated(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
-
-	protected void fireContainerRemoved(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerRemoved(new ContainerEvent(c, fContainerManagerID));
-		}
-	}
-
-	public void fireContainerSelected(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerSelected(new ContainerEvent(c,
-							fContainerManagerID));
-		}
-	}
-
-	protected void fireContainerLostSelection(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerLostSelection(new ContainerEvent(c,
-							fContainerManagerID));
-		}
-	}
-
-	protected void fireContainerActivated(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerActivated(new ContainerEvent(c,
-							fContainerManagerID));
-		}
-	}
-
-	public void fireContainerDeactivated(Container c) {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.containerDeactivated(new ContainerEvent(c,
-							fContainerManagerID));
-		}
-	}
-
-	protected void fireDebugNotification() {
-		Object[] listeners = getListeners();
-		for (int i = 0; i < listeners.length; i++) {
-			((IContainerManagerListener) listeners[i])
-					.debugNotification(new ContainerEvent(null,
-							fContainerManagerID));
-		}
 	}
 
 	private Container parseContainer(Position position, String content) {
@@ -625,7 +603,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return container;
 	}
 
-	public Container getContainerAtPoint(int x, int y) {
+	private Container getContainerAtPoint(int x, int y) {
 		for(Container container : getContainers()) {
 			if (container.getBounds().contains(x, y)) {
 				return container;
@@ -634,7 +612,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return null;
 	}
 
-	public Container getContainerAtPoint(Point styledTextPoint) {
+	private Container getContainerAtPoint(Point styledTextPoint) {
 		for(Container container : getContainers()) {
 			if (container.getBounds().contains(styledTextPoint)) {
 				return container;
@@ -681,10 +659,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return result;
 	}
 	
-	public void select(Container c) {
-		selectContainer(c);
+	public void select(@Nullable ITextEditor<?> c) {
+		selectEditor(c);
 		if (c != null) {
-			SelectionChangedEvent event = new SelectionChangedEvent(this, new StructuredSelection(c));
+			SelectionChangedEvent event = new SelectionChangedEvent(this, new StructuredSelection(c.getModel()));
 			fireSelectionChanged(event);
 			firePostSelectionChanged(event);
 		}
@@ -698,8 +676,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			}
 		}
 		Object selected = ((IStructuredSelection) selection).getFirstElement();
-		if (selected instanceof Container) {
-			select((Container) selected);
+		if (selected instanceof ITextEditor) {
+			select((ITextEditor<?>) selected);
 		}
 	}
 	
@@ -785,49 +763,163 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		}
 	}
 	
-	public void selectContainer(Container container) {
-		if (container != null && container.equals(fSelectedContainer)) {
+	public void selectEditor(ITextEditor<?> editor) {
+		if (editor != null && editor.equals(fSelectedEditor)) {
 			return;
 		}
 		
-		if (fSelectedContainer != null) {
-			Pad<?> selected = getPadById(fSelectedContainer.getContainerID());
-			selected.setSelected(false);
-			fireContainerLostSelection(fSelectedContainer);
+		if (fSelectedEditor != null) {
+			fSelectedEditor.setSelected(false);
 		}
-		fSelectedContainer = container;
-		if (fSelectedContainer != null) {
-			Pad<?> selected = getPadById(container.getContainerID());
-			selected.setSelected(true);
-			fireContainerSelected(fSelectedContainer);
+		fSelectedEditor = editor;
+		if (fSelectedEditor != null) {
+			fSelectedEditor.setSelected(true);
 		}
 	}
 
-	public void activateContainer(Container container) {
-		if (container != null && container.equals(fActiveContainer)) {
+	public void activateEditor(@Nullable ITextEditor<?> editor) {
+		if (editor != null && editor.equals(fActiveEditor)) {
 			return;
 		}
-		if (fActiveContainer != null) {
-			Pad<?> pad = getPadById(fActiveContainer.getContainerID());
-			pad.deactivate();
-			fireContainerDeactivated(fActiveContainer);
+		if (fActiveEditor != null) {
+			fActiveEditor.setActive(false);
 		}
-		fActiveContainer = container;
-		if (fActiveContainer != null) {
-			Pad<?> pad = getPadById(fActiveContainer.getContainerID());
-			pad.activate();
-			fireContainerActivated(fActiveContainer);
+		fActiveEditor = editor;
+		if (fActiveEditor != null) {
+			fActiveEditor.setActive(true);
 		}
-		selectContainer(container);
+		selectEditor(editor);
 	}
 
-	public void deactivateContainer(Container container) {
-		activateContainer(null);
+	public void deactivateEditor(ITextEditor<?> container) {
+		activateEditor(null);
 		fSourceViewer.getTextWidget().forceFocus();
 	}
 
 	public IFigure getMainFigure() {
 		return fMainFigure;
+	}
+
+	public IFigure getFeedbackFigure() {
+		return fFeedbackFigure;
+	}
+
+	public void registerVisual(ITextEditor<?> textPartEditor, IFigure figure) {
+		fFigureToEditor.put(figure, textPartEditor);
+	}
+
+	public TextLocation getCursonPosition() {
+		return fCursorPositon;
+	}
+
+	public boolean isMirrored() {
+		//TODO rtl?
+		return false;
+	}
+
+	public void setCursorPosition(TextLocation textLocation) {
+		fCursorPositon = textLocation;
+		IContentTextPart textPart = textLocation.getTextPart();
+		int position = textLocation.getPosition();
+		textPart.updateCaret(getCaret(), position, position == textPart.getLength());
+	}
+
+	public Optional<ITextEditor<?>> getEditorAt(int x, int y) {
+		IFigure findFigureAt = fMainFigure.findFigureAt(x, y);
+		ITextEditor<?> editor = null;
+		while (findFigureAt != null) {
+			editor = fFigureToEditor.get(findFigureAt);
+			if (editor != null) {
+				break;
+			}
+			findFigureAt = findFigureAt.getParent();
+		}
+		if (editor == null) {
+			Container containerAtPoint = getContainerAtPoint(x, y);
+			if (containerAtPoint != null) {
+				editor = containerAtPoint.getPad();
+			}
+		}
+		
+		return Optional.<ITextEditor<?>> fromNullable(editor);
+	}
+
+	public ICompositeTextPart getRootTextPart() {
+		return new ICompositeTextPart() {
+			
+			@Override
+			public TextLocation getStart() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Optional<ICompositeTextPart> getParentTextPart() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public TextLocation getEnd() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Optional<ITextPart> getPrevious(ITextPart textPart) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Optional<ITextPart> getNext(ITextPart textPart) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+	}
+
+	public void addTextPart(ITextPart tablePad) {
+		
+		
+	}
+
+	public Optional<ITextEditor<?>> getRootTextEditor() {
+		return Optional.<ITextEditor<?>>of (new AbstractTextEditor<DocumentPart>(null) {
+
+			@Override
+			public TextLocation getTextLocation(int x, int y) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void acceptCaret(Caret caret, TextLocation textLocation) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean isSelectable() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void setSelected(boolean b) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void setActive(boolean b) {
+				// TODO Auto-generated method stub
+				
+			}});
+	}
+
+	public void deactivate() {
+		activateEditor(null);
 	}
 
 	

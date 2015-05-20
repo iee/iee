@@ -15,7 +15,6 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.GlyphMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +87,7 @@ public class StyledTextManager {
 			boolean isVisible = widgetLine != -1 && widgetLine >= topLineIndex && widgetLine <= bottomLineIndex;
 			c.setVisible(isVisible);
 			if (isVisible) {
-				c.updatePresentation();
+				c.updatePosition();
 			}
 		}
 	}
@@ -106,7 +105,7 @@ public class StyledTextManager {
 			int regionEnd = region.getOffset() + region.getLength();
 			int pEnd = position.getOffset() + position.getLength();
 			if (pEnd >= region.getOffset() && regionEnd > position.getOffset()) {
-				styleRanges.addAll(getContainerStyles(c));
+				styleRanges.addAll(c.getContainerStyles());
 			}
 		}
 
@@ -116,35 +115,6 @@ public class StyledTextManager {
 		return rangeArray;
 	}
 
-	protected List<StyleRange> getContainerStyles(Container c) {
-		List<StyleRange> styles = new ArrayList<StyleRange>();
 
-		Position p = c.getPosition();
-
-		int descent = // TODO: Quickly fix it!!!
-		(c.getBounds().height < 10) ? 0
-				: c.getBounds().height - 10;
-
-		/* First symbol is shaped by container's geometry */
-		StyleRange firstSymbol = new StyleRange();
-		firstSymbol.start = p.getOffset();
-		firstSymbol.length = 1;
-		firstSymbol.metrics = new GlyphMetrics(0, descent, c.getBounds().width + PAD_LEFT_MARGIN);
-
-		/* Setting data */
-		firstSymbol.data = c;
-
-		styles.add(firstSymbol);
-
-		/* Other symbols in container's text region becomes invisible */
-		StyleRange hiddenText = new StyleRange();
-		hiddenText.start = p.getOffset() + 1;
-		hiddenText.length = p.getLength() - 1;
-		hiddenText.metrics = new GlyphMetrics(0, 0, 0);
-
-		styles.add(hiddenText);
-
-		return styles;
-	}
 
 }

@@ -5,14 +5,11 @@ import java.util.Map;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.CompositePad;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.ProgressDocumentPart;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -25,6 +22,7 @@ public class ProgressPad extends CompositePad<ProgressDocumentPart> implements S
 	private ProgressComposite fComposite;
 	
 	public ProgressPad(ProgressDocumentPart part) {
+		super(part);
 	}
 
 	private Document fDocument;
@@ -60,19 +58,6 @@ public class ProgressPad extends CompositePad<ProgressDocumentPart> implements S
 	}
 
 	public void setListeners() {
-
-		fViewer.getControl().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				getContainer().getContainerManager()
-						.deactivateContainer(getContainer());
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-		});
 
 	}
 	

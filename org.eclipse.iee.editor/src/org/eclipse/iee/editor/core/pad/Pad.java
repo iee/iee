@@ -8,20 +8,26 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
+import org.eclipse.iee.editor.core.container.ITextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
-public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
+public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<T> implements IDisposable, ITextEditor<T> {
 
 	protected Container fContainer;
 
 	private final RectangleFigure selectionFigure; 
 
-	public Pad() {
+	public Pad(T model) {
+		super(model);
 		selectionFigure = new RectangleFigure();
 		selectionFigure.setForegroundColor(IPadConfiguration.BORDER_COLOR_SELECTED);
 		selectionFigure.setLineWidth(1);
+		selectionFigure.setFill(false);
 	}
 
 	public String getContainerManagerID() {
@@ -40,13 +46,13 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 	}
 
 	public void setSelected(boolean isSelected) {
-		IFigure figure = fContainer.getMainFigure();
+		IFigure figure = fContainer.getFeedbackFigure();
 		if (isSelected) {
 			Rectangle bounds = getBounds();
 			updateSelectionBounds(bounds);
 			figure.add(selectionFigure);
-		} else {
-			figure.remove(selectionFigure);
+		} else if (selectionFigure.getParent() != null) {
+			selectionFigure.getParent().remove(selectionFigure);
 		}
 	}
 
@@ -131,5 +137,33 @@ public abstract class Pad<T extends PadDocumentPart> implements IDisposable {
 	public abstract void setBounds(Rectangle newBounds);
 
 	public abstract void setVisible(boolean isVisible);
+	
+	@Override
+	public void acceptCaret(Caret caret, TextLocation textLocation) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public TextLocation getTextLocation(int x, int y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void setActive(boolean b) {
+		if (b) {
+			activate();
+		} else {
+			deactivate();
+		}
+		
+	}
+	
+	@Override
+	public boolean isSelectable() {
+		return true;
+	}
+	
 	
 }

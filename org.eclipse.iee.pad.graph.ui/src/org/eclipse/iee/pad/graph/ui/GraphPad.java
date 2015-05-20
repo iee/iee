@@ -15,6 +15,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.iee.core.utils.ArrayUtils;
 import org.eclipse.iee.editor.core.pad.CompositePad;
+import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
@@ -65,6 +66,7 @@ public class GraphPad extends CompositePad<GraphPart> implements Serializable {
 	private AxisChangeListener fRangeAxisListener;
 	
 	public GraphPad(GraphPart part, UIFormulaRenderer formulaRenderer) {
+		super(part);
 		this.formulaRenderer = formulaRenderer;
 		fIsAdvancedMode = false;
 	}
@@ -133,7 +135,7 @@ public class GraphPad extends CompositePad<GraphPart> implements Serializable {
 					 while (findMouseEventTargetAt != null) {
 						 if (findMouseEventTargetAt instanceof IMenuContributor) {
 							 IMenuContributor contributor = (IMenuContributor) findMouseEventTargetAt;
-							 contributor.contribute(menuManager);
+							 contributor.contribute(menuManager, null);
 						 }
 						 findMouseEventTargetAt = findMouseEventTargetAt.getParent();
 					 }

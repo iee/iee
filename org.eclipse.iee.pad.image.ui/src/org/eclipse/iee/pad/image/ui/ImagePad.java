@@ -52,6 +52,7 @@ public class ImagePad extends CompositePad<ImagePart> {
 	private PropertyChangeListener fListener;
 
 	public ImagePad(ImagePart imagePart) {
+		super(imagePart);
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

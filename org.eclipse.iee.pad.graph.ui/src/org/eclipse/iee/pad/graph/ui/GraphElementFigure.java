@@ -6,6 +6,8 @@ import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
+import org.eclipse.iee.editor.core.pad.common.ui.TextFigure;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -125,7 +127,7 @@ public class GraphElementFigure extends Figure implements IMenuContributor {
 	}
 
 	@Override
-	public void contribute(MenuManager menuManager) {
+	public void contribute(MenuManager menuManager, Object object) {
 		menuManager.add(new ActionContributionItem(new Action("Add function") {
 			@Override
 			public void runWithEvent(Event event) {

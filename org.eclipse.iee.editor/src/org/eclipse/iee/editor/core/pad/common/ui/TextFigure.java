@@ -1,4 +1,4 @@
-package org.eclipse.iee.pad.graph.ui;
+package org.eclipse.iee.editor.core.pad.common.ui;
 
 import java.util.Hashtable;
 
@@ -15,6 +15,10 @@ import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
+import org.eclipse.iee.editor.core.pad.common.text.IContentTextPart;
+import org.eclipse.iee.editor.core.pad.common.text.OffsetTextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
@@ -24,11 +28,11 @@ import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Display;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 
-public class TextFigure extends FlowPage {
+public class TextFigure extends FlowPage implements IContentTextPart {
 
-	private FlowPage fFormulaText;
 	private Document fFormula;
 	private TextFlow fTextFlow;
 	private Caret fCaret;
@@ -39,12 +43,7 @@ public class TextFigure extends FlowPage {
 
 		@Override
 		public TextLocation getStart() {
-			return new TextLocation() {
-				@Override
-				public int getPosition() {
-					return fCaretOffset;
-				}
-			};
+			return new OffsetTextLocation(TextFigure.this, fCaretOffset);
 		}
 		
 	};
@@ -268,64 +267,39 @@ public class TextFigure extends FlowPage {
 
 	private void doColumnNext() {
 		TextLocation position = getCursonPosition();
-		TextLocation next = getNext(position);
-		if (next != null) {
-			showCursorAt(next);
+		Optional<TextLocation> next = position.getNext();
+		if (next.isPresent()) {
+			showCursorAt(next.get());
 		}
 	}
 	
 	private void doColumnPrevious() {
 		TextLocation position = getCursonPosition();
-		TextLocation previous = getPrevious(position);
-		if (previous != null) {
-			showCursorAt(previous);
+		Optional<TextLocation> previous = position.getPrevious();
+		if (previous.isPresent()) {
+			showCursorAt(previous.get());
 		}
 	}
 	
 	private TextLocation getCursonPosition() {
-		return new TextLocation() {
-			
-			@Override
-			public int getPosition() {
-				return fCaretOffset;
-			}
-		};
+		return new OffsetTextLocation(this, fCaretOffset);
 	}
-
-
+	
 	private void doDeletePrevious() {
 		TextLocation start = fSelectionModel.getStart();
-		TextLocation previous = getPrevious(start);
-		if (previous != null) {
-			replace(previous, start, "");
-			showCursorAt(previous);
+		Optional<TextLocation> previous = start.getPrevious();
+		if (previous.isPresent()) {
+			replace(previous.get(), start, "");
+			showCursorAt(previous.get());
 		}
 	}
 	
 	private void doDeleteNext() {
 		TextLocation start = fSelectionModel.getStart();
-		TextLocation next = getNext(start);
-		if (next != null) {
-			replace(start, next, "");
+		Optional<TextLocation> next = start.getNext();
+		if (next.isPresent()) {
+			replace(start, next.get(), "");
 		}
-	}
-	
-	private TextLocation getPrevious(final TextLocation textLocation) {
-		return textLocation.getPosition() > 0 ? new TextLocation() {
-			@Override
-			public int getPosition() {
-				return textLocation.getPosition() - 1;
-			}
-		} : null;
-	}
-	
-	private TextLocation getNext(final TextLocation textLocation) {
-		return textLocation.getPosition() < fFormula.getLength() ? new TextLocation() {
-			@Override
-			public int getPosition() {
-				return textLocation.getPosition() + 1;
-			}
-		} : null;
 	}
 	
 	private void showCursorAt(TextLocation textLocation) {
@@ -367,6 +341,42 @@ public class TextFigure extends FlowPage {
 				caret.setSize(1, caretPlacement.getHeight());
 				caret.setLocation(caretPlacement.getX(), caretPlacement.getY());					}
 		});
+	}
+
+
+	@Override
+	public int getLength() {
+		return fFormula.getLength();
+	}
+
+
+	@Override
+	public TextLocation getStart() {
+		return new OffsetTextLocation(this, 0);
+	}
+
+
+	@Override
+	public TextLocation getEnd() {
+		return new OffsetTextLocation(this, getLength() - 1);
+	}
+
+
+	@Override
+	public Optional<ICompositeTextPart> getParentTextPart() {
+		return Optional.absent() ;
+	}
+
+
+	@Override
+	public void updateCaret(Caret caret, int position, boolean flag) {
+		
+	}
+
+
+	@Override
+	public void replace(int start, int end, String text) {
+		
 	}
 	
 }

@@ -149,12 +149,15 @@ public class GraphElementComposite extends Composite {
 						fHoverShell.dispose();
 						fHoverShell = null;
 					}
+					Image image = createImage();
+					fHoverShell = new HoverShell(GraphElementComposite.this, image);
 					// hack to paint hover image after widgets size
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
-							Image image = createImage();
-							fHoverShell = new HoverShell(GraphElementComposite.this, image);
+							if (fHoverShell != null) {
+								fHoverShell.show();
+							}
 						}
 					});
 					/* Resize fInputText */

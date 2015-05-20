@@ -27,6 +27,7 @@ public class LoadingPad extends CompositePad<PadDocumentPart> {
 	}
 
 	public LoadingPad(PadDocumentPart part) {
+		super(part);
 	}
 
 	@Override

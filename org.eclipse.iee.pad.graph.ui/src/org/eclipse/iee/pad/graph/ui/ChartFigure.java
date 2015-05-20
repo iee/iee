@@ -20,6 +20,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.MenuManager;
@@ -1135,7 +1136,7 @@ public class ChartFigure extends Figure implements ChartChangeListener,
     }
 
     @Override
-    public void contribute(MenuManager menuManager) {
+    public void contribute(MenuManager menuManager, Object object) {
         boolean separator = false;
 
         if (properties) {

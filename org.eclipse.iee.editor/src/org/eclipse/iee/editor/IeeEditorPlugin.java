@@ -1,9 +1,15 @@
 package org.eclipse.iee.editor;
 
+import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
+import org.eclipse.iee.editor.core.pad.table.TableCell;
+import org.eclipse.iee.editor.core.pad.table.ui.CellPropertiesAdapterFactory;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
+import org.eclipse.iee.editor.properties.PropertiesAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -23,6 +29,8 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	// Single instance of PadManager
 	private static IPadStorage fPadStorage;
 	
+	private IAdapterFactory fPropertiesAdapterFactory = new PropertiesAdapterFactory();
+	private IAdapterFactory fCellPropertiesAdapterFactory = new CellPropertiesAdapterFactory();
 	/**
 	 * The constructor
 	 */
@@ -59,6 +67,8 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		Platform.getAdapterManager().registerAdapters(fPropertiesAdapterFactory, DocumentPart.class);
+		Platform.getAdapterManager().registerAdapters(fCellPropertiesAdapterFactory, TableCell.class);
 	}
 
 	/*
@@ -67,6 +77,8 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		Platform.getAdapterManager().unregisterAdapters(fPropertiesAdapterFactory);
+		Platform.getAdapterManager().unregisterAdapters(fCellPropertiesAdapterFactory);
 		plugin = null;
 		super.stop(context);
 	}

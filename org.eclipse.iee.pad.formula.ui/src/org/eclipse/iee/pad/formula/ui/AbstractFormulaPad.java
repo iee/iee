@@ -120,6 +120,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 	}
 
 	public AbstractFormulaPad(T part, UIFormulaRenderer formulaRenderer) {
+		super(part);
 		this.formulaRenderer = formulaRenderer;
 	}
 
@@ -248,20 +249,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 		FileMessager.getInstance().addFileMessageListener(fFileMessageListener,
 				getContainer().getContainerManager().getStoragePath());
 
-		fViewer.getControl().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				getContainer().getContainerManager()
-						.deactivateContainer(getContainer());
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				logger.debug("focusGained");
-			}
-		});
-
 		addTextListener();
 
 		fViewer.getControl().addKeyListener(new KeyAdapter() {
@@ -374,20 +361,23 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 						fHoverShell.dispose();
 						fHoverShell = null;
 					}
+					fTexExpression = fDocument.get();
+					Image image = createImage(fTexExpression);
+					if (image == null) {
+						fTexExpression = fLastValidText;
+						image = createImage(fTexExpression);
+					}
+					if (fHoverShell != null) {
+						fHoverShell.dispose();
+					}
+					fHoverShell = new HoverShell(fParent, image);
 					// hack to paint hover image after widgets size
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
-							fTexExpression = fDocument.get();
-							Image image = createImage(fTexExpression);
-							if (image == null) {
-								fTexExpression = fLastValidText;
-								image = createImage(fTexExpression);
-							}
 							if (fHoverShell != null) {
-								fHoverShell.dispose();
+								fHoverShell.show();
 							}
-							fHoverShell = new HoverShell(fParent, image);
 						}
 					});
 					/* Resize fInputText */

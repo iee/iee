@@ -5,6 +5,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
+import org.eclipse.iee.editor.core.pad.common.ui.TextFigure;
 import org.eclipse.swt.widgets.Caret;
 
 public class VariablesFigure extends Figure {

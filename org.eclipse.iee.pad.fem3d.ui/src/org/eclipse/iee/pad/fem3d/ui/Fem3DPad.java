@@ -29,6 +29,7 @@ public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
 	private TextViewer fViewer;
 
 	public Fem3DPad(Fem3DPart part) {
+		super(part);
 		modelVariable = part.getModelVariable();
 	}
 
@@ -62,19 +63,6 @@ public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
 	}
 
 	public void setListeners() {
-
-		fViewer.getControl().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				getContainer().getContainerManager()
-						.deactivateContainer(getContainer());
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-		});
 
 	}
 	

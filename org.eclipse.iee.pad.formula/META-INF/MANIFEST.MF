@@ -6,13 +6,20 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: com.google.gson;version="2.2.4",
+ org.antlr.v4.runtime,
+ org.antlr.v4.runtime.misc,
+ org.antlr.v4.runtime.tree,
  org.eclipse.core.expressions,
+ org.eclipse.draw2d,
+ org.eclipse.draw2d.geometry,
  org.eclipse.iee.core.document,
  org.eclipse.iee.core.document.parser,
  org.eclipse.iee.core.document.source,
  org.eclipse.iee.core.document.writer,
  org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.widgets,
  org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j;version="1.7.0"
 Bundle-ClassPath: .,

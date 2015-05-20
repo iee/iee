@@ -37,12 +37,11 @@ import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.ImageTransfer;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -51,6 +50,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -71,17 +72,39 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	private PropertySheetPage fPropertySheetPage;
 	
 	private ContainerManager fContainerManager;
+	
+	private IPartListener fPartListener = new IPartListener() {
+        public void partActivated(IWorkbenchPart part) {
+        }
 
+        public void partBroughtToTop(IWorkbenchPart part) {
+        }
+
+        public void partClosed(IWorkbenchPart part) {
+        }
+
+        public void partDeactivated(IWorkbenchPart part) {
+        	if (part == ExtendedJavaEditor.this) {
+        		fContainerManager.deactivate();
+        	}
+        }
+
+        public void partOpened(IWorkbenchPart part) {
+        }
+    };
+	
 	public ExtendedJavaEditor() {
 		super();
 	}
-
+	
 	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
 		logger.debug("Create ExtendedJavaEditor");
 
+		getSite().getPage().addPartListener(fPartListener);
+		
 		initIeeEditorCore();
 
 		doSave(null);
@@ -95,23 +118,18 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		ICompilationUnit compilationUnit = JavaCore
 				.createCompilationUnitFrom(file);
 		getContainerManager().setCompilationUnit(compilationUnit);
-		getSourceViewer().getTextWidget().addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				getContainerManager().activateContainer(null);
-			}
-		});
 	}
 
 	@Override
 	public void dispose() {
 		logger.debug("dispose() called");
+		getSite().getPage().removePartListener(fPartListener);
 		super.dispose();
+	}
+	
+	@Override
+	public ISelectionProvider getSelectionProvider() {
+		return fContainerManager;
 	}
 
 	@Override

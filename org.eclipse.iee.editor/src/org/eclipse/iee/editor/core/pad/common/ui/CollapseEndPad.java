@@ -25,6 +25,7 @@ public class CollapseEndPad extends CompositePad<CollapseEndPart> {
 	
 	
 	public CollapseEndPad(CollapseEndPart imagePart) {
+		super(imagePart);
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

@@ -13,7 +13,7 @@
       </editor>
    </extension>
    
-    <extension point="org.eclipse.ui.commands">
+   <extension point="org.eclipse.ui.commands">
       <command id="org.eclipse.iee.pad.collapaseBegin.addCommand" name="Add collapse begin"/>
    </extension>
    <extension point="org.eclipse.ui.commands">
@@ -21,6 +21,9 @@
    </extension>
    <extension point="org.eclipse.ui.commands">
       <command id="org.eclipse.iee.pad.progress.addCommand" name="Add progress"/>
+   </extension>
+      <extension point="org.eclipse.ui.commands">
+      <command id="org.eclipse.iee.pad.table.addCommand" name="Add table"/>
    </extension>
    <extension point="org.eclipse.ui.handlers">
       <handler
@@ -38,6 +41,12 @@
       <handler
             class="org.eclipse.iee.editor.core.pad.common.ui.handler.AddProgressHandler"
             commandId="org.eclipse.iee.pad.progress.addCommand">
+      </handler>
+   </extension>
+      <extension point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.iee.editor.core.pad.table.ui.handler.AddTableHandler"
+            commandId="org.eclipse.iee.pad.table.addCommand">
       </handler>
    </extension>
    <extension
@@ -59,6 +68,13 @@
       <image
             commandId="org.eclipse.iee.pad.progress.addCommand"
             icon="icons/progress.png">
+      </image>
+   </extension>
+      <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.iee.pad.table.addCommand"
+            icon="icons/table.png">
       </image>
    </extension>
    <extension
@@ -96,6 +112,20 @@
             locationURI="toolbar:org.eclipse.iee.editor.addToolbar">
          <command
                commandId="org.eclipse.iee.pad.progress.addCommand"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.iee.editor.addToolbar">
+         <command
+               commandId="org.eclipse.iee.pad.table.addCommand"
                style="push">
             <visibleWhen
                   checkEnabled="true">

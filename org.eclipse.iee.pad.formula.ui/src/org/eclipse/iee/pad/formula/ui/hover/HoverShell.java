@@ -11,13 +11,13 @@ import org.eclipse.swt.widgets.Shell;
 public class HoverShell {
 	public Shell fShell;
 	public Label fLabel;
+	private Composite fParent;
 
 	public HoverShell(Composite parent, Image image) {
 		
+		fParent = parent;
 		fShell = new Shell(SWT.TOOL | SWT.NO_FOCUS | SWT.ON_TOP);
 		fShell.setVisible(false);
-		Point pt = parent.toDisplay(10, 30);
-		fShell.setLocation(pt.x, pt.y);
 		
 		fShell.setSize(0, 0);
 		fShell.setLayout(new FillLayout());
@@ -38,11 +38,17 @@ public class HoverShell {
 
 	public void pack() {
 		fShell.pack();
-		fShell.setVisible(true);
 	}
 	
 	public void setVisible(boolean visibility) {
 		fShell.setVisible(visibility);
+	}
+
+	public void show() {
+		Point pt = fParent.toDisplay(10, 30);
+		fShell.setLocation(pt.x, pt.y);
+		pack();
+		setVisible(true);
 	}
 
 }

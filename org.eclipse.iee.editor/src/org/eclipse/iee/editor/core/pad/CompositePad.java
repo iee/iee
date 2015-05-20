@@ -11,6 +11,10 @@ import org.eclipse.swt.widgets.Composite;
 
 public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	
+	public CompositePad(T model) {
+		super(model);
+	}
+
 	private Composite fContent;
 	
 	@Override
@@ -26,14 +30,13 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 		fContent.addControlListener(new ControlListener() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				Rectangle bounds = fContent.getBounds();
-				fContainer.setBounds(bounds);
+				fContainer.updatePresentation();
+				Rectangle bounds = fContainer.getBounds();
 				updateSelectionBounds(bounds);
 			}
 
 			@Override
 			public void controlMoved(ControlEvent e) {
-				updateSelectionBounds(fContent.getBounds());
 			}
 		});
 
@@ -53,6 +56,7 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	@Override
 	public void setBounds(Rectangle newBounds) {
 		fContent.setBounds(newBounds);
+		updateSelectionBounds(newBounds);
 	}
 
 	@Override

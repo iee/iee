@@ -8,8 +8,6 @@ import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.IPadEditor;
 import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.event.ContainerEvent;
-import org.eclipse.iee.editor.core.container.event.IContainerManagerListener;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jface.text.BadLocationException;
@@ -22,7 +20,6 @@ import com.google.common.io.Files;
 public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 
 	private ContainerManager fContainerManager;
-	private IContainerManagerListener fContainerManagerListener;
 
 	private final IPadFactoryManager fPadManager = IeeEditorPlugin.getDefault()
 			.getPadFactoryManager();
@@ -37,46 +34,6 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 	@Override
 	public void initIeeEditorCore() {
 		IDocument document = getSourceViewer().getDocument();
-
-		fContainerManagerListener = new IContainerManagerListener() {
-			@Override
-			public void debugNotification(ContainerEvent event) {
-				firePropertyChange(PROP_CONTAINER_SET);
-			}
-
-			@Override
-			public void containerCreated(ContainerEvent event) {
-			}
-
-			@Override
-			public void containerRemoved(ContainerEvent event) {
-			}
-
-			@Override
-			public void containerSelected(ContainerEvent event) {
-			}
-
-			@Override
-			public void containerLostSelection(ContainerEvent event) {
-			}
-
-			@Override
-			public void containerActivated(ContainerEvent event) {
-			}
-
-			@Override
-			public void containerUpdated(ContainerEvent containerEvent) {
-			}
-
-			@Override
-			public void containerDeactivated(ContainerEvent containerEvent) {
-				// TODO Auto-generated method stub
-
-			}
-		};
-		fContainerManager
-				.addContainerManagerListener(fContainerManagerListener);
-
 		/*
 		 * Update document partitioning.
 		 * 
@@ -93,8 +50,6 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 
 	@Override
 	public void dispose() {
-		fContainerManager
-				.removeContainerManagerListener(fContainerManagerListener);
 		fContainerManager.dispose();
 		fContainerManager = null;
 

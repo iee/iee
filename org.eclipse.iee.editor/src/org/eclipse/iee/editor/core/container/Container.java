@@ -1,12 +1,19 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.properties.ContainerPropertySource;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.TextPresentation;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -71,7 +78,7 @@ public class Container implements IAdaptable {
 	/**
 	 * This function causes container's SWT-composite get into proper position.
 	 */
-	boolean updatePresentation() {
+	boolean updatePosition() {
 		// logger.debug("Updated container's position");
 
 		ITextViewerExtension5 ext5 = (ITextViewerExtension5) fContainerManager.getSourceViewer();
@@ -81,8 +88,8 @@ public class Container implements IAdaptable {
 		int height = textWidget.getLineHeight(offset);
 		Rectangle bounds = getBounds();
 		int heightOffset = height - bounds.height;
-		Rectangle newBounds = new Rectangle(point.x
-				+ StyledTextManager.PAD_LEFT_MARGIN, point.y + heightOffset,
+		Rectangle newBounds = new Rectangle(
+				point.x, point.y + heightOffset,
 				bounds.width, bounds.height);
 		if (!bounds.equals(newBounds)) {
 			fPad.setBounds(newBounds);
@@ -90,6 +97,15 @@ public class Container implements IAdaptable {
 		}
 		return false;
 	}
+	
+	public void updatePresentation() {
+		TextPresentation textPresentation = new TextPresentation();
+		for (StyleRange styleRange : getContainerStyles()) {
+			textPresentation.addStyleRange(styleRange);
+		}
+		fContainerManager.getSourceViewer().changeTextPresentation(textPresentation, false);
+	}
+	
 	
 	/**
 	 * Sets container's SWT-composite visibility.
@@ -127,10 +143,6 @@ public class Container implements IAdaptable {
 		return fContainerManager.getStyledText();
 	}
 
-	public void setBounds(Rectangle bounds) {
-		updatePresentation();
-	}
-
 	public IFigure getMainFigure() {
 		return fContainerManager.getMainFigure();
 	}
@@ -139,4 +151,39 @@ public class Container implements IAdaptable {
 		return fPad;
 	}
 
+	public IFigure getFeedbackFigure() {
+		return fContainerManager.getFeedbackFigure();
+	}
+
+	protected List<StyleRange> getContainerStyles() {
+		List<StyleRange> styles = new ArrayList<StyleRange>();
+
+		Position p = getPosition();
+
+		int descent = // TODO: Quickly fix it!!!
+		(getBounds().height < 10) ? 0
+				: getBounds().height - 10;
+
+		/* First symbol is shaped by container's geometry */
+		StyleRange firstSymbol = new StyleRange();
+		firstSymbol.start = p.getOffset();
+		firstSymbol.length = 1;
+		firstSymbol.metrics = new GlyphMetrics(0, descent, getBounds().width);
+
+		/* Setting data */
+		firstSymbol.data = this;
+
+		styles.add(firstSymbol);
+
+		/* Other symbols in container's text region becomes invisible */
+		StyleRange hiddenText = new StyleRange();
+		hiddenText.start = p.getOffset() + 1;
+		hiddenText.length = p.getLength() - 1;
+		hiddenText.metrics = new GlyphMetrics(0, 0, 0);
+
+		styles.add(hiddenText);
+
+		return styles;
+	}
+	
 }

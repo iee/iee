@@ -24,6 +24,7 @@ public class CollapseBeginPad extends CompositePad<CollapseBeginPart> {
 	}
 
 	public CollapseBeginPad(CollapseBeginPart imagePart) {
+		super(imagePart);
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

@@ -83,6 +83,7 @@ public class TextPad extends CompositePad<TextPart> {
 	static final int BACKGROUND = 1 << 5;
 	
 	public TextPad(TextPart textPart) {
+		super(textPart);
 	}
 
 	public void toggleEditMode() {
