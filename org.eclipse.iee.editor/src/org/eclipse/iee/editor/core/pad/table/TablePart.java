@@ -35,8 +35,20 @@ public class TablePart extends PadDocumentPart {
 	
 	public void removeColumn(TableColumn column) {
 		List<TableColumn> oldValue = Lists.newArrayList(columns);
+		Table<Integer, Integer, TableCell> oldCells = copyCells();
+		int indexOf = columns.indexOf(column);
+		for (int i = 0; i < getRowCount(); i++) {
+			for (int j = indexOf; j < getColumnCount() - 1; j++) {
+				TableCell value = cells.get(i, j + 1);
+				if (value != null) {
+					cells.put(i, j, value);
+					cells.remove(i, j + 1);
+				}
+			}
+		}
 		columns.remove(column);
 		getPropertyChangeSupport().firePropertyChange("columns", oldValue, columns);
+		getPropertyChangeSupport().firePropertyChange("cells", oldCells, cells);
 	}
 	
 	public List<TableColumn> getColumns() {
@@ -57,8 +69,20 @@ public class TablePart extends PadDocumentPart {
 	
 	public void removeRow(TableRow row) {
 		List<TableRow> oldValue = Lists.newArrayList(rows);
+		Table<Integer, Integer, TableCell> oldCells = copyCells();
+		int indexOf = rows.indexOf(row);
+		for (int i = indexOf; i < getRowCount() - 1; i++) {
+			for (int j = 0; j < getColumnCount(); j++) {
+				TableCell value = cells.get(i + 1, j);
+				if (value != null) {
+					cells.put(i, j, value);
+					cells.remove(i + 1, j);
+				}
+			}
+		}
 		rows.remove(row);
 		getPropertyChangeSupport().firePropertyChange("rows", oldValue, rows);
+		getPropertyChangeSupport().firePropertyChange("cells", oldCells, cells);
 	}
 	
 	public List<TableRow> getRows() {
@@ -76,10 +100,7 @@ public class TablePart extends PadDocumentPart {
 	}
 
 	public int getRowCount() {
-		if (cells.size() == 0) {
-			return 0;
-		}
-		return Collections.max(cells.rowKeySet()) + 1;
+		return rows.size();
 	}
 	
 	public int getColumnCount() {

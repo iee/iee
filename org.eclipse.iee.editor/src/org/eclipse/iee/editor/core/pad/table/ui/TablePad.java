@@ -52,7 +52,8 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if ("cells".equals(evt.getPropertyName()) 
-						|| "columns".equals(evt.getPropertyName())) {
+						|| "columns".equals(evt.getPropertyName())
+						|| "rows".equals(evt.getPropertyName())) {
 					updateTable(fTable);
 				}
 			}

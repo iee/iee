@@ -31,6 +31,15 @@ public class CellMenuContributor implements IMenuContributor<TableCell> {
 			}
 		}));
 		
+		menuManager.add(new ActionContributionItem(new Action("Delete column") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePart table = object.getTable();
+				TableColumn column = table.getColumn(object);
+				table.removeColumn(column);
+			}
+		}));
+		
 		menuManager.add(new ActionContributionItem(new Action("Add row after") {
 			@Override
 			public void runWithEvent(Event event) {
@@ -46,6 +55,15 @@ public class CellMenuContributor implements IMenuContributor<TableCell> {
 				TablePart table = object.getTable();
 				TableRow row = table.getRow(object);
 				table.addRowBefore(row, new TableRow());
+			}
+		}));
+		
+		menuManager.add(new ActionContributionItem(new Action("Delete row") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePart table = object.getTable();
+				TableRow row = table.getRow(object);
+				table.removeRow(row);
 			}
 		}));
 		
