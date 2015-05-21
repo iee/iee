@@ -39,7 +39,7 @@ public class InputPad extends AbstractFormulaPad<InputPart> {
 
 	public String getDefaultValue() {
 		String[] expressions = fTranslatingExpression.split("=");
-		return expressions[1];
+		return expressions.length > 1 ? expressions[1] : "";
 	}
 	
 	@Override
