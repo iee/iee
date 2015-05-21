@@ -528,12 +528,14 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 				for (Iterator<Container> iterator = fContainers.iterator(); iterator.hasNext();) {
 					Container container = iterator.next();
 					Position position = container.getPosition();
+					int cStart = position.getOffset();
 					int cEnd = position.getOffset() + position.getLength();
-					if (position.getOffset() >= to && cEnd <= from) {
+					if (to >= cStart && from <= cEnd) {
 						container.dispose();
 						String containerID = container.getContainerID();
 						clearPadSetsAndRuntime(containerID);
 						fPads.remove(containerID);
+						iterator.remove();
 					}
 				}
 			}

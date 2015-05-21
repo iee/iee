@@ -63,5 +63,10 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	public void setVisible(boolean isVisible) {
 		fContent.setVisible(isVisible);
 	}
+	
+	@Override
+	public void dispose() {
+		fContent.dispose();
+	}
 
 }
