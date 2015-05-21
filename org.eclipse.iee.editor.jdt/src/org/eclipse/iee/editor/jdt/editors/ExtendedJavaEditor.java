@@ -48,10 +48,13 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -72,6 +75,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	private PropertySheetPage fPropertySheetPage;
 	
 	private ContainerManager fContainerManager;
+	
+	private ICompilationUnit fCompilationUnit;
 	
 	private IPartListener fPartListener = new IPartListener() {
         public void partActivated(IWorkbenchPart part) {
@@ -98,6 +103,14 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	}
 	
 	@Override
+	public void init(IEditorSite site, IEditorInput input)
+			throws PartInitException {
+		super.init(site, input);
+		IFile file = ((IFileEditorInput)input).getFile();
+		fCompilationUnit = JavaCore.createCompilationUnitFrom(file);
+	}
+	
+	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
@@ -105,21 +118,9 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 
 		getSite().getPage().addPartListener(fPartListener);
 		
-		initIeeEditorCore();
-
 		doSave(null);
 	};
-
-	@Override
-	public void initIeeEditorCore() {
-		IEditorPart editor = this;
-		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-		IFile file = input.getFile();
-		ICompilationUnit compilationUnit = JavaCore
-				.createCompilationUnitFrom(file);
-		getContainerManager().setCompilationUnit(compilationUnit);
-	}
-
+	
 	@Override
 	public void dispose() {
 		logger.debug("dispose() called");
@@ -168,7 +169,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		ISourceViewer viewer = super.createJavaSourceViewer(parent, verticalRuler, overviewRuler, isOverviewRulerVisible, styles, store);
 		fContainerManager = new ContainerManager(IeeEditorPlugin.getDefault().getPadFactoryManager(), IeeEditorPlugin.getDefault().getParser(), 
 				IeeEditorPlugin.getDefault().getWriter(), viewer);
-		
+		fContainerManager.setCompilationUnit(fCompilationUnit);
+
 		IEditorPart editor = this;
 		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
 		IFile file = input.getFile();

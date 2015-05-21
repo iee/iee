@@ -31,7 +31,6 @@ public class SampleExtendedEditor extends TextEditor implements IPadEditor {
 		initIeeEditorCore();
 	};
 
-	@Override
 	public void initIeeEditorCore() {
 		IDocument document = getSourceViewer().getDocument();
 		/*

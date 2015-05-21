@@ -186,7 +186,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public UserInteractionManager getUserInteractionManager() {
-		return fUserInteractionManager;
+		return fUserInteractionManager;	
 	}
 
 	public ICompilationUnit getCompilationUnit() {
@@ -353,7 +353,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public void dispose() {
-		fSourceViewer.getTextWidget().getDisplay().removeFilter(SWT.MouseDown, fMouseListener);
+		fStyledText.getDisplay().removeFilter(SWT.MouseDown, fMouseListener);
 		setDocument(null);
 	}
 

@@ -55,6 +55,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 						|| "columns".equals(evt.getPropertyName())
 						|| "rows".equals(evt.getPropertyName())) {
 					updateTable(fTable);
+					getContainer().updateDocument();
 				}
 			}
 		};
@@ -211,6 +212,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 					@Override
 					public void setText(TableCell object, String text) {
 						object.setValue(text);
+						getContainer().updateDocument();
 					}
 				});
 				textPartEditor.setMenuContributor(CellMenuContributor.INSTANCE);
@@ -245,6 +247,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 			@Override
 			public void setText(TableColumn object, String text) {
 				object.setHeader(text);
+				getContainer().updateDocument();
 			}
 		});
 		IFigure figure = textPartEditor.createFigure();
@@ -386,6 +389,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 	@Override
 	public void dispose() {
 		getModel().removePropertyChangeListener(fListener);
+		getContainer().getMainFigure().remove(fTable);
 	}
 
 }
