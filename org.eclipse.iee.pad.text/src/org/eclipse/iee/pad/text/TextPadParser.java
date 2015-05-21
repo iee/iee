@@ -12,6 +12,7 @@ import org.eclipse.iee.pad.text.elements.Node;
 import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
 import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 import org.jsoup.select.NodeVisitor;
 import org.osgi.service.component.annotations.Component;
 import org.w3c.css.sac.InputSource;
@@ -43,7 +44,8 @@ public class TextPadParser implements IPadParser {
 		final Deque<Node> stack = new LinkedList<>();
 		stack.add(root);
 		final CSSOMParser parser = new CSSOMParser();
-		doc.traverse(new NodeVisitor() {
+		Elements body = doc.getElementsByTag("body");
+		body.traverse(new NodeVisitor() {
 			
 			@Override
 			public void tail(org.jsoup.nodes.Node node, int depth) {
@@ -106,7 +108,7 @@ public class TextPadParser implements IPadParser {
 				stack.push(newNode);
 			}
 		});
-		return root;
+		return root.getChildren().get(0);
 	}
 	
 	@Override

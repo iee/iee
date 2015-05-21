@@ -13,6 +13,8 @@ import org.eclipse.iee.pad.text.elements.Span;
 import org.eclipse.iee.pad.text.elements.TextNode;
 import org.osgi.service.component.annotations.Component;
 
+import com.google.common.base.Throwables;
+
 /**
  * @author Toxin
  *
@@ -55,7 +57,7 @@ public class TextHTMLRenderer implements IHTMLRenderer<TextPart> {
 						writer.append(((TextNode) node).getText());
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw Throwables.propagate(e);
 				}
 			}
 			
@@ -66,7 +68,7 @@ public class TextHTMLRenderer implements IHTMLRenderer<TextPart> {
 						writer.append("</span>");
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw Throwables.propagate(e);
 				}
 			}
 		});

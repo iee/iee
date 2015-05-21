@@ -3,6 +3,8 @@ package org.eclipse.iee.pad.text.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.select.Elements;
+
 public class Node {
 
 	private List<Node> children = new ArrayList<>();
@@ -24,5 +26,18 @@ public class Node {
 		depth--;
         visitor.tail(this, depth);
     }
+	
+	public boolean hasText() {
+		for (Node node : children) {
+			if (node.hasText()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<Node> getChildren() {
+		return children;
+	}
 	
 }

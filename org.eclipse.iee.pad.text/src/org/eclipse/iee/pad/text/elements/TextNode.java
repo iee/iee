@@ -13,4 +13,9 @@ public class TextNode extends Node {
 		return this;
 	}
 	
+	@Override
+	public boolean hasText() {
+		return true;
+	}
+	
 }

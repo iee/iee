@@ -26,47 +26,49 @@ public class TextPadWriter implements IPadWriter<TextPart> {
 	public String getValue(TextPart part) {
 		Node root = part.getRoot();
 		final StringWriter sw = new StringWriter();
-		root.traverse(new NodeVisitor() {
-			@Override
-			public void head(Node node, int depth) {
-				if (node instanceof Span) {
-					sw.append("<span style='");
-					Span span = (Span) node;
-					if (span.isBold().isPresent()) {
-						sw.append("font-weight:bold;");
+		for (Node node : root.getChildren()) {
+			node.traverse(new NodeVisitor() {
+				@Override
+				public void head(Node node, int depth) {
+					if (node instanceof Span) {
+						sw.append("<span style='");
+						Span span = (Span) node;
+						if (span.isBold().isPresent()) {
+							sw.append("font-weight:bold;");
+						}
+						if (span.isItalic().isPresent()) {
+							sw.append("font-style:italic;");
+						}
+						if (span.getFont().isPresent() && span.getFont().get().length() > 0) {
+							sw.append("font-family:").append(span.getFont().get()).append(';');
+						}
+						if (span.getFontSize().isPresent()) {
+							sw.append("font-size:").append(String.valueOf(span.getFontSize().get())).append(';');
+						}
+						if (span.getFgColor().isPresent()) {
+							String hexColor = Integer.toHexString(span.getFgColor().get().getRGB());
+							hexColor = hexColor.substring(2, hexColor.length());
+							sw.append("color:#").append(hexColor).append(';');
+						}
+						if (span.getBgColor().isPresent()) {
+							String hexColor = Integer.toHexString(span.getBgColor().get().getRGB());
+							hexColor = hexColor.substring(2, hexColor.length());
+							sw.append("background-color:#").append(hexColor).append(';');
+						}
+						sw.append("'>");
+					} else if (node instanceof TextNode) {
+						sw.append(((TextNode) node).getText());
 					}
-					if (span.isItalic().isPresent()) {
-						sw.append("font-style:italic;");
-					}
-					if (span.getFont().isPresent() && span.getFont().get().length() > 0) {
-						sw.append("font-family:").append(span.getFont().get()).append(';');
-					}
-					if (span.getFontSize().isPresent()) {
-						sw.append("font-size:").append(String.valueOf(span.getFontSize().get())).append(';');
-					}
-					if (span.getFgColor().isPresent()) {
-						String hexColor = Integer.toHexString(span.getFgColor().get().getRGB());
-						hexColor = hexColor.substring(2, hexColor.length());
-						sw.append("color:#").append(hexColor).append(';');
-					}
-					if (span.getBgColor().isPresent()) {
-						String hexColor = Integer.toHexString(span.getBgColor().get().getRGB());
-						hexColor = hexColor.substring(2, hexColor.length());
-						sw.append("background-color:#").append(hexColor).append(';');
-					}
-					sw.append("'>");
-				} else if (node instanceof TextNode) {
-					sw.append(((TextNode) node).getText());
 				}
-			}
-			
-			@Override
-			public void tail(Node node, int depth) {
-				if (node instanceof Span) {
-					sw.append("</span>");
+				
+				@Override
+				public void tail(Node node, int depth) {
+					if (node instanceof Span) {
+						sw.append("</span>");
+					}
 				}
-			}
-		});
+			});
+		}
 		return sw.toString();
 	}
 
