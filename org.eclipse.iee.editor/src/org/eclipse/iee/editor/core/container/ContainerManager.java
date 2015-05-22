@@ -530,7 +530,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 					Position position = container.getPosition();
 					int cStart = position.getOffset();
 					int cEnd = position.getOffset() + position.getLength();
-					if (to >= cStart && from <= cEnd) {
+					if (from <= cStart && to >= cEnd) {
 						container.dispose();
 						String containerID = container.getContainerID();
 						clearPadSetsAndRuntime(containerID);
