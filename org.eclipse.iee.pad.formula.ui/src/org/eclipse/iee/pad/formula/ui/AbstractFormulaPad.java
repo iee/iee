@@ -3,6 +3,8 @@ package org.eclipse.iee.pad.formula.ui;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.CompositePad;
@@ -10,10 +12,8 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.editor.core.utils.runtime.file.IFileMessageListener;
-import org.eclipse.iee.pad.formula.FormulaPart;
-import org.eclipse.iee.pad.formula.ui.hover.HoverShell;
-import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.formula.ui.utils.Function;
+import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -26,8 +26,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -38,6 +36,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -69,7 +68,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 
 	protected Document fDocument;
 
-	HoverShell fHoverShell;
+	private ImageFigure fHoverShell;
 
 	protected boolean fIsInputValid;
 
@@ -238,8 +237,14 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 		if (fTranslatingExpression != "")
 			toggleFormulaImage();
 
+		removeFormulaHover();
+	}
+
+	private void removeFormulaHover() {
 		if (fHoverShell != null) {
-			fHoverShell.dispose();
+			if (fHoverShell.getParent() != null) {
+				fHoverShell.getParent().remove(fHoverShell);
+			}
 			fHoverShell = null;
 		}
 	}
@@ -321,10 +326,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 
 			@Override
 			public void mouseScrolled(MouseEvent e) {
-				if (fHoverShell != null) {
-					fHoverShell.dispose();
-					fHoverShell = null;
-				}
+				removeFormulaHover();
 			}
 		});
 
@@ -357,26 +359,26 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 
 					validateInput();
 
-					if (fHoverShell != null) {
-						fHoverShell.dispose();
-						fHoverShell = null;
-					}
+					removeFormulaHover();
 					fTexExpression = fDocument.get();
 					Image image = createImage(fTexExpression);
 					if (image == null) {
 						fTexExpression = fLastValidText;
 						image = createImage(fTexExpression);
 					}
-					if (fHoverShell != null) {
-						fHoverShell.dispose();
-					}
-					fHoverShell = new HoverShell(fParent, image);
+					
+					fHoverShell = new ImageFigure(image);
+					fHoverShell.setBorder(new LineBorder(1));
 					// hack to paint hover image after widgets size
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
 							if (fHoverShell != null) {
-								fHoverShell.show();
+								Rectangle bounds = getBounds();
+								getContainer().getFeedbackFigure().add(
+										fHoverShell,
+										new org.eclipse.draw2d.geometry.Rectangle(bounds.x + 5, bounds.y + bounds.height + 5, -1, -1)
+										);
 							}
 						}
 					});
@@ -510,10 +512,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 		if (fTranslatingExpression != "") {
 			toggleFormulaImage();
 		}
-		if (fHoverShell != null) {
-			fHoverShell.dispose();
-			fHoverShell = null;
-		}
+		removeFormulaHover();
 	}
 
 	// Save&Load operations

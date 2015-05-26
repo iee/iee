@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.core.container;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 import org.antlr.v4.runtime.misc.Nullable;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.StackLayout;
@@ -134,6 +136,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	private Map<IFigure, ITextEditor<?>> fFigureToEditor = Maps.newHashMap();
 	
 	private TextLocation fCursorPositon;
+
+	private Field fVerticalScrollOffsetField;
+
+	private Field fHorizontalScrollOffsetField;
 	
 	public Pad<?> getPadById(String id) {
 		return fPads.get(id);
@@ -210,20 +216,36 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 		LightweightSystem lightweightSystem = new LightweightSystem(fStyledText);
 		lightweightSystem.getRootFigure().setOpaque(false);
-		Figure stack = new Figure();
-		stack.setLayoutManager(new StackLayout());
-		lightweightSystem.setContents(stack);
+		Figure viewport = new Figure() {
+			@Override
+			protected void paintClientArea(Graphics g) {
+				org.eclipse.draw2d.geometry.Point p = getViewLocation();
+				try {
+					g.translate(-p.x, -p.y);
+					g.pushState();
+					super.paintClientArea(g);
+					g.popState();
+				} finally {
+					g.translate(p.x, p.y);
+				}
+			}
+		};
+		
+//		Figure stack = new Figure();
+//		viewport.add(stack);
+		viewport.setLayoutManager(new StackLayout());
+		lightweightSystem.setContents(viewport);
 		
 		fMainFigure = new Figure();
 		fMainFigure.setLayoutManager(new XYLayout());
 		fMainFigure.setOpaque(false);
-		stack.add(fMainFigure);
+		viewport.add(fMainFigure);
 		
 		fFeedbackFigure = new Figure();
 		fFeedbackFigure.setLayoutManager(new XYLayout());
 		fFeedbackFigure.setOpaque(false);
 		fFeedbackFigure.setEnabled(false);
-		stack.add(fFeedbackFigure);		
+		viewport.add(fFeedbackFigure);		
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
@@ -233,6 +255,24 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 		initViewer(sourceViewer);
 		
+		try {
+			fVerticalScrollOffsetField = StyledText.class.getDeclaredField("verticalScrollOffset");
+			fVerticalScrollOffsetField.setAccessible(true);
+			fHorizontalScrollOffsetField = StyledText.class.getDeclaredField("horizontalScrollOffset");
+			fHorizontalScrollOffsetField.setAccessible(true);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException e1) {
+			throw Throwables.propagate(e1);
+		}
+	}
+	
+	public org.eclipse.draw2d.geometry.Point getViewLocation() {
+		try {
+			Integer verticalScrollOffset = (Integer) fVerticalScrollOffsetField.get(fStyledText);
+			Integer horizontalScrollOffset = (Integer) fHorizontalScrollOffsetField.get(fStyledText);
+			return new org.eclipse.draw2d.geometry.Point(horizontalScrollOffset, verticalScrollOffset);
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+			throw Throwables.propagate(e1);
+		}
 	}
 	
 	private void initViewer(ISourceViewer sourceViewer) {
@@ -606,17 +646,11 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	private Container getContainerAtPoint(int x, int y) {
+		org.eclipse.draw2d.geometry.Point viewLocation = getViewLocation();
+		Point p = new Point(viewLocation.x + x, viewLocation.y + y);
+		
 		for(Container container : getContainers()) {
-			if (container.getBounds().contains(x, y)) {
-				return container;
-			}
-		}
-		return null;
-	}
-
-	private Container getContainerAtPoint(Point styledTextPoint) {
-		for(Container container : getContainers()) {
-			if (container.getBounds().contains(styledTextPoint)) {
+			if (container.getPad().getBounds().contains(p)) {
 				return container;
 			}
 		}

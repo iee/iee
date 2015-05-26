@@ -86,10 +86,11 @@ public class Container implements IAdaptable {
 		StyledText textWidget = fContainerManager.getStyledText();
 		Point point = textWidget.getLocationAtOffset(offset);
 		int height = textWidget.getLineHeight(offset);
-		Rectangle bounds = getBounds();
+		Rectangle bounds = fPad.getBounds();
 		int heightOffset = height - bounds.height;
+		org.eclipse.draw2d.geometry.Point viewLocation = getContainerManager().getViewLocation();
 		Rectangle newBounds = new Rectangle(
-				point.x, point.y + heightOffset,
+				point.x + viewLocation.x, point.y + heightOffset + viewLocation.y,
 				bounds.width, bounds.height);
 		if (!bounds.equals(newBounds)) {
 			fPad.setBounds(newBounds);
@@ -135,10 +136,6 @@ public class Container implements IAdaptable {
 		return null;
 	}
 
-	public Rectangle getBounds() {
-		return fPad.getBounds();
-	}
-
 	public Composite getTextWidget() {
 		return fContainerManager.getStyledText();
 	}
@@ -161,14 +158,14 @@ public class Container implements IAdaptable {
 		Position p = getPosition();
 
 		int descent = // TODO: Quickly fix it!!!
-		(getBounds().height < 10) ? 0
-				: getBounds().height - 10;
+		(fPad.getBounds().height < 10) ? 0
+				: fPad.getBounds().height - 10;
 
 		/* First symbol is shaped by container's geometry */
 		StyleRange firstSymbol = new StyleRange();
 		firstSymbol.start = p.getOffset();
 		firstSymbol.length = 1;
-		firstSymbol.metrics = new GlyphMetrics(0, descent, getBounds().width);
+		firstSymbol.metrics = new GlyphMetrics(0, descent, fPad.getBounds().width);
 
 		/* Setting data */
 		firstSymbol.data = this;

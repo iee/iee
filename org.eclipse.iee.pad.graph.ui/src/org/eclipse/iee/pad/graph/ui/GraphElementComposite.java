@@ -2,8 +2,9 @@ package org.eclipse.iee.pad.graph.ui;
 
 import java.awt.BasicStroke;
 
+import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
-import org.eclipse.iee.pad.formula.ui.hover.HoverShell;
+import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
@@ -35,7 +36,7 @@ public class GraphElementComposite extends Composite {
 	private Document fDocument;
 	private Composite fResultView;
 	private Label fFormulaImageLabel;
-	private HoverShell fHoverShell;
+	private ImageFigure fHoverShell;
 	private String fLastValidText = "";
 	private boolean editInProgress = false;
 	private java.awt.Color color = java.awt.Color.BLACK;
@@ -44,6 +45,7 @@ public class GraphElementComposite extends Composite {
 	private MenuItem addItem;
 	private MenuItem removeItem;
 	private MenuItem propertiesItem;
+	private Container fContainer;
 
 	private UIFormulaRenderer formulaRenderer;
 	
@@ -52,8 +54,9 @@ public class GraphElementComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public GraphElementComposite(Composite parent, int style, UIFormulaRenderer formulaRenderer) {
+	public GraphElementComposite(Composite parent, int style, UIFormulaRenderer formulaRenderer, Container container) {
 		super(parent, style);
+		fContainer = container;
 		this.formulaRenderer = formulaRenderer;
 		GridLayout layout = new GridLayout(1, false);
 		layout.verticalSpacing = 0;
@@ -145,18 +148,16 @@ public class GraphElementComposite extends Composite {
 				
 				if (fDocument.get() != "") {
 
-					if (fHoverShell != null) {
-						fHoverShell.dispose();
-						fHoverShell = null;
-					}
+					removeFormulaHover();
 					Image image = createImage();
-					fHoverShell = new HoverShell(GraphElementComposite.this, image);
+					fHoverShell = new ImageFigure(image);
 					// hack to paint hover image after widgets size
 					// recalculation.
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
 							if (fHoverShell != null) {
-								fHoverShell.show();
+								Point pt = GraphElementComposite.this.getLocation();
+								fContainer.getFeedbackFigure().add(fHoverShell, new org.eclipse.draw2d.geometry.Rectangle(pt.x, pt.y, -1, -1));
 							}
 						}
 					});
@@ -192,12 +193,18 @@ public class GraphElementComposite extends Composite {
 		// ON
 		fResultView.setVisible(true);
 
-		if (fHoverShell != null) {
-			fHoverShell.dispose();
-			fHoverShell = null;
-		}
+		removeFormulaHover();
 		
 		pack();
+	}
+
+	private void removeFormulaHover() {
+		if (fHoverShell != null) {
+			if (fHoverShell.getParent() != null) {
+				fHoverShell.getParent().remove(fHoverShell);
+			}
+			fHoverShell = null;
+		}
 	}
 	
 	public void processInput() {

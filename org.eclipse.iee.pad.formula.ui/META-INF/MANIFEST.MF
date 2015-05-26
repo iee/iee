@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.eclipse.iee.pad.formula.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.eclipse.draw2d,
+ org.eclipse.draw2d.geometry,
  org.eclipse.iee.core.document,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.jdt.core,
@@ -21,8 +22,7 @@ Require-Bundle: org.eclipse.core.commands,
  org.eclipse.core.runtime
 Bundle-ClassPath: lib/jlatexmath-embedded-fop-1.0.2.jar,
  .
-Export-Package: org.eclipse.iee.pad.formula.ui.hover,
- org.eclipse.iee.pad.formula.ui.utils
+Export-Package: org.eclipse.iee.pad.formula.ui.utils
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml
 

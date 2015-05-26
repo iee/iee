@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.core.pad;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.swt.SWT;
@@ -31,7 +32,7 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 			@Override
 			public void controlResized(ControlEvent e) {
 				fContainer.updatePresentation();
-				Rectangle bounds = fContainer.getBounds();
+				Rectangle bounds = getBounds();
 				updateSelectionBounds(bounds);
 			}
 
@@ -50,12 +51,16 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 
 	@Override
 	public Rectangle getBounds() {
-		return fContent.getBounds();
+		Rectangle bounds = fContent.getBounds();
+		Point viewLocation = getContainer().getContainerManager().getViewLocation();
+		return new Rectangle(viewLocation.x + bounds.x, viewLocation.y + bounds.y, bounds.width, bounds.height);
 	}
 
 	@Override
 	public void setBounds(Rectangle newBounds) {
-		fContent.setBounds(newBounds);
+		Point viewLocation = getContainer().getContainerManager().getViewLocation();
+		Rectangle bounds = new Rectangle(newBounds.x - viewLocation.x, newBounds.y - viewLocation.y, newBounds.width, newBounds.height);
+		fContent.setBounds(bounds);
 		updateSelectionBounds(newBounds);
 	}
 
