@@ -13,12 +13,19 @@ import java.util.UUID;
 
 import org.antlr.v4.runtime.misc.Nullable;
 import org.eclipse.core.commands.common.EventManager;
+import org.eclipse.draw2d.AbstractHintLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.Translatable;
 import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
@@ -229,23 +236,113 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 					g.translate(p.x, p.y);
 				}
 			}
+			
+			/**
+			 * @see IFigure#getClientArea(Rectangle)
+			 */
+			public Rectangle getClientArea(Rectangle rect) {
+				super.getClientArea(rect);
+				rect.translate(getViewLocation());
+				return rect;
+			}
+			
+			/**
+			 * @see IFigure#isCoordinateSystem()
+			 */
+			public boolean isCoordinateSystem() {
+				return true;
+			}
+			
+			/**
+			 * @see IFigure#translateFromParent(Translatable)
+			 */
+			public void translateFromParent(Translatable t) {
+				org.eclipse.draw2d.geometry.Point p = getViewLocation();
+				t.performTranslate(p.x, p.y);
+				super.translateFromParent(t);
+			}
+
+			/**
+			 * @see IFigure#translateToParent(Translatable)
+			 */
+			public void translateToParent(Translatable t) {
+				org.eclipse.draw2d.geometry.Point p = getViewLocation();
+				t.performTranslate(-p.x, -p.y);
+				super.translateToParent(t);
+			}
+			
 		};
 		
-//		Figure stack = new Figure();
-//		viewport.add(stack);
-		viewport.setLayoutManager(new StackLayout());
+		viewport.setLayoutManager(new AbstractHintLayout() {
+			
+			protected Dimension calculateMinimumSize(IFigure figure, int wHint,
+					int hHint) {
+				Dimension min = new Dimension();
+				Insets insets = figure.getInsets();
+				return min.getExpanded(insets.getWidth(), insets.getHeight());
+			}
+			
+			@Override
+			public void layout(IFigure container) {
+				IFigure contents = (IFigure) container.getChildren().get(0);
+
+				if (contents == null)
+					return;
+				org.eclipse.draw2d.geometry.Point p = container.getClientArea().getLocation();
+
+				p.translate(getViewLocation().getNegated());
+
+				// Calculate the hints
+				Rectangle hints = container.getClientArea();
+				int wHint = -1;
+				int hHint = -1;
+
+				Dimension newSize = container.getClientArea().getSize();
+				Dimension min = contents.getMinimumSize(wHint, hHint);
+				Dimension pref = contents.getPreferredSize(wHint, hHint);
+
+				newSize.height = Math.max(newSize.height, pref.height);
+				newSize.width = Math.max(newSize.width, pref.width);
+
+				contents.setBounds(new Rectangle(p, newSize));
+			}
+			
+			@Override
+			protected Dimension calculatePreferredSize(IFigure container, int wHint,
+					int hHint) {
+				Insets insets = container.getInsets();
+				IFigure contents = (IFigure) container.getChildren().get(0);
+				wHint = -1;
+				hHint = -1;
+				if (contents == null) {
+					return new Dimension(insets.getWidth(), insets.getHeight());
+				} else {
+					Dimension minSize = contents.getMinimumSize(wHint, hHint);
+					if (wHint > -1)
+						wHint = Math.max(wHint, minSize.width);
+					if (hHint > -1)
+						hHint = Math.max(hHint, minSize.height);
+					return contents.getPreferredSize(wHint, hHint).getExpanded(
+							insets.getWidth(), insets.getHeight());
+				}
+			}
+		});
+		
+		Figure stack = new Figure();
+		viewport.add(stack);
+		stack.setLayoutManager(new StackLayout());
 		lightweightSystem.setContents(viewport);
 		
 		fMainFigure = new Figure();
 		fMainFigure.setLayoutManager(new XYLayout());
 		fMainFigure.setOpaque(false);
-		viewport.add(fMainFigure);
+		stack.add(fMainFigure);
 		
 		fFeedbackFigure = new Figure();
 		fFeedbackFigure.setLayoutManager(new XYLayout());
 		fFeedbackFigure.setOpaque(false);
 		fFeedbackFigure.setEnabled(false);
-		viewport.add(fFeedbackFigure);		
+		stack.add(fFeedbackFigure);		
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
@@ -313,7 +410,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 						
 						Optional<ITextEditor<?>> editor = getEditorAt(styledTextPoint.x, styledTextPoint.y);
 						if (editor.isPresent()) {
-							TextLocation textLocation = editor.get().getTextLocation(styledTextPoint.x, styledTextPoint.y);
+							org.eclipse.draw2d.geometry.Point point = translateViewToReal(styledTextPoint.x, styledTextPoint.y);
+							TextLocation textLocation = editor.get().getTextLocation(point.x, point.y);
 							fCursorPositon = textLocation;
 							editor.get().acceptCaret(getCaret(), textLocation);
 						} else {
@@ -646,15 +744,20 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	private Container getContainerAtPoint(int x, int y) {
-		org.eclipse.draw2d.geometry.Point viewLocation = getViewLocation();
-		Point p = new Point(viewLocation.x + x, viewLocation.y + y);
+		org.eclipse.draw2d.geometry.Point p = translateViewToReal(x, y);
 		
 		for(Container container : getContainers()) {
-			if (container.getPad().getBounds().contains(p)) {
+			if (container.getPad().getBounds().contains(p.x, p.y)) {
 				return container;
 			}
 		}
 		return null;
+	}
+
+	private org.eclipse.draw2d.geometry.Point translateViewToReal(int x, int y) {
+		org.eclipse.draw2d.geometry.Point viewLocation = getViewLocation();
+		org.eclipse.draw2d.geometry.Point p = new org.eclipse.draw2d.geometry.Point(viewLocation.x + x, viewLocation.y + y);
+		return p;
 	}
 
 	private void clearPadSetsAndRuntime(String containerID) {
@@ -861,7 +964,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public Optional<ITextEditor<?>> getEditorAt(int x, int y) {
-		IFigure findFigureAt = fMainFigure.findFigureAt(x, y);
+		org.eclipse.draw2d.geometry.Point p = translateViewToReal(x, y);
+		IFigure findFigureAt = fMainFigure.findFigureAt(p);
 		ITextEditor<?> editor = null;
 		while (findFigureAt != null) {
 			editor = fFigureToEditor.get(findFigureAt);
