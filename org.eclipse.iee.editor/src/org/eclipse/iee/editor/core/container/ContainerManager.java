@@ -946,6 +946,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public void registerVisual(ITextEditor<?> textPartEditor, IFigure figure) {
 		fFigureToEditor.put(figure, textPartEditor);
 	}
+	
+	public void unregisterVisual(IFigure figure) {
+		fFigureToEditor.remove(figure);
+	}
 
 	public TextLocation getCursonPosition() {
 		return fCursorPositon;
@@ -1025,7 +1029,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public Optional<ITextEditor<?>> getRootTextEditor() {
-		return Optional.<ITextEditor<?>>of (new AbstractTextEditor<DocumentPart>(null) {
+		return Optional.<ITextEditor<?>>of (new AbstractTextEditor<DocumentPart>() {
 
 			@Override
 			public TextLocation getTextLocation(int x, int y) {
@@ -1055,6 +1059,12 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			public void setActive(boolean b) {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			protected IFigure createFigure() {
+				// TODO Auto-generated method stub
+				return null;
 			}});
 	}
 

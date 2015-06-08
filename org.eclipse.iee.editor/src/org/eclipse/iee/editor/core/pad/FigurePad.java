@@ -1,24 +1,20 @@
 package org.eclipse.iee.editor.core.pad;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Composite;
 
-public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
+public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
+
+	private IFigure fContent;
 	
-	public CompositePad(T model) {
+	public FigurePad(T model) {
 		super(model);
 	}
-
-	private Composite fContent;
 	
 	@Override
 	public void attachContainer(Container container)  {
@@ -26,35 +22,31 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 		Assert.isLegal(!isContainerAttached(), "Another container is already attached");
 
 		fContainer = container;
-		final Composite parent = fContainer.getTextWidget();
-
-		fContent = new Composite(parent, SWT.NONE);
-
-		fContent.addControlListener(new ControlListener() {
+		fContent = createFigure();
+		
+		container.getMainFigure().add(fContent, new org.eclipse.draw2d.geometry.Rectangle(0, 0, -1, -1));
+		getContainer().getContainerManager().registerVisual(this, fContent);
+		
+		fContent.addFigureListener(new FigureListener() {
+			
 			@Override
-			public void controlResized(ControlEvent e) {
-				fContainer.updatePresentation();
+			public void figureMoved(IFigure source) {
+				if (source != fContent) {
+					return;
+				}
 				Rectangle bounds = getBounds();
 				updateSelectionBounds(bounds);
-			}
-
-			@Override
-			public void controlMoved(ControlEvent e) {
+				fContainer.updatePresentation();
 			}
 		});
 
-		createPartControl(fContent);
-		fContent.pack();
-		
-		addMouseListeners(parent);
-
 	}
 	
-	protected abstract void createPartControl(Composite parent);
+	protected abstract IFigure createFigure();
 
 	@Override
 	public Rectangle getBounds() {
-		Rectangle bounds = fContent.getBounds();
+		org.eclipse.draw2d.geometry.Rectangle bounds = fContent.getBounds();
 		Point viewLocation = getContainer().getContainerManager().getViewLocation();
 		return new Rectangle(viewLocation.x + bounds.x, viewLocation.y + bounds.y, bounds.width, bounds.height);
 	}
@@ -62,7 +54,7 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	@Override
 	public void setBounds(Rectangle newBounds) {
 		Point viewLocation = getContainer().getContainerManager().getViewLocation();
-		Rectangle bounds = new Rectangle(newBounds.x - viewLocation.x, newBounds.y - viewLocation.y, newBounds.width, newBounds.height);
+		org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(newBounds.x - viewLocation.x, newBounds.y - viewLocation.y, newBounds.width, newBounds.height);
 		fContent.setBounds(bounds);
 		updateSelectionBounds(newBounds);
 	}
@@ -74,12 +66,5 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	
 	@Override
 	public void dispose() {
-		fContent.dispose();
 	}
-
-	@Override
-	protected IFigure createFigure() {
-		return new Figure();
-	}
-	
 }

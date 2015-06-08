@@ -1,8 +1,6 @@
 package org.eclipse.iee.editor.core.pad.common.text;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FocusBorder;
 import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
@@ -13,7 +11,8 @@ import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
-import org.eclipse.iee.core.document.DocumentPart;
+import org.eclipse.iee.editor.core.bindings.IObservableValue;
+import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
@@ -25,7 +24,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 
-public class TextPartEditor<T extends DocumentPart> extends AbstractTextEditor<T> implements IContentTextPart {
+public class TextPartEditor extends AbstractTextEditor<String> implements IContentTextPart {
 
 	private TextFlow fTextFlow;
 
@@ -33,26 +32,11 @@ public class TextPartEditor<T extends DocumentPart> extends AbstractTextEditor<T
 
 	private FlowPage fFlowPage;
 	
-	private ITextAdapter<T> fAdapter;
-
-	private PropertyChangeListener fListener;
-	
-	public TextPartEditor(T model, ITextAdapter<T> adapter) {
-		super(model);
-		fAdapter = adapter;
-		fText = new Document(fAdapter.getText(model));
-		fListener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if ("value".equals(evt.getPropertyName())) {
-					fText.set((String) evt.getNewValue());
-				}
-			}
-		};
-		model.addPropertyChangeListener(fListener);
+	public TextPartEditor() {
+		fText = new Document();
 	}
 	
-	public IFigure createFigure() {
+	protected FlowPage createFigure() {
 		fFlowPage = new FlowPage();
 		BlockFlow blockFlow = new BlockFlow();
 		fTextFlow = new TextFlow(fText.get());
@@ -72,7 +56,7 @@ public class TextPartEditor<T extends DocumentPart> extends AbstractTextEditor<T
 			public void focusLost(FocusEvent fe) {
 				IFigure loser = fe.loser;
 				loser.setBorder(null);
-				fAdapter.setText(getModel(), fText.get());
+				fText.set(fTextFlow.getText());
 			}});
 		fText.addDocumentListener(new IDocumentListener() {
 			@Override
@@ -86,6 +70,9 @@ public class TextPartEditor<T extends DocumentPart> extends AbstractTextEditor<T
 					fTextFlow.setText(s);
 				} else {
 					fTextFlow.setText("\u25a1");
+				}
+				if (!s.equals(getObservableValue().getValue())) {
+					getObservableValue().setValue(s);
 				}
 //				fFlowPage.revalidate();
 			}
@@ -173,4 +160,20 @@ public class TextPartEditor<T extends DocumentPart> extends AbstractTextEditor<T
 		return true;
 	}
 
+	public Figure getFigure() {
+		if (fFlowPage == null) {
+			fFlowPage = createFigure();
+		}
+		return fFlowPage;
+	}
+	
+	public void bindValue(IObservableValue<String> value) {
+		bindObservableValue(value);
+	}
+	
+	@Override
+	protected void onValueChanged(String oldValue, String newValue) {
+		fText.set(newValue);
+	}
+	
 }

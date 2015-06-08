@@ -7,7 +7,6 @@ import java.util.List;
 import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
@@ -15,8 +14,12 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.bindings.IObservableValue;
+import org.eclipse.iee.editor.core.bindings.IObserver;
+import org.eclipse.iee.editor.core.container.ITextEditor;
+import org.eclipse.iee.editor.core.pad.FigurePad;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
 import org.eclipse.iee.editor.core.pad.common.text.ITextAdapter;
 import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
@@ -28,11 +31,12 @@ import org.eclipse.iee.editor.core.pad.table.TableColumn;
 import org.eclipse.iee.editor.core.pad.table.TablePart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
-public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
+public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart {
 
 	private GridLayout fManager;
 	
@@ -42,7 +46,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 
 	private RectangleFigure fRowHighlighter;
 	
-	private List<TextPartEditor<TableCell>> cells = Lists.newArrayList();
+	private List<TextPartEditor> cells = Lists.newArrayList();
 
 	private PropertyChangeListener fListener;
 	
@@ -62,12 +66,8 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 		part.addPropertyChangeListener(fListener);
 	}
 
-	//TODO remove
 	@Override
-	public void attachContainer(Container container) {
-		fContainer = container;
-		
-		IFigure mainFigure = container.getMainFigure();
+	public IFigure createFigure() {
 		fTable = new Figure();
 		fTable.setMinimumSize(new Dimension(20, 20));
 		
@@ -177,19 +177,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 		
 		updateTable(fTable);
 		
-		mainFigure.add(fTable, new org.eclipse.draw2d.geometry.Rectangle(0, 0, -1, -1));
-		getContainer().getContainerManager().registerVisual(this, fTable);
-		
-		fTable.addFigureListener(new FigureListener() {
-			
-			@Override
-			public void figureMoved(IFigure source) {
-				if (source != fTable) {
-					return;
-				}
-				fContainer.updatePresentation();
-			}
-		});
+		return fTable;
 	}
 
 	private void updateTable(final Figure table) {
@@ -202,25 +190,23 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 		TablePart documentPart = getDocumentPart();
 		for (int i = 0; i < documentPart.getRowCount(); i++) {
 			for (int j = 0; j < documentPart.getColumnCount(); j++) {
-				TextPartEditor<TableCell> textPartEditor = new TextPartEditor<TableCell>(documentPart.getCell(i, j), new ITextAdapter<TableCell>() {
-
-					@Override
-					public String getText(TableCell object) {
-						return object.getValue();
-					}
-
-					@Override
-					public void setText(TableCell object, String text) {
-						object.setValue(text);
-						getContainer().updateDocument();
-					}
-				});
-				textPartEditor.setMenuContributor(CellMenuContributor.INSTANCE);
-				IFigure figure = textPartEditor.createFigure();
-				table.add(createCell(figure), new GridData(GridData.FILL, GridData.FILL, true, true));
-				getContainer().getContainerManager().registerVisual(textPartEditor, figure);
+				TableCell cell = documentPart.getCell(i, j);
+				TableCellEditor tableCellEditor = new TableCellEditor();
+				addCellEditor(tableCellEditor);
 			}
 		}
+	}
+	
+	private void addColumnEditor(TableColumnEditor tableColumnEditor) {
+		addChildEditor(tableColumnEditor);
+		IFigure figure = tableColumnEditor.getFigure();
+		fTable.add(figure, new GridData(GridData.FILL, GridData.FILL, true, true));
+	}
+
+	private void addCellEditor(TableCellEditor tableCellEditor) {
+		addChildEditor(tableCellEditor);
+		IFigure figure = tableCellEditor.getFigure();
+		fTable.add(figure, new GridData(GridData.FILL, GridData.FILL, true, true));
 	}
 
 	private void createHeader(Figure table) {
@@ -237,23 +223,8 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 	}
 
 	private void createColumn(Figure table, TableColumn column) {
-		TextPartEditor<TableColumn> textPartEditor = new TextPartEditor<TableColumn>(column, new ITextAdapter<TableColumn>() {
-
-			@Override
-			public String getText(TableColumn object) {
-				return object.getHeader();
-			}
-
-			@Override
-			public void setText(TableColumn object, String text) {
-				object.setHeader(text);
-				getContainer().updateDocument();
-			}
-		});
-		IFigure figure = textPartEditor.createFigure();
-		table.add(createCell(figure), new GridData(GridData.FILL, GridData.FILL, true, true));
-		textPartEditor.setText(column.getHeader());
-		getContainer().getContainerManager().registerVisual(textPartEditor, figure);
+		TableColumnEditor tableCellEditor = new TableColumnEditor();
+		addColumnEditor(tableCellEditor);
 	}
 
 	@Override
@@ -303,14 +274,6 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 	@Override
 	public void setVisible(boolean isVisible) {
 		fTable.setVisible(isVisible);
-	}
-	
-	private IFigure createCell(IFigure content) {
-		Figure figure = new Figure();
-		figure.setLayoutManager(new BorderLayout());
-		figure.setBorder(new CellFigureBorder());
-		figure.add(content, BorderLayout.CENTER);
-		return figure;
 	}
 	
 	private void enableHighlight() {
@@ -388,6 +351,7 @@ public class TablePad extends Pad<TablePart> implements ICompositeTextPart {
 	
 	@Override
 	public void dispose() {
+		disableHighlight();
 		getModel().removePropertyChangeListener(fListener);
 		getContainer().getMainFigure().remove(fTable);
 	}

@@ -7,9 +7,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class GraphModel implements Serializable, Cloneable {
+import org.eclipse.iee.core.IHasPropertyChangeListener;
+
+public class GraphModel implements Serializable, Cloneable, IHasPropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -31,10 +34,16 @@ public class GraphModel implements Serializable, Cloneable {
 		if (elements == null) {
 			elements = new ArrayList<GraphElement>();
 		}
-		return elements;
+		return Collections.unmodifiableList(elements);
 	}
 
 	public void setElements(List<GraphElement> elements) {
+		for (GraphElement graphElement : this.elements) {
+			graphElement.setGraph(this);
+		}
+		for (GraphElement graphElement : elements) {
+			graphElement.setGraph(this);
+		}
 		this.elements = elements;
 	}
 	
@@ -95,16 +104,36 @@ public class GraphModel implements Serializable, Cloneable {
 		getPropertyChangeSupport().firePropertyChange("maxY", oldValue, maxY);
 	}
 	
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		fpcs.addPropertyChangeListener(listener);
 	}
 	
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		fpcs.removePropertyChangeListener(listener);
 	}
 	
 	protected PropertyChangeSupport getPropertyChangeSupport() {
 		return fpcs;
+	}
+
+	public void addElement(GraphElement newElement) {
+		if (elements == null) {
+			elements = new ArrayList<GraphElement>();
+		}
+		List<GraphElement> oldValue = new ArrayList<GraphElement>(elements);
+		elements.add(newElement);
+		getPropertyChangeSupport().firePropertyChange("elements", oldValue, elements);
+	}
+	
+	public void removeElement(GraphElement newElement) {
+		if (elements == null) {
+			elements = new ArrayList<GraphElement>();
+		}
+		List<GraphElement> oldValue = new ArrayList<GraphElement>(elements);
+		elements.remove(newElement);
+		getPropertyChangeSupport().firePropertyChange("elements", oldValue, elements);
 	}
 
 }

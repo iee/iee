@@ -2,9 +2,9 @@ package org.eclipse.iee.web.renderer;
 
 import java.io.IOException;
 
-import org.eclipse.iee.core.document.DocumentPart;
+import org.eclipse.iee.core.IHasPropertyChangeListener;
 
-public interface IHTMLRenderer<T extends DocumentPart> {
+public interface IHTMLRenderer<T extends IHasPropertyChangeListener> {
 
 	void renderPad(T pad, IHTMLRendererContext context) throws IOException;
 	

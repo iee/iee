@@ -3,7 +3,7 @@ package org.eclipse.iee.web.renderer;
 import java.util.Set;
 
 import org.eclipse.iee.core.HandlerManager;
-import org.eclipse.iee.core.document.DocumentPart;
+import org.eclipse.iee.core.IHasPropertyChangeListener;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -47,7 +47,7 @@ public class HTMLRendererManager implements IHTMLRendererManager {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends DocumentPart> IHTMLRenderer<T> getPadHTMLRenderer(T part) {
+	public <T extends IHasPropertyChangeListener> IHTMLRenderer<T> getPadHTMLRenderer(T part) {
 		Set<Class<?>> hierarchy = flattenHierarchyCache.getUnchecked(part.getClass());
 		for (Class<?> clz : hierarchy) {
 			IHTMLRenderer<T> handler = fhtmlRenderers.getHandler(clz);

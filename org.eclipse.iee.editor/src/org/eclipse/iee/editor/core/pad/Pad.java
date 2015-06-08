@@ -23,7 +23,6 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 	private final RectangleFigure selectionFigure; 
 
 	public Pad(T model) {
-		super(model);
 		selectionFigure = new RectangleFigure();
 		selectionFigure.setForegroundColor(IPadConfiguration.BORDER_COLOR_SELECTED);
 		selectionFigure.setLineWidth(1);

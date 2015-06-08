@@ -4,7 +4,6 @@ import java.util.Hashtable;
 
 import org.eclipse.iee.editor.core.pad.common.text.IContentTextPart;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
@@ -103,6 +102,14 @@ public class UserInteractionManager {
 				if (action != SWT.NULL) {
 					int caretOffset = getExt5().widgetOffset2ModelOffset(textWidget.getCaretOffset());
 					switch (action) {
+					case ST.COLUMN_PREVIOUS:
+					case ST.SELECT_COLUMN_PREVIOUS:
+						event.doit = caretPositionChange(caretOffset, false);
+						break;
+					case ST.COLUMN_NEXT:
+					case ST.SELECT_COLUMN_NEXT:	
+						event.doit = caretPositionChange(caretOffset, true);
+						break;
 					case ST.DELETE_NEXT:
 						Container container = fContainerManager
 								.getContainerHavingOffset(caretOffset);
@@ -195,6 +202,26 @@ public class UserInteractionManager {
 			}
 		});
 
+	}
+
+	private boolean caretPositionChange(int x, boolean caretMovesForward) {
+		Point selection = fSourceViewer.getSelectedRange();
+		if (selection.y == 0) {
+			Container container = fContainerManager.getContainerHavingOffset(caretMovesForward ? x : x - 1);
+			if (container != null) {
+				Position position = container.getPosition();
+				if (caretMovesForward) {
+					fContainerManager.activateEditor(container.getPad());
+					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
+							+ position.getLength()));
+				} else {
+					fContainerManager.activateEditor(container.getPad());
+					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()));
+				}
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private int getAction(KeyEvent event) {

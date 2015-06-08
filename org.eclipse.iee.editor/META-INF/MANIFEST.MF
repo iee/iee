@@ -39,6 +39,7 @@ Export-Package: org.eclipse.iee.editor;
    org.eclipse.swt.graphics,
    org.eclipse.swt.widgets",
  org.eclipse.iee.editor.core.pad.common;uses:="org.eclipse.iee.editor.core.pad,org.eclipse.swt.widgets",
+ org.eclipse.iee.editor.core.pad.common.text,
  org.eclipse.iee.editor.core.pad.common.ui,
  org.eclipse.iee.editor.core.pad.table,
  org.eclipse.iee.editor.core.storage;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream,org.eclipse.iee.editor.core.pad",

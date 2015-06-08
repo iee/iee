@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.container;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Caret;
@@ -25,5 +26,11 @@ public interface ITextEditor<M> {
 	Optional<ITextEditor<?>> getParent();
 	
 	void contribute(MenuManager menuManager);
+	
+	IFigure getFigure();
+	
+	void dispose();
+	
+	ContainerManager getContainerManager();
 	
 }

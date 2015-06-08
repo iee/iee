@@ -1,8 +1,12 @@
 package org.eclipse.iee.pad.graph.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
-public class GraphElement implements Serializable {
+import org.eclipse.iee.core.IHasPropertyChangeListener;
+
+public class GraphElement implements Serializable, IHasPropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,6 +18,10 @@ public class GraphElement implements Serializable {
 	
 	private int width = 1;
 
+	private GraphModel fGraph;
+	
+	private transient final PropertyChangeSupport fpcs = new PropertyChangeSupport(this);
+	
 	public String getFunction() {
 		return function;
 	}
@@ -44,6 +52,26 @@ public class GraphElement implements Serializable {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public GraphModel getGraph() {
+		return fGraph;
+	}
+	
+	void setGraph(GraphModel graph) {
+		fGraph = graph;
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		fpcs.addPropertyChangeListener(listener);
+	}
+	
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		fpcs.removePropertyChangeListener(listener);
+	}
+	
+	protected PropertyChangeSupport getPropertyChangeSupport() {
+		return fpcs;
 	}
 
 }

@@ -5,7 +5,9 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DocumentPart {
+import org.eclipse.iee.core.IHasPropertyChangeListener;
+
+public abstract class DocumentPart implements IHasPropertyChangeListener {
 
 	private final PropertyChangeSupport fpcs = new PropertyChangeSupport(this);
 	
@@ -48,10 +50,18 @@ public abstract class DocumentPart {
 		return children;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.IHasPropertyChangeListener#addPropertyChangeListener(java.beans.PropertyChangeListener)
+	 */
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		fpcs.addPropertyChangeListener(listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.iee.core.document.IHasPropertyChangeListener#removePropertyChangeListener(java.beans.PropertyChangeListener)
+	 */
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		fpcs.removePropertyChangeListener(listener);
 	}
@@ -69,7 +79,7 @@ public abstract class DocumentPart {
 	}
 	
 	void setParent(DocumentPart parent) {
-		DocumentPart oldValue = this.parent;
+		IHasPropertyChangeListener oldValue = this.parent;
 		this.parent = parent;
 		getPropertyChangeSupport().firePropertyChange("parent", oldValue, parent);
 	}
