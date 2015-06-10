@@ -8,6 +8,6 @@ public interface IObservableValue<T> {
 	
 	void addObserver(IObserver<T> observer);
 	
-	void removerObserver(IObserver<T> observer);
+	void removeObserver(IObserver<T> observer);
 	
 }

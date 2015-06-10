@@ -4,17 +4,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.iee.core.IHasPropertyChangeListener;
 
-import com.google.common.base.Converter;
 import com.google.common.base.Throwables;
+import com.google.common.reflect.TypeToken;
 
-public class ObservableProperty<T, P> implements IObservableValue<T> {
+public class ObservableProperty<T> implements IObservableValue<T> {
 
 	private IHasPropertyChangeListener fModel;
 	
@@ -26,19 +24,15 @@ public class ObservableProperty<T, P> implements IObservableValue<T> {
 	
 	private Method fSetter;
 	
-	private Type fPropertyType;
-	
-	private Type fValueType;
-	
-	private Converter<P, T> fConverter;
-	
 	private List<IObserver<T>> observers = new CopyOnWriteArrayList<>();
 	
-	public ObservableProperty(IHasPropertyChangeListener model, String property, Type propertyType, Type valueType, Converter<P, T> converter) {
+	public ObservableProperty(IHasPropertyChangeListener model, String property, Class<T> propertyType) {
+		this(model, property, TypeToken.of(propertyType));
+	}
+	
+	public ObservableProperty(IHasPropertyChangeListener model, String property, TypeToken<T> propertyType) {
 		fModel = model;
 		fProperty = property;
-		fPropertyType = propertyType;
-		fValueType = valueType;
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -52,7 +46,7 @@ public class ObservableProperty<T, P> implements IObservableValue<T> {
 		model.addPropertyChangeListener(fListener);
 		try {
 			fGetter = model.getClass().getMethod("get" + property.substring(0, 1).toUpperCase() + property.substring(1), new Class[]{});
-			fSetter = model.getClass().getMethod("set" + property.substring(0, 1).toUpperCase() + property.substring(1), new Class[] {(Class) propertyType} );
+			fSetter = model.getClass().getMethod("set" + property.substring(0, 1).toUpperCase() + property.substring(1), new Class[] {propertyType.getRawType()} );
 		} catch (NoSuchMethodException | SecurityException e) {
 			throw Throwables.propagate(e);
 		}
@@ -61,7 +55,7 @@ public class ObservableProperty<T, P> implements IObservableValue<T> {
 	@Override
 	public void setValue(T value) {
 		try {
-			fSetter.invoke(fModel, fConverter.reverse().convert(value));
+			fSetter.invoke(fModel);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw Throwables.propagate(e);
@@ -71,7 +65,7 @@ public class ObservableProperty<T, P> implements IObservableValue<T> {
 	@Override
 	public T getValue() {
 		try {
-			return fConverter.convert((P) fGetter.invoke(fModel, new Object() {}));
+			return (T) fGetter.invoke(fModel, new Object() {});
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw Throwables.propagate(e);
@@ -86,7 +80,7 @@ public class ObservableProperty<T, P> implements IObservableValue<T> {
 	}
 
 	@Override
-	public void removerObserver(IObserver<T> observer) {
+	public void removeObserver(IObserver<T> observer) {
 		observers.remove(observer);
 	}
 	

@@ -1,7 +1,5 @@
 package org.eclipse.iee.pad.graph.ui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +10,9 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.iee.editor.core.bindings.IObservableModel;
+import org.eclipse.iee.editor.core.bindings.ConvertedObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
+import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
@@ -27,6 +26,7 @@ import org.jfree.util.PaintUtilities;
 
 import com.google.common.base.Converter;
 import com.google.common.primitives.Doubles;
+import com.google.common.reflect.TypeToken;
 
 public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 
@@ -34,7 +34,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 	
 	private UIFormulaRenderer fFormulaRenderer;
 
-	private PropertyChangeListener fListener;
+	private IObserver<List<GraphElement>> fListener;
 	
 	private TextPartEditor fMinY;
 	
@@ -51,18 +51,26 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 	private IShellProvider fShellProvider;
 
 	private ChartEditor fChartEditor;
+
+	private ObservableProperty<Double> fMinXValue;
+
+	private ObservableProperty<Double> fMaxXValue;
+
+	private ObservableProperty<Double> fMinYValue;
+
+	private ObservableProperty<Double> fMaxYValue;
+
+	private ObservableProperty<List<String>> fVariablesValue;
+
+	private ObservableProperty<List<GraphElement>> fElementsValue;
 	
 	public GraphModelEditor(UIFormulaRenderer formulaRenderer, IShellProvider shellProvider) {
 		fFormulaRenderer = formulaRenderer;
 		fShellProvider = shellProvider;
-		fListener = new PropertyChangeListener() {
-			
+		fListener = new IObserver<List<GraphElement>>() {
 			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (getModel() == evt.getSource() &&
-						"elements".equals(evt.getPropertyName())) {
-					
-				}
+			public void valueChanged(List<GraphElement> oldValue, List<GraphElement> newValue) {
+				updateElements(newValue);
 			}
 		};
 	}
@@ -76,6 +84,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		GridData seriesData = new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		figure.add(seriesFigure, seriesData);
 		fChartEditor = new ChartEditor(fShellProvider);
+		addChildEditor(fChartEditor);
 		IFigure chartFigure = fChartEditor.getFigure();
 		GridData chartData = new GridData(
 				GridData.HORIZONTAL_ALIGN_FILL
@@ -166,21 +175,23 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		}
 	}
 	
-	public void bindGraphElementModel(IObservableModel<GraphModel> model) {
+	public void bindGraphElementModel(IObservableValue<GraphModel> model) {
 		bindObservableValue(model);
-		fMinX.bindValue((IObservableValue<String>) model.getObservableValue("minX"));
-		fMaxX.bindValue((IObservableValue<String>) model.getObservableValue("maxX"));
-		fMinY.bindValue((IObservableValue<String>) model.getObservableValue("minY"));
-		fMaxY.bindValue((IObservableValue<String>) model.getObservableValue("maxY"));
 	}
 	
+	@SuppressWarnings("serial")
 	@Override
-	protected void onValueChanged(GraphModel oldValue, GraphModel newValue) {
-
-		updateElements(newValue.getElements());
-
-		
-		fVarsProperty = new ObservableProperty<String, List<String>>(getModel(), "variables", List.class, String.class, new Converter<List<String>, String>() {
+	protected void doBindValue(GraphModel value) {
+		fMinXValue = new ObservableProperty<Double>(value, "minX", Double.class);
+		fMinX.bindValue(ConvertedObservableValue.from(fMinXValue, Doubles.stringConverter().reverse()));
+		fMaxXValue = new ObservableProperty<Double>(value, "maxX", Double.class);
+		fMaxX.bindValue(ConvertedObservableValue.from(fMaxXValue, Doubles.stringConverter().reverse()));
+		fMinYValue = new ObservableProperty<Double>(value, "minY", Double.class);
+		fMinY.bindValue(ConvertedObservableValue.from(fMinYValue, Doubles.stringConverter().reverse()));
+		fMaxYValue = new ObservableProperty<Double>(value, "maxY", Double.class);
+		fMaxY.bindValue(ConvertedObservableValue.from(fMaxYValue, Doubles.stringConverter().reverse()));
+		fVariablesValue = new ObservableProperty<List<String>>(value, "variables", new TypeToken<List<String>> (){});
+		fVars.bindValue(ConvertedObservableValue.from(fVariablesValue, new Converter<List<String>, String>() {
 			@Override
 			protected String doForward(List<String> variables) {
 				StringBuilder sb = new StringBuilder();
@@ -198,41 +209,28 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 				String[] variables = b.split(",");
 				return Arrays.asList(variables);
 			}
-		});
-		fVars.setValue(fVarsProperty);
+		}));
+		fElementsValue = new ObservableProperty<List<GraphElement>>(value, "elements", new TypeToken<List<GraphElement>>() {});
+		fElementsValue.addObserver(fListener);
+	}
 	
+	@Override
+	protected void doUnbindValue(GraphModel oldValue) {
+		fMaxXValue.dispose();
+		fMaxYValue.dispose();
+		fMinXValue.dispose();
+		fMinYValue.dispose();
+		fVariablesValue.dispose();
+		fElementsValue.dispose();
+	}
+	
+	@Override
+	protected void onValueChanged(GraphModel oldValue, GraphModel newValue) {
+		updateElements(newValue.getElements());
 	}
 
 	public String getNextColor() {
 		return PaintUtilities.colorToString((java.awt.Color) fChartEditor.getDrawingSupplier().getNextPaint());
-	}
-
-	public void dispose() {
-		fMaxX.dispose();
-		fMaxY.dispose();
-		fMinX.dispose();
-		fMinY.dispose();
-		disposeModelListeners();
-		fChartEditor.dispose();
-	}
-
-	private void disposeModelListeners() {
-		getModel().removePropertyChangeListener(fListener);
-		if (fMaxXProperty != null) {
-			fMaxXProperty.dispose();
-		}
-		if (fMaxYProperty != null) {
-			fMaxYProperty.dispose();
-		}
-		if (fMinXProperty != null) {
-			fMinXProperty.dispose();
-		}
-		if (fMinYProperty != null) {
-			fMinYProperty.dispose();
-		}
-		if (fVarsProperty != null) {
-			fVarsProperty.dispose();
-		}
 	}
 
 	@Override

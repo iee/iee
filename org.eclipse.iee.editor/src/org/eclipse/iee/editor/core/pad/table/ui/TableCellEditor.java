@@ -4,7 +4,7 @@ import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
-import org.eclipse.iee.editor.core.bindings.IObserver;
+import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
@@ -16,37 +16,12 @@ import org.eclipse.swt.widgets.Caret;
 public class TableCellEditor extends AbstractTextEditor<TableCell> {
 
 	private TextPartEditor fTextPartEditor;
+	private ObservableProperty<String> fValue;
 
 	public TableCellEditor() {
 		setMenuContributor(CellMenuContributor.INSTANCE);
 		fTextPartEditor = new TextPartEditor();
 		addChildEditor(fTextPartEditor);
-		fTextPartEditor.setValue(new IObservableValue<String>() {
-			
-			@Override
-			public void setValue(String value) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void removerObserver(IObserver<String> observer) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public String getValue() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public void addObserver(IObserver<String> observer) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 	}
 	
 	
@@ -88,5 +63,22 @@ public class TableCellEditor extends AbstractTextEditor<TableCell> {
 		figure.add(fTextPartEditor.getFigure(), BorderLayout.CENTER);
 		return figure;
 	}
+	
+	public void bindValue(IObservableValue<TableCell> value) {
+		bindObservableValue(value);
+	}
+	
+	@Override
+	protected void doBindValue(TableCell value) {
+		fValue = new ObservableProperty<String>(value, "value", String.class);
+		fTextPartEditor.bindValue(fValue);
+	}
+	
+	@Override
+	protected void doUnbindValue(TableCell oldValue) {
+		fValue.dispose();
+	}
+	
+	
 
 }

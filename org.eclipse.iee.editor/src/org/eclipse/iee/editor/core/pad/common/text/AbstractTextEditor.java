@@ -91,11 +91,26 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 		IObservableValue<T> oldValue = fModel;
 		fModel = value;
 		if (oldValue != value) {
+			T old = oldValue.getValue();
 			if (oldValue != null) {
-				oldValue.removerObserver(fObserver);
+				if (old != null) {
+					doUnbindValue(old);
+				}
+				oldValue.removeObserver(fObserver);
 			}
 			value.addObserver(fObserver);
+			T newV = value.getValue();
+			if (newV != null) {
+				doBindValue(newV);
+			}
+			onValueChanged(old, newV);
 		}
+	}
+
+	protected void doBindValue(T value) {
+	}
+
+	protected void doUnbindValue(T oldValue) {
 	}
 
 	protected void onValueChanged(T oldValue, T newValue) {
@@ -125,7 +140,10 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	
 	public void dispose() {
 		if (fModel != null) {
-			fModel.removerObserver(fObserver);
+			if (fModel.getValue() != null) {
+				doUnbindValue(fModel.getValue());
+			}
+			fModel.removeObserver(fObserver);
 		}
 		for (ITextEditor<?> child : children) {
 			child.dispose();

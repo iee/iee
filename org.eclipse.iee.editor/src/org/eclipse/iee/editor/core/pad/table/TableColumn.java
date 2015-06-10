@@ -25,7 +25,9 @@ public class TableColumn extends DocumentPart {
 	}
 
 	public void setHeader(String header) {
+		String oldValue = header;
 		this.header = header;
+		getPropertyChangeSupport().firePropertyChange("header", oldValue, header);
 	}
 
 	public InputValidation getValidation() {

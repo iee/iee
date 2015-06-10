@@ -9,6 +9,7 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
+import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
@@ -35,7 +36,6 @@ import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.experimental.swt.SWTUtils;
 import org.jfree.util.PaintUtilities;
 
-import com.google.common.base.Converter;
 import com.google.common.base.Strings;
 
 public class GraphElementEditor extends AbstractTextEditor<GraphElement> implements IMenuContributor<GraphElement> {
@@ -54,8 +54,12 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 
 	private TextPartEditor fTextPartEditor;
 
-	private ObservableProperty<String, String> fFunctionProperty;
-	
+	private ObservableProperty<String> fColorValue;
+
+	private ObservableProperty<String> fFunctionValue;
+
+	private ObservableProperty<Integer> fWidthValue;
+
 	public GraphElementEditor(UIFormulaRenderer formulaRenderer, DrawingSupplier drawingSupplier, IShellProvider shellProvider) {
 		this.fFormulaRenderer = formulaRenderer;
 		fDrawingSupplier = drawingSupplier;
@@ -67,9 +71,7 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 		figure.setLayoutManager(new ToolbarLayout(false));
 		fFormulaImage = new ImageFigure();
 		fTextPartEditor = new TextPartEditor();
-		
-		fFunctionProperty = new ObservableProperty<String, String>(getModel(), "function", String.class, String.class, Converter.<String> identity());
-		fTextPartEditor.setValue(fFunctionProperty);
+		addChildEditor(fTextPartEditor);
 		
 		fTextFigure = fTextPartEditor.getFigure();
 		fLine = new Label();
@@ -226,21 +228,49 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 		return PaintUtilities.colorToString((java.awt.Color) fDrawingSupplier.getNextPaint());
 	}
 	
-	@Override
-	public void setValue(IObservableValue<GraphElement> value) {
-		super.setValue(value);
-		String color = value.getValue().getColor();
-		if (color == null) {
-			color = getNextColor();
-			value.getValue().setColor(color);
-		}
-		setColor(PaintUtilities.stringToColor(color));
-		setWidth(value.getValue().getWidth());
-	}
-
-	public void dispose() {
-		fTextPartEditor.dispose();
-		fFunctionProperty.dispose();
+	public void bindValue(IObservableValue<GraphElement> value) {
+		super.bindObservableValue(value);
 	}
 	
+	@Override
+	protected void doBindValue(GraphElement value) {
+
+		IObserver<Integer> fWidthObserver = new IObserver<Integer>() {
+			@Override
+			public void valueChanged(Integer oldValue, Integer newValue) {
+				setWidth(newValue);
+			}
+		};
+		IObserver<String> fColorObserver = new IObserver<String>() {
+			@Override
+			public void valueChanged(String oldValue, String newValue) {
+				setColor(PaintUtilities.stringToColor(newValue));
+			}
+		};
+		
+		fColorValue = new ObservableProperty<String>(value, "color", String.class);
+		fColorValue.addObserver(fColorObserver);
+		String color = fColorValue.getValue();
+		if (color == null) {
+			color = getNextColor();
+			fColorValue.setValue(color);
+		}
+		fWidthValue = new ObservableProperty<Integer>(value, "width", Integer.class);
+		fWidthValue.addObserver(fWidthObserver);
+		
+		fFunctionValue = new ObservableProperty<String>(value, "function", String.class);
+		fTextPartEditor.bindValue(fFunctionValue);
+		
+		setColor(PaintUtilities.stringToColor(color));
+		setWidth(fWidthValue.getValue());
+
+	}
+	
+	@Override
+	protected void doUnbindValue(GraphElement value) {
+		fWidthValue.dispose();
+		fFunctionValue.dispose();
+		fWidthValue.dispose();
+	}
+
 }
