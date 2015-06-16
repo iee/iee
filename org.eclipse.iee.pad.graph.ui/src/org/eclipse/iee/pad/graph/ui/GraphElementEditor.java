@@ -11,6 +11,7 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
@@ -71,11 +72,10 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 		figure.setLayoutManager(new ToolbarLayout(false));
 		fFormulaImage = new ImageFigure();
 		fTextPartEditor = new TextPartEditor();
-		addChildEditor(fTextPartEditor);
+		addEditor(fTextPartEditor);
 		
 		fTextFigure = fTextPartEditor.getFigure();
 		fLine = new Label();
-		toggleFormulaImage();
 		
 		figure.addMouseListener(new MouseListener() {
 			
@@ -104,7 +104,6 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 			public void focusLost(FocusEvent fe) {
 				toggleFormulaImage();
 			}});
-		toggleFormulaImage();
 		return figure;
 	}
 	
@@ -271,6 +270,11 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 		fWidthValue.dispose();
 		fFunctionValue.dispose();
 		fWidthValue.dispose();
+	}
+	@Override
+	public void attach(ContainerManager containerManager) {
+		super.attach(containerManager);
+		toggleFormulaImage();
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.eclipse.iee.pad.graph.ui;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,17 +37,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 
 	private IObserver<List<GraphElement>> fListener;
 	
-	private TextPartEditor fMinY;
-	
 	private Figure fSeries;
-	
-	private TextPartEditor fMaxY;
-	
-	private TextPartEditor fMinX;
-	
-	private TextPartEditor fVars;
-	
-	private TextPartEditor fMaxX;
 	
 	private IShellProvider fShellProvider;
 
@@ -80,11 +71,11 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		GridLayout manager = new GridLayout();
 		manager.numColumns = 2;
 		figure.setLayoutManager(manager);
+		fChartEditor = new ChartEditor(fShellProvider);
 		IFigure seriesFigure = createSeriesFigure();
 		GridData seriesData = new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		figure.add(seriesFigure, seriesData);
-		fChartEditor = new ChartEditor(fShellProvider);
-		addChildEditor(fChartEditor);
+		addEditor(fChartEditor);
 		IFigure chartFigure = fChartEditor.getFigure();
 		GridData chartData = new GridData(
 				GridData.HORIZONTAL_ALIGN_FILL
@@ -107,18 +98,25 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
 		figure.setLayoutManager(layout);
-		fMaxY = new TextPartEditor();
 		GridData maxXdata = new GridData();
-		figure.add(fMaxY.getFigure(), maxXdata);
+		TextPartEditor maxY = new TextPartEditor();
+		maxY.bindValue(ConvertedObservableValue.from(fMaxYValue, Doubles.stringConverter().reverse()));
+		figure.add(maxY.getFigure(), maxXdata);
+		addEditor(maxY);
 		fSeries = new Figure();
 		fSeries.setLayoutManager(new ToolbarLayout(false));
 		GridData seriesData = new GridData(
 				GridData.GRAB_VERTICAL 
 				| GridData.VERTICAL_ALIGN_CENTER);
 		figure.add(fSeries, seriesData);
-		fMinY = new TextPartEditor();
 		GridData minXdata = new GridData();
-		figure.add(fMinY.getFigure(), minXdata);
+		TextPartEditor minY = new TextPartEditor();
+		minY.bindValue(ConvertedObservableValue.from(fMinYValue, Doubles.stringConverter().reverse()));
+		addEditor(minY);
+		figure.add(minY.getFigure(), minXdata);
+		
+		updateElements(getModel()!= null ? getModel().getElements() : Collections.<GraphElement> emptyList());
+		
 		return figure;
 	}
 	
@@ -127,23 +125,48 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		figure.setLayoutManager(layout);
-		fMinX = new TextPartEditor();
 		GridData minXdata = new GridData();
-		figure.add(fMinX.getFigure(), minXdata);
-		fVars = new TextPartEditor();
+		TextPartEditor minX = new TextPartEditor();
+		minX.bindValue(ConvertedObservableValue.from(fMinXValue, Doubles.stringConverter().reverse()));
+		addEditor(minX);
+		figure.add(minX.getFigure(), minXdata);
 		GridData varsData = new GridData();
 		varsData.horizontalAlignment = GridData.CENTER;
 		varsData.grabExcessHorizontalSpace = true;
-		figure.add(fVars.getFigure(), varsData);
-		fMaxX = new TextPartEditor();
+		TextPartEditor vars = new TextPartEditor();
+		vars.bindValue(ConvertedObservableValue.from(fVariablesValue, new Converter<List<String>, String>() {
+			@Override
+			protected String doForward(List<String> variables) {
+				StringBuilder sb = new StringBuilder();
+				for (String variable : variables) {
+					if (sb.length() > 0) {
+						sb.append(",");
+					}
+					sb.append(variable);
+				}
+				return sb.toString();
+			}
+
+			@Override
+			protected List<String> doBackward(String b) {
+				String[] variables = b.split(",");
+				return Arrays.asList(variables);
+			}
+		}));
+		addEditor(vars);
+		figure.add(vars.getFigure(), varsData);
 		GridData maxXdata = new GridData();
 		maxXdata.horizontalAlignment = GridData.END;
-		figure.add(fMaxX.getFigure(), maxXdata);
+		TextPartEditor maxX = new TextPartEditor();
+		maxX.bindValue(ConvertedObservableValue.from(fMaxXValue, Doubles.stringConverter().reverse()));
+		addEditor(maxX);
+		figure.add(maxX.getFigure(), maxXdata);
 		return figure;
 	}
 	
 	private void addElementComposite(final GraphElement graphElement) {
 		GraphElementEditor elementEditor = new GraphElementEditor(fFormulaRenderer, fChartEditor.getDrawingSupplier(), fShellProvider);
+		addEditor(elementEditor);
 		editors.put(graphElement, elementEditor);
 		fSeries.add(elementEditor.getFigure());
 	}
@@ -164,12 +187,15 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 	}
 	
 	private void updateElements(List<GraphElement> elements) {
+		if (fSeries == null) {
+			return;
+		}
 		for (GraphElementEditor editor: editors.values()) {
 			fSeries.remove(editor.getFigure());
+			removeEditor(editor);
 			editor.dispose();
 		}
 		editors.clear();
-		fSeries.removeAll();
 		for (GraphElement graphElement : elements) {
 			addElementComposite(graphElement);
 		}
@@ -183,33 +209,10 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 	@Override
 	protected void doBindValue(GraphModel value) {
 		fMinXValue = new ObservableProperty<Double>(value, "minX", Double.class);
-		fMinX.bindValue(ConvertedObservableValue.from(fMinXValue, Doubles.stringConverter().reverse()));
 		fMaxXValue = new ObservableProperty<Double>(value, "maxX", Double.class);
-		fMaxX.bindValue(ConvertedObservableValue.from(fMaxXValue, Doubles.stringConverter().reverse()));
 		fMinYValue = new ObservableProperty<Double>(value, "minY", Double.class);
-		fMinY.bindValue(ConvertedObservableValue.from(fMinYValue, Doubles.stringConverter().reverse()));
 		fMaxYValue = new ObservableProperty<Double>(value, "maxY", Double.class);
-		fMaxY.bindValue(ConvertedObservableValue.from(fMaxYValue, Doubles.stringConverter().reverse()));
 		fVariablesValue = new ObservableProperty<List<String>>(value, "variables", new TypeToken<List<String>> (){});
-		fVars.bindValue(ConvertedObservableValue.from(fVariablesValue, new Converter<List<String>, String>() {
-			@Override
-			protected String doForward(List<String> variables) {
-				StringBuilder sb = new StringBuilder();
-				for (String variable : variables) {
-					if (sb.length() > 0) {
-						sb.append(",");
-					}
-					sb.append(variable);
-				}
-				return sb.toString();
-			}
-
-			@Override
-			protected List<String> doBackward(String b) {
-				String[] variables = b.split(",");
-				return Arrays.asList(variables);
-			}
-		}));
 		fElementsValue = new ObservableProperty<List<GraphElement>>(value, "elements", new TypeToken<List<GraphElement>>() {});
 		fElementsValue.addObserver(fListener);
 	}

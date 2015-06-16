@@ -35,6 +35,7 @@ public class ObservableProperty<T> implements IObservableValue<T> {
 		fProperty = property;
 		fListener = new PropertyChangeListener() {
 			@Override
+			@SuppressWarnings("unchecked")
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getSource() == fModel && evt.getPropertyName().equals(fProperty)) {
 					for (IObserver<T> observer : observers) {
@@ -46,14 +47,21 @@ public class ObservableProperty<T> implements IObservableValue<T> {
 		model.addPropertyChangeListener(fListener);
 		try {
 			fGetter = model.getClass().getMethod("get" + property.substring(0, 1).toUpperCase() + property.substring(1), new Class[]{});
-			fSetter = model.getClass().getMethod("set" + property.substring(0, 1).toUpperCase() + property.substring(1), new Class[] {propertyType.getRawType()} );
 		} catch (NoSuchMethodException | SecurityException e) {
 			throw Throwables.propagate(e);
 		}
+		try {
+			fSetter = model.getClass().getMethod("set" + property.substring(0, 1).toUpperCase() + property.substring(1), new Class[] {propertyType.getRawType()} );
+		} catch (NoSuchMethodException e) {
+		}
+		
 	}
 	
 	@Override
 	public void setValue(T value) {
+		if (fSetter == null) {
+			throw new IllegalAccessError("Property is read only!");
+		}
 		try {
 			fSetter.invoke(fModel);
 		} catch (IllegalAccessException | IllegalArgumentException
@@ -62,10 +70,11 @@ public class ObservableProperty<T> implements IObservableValue<T> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getValue() {
 		try {
-			return (T) fGetter.invoke(fModel, new Object() {});
+			return (T) fGetter.invoke(fModel, new Object[] {});
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw Throwables.propagate(e);

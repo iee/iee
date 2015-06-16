@@ -12,7 +12,6 @@ public class GraphPart extends PadDocumentPart {
 		fModel = model;
 	}
 
-
 	public GraphModel getModel() {
 		return fModel;
 	}

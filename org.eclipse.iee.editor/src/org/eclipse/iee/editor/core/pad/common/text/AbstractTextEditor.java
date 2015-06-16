@@ -1,7 +1,5 @@
 package org.eclipse.iee.editor.core.pad.common.text;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
@@ -26,8 +24,6 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	
 	private Optional<IMenuContributor<? super T>> fMenuContributor = Optional.absent();
 	
-	private Collection<ITextEditor<?>> children = new HashSet<>();
-	
 	private IFigure fFigure;
 	
 	private IObserver<T> fObserver = new IObserver<T>() {
@@ -50,7 +46,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	
 	@Override
 	public T getModel() {
-		return fModel.getValue();
+		return fModel != null ? fModel.getValue() : null;
 	}
 	
 	public void setParent(Optional<ITextEditor<?>> parent) {
@@ -65,11 +61,33 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	public void addEditor(ITextEditor<?> child) {
 		child.setParent(Optional.<ITextEditor<?>> of(this));
 		fChildren.add(child);
+		Optional<ContainerManager> containerManager = getContainerManager();
+		if (containerManager.isPresent()) {
+			child.attach(containerManager.get());
+		}
+	}
+	
+	public void attach(ContainerManager containerManager) {
+		containerManager.registerVisual(this, getFigure());
+		for (ITextEditor<?> iTextEditor : fChildren) {
+			iTextEditor.attach(containerManager);
+		}
 	}
 	
 	public void removeEditor(ITextEditor<?> child) {
-		child.setParent(Optional.<ITextEditor<?>> absent());
+		Optional<ContainerManager> containerManager = getContainerManager();
+		if (containerManager.isPresent()) {
+			child.attach(containerManager.get());
+		}
 		fChildren.remove(child);
+		child.setParent(Optional.<ITextEditor<?>> absent());
+	}
+	
+	public void detach(ContainerManager containerManager) {
+		containerManager.unregisterVisual(getFigure());
+		for (ITextEditor<?> iTextEditor : fChildren) {
+			iTextEditor.detach(containerManager);
+		}
 	}
 	
 	protected void setMenuContributor(IMenuContributor<? super T> instance) {
@@ -91,8 +109,9 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 		IObservableValue<T> oldValue = fModel;
 		fModel = value;
 		if (oldValue != value) {
-			T old = oldValue.getValue();
+			T old = null;
 			if (oldValue != null) {
+				old = oldValue.getValue();
 				if (old != null) {
 					doUnbindValue(old);
 				}
@@ -124,20 +143,15 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 		return getObservableValue().getValue();
 	}
 	
-	protected void addChildEditor(ITextEditor<?> child) {
-		children.add(child);
-		getContainerManager().registerVisual(child, child.getFigure());
-	}
-	
-	public ContainerManager getContainerManager() {
-		return getParent().get().getContainerManager();
-	}
+	public Optional<ContainerManager> getContainerManager() {
+		Optional<ITextEditor<?>> parent = getParent();
+		if (parent.isPresent()) {
+			return parent.get().getContainerManager();
+		} else {
+			return Optional.absent();
+		}
+ 	}
 
-	protected void removeChildEditor(ITextEditor<?> child) {
-		children.remove(child);
-		getContainerManager().unregisterVisual(child.getFigure());
-	}
-	
 	public void dispose() {
 		if (fModel != null) {
 			if (fModel.getValue() != null) {
@@ -145,7 +159,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 			}
 			fModel.removeObserver(fObserver);
 		}
-		for (ITextEditor<?> child : children) {
+		for (ITextEditor<?> child : fChildren) {
 			child.dispose();
 		}
 		doDispose();

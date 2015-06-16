@@ -1065,7 +1065,14 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			protected IFigure createFigure() {
 				// TODO Auto-generated method stub
 				return null;
-			}});
+			}
+			
+			@Override
+			public Optional<ContainerManager> getContainerManager() {
+				return Optional.of(ContainerManager.this);
+			}
+		
+		});
 	}
 
 	public void deactivate() {

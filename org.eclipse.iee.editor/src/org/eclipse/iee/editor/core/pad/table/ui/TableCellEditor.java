@@ -21,7 +21,7 @@ public class TableCellEditor extends AbstractTextEditor<TableCell> {
 	public TableCellEditor() {
 		setMenuContributor(CellMenuContributor.INSTANCE);
 		fTextPartEditor = new TextPartEditor();
-		addChildEditor(fTextPartEditor);
+		addEditor(fTextPartEditor);
 	}
 	
 	

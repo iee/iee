@@ -34,8 +34,6 @@ import org.jfree.util.PaintUtilities;
 
 public class ChartEditor extends AbstractTextEditor<GraphModel> {
 
-	private XYPlot plot;
-	
 	private AxisChangeListener fDomainAxisListener;
 	
 	private AxisChangeListener fRangeAxisListener;
@@ -47,14 +45,28 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 	private XYDataset dataset;
 	
 	private IShellProvider fShellProvider;
+
+	private JFreeChart fChart;
 	
 	public ChartEditor(IShellProvider fShellProvider) {
 		this.fShellProvider = fShellProvider;
+		fListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String propertyName = evt.getPropertyName();
+				if ("maxX".equals(propertyName) 
+						|| "minX".equals(propertyName)
+						|| "maxY".equals(propertyName)
+						|| "minY".equals(propertyName)) {
+					updateAxes(getPlot());
+				}
+			}
+		};
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new ChartFigure(createChart(), fShellProvider);
+		return new ChartFigure(getChart(), fShellProvider);
 	}
 	
 	public JFreeChart createChart() {
@@ -67,7 +79,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		chart.setBackgroundPaint(Color.white);
 		chart.setBorderVisible(true);
 		chart.setBorderPaint(Color.BLACK);
-		plot = (XYPlot) chart.getPlot();
+		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setOrientation(PlotOrientation.VERTICAL);
 		plot.setBackgroundPaint(Color.lightGray);
 		plot.setDomainGridlinePaint(Color.white);
@@ -77,9 +89,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, Color.black);
 		
-		final GraphModel model = getModel();
-		
-		updateAxes();
+		updateAxes(plot);
 		
 		fDomainAxisListener = new AxisChangeListener() {
 			@Override
@@ -98,33 +108,29 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		plot.getDomainAxis().addChangeListener(fDomainAxisListener);
 		plot.getRangeAxis().addChangeListener(fRangeAxisListener);
 		
-		fListener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				String propertyName = evt.getPropertyName();
-				if ("maxX".equals(propertyName) 
-						|| "minX".equals(propertyName)
-						|| "maxY".equals(propertyName)
-						|| "minY".equals(propertyName)) {
-					updateAxes();
-				}
-			}
-		};
-		model.addPropertyChangeListener(fListener);
-		
 		return chart;
+	}
+	
+	@Override
+	protected void doBindValue(GraphModel value) {
+		value.addPropertyChangeListener(fListener);
+	}
+	
+	@Override
+	protected void doUnbindValue(GraphModel oldValue) {
+		oldValue.removePropertyChangeListener(fListener);
 	}
 
 
-	private void updateAxes() {
+	private void updateAxes(XYPlot plot) {
 		final GraphModel model = getModel();
-		if (model.getMaxX() != null && model.getMinX() != null) {
+		if (model != null && model.getMaxX() != null && model.getMinX() != null) {
 			plot.getDomainAxis().setRange(model.getMinX(), model.getMaxX());
 		} else {
 			plot.getDomainAxis().setAutoRange(true);
 		}
 		
-		if (model.getMaxY() != null && model.getMinY() != null) {
+		if (model != null && model.getMaxY() != null && model.getMinY() != null) {
 			plot.getRangeAxis().setRange(model.getMinY(), model.getMaxY());
 		} else {
 			plot.getRangeAxis().setAutoRange(true);
@@ -180,7 +186,8 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 
 			@Override
 			public int getSeriesCount() {
-				return getModel().getElements().size();
+				GraphModel model = getModel();
+				return model != null ? model.getElements().size() : 0;
 			}
 			
 			private double[][] getResult(int number) {
@@ -235,8 +242,8 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 	
 	public void dispose() {
 		getModel().removePropertyChangeListener(fListener);
-		plot.getDomainAxis().removeChangeListener(fDomainAxisListener);
-		plot.getRangeAxis().removeChangeListener(fRangeAxisListener);
+		getPlot().getDomainAxis().removeChangeListener(fDomainAxisListener);
+		getPlot().getRangeAxis().removeChangeListener(fRangeAxisListener);
 	}
 
 
@@ -244,13 +251,13 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		results = new HashMap<>(result);
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				XYItemRenderer renderer = plot.getRenderer();
+				XYItemRenderer renderer = getPlot().getRenderer();
 				List<GraphElement> elements = getModel().getElements();
 				for (int i = 0; i < elements.size(); i++) {
 					GraphElement element = elements.get(i);
 					String color = element.getColor();
 					if (color == null) {
-						color = PaintUtilities.colorToString((Color) plot.getDrawingSupplier().getNextPaint());
+						color = PaintUtilities.colorToString((Color) getPlot().getDrawingSupplier().getNextPaint());
 					}
 					renderer.setSeriesPaint(i, PaintUtilities.stringToColor(color));
 					int width = element.getWidth();
@@ -260,14 +267,25 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 					renderer.setSeriesStroke(i, new BasicStroke(width));
 				}
 				
-				plot.datasetChanged(new DatasetChangeEvent(this, dataset));
+				getPlot().datasetChanged(new DatasetChangeEvent(this, dataset));
 			}
 		});
 		
 	}
 
 	public DrawingSupplier getDrawingSupplier() {
-		return plot.getDrawingSupplier();
+		return getPlot().getDrawingSupplier();
+	}
+
+	private XYPlot getPlot() {
+		return (XYPlot) getChart().getPlot();
+	}
+
+	private JFreeChart getChart() {
+		if (fChart == null) {
+			fChart = createChart();
+		}
+		return fChart;
 	}
 
 }

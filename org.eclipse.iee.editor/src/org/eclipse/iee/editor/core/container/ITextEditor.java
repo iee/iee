@@ -30,7 +30,11 @@ public interface ITextEditor<M> {
 	IFigure getFigure();
 	
 	void dispose();
-	
-	ContainerManager getContainerManager();
-	
+
+	Optional<ContainerManager> getContainerManager();
+
+	void attach(ContainerManager containerManager);
+
+	void detach(ContainerManager containerManager);
+
 }

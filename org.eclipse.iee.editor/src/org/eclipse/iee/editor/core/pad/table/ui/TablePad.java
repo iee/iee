@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.draw2d.AbstractBorder;
-import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -14,24 +13,17 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.iee.editor.core.bindings.IObservableValue;
-import org.eclipse.iee.editor.core.bindings.IObserver;
-import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.FigurePad;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
-import org.eclipse.iee.editor.core.pad.common.text.ITextAdapter;
 import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
-import org.eclipse.iee.editor.core.pad.table.CellMenuContributor;
 import org.eclipse.iee.editor.core.pad.table.TableCell;
 import org.eclipse.iee.editor.core.pad.table.TableColumn;
 import org.eclipse.iee.editor.core.pad.table.TablePart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -50,8 +42,7 @@ public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart
 
 	private PropertyChangeListener fListener;
 	
-	public TablePad(TablePart part) {
-		super(part);
+	public TablePad() {
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -63,7 +54,6 @@ public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart
 				}
 			}
 		};
-		part.addPropertyChangeListener(fListener);
 	}
 
 	@Override
@@ -198,13 +188,13 @@ public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart
 	}
 	
 	private void addColumnEditor(TableColumnEditor tableColumnEditor) {
-		addChildEditor(tableColumnEditor);
+		addEditor(tableColumnEditor);
 		IFigure figure = tableColumnEditor.getFigure();
 		fTable.add(figure, new GridData(GridData.FILL, GridData.FILL, true, true));
 	}
 
 	private void addCellEditor(TableCellEditor tableCellEditor) {
-		addChildEditor(tableCellEditor);
+		addEditor(tableCellEditor);
 		IFigure figure = tableCellEditor.getFigure();
 		fTable.add(figure, new GridData(GridData.FILL, GridData.FILL, true, true));
 	}
@@ -236,7 +226,7 @@ public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart
 	//TODO remove
 	@Override
 	public Pad<TablePart> copy() {
-		return new TablePad(getDocumentPart().copy());
+		return new TablePad();
 	}
 
 	@Override
@@ -354,6 +344,16 @@ public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart
 		disableHighlight();
 		getModel().removePropertyChangeListener(fListener);
 		getContainer().getMainFigure().remove(fTable);
+	}
+	
+	@Override
+	protected void doBindValue(TablePart value) {
+		value.addPropertyChangeListener(fListener);
+	}
+	
+	@Override
+	protected void doUnbindValue(TablePart oldValue) {
+		oldValue.removePropertyChangeListener(fListener);
 	}
 
 }

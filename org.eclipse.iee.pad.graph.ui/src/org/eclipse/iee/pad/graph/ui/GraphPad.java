@@ -1,6 +1,5 @@
 package org.eclipse.iee.pad.graph.ui;
 
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
@@ -9,6 +8,8 @@ import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.core.utils.ArrayUtils;
+import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.pad.FigurePad;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -32,10 +33,16 @@ public class GraphPad extends FigurePad<GraphPart> implements Serializable {
 	private UIFormulaRenderer formulaRenderer;
 
 	
-	public GraphPad(GraphPart part, UIFormulaRenderer formulaRenderer) {
-		super(part);
+	public GraphPad(UIFormulaRenderer formulaRenderer) {
 		this.formulaRenderer = formulaRenderer;
 		fIsAdvancedMode = false;
+		fGraphModelEditor = new GraphModelEditor(formulaRenderer, new IShellProvider() {
+			@Override
+			public Shell getShell() {
+				return getContainer().getTextWidget().getShell();
+			}
+		});
+		addEditor(fGraphModelEditor);
 	}
 
 	private IFileMessageListener fFileMessageListener = new IFileMessageListener() {
@@ -52,18 +59,10 @@ public class GraphPad extends FigurePad<GraphPart> implements Serializable {
 
 	};
 
-	private PropertyChangeListener fModelListener;
-	
+	private ObservableProperty<GraphModel> fModelValue;
+
 	@Override
 	public IFigure createFigure() {
-		fGraphModelEditor = new GraphModelEditor(formulaRenderer, new IShellProvider() {
-			@Override
-			public Shell getShell() {
-				return getContainer().getTextWidget().getShell();
-			}
-		});
-		FileMessager.getInstance().addFileMessageListener(fFileMessageListener, 
-				getContainer().getContainerManager().getStoragePath());
 		return fGraphModelEditor.getFigure();
 	}
 
@@ -74,7 +73,7 @@ public class GraphPad extends FigurePad<GraphPart> implements Serializable {
 
 	@Override
 	public GraphPad copy() {
-		GraphPad newPad = new GraphPad(getDocumentPart().copy(), formulaRenderer);
+		GraphPad newPad = new GraphPad(formulaRenderer);
 		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
 		return newPad;
 	}
@@ -123,12 +122,23 @@ public class GraphPad extends FigurePad<GraphPart> implements Serializable {
 	public String getTex() {
 		return "";
 	}
-
+	
 	@Override
-	public void dispose() {
-		super.dispose();
-		getDocumentPart().getModel().addPropertyChangeListener(fModelListener);
-		fGraphModelEditor.dispose();
+	public void attachContainer(Container container) {
+		super.attachContainer(container);
+		FileMessager.getInstance().addFileMessageListener(fFileMessageListener, 
+				container.getContainerManager().getStoragePath());
 	}
 
+	@Override
+	protected void doBindValue(GraphPart value) {
+		fModelValue = new ObservableProperty<GraphModel>(value, "model", GraphModel.class);
+		fGraphModelEditor.bindGraphElementModel(fModelValue);
+	}
+	
+	@Override
+	protected void doUnbindValue(GraphPart oldValue) {
+		fModelValue.dispose();
+	}
+	
 }

@@ -6,6 +6,8 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
+import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
@@ -22,11 +24,17 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 
 	private final RectangleFigure selectionFigure; 
 
-	public Pad(T model) {
+	private IObservableValue<T> fObservableValue = new DefaultObservableValue<T>();
+	
+	public Pad() {
 		selectionFigure = new RectangleFigure();
 		selectionFigure.setForegroundColor(IPadConfiguration.BORDER_COLOR_SELECTED);
 		selectionFigure.setLineWidth(1);
 		selectionFigure.setFill(false);
+	}
+	
+	public Pad(T model) {
+		this();
 	}
 
 	public String getContainerManagerID() {
@@ -123,7 +131,11 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 	public T getDocumentPart() {
 		return (T) fContainer.getPadPart();
 	}
-
+	
+	public void bindDocumentPart(IObservableValue<T> model) {
+		bindObservableValue(model);
+	}
+	
 	public String getContainerID() {
 		return getDocumentPart().getId();
 	}

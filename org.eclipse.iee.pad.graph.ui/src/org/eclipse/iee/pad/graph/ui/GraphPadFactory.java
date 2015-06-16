@@ -1,5 +1,6 @@
 package org.eclipse.iee.pad.graph.ui;
 
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.graph.GraphPart;
@@ -14,7 +15,11 @@ public class GraphPadFactory implements IPadFactory<GraphPart> {
 	
 	@Override
 	public GraphPad create(GraphPart documentPart) {
-		return new GraphPad(documentPart, formulaRenderer);
+		GraphPad graphPad = new GraphPad(formulaRenderer);
+		DefaultObservableValue<GraphPart> model = new DefaultObservableValue<GraphPart>();
+		model.setValue(documentPart);
+		graphPad.bindDocumentPart(model);
+		return graphPad;
 	}
 	
 	@Reference(unbind = "unbindFormulaRenderer", policy = ReferencePolicy.DYNAMIC)

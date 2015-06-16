@@ -12,10 +12,6 @@ public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
 
 	private IFigure fContent;
 	
-	public FigurePad(T model) {
-		super(model);
-	}
-	
 	@Override
 	public void attachContainer(Container container)  {
 		Assert.isNotNull(container);

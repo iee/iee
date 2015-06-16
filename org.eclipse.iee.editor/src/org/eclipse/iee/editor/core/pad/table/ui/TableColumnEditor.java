@@ -19,7 +19,7 @@ public class TableColumnEditor extends AbstractTextEditor<TableColumn> {
 
 	public TableColumnEditor() {
 		fTextPartEditor = new TextPartEditor();
-		addChildEditor(fTextPartEditor);
+		addEditor(fTextPartEditor);
 	}
 	
 	
