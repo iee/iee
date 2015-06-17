@@ -73,6 +73,7 @@ public class Container implements IAdaptable {
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fPadPart = part;
 		pad.attachContainer(this);
+		pad.attach(containerManager);
 	}
 
 	/**

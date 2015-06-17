@@ -105,9 +105,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		addEditor(maxY);
 		fSeries = new Figure();
 		fSeries.setLayoutManager(new ToolbarLayout(false));
-		GridData seriesData = new GridData(
-				GridData.GRAB_VERTICAL 
-				| GridData.VERTICAL_ALIGN_CENTER);
+		GridData seriesData = new GridData(GridData.GRAB_VERTICAL | GridData.VERTICAL_ALIGN_CENTER);
 		figure.add(fSeries, seriesData);
 		GridData minXdata = new GridData();
 		TextPartEditor minY = new TextPartEditor();

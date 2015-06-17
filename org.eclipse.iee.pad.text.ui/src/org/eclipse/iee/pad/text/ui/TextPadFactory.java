@@ -1,7 +1,7 @@
 package org.eclipse.iee.pad.text.ui;
 
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.text.TextPart;
 import org.osgi.service.component.annotations.Component;
 
@@ -10,7 +10,9 @@ public class TextPadFactory implements IPadFactory<TextPart> {
 
 	@Override
 	public TextPad create(TextPart documentPart) {
-		return new TextPad(documentPart);
+		TextPad textPad = new TextPad();
+		textPad.bindDocumentPart(DefaultObservableValue.fromValue(documentPart));
+		return textPad;
 	}
 
 }

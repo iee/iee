@@ -1,8 +1,5 @@
 package org.eclipse.iee.editor.core.pad.common.ui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.CollapseBeginPart;
@@ -16,21 +13,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class CollapseBeginPad extends CompositePad<CollapseBeginPart> {
 
-	private PropertyChangeListener fListener;
 	private static Image image;
 
 	static {
 		image = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.iee.editor", "images/visibility-off.png").createImage();
 	}
 
-	public CollapseBeginPad(CollapseBeginPart imagePart) {
-		super(imagePart);
-		fListener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-			}
-		};
-		imagePart.addPropertyChangeListener(fListener);
+	public CollapseBeginPad() {
 	}
 
 	@Override
@@ -48,16 +37,7 @@ public class CollapseBeginPad extends CompositePad<CollapseBeginPart> {
 	}
 
 	@Override
-	public Pad<CollapseBeginPart> copy() {
-		return new CollapseBeginPad(getDocumentPart().copy());
-	}
-
-	@Override
 	public void save() {
-	}
-
-	@Override
-	public void unsave() {
 	}
 
 	@Override
@@ -76,7 +56,6 @@ public class CollapseBeginPad extends CompositePad<CollapseBeginPart> {
 
 	@Override
 	public void dispose() {
-		getDocumentPart().removePropertyChangeListener(fListener);
 		image.dispose();
 	}
 

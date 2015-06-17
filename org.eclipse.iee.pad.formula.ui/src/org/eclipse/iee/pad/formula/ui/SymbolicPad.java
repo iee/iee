@@ -17,10 +17,8 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
 	private SymbolicEngine fSymbolicEngine;
 
-	public SymbolicPad(SymbolicPart part, UIFormulaRenderer formulaRenderer) {
-		super(part, formulaRenderer);
-		setTranslatingExpression(part.getFormula());
-		setOriginalExpression(part.getFormula());
+	public SymbolicPad(UIFormulaRenderer formulaRenderer) {
+		super(formulaRenderer);
 		fSymbolicEngine = new SymbolicEngine();
 	}
 
@@ -132,9 +130,9 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 	}
 	
 	@Override
-	public SymbolicPad copy() {
-		SymbolicPad newPad = new SymbolicPad(getDocumentPart().copy(), getFormulaRenderer());
-		return newPad;
+	protected void onValueChanged(SymbolicPart oldValue, SymbolicPart newValue) {
+		setTranslatingExpression(newValue.getFormula());
+		setOriginalExpression(newValue.getFormula());
 	}
 
 }

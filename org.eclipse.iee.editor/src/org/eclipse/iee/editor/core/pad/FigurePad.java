@@ -3,7 +3,7 @@ package org.eclipse.iee.editor.core.pad;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.swt.graphics.Rectangle;
@@ -18,7 +18,7 @@ public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
 		Assert.isLegal(!isContainerAttached(), "Another container is already attached");
 
 		fContainer = container;
-		fContent = createFigure();
+		fContent = getFigure();
 		
 		container.getMainFigure().add(fContent, new org.eclipse.draw2d.geometry.Rectangle(0, 0, -1, -1));
 		getContainer().getContainerManager().registerVisual(this, fContent);
@@ -35,6 +35,8 @@ public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
 				fContainer.updatePresentation();
 			}
 		});
+		
+		fContent.setPreferredSize(new Dimension(300, 200));
 
 	}
 	
@@ -43,15 +45,13 @@ public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
 	@Override
 	public Rectangle getBounds() {
 		org.eclipse.draw2d.geometry.Rectangle bounds = fContent.getBounds();
-		Point viewLocation = getContainer().getContainerManager().getViewLocation();
-		return new Rectangle(viewLocation.x + bounds.x, viewLocation.y + bounds.y, bounds.width, bounds.height);
+		return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 
 	@Override
 	public void setBounds(Rectangle newBounds) {
-		Point viewLocation = getContainer().getContainerManager().getViewLocation();
-		org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(newBounds.x - viewLocation.x, newBounds.y - viewLocation.y, newBounds.width, newBounds.height);
-		fContent.setBounds(bounds);
+		org.eclipse.draw2d.geometry.Rectangle bounds = new org.eclipse.draw2d.geometry.Rectangle(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
+		fContent.getParent().setConstraint(fContent, bounds);
 		updateSelectionBounds(newBounds);
 	}
 

@@ -7,10 +7,8 @@ import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 @SuppressWarnings("unused")
 public class FormulaPad extends AbstractFormulaPad<FormulaPart> {
 
-	public FormulaPad(FormulaPart part, UIFormulaRenderer formulaRenderer) {
-		super(part, formulaRenderer);
-		setTranslatingExpression(part.getFormula());
-		setOriginalExpression(part.getFormula());
+	public FormulaPad(UIFormulaRenderer formulaRenderer) {
+		super(formulaRenderer);
 	}
 	
 	@Override
@@ -21,8 +19,9 @@ public class FormulaPad extends AbstractFormulaPad<FormulaPart> {
 	}
 	
 	@Override
-	public FormulaPad copy() {
-		FormulaPad newPad = new FormulaPad(getDocumentPart().copy(), getFormulaRenderer());
-		return newPad;
+	protected void onValueChanged(FormulaPart oldValue, FormulaPart newValue) {
+		setTranslatingExpression(newValue.getFormula());
+		setOriginalExpression(newValue.getFormula());
 	}
+	
 }

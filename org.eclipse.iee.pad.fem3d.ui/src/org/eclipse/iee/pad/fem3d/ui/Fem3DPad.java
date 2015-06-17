@@ -5,14 +5,11 @@ import java.util.Map;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.CompositePad;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.fem3d.Fem3DPart;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -28,9 +25,7 @@ public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
 	
 	private TextViewer fViewer;
 
-	public Fem3DPad(Fem3DPart part) {
-		super(part);
-		modelVariable = part.getModelVariable();
+	public Fem3DPad() {
 	}
 
 	private Document fDocument;
@@ -66,22 +61,10 @@ public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
 
 	}
 	
-	@Override
-	public Fem3DPad copy() {
-		Fem3DPad newPad = new Fem3DPad(getDocumentPart().copy());
-		return newPad;
-	}
-
-	// Save&Load operations, use it for serialization
-
 	public void save() {
 		processInput();
 	}
 
-	@Override
-	public void unsave() {
-	}
-	
 	public void toggleInputText() {
 		fParent.pack();
 		fViewer.getControl().forceFocus();
@@ -121,5 +104,10 @@ public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
 	@Override
 	public String getTex() {
 		return "";
+	}
+	
+	@Override
+	protected void onValueChanged(Fem3DPart oldValue, Fem3DPart newValue) {
+		modelVariable = newValue.getModelVariable();
 	}
 }

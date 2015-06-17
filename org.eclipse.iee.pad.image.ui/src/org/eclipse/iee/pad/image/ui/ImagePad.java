@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.iee.editor.core.pad.CompositePad;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -51,8 +50,7 @@ public class ImagePad extends CompositePad<ImagePart> {
 
 	private PropertyChangeListener fListener;
 
-	public ImagePad(ImagePart imagePart) {
-		super(imagePart);
+	public ImagePad() {
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -62,7 +60,6 @@ public class ImagePad extends CompositePad<ImagePart> {
 				}
 			}
 		};
-		imagePart.addPropertyChangeListener(fListener);
 	}
 
 	@Override
@@ -243,18 +240,9 @@ public class ImagePad extends CompositePad<ImagePart> {
 	}
 
 	@Override
-	public Pad<ImagePart> copy() {
-		return new ImagePad(getDocumentPart().copy());
-	}
-
-	@Override
 	public void save() {
 	}
 
-	@Override
-	public void unsave() {
-	}
-	
 	@Override
 	public void activate() {
 		// TODO Auto-generated method stub
@@ -316,6 +304,16 @@ public class ImagePad extends CompositePad<ImagePart> {
 	@Override
 	public void dispose() {
 		getDocumentPart().removePropertyChangeListener(fListener);
+	}
+	
+	@Override
+	protected void doBindValue(ImagePart value) {
+		value.addPropertyChangeListener(fListener);
+	}
+	
+	@Override
+	protected void doUnbindValue(ImagePart oldValue) {
+		oldValue.removePropertyChangeListener(fListener);
 	}
 
 }

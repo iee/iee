@@ -52,7 +52,7 @@ public class AddGraphHandler implements IHandler {
 		}
 
 		GraphModel model = new GraphModel();
-		model.getElements().add(new GraphElement());
+		model.addElement(new GraphElement());
 		fPadEditor.createPad(new GraphPart(model), fPadEditor.getCaretOffset());
 
 		return null;

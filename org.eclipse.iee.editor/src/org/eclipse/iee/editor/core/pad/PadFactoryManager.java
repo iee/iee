@@ -2,6 +2,7 @@ package org.eclipse.iee.editor.core.pad;
 
 import org.eclipse.iee.core.HandlerManager;
 import org.eclipse.iee.core.document.PadDocumentPart;
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -35,7 +36,8 @@ public class PadFactoryManager implements IPadFactoryManager {
 		if (iPadFactory != null) {
 			pad = iPadFactory.create(padPart);
 		} else {
-			pad = (Pad<T>) new LoadingPad(padPart);
+			pad = (Pad<T>) new LoadingPad();
+			pad.bindDocumentPart(DefaultObservableValue.fromValue(padPart));
 		}
 		return pad;
 	}

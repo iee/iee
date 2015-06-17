@@ -118,8 +118,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 		fTranslatingExpression = expression;
 	}
 
-	public AbstractFormulaPad(T part, UIFormulaRenderer formulaRenderer) {
-		super(part);
+	public AbstractFormulaPad(UIFormulaRenderer formulaRenderer) {
 		this.formulaRenderer = formulaRenderer;
 	}
 
@@ -519,10 +518,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 
 	public void save() {
 		processInput();
-	}
-
-	@Override
-	public void unsave() {
 	}
 
 	@Override

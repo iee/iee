@@ -14,10 +14,6 @@ import org.eclipse.swt.widgets.Composite;
 
 public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	
-	public CompositePad(T model) {
-		super(model);
-	}
-
 	private Composite fContent;
 	
 	@Override

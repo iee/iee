@@ -14,7 +14,6 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.iee.editor.core.pad.FigurePad;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
 import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
@@ -223,18 +222,8 @@ public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart
 		
 	}
 
-	//TODO remove
-	@Override
-	public Pad<TablePart> copy() {
-		return new TablePad();
-	}
-
 	@Override
 	public void save() {
-	}
-
-	@Override
-	public void unsave() {
 	}
 
 	@Override

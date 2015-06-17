@@ -71,21 +71,9 @@ public class GraphPad extends FigurePad<GraphPart> implements Serializable {
 		
 	}
 
-	@Override
-	public GraphPad copy() {
-		GraphPad newPad = new GraphPad(formulaRenderer);
-		newPad.fIsAdvancedMode = this.fIsAdvancedMode;
-		return newPad;
-	}
-
 	public void save() {
 		processInput(getDocumentPart().getModel());
 	}
-
-	@Override
-	public void unsave() {
-	}
-
 
 	public void processInput(GraphModel model) {
 		getContainer().updateDocument();

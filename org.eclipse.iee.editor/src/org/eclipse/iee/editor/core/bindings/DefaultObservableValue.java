@@ -8,7 +8,7 @@ public class DefaultObservableValue<T> implements IObservableValue<T> {
 	private T fModel;
 	
 	private List<IObserver<T>> observers = new CopyOnWriteArrayList<>();
-	
+
 	@Override
 	public void setValue(T value) {
 		T oldValue = fModel;
@@ -36,6 +36,12 @@ public class DefaultObservableValue<T> implements IObservableValue<T> {
 	}
 	
 	public void dispose() {
+	}
+	
+	public static <T> DefaultObservableValue<T> fromValue(T value) {
+		DefaultObservableValue<T> observableValue = new DefaultObservableValue<T>();
+		observableValue.setValue(value);
+		return observableValue;
 	}
 	
 }

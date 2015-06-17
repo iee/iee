@@ -82,8 +82,7 @@ public class TextPad extends CompositePad<TextPart> {
 	static final int FOREGROUND = 1 << 4;
 	static final int BACKGROUND = 1 << 5;
 	
-	public TextPad(TextPart textPart) {
-		super(textPart);
+	public TextPad() {
 	}
 
 	public void toggleEditMode() {
@@ -335,19 +334,9 @@ public class TextPad extends CompositePad<TextPart> {
 		toggleViewMode();
 	}
 	
-	@Override
-	public TextPad copy() {
-		TextPad newPad = new TextPad(getDocumentPart().copy());
-		return newPad;
-	}
-
 	// Save&Load operations, use it for serialization
 
 	public void save() {
-	}
-
-	@Override
-	public void unsave() {
 	}
 
 	@Override

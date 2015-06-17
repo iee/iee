@@ -74,7 +74,7 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 		fTextPartEditor = new TextPartEditor();
 		addEditor(fTextPartEditor);
 		
-		fTextFigure = fTextPartEditor.getFigure();
+		fTextFigure = (Figure) fTextPartEditor.getFigure();
 		fLine = new Label();
 		
 		figure.addMouseListener(new MouseListener() {
@@ -169,13 +169,13 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement> impleme
 				GraphElement newElement = new GraphElement();
 				newElement.setNumberOfPoints(100);
 				newElement.setColor(getNextColor());
-				getObservableValue().getValue().getGraph().addElement(newElement);
+				getObservableValue().get().getValue().getGraph().addElement(newElement);
 			}
 		}));
 		menuManager.add(new ActionContributionItem(new Action("Remove function") {
 			@Override
 			public void runWithEvent(Event event) {
-				getObservableValue().getValue().getGraph().removeElement(getModel());
+				getObservableValue().get().getValue().getGraph().removeElement(getModel());
 			}
 		}));
 		menuManager.add(new ActionContributionItem(new Action("Properties") {

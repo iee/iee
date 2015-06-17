@@ -1,5 +1,6 @@
 package org.eclipse.iee.pad.formula.ui;
 
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
 import org.eclipse.iee.pad.formula.SymbolicPart;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
@@ -17,7 +18,8 @@ public class SymbolicPadFactory implements IPadFactory<SymbolicPart> {
 	
 	@Override
 	public SymbolicPad create(SymbolicPart part) {
-		SymbolicPad formulaPad = new SymbolicPad(part, formulaRenderer);
+		SymbolicPad formulaPad = new SymbolicPad(formulaRenderer);
+		formulaPad.bindDocumentPart(DefaultObservableValue.fromValue(part));
 		return formulaPad;
 	}
 	

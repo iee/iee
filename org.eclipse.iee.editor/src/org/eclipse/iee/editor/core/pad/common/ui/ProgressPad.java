@@ -21,8 +21,7 @@ public class ProgressPad extends CompositePad<ProgressDocumentPart> implements S
 	
 	private ProgressComposite fComposite;
 	
-	public ProgressPad(ProgressDocumentPart part) {
-		super(part);
+	public ProgressPad() {
 	}
 
 	private Document fDocument;
@@ -61,22 +60,10 @@ public class ProgressPad extends CompositePad<ProgressDocumentPart> implements S
 
 	}
 	
-	@Override
-	public ProgressPad copy() {
-		ProgressPad newPad = new ProgressPad(getDocumentPart().copy());
-		return newPad;
-	}
-
-	// Save&Load operations, use it for serialization
-
 	public void save() {
 		processInput();
 	}
 
-	@Override
-	public void unsave() {
-	}
-	
 	public void toggleInputText() {
 		fParent.pack();
 		fViewer.getControl().forceFocus();

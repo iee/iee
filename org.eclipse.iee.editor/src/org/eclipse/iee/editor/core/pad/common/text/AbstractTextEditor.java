@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
 
 public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 
-	private IObservableValue<T> fModel;
+	private Optional<IObservableValue<T>> fModel = Optional.absent();
 	
 	private Optional<ITextEditor<?>> fParent = Optional.absent();
 
@@ -46,7 +46,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	
 	@Override
 	public T getModel() {
-		return fModel != null ? fModel.getValue() : null;
+		return fModel.isPresent() ? fModel.get().getValue() : null;
 	}
 	
 	public void setParent(Optional<ITextEditor<?>> parent) {
@@ -106,8 +106,8 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	}
 	
 	protected void bindObservableValue(IObservableValue<T> value) {
-		IObservableValue<T> oldValue = fModel;
-		fModel = value;
+		IObservableValue<T> oldValue = getObservableValue().isPresent() ? getObservableValue().get() : null;
+		fModel = Optional.of(value);
 		if (oldValue != value) {
 			T old = null;
 			if (oldValue != null) {
@@ -135,12 +135,12 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	protected void onValueChanged(T oldValue, T newValue) {
 	}
 	
-	protected IObservableValue<T> getObservableValue() {
+	protected Optional<IObservableValue<T>> getObservableValue() {
 		return fModel;
 	}
 
 	public T getValue() {
-		return getObservableValue().getValue();
+		return getObservableValue().isPresent() ? getObservableValue().get().getValue() : null;
 	}
 	
 	public Optional<ContainerManager> getContainerManager() {
@@ -153,11 +153,11 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
  	}
 
 	public void dispose() {
-		if (fModel != null) {
-			if (fModel.getValue() != null) {
-				doUnbindValue(fModel.getValue());
+		if (fModel.isPresent()) {
+			if (fModel.get().getValue() != null) {
+				doUnbindValue(fModel.get().getValue());
 			}
-			fModel.removeObserver(fObserver);
+			fModel.get().removeObserver(fObserver);
 		}
 		for (ITextEditor<?> child : fChildren) {
 			child.dispose();

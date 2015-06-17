@@ -6,7 +6,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
-import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
@@ -24,8 +23,6 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 
 	private final RectangleFigure selectionFigure; 
 
-	private IObservableValue<T> fObservableValue = new DefaultObservableValue<T>();
-	
 	public Pad() {
 		selectionFigure = new RectangleFigure();
 		selectionFigure.setForegroundColor(IPadConfiguration.BORDER_COLOR_SELECTED);
@@ -33,10 +30,6 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 		selectionFigure.setFill(false);
 	}
 	
-	public Pad(T model) {
-		this();
-	}
-
 	public String getContainerManagerID() {
 		if (fContainer == null) {
 			return null;
@@ -98,21 +91,9 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 	}
 
 	/**
-	 * Copy pad with @param containerID
-	 * 
-	 * @return
-	 */
-	public abstract Pad<T> copy();
-
-	/**
 	 * Save pad
 	 */
 	public abstract void save();
-
-	/**
-	 * Remove pad's storage
-	 */
-	public abstract void unsave();
 
 	public abstract String getType();
 

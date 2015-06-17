@@ -66,6 +66,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
@@ -223,55 +225,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 		LightweightSystem lightweightSystem = new LightweightSystem(fStyledText);
 		lightweightSystem.getRootFigure().setOpaque(false);
-		Figure viewport = new Figure() {
-			@Override
-			protected void paintClientArea(Graphics g) {
-				org.eclipse.draw2d.geometry.Point p = getViewLocation();
-				try {
-					g.translate(-p.x, -p.y);
-					g.pushState();
-					super.paintClientArea(g);
-					g.popState();
-				} finally {
-					g.translate(p.x, p.y);
-				}
-			}
-			
-			/**
-			 * @see IFigure#getClientArea(Rectangle)
-			 */
-			public Rectangle getClientArea(Rectangle rect) {
-				super.getClientArea(rect);
-				rect.translate(getViewLocation());
-				return rect;
-			}
-			
-			/**
-			 * @see IFigure#isCoordinateSystem()
-			 */
-			public boolean isCoordinateSystem() {
-				return true;
-			}
-			
-			/**
-			 * @see IFigure#translateFromParent(Translatable)
-			 */
-			public void translateFromParent(Translatable t) {
-				org.eclipse.draw2d.geometry.Point p = getViewLocation();
-				t.performTranslate(p.x, p.y);
-				super.translateFromParent(t);
-			}
-
-			/**
-			 * @see IFigure#translateToParent(Translatable)
-			 */
-			public void translateToParent(Translatable t) {
-				org.eclipse.draw2d.geometry.Point p = getViewLocation();
-				t.performTranslate(-p.x, -p.y);
-				super.translateToParent(t);
-			}
-			
-		};
+		final Viewport viewport = new Viewport();
 		
 		viewport.setLayoutManager(new AbstractHintLayout() {
 			
@@ -294,8 +248,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 				// Calculate the hints
 				Rectangle hints = container.getClientArea();
-				int wHint = -1;
-				int hHint = -1;
+				int wHint = hints.width;
+				int hHint = hints.height;
 
 				Dimension newSize = container.getClientArea().getSize();
 				Dimension min = contents.getMinimumSize(wHint, hHint);
@@ -326,7 +280,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 							insets.getWidth(), insets.getHeight());
 				}
 			}
-		});
+			
+		});	
 		
 		Figure stack = new Figure();
 		viewport.add(stack);
@@ -579,6 +534,63 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	/* DOCUMENT MODIFICATION EVENT PROCESSING */
+
+	private final class Viewport extends Figure {
+		@Override
+		protected void paintClientArea(Graphics g) {
+			org.eclipse.draw2d.geometry.Point p = getViewLocation();
+			try {
+				g.translate(-p.x, -p.y);
+				g.pushState();
+				super.paintClientArea(g);
+				g.popState();
+			} finally {
+				g.translate(p.x, p.y);
+			}
+		}
+
+		/**
+		 * @see IFigure#getClientArea(Rectangle)
+		 */
+		public Rectangle getClientArea(Rectangle rect) {
+			super.getClientArea(rect);
+			rect.translate(getViewLocation());
+			return rect;
+		}
+
+		/**
+		 * @see IFigure#isCoordinateSystem()
+		 */
+		public boolean isCoordinateSystem() {
+			return true;
+		}
+
+		/**
+		 * @see IFigure#translateFromParent(Translatable)
+		 */
+		public void translateFromParent(Translatable t) {
+			org.eclipse.draw2d.geometry.Point p = getViewLocation();
+			t.performTranslate(p.x, p.y);
+			super.translateFromParent(t);
+		}
+
+		/**
+		 * @see IFigure#translateToParent(Translatable)
+		 */
+		public void translateToParent(Translatable t) {
+			org.eclipse.draw2d.geometry.Point p = getViewLocation();
+			t.performTranslate(-p.x, -p.y);
+			super.translateToParent(t);
+		}
+
+		private void localRevalidate() {
+			invalidate();
+			if (getLayoutManager() != null) {
+				getLayoutManager().invalidate();
+			}
+			getUpdateManager().addInvalidFigure(this);
+		}
+	}
 
 	class DocumentListener implements IDocumentListener,
 			IDocumentPartitioningListener,

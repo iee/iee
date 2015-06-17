@@ -65,19 +65,25 @@ public class TextPartEditor extends AbstractTextEditor<String> implements IConte
 			@Override
 			public void documentChanged(DocumentEvent event) {
 				String s = event.getDocument().get();
-				if (!Strings.isNullOrEmpty(s)) {
-					fTextFlow.setText(s);
-				} else {
-					fTextFlow.setText("\u25a1");
-				}
-				if (!s.equals(getObservableValue().getValue())) {
-					getObservableValue().setValue(s);
+				fTextFlow.setText(getVisibleText(s));
+				if (!s.equals(getObservableValue().get().getValue())) {
+					getObservableValue().get().setValue(s);
 				}
 //				fFlowPage.revalidate();
 			}
+
 		});
+		fTextFlow.setText(getVisibleText(getModel()));
 		
 		return fFlowPage;
+	}
+	
+	private String getVisibleText(String s) {
+		if (!Strings.isNullOrEmpty(s)) {
+			return s;
+		} else {
+			return "\u25a1";
+		}
 	}
 	
 	public void setText(String text) {
@@ -156,14 +162,7 @@ public class TextPartEditor extends AbstractTextEditor<String> implements IConte
 
 	@Override
 	public boolean isSelectable() {
-		return true;
-	}
-
-	public Figure getFigure() {
-		if (fFlowPage == null) {
-			fFlowPage = createFigure();
-		}
-		return fFlowPage;
+		return false;
 	}
 	
 	public void bindValue(IObservableValue<String> value) {

@@ -16,22 +16,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class CollapseEndPad extends CompositePad<CollapseEndPart> {
 
-	private PropertyChangeListener fListener;
 	private static Image image;
 
 	static {
 		image = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.iee.editor", "images/visibility-on.png").createImage();
 	}
 	
-	
-	public CollapseEndPad(CollapseEndPart imagePart) {
-		super(imagePart);
-		fListener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-			}
-		};
-		imagePart.addPropertyChangeListener(fListener);
+	public CollapseEndPad() {
 	}
 
 	@Override
@@ -49,16 +40,7 @@ public class CollapseEndPad extends CompositePad<CollapseEndPart> {
 	}
 
 	@Override
-	public Pad<CollapseEndPart> copy() {
-		return new CollapseEndPad(getDocumentPart().copy());
-	}
-
-	@Override
 	public void save() {
-	}
-
-	@Override
-	public void unsave() {
 	}
 
 	@Override
@@ -77,7 +59,6 @@ public class CollapseEndPad extends CompositePad<CollapseEndPart> {
 	
 	@Override
 	public void dispose() {
-		getDocumentPart().removePropertyChangeListener(fListener);
 		image.dispose();
 	}
 

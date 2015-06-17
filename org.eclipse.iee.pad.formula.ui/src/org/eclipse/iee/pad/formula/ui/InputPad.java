@@ -5,17 +5,8 @@ import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 
 public class InputPad extends AbstractFormulaPad<InputPart> {
 
-	public InputPad(InputPart part, UIFormulaRenderer formulaRenderer) {
-		super(part, formulaRenderer);
-		String expression = "";
-		if (!part.getVariable().isEmpty()) {
-			expression += part.getVariable();
-		}
-		if (!part.getDefaultValue().isEmpty()) {
-			expression += "=" + part.getDefaultValue();
-		}
-		setTranslatingExpression(expression);
-		setOriginalExpression(expression);
+	public InputPad(UIFormulaRenderer formulaRenderer) {
+		super(formulaRenderer);
 	}
 
 	@Override
@@ -43,9 +34,16 @@ public class InputPad extends AbstractFormulaPad<InputPart> {
 	}
 	
 	@Override
-	public InputPad copy() {
-		InputPad newPad = new InputPad(getDocumentPart().copy(), getFormulaRenderer());
-		return newPad;
+	protected void onValueChanged(InputPart oldValue, InputPart newValue) {
+		String expression = "";
+		if (!newValue.getVariable().isEmpty()) {
+			expression += newValue.getVariable();
+		}
+		if (!newValue.getDefaultValue().isEmpty()) {
+			expression += "=" + newValue.getDefaultValue();
+		}
+		setTranslatingExpression(expression);
+		setOriginalExpression(expression);
 	}
 	
 }
