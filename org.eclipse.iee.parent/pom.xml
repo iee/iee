@@ -37,7 +37,7 @@
 	</modules>
 
 	<properties>
-		<tycho-version>0.22.0</tycho-version>
+		<tycho-version>0.23.1</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -202,7 +202,6 @@
 					<artifactId>tycho-packaging-plugin</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
-						<format>yyyyMMddHHmm-'${p2.qualifier}'</format>
 						<archiveSite>true</archiveSite>
 						<archive>
 							<manifestEntries>

@@ -15,6 +15,7 @@ import org.eclipse.iee.editor.core.bindings.ConvertedObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.bindings.converter.DoubleConverter;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
@@ -26,7 +27,6 @@ import org.eclipse.swt.widgets.Caret;
 import org.jfree.util.PaintUtilities;
 
 import com.google.common.base.Converter;
-import com.google.common.primitives.Doubles;
 import com.google.common.reflect.TypeToken;
 
 public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
@@ -100,7 +100,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		figure.setLayoutManager(layout);
 		GridData maxXdata = new GridData();
 		TextPartEditor maxY = new TextPartEditor();
-		maxY.bindValue(ConvertedObservableValue.from(fMaxYValue, Doubles.stringConverter().reverse()));
+		maxY.bindValue(ConvertedObservableValue.from(fMaxYValue, DoubleConverter.REVERSE_INSTANCE));
 		figure.add(maxY.getFigure(), maxXdata);
 		addEditor(maxY);
 		fSeries = new Figure();
@@ -109,7 +109,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		figure.add(fSeries, seriesData);
 		GridData minXdata = new GridData();
 		TextPartEditor minY = new TextPartEditor();
-		minY.bindValue(ConvertedObservableValue.from(fMinYValue, Doubles.stringConverter().reverse()));
+		minY.bindValue(ConvertedObservableValue.from(fMinYValue, DoubleConverter.REVERSE_INSTANCE));
 		addEditor(minY);
 		figure.add(minY.getFigure(), minXdata);
 		
@@ -125,7 +125,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		figure.setLayoutManager(layout);
 		GridData minXdata = new GridData();
 		TextPartEditor minX = new TextPartEditor();
-		minX.bindValue(ConvertedObservableValue.from(fMinXValue, Doubles.stringConverter().reverse()));
+		minX.bindValue(ConvertedObservableValue.from(fMinXValue, DoubleConverter.REVERSE_INSTANCE));
 		addEditor(minX);
 		figure.add(minX.getFigure(), minXdata);
 		GridData varsData = new GridData();
@@ -156,7 +156,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 		GridData maxXdata = new GridData();
 		maxXdata.horizontalAlignment = GridData.END;
 		TextPartEditor maxX = new TextPartEditor();
-		maxX.bindValue(ConvertedObservableValue.from(fMaxXValue, Doubles.stringConverter().reverse()));
+		maxX.bindValue(ConvertedObservableValue.from(fMaxXValue, DoubleConverter.REVERSE_INSTANCE));
 		addEditor(maxX);
 		figure.add(maxX.getFigure(), maxXdata);
 		return figure;

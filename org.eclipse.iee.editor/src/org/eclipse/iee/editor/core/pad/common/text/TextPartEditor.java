@@ -50,6 +50,7 @@ public class TextPartEditor extends AbstractTextEditor<String> implements IConte
 			public void focusGained(FocusEvent fe) {
 				IFigure gainer = fe.gainer;
 				gainer.setBorder(new FocusBorder());
+				fTextFlow.setText(fText.get());
 			}
 
 			public void focusLost(FocusEvent fe) {
@@ -66,7 +67,7 @@ public class TextPartEditor extends AbstractTextEditor<String> implements IConte
 			public void documentChanged(DocumentEvent event) {
 				String s = event.getDocument().get();
 				fTextFlow.setText(getVisibleText(s));
-				if (!s.equals(getObservableValue().get().getValue())) {
+				if (getObservableValue().isPresent() && !s.equals(getObservableValue().get().getValue())) {
 					getObservableValue().get().setValue(s);
 				}
 //				fFlowPage.revalidate();

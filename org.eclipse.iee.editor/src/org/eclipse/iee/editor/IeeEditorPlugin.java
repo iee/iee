@@ -44,6 +44,9 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	private <T> T getService(Class<T> clazz) {
 		BundleContext context = getDefault().getBundle().getBundleContext();
 		ServiceReference<T> sr = context.getServiceReference(clazz);
+		if (sr == null) {
+			throw new IllegalArgumentException("Unknown service " + clazz.getName());
+		}
 		return context.getService(sr);
 	}
 	

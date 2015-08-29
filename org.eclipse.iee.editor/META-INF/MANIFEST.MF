@@ -25,6 +25,7 @@ Export-Package: org.eclipse.iee.editor;
    org.osgi.framework,
    org.eclipse.iee.editor.core.pad",
  org.eclipse.iee.editor.core.bindings,
+ org.eclipse.iee.editor.core.bindings.converter,
  org.eclipse.iee.editor.core.container;
   uses:="org.eclipse.jface.text,
    org.eclipse.core.commands.common,
