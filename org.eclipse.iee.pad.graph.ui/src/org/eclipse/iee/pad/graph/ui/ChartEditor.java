@@ -7,8 +7,8 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.pad.graph.model.GraphElement;
@@ -25,38 +25,40 @@ import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.PaintUtilities;
 
-
-public class ChartEditor extends AbstractTextEditor<GraphModel> {
+public class ChartEditor extends AbstractTextEditor<GraphModel, ChartFigure> {
 
 	private AxisChangeListener fDomainAxisListener;
-	
+
 	private AxisChangeListener fRangeAxisListener;
-	
+
 	private PropertyChangeListener fListener;
-	
+
 	private Map<Integer, double[][]> results = new HashMap<>();
-	
+
 	private XYDataset dataset;
-	
+
 	private IShellProvider fShellProvider;
 
 	private JFreeChart fChart;
-	
+
+	/** The resourceBundle for the localization. */
+	protected static ResourceBundle localizationResources = ResourceBundleWrapper
+			.getBundle("org.jfree.chart.LocalizationBundle");
+
 	public ChartEditor(IShellProvider fShellProvider) {
 		this.fShellProvider = fShellProvider;
 		fListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				String propertyName = evt.getPropertyName();
-				if ("maxX".equals(propertyName) 
-						|| "minX".equals(propertyName)
-						|| "maxY".equals(propertyName)
+				if ("maxX".equals(propertyName) || "minX".equals(propertyName) || "maxY".equals(propertyName)
 						|| "minY".equals(propertyName)) {
 					updateAxes(getPlot());
 				}
@@ -65,16 +67,16 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 	}
 
 	@Override
-	protected IFigure createFigure() {
+	protected ChartFigure createFigure() {
 		return new ChartFigure(getChart(), fShellProvider);
 	}
-	
+
 	public JFreeChart createChart() {
 
 		XYDataset dataset = createDataset("Series 1");
 
-		JFreeChart chart = ChartFactory.createXYLineChart(null, null,
-				null, dataset, PlotOrientation.HORIZONTAL, false, false, false);
+		JFreeChart chart = ChartFactory.createXYLineChart(null, null, null, dataset, PlotOrientation.HORIZONTAL, false,
+				false, false);
 
 		chart.setBackgroundPaint(Color.white);
 		chart.setBorderVisible(true);
@@ -88,9 +90,9 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		plot.getRangeAxis().setFixedDimension(15.0);
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, Color.black);
-		
+
 		updateAxes(plot);
-		
+
 		fDomainAxisListener = new AxisChangeListener() {
 			@Override
 			public void axisChanged(AxisChangeEvent event) {
@@ -107,20 +109,19 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		};
 		plot.getDomainAxis().addChangeListener(fDomainAxisListener);
 		plot.getRangeAxis().addChangeListener(fRangeAxisListener);
-		
+
 		return chart;
 	}
-	
+
 	@Override
 	protected void doBindValue(GraphModel value) {
 		value.addPropertyChangeListener(fListener);
 	}
-	
+
 	@Override
 	protected void doUnbindValue(GraphModel oldValue) {
 		oldValue.removePropertyChangeListener(fListener);
 	}
-
 
 	private void updateAxes(XYPlot plot) {
 		final GraphModel model = getModel();
@@ -129,7 +130,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		} else {
 			plot.getDomainAxis().setAutoRange(true);
 		}
-		
+
 		if (model != null && model.getMaxY() != null && model.getMinY() != null) {
 			plot.getRangeAxis().setRange(model.getMinY(), model.getMaxY());
 		} else {
@@ -147,7 +148,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 			model.setMaxX(axis.getRange().getUpperBound());
 		}
 	}
-	
+
 	private void updateYAxis(ValueAxis axis) {
 		GraphModel model = getModel();
 		if (axis.isAutoRange()) {
@@ -158,7 +159,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 			model.setMaxY(axis.getRange().getUpperBound());
 		}
 	}
-	
+
 	public XYDataset createDataset(String name) {
 		dataset = new AbstractXYDataset() {
 
@@ -189,7 +190,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 				GraphModel model = getModel();
 				return model != null ? model.getElements().size() : 0;
 			}
-			
+
 			private double[][] getResult(int number) {
 				double[][] ds = getResults().get(Integer.valueOf(number));
 				if (ds == null) {
@@ -197,19 +198,19 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 				}
 				return ds;
 			}
-			
+
 		};
 
 		return dataset;
 	}
-	
+
 	public Map<Integer, double[][]> getResults() {
 		if (results == null) {
 			results = new HashMap<Integer, double[][]>();
 		}
 		return results;
 	}
-	
+
 	@Override
 	public TextLocation getTextLocation(int x, int y) {
 		// TODO Auto-generated method stub
@@ -219,7 +220,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 	@Override
 	public void acceptCaret(Caret caret, TextLocation textLocation) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -231,21 +232,20 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 	@Override
 	public void setSelected(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setActive(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void dispose() {
 		getModel().removePropertyChangeListener(fListener);
 		getPlot().getDomainAxis().removeChangeListener(fDomainAxisListener);
 		getPlot().getRangeAxis().removeChangeListener(fRangeAxisListener);
 	}
-
 
 	public void setResult(Map<Integer, double[][]> result) {
 		results = new HashMap<>(result);
@@ -266,11 +266,11 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 					}
 					renderer.setSeriesStroke(i, new BasicStroke(width));
 				}
-				
+
 				getPlot().datasetChanged(new DatasetChangeEvent(this, dataset));
 			}
 		});
-		
+
 	}
 
 	public DrawingSupplier getDrawingSupplier() {
@@ -281,7 +281,7 @@ public class ChartEditor extends AbstractTextEditor<GraphModel> {
 		return (XYPlot) getChart().getPlot();
 	}
 
-	private JFreeChart getChart() {
+	JFreeChart getChart() {
 		if (fChart == null) {
 			fChart = createChart();
 		}

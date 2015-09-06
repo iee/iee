@@ -39,7 +39,7 @@ import org.jfree.util.PaintUtilities;
 
 import com.google.common.base.Strings;
 
-public class GraphElementEditor extends AbstractTextEditor<GraphElement> implements IMenuContributor<GraphElement> {
+public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure> implements IMenuContributor<GraphElement> {
 
 	private ImageFigure fFormulaImage;
 	

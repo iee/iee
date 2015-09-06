@@ -1,6 +1,5 @@
 package org.eclipse.iee.pad.fem3d.ui;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
@@ -13,7 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class Fem3DPad extends CompositePad<Fem3DPart> implements Serializable {
+public class Fem3DPad extends CompositePad<Fem3DPart> {
 
 	private static final long serialVersionUID = 1L;
 

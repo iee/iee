@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
@@ -24,12 +25,16 @@ import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.actions.CompositeActionGroup;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
+import org.eclipse.jdt.ui.actions.OpenViewActionGroup;
 import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration;
 import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextViewerExtension5;
@@ -39,6 +44,7 @@ import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.ImageTransfer;
@@ -55,6 +61,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -100,6 +107,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	
 	public ExtendedJavaEditor() {
 		super();
+		setEditorContextMenuId("org.eclipse.iee.editor.popup");
 	}
 	
 	@Override
@@ -117,7 +125,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		logger.debug("Create ExtendedJavaEditor");
 
 		getSite().getPage().addPartListener(fPartListener);
-		
+
 		doSave(null);
 	};
 	
@@ -171,6 +179,8 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				IeeEditorPlugin.getDefault().getWriter(), viewer);
 		fContainerManager.setCompilationUnit(fCompilationUnit);
 
+		
+		
 		IEditorPart editor = this;
 		IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
 		IFile file = input.getFile();
@@ -554,6 +564,29 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	@Override
 	public void createPad(PadDocumentPart pad) {
 		createPad(pad, getCaretOffset());
+	}
+	
+	@Override
+	public void editorContextMenuAboutToShow(IMenuManager menu) {
+		Field groupsField;
+		try {
+			groupsField = CompositeActionGroup.class.getDeclaredField("fGroups");
+			groupsField.setAccessible(true);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException e1) {
+			throw Throwables.propagate(e1);
+		}
+		ActionGroup[] groups;
+		try {
+			groups = (ActionGroup[]) groupsField.get(fActionGroups);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw Throwables.propagate(e);
+		}
+		for (ActionGroup actionGroup : groups) {
+			if (actionGroup instanceof OpenViewActionGroup) {
+				((OpenViewActionGroup) actionGroup).containsOpenPropertiesAction(false);
+			}
+		}
+		super.editorContextMenuAboutToShow(menu);
 	}
 	
 }

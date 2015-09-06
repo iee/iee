@@ -6,6 +6,7 @@ import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.table.TableCell;
 import org.eclipse.iee.editor.core.pad.table.ui.CellPropertiesAdapterFactory;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
@@ -71,6 +72,7 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		Platform.getAdapterManager().registerAdapters(fPropertiesAdapterFactory, DocumentPart.class);
+		Platform.getAdapterManager().registerAdapters(fPropertiesAdapterFactory, Pad.class);
 		Platform.getAdapterManager().registerAdapters(fCellPropertiesAdapterFactory, TableCell.class);
 	}
 

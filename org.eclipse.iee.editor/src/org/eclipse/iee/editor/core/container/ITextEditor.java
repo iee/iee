@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public interface ITextEditor<M> {
+public interface ITextEditor<M, F extends IFigure> {
 
 	TextLocation getTextLocation(int x, int y);
 
@@ -21,13 +21,13 @@ public interface ITextEditor<M> {
 	
 	M getModel();
 
-	void setParent(Optional<ITextEditor<?>> parent);
+	void setParent(Optional<ITextEditor<?, ?>> parent);
 	
-	Optional<ITextEditor<?>> getParent();
+	Optional<ITextEditor<?, ?>> getParent();
 	
 	void contribute(MenuManager menuManager);
 	
-	IFigure getFigure();
+	F getFigure();
 	
 	void dispose();
 

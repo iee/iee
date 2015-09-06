@@ -12,10 +12,11 @@ public interface IPadFactory<T extends PadDocumentPart> {
 
 	/**
 	 * Creates new pad instance using provided parameters
+	 * @param factoryContext TODO
 	 * @param padParams pad parameters
 	 * @param value pad value
 	 * @return new pad instance
 	 */
-	Pad<T> create(T documentPart);
+	Pad<T, ?> create(T documentPart, IPadFactoryContext factoryContext);
 
 }

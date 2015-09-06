@@ -2,6 +2,7 @@ package org.eclipse.iee.editor.core.pad.common.ui;
 
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
+import org.eclipse.iee.editor.core.pad.IPadFactoryContext;
 import org.eclipse.iee.editor.core.pad.common.CollapseEndPart;
 import org.osgi.service.component.annotations.Component;
 
@@ -9,7 +10,7 @@ import org.osgi.service.component.annotations.Component;
 public class CollapseEndPadFactory implements IPadFactory<CollapseEndPart> {
 
 	@Override
-	public CollapseEndPad create(CollapseEndPart documentPart) {
+	public CollapseEndPad create(CollapseEndPart documentPart, IPadFactoryContext factoryContext) {
 		CollapseEndPad collapseEndPad = new CollapseEndPad();
 		collapseEndPad.bindDocumentPart(DefaultObservableValue.fromValue(documentPart));
 		return collapseEndPad;

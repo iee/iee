@@ -30,13 +30,13 @@ public class PadFactoryManager implements IPadFactoryManager {
 	}
 
 	@Override
-	public <T extends PadDocumentPart> Pad<T> createPad(T padPart) {
+	public <T extends PadDocumentPart> Pad<T, ?> createPad(T padPart) {
 		IPadFactory iPadFactory = fPadFactories.getHandler(padPart.getClass());
-		Pad<T> pad;
+		Pad<T, ?> pad;
 		if (iPadFactory != null) {
-			pad = iPadFactory.create(padPart);
+			pad = iPadFactory.create(padPart, null);
 		} else {
-			pad = (Pad<T>) new LoadingPad();
+			pad = (Pad<T, ?>) new LoadingPad();
 			pad.bindDocumentPart(DefaultObservableValue.fromValue(padPart));
 		}
 		return pad;

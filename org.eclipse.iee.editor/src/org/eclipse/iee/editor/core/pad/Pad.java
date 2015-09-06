@@ -3,6 +3,7 @@ package org.eclipse.iee.editor.core.pad;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
@@ -17,7 +18,7 @@ import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
-public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<T> implements IDisposable, ITextEditor<T> {
+public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends AbstractTextEditor<T, F> implements IDisposable {
 
 	protected Container fContainer;
 
@@ -156,6 +157,5 @@ public abstract class Pad<T extends PadDocumentPart> extends AbstractTextEditor<
 	public boolean isSelectable() {
 		return true;
 	}
-	
 	
 }

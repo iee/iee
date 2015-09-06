@@ -27,7 +27,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
-public class TablePad extends FigurePad<TablePart> implements ICompositeTextPart {
+public class TablePad extends FigurePad<TablePart, IFigure> implements ICompositeTextPart {
 
 	private GridLayout fManager;
 	

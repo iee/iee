@@ -3,6 +3,7 @@ package org.eclipse.iee.editor.core.pad.common.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.CollapseEndPart;

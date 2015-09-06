@@ -2,6 +2,7 @@ package org.eclipse.iee.editor.core.pad.common.text;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
@@ -14,17 +15,17 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 
-public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
+public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextEditor<T, F>, IAdaptable {
 
 	private Optional<IObservableValue<T>> fModel = Optional.absent();
 	
-	private Optional<ITextEditor<?>> fParent = Optional.absent();
+	private Optional<ITextEditor<?, ?>> fParent = Optional.absent();
 
-	private List<ITextEditor<?>> fChildren = Lists.newArrayList();
+	private List<ITextEditor<?, ?>> fChildren = Lists.newArrayList();
 	
 	private Optional<IMenuContributor<? super T>> fMenuContributor = Optional.absent();
 	
-	private IFigure fFigure;
+	private F fFigure;
 	
 	private IObserver<T> fObserver = new IObserver<T>() {
 		@Override
@@ -35,31 +36,31 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	};
 	
 	@Override
-	public IFigure getFigure() {
+	public F getFigure() {
 		if (fFigure == null) {
 			fFigure = createFigure();
 		}
 		return fFigure;
 	}
 	
-	abstract protected IFigure createFigure();
+	abstract protected F createFigure();
 	
 	@Override
 	public T getModel() {
 		return fModel.isPresent() ? fModel.get().getValue() : null;
 	}
 	
-	public void setParent(Optional<ITextEditor<?>> parent) {
+	public void setParent(Optional<ITextEditor<?, ?>> parent) {
 		fParent = parent;
 	}
 	
 	@Override
-	public Optional<ITextEditor<?>> getParent() {
+	public Optional<ITextEditor<?, ?>> getParent() {
 		return fParent;
 	}
 	
-	public void addEditor(ITextEditor<?> child) {
-		child.setParent(Optional.<ITextEditor<?>> of(this));
+	public void addEditor(ITextEditor<?, ?> child) {
+		child.setParent(Optional.<ITextEditor<?, ?>> of(this));
 		fChildren.add(child);
 		Optional<ContainerManager> containerManager = getContainerManager();
 		if (containerManager.isPresent()) {
@@ -69,23 +70,23 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	
 	public void attach(ContainerManager containerManager) {
 		containerManager.registerVisual(this, getFigure());
-		for (ITextEditor<?> iTextEditor : fChildren) {
+		for (ITextEditor<?, ?> iTextEditor : fChildren) {
 			iTextEditor.attach(containerManager);
 		}
 	}
 	
-	public void removeEditor(ITextEditor<?> child) {
+	public void removeEditor(ITextEditor<?, ?> child) {
 		Optional<ContainerManager> containerManager = getContainerManager();
 		if (containerManager.isPresent()) {
 			child.attach(containerManager.get());
 		}
 		fChildren.remove(child);
-		child.setParent(Optional.<ITextEditor<?>> absent());
+		child.setParent(Optional.<ITextEditor<?, ?>> absent());
 	}
 	
 	public void detach(ContainerManager containerManager) {
 		containerManager.unregisterVisual(getFigure());
-		for (ITextEditor<?> iTextEditor : fChildren) {
+		for (ITextEditor<?, ?> iTextEditor : fChildren) {
 			iTextEditor.detach(containerManager);
 		}
 	}
@@ -96,7 +97,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	
 	@Override
 	public void contribute(MenuManager menuManager) {
-		Optional<ITextEditor<?>> parent = getParent();
+		Optional<ITextEditor<?, ?>> parent = getParent();
 		if (parent.isPresent()) {
 			parent.get().contribute(menuManager);
 		}
@@ -144,7 +145,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 	}
 	
 	public Optional<ContainerManager> getContainerManager() {
-		Optional<ITextEditor<?>> parent = getParent();
+		Optional<ITextEditor<?, ?>> parent = getParent();
 		if (parent.isPresent()) {
 			return parent.get().getContainerManager();
 		} else {
@@ -159,13 +160,21 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T> {
 			}
 			fModel.get().removeObserver(fObserver);
 		}
-		for (ITextEditor<?> child : fChildren) {
+		for (ITextEditor<?, ?> child : fChildren) {
 			child.dispose();
 		}
 		doDispose();
 	}
 
 	protected void doDispose() {
+	}
+
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter.isAssignableFrom(getModel().getClass())) {
+			return adapter;
+		}
+		return null;
 	}
 	
 }

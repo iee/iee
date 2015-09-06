@@ -44,4 +44,5 @@ Require-Bundle: org.eclipse.swt,
  org.eclipse.ui.forms,
  org.eclipse.jface,
  org.eclipse.iee.editor,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ org.eclipse.ui

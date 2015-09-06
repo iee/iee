@@ -1,6 +1,5 @@
 package org.eclipse.iee.editor.core.pad.common.text;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FocusBorder;
 import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
@@ -23,7 +22,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 
-public class TextPartEditor extends AbstractTextEditor<String> implements IContentTextPart {
+public class TextPartEditor extends AbstractTextEditor<String, FlowPage> implements IContentTextPart {
 
 	private TextFlow fTextFlow;
 

@@ -24,12 +24,13 @@ import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Caret;
+import org.jfree.chart.JFreeChart;
 import org.jfree.util.PaintUtilities;
 
 import com.google.common.base.Converter;
 import com.google.common.reflect.TypeToken;
 
-public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
+public class GraphModelEditor extends AbstractTextEditor<GraphModel, IFigure> {
 
 	private Map<GraphElement, GraphElementEditor> editors = new HashMap<>();
 	
@@ -266,6 +267,10 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel> {
 
 	public void setResult(Map<Integer, double[][]> result) {
 		fChartEditor.setResult(result);
+	}
+
+	public JFreeChart getChart() {
+		return fChartEditor.getChart();
 	}
 
 }

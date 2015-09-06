@@ -181,10 +181,10 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Comp
 		if (fIsInputValid) {
 			if (!fDocument.get().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
-				Collection<Pad<?>> following = FormulaPadManager
+				Collection<Pad<?, ?>> following = FormulaPadManager
 						.getFollowingPads(this);
 
-				for (Pad<?> pad : following) {
+				for (Pad<?, ?> pad : following) {
 					((AbstractFormulaPad<?>) pad).updateLastResult("");
 				}
 			}

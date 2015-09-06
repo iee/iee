@@ -12,7 +12,7 @@ import org.eclipse.iee.editor.core.pad.table.TableColumn;
 import org.eclipse.iee.editor.core.pad.table.ui.TablePad.CellFigureBorder;
 import org.eclipse.swt.widgets.Caret;
 
-public class TableColumnEditor extends AbstractTextEditor<TableColumn> {
+public class TableColumnEditor extends AbstractTextEditor<TableColumn, IFigure> {
 
 	private TextPartEditor fTextPartEditor;
 	private ObservableProperty<String> fValue;

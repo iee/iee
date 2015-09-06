@@ -8,7 +8,7 @@ import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.swt.graphics.Rectangle;
 
-public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
+public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> extends Pad<T, F> {
 
 	private IFigure fContent;
 	
@@ -39,8 +39,6 @@ public abstract class FigurePad<T extends PadDocumentPart> extends Pad<T> {
 		fContent.setPreferredSize(new Dimension(300, 200));
 
 	}
-	
-	protected abstract IFigure createFigure();
 
 	@Override
 	public Rectangle getBounds() {

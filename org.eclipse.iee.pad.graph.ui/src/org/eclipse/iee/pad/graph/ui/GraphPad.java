@@ -19,23 +19,17 @@ import org.eclipse.iee.pad.graph.GraphPart;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;
+import org.jfree.chart.JFreeChart;
 
 import com.google.common.base.Throwables;
 
-public class GraphPad extends FigurePad<GraphPart> implements Serializable {
+public class GraphPad extends FigurePad<GraphPart, IFigure> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private boolean fIsAdvancedMode;
-
 	private GraphModelEditor fGraphModelEditor;
 	
-	private UIFormulaRenderer formulaRenderer;
-
-	
 	public GraphPad(UIFormulaRenderer formulaRenderer) {
-		this.formulaRenderer = formulaRenderer;
-		fIsAdvancedMode = false;
 		fGraphModelEditor = new GraphModelEditor(formulaRenderer, new IShellProvider() {
 			@Override
 			public Shell getShell() {
@@ -127,6 +121,11 @@ public class GraphPad extends FigurePad<GraphPart> implements Serializable {
 	@Override
 	protected void doUnbindValue(GraphPart oldValue) {
 		fModelValue.dispose();
+	}
+
+
+	public JFreeChart getChart() {
+		return fGraphModelEditor.getChart();
 	}
 	
 }

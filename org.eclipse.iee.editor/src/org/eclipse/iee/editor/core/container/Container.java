@@ -29,7 +29,7 @@ public class Container implements IAdaptable {
 	
 	private DocumentAccess fDocumentAccess;
 
-	private final Pad<?> fPad;
+	private final Pad<?, ?> fPad;
 	
 	/* Setters */
 
@@ -66,7 +66,7 @@ public class Container implements IAdaptable {
 
 	/* FUNCTION USED IN CONTAINER MANAGER: */
 
-	public Container(Position position, ContainerManager containerManager, PadDocumentPart part, Pad<?> pad) {
+	public Container(Position position, ContainerManager containerManager, PadDocumentPart part, Pad<?, ?> pad) {
 		fPosition = position;
 		fContainerManager = containerManager;
 		this.fPad = pad;
@@ -145,7 +145,7 @@ public class Container implements IAdaptable {
 		return fContainerManager.getMainFigure();
 	}
 
-	public Pad<?> getPad() {
+	public Pad<?, ?> getPad() {
 		return fPad;
 	}
 

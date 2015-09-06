@@ -1,7 +1,6 @@
 package org.eclipse.iee.editor.core.pad.common.ui;
 
 import org.eclipse.iee.editor.core.pad.CompositePad;
-import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.CollapseBeginPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;

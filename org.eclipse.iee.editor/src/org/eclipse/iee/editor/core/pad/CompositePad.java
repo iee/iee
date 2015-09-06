@@ -12,7 +12,7 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
-public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
+public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFigure> {
 	
 	private Composite fContent;
 	

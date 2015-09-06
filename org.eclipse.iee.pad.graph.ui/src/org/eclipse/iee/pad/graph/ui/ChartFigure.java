@@ -4,10 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -18,23 +14,10 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
-import org.eclipse.draw2d.MouseMotionListener;
-import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.MessageBox;
-import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -51,12 +34,10 @@ import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueAxisPlot;
 import org.jfree.chart.plot.Zoomable;
 import org.jfree.chart.util.ResourceBundleWrapper;
-import org.jfree.experimental.chart.swt.editor.SWTChartEditor;
 import org.jfree.experimental.swt.SWTUtils;
 
 public class ChartFigure extends Figure implements ChartChangeListener,
-		ChartProgressListener, MouseListener,
-		MouseMotionListener, Printable, IMenuContributor {
+		ChartProgressListener {
 
     /** Default setting for buffer usage. */
     public static final boolean DEFAULT_BUFFER_USED = false;
@@ -92,12 +73,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
     /** Storage for registered (chart) mouse listeners. */
     private EventListenerList chartMouseListeners;
 
-    /** A flag that controls whether or not the off-screen buffer is used. */
-    private boolean useBuffer;
-
-    /** A flag that indicates that the tooltips should be displayed. */
-    private boolean displayToolTips;
-
     /** A buffer for the rendered chart. */
     private org.eclipse.swt.graphics.Image chartBuffer;
 
@@ -124,8 +99,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
      */
     private int maximumDrawHeight;
 
-    /** The popup menu for the frame. */
-    private Menu popup;
 
     /** The drawing info collected the last time the chart was drawn. */
     private ChartRenderingInfo info;
@@ -138,9 +111,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
 
     /** The scale factor used to draw the chart. */
     private double scaleY;
-
-    /** The plot orientation. */
-    private PlotOrientation orientation = PlotOrientation.VERTICAL;
 
     /** A flag that controls whether or not domain zooming is enabled. */
     private boolean domainZoomable = false;
@@ -161,9 +131,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
     /** Controls if the zoom rectangle is drawn as an outline or filled. */
     //TODO private boolean fillZoomRectangle = true;
 
-    /** The minimum distance required to drag the mouse to trigger a zoom. */
-    private int zoomTriggerDistance;
-
     /** A flag that controls whether or not horizontal tracing is enabled. */
     private boolean horizontalAxisTrace = false;
 
@@ -175,33 +142,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
 
     /** A horizontal trace line. */
     private transient int horizontalTraceLineY;
-
-    /** Menu item for zooming in on a chart (both axes). */
-    private MenuItem zoomInBothMenuItem;
-
-    /** Menu item for zooming in on a chart (domain axis). */
-    private MenuItem zoomInDomainMenuItem;
-
-    /** Menu item for zooming in on a chart (range axis). */
-    private MenuItem zoomInRangeMenuItem;
-
-    /** Menu item for zooming out on a chart. */
-    private MenuItem zoomOutBothMenuItem;
-
-    /** Menu item for zooming out on a chart (domain axis). */
-    private MenuItem zoomOutDomainMenuItem;
-
-    /** Menu item for zooming out on a chart (range axis). */
-    private MenuItem zoomOutRangeMenuItem;
-
-    /** Menu item for resetting the zoom (both axes). */
-    private MenuItem zoomResetBothMenuItem;
-
-    /** Menu item for resetting the zoom (domain axis only). */
-    private MenuItem zoomResetDomainMenuItem;
-
-    /** Menu item for resetting the zoom (range axis only). */
-    private MenuItem zoomResetRangeMenuItem;
 
     /** A flag that controls whether or not file extensions are enforced. */
     private boolean enforceFileExtensions;
@@ -218,16 +158,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
                     "org.jfree.chart.LocalizationBundle");
 
 	private Label fTooltip;
-
-	private boolean properties;
-
-	private boolean save;
-
-	private boolean zoom;
-
-	private boolean tooltips;
-
-	private boolean print;
 
     /**
      * Constructs a panel that displays the specified chart.
@@ -247,10 +177,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
              DEFAULT_MAXIMUM_DRAW_HEIGHT,
              DEFAULT_BUFFER_USED,
              true,  // properties
-             true,  // save
-             true,  // print
-             true,  // zoom
-             true,   // tooltips
              shellProvider
         );
     }
@@ -277,58 +203,11 @@ public class ChartFigure extends Figure implements ChartChangeListener,
                 DEFAULT_MAXIMUM_DRAW_HEIGHT,
                 useBuffer,
                 true,  // properties
-                true,  // save
-                true,  // print
-                true,  // zoom
-                true,   // tooltips
                 shellProvider);
     }
 
     /**
      * Constructs a JFreeChart panel.
-     *
-     * @param comp The parent.
-     * @param style The style of the composite.
-     * @param chart  the chart.
-     * @param properties  a flag indicating whether or not the chart property
-     *                    editor should be available via the popup menu.
-     * @param save  a flag indicating whether or not save options should be
-     *              available via the popup menu.
-     * @param print  a flag indicating whether or not the print option
-     *               should be available via the popup menu.
-     * @param zoom  a flag indicating whether or not zoom options should
-     *              be added to the popup menu.
-     * @param tooltips  a flag indicating whether or not tooltips should be
-     *                  enabled for the chart.
-     */
-    public ChartFigure(JFreeChart chart,
-            boolean properties,
-            boolean save,
-            boolean print,
-            boolean zoom,
-            boolean tooltips,
-            IShellProvider shellProvider) {
-        this(chart,
-                DEFAULT_WIDTH,
-                DEFAULT_HEIGHT,
-                DEFAULT_MINIMUM_DRAW_WIDTH,
-                DEFAULT_MINIMUM_DRAW_HEIGHT,
-                DEFAULT_MAXIMUM_DRAW_WIDTH,
-                DEFAULT_MAXIMUM_DRAW_HEIGHT,
-                DEFAULT_BUFFER_USED,
-                properties,
-                save,
-                print,
-                zoom,
-                tooltips,
-                shellProvider);
-    }
-
-    /**
-     * Constructs a JFreeChart panel.
-     *
-     * @param comp The parent.
-     * @param style The style of the composite.
      * @param jfreechart  the chart.
      * @param width  the preferred width of the panel.
      * @param height  the preferred height of the panel.
@@ -339,16 +218,10 @@ public class ChartFigure extends Figure implements ChartChangeListener,
      * @param usingBuffer  a flag that indicates whether to use the off-screen
      *                   buffer to improve performance (at the expense of
      *                   memory).
-     * @param properties  a flag indicating whether or not the chart property
-     *                    editor should be available via the popup menu.
-     * @param save  a flag indicating whether or not save options should be
-     *              available via the popup menu.
-     * @param print  a flag indicating whether or not the print option
-     *               should be available via the popup menu.
-     * @param zoom  a flag indicating whether or not zoom options should be
-     *              added to the popup menu.
      * @param tooltips  a flag indicating whether or not tooltips should be
      *                  enabled for the chart.
+     * @param comp The parent.
+     * @param style The style of the composite.
      */
     public ChartFigure(JFreeChart jfreechart,
             int width,
@@ -358,32 +231,17 @@ public class ChartFigure extends Figure implements ChartChangeListener,
             int maximumDrawW,
             int maximumDrawH,
             boolean usingBuffer,
-            boolean properties,
-            boolean save,
-            boolean print,
-            boolean zoom,
             boolean tooltips,
             IShellProvider shellProvider) {
-        this.properties = properties;
-		this.save = save;
-		this.print = print;
-		this.zoom = zoom;
-		this.tooltips = tooltips;
         
 		setChart(jfreechart);
         this.shellProvider = shellProvider;
         this.chartMouseListeners = new EventListenerList();
         this.info = new ChartRenderingInfo();
-        this.useBuffer = usingBuffer;
         this.minimumDrawWidth = minimumDrawW;
         this.minimumDrawHeight = minimumDrawH;
         this.maximumDrawWidth = maximumDrawW;
         this.maximumDrawHeight = maximumDrawH;
-        this.zoomTriggerDistance = DEFAULT_ZOOM_TRIGGER_DISTANCE;
-        setDisplayToolTips(tooltips);
-        // create the canvas and add the required listeners
-        addMouseListener(this);
-        addMouseMotionListener(this);
 
         this.enforceFileExtensions = true;
         
@@ -463,7 +321,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
                 Zoomable z = (Zoomable) plot;
                 this.domainZoomable = z.isDomainZoomable();
                 this.rangeZoomable = z.isRangeZoomable();
-                this.orientation = z.getOrientation();
             }
         }
         else {
@@ -584,17 +441,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
     }
 
     /**
-     * Displays a dialog that allows the user to edit the properties for the
-     * current chart.
-     */
-    private void attemptEditChartProperties() {
-        SWTChartEditor editor = new SWTChartEditor(Display.getDefault(),
-                this.chart);
-        //ChartEditorManager.getChartEditor(canvas.getDisplay(), this.chart);
-        editor.open();
-    }
-
-    /**
      * Returns <code>true</code> if file extensions should be enforced, and
      * <code>false</code> otherwise.
      *
@@ -636,23 +482,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
             ChartUtilities.saveChartAsPNG(new File(filename), this.chart,
             		bounds.getSize().width, bounds.getSize().height);
         }
-    }
-
-    /**
-     * Returns a point based on (x, y) but constrained to be within the bounds
-     * of the given rectangle.  This method could be moved to JCommon.
-     *
-     * @param x  the x-coordinate.
-     * @param y  the y-coordinate.
-     * @param area  the rectangle (<code>null</code> not permitted).
-     *
-     * @return A point within the rectangle.
-     */
-    private org.eclipse.swt.graphics.Point getPointInRectangle(int x, int y,
-            Rectangle area) {
-        x = Math.max(area.x, Math.min(x, area.x + area.width));
-        y = Math.max(area.y, Math.min(y, area.y + area.height));
-        return new org.eclipse.swt.graphics.Point(x, y);
     }
 
     /**
@@ -795,11 +624,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
      * @param event  details of the chart change event.
      */
     public void chartChanged(ChartChangeEvent event) {
-        Plot plot = this.chart.getPlot();
-        if (plot instanceof Zoomable) {
-            Zoomable z = (Zoomable) plot;
-            this.orientation = z.getOrientation();
-        }
         repaint();
     }
 
@@ -1021,13 +845,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
     }
 
     /**
-     * @param displayToolTips the displayToolTips to set
-     */
-    public void setDisplayToolTips(boolean displayToolTips) {
-        this.displayToolTips = displayToolTips;
-    }
-
-    /**
      * Returns a string for the tooltip.
      *
      * @param e  the mouse event.
@@ -1052,444 +869,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
 
     }
 
-    /**
-     * The idea is to modify the zooming options depending on the type of chart
-     * being displayed by the panel.
-     *
-     * @param x  horizontal position of the popup.
-     * @param y  vertical position of the popup.
-     */
-    protected void displayPopupMenu(int x, int y) {
-        if (this.popup != null) {
-            // go through each zoom menu item and decide whether or not to
-            // enable it...
-            Plot plot = this.chart.getPlot();
-            boolean isDomainZoomable = false;
-            boolean isRangeZoomable = false;
-            if (plot instanceof Zoomable) {
-                Zoomable z = (Zoomable) plot;
-                isDomainZoomable = z.isDomainZoomable();
-                isRangeZoomable = z.isRangeZoomable();
-            }
-            if (this.zoomInDomainMenuItem != null) {
-                this.zoomInDomainMenuItem.setEnabled(isDomainZoomable);
-            }
-            if (this.zoomOutDomainMenuItem != null) {
-                this.zoomOutDomainMenuItem.setEnabled(isDomainZoomable);
-            }
-            if (this.zoomResetDomainMenuItem != null) {
-                this.zoomResetDomainMenuItem.setEnabled(isDomainZoomable);
-            }
-
-            if (this.zoomInRangeMenuItem != null) {
-                this.zoomInRangeMenuItem.setEnabled(isRangeZoomable);
-            }
-            if (this.zoomOutRangeMenuItem != null) {
-                this.zoomOutRangeMenuItem.setEnabled(isRangeZoomable);
-            }
-
-            if (this.zoomResetRangeMenuItem != null) {
-                this.zoomResetRangeMenuItem.setEnabled(isRangeZoomable);
-            }
-
-            if (this.zoomInBothMenuItem != null) {
-                this.zoomInBothMenuItem.setEnabled(isDomainZoomable
-                        & isRangeZoomable);
-            }
-            if (this.zoomOutBothMenuItem != null) {
-                this.zoomOutBothMenuItem.setEnabled(isDomainZoomable
-                        & isRangeZoomable);
-            }
-            if (this.zoomResetBothMenuItem != null) {
-                this.zoomResetBothMenuItem.setEnabled(isDomainZoomable
-                        & isRangeZoomable);
-            }
-
-            this.popup.setLocation(x, y);
-            this.popup.setVisible(true);
-        }
-
-    }
-
-    /**
-     * Creates a print job for the chart.
-     */
-    public void createChartPrintJob() {
-        //FIXME try to replace swing print stuff by swt
-        PrinterJob job = PrinterJob.getPrinterJob();
-        PageFormat pf = job.defaultPage();
-        PageFormat pf2 = job.pageDialog(pf);
-        if (pf2 != pf) {
-            job.setPrintable(this, pf2);
-            if (job.printDialog()) {
-                try {
-                    job.print();
-                }
-                catch (PrinterException e) {
-                    MessageBox messageBox = new MessageBox(
-                            shellProvider.getShell(), SWT.OK | SWT.ICON_ERROR);
-                    messageBox.setMessage(e.getMessage());
-                    messageBox.open();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void contribute(MenuManager menuManager, Object object) {
-        boolean separator = false;
-
-        if (properties) {
-        	menuManager.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Properties...")) {
-        		@Override
-        		public void run() {
-        			attemptEditChartProperties();
-        		}
-        	}));
-            separator = true;
-        }
-        if (save) {
-            if (separator) {
-            	menuManager.add(new Separator());
-                separator = false;
-            }
-            menuManager.add(new ActionContributionItem(new Action(localizationResources.getString("Save_as...")) {
-        		@Override
-        		public void run() {
-        			try {
-						doSaveAs();
-					} catch (IOException e) {
-					}
-        		}
-        	}));
-            separator = true;
-        }
-        if (print) {
-        	if (separator) {
-            	menuManager.add(new Separator());
-                separator = false;
-            }
-        	menuManager.add(new ActionContributionItem(new Action(localizationResources.getString("Print...")) {
-        		@Override
-        		public void run() {
-        			createChartPrintJob();
-        		}
-        	}));
-            separator = true;
-        }
-        
-        if (zoom) {
-        	if (separator) {
-            	menuManager.add(new Separator());
-                separator = false;
-            }
-
-        	MenuManager zoomInMenu = new MenuManager(localizationResources.getString("Zoom_In"));
-			menuManager.add(zoomInMenu);
-        	
-			zoomInMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "All_Axes")) {
-					@Override
-					public void runWithEvent(Event e) {
-						zoomInBoth(e.x, e.y);
-					}
-        	}));
-			zoomInMenu.add(new Separator());
-			
-			zoomInMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Domain_Axis")) {
-					@Override
-					public void runWithEvent(Event e) {
-						zoomInDomain(e.x, e.y);
-					}
-        	}));
-			zoomInMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Range_Axis")) {
-					@Override
-					public void runWithEvent(Event e) {
-						zoomInRange(e.x, e.y);
-					}
-        	}));
-        	
-			MenuManager zoomOutMenu = new MenuManager(localizationResources.getString("Zoom_Out"));
-			menuManager.add(zoomOutMenu);
-			
-			zoomOutMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "All_Axes")) {
-					@Override
-					public void runWithEvent(Event e) {
-						zoomOutBoth(e.x, e.y);
-					}
-        	}));
-			
-			zoomOutMenu.add(new Separator());
-			
-			zoomOutMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Domain_Axis")) {
-					@Override
-					public void runWithEvent(Event e) {
-						zoomOutDomain(e.x, e.y);
-					}
-        	}));
-			zoomOutMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Range_Axis")) {
-					@Override
-					public void runWithEvent(Event e) {
-						zoomOutRange(e.x, e.y);
-					}
-        	}));
-			
-			MenuManager zoomResetMenu = new MenuManager(localizationResources.getString("Auto_Range"));
-			menuManager.add(zoomResetMenu);
-			
-			zoomResetMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "All_Axes")) {
-					@Override
-					public void runWithEvent(Event e) {
-						restoreAutoBounds();
-					}
-        	}));
-			
-			zoomResetMenu.add(new Separator());
-
-			zoomResetMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Domain_Axis")) {
-					@Override
-					public void runWithEvent(Event e) {
-						restoreAutoDomainBounds();
-					}
-        	}));
-			
-			zoomResetMenu.add(new ActionContributionItem(new Action(localizationResources.getString(
-                    "Range_Axis")) {
-					@Override
-					public void runWithEvent(Event e) {
-						restoreAutoRangeBounds();
-					}
-        	}));
-
-        }
-
-    }
-    
-    /**
-     * Not implemented.
-     *
-     * @param graphics  the graphics.
-     * @param pageFormat  the page format.
-     * @param pageIndex  the page index.
-     *
-     * @return ?.
-     *
-     * @throws PrinterException if there is a problem.
-     */
-    @Override
-    public int print(java.awt.Graphics graphics, PageFormat pageFormat, int pageIndex)
-        throws PrinterException {
-        if (pageIndex != 0) {
-            return NO_SUCH_PAGE;
-        }
-        /*
-        CairoImage image = new CairoImage(
-                this.getBounds().width, this.getBounds().height);
-        Graphics2D g2 = image.createGraphics2D();
-        double x = pageFormat.getImageableX();
-        double y = pageFormat.getImageableY();
-        double w = pageFormat.getImageableWidth();
-        double h = pageFormat.getImageableHeight();
-        this.chart.draw(
-            g2, new Rectangle2D.Double(x, y, w, h), this.anchor, null
-        );
-        */
-        return PAGE_EXISTS;
-    }
-
-    @Override
-    public void mouseDoubleClicked(MouseEvent me) {
-    }
-    
-    
-    /**
-     * Handles a mouse down event.
-     *
-     * @param event  the event.
-     */
-    @Override
-    public void mousePressed(MouseEvent event) {
-
-        Rectangle scaledDataArea = getScreenDataArea(event.x, event.y);
-        if (scaledDataArea == null) return;
-        this.zoomPoint = getPointInRectangle(event.x, event.y, scaledDataArea);
-        int x = (int) ((event.x - getClientArea().x) / this.scaleX);
-        int y = (int) ((event.y - getClientArea().y) / this.scaleY);
-
-        this.anchor = new Point2D.Double(x, y);
-        this.chart.setNotify(true);  // force a redraw
-        repaint();
-
-        // new entity code
-        ChartEntity entity = null;
-        if (this.info != null) {
-            EntityCollection entities = this.info.getEntityCollection();
-            if (entities != null) {
-                entity = entities.getEntity(x, y);
-            }
-        }
-
-        Object[] listeners = this.chartMouseListeners.getListeners(
-                ChartMouseListener.class);
-        if (listeners.length == 0) {
-            return;
-        }
-
-        // pass mouse down event if some ChartMouseListener are listening
-        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event);
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(),
-                mouseEvent, entity);
-        for (int i = listeners.length - 1; i >= 0; i -= 1) {
-            ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
-        }
-    }
-
-    /**
-     * Handles a mouse up event.
-     *
-     * @param event  the event.
-     */
-    @Override
-    public void mouseReleased(MouseEvent event) {
-
-        boolean hZoom, vZoom;
-        if (this.zoomRectangle == null) {
-            Rectangle screenDataArea = getScreenDataArea(event.x, event.y);
-            if (screenDataArea != null) {
-                this.zoomPoint = getPointInRectangle(event.x, event.y,
-                        screenDataArea);
-            }
-            if (this.popup != null && event.button == 3) {
-//                org.eclipse.swt.graphics.Point pt = this.canvas.toDisplay(
-//                        event.x, event.y);
-//                displayPopupMenu(pt.x, pt.y);
-            }
-        }
-        else {
-            hZoom = false;
-            vZoom = false;
-            if (this.orientation == PlotOrientation.HORIZONTAL) {
-                hZoom = this.rangeZoomable;
-                vZoom = this.domainZoomable;
-            }
-            else {
-                hZoom = this.domainZoomable;
-                vZoom = this.rangeZoomable;
-            }
-            boolean zoomTrigger1 = hZoom && Math.abs(this.zoomRectangle.width)
-                    >= this.zoomTriggerDistance;
-            boolean zoomTrigger2 = vZoom
-                    && Math.abs(this.zoomRectangle.height)
-                    >= this.zoomTriggerDistance;
-            if (zoomTrigger1 || zoomTrigger2) {
-                // if the box has been drawn backwards, restore the auto bounds
-                if ((hZoom && (this.zoomRectangle.x + this.zoomRectangle.width
-                        < this.zoomPoint.x)) || (vZoom && (this.zoomRectangle.y
-                        + this.zoomRectangle.height < this.zoomPoint.y)))
-                    restoreAutoBounds();
-                else {
-                    zoom(this.zoomRectangle);
-                }
-                repaint();
-            }
-        }
-        this.zoomPoint = null;
-        this.zoomRectangle = null;
-    }
-
-    /**
-     * Handles a mouse move event.
-     *
-     * @param event  the mouse event.
-     */
-    @Override
-    public void mouseMoved(MouseEvent event) {
-
-        // handle axis trace
-        if (this.horizontalAxisTrace || this.verticalAxisTrace) {
-            this.horizontalTraceLineY = event.y;
-            this.verticalTraceLineX = event.x;
-            repaint();
-        }
-        // handle tool tips in a simple way
-        if (this.displayToolTips) {
-            String s = getToolTipText(event);
-            if (s == null && fTooltip.getText() != null
-            		|| s != null && !s.equals(fTooltip.getText())) {
-            	fTooltip.setText(s);
-            }
-        }
-
-        // handle zoom box
-        boolean hZoom, vZoom;
-        if (this.zoomPoint != null) {
-            Rectangle scaledDataArea = getScreenDataArea(this.zoomPoint.x,
-                    this.zoomPoint.y);
-            org.eclipse.swt.graphics.Point movingPoint
-                    = getPointInRectangle(event.x, event.y, scaledDataArea);
-            if (this.orientation == PlotOrientation.HORIZONTAL) {
-                hZoom = this.rangeZoomable;
-                vZoom = this.domainZoomable;
-            }
-            else {
-                hZoom = this.domainZoomable;
-                vZoom = this.rangeZoomable;
-            }
-            if (hZoom && vZoom) {
-                // selected rectangle shouldn't extend outside the data area...
-                this.zoomRectangle = new org.eclipse.draw2d.geometry.Rectangle(this.zoomPoint.x,
-                        this.zoomPoint.y, movingPoint.x - this.zoomPoint.x,
-                        movingPoint.y - this.zoomPoint.y);
-            }
-            else if (hZoom) {
-                this.zoomRectangle = new org.eclipse.draw2d.geometry.Rectangle(this.zoomPoint.x,
-                        scaledDataArea.y, movingPoint.x - this.zoomPoint.x,
-                        scaledDataArea.height);
-            }
-            else if (vZoom) {
-                int ymax = Math.max(movingPoint.y, scaledDataArea.y);
-                this.zoomRectangle = new org.eclipse.draw2d.geometry.Rectangle(
-                        scaledDataArea.x, this.zoomPoint.y,
-                        scaledDataArea.width, ymax - this.zoomPoint.y);
-            }
-            repaint();
-        }
-
-        // new entity code
-        ChartEntity entity = null;
-        int x = (int) ((event.x - getClientArea().x) / this.scaleX);
-        int y = (int) ((event.y - getClientArea().y) / this.scaleY);
-
-        if (this.info != null) {
-            EntityCollection entities = this.info.getEntityCollection();
-            if (entities != null) {
-                entity = entities.getEntity(x, y);
-            }
-        }
-
-        Object[] listeners = this.chartMouseListeners.getListeners(
-                ChartMouseListener.class);
-        if (listeners.length == 0) {
-            return;
-        }
-
-//        // pass mouse move event if some ChartMouseListener are listening
-//        java.awt.event.MouseEvent mouseEvent = SWTUtils.toAwtMouseEvent(event);
-//        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(),
-//                mouseEvent, entity);
-//        for (int i = listeners.length - 1; i >= 0; i -= 1) {
-//            ((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
-//        }
-    }
-
     @Override
     public void paint(Graphics graphics) {
         // first determine the size of the chart rendering area...
@@ -1503,7 +882,6 @@ public class ChartFigure extends Figure implements ChartChangeListener,
         }
 
         // work out if scaling is required...
-        boolean scale = false;
         int drawWidth = available.width;
         int drawHeight = available.height;
         if (drawWidth == 0.0 || drawHeight == 0.0) return;
@@ -1512,22 +890,18 @@ public class ChartFigure extends Figure implements ChartChangeListener,
         if (drawWidth < this.minimumDrawWidth) {
             this.scaleX = (double) drawWidth / this.minimumDrawWidth;
             drawWidth = this.minimumDrawWidth;
-            scale = true;
         }
         else if (drawWidth > this.maximumDrawWidth) {
             this.scaleX = (double) drawWidth / this.maximumDrawWidth;
             drawWidth = this.maximumDrawWidth;
-            scale = true;
         }
         if (drawHeight < this.minimumDrawHeight) {
             this.scaleY = (double) drawHeight / this.minimumDrawHeight;
             drawHeight = this.minimumDrawHeight;
-            scale = true;
         }
         else if (drawHeight > this.maximumDrawHeight) {
             this.scaleY = (double) drawHeight / this.maximumDrawHeight;
             drawHeight = this.maximumDrawHeight;
-            scale = true;
         }
         org.eclipse.draw2d.geometry.Rectangle bounds = getBounds();
 		graphics.translate(bounds.x, bounds.y);
@@ -1574,21 +948,5 @@ public class ChartFigure extends Figure implements ChartChangeListener,
         }
         renderer.dispose();
     }
-
-	@Override
-	public void mouseDragged(MouseEvent me) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent me) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent me) {
-	}
-
-	@Override
-	public void mouseHover(MouseEvent me) {
-	}
 
 }

@@ -7,12 +7,25 @@
             id="org.eclipse.iee.pad.graph.addCommand"
             name="Add Graph">
       </command>
+      <command
+            id="org.eclipse.iee.pad.graph.ui.properties"
+            name="Properties">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="org.eclipse.iee.pad.graph.ui.handlers.AddGraphHandler"
             commandId="org.eclipse.iee.pad.graph.addCommand">
+      </handler>
+      <handler
+            class="org.eclipse.iee.pad.graph.ui.handlers.PropertiesHandler"
+            commandId="org.eclipse.iee.pad.graph.ui.properties">
+         <enabledWhen>
+            <reference
+                  definitionId="org.eclipse.iee.pad.graph.ui.isGraphPad">
+            </reference>
+         </enabledWhen>
       </handler>
    </extension>
    <extension
@@ -30,6 +43,35 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+A">
       </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.iee.editor.popup?after=additions">
+         <command
+               commandId="org.eclipse.iee.pad.graph.ui.properties"
+               label="Properties"
+               style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                     <reference
+                           definitionId="org.eclipse.iee.pad.graph.ui.isGraphPad">
+                     </reference>
+               </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="org.eclipse.iee.pad.graph.ui.isGraphPad">
+            <with variable="selection">
+               <iterate ifEmpty="false" operator="or">
+                  <instanceof value="org.eclipse.iee.pad.graph.ui.GraphPad" />
+               </iterate>
+            </with>
+      </definition>
    </extension>
 
 

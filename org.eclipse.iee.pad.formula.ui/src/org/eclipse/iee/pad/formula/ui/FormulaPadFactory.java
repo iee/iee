@@ -2,6 +2,7 @@ package org.eclipse.iee.pad.formula.ui;
 
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
+import org.eclipse.iee.editor.core.pad.IPadFactoryContext;
 import org.eclipse.iee.pad.formula.FormulaPart;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.osgi.service.component.annotations.Component;
@@ -17,7 +18,7 @@ public class FormulaPadFactory implements IPadFactory<FormulaPart> {
 	private UIFormulaRenderer formulaRenderer;
 	
 	@Override
-	public FormulaPad create(FormulaPart part) {
+	public FormulaPad create(FormulaPart part, IPadFactoryContext factoryContext) {
 		FormulaPad formulaPad = new FormulaPad(formulaRenderer);
 		formulaPad.bindDocumentPart(DefaultObservableValue.fromValue(part));
 		return formulaPad;

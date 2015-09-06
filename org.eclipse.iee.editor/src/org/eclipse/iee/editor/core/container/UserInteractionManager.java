@@ -172,23 +172,23 @@ public class UserInteractionManager {
 			}
 		});
 		
-		textWidget.addMenuDetectListener(new MenuDetectListener() {
-			
-			@Override
-			public void menuDetected(MenuDetectEvent e) {
-				Point control = textWidget.toControl(e.x, e.y);
-				Optional<ITextEditor<?>> editor = fContainerManager.getEditorAt(control.x, control.y);
-				if (editor.isPresent()) {
-					MenuManager menuManager = new MenuManager();
-					Menu menu = menuManager.createContextMenu(textWidget);
-					editor.get().contribute(menuManager);
-					menuManager.update(false);
-					menu.setLocation(e.x, e.y);
-					menu.setVisible(true);
-					e.doit = false;
-				}
-			}
-		});
+//		textWidget.addMenuDetectListener(new MenuDetectListener() {
+//			
+//			@Override
+//			public void menuDetected(MenuDetectEvent e) {
+//				Point control = textWidget.toControl(e.x, e.y);
+//				Optional<ITextEditor<?, ?>> editor = fContainerManager.getEditorAt(control.x, control.y);
+//				if (editor.isPresent()) {
+//					MenuManager menuManager = new MenuManager();
+//					Menu menu = menuManager.createContextMenu(textWidget);
+//					editor.get().contribute(menuManager);
+//					menuManager.update(false);
+//					menu.setLocation(e.x, e.y);
+//					menu.setVisible(true);
+//					e.doit = false;
+//				}
+//			}
+//		});
 		
 		textWidget.addFocusListener(new FocusListener() {
 			
