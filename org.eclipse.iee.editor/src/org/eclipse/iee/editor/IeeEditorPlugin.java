@@ -12,6 +12,7 @@ import org.eclipse.iee.editor.core.pad.table.ui.CellPropertiesAdapterFactory;
 import org.eclipse.iee.editor.core.storage.IPadStorage;
 import org.eclipse.iee.editor.properties.PropertiesAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -107,4 +108,12 @@ public class IeeEditorPlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
+	
+	@Override
+	protected void initializeImageRegistry(ImageRegistry reg) {
+		reg.put("visibility-off", getImageDescriptor("images/visibility-off.png"));
+		reg.put("visibility-on", getImageDescriptor("images/visibility-on.png"));
+		reg.put("progress", getImageDescriptor("icons/progress.png"));
+	}
+	
 }

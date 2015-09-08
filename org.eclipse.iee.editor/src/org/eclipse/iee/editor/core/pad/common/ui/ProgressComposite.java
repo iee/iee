@@ -1,14 +1,14 @@
 package org.eclipse.iee.editor.core.pad.common.ui;
 
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Spinner;
 
 public class ProgressComposite extends Composite {
@@ -17,7 +17,7 @@ public class ProgressComposite extends Composite {
 	private TextViewer fTextViewer;
 	private Spinner fSpinner;
 
-	public ProgressComposite(Composite parent, int style) {
+	public ProgressComposite(Composite parent, int style, ImageRegistry imageRegistry) {
 		super(parent, style);
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
@@ -27,7 +27,7 @@ public class ProgressComposite extends Composite {
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		image = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.iee.editor", "icons/progress.png").createImage();
+		image = imageRegistry.get("progress");
 		lblNewLabel.setImage(image);
 		
 		fSpinner = new Spinner(composite, SWT.BORDER);

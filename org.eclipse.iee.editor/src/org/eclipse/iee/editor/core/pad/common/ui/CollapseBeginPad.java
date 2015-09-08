@@ -1,38 +1,17 @@
 package org.eclipse.iee.editor.core.pad.common.ui;
 
-import org.eclipse.iee.editor.core.pad.CompositePad;
+import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.iee.editor.core.pad.FigurePad;
 import org.eclipse.iee.editor.core.pad.common.CollapseBeginPart;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-public class CollapseBeginPad extends CompositePad<CollapseBeginPart> {
+public class CollapseBeginPad extends FigurePad<CollapseBeginPart, ImageFigure> {
 
-	private static Image image;
+	private Image image;
 
-	static {
-		image = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.iee.editor", "images/visibility-off.png").createImage();
-	}
-
-	public CollapseBeginPad() {
-	}
-
-	@Override
-	public void createPartControl(final Composite parent) {
-		initView(parent);
-	}
-
-	protected void initView(Composite parent) {
-		Rectangle bounds = image.getBounds();
-		parent.setLayout(new FillLayout(SWT.VERTICAL));
-		final Label label = new Label(parent, SWT.WRAP | SWT.CENTER);
-		label.setImage(image);
-		label.setSize(bounds.width, bounds.height);
-		parent.pack();
+	public CollapseBeginPad(ImageRegistry imageRegistry) {
+		image = imageRegistry.get("visibility-off");
 	}
 
 	@Override
@@ -54,8 +33,8 @@ public class CollapseBeginPad extends CompositePad<CollapseBeginPart> {
 	}
 
 	@Override
-	public void dispose() {
-		image.dispose();
+	protected ImageFigure createFigure() {
+		return new ImageFigure(image);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
 import org.eclipse.iee.editor.core.pad.CompositePad;
 import org.eclipse.iee.editor.core.pad.common.ProgressDocumentPart;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
@@ -20,8 +21,11 @@ public class ProgressPad extends CompositePad<ProgressDocumentPart> implements S
 	private Composite fParent;
 	
 	private ProgressComposite fComposite;
+
+	private ImageRegistry imageRegistry;
 	
-	public ProgressPad() {
+	public ProgressPad(ImageRegistry imageRegistry) {
+		this.imageRegistry = imageRegistry;
 	}
 
 	private Document fDocument;
@@ -33,7 +37,7 @@ public class ProgressPad extends CompositePad<ProgressDocumentPart> implements S
 		fParent = parent;
 		parent.setLayout(new FillLayout());
 		
-		fComposite = new ProgressComposite(parent, SWT.NONE);
+		fComposite = new ProgressComposite(parent, SWT.NONE, imageRegistry);
 		
 		fDocument = new Document();
 		fDocument.set(getDocumentPart().getStatus());

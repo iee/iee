@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.pad.common.ui;
 
+import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.pad.IPadFactory;
 import org.eclipse.iee.editor.core.pad.IPadFactoryContext;
@@ -11,7 +12,7 @@ public class CollapseBeginPadFactory implements IPadFactory<CollapseBeginPart> {
 
 	@Override
 	public CollapseBeginPad create(CollapseBeginPart documentPart, IPadFactoryContext factoryContext) {
-		CollapseBeginPad collapseBeginPad = new CollapseBeginPad();
+		CollapseBeginPad collapseBeginPad = new CollapseBeginPad(IeeEditorPlugin.getDefault().getImageRegistry());
 		collapseBeginPad.bindDocumentPart(DefaultObservableValue.fromValue(documentPart));
 		return collapseBeginPad;
 	}
