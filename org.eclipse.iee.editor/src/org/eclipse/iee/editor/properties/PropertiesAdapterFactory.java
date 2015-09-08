@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.properties;
 
 import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 public class PropertiesAdapterFactory implements IAdapterFactory {
@@ -11,6 +12,9 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
 	@Override
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (IPropertySource.class.isAssignableFrom(adapterType)) {
+			if (adaptableObject instanceof Pad) {
+				adaptableObject = ((Pad) adaptableObject).getModel();
+			}
 			return new ContainerPropertySource(adaptableObject);
 		} 
 		return null;
