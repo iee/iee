@@ -17,10 +17,8 @@ import org.eclipse.draw2d.AbstractHintLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
@@ -41,7 +39,6 @@ import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DocumentEvent;
@@ -69,8 +66,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
@@ -78,7 +73,6 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Caret;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -1149,7 +1143,15 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		}
 		
 		private Pad<?, ?> getPad() {
-			return (Pad<?, ?>) getFirstElement();
+			Object firstElement = getFirstElement();
+			if (firstElement instanceof ITextEditor) {
+				ITextEditor<?, ?> element = (ITextEditor<?, ?>) firstElement;
+				while(element.getParent().isPresent()) {
+					element = element.getParent().get();
+				}
+				return (Pad<?, ?>) element;
+			}
+			return null;
 		}
 
 		

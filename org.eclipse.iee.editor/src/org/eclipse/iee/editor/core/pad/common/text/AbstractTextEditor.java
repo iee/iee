@@ -8,8 +8,6 @@ import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
-import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
-import org.eclipse.jface.action.MenuManager;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -22,8 +20,6 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 	private Optional<ITextEditor<?, ?>> fParent = Optional.absent();
 
 	private List<ITextEditor<?, ?>> fChildren = Lists.newArrayList();
-	
-	private Optional<IMenuContributor<? super T>> fMenuContributor = Optional.absent();
 	
 	private F fFigure;
 	
@@ -90,22 +86,7 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 			iTextEditor.detach(containerManager);
 		}
 	}
-	
-	protected void setMenuContributor(IMenuContributor<? super T> instance) {
-		fMenuContributor = Optional.<IMenuContributor<? super T>> of(instance);
-	}
-	
-	@Override
-	public void contribute(MenuManager menuManager) {
-		Optional<ITextEditor<?, ?>> parent = getParent();
-		if (parent.isPresent()) {
-			parent.get().contribute(menuManager);
-		}
-		if (fMenuContributor.isPresent()) {
-			fMenuContributor.get().contribute(menuManager, getModel());
-		}
-	}
-	
+		
 	protected void bindObservableValue(IObservableValue<T> value) {
 		IObservableValue<T> oldValue = getObservableValue().isPresent() ? getObservableValue().get() : null;
 		fModel = Optional.of(value);
@@ -171,6 +152,9 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 
 	@Override
 	public Object getAdapter(Class adapter) {
+		if (getModel() == null) {
+			return null;
+		}
 		if (adapter.isAssignableFrom(getModel().getClass())) {
 			return adapter;
 		}

@@ -11,7 +11,6 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
@@ -39,7 +38,7 @@ import org.jfree.util.PaintUtilities;
 
 import com.google.common.base.Strings;
 
-public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure> implements IMenuContributor<GraphElement> {
+public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure> implements IMenuContributor {
 
 	private ImageFigure fFormulaImage;
 	
@@ -72,6 +71,7 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 		figure.setLayoutManager(new ToolbarLayout(false));
 		fFormulaImage = new ImageFigure();
 		fTextPartEditor = new TextPartEditor();
+		fTextPartEditor.bindValue(fFunctionValue);
 		addEditor(fTextPartEditor);
 		
 		fTextFigure = (Figure) fTextPartEditor.getFigure();
@@ -104,6 +104,7 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 			public void focusLost(FocusEvent fe) {
 				toggleFormulaImage();
 			}});
+		toggleFormulaImage(figure);
 		return figure;
 	}
 	
@@ -117,6 +118,10 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 
 	public void toggleFormulaImage() {
 		Figure figure = (Figure) getFigure();
+		toggleFormulaImage(figure);
+	}
+
+	private void toggleFormulaImage(Figure figure) {
 		figure.removeAll();
 		Image newImage = createImage();
 		if (newImage != null) {
@@ -162,20 +167,22 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 	}
 
 	@Override
-	public void contribute(MenuManager menuManager, GraphElement object) {
+	public void contribute(MenuManager menuManager) {
 		menuManager.add(new ActionContributionItem(new Action("Add function") {
 			@Override
 			public void runWithEvent(Event event) {
+				GraphModelEditor graphModelEditor = (GraphModelEditor) getParent().get();
 				GraphElement newElement = new GraphElement();
 				newElement.setNumberOfPoints(100);
 				newElement.setColor(getNextColor());
-				getObservableValue().get().getValue().getGraph().addElement(newElement);
+				graphModelEditor.getModel().addElement(newElement);
 			}
 		}));
 		menuManager.add(new ActionContributionItem(new Action("Remove function") {
 			@Override
 			public void runWithEvent(Event event) {
-				getObservableValue().get().getValue().getGraph().removeElement(getModel());
+				GraphModelEditor graphModelEditor = (GraphModelEditor) getParent().get();
+				graphModelEditor.getModel().removeElement(getModel());
 			}
 		}));
 		menuManager.add(new ActionContributionItem(new Action("Properties") {
@@ -216,11 +223,15 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 	}
 	
 	public void setColor(java.awt.Color awtColor) {
-		fLine.setBackgroundColor(SWTUtils.toSwtColor(Display.getDefault(), awtColor));
+		if (fLine != null) { 
+			fLine.setBackgroundColor(SWTUtils.toSwtColor(Display.getDefault(), awtColor));
+		}
 	}
 
 	public void setWidth(int width) {
-		fLine.setSize(getFigure().getSize().width, width);
+		if (fLine != null) {
+			fLine.setSize(getFigure().getSize().width, width);
+		}
 	}
 	
 	public String getNextColor() {
@@ -258,7 +269,6 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 		fWidthValue.addObserver(fWidthObserver);
 		
 		fFunctionValue = new ObservableProperty<String>(value, "function", String.class);
-		fTextPartEditor.bindValue(fFunctionValue);
 		
 		setColor(PaintUtilities.stringToColor(color));
 		setWidth(fWidthValue.getValue());
@@ -270,11 +280,6 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 		fWidthValue.dispose();
 		fFunctionValue.dispose();
 		fWidthValue.dispose();
-	}
-	@Override
-	public void attach(ContainerManager containerManager) {
-		super.attach(containerManager);
-		toggleFormulaImage();
 	}
 
 }

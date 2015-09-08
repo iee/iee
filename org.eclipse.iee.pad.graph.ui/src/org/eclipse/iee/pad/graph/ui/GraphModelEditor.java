@@ -12,6 +12,7 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.iee.editor.core.bindings.ConvertedObservableValue;
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
@@ -165,6 +166,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel, IFigure> {
 	
 	private void addElementComposite(final GraphElement graphElement) {
 		GraphElementEditor elementEditor = new GraphElementEditor(fFormulaRenderer, fChartEditor.getDrawingSupplier(), fShellProvider);
+		elementEditor.bindValue(DefaultObservableValue.fromValue(graphElement));
 		addEditor(elementEditor);
 		editors.put(graphElement, elementEditor);
 		fSeries.add(elementEditor.getFigure());

@@ -8,18 +8,25 @@ import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
-import org.eclipse.iee.editor.core.pad.table.CellMenuContributor;
+import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.iee.editor.core.pad.table.TableCell;
+import org.eclipse.iee.editor.core.pad.table.TableColumn;
+import org.eclipse.iee.editor.core.pad.table.TablePart;
+import org.eclipse.iee.editor.core.pad.table.TableRow;
 import org.eclipse.iee.editor.core.pad.table.ui.TablePad.CellFigureBorder;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Caret;
+import org.eclipse.swt.widgets.Event;
 
-public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> {
+public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> implements IMenuContributor {
 
 	private TextPartEditor fTextPartEditor;
+	
 	private ObservableProperty<String> fValue;
 
 	public TableCellEditor() {
-		setMenuContributor(CellMenuContributor.INSTANCE);
 		fTextPartEditor = new TextPartEditor();
 		addEditor(fTextPartEditor);
 	}
@@ -39,14 +46,13 @@ public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> {
 
 	@Override
 	public boolean isSelectable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public void setSelected(boolean b) {
-		// TODO Auto-generated method stub
-		
+	public void setSelected(boolean selected) {
+		TablePad tablePad = (TablePad) getParent().get();
+		tablePad.updateSelectionFrame(selected);
 	}
 
 	@Override
@@ -79,6 +85,70 @@ public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> {
 		fValue.dispose();
 	}
 	
-	
+	@Override
+	public void contribute(MenuManager menuManager) {
+		
+		menuManager.add(new ActionContributionItem(new Action("Add column after") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePad tablePad = (TablePad) getParent().get();
+				TablePart table = tablePad.getModel();
+				TableColumn column = table.getColumn(getModel());
+				table.addColumnAfter(column, new TableColumn("Header"));
+			}
+		}));
+		
+		menuManager.add(new ActionContributionItem(new Action("Add column before") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePad tablePad = (TablePad) getParent().get();
+				TablePart table = tablePad.getModel();
+				TableColumn column = table.getColumn(getModel());
+				table.addColumnBefore(column, new TableColumn("Header"));
+			}
+		}));
+		
+		menuManager.add(new ActionContributionItem(new Action("Delete column") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePad tablePad = (TablePad) getParent().get();
+				TablePart table = tablePad.getModel();
+				TableColumn column = table.getColumn(getModel());
+				table.removeColumn(column);
+			}
+		}));
+		
+		menuManager.add(new ActionContributionItem(new Action("Add row after") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePad tablePad = (TablePad) getParent().get();
+				TablePart table = tablePad.getModel();
+				TableRow row = table.getRow(getModel());
+				table.addRowAfter(row, new TableRow());
+			}
+		}));
+		
+		menuManager.add(new ActionContributionItem(new Action("Add row before") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePad tablePad = (TablePad) getParent().get();
+				TablePart table = tablePad.getModel();
+				TableRow row = table.getRow(getModel());
+				table.addRowBefore(row, new TableRow());
+			}
+		}));
+		
+		menuManager.add(new ActionContributionItem(new Action("Delete row") {
+			@Override
+			public void runWithEvent(Event event) {
+				TablePad tablePad = (TablePad) getParent().get();
+				TablePart table = tablePad.getModel();
+				TableRow row = table.getRow(getModel());
+				table.removeRow(row);
+			}
+		}));
+		
+		
+	}
 
 }

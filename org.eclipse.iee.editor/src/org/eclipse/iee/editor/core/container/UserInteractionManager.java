@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import org.eclipse.iee.editor.core.pad.common.text.IContentTextPart;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
@@ -172,23 +173,26 @@ public class UserInteractionManager {
 			}
 		});
 		
-//		textWidget.addMenuDetectListener(new MenuDetectListener() {
-//			
-//			@Override
-//			public void menuDetected(MenuDetectEvent e) {
-//				Point control = textWidget.toControl(e.x, e.y);
-//				Optional<ITextEditor<?, ?>> editor = fContainerManager.getEditorAt(control.x, control.y);
-//				if (editor.isPresent()) {
-//					MenuManager menuManager = new MenuManager();
-//					Menu menu = menuManager.createContextMenu(textWidget);
-//					editor.get().contribute(menuManager);
-//					menuManager.update(false);
-//					menu.setLocation(e.x, e.y);
-//					menu.setVisible(true);
-//					e.doit = false;
-//				}
-//			}
-//		});
+		textWidget.addMenuDetectListener(new MenuDetectListener() {
+			
+			@Override
+			public void menuDetected(MenuDetectEvent e) {
+				Point control = textWidget.toControl(e.x, e.y);
+				Optional<ITextEditor<?, ?>> editor = fContainerManager.getEditorAt(control.x, control.y);
+				while (editor.isPresent() && !(editor.get() instanceof IMenuContributor)) {
+					editor = editor.get().getParent();
+				}
+				if (editor.isPresent()) {
+					MenuManager menuManager = new MenuManager();
+					Menu menu = menuManager.createContextMenu(textWidget);
+					((IMenuContributor) editor.get()).contribute(menuManager);
+					menuManager.update(false);
+					menu.setLocation(e.x, e.y);
+					menu.setVisible(true);
+					e.doit = false;
+				}
+			}
+		});
 		
 		textWidget.addFocusListener(new FocusListener() {
 			

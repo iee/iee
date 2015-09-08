@@ -47,14 +47,26 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 	}
 
 	public void setSelected(boolean isSelected) {
-		IFigure figure = fContainer.getFeedbackFigure();
+		updateSelectionFrame(isSelected);
+	}
+
+	public void updateSelectionFrame(boolean isSelected) {
 		if (isSelected) {
-			Rectangle bounds = getBounds();
-			updateSelectionBounds(bounds);
-			figure.add(selectionFigure);
+			addSelectionFrame();
 		} else if (selectionFigure.getParent() != null) {
-			selectionFigure.getParent().remove(selectionFigure);
+			removeSelectionFrame();
 		}
+	}
+
+	private void removeSelectionFrame() {
+		selectionFigure.getParent().remove(selectionFigure);
+	}
+
+	private void addSelectionFrame() {
+		IFigure figure = fContainer.getFeedbackFigure();
+		Rectangle bounds = getBounds();
+		updateSelectionBounds(bounds);
+		figure.add(selectionFigure);
 	}
 
 	protected void updateSelectionBounds(Rectangle bounds) {
