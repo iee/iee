@@ -916,10 +916,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		if (fSourceViewer instanceof ISelectionProvider) {
 			((ISelectionProvider) fSourceViewer).removeSelectionChangedListener(listener);
 		}
-		if (fPostSelectionChangedListeners != null)  {
-			fPostSelectionChangedListeners.remove(listener);
-			if (fPostSelectionChangedListeners.size() == 0) {
-				fPostSelectionChangedListeners=  null;
+		if (fSelectionChangedListeners != null)  {
+			fSelectionChangedListeners.remove(listener);
+			if (fSelectionChangedListeners.size() == 0) {
+				fSelectionChangedListeners = null;
 			}
 		}
 	}
