@@ -63,7 +63,7 @@ public class ObservableProperty<T> implements IObservableValue<T> {
 			throw new IllegalAccessError("Property is read only!");
 		}
 		try {
-			fSetter.invoke(fModel);
+			fSetter.invoke(fModel, value);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			throw Throwables.propagate(e);
