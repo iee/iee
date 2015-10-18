@@ -1,35 +1,28 @@
 package org.eclipse.iee.editor.core.pad.common.text;
 
+import org.eclipse.draw2d.text.CaretInfo;
+import org.eclipse.iee.editor.core.container.ITextEditor;
+import org.eclipse.swt.widgets.Caret;
+
 import com.google.common.base.Optional;
 
 public class OffsetTextLocation implements TextLocation {
 
-	private IContentTextPart fTextPart;
+	private TextPartEditor fTextPart;
 	
 	private int fTextOffset;
 	
-	public OffsetTextLocation(IContentTextPart textPart, int textOffset) {
+	public OffsetTextLocation(TextPartEditor textPart, int textOffset) {
 		fTextOffset = textOffset;
 		fTextPart = textPart;
-	}
-
-	@Override
-	public IContentTextPart getTextPart() {
-		return fTextPart;
-	}
-	
-	@Override
-	public int getPosition() {
-		return fTextOffset;
 	}
 
 	public Optional<TextLocation> getPrevious() {
 		if (fTextOffset > 0) {
 			return Optional.<TextLocation> of(new OffsetTextLocation(fTextPart, fTextOffset - 1));
-		} else if (fTextPart.getParentTextPart().isPresent()) {
-			Optional<ICompositeTextPart> parent = fTextPart.getParentTextPart();
-			Optional<ITextPart> previousPart = parent.get().getPrevious(fTextPart);
-			return previousPart.isPresent() ? Optional.<TextLocation> of(previousPart.get().getEnd()) : Optional.<TextLocation> absent();
+		} else if (fTextPart.getParent().isPresent()) {
+			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			return parent.get().getPrevious(fTextPart);
 		} else {
 			return Optional.<TextLocation> absent();
 		}
@@ -39,15 +32,47 @@ public class OffsetTextLocation implements TextLocation {
 	public Optional<TextLocation> getNext() {
 		if (fTextOffset < fTextPart.getLength()) {
 			return Optional.<TextLocation> of(new OffsetTextLocation(fTextPart, fTextOffset + 1));
-		} else if (fTextPart.getParentTextPart().isPresent()) {
-			Optional<ICompositeTextPart> parent = fTextPart.getParentTextPart();
-			Optional<ITextPart> nextPart = parent.get().getNext(fTextPart);
-			return nextPart.isPresent() ? Optional.<TextLocation> of(nextPart.get().getStart()) : Optional.<TextLocation> absent();
+		} else if (fTextPart.getParent().isPresent()) {
+			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			return parent.get().getNext(fTextPart);
+		} else {
+			return Optional.<TextLocation> absent();
+		}
+	}
+
+	@Override
+	public void putCaret(Caret caret) {
+		fTextPart.updateCaret(caret, fTextOffset, fTextOffset == fTextPart.getLength());
+	}
+
+	@Override
+	public Optional<TextLocation> getAbove() {
+		if (fTextPart.getParent().isPresent()) {
+			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			return parent.get().getAbove(this);
+		} else {
+			return Optional.<TextLocation> absent();
+		}
+	}
+
+	@Override
+	public Optional<TextLocation> getBelow() {
+		if (fTextPart.getParent().isPresent()) {
+			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			return parent.get().getBelow(this);
 		} else {
 			return Optional.<TextLocation> absent();
 		}
 	};
 	
-	
+	@Override
+	public CaretInfo getCaretInfo() {
+		return fTextPart.getCaretInfo(fTextOffset, fTextOffset == fTextPart.getLength());
+	}
+
+	@Override
+	public ITextEditor<?, ?> getEditor() {
+		return fTextPart;
+	}
 	
 }

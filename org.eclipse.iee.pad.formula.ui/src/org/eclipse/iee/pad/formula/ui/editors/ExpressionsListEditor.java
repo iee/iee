@@ -27,15 +27,6 @@ public class ExpressionsListEditor extends AbstractTextEditor<List<Expression>, 
 	}
 
 	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-	}
-
-	@Override
 	public boolean isSelectable() {
 		return false;
 	}

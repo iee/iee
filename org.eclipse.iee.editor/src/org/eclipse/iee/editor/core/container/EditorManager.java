@@ -6,7 +6,6 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.XYLayout;
-import org.eclipse.iee.editor.core.container.ITextEditor;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;

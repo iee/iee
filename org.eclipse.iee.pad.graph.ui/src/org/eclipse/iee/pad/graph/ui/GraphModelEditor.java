@@ -239,18 +239,6 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel, IFigure> {
 	}
 
 	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean isSelectable() {
 		// TODO Auto-generated method stub
 		return false;

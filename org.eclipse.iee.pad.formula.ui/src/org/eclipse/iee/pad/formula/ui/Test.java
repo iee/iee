@@ -16,6 +16,9 @@ import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.translator.FormulaModelCreator;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Caret;
@@ -26,6 +29,7 @@ import com.google.common.base.Optional;
 
 public class Test {
 
+	private static TextLocation fTextLocation;
 	
 	public static void main(String[] args) {
 
@@ -85,8 +89,11 @@ public class Test {
 				
 				Optional<ITextEditor<?, ?>> editor = editorManager.getEditorAt(p);
 				if (editor.isPresent()) {
-					TextLocation textLocation = editor.get().getTextLocation(e.x, e.y);
-					editor.get().acceptCaret(getCaret(shell), textLocation);
+					Optional<TextLocation> textLocation = editor.get().getTextLocation(e.x, e.y);
+					if (textLocation.isPresent()) {
+						fTextLocation = textLocation.get();
+						textLocation.get().putCaret(getCaret(shell));
+					}
 				} 
 			}
 			
@@ -103,6 +110,38 @@ public class Test {
 				return c;
 			}
 			
+		});
+		
+		shell.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.ARROW_LEFT) {
+					Optional<TextLocation> previous = fTextLocation.getPrevious();
+					if (previous.isPresent()) {
+						(fTextLocation = previous.get()).putCaret(getCaret(shell));
+					}
+				} else if (e.keyCode == SWT.ARROW_RIGHT) {
+					Optional<TextLocation> next = fTextLocation.getNext();
+					if (next.isPresent()) {
+						(fTextLocation = next.get()).putCaret(getCaret(shell));
+					}
+				} else if (e.keyCode == SWT.ARROW_UP) {
+					Optional<TextLocation> above = fTextLocation.getAbove();
+					if (above.isPresent()) {
+						(fTextLocation = above.get()).putCaret(getCaret(shell));
+					}
+				} else if (e.keyCode == SWT.ARROW_DOWN) {
+					Optional<TextLocation> below = fTextLocation.getBelow();
+					if (below.isPresent()) {
+						(fTextLocation = below.get()).putCaret(getCaret(shell));
+					}
+				}
+			}
 		});
 		
 		

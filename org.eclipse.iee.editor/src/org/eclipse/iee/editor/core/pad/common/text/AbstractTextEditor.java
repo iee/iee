@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.container.EditorManager;
@@ -43,7 +45,94 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 	
 	abstract protected F createFigure();
 	
+	@Override
+	public Optional<TextLocation> getTextLocation(int x, int y) {
+		return Optional.absent();
+	}
 	
+	@Override
+	public Optional<TextLocation> getNext(ITextEditor<?, ?> textPart) {
+		int indexOf = getChildren().indexOf(textPart);
+		if (indexOf < 0) {
+			throw new IllegalArgumentException("Editor is not a child of this container");
+		} else if (indexOf + 1 == getChildren().size()) {
+			if (getParent().isPresent()) {
+				return getParent().get().getNext(this);
+			} else {
+				return Optional.<TextLocation> absent();
+			}
+		} else {
+			return getChildren().get(indexOf + 1).getStart();
+		}
+	}
+	
+	@Override
+	public Optional<TextLocation> getPrevious(ITextEditor<?, ?> textPart) {
+		int indexOf = getChildren().indexOf(textPart);
+		if (indexOf < 0) {
+			throw new IllegalArgumentException("Editor is not a child of this container");
+		} else if (indexOf - 1 < 0) {
+			if (getParent().isPresent()) {
+				return getParent().get().getPrevious(this);
+			} else {
+				return Optional.<TextLocation> absent();
+			}
+		} else {
+			return getChildren().get(indexOf - 1).getEnd();
+		}
+	}
+	
+	@Override
+	public Optional<TextLocation> getAbove(TextLocation textLocation) {
+		ITextEditor<?, ?> editor = textLocation.getEditor();
+		return getAbove(textLocation, editor);
+	}
+
+	public Optional<TextLocation> getAbove(TextLocation textLocation, ITextEditor<?, ?> editor) {
+		CaretInfo caretInfo = textLocation.getCaretInfo();
+		int y = editor.getFigure().getBounds().y() - 1;
+		Optional<ITextEditor<?, ?>> editorAt = fManager.get().getEditorAt(new Point(caretInfo.getX(), y));
+		if (editorAt.isPresent()) {
+			return editorAt.get().getTextLocation(caretInfo.getX(), y);
+		} else if (getParent().isPresent()) {
+			return getAbove(textLocation, getParent().get());
+		}
+		return Optional.<TextLocation> absent();
+	}
+	
+	@Override
+	public Optional<TextLocation> getBelow(TextLocation textLocation) {
+		ITextEditor<?, ?> editor = textLocation.getEditor();
+		return getBelow(textLocation, editor);
+	}
+
+	private Optional<TextLocation> getBelow(TextLocation textLocation, ITextEditor<?, ?> editor) {
+		CaretInfo caretInfo = textLocation.getCaretInfo();
+		int y = editor.getFigure().getBounds().bottom() + 1;
+		Optional<ITextEditor<?, ?>> editorAt = fManager.get().getEditorAt(new Point(caretInfo.getX(), y));
+		if (editorAt.isPresent()) {
+			return editorAt.get().getTextLocation(caretInfo.getX(), y);
+		} else if (getParent().isPresent()) {
+			return getBelow(textLocation, getParent().get());
+		}
+		return Optional.<TextLocation> absent();
+	}
+	
+	@Override
+	public Optional<TextLocation> getStart() {
+		if (getChildren().size() > 0) {
+			return getChildren().get(0).getStart();
+		}
+		return Optional.<TextLocation> absent();
+	}
+	
+	@Override
+	public Optional<TextLocation> getEnd() {
+		if (getChildren().size() > 0) {
+			return getChildren().get(getChildren().size() - 1).getEnd();
+		}
+		return Optional.<TextLocation> absent();
+	}
 	
 	@Override
 	public T getModel() {
@@ -114,6 +203,10 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 				onValueChanged(old, newV);
 			}
 		}
+	}
+	
+	protected List<ITextEditor<?, ?>> getChildren() {
+		return fChildren;
 	}
 
 	protected void doBindValue(T value) {

@@ -3,6 +3,7 @@ package org.eclipse.iee.pad.formula.ui.editors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.container.RenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
@@ -28,15 +29,6 @@ public class BinaryExpressionEditor extends AbstractTextEditor<BinaryExpression,
 		addEditor(fLeftEditor = new ExpressionEditor(fRenderCtx));
 		addEditor(fSignEditor = new WrapperEditor<>("sign", renderCtx));
 		addEditor(fRightEditor = new ExpressionEditor(fRenderCtx));
-	}
-
-	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
 	}
 
 	@Override
@@ -80,4 +72,5 @@ public class BinaryExpressionEditor extends AbstractTextEditor<BinaryExpression,
 			fRight.get().dispose();
 		}
 	}
+	
 }

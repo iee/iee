@@ -24,7 +24,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 
-public class TextPartEditor extends AbstractTextEditor<String, FlowPage> implements IContentTextPart {
+public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 
 	private TextFlow fTextFlow;
 
@@ -105,12 +105,6 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> impleme
 		return fText.get();
 	}
 	
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-		int position = textLocation.getPosition();
-		updateCaret(caret, position, position == fText.getLength());
-		fFlowPage.requestFocus();
-	}
-
 	public void addDocumentListener(IDocumentListener listener) {
 		fText.addDocumentListener(listener);
 	}
@@ -125,36 +119,32 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> impleme
 				caret.setLocation(caretPlacement.getX(), caretPlacement.getY());					}
 		});
 	}
+	
+	public CaretInfo getCaretInfo(final int offset, final boolean b) {
+		return fTextFlow.getCaretPlacement(offset, b);
+	}
 
-	public TextLocation getTextLocation(int x, int y) {
+	public Optional<TextLocation> getTextLocation(int x, int y) {
 		int[] trailing = new int[1];
 		Point location = new Point(x, y);
 		fFlowPage.translateFromParent(location);
 		final int offset = fTextFlow.getOffset(location, trailing, null);
-		return new OffsetTextLocation(this, offset);
+		return Optional.<TextLocation> of(new OffsetTextLocation(this, offset));
 	}
 
-	@Override
 	public int getLength() {
 		return fText.getLength();
 	}
 
-	@Override
-	public TextLocation getStart() {
-		return new OffsetTextLocation(this, 0);
+	public Optional<TextLocation> getStart() {
+		return Optional.<TextLocation> of(new OffsetTextLocation(this, 0));
 	}
 
 	@Override
-	public TextLocation getEnd() {
-		return new OffsetTextLocation(this, getLength() - 1);
+	public Optional<TextLocation> getEnd() {
+		return Optional.<TextLocation> of(new OffsetTextLocation(this, getLength() - 1));
 	}
 
-	@Override
-	public Optional<ICompositeTextPart> getParentTextPart() {
-		return Optional.absent() ;
-	}
-
-	@Override
 	public void replace(int start, int end, String text) {
 		try {
 			fText.replace(start, end - start, text);

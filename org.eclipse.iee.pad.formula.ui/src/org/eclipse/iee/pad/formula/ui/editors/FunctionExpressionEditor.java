@@ -7,13 +7,11 @@ import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.container.RenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.common.text.WrapperEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
 import org.eclipse.iee.translator.antlr.translator.model.FunctionExpression;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
@@ -28,15 +26,6 @@ public final class FunctionExpressionEditor extends AbstractTextEditor<FunctionE
 		this.fRenderCtx = renderCtx;
 		addEditor(fNameEditor = new WrapperEditor<>("name", renderCtx));
 		addEditor(fArgumentsEditor = new ExpressionsListEditor(renderCtx));
-	}
-
-	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
 	}
 
 	@Override

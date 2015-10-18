@@ -3,15 +3,12 @@ package org.eclipse.iee.editor.core.container;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
 public interface ITextEditor<M, F extends IFigure> {
 
-	TextLocation getTextLocation(int x, int y);
-
-	void acceptCaret(Caret caret, TextLocation textLocation);
+	Optional<TextLocation> getTextLocation(int x, int y);
 
 	boolean isSelectable();
 	
@@ -36,5 +33,17 @@ public interface ITextEditor<M, F extends IFigure> {
 	void attach(EditorManager containerManager);
 
 	void detach(EditorManager containerManager);
+
+	Optional<TextLocation> getPrevious(ITextEditor<?, ?> textPart);
+	
+	Optional<TextLocation> getNext(ITextEditor<?, ?> textPart);
+
+	Optional<TextLocation> getEnd();
+
+	Optional<TextLocation> getStart();
+
+	Optional<TextLocation> getAbove(TextLocation textLocation);
+
+	Optional<TextLocation> getBelow(TextLocation textLocation);
 
 }

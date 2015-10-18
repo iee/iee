@@ -3,18 +3,14 @@ package org.eclipse.iee.editor.core.pad;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
@@ -144,18 +140,6 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 	public abstract void setBounds(Rectangle newBounds);
 
 	public abstract void setVisible(boolean isVisible);
-	
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
 	public void setActive(boolean b) {

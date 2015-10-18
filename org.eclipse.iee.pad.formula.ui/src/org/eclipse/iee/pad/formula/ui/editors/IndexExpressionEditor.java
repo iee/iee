@@ -28,15 +28,6 @@ public final class IndexExpressionEditor extends AbstractTextEditor<IndexExpress
 	}
 
 	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-	}
-
-	@Override
 	public boolean isSelectable() {
 		return false;
 	}

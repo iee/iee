@@ -6,7 +6,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.core.IHasPropertyChangeListener;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Preconditions;
 
@@ -24,15 +23,6 @@ public class WrapperEditor<T extends IHasPropertyChangeListener> extends Abstrac
 		addEditor(fTextPartEditor);
 	}
 	
-	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-	}
-
 	@Override
 	public boolean isSelectable() {
 		return true;

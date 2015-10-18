@@ -86,15 +86,6 @@ public class EditorVisitor
 			}
 			
 			@Override
-			public TextLocation getTextLocation(int x, int y) {
-				return null;
-			}
-
-			@Override
-			public void acceptCaret(Caret caret, TextLocation textLocation) {
-			}
-
-			@Override
 			public boolean isSelectable() {
 				return false;
 			}
@@ -193,15 +184,6 @@ public class EditorVisitor
 	public AbstractTextEditor<? extends Expression, ? extends IFigure> acceptVariableAssignment(
 			final VariableAssignment expression, final EditorVisitorContext context) {
 		AbstractTextEditor<BinaryExpression, Figure> wrapperEditor = new AbstractTextEditor<BinaryExpression, Figure>() {
-
-			@Override
-			public TextLocation getTextLocation(int x, int y) {
-				return null;
-			}
-
-			@Override
-			public void acceptCaret(Caret caret, TextLocation textLocation) {
-			}
 
 			@Override
 			public boolean isSelectable() {

@@ -33,19 +33,6 @@ public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> impl
 		addEditor(fTextPartEditor);
 	}
 	
-	
-	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public boolean isSelectable() {
 		return true;

@@ -331,9 +331,11 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 						Optional<ITextEditor<?, ?>> editor = getEditorAt(styledTextPoint.x, styledTextPoint.y);
 						if (editor.isPresent()) {
 							org.eclipse.draw2d.geometry.Point point = translateViewToReal(styledTextPoint.x, styledTextPoint.y);
-							TextLocation textLocation = editor.get().getTextLocation(point.x, point.y);
-							fCursorPositon = textLocation;
-							editor.get().acceptCaret(getCaret(), textLocation);
+							Optional<TextLocation> textLocation = editor.get().getTextLocation(point.x, point.y);
+							if (textLocation.isPresent()) {
+								fCursorPositon = textLocation.get();
+								textLocation.get().putCaret(getCaret());
+							}
 						} else {
 							fCursorPositon = null;
 						}
@@ -920,9 +922,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public void setCursorPosition(TextLocation textLocation) {
 		fCursorPositon = textLocation;
-		IContentTextPart textPart = textLocation.getTextPart();
-		int position = textLocation.getPosition();
-		textPart.updateCaret(getCaret(), position, position == textPart.getLength());
+		textLocation.putCaret(getCaret());
 	}
 
 	public Optional<ITextEditor<?, ?>> getEditorAt(int x, int y) {
@@ -975,48 +975,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public void addTextPart(ITextPart tablePad) {
 		
 		
-	}
-
-	public Optional<ITextEditor<?, ?>> getRootTextEditor() {
-		return Optional.<ITextEditor<?, ?>>of (new AbstractTextEditor<DocumentPart, IFigure>() {
-
-			@Override
-			public TextLocation getTextLocation(int x, int y) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public void acceptCaret(Caret caret, TextLocation textLocation) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public boolean isSelectable() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public void setSelected(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void setActive(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			protected IFigure createFigure() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		
-		});
 	}
 
 	public void deactivate() {

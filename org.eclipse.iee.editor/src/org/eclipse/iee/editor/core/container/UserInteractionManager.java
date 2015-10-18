@@ -406,8 +406,8 @@ public class UserInteractionManager {
 
 
 	private void replace(TextLocation start, TextLocation end, String text) {
-		IContentTextPart textPart = start.getTextPart();
-		textPart.replace(start.getPosition(), end.getPosition(), text);
+//		IContentTextPart textPart = start.getTextPart();
+//		textPart.replace(start.getPosition(), end.getPosition(), text);
 	}
 	
 }

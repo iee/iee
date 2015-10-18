@@ -13,9 +13,8 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.FigurePad;
-import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
-import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.table.TableCell;
@@ -27,7 +26,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
-public class TablePad extends FigurePad<TablePart, IFigure> implements ICompositeTextPart {
+public class TablePad extends FigurePad<TablePart, IFigure> {
 
 	private GridLayout fManager;
 	
@@ -301,31 +300,24 @@ public class TablePad extends FigurePad<TablePart, IFigure> implements IComposit
 		}
 	}
 
-	@Override
-	public Optional<ICompositeTextPart> getParentTextPart() {
-		return Optional.of(getContainer().getContainerManager().getRootTextPart());
-	}
+//	public TextLocation getStart() {
+//		return cells.get(0).getStart();
+//	}
+//
+//	public TextLocation getEnd() {
+//		return cells.get(cells.size() - 1).getEnd();
+//	}
 
 	@Override
-	public TextLocation getStart() {
-		return cells.get(0).getStart();
-	}
-
-	@Override
-	public TextLocation getEnd() {
-		return cells.get(cells.size() - 1).getEnd();
-	}
-
-	@Override
-	public Optional<ITextPart> getPrevious(ITextPart textPart) {
+	public Optional<TextLocation> getPrevious(ITextEditor<?, ?> textPart) {
 		int indexOf = cells.indexOf(textPart);
-		return indexOf > 0 ? Optional.<ITextPart> of(cells.get(indexOf - 1)) : Optional.<ITextPart> absent();
+		return indexOf > 0 ? cells.get(indexOf - 1).getEnd() : Optional.<TextLocation> absent();
 	}
 
 	@Override
-	public Optional<ITextPart> getNext(ITextPart textPart) {
+	public Optional<TextLocation> getNext(ITextEditor<?, ?> textPart) {
 		int indexOf = cells.indexOf(textPart);
-		return indexOf < cells.size() - 1 ? Optional.<ITextPart> of(cells.get(indexOf + 1)) : Optional.<ITextPart> absent();
+		return indexOf < cells.size() - 1 ? cells.get(indexOf + 1).getStart() : Optional.<TextLocation> absent();
 	}
 	
 	@Override

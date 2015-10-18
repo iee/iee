@@ -10,11 +10,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Display;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -209,18 +207,6 @@ public class ChartEditor extends AbstractTextEditor<GraphModel, ChartFigure> {
 			results = new HashMap<Integer, double[][]>();
 		}
 		return results;
-	}
-
-	@Override
-	public TextLocation getTextLocation(int x, int y) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void acceptCaret(Caret caret, TextLocation textLocation) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
