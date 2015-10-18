@@ -18,8 +18,6 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -83,7 +81,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
 
 public class ContainerManager extends EventManager implements IPostSelectionProvider {
 
@@ -132,21 +129,13 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private List<ISelectionChangedListener> fPostSelectionChangedListeners;
 	
-	private ITextEditor<?, ?> fSelectedEditor;
-
-	private ITextEditor<?, ?> fActiveEditor;
-	
-	private IFigure fMainFigure;
-
-	private IFigure fFeedbackFigure;
-	
-	private Map<IFigure, ITextEditor<?, ?>> fFigureToEditor = Maps.newHashMap();
-	
 	private TextLocation fCursorPositon;
 
 	private Field fVerticalScrollOffsetField;
 
 	private Field fHorizontalScrollOffsetField;
+
+	private EditorManager fEditorManager;
 
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
@@ -220,6 +209,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fWriter = writer;
 		fStyledText = sourceViewer.getTextWidget();
 		fSourceViewer = sourceViewer;
+
 		
 		LightweightSystem lightweightSystem = new LightweightSystem(fStyledText);
 		lightweightSystem.getRootFigure().setOpaque(false);
@@ -281,21 +271,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			
 		});	
 		
-		Figure stack = new Figure();
-		viewport.add(stack);
-		stack.setLayoutManager(new StackLayout());
+		fEditorManager = new EditorManager();
+		viewport.add(fEditorManager.getRoot());
 		lightweightSystem.setContents(viewport);
-		
-		fMainFigure = new Figure();
-		fMainFigure.setLayoutManager(new XYLayout());
-		fMainFigure.setOpaque(false);
-		stack.add(fMainFigure);
-		
-		fFeedbackFigure = new Figure();
-		fFeedbackFigure.setLayoutManager(new XYLayout());
-		fFeedbackFigure.setOpaque(false);
-		fFeedbackFigure.setEnabled(false);
-		stack.add(fFeedbackFigure);		
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
@@ -896,8 +874,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	@Override
 	public ISelection getSelection() {
-		if (fSelectedEditor != null) {
-			return new HybridSelection(fSelectedEditor);
+		if (fEditorManager.isEditorSelected()) {
+			return new HybridSelection(fEditorManager.getSelectedEditor());
 		}
 		if (fSourceViewer instanceof ISelectionProvider) {
 			return ((ISelectionProvider) fSourceViewer).getSelection();
@@ -919,52 +897,16 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 	
 	public void selectEditor(ITextEditor<?, ?> editor) {
-		if (editor != null && editor.equals(fSelectedEditor)) {
-			return;
-		}
-		
-		if (fSelectedEditor != null) {
-			fSelectedEditor.setSelected(false);
-		}
-		fSelectedEditor = editor;
-		if (fSelectedEditor != null) {
-			fSelectedEditor.setSelected(true);
-		}
+		fEditorManager.selectEditor(editor);
 	}
 
 	public void activateEditor(@Nullable ITextEditor<?, ?> editor) {
-		if (editor != null && editor.equals(fActiveEditor)) {
-			return;
-		}
-		if (fActiveEditor != null) {
-			fActiveEditor.setActive(false);
-		}
-		fActiveEditor = editor;
-		if (fActiveEditor != null) {
-			fActiveEditor.setActive(true);
-		}
-		selectEditor(editor);
+		fEditorManager.activateEditor(editor);
 	}
 
 	public void deactivateEditor(ITextEditor<?, ?> container) {
 		activateEditor(null);
 		fSourceViewer.getTextWidget().forceFocus();
-	}
-
-	public IFigure getMainFigure() {
-		return fMainFigure;
-	}
-
-	public IFigure getFeedbackFigure() {
-		return fFeedbackFigure;
-	}
-
-	public void registerVisual(ITextEditor<?, ?> textPartEditor, IFigure figure) {
-		fFigureToEditor.put(figure, textPartEditor);
-	}
-	
-	public void unregisterVisual(IFigure figure) {
-		fFigureToEditor.remove(figure);
 	}
 
 	public TextLocation getCursonPosition() {
@@ -984,25 +926,16 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public Optional<ITextEditor<?, ?>> getEditorAt(int x, int y) {
-		org.eclipse.draw2d.geometry.Point p = translateViewToReal(x, y);
-		IFigure findFigureAt = fMainFigure.findFigureAt(p);
-		ITextEditor<?, ?> editor = null;
-		while (findFigureAt != null) {
-			editor = fFigureToEditor.get(findFigureAt);
-			if (editor != null) {
-				break;
-			}
-			findFigureAt = findFigureAt.getParent();
-		}
-		if (editor == null) {
+		Optional<ITextEditor<?, ?>> editor = fEditorManager.getEditorAt(translateViewToReal(x, y));
+		if (!editor.isPresent()) {
 			Container containerAtPoint = getContainerAtPoint(x, y);
 			if (containerAtPoint != null) {
-				editor = containerAtPoint.getPad();
+				editor = Optional.<ITextEditor<?, ?>> fromNullable(containerAtPoint.getPad());
 			}
 		}
-		
-		return Optional.<ITextEditor<?, ?>> fromNullable(editor);
+		return editor;
 	}
+
 
 	public ICompositeTextPart getRootTextPart() {
 		return new ICompositeTextPart() {
@@ -1082,11 +1015,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
-			@Override
-			public Optional<ContainerManager> getContainerManager() {
-				return Optional.of(ContainerManager.this);
-			}
 		
 		});
 	}
@@ -1155,5 +1083,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		}
 
 		
+	}
+
+	public EditorManager getEditorManager() {
+		return fEditorManager;
 	}
 }

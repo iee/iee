@@ -1,6 +1,7 @@
 package org.eclipse.iee.editor.core.container;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
 import org.eclipse.swt.widgets.Caret;
 
@@ -19,6 +20,10 @@ public interface ITextEditor<M, F extends IFigure> {
 	void setActive(boolean b);
 	
 	M getModel();
+	
+	Optional<? extends IObservableValue<M>> getValue();
+	
+	void setValue(Optional<? extends IObservableValue<M>> value);
 
 	void setParent(Optional<ITextEditor<?, ?>> parent);
 	
@@ -28,10 +33,8 @@ public interface ITextEditor<M, F extends IFigure> {
 	
 	void dispose();
 
-	Optional<ContainerManager> getContainerManager();
+	void attach(EditorManager containerManager);
 
-	void attach(ContainerManager containerManager);
-
-	void detach(ContainerManager containerManager);
+	void detach(EditorManager containerManager);
 
 }

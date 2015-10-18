@@ -4,10 +4,17 @@ Bundle-Name: Formula UI
 Bundle-SymbolicName: org.eclipse.iee.pad.formula.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.eclipse.draw2d,
+Import-Package: com.google.common.base;version="17.0.0",
+ com.google.common.reflect;version="17.0.0",
+ org.antlr.v4.runtime,
+ org.antlr.v4.runtime.tree,
+ org.eclipse.draw2d,
  org.eclipse.draw2d.geometry,
+ org.eclipse.draw2d.text,
  org.eclipse.iee.core.document,
+ org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator,
+ org.eclipse.iee.translator.antlr.translator.model,
  org.eclipse.jdt.core,
  org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j
@@ -19,7 +26,8 @@ Require-Bundle: org.eclipse.core.commands,
  org.eclipse.iee.pad.formula,
  org.eclipse.text,
  org.eclipse.jface.text,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ com.ibm.icu
 Bundle-ClassPath: lib/jlatexmath-embedded-fop-1.0.2.jar,
  .
 Export-Package: org.eclipse.iee.pad.formula.ui.utils

@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
+import com.google.common.base.Optional;
+
 public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends AbstractTextEditor<T, F> implements IDisposable {
 
 	protected Container fContainer;
@@ -127,7 +129,7 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 	}
 	
 	public void bindDocumentPart(IObservableValue<T> model) {
-		bindObservableValue(model);
+		setValue(Optional.of(model));
 	}
 	
 	public String getContainerID() {

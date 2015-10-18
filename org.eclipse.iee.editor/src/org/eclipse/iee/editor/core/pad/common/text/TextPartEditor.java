@@ -4,6 +4,7 @@ import org.eclipse.draw2d.FocusBorder;
 import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.text.BlockFlow;
 import org.eclipse.draw2d.text.CaretInfo;
@@ -11,6 +12,7 @@ import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
+import org.eclipse.iee.editor.core.container.RenderCtx;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
@@ -29,32 +31,41 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> impleme
 	private Document fText;
 
 	private FlowPage fFlowPage;
+
+	private RenderCtx fRenderCtx;
 	
 	public TextPartEditor() {
 		fText = new Document();
 	}
 	
+	public TextPartEditor(RenderCtx renderCtx) {
+		fText = new Document();
+		this.fRenderCtx = renderCtx;
+	}
+
 	protected FlowPage createFigure() {
-		fFlowPage = new FlowPage();
-		BlockFlow blockFlow = new BlockFlow();
+		fFlowPage = new FlowPage() {
+			@Override
+			public Dimension getPreferredSize(int width, int h) {
+				super.getPreferredSize(width, h);
+				TextFlow object = (TextFlow) getChildren().get(0);
+				return object.getPreferredSize(width, h);
+			}
+		};
 		fTextFlow = new TextFlow(fText.get());
+		fTextFlow.setFont(fRenderCtx.getFont());
 		fTextFlow.setLayoutManager(new ParagraphTextLayout(fTextFlow, ParagraphTextLayout.WORD_WRAP_SOFT));
-		blockFlow.add(fTextFlow);
-		fFlowPage.add(blockFlow);
+		fFlowPage.add(fTextFlow);
 		
 		fFlowPage.setRequestFocusEnabled(true);
 	
 		fFlowPage.addFocusListener(new FocusListener() {
 
 			public void focusGained(FocusEvent fe) {
-				IFigure gainer = fe.gainer;
-				gainer.setBorder(new FocusBorder());
 				fTextFlow.setText(fText.get());
 			}
 
 			public void focusLost(FocusEvent fe) {
-				IFigure loser = fe.loser;
-				loser.setBorder(null);
 				fText.set(fTextFlow.getText());
 			}});
 		fText.addDocumentListener(new IDocumentListener() {
@@ -66,8 +77,8 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> impleme
 			public void documentChanged(DocumentEvent event) {
 				String s = event.getDocument().get();
 				fTextFlow.setText(getVisibleText(s));
-				if (getObservableValue().isPresent() && !s.equals(getObservableValue().get().getValue())) {
-					getObservableValue().get().setValue(s);
+				if (getValue().isPresent() && !s.equals(getValue().get().getValue())) {
+					getValue().get().setValue(s);
 				}
 //				fFlowPage.revalidate();
 			}
@@ -166,7 +177,7 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> impleme
 	}
 	
 	public void bindValue(IObservableValue<String> value) {
-		bindObservableValue(value);
+		setValue(Optional.of(value));
 	}
 	
 	@Override

@@ -29,6 +29,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.util.PaintUtilities;
 
 import com.google.common.base.Converter;
+import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
 
 public class GraphModelEditor extends AbstractTextEditor<GraphModel, IFigure> {
@@ -203,7 +204,7 @@ public class GraphModelEditor extends AbstractTextEditor<GraphModel, IFigure> {
 	}
 	
 	public void bindGraphElementModel(IObservableValue<GraphModel> model) {
-		bindObservableValue(model);
+		setValue(Optional.of(model));
 	}
 	
 	@SuppressWarnings("serial")

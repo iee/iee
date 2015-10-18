@@ -20,8 +20,8 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 		fContainer = container;
 		fContent = getFigure();
 		
+		container.getContainerManager().getEditorManager().addEditor(this);
 		container.getMainFigure().add(fContent, new org.eclipse.draw2d.geometry.Rectangle(0, 0, -1, -1));
-		getContainer().getContainerManager().registerVisual(this, fContent);
 		
 		fContent.addFigureListener(new FigureListener() {
 			

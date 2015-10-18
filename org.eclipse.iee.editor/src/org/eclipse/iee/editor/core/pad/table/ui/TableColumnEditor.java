@@ -12,6 +12,8 @@ import org.eclipse.iee.editor.core.pad.table.TableColumn;
 import org.eclipse.iee.editor.core.pad.table.ui.TablePad.CellFigureBorder;
 import org.eclipse.swt.widgets.Caret;
 
+import com.google.common.base.Optional;
+
 public class TableColumnEditor extends AbstractTextEditor<TableColumn, IFigure> {
 
 	private TextPartEditor fTextPartEditor;
@@ -63,7 +65,7 @@ public class TableColumnEditor extends AbstractTextEditor<TableColumn, IFigure> 
 	}
 
 	public void bindValue(IObservableValue<TableColumn> cell) {
-		bindObservableValue(cell);
+		setValue(Optional.of(cell));
 	}
 	
 	@Override

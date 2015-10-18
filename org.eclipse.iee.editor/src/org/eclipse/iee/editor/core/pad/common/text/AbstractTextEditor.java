@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
-import org.eclipse.iee.editor.core.container.ContainerManager;
+import org.eclipse.iee.editor.core.container.EditorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 
 import com.google.common.base.Optional;
@@ -15,13 +15,15 @@ import com.google.common.collect.Lists;
 
 public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextEditor<T, F>, IAdaptable {
 
-	private Optional<IObservableValue<T>> fModel = Optional.absent();
+	private Optional<? extends IObservableValue<T>> fModel = Optional.absent();
 	
 	private Optional<ITextEditor<?, ?>> fParent = Optional.absent();
 
 	private List<ITextEditor<?, ?>> fChildren = Lists.newArrayList();
 	
 	private F fFigure;
+	
+	private Optional<EditorManager> fManager = Optional.absent();
 	
 	private IObserver<T> fObserver = new IObserver<T>() {
 		@Override
@@ -41,6 +43,8 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 	
 	abstract protected F createFigure();
 	
+	
+	
 	@Override
 	public T getModel() {
 		return fModel.isPresent() ? fModel.get().getValue() : null;
@@ -55,41 +59,43 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 		return fParent;
 	}
 	
-	public void addEditor(ITextEditor<?, ?> child) {
+	public ITextEditor<?, ?> addEditor(ITextEditor<?, ?> child) {
 		child.setParent(Optional.<ITextEditor<?, ?>> of(this));
 		fChildren.add(child);
-		Optional<ContainerManager> containerManager = getContainerManager();
-		if (containerManager.isPresent()) {
-			child.attach(containerManager.get());
+		if (fManager.isPresent()) {
+			fManager.get().addEditor(child);
 		}
+		return child;
 	}
 	
-	public void attach(ContainerManager containerManager) {
-		containerManager.registerVisual(this, getFigure());
+	public void attach(EditorManager manager) {
+		fManager = Optional.of(manager);
+		manager.registerVisual(this, getFigure());
 		for (ITextEditor<?, ?> iTextEditor : fChildren) {
-			iTextEditor.attach(containerManager);
+			iTextEditor.attach(manager);
 		}
 	}
 	
 	public void removeEditor(ITextEditor<?, ?> child) {
-		Optional<ContainerManager> containerManager = getContainerManager();
-		if (containerManager.isPresent()) {
-			child.attach(containerManager.get());
+		if (fManager.isPresent()) {
+			fManager.get().removeEditor(child);
 		}
 		fChildren.remove(child);
 		child.setParent(Optional.<ITextEditor<?, ?>> absent());
 	}
 	
-	public void detach(ContainerManager containerManager) {
-		containerManager.unregisterVisual(getFigure());
+	public void detach(EditorManager manager) {
 		for (ITextEditor<?, ?> iTextEditor : fChildren) {
-			iTextEditor.detach(containerManager);
+			iTextEditor.detach(manager);
 		}
+		manager.unregisterVisual(getFigure());
+		fManager = Optional.absent();
 	}
 		
-	protected void bindObservableValue(IObservableValue<T> value) {
-		IObservableValue<T> oldValue = getObservableValue().isPresent() ? getObservableValue().get() : null;
-		fModel = Optional.of(value);
+	@Override
+	public void setValue(Optional<? extends IObservableValue<T>> value) {
+		IObservableValue<T> oldValue = getValue().isPresent() ? getValue().get() : null;
+		fModel = value;
 		if (oldValue != value) {
 			T old = null;
 			if (oldValue != null) {
@@ -99,12 +105,14 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 				}
 				oldValue.removeObserver(fObserver);
 			}
-			value.addObserver(fObserver);
-			T newV = value.getValue();
-			if (newV != null) {
-				doBindValue(newV);
+			if (value.isPresent()) {
+				value.get().addObserver(fObserver);
+				T newV = value.get().getValue();
+				if (newV != null) {
+					doBindValue(newV);
+				}
+				onValueChanged(old, newV);
 			}
-			onValueChanged(old, newV);
 		}
 	}
 
@@ -117,22 +125,10 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 	protected void onValueChanged(T oldValue, T newValue) {
 	}
 	
-	protected Optional<IObservableValue<T>> getObservableValue() {
+	@Override
+	public Optional<? extends IObservableValue<T>> getValue() {
 		return fModel;
 	}
-
-	public T getValue() {
-		return getObservableValue().isPresent() ? getObservableValue().get().getValue() : null;
-	}
-	
-	public Optional<ContainerManager> getContainerManager() {
-		Optional<ITextEditor<?, ?>> parent = getParent();
-		if (parent.isPresent()) {
-			return parent.get().getContainerManager();
-		} else {
-			return Optional.absent();
-		}
- 	}
 
 	public void dispose() {
 		if (fModel.isPresent()) {

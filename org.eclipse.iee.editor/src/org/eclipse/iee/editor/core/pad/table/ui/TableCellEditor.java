@@ -20,6 +20,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Event;
 
+import com.google.common.base.Optional;
+
 public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> implements IMenuContributor {
 
 	private TextPartEditor fTextPartEditor;
@@ -71,7 +73,7 @@ public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> impl
 	}
 	
 	public void bindValue(IObservableValue<TableCell> value) {
-		bindObservableValue(value);
+		setValue(Optional.of(value));
 	}
 	
 	@Override

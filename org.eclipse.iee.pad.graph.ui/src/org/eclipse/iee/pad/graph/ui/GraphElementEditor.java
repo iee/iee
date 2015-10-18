@@ -36,6 +36,7 @@ import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.experimental.swt.SWTUtils;
 import org.jfree.util.PaintUtilities;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 
 public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure> implements IMenuContributor {
@@ -155,7 +156,7 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 	}
 	
 	private Image createImage() {
-		String fTexExpression = fTextPartEditor.getValue();
+		String fTexExpression = fTextPartEditor.getModel();
 		if (Strings.isNullOrEmpty(fTexExpression)) {
 			fTexExpression = "o";
 		}
@@ -239,7 +240,7 @@ public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure>
 	}
 	
 	public void bindValue(IObservableValue<GraphElement> value) {
-		super.bindObservableValue(value);
+		setValue(Optional.of(value));
 	}
 	
 	@Override

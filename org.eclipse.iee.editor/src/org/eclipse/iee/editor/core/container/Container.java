@@ -73,7 +73,7 @@ public class Container implements IAdaptable {
 		fDocumentAccess = containerManager.getDocumentAccess();
 		fPadPart = part;
 		pad.attachContainer(this);
-		pad.attach(containerManager);
+		pad.attach(containerManager.getEditorManager());
 	}
 
 	/**
@@ -141,16 +141,8 @@ public class Container implements IAdaptable {
 		return fContainerManager.getStyledText();
 	}
 
-	public IFigure getMainFigure() {
-		return fContainerManager.getMainFigure();
-	}
-
 	public Pad<?, ?> getPad() {
 		return fPad;
-	}
-
-	public IFigure getFeedbackFigure() {
-		return fContainerManager.getFeedbackFigure();
 	}
 
 	protected List<StyleRange> getContainerStyles() {
@@ -182,6 +174,14 @@ public class Container implements IAdaptable {
 		styles.add(hiddenText);
 
 		return styles;
+	}
+
+	public IFigure getFeedbackFigure() {
+		return getContainerManager().getEditorManager().getFeedbackFigure();
+	}
+
+	public IFigure getMainFigure() {
+		return getContainerManager().getEditorManager().getMainFigure();
 	}
 	
 }

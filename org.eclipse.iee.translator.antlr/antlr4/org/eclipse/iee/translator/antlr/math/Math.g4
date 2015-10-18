@@ -2,7 +2,6 @@ grammar Math;
 
 statement:
 	functionDefinition |
-	variableAssignment |
 	expression |
 	logicalExpression
 ;
@@ -26,10 +25,10 @@ standardFunction:
         name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')'            
                 ;
 	
-variableAssignment:
-	name=expression '=' value=expression
+rangeExpression:
+	begin = expression '..' end = expression
 ;
-
+	
 expression
 	: primary #PrimaryExpr
 	| function #PrimaryFunctions
@@ -38,7 +37,7 @@ expression
 	| container = expression '.' func = standardFunction #MethodCall
 	| container = expression '.' property = MATH_NAME #Property
 	| matrix #MatrixDefinition
-	| begin = expression (',' next = expression)? '..' end = expression #RangeExpr
+	| begin = expression '..' end = expression #RangeExpr
 	| left=expression '^'<assoc=right> right=expression #Power 
 	| sign=('+'|'-') unaryExpr=expression #Unary 
 	| left=expression sign=('*'|'/'|'%') right=expression #Mult 
@@ -48,6 +47,7 @@ expression
 	| left=expression XOR right=expression #Xor 
 	| left=expression '|' right=expression #BitwiseOr 
 	| '(' bracketedExpr=expression ')' #ExprBrackets
+	| <assoc=right> left=expression '=' right=expression #VariableAssignment
 ;
 
 logicalExpression:
@@ -67,7 +67,7 @@ primary
 
 parameter: 
     variable=MATH_NAME #ValueParameter |
-    variable=MATH_NAME '=' min=expression INTERVAL max=expression #IntervalParameter
+    variable=MATH_NAME '=' range=rangeExpression #IntervalParameter
 ;
 
 matrix:
