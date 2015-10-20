@@ -75,4 +75,9 @@ public class OffsetTextLocation implements TextLocation {
 		return fTextPart;
 	}
 	
+	@Override
+	public int getOffset() {
+		return fTextOffset;
+	}
+	
 }

@@ -21,5 +21,7 @@ public interface TextLocation {
 	CaretInfo getCaretInfo();
 
 	ITextEditor<?, ?> getEditor();
+
+	int getOffset();
 	
 }

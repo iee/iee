@@ -1,12 +1,9 @@
 package org.eclipse.iee.editor.core.pad.common.text;
 
-import org.eclipse.draw2d.FocusBorder;
 import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.text.BlockFlow;
 import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
@@ -173,6 +170,24 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 	@Override
 	protected void onValueChanged(String oldValue, String newValue) {
 		fText.set(newValue);
+	}
+	
+	@Override
+	public void selectBetween(TextLocation start, TextLocation end) {
+		if (start.getEditor() == this  && end.getEditor() == this) {
+			fTextFlow.setSelection(start.getOffset(), end.getOffset());
+		} else if (start.getEditor() == this) {
+			fTextFlow.setSelection(start.getOffset(), fTextFlow.getText().length());
+		} else if (end.getEditor() == this) {
+			fTextFlow.setSelection(0, end.getOffset());
+		} else {
+			fTextFlow.setSelection(0, fTextFlow.getText().length());
+		}
+	}
+	
+	@Override
+	public void unselectBetween(TextLocation start, TextLocation end) {
+		fTextFlow.setSelection(-1, -1);
 	}
 	
 }

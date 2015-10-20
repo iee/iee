@@ -12,6 +12,7 @@ import org.eclipse.iee.editor.core.container.EditorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.container.RenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.translator.FormulaModelCreator;
@@ -30,6 +31,8 @@ import com.google.common.base.Optional;
 public class Test {
 
 	private static TextLocation fTextLocation;
+	
+	private static SelectionModel fSelectionModel = new SelectionModel();
 	
 	public static void main(String[] args) {
 
@@ -91,8 +94,7 @@ public class Test {
 				if (editor.isPresent()) {
 					Optional<TextLocation> textLocation = editor.get().getTextLocation(e.x, e.y);
 					if (textLocation.isPresent()) {
-						fTextLocation = textLocation.get();
-						textLocation.get().putCaret(getCaret(shell));
+						setPosition(shell, textLocation);
 					}
 				} 
 			}
@@ -123,25 +125,34 @@ public class Test {
 				if (e.keyCode == SWT.ARROW_LEFT) {
 					Optional<TextLocation> previous = fTextLocation.getPrevious();
 					if (previous.isPresent()) {
-						(fTextLocation = previous.get()).putCaret(getCaret(shell));
+						if ((e.stateMask & SWT.SHIFT) != 0) {
+							appendSelection(shell, previous.get());
+						} else {
+							setPosition(shell, previous);
+						}
 					}
 				} else if (e.keyCode == SWT.ARROW_RIGHT) {
 					Optional<TextLocation> next = fTextLocation.getNext();
 					if (next.isPresent()) {
-						(fTextLocation = next.get()).putCaret(getCaret(shell));
+						if ((e.stateMask & SWT.SHIFT) != 0) {
+							appendSelection(shell, next.get());
+						} else {
+							setPosition(shell, next);
+						}
 					}
 				} else if (e.keyCode == SWT.ARROW_UP) {
 					Optional<TextLocation> above = fTextLocation.getAbove();
 					if (above.isPresent()) {
-						(fTextLocation = above.get()).putCaret(getCaret(shell));
+						setPosition(shell, above);
 					}
 				} else if (e.keyCode == SWT.ARROW_DOWN) {
 					Optional<TextLocation> below = fTextLocation.getBelow();
 					if (below.isPresent()) {
-						(fTextLocation = below.get()).putCaret(getCaret(shell));
+						setPosition(shell, below);
 					}
 				}
 			}
+			
 		});
 		
 		
@@ -156,6 +167,18 @@ public class Test {
 	    
 		
 		
+	    
+	    
+	}
+	
+	public static void setPosition(final Shell shell, Optional<TextLocation> previous) {
+		(fTextLocation = previous.get()).putCaret(getCaret(shell));
+		fSelectionModel.set(previous.get());
+	}
+	
+	public static void appendSelection(final Shell shell, TextLocation to) {
+		fSelectionModel.append(to);
+		(fTextLocation = to).putCaret(getCaret(shell));
 	}
 	
 	public static Caret getCaret(Shell shell) {

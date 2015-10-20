@@ -205,7 +205,7 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 		}
 	}
 	
-	protected List<ITextEditor<?, ?>> getChildren() {
+	public List<ITextEditor<?, ?>> getChildren() {
 		return fChildren;
 	}
 
@@ -221,6 +221,44 @@ public abstract class AbstractTextEditor<T, F extends IFigure> implements ITextE
 	@Override
 	public Optional<? extends IObservableValue<T>> getValue() {
 		return fModel;
+	}
+	
+	@Override
+	public void selectBetween(TextLocation start, TextLocation end) {
+		List<ITextEditor<?,?>> children = getChildren();
+		Optional<ITextEditor<?, ?>> startContainer = getChildContaining(start.getEditor());
+		int startindex = startContainer.isPresent() ? children.indexOf(startContainer.get()) : 0;
+		Optional<ITextEditor<?, ?>> endContainer = getChildContaining(end.getEditor());
+		int endindex = endContainer.isPresent() ? children.indexOf(endContainer.get()) + 1 : children.size();
+		for(int i = startindex; i < endindex; i++) {
+			children.get(i).selectBetween(start, end);
+		}
+	}
+	
+	private Optional<ITextEditor<?, ?>> getChildContaining(ITextEditor<?, ?> editor) {
+		Optional<ITextEditor<?, ?>> t = Optional.<ITextEditor<?, ?>> of(editor);
+		if (t.get().getParent().isPresent() && t.get().getParent().get() == this) {
+			return t;
+		}
+		while(t.get().getParent().isPresent() && t.get().getParent().get() != this) {
+			t = t.get().getParent();
+		}
+		if (!t.get().getParent().isPresent()) {
+			return Optional.absent();
+		}
+		return t;
+	}
+	
+	@Override
+	public void unselectBetween(TextLocation start, TextLocation end) {
+		List<ITextEditor<?,?>> children = getChildren();
+		Optional<ITextEditor<?, ?>> startContainer = getChildContaining(start.getEditor());
+		int startindex = startContainer.isPresent() ? children.indexOf(startContainer.get()) : 0;
+		Optional<ITextEditor<?, ?>> endContainer = getChildContaining(end.getEditor());
+		int endindex = endContainer.isPresent() ? children.indexOf(endContainer) + 1 : children.size();
+		for(int i = startindex; i < endindex; i++) {
+			children.get(i).unselectBetween(start, end);
+		}
 	}
 
 	public void dispose() {

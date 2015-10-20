@@ -1,5 +1,7 @@
 package org.eclipse.iee.editor.core.container;
 
+import java.util.List;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
@@ -45,5 +47,11 @@ public interface ITextEditor<M, F extends IFigure> {
 	Optional<TextLocation> getAbove(TextLocation textLocation);
 
 	Optional<TextLocation> getBelow(TextLocation textLocation);
+
+	void selectBetween(TextLocation start, TextLocation end);
+
+	void unselectBetween(TextLocation start, TextLocation end);
+
+	List<ITextEditor<?, ?>> getChildren();
 
 }
