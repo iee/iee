@@ -11,7 +11,10 @@ Import-Package: com.google.common.base;version="17.0.0",
  org.eclipse.draw2d,
  org.eclipse.draw2d.geometry,
  org.eclipse.draw2d.text,
+ org.eclipse.iee.core,
  org.eclipse.iee.core.document,
+ org.eclipse.iee.core.document.text,
+ org.eclipse.iee.pad.text.ui,
  org.eclipse.iee.translator.antlr.math,
  org.eclipse.iee.translator.antlr.translator,
  org.eclipse.iee.translator.antlr.translator.model,
@@ -30,7 +33,8 @@ Require-Bundle: org.eclipse.core.commands,
  com.ibm.icu
 Bundle-ClassPath: lib/jlatexmath-embedded-fop-1.0.2.jar,
  .
-Export-Package: org.eclipse.iee.pad.formula.ui.utils
+Export-Package: org.eclipse.iee.pad.formula.ui.editors,
+ org.eclipse.iee.pad.formula.ui.utils
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml
 

@@ -3,6 +3,7 @@ package org.eclipse.iee.editor.core.pad;
 import org.eclipse.iee.core.HandlerManager;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.LoadingPad;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -30,11 +31,17 @@ public class PadFactoryManager implements IPadFactoryManager {
 	}
 
 	@Override
-	public <T extends PadDocumentPart> Pad<T, ?> createPad(T padPart) {
+	public <T extends PadDocumentPart> Pad<T, ?> createPad(T padPart, final TextRenderCtx renderCtx) {
 		IPadFactory iPadFactory = fPadFactories.getHandler(padPart.getClass());
 		Pad<T, ?> pad;
 		if (iPadFactory != null) {
-			pad = iPadFactory.create(padPart, null);
+			pad = iPadFactory.create(padPart, new IPadFactoryContext() {
+				
+				@Override
+				public TextRenderCtx getRenderContext() {
+					return renderCtx;
+				}
+			});
 		} else {
 			pad = (Pad<T, ?>) new LoadingPad();
 			pad.bindDocumentPart(DefaultObservableValue.fromValue(padPart));

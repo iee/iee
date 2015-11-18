@@ -1,5 +1,6 @@
 package org.eclipse.iee.pad.formula.ui;
 
+import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.Map;
 
@@ -36,7 +37,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;

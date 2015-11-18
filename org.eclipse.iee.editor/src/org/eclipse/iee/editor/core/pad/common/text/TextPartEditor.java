@@ -8,8 +8,9 @@ import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
-import org.eclipse.iee.editor.core.container.RenderCtx;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
@@ -21,7 +22,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 
-public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
+public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> implements ITextContainer<String> {
 
 	private TextFlow fTextFlow;
 
@@ -29,13 +30,13 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 
 	private FlowPage fFlowPage;
 
-	private RenderCtx fRenderCtx;
+	private TextRenderCtx fRenderCtx;
 	
 	public TextPartEditor() {
 		fText = new Document();
 	}
 	
-	public TextPartEditor(RenderCtx renderCtx) {
+	public TextPartEditor(TextRenderCtx renderCtx) {
 		fText = new Document();
 		this.fRenderCtx = renderCtx;
 	}
@@ -50,7 +51,7 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 			}
 		};
 		fTextFlow = new TextFlow(fText.get());
-		fTextFlow.setFont(fRenderCtx.getFont());
+		fTextFlow.setFont(fRenderCtx.getFont(Optional.<TextStyle> absent()));
 		fTextFlow.setLayoutManager(new ParagraphTextLayout(fTextFlow, ParagraphTextLayout.WORD_WRAP_SOFT));
 		fFlowPage.add(fTextFlow);
 		
@@ -107,10 +108,10 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 	}
 	
 	public void updateCaret(final Caret caret,
-			final int offset, final boolean b) {
+			final int offset) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				CaretInfo caretPlacement = fTextFlow.getCaretPlacement(offset, b);
+				CaretInfo caretPlacement = fTextFlow.getCaretPlacement(offset, offset == getLength());
 				caret.setVisible(true);
 				caret.setSize(1, caretPlacement.getHeight());
 				caret.setLocation(caretPlacement.getX(), caretPlacement.getY());					}
@@ -121,25 +122,25 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 		return fTextFlow.getCaretPlacement(offset, b);
 	}
 
-	public Optional<TextLocation> getTextLocation(int x, int y) {
+	public Optional<IEditorLocation> getTextLocation(int x, int y) {
 		int[] trailing = new int[1];
 		Point location = new Point(x, y);
 		fFlowPage.translateFromParent(location);
 		final int offset = fTextFlow.getOffset(location, trailing, null);
-		return Optional.<TextLocation> of(new OffsetTextLocation(this, offset));
+		return Optional.<IEditorLocation> of(new OffsetEditorLocation(this, offset));
 	}
 
 	public int getLength() {
 		return fText.getLength();
 	}
 
-	public Optional<TextLocation> getStart() {
-		return Optional.<TextLocation> of(new OffsetTextLocation(this, 0));
+	public Optional<IEditorLocation> getStart() {
+		return Optional.<IEditorLocation> of(new OffsetEditorLocation(this, 0));
 	}
 
 	@Override
-	public Optional<TextLocation> getEnd() {
-		return Optional.<TextLocation> of(new OffsetTextLocation(this, getLength() - 1));
+	public Optional<IEditorLocation> getEnd() {
+		return Optional.<IEditorLocation> of(new OffsetEditorLocation(this, getLength() - 1));
 	}
 
 	public void replace(int start, int end, String text) {
@@ -173,7 +174,7 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 	}
 	
 	@Override
-	public void selectBetween(TextLocation start, TextLocation end) {
+	public void selectBetween(IEditorLocation start, IEditorLocation end) {
 		if (start.getEditor() == this  && end.getEditor() == this) {
 			fTextFlow.setSelection(start.getOffset(), end.getOffset());
 		} else if (start.getEditor() == this) {
@@ -186,7 +187,7 @@ public class TextPartEditor extends AbstractTextEditor<String, FlowPage> {
 	}
 	
 	@Override
-	public void unselectBetween(TextLocation start, TextLocation end) {
+	public void unselectBetween(IEditorLocation start, IEditorLocation end) {
 		fTextFlow.setSelection(-1, -1);
 	}
 	

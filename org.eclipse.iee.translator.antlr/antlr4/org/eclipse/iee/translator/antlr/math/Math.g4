@@ -25,10 +25,6 @@ standardFunction:
         name=MATH_NAME '(' (params+=expression (',' params+=expression)*)? ')'            
                 ;
 	
-rangeExpression:
-	begin = expression '..' end = expression
-;
-	
 expression
 	: primary #PrimaryExpr
 	| function #PrimaryFunctions
@@ -47,7 +43,7 @@ expression
 	| left=expression XOR right=expression #Xor 
 	| left=expression '|' right=expression #BitwiseOr 
 	| '(' bracketedExpr=expression ')' #ExprBrackets
-	| <assoc=right> left=expression '=' right=expression #VariableAssignment
+	| <assoc=right> name=expression '=' value=expression #VariableAssignment
 ;
 
 logicalExpression:
@@ -67,7 +63,7 @@ primary
 
 parameter: 
     variable=MATH_NAME #ValueParameter |
-    variable=MATH_NAME '=' range=rangeExpression #IntervalParameter
+    variable=MATH_NAME '=' min=expression INTERVAL max=expression #IntervalParameter
 ;
 
 matrix:

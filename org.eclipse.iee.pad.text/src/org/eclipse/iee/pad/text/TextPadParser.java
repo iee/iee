@@ -8,9 +8,12 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.iee.core.document.parser.IPadParser;
-import org.eclipse.iee.pad.text.elements.Node;
-import org.eclipse.iee.pad.text.elements.Span;
-import org.eclipse.iee.pad.text.elements.TextNode;
+import org.eclipse.iee.core.document.text.AbstractCompositeNode;
+import org.eclipse.iee.core.document.text.Document;
+import org.eclipse.iee.core.document.text.INode;
+import org.eclipse.iee.core.document.text.Span;
+import org.eclipse.iee.core.document.text.Text;
+import org.eclipse.iee.core.document.text.TextStyle;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeVisitor;
@@ -33,15 +36,15 @@ public class TextPadParser implements IPadParser {
 	public TextPart create(Map<String, String> padParams, String value) {
 		TextPart textPad = new TextPart();
 		textPad.setId(padParams.get("id"));
-		Node root = parseDoc(value);
+		Document root = parseDoc(value);
 		textPad.setRoot(root);
 		return textPad;
 	}
 
-	private Node parseDoc(String value) {
-		Node root = new Node();
+	private Document parseDoc(String value) {
+		Document root = new Document();
 		org.jsoup.nodes.Document doc = Jsoup.parse(value);
-		final Deque<Node> stack = new LinkedList<>();
+		final Deque<INode> stack = new LinkedList<>();
 		stack.add(root);
 		final CSSOMParser parser = new CSSOMParser();
 		Elements body = doc.getElementsByTag("body");
@@ -49,35 +52,37 @@ public class TextPadParser implements IPadParser {
 			
 			@Override
 			public void tail(org.jsoup.nodes.Node node, int depth) {
-				Node n = stack.pop();
-				stack.peek().appendChild(n);
+				INode n = stack.pop();
+				AbstractCompositeNode<INode> peek = (AbstractCompositeNode<INode>) stack.peek();
+				peek.addChild(n);
 			}
 			
 			@Override
 			public void head(org.jsoup.nodes.Node node, int depth) {
-				Node newNode;
+				INode newNode;
 				if (node instanceof org.jsoup.nodes.TextNode) {
-					newNode = new TextNode().setText(((org.jsoup.nodes.TextNode) node).text());
+					newNode = new Text().setText(((org.jsoup.nodes.TextNode) node).text());
 				} else if (node instanceof org.jsoup.nodes.Element) {
 					Span span = new Span();
 					if (node.hasAttr("style")) {
+						TextStyle style = span.getStyle();
 						try {
 							CSSStyleDeclaration styleDecl = parser.parseStyleDeclaration(new InputSource(new StringReader(node.attr("style"))));
 							if ("italic".equals(styleDecl.getPropertyValue("font-style"))) {
-								span.setItalic(true);
+								style.setItalic(true);
 							} else {
-								span.setItalic(false);
+								style.setItalic(false);
 							}
 							if ("bold".equals(styleDecl.getPropertyValue("font-weight"))) {
-								span.setBold(true);
+								style.setBold(true);
 							} else {
-								span.setBold(false);
+								style.setBold(false);
 							}
 							if (styleDecl.getPropertyValue("font-family") != null) {
-								span.setFont(styleDecl.getPropertyValue("font-family"));
+								style.setFont(styleDecl.getPropertyValue("font-family"));
 							}
 							if (!Strings.isNullOrEmpty(styleDecl.getPropertyValue("font-size"))) {
-								span.setFontSize(new Integer(styleDecl.getPropertyValue("font-size")));
+								style.setFontSize(new Integer(styleDecl.getPropertyValue("font-size")));
 							}
 							if (!Strings.isNullOrEmpty(styleDecl.getPropertyValue("color"))) {
 								RGBColor rgbColorValue = ((CSSPrimitiveValue)styleDecl.getPropertyCSSValue("color")).getRGBColorValue();
@@ -86,7 +91,7 @@ public class TextPadParser implements IPadParser {
 										(int) rgbColorValue.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER), 
 										(int) rgbColorValue.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER)
 										);
-								span.setFgColor(fg);
+								style.setFgColor(fg);
 							}
 							if (!Strings.isNullOrEmpty(styleDecl.getPropertyValue("background-color"))) {
 								RGBColor rgbColorValue = ((CSSPrimitiveValue)styleDecl.getPropertyCSSValue("background-color")).getRGBColorValue();
@@ -95,7 +100,7 @@ public class TextPadParser implements IPadParser {
 										(int) rgbColorValue.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER), 
 										(int) rgbColorValue.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER)
 										);
-								span.setBgColor(bg);
+								style.setBgColor(bg);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -103,12 +108,12 @@ public class TextPadParser implements IPadParser {
 					}
 					newNode = span;
 				} else {
-					newNode = new Node();
+					newNode = new Span();
 				}
 				stack.push(newNode);
 			}
 		});
-		return root.getChildren().get(0);
+		return root;
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.pad.table.ui;
 
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -15,13 +16,12 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.FigurePad;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.table.TableCell;
 import org.eclipse.iee.editor.core.pad.table.TableColumn;
 import org.eclipse.iee.editor.core.pad.table.TablePart;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Rectangle;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -235,7 +235,6 @@ public class TablePad extends FigurePad<TablePart, IFigure> {
 		return "";
 	}
 
-	@Override
 	public Rectangle getBounds() {
 		org.eclipse.draw2d.geometry.Rectangle bounds = fTable.getBounds();
 		return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -309,15 +308,15 @@ public class TablePad extends FigurePad<TablePart, IFigure> {
 //	}
 
 	@Override
-	public Optional<TextLocation> getPrevious(ITextEditor<?, ?> textPart) {
+	public Optional<IEditorLocation> getPrevious(ITextEditor<?> textPart) {
 		int indexOf = cells.indexOf(textPart);
-		return indexOf > 0 ? cells.get(indexOf - 1).getEnd() : Optional.<TextLocation> absent();
+		return indexOf > 0 ? cells.get(indexOf - 1).getEnd() : Optional.<IEditorLocation> absent();
 	}
 
 	@Override
-	public Optional<TextLocation> getNext(ITextEditor<?, ?> textPart) {
+	public Optional<IEditorLocation> getNext(ITextEditor<?> textPart) {
 		int indexOf = cells.indexOf(textPart);
-		return indexOf < cells.size() - 1 ? cells.get(indexOf + 1).getStart() : Optional.<TextLocation> absent();
+		return indexOf < cells.size() - 1 ? cells.get(indexOf + 1).getStart() : Optional.<IEditorLocation> absent();
 	}
 	
 	@Override

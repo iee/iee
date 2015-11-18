@@ -4,14 +4,17 @@ public class VariableAssignment extends Expression {
 
 	private String name;
 	
-	private Expression value;
+	private Expression fMin;
+
+	private Expression fMax;
 
 	public VariableAssignment() {
 	}
 
-	public VariableAssignment(String name, Expression value) {
+	public VariableAssignment(String name, Expression min, Expression max) {
 		this.name = name;
-		this.value = value;
+		this.fMin = min;
+		fMax = max;
 	}
 
 	public String getName() {
@@ -24,19 +27,29 @@ public class VariableAssignment extends Expression {
 		getPropertyChangeSupport().firePropertyChange("name", oldValue, name);
 	}
 
-	public Expression getValue() {
-		return value;
+	public Expression getMin() {
+		return fMin;
 	}
 
-	public void setValue(Expression value) {
-		Expression oldValue = this.value;
-		this.value = value;
-		getPropertyChangeSupport().firePropertyChange("value", oldValue, value);
+	public void setMin(Expression value) {
+		Expression oldValue = this.fMin;
+		this.fMin = value;
+		getPropertyChangeSupport().firePropertyChange("min", oldValue, value);
+	}
+	
+	public Expression getMax() {
+		return fMin;
+	}
+
+	public void setMax(Expression value) {
+		Expression oldValue = this.fMax;
+		this.fMax = value;
+		getPropertyChangeSupport().firePropertyChange("max", oldValue, value);
 	}
 
 	@Override
 	public String getText() {
-		return (getName() != null ? getName() : PLACEHOLDER) + " = " + (getValue() != null ? getValue().getText() : PLACEHOLDER);
+		return (getName() != null ? getName() : PLACEHOLDER) + " = " + (getMin() != null ? getMin().getText() : PLACEHOLDER);
 	}
 	
 	@Override

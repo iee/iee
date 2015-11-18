@@ -1,536 +1,267 @@
 package org.eclipse.iee.pad.text.ui;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.iee.editor.core.bindings.TextViewerSupport;
-import org.eclipse.iee.editor.core.pad.CompositePad;
+import org.eclipse.draw2d.BorderLayout;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.iee.core.document.text.Document;
+import org.eclipse.iee.core.document.text.INode;
+import org.eclipse.iee.core.document.text.NodeVisitor;
+import org.eclipse.iee.core.document.text.Text;
+import org.eclipse.iee.core.document.text.TextStyle;
+import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.FigurePad;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
+import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
+import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
+import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel.StyleProcessor;
 import org.eclipse.iee.pad.text.TextPart;
-import org.eclipse.iee.pad.text.elements.Node;
-import org.eclipse.iee.pad.text.elements.NodeVisitor;
-import org.eclipse.iee.pad.text.elements.Span;
-import org.eclipse.iee.pad.text.elements.TextNode;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.ITextListener;
-import org.eclipse.jface.text.TextEvent;
-import org.eclipse.jface.text.TextViewer;
-import org.eclipse.jface.text.TextViewerUndoManager;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.VerifyKeyListener;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.graphics.Resource;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.ColorDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-public class TextPad extends CompositePad<TextPart> {
+import com.google.common.base.Optional;
 
-	private TextViewer fViewer;
-	private Document fDocument;
+public class TextPad extends FigurePad<TextPart, Figure> implements IMenuContributor {
 
-	private Composite fParent;
-	private Composite fInputView;
+	private ImageDescriptor iBold;
+	private ImageDescriptor iFont;
+	private ImageDescriptor iItalic;
+	private ImageDescriptor iCopy;
+	private ImageDescriptor iPaste;
+	private ImageDescriptor iTextForeground;
+	private ImageDescriptor iTextBackground;
 
-	private boolean fTextChanged;
+	private Optional<ObservableProperty<Document>> fRoot;
 
-	private Image iBold;
-	private Image iFont;
-	private Image iItalic;
-	private Image iUnderline;
-	private Image iStrikeout;
-	private Image iCut;
-	private Image iCopy;
-	private Image iPaste;
-	private Image iTextForeground;
-	private Image iTextBackground;
-
-	private Font textFont;
+	private DocumentEditor fDocumentEditor;
 	
-	private MenuItem fontControl, boldControl, italicControl;
-	private Color textForeground, textBackground;
-	private int styleState;
-	static final int BOLD = SWT.BOLD;
-	static final int ITALIC = SWT.ITALIC;
-	static final int FONT_STYLE = BOLD | ITALIC;
-	static final int FONT = 1 << 3;
-	static final int FOREGROUND = 1 << 4;
-	static final int BACKGROUND = 1 << 5;
+	private TextRenderCtx fRenderCtx;
 	
-	public TextPad() {
+	public TextPad(TextRenderCtx renderContext) {
+		fRenderCtx = renderContext;
+		fDocumentEditor = new DocumentEditor(renderContext);
+		addEditor(fDocumentEditor);
 	}
-
-	public void toggleEditMode() {
-//		fViewer.setEditable(true);
-
-		fParent.pack();
-
-		fViewer.getControl().forceFocus();
+	
+	@Override
+	public void attachContainer(Container container) {
+		super.attachContainer(container);
 	}
-
-	public void toggleViewMode() {
-//		fViewer.setEditable(false);
-		getContainer().updateDocument();
-		focusOnMainEditor();
-		fParent.pack();
+	
+	@Override
+	public void doBindValue(TextPart value) {
+		fRoot = Optional.of(new ObservableProperty<Document>(value, "root", Document.class));
+		fDocumentEditor.setValue(fRoot);
 	}
-
-	public void setListeners() {
-
-		fViewer.addTextListener(new ITextListener() {
-
-			@Override
-			public void textChanged(TextEvent event) {
-				fTextChanged = true;
-				String newText = fDocument.get();
-				getDocumentPart().setRoot(toRoot(fDocument));
-				getContainer().updateDocument();
-				if (newText != "") {
-					/* Resize fInputText */
-					Point size = fViewer.getControl().computeSize(
-							SWT.DEFAULT, SWT.DEFAULT, false);
-					fViewer.getControl().setSize(size);
-					fParent.pack();
-				}
-			}
-		});
-
-		final StyledText control = (StyledText)fViewer.getControl();
-		control.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				switch (e.keyCode) {
-				case SWT.ESC:
-					toggleViewMode();
-					moveCaretToContainerTail();
-					break;
-				
-
-				}
-			}
-		});
-		
-		control.addVerifyKeyListener(new VerifyKeyListener() {
-			@Override
-			public void verifyKey(VerifyEvent event) {
-				Point selection = control.getSelection();
-				int caretOffset = control.getCaretOffset();
-				switch (event.keyCode) {
-				case SWT.ARROW_LEFT:
-					if (selection.y - selection.x == 0 && caretOffset == 0) {
-						toggleViewMode();
-						moveCaretToCurrentPad();
-					}
-					break;
-				case SWT.ARROW_RIGHT:
-					if (selection.y - selection.x == 0 && caretOffset == control.getCharCount()) {
-						toggleViewMode();
-						moveCaretToContainerTail();
-					}
-					break;
-				}
-			}
-		});
-
+	
+	@Override
+	protected void doUnbindValue(TextPart value) {
+		if (fRoot.isPresent()) {
+			fRoot.get().dispose();
+		}
 	}
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		fParent = parent;
-
-		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
-		parent.setLayout(layout);
-
-		SashForm sashForm = new SashForm(parent, SWT.FILL);
-		sashForm.setLayout(new FillLayout(SWT.HORIZONTAL));
-
-		/* Input View */
-
-		fInputView = new Composite(sashForm, SWT.NONE);
-		fInputView.setBackground(new Color(null, 255, 255, 255));
-		fInputView.setLayout(new GridLayout(1, true));
-
-		fViewer = new TextViewer(fInputView, SWT.MULTI);
-		fViewer.getControl().setSize(50, 100);
-		fDocument = new Document(rootToString(getDocumentPart().getRoot()));
-		fViewer.setDocument(fDocument);
-		fViewer.getTextWidget().setStyleRanges(rootToStyleRanges(getDocumentPart().getRoot()));
-		fTextChanged = false;
-
-		TextViewerUndoManager defaultUndoManager = new TextViewerUndoManager(25);
-		fViewer.setUndoManager(defaultUndoManager);
-		defaultUndoManager.connect(fViewer);
-		new TextViewerSupport(fViewer);
-		
-		((StyledText)fViewer.getControl()).setMenu(createPopupMenu(fViewer.getControl()));
-		setListeners();
-		toggleViewMode();
-	}
-
-	private Menu createPopupMenu(org.eclipse.swt.widgets.Control parent) {
-		Menu menu = new Menu(parent);
-
-		final MenuItem cutItem = new MenuItem(menu, SWT.PUSH);
-		cutItem.setText("Cut"); 
-		cutItem.setImage(iCopy);
+	public void contribute(MenuManager menuManager) {
+		Action cutItem = new Action("Cut", SWT.PUSH) {
+			@Override
+			public void run() {
+				
+			}
+		};
+		cutItem.setImageDescriptor(iCopy);
 		cutItem.setAccelerator(SWT.MOD1 | 'x');
-		cutItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				((StyledText)fViewer.getControl()).cut();
-			}
-		});
+		menuManager.add(cutItem);
 
-		final MenuItem copyItem = new MenuItem(menu, SWT.PUSH);
-		copyItem.setText("Copy"); 
-		copyItem.setImage(iCopy);
+		Action copyItem = new Action("Copy", SWT.PUSH) {
+			@Override
+			public void run() {
+				
+			}
+		};
+		copyItem.setImageDescriptor(iCopy);
 		copyItem.setAccelerator(SWT.MOD1 | 'c');
-		copyItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				((StyledText)fViewer.getControl()).copy();
-			}
-		});
+		menuManager.add(copyItem);
 
-		MenuItem pasteItem = new MenuItem(menu, SWT.PUSH);
-		pasteItem.setText("Paste"); 
-		pasteItem.setImage(iPaste);
+		Action pasteItem = new Action("Paste", SWT.PUSH) {
+			@Override
+			public void run() {
+				
+			}
+		};
+		pasteItem.setImageDescriptor(iPaste);
 		pasteItem.setAccelerator(SWT.MOD1 | 'v');
-		pasteItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				((StyledText)fViewer.getControl()).paste();
-			}
-		});
-
-		new MenuItem (menu, SWT.SEPARATOR);
+		menuManager.add(pasteItem);
 		
-		fontControl = new MenuItem(menu, SWT.PUSH);
-		fontControl.setImage(iFont);
-		fontControl.setText("Font");
-		fontControl.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				StyledText textWidget = fViewer.getTextWidget();
-				Shell shell = textWidget.getShell();
-				FontDialog dlg = new FontDialog(shell);
-
-				if (textFont != null) {
-					dlg.setFontList(textFont.getFontData());
-				}
-				if (textForeground != null) {
-					dlg.setRGB(textForeground.getRGB());
+		menuManager.add(new Separator());
+		
+		Action fontItem = new Action("Font", SWT.PUSH) {
+			@Override
+			public void run() {
+				FontDialog dlg = new FontDialog(getContainer().getContainerManager().getShell());
+				SelectionModel selectionModel = getContainer().getContainerManager().getSelectionModel();
+				TextStyle style = selectionModel.getStyle();
+				Font font = fRenderCtx.getFont(Optional.of(style));
+				FontData[] fontData = font.getFontData();
+				dlg.setFontList(fontData);
+				Optional<Color> foreground = fRenderCtx.getForeground(Optional.of(style));
+				if (foreground.isPresent()) {
+					dlg.setRGB(foreground.get().getRGB());
 				}
 
 				if (dlg.open() != null) {
-					if (textFont != null) {
-						textFont.dispose();
-					}
-					if (textForeground != null)
-						textForeground.dispose();
+					final FontData[] fontList = dlg.getFontList();
+					final RGB rgb = dlg.getRGB();
+					selectionModel.applyStyle(new StyleProcessor() {
+						@Override
+						public void apply(TextStyle style) {
+							style.setFont(fontList[0].getName());
+							style.setFontSize(fontList[0].getHeight());
 
-					textFont = new Font(shell.getDisplay(), dlg.getFontList());
-					setStyle(FONT);
-
-					RGB rgb = dlg.getRGB();
-					if (rgb != null) {
-						textForeground = new Color(shell.getDisplay(), rgb);
-						setStyle(FOREGROUND);
-					}
+							if (rgb != null) {
+								style.setFgColor(new java.awt.Color(rgb.red, rgb.green, rgb.blue));
+							}
+						}
+					});
 				}
-				fParent.pack();
 			}
-		});
+		};
+		fontItem.setImageDescriptor(iFont);
+		menuManager.add(fontItem);
 		
-		boldControl = new MenuItem(menu, SWT.PUSH);
-		boldControl.setImage(iBold);
-		boldControl.setText("Bold");
-		boldControl.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				setStyle(BOLD);
-			}
-		});
-
-		italicControl = new MenuItem(menu, SWT.PUSH);
-		italicControl.setImage(iItalic);
-		italicControl.setText("Italic"); //$NON-NLS-1$
-		italicControl.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				setStyle(ITALIC);
-			}
-		});
-
-		MenuItem foregroundItem = new MenuItem(menu, SWT.PUSH);
-		foregroundItem.setImage(iTextForeground);
-		foregroundItem.setText("Text Foreground"); //$NON-NLS-1$
-		foregroundItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {		
-				if (event.detail == SWT.ARROW || textForeground == null) {
-					ColorDialog dialog = new ColorDialog(((StyledText)fViewer.getControl()).getShell());
-					RGB rgb = textForeground != null ? textForeground.getRGB() : null;
-					dialog.setRGB(rgb);
-					RGB newRgb = dialog.open();
-					if (newRgb == null) return;
-					if (!newRgb.equals(rgb)) {
-						disposeResource(textForeground);
-						textForeground = new Color(Display.getDefault(), newRgb);					
+		Action boldItem = new Action("Bold", SWT.PUSH) {
+			@Override
+			public void run() {
+				SelectionModel selectionModel = getContainer().getContainerManager().getSelectionModel();
+				TextStyle style = selectionModel.getStyle();
+				final boolean newV = !style.isBold().or(false);
+				selectionModel.applyStyle(new StyleProcessor() {
+					@Override
+					public void apply(TextStyle style) {
+						style.setBold(newV);
 					}
-				}
-				setStyle(FOREGROUND);				
+				});
 			}
-		});
-
-		MenuItem backgroundItem = new MenuItem(menu, SWT.PUSH);
-		backgroundItem.setImage(iTextBackground);
-		backgroundItem.setText("Text Background"); //$NON-NLS-1$
-		backgroundItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {			
-				if (event.detail == SWT.ARROW || textBackground == null) {
-					ColorDialog dialog = new ColorDialog(((StyledText)fViewer.getControl()).getShell());
-					RGB rgb = textBackground != null ? textBackground.getRGB() : null;
-					dialog.setRGB(rgb);
-					RGB newRgb = dialog.open();
-					if (newRgb == null) return;
-					if (!newRgb.equals(rgb)) {
-						disposeResource(textBackground);
-						textBackground = new Color(Display.getDefault(), newRgb);
+		};
+		boldItem.setImageDescriptor(iBold);
+		menuManager.add(boldItem);
+		
+		Action italicItem = new Action("Italic", SWT.PUSH) {
+			@Override
+			public void run() {
+				SelectionModel selectionModel = getContainer().getContainerManager().getSelectionModel();
+				TextStyle style = selectionModel.getStyle();
+				final boolean newV = !style.isItalic().or(false);
+				selectionModel.applyStyle(new StyleProcessor() {
+					@Override
+					public void apply(TextStyle style) {
+						style.setItalic(newV);
 					}
-				}
-				setStyle(BACKGROUND);
+				});
 			}
-		});
-
-		return menu;
+		};
+		italicItem.setImageDescriptor(iItalic);
+		menuManager.add(italicItem);
+		
+		Action foregroundItem = new Action("Text Foreground", SWT.PUSH) {
+			@Override
+			public void run() {
+				SelectionModel selectionModel = getContainer().getContainerManager().getSelectionModel();
+				TextStyle style = selectionModel.getStyle();
+				Optional<java.awt.Color> fgColor = style.getFgColor();
+				Shell shell = getContainer().getContainerManager().getShell();
+				ColorDialog dialog = new ColorDialog(shell);
+				RGB rgb = null;
+				if (fgColor.isPresent()) {
+					rgb = new RGB(fgColor.get().getRed(), fgColor.get().getGreen(), fgColor.get().getBlue());
+					dialog.setRGB(rgb);
+				}
+				final RGB newRgb = dialog.open();
+				if (newRgb == null) return;
+				if (!newRgb.equals(rgb)) {
+					selectionModel.applyStyle(new StyleProcessor() {
+						@Override
+						public void apply(TextStyle style) {
+							style.setFgColor(new java.awt.Color(newRgb.red, newRgb.green, newRgb.blue));
+						}
+					});
+				}
+			}
+		};
+		foregroundItem.setImageDescriptor(iTextForeground);
+		menuManager.add(foregroundItem);
+		
+		Action backgroundItem = new Action("Text Background", SWT.PUSH) {
+			@Override
+			public void run() {
+				SelectionModel selectionModel = getContainer().getContainerManager().getSelectionModel();
+				TextStyle style = selectionModel.getStyle();
+				Optional<java.awt.Color> bgColor = style.getBgColor();
+				Shell shell = getContainer().getContainerManager().getShell();
+				ColorDialog dialog = new ColorDialog(shell);
+				RGB rgb = null;
+				if (bgColor.isPresent()) {
+					rgb = new RGB(bgColor.get().getRed(), bgColor.get().getGreen(), bgColor.get().getBlue());
+					dialog.setRGB(rgb);
+				}
+				final RGB newRgb = dialog.open();
+				if (newRgb == null) return;
+				if (!newRgb.equals(rgb)) {
+					selectionModel.applyStyle(new StyleProcessor() {
+						@Override
+						public void apply(TextStyle style) {
+							style.setBgColor(new java.awt.Color(newRgb.red, newRgb.green, newRgb.blue));
+						}
+					});
+				}
+			}
+		};
+		backgroundItem.setImageDescriptor(iTextBackground);
+		menuManager.add(backgroundItem);
+		
 	}
 	
 	@Override
 	public void activate() {
-		toggleEditMode();
 	}
 
 	@Override
 	public void deactivate() {
-		fViewer.getTextWidget().setSelection(0,0);
-		toggleViewMode();
+		getContainer().updateDocument();
 	}
 	
-	// Save&Load operations, use it for serialization
-
-	public void save() {
-	}
-
 	@Override
 	public String getType() {
 		return "Text";
 	}
 
-	@Override
-	public void addMouseListeners(Composite control) {
-	}
-	
 	void initResources() {
 		iFont= loadImage(Display.getDefault(), "font_big.ico"); 
 		iBold = loadImage(Display.getDefault(), "bold.ico"); 
-		iItalic = loadImage(Display.getDefault(), "italic.ico"); 
-		iUnderline = loadImage(Display.getDefault(), "underline.ico"); 
-		iStrikeout = loadImage(Display.getDefault(), "strikeout.ico"); 
-		iCut = loadImage(Display.getDefault(), "cut.ico"); 
+		iItalic = loadImage(Display.getDefault(), "italic.ico");
 		iCopy = loadImage(Display.getDefault(), "copy.ico"); 
 		iPaste = loadImage(Display.getDefault(), "paste.ico"); 
 		iTextForeground = loadImage(Display.getDefault(), "textForeground.ico"); 
 		iTextBackground = loadImage(Display.getDefault(), "textBackground.ico"); 
 	}
 	
-	private Image loadImage(Display display, String fileName) {
-		Image image = null; 
-		try {
-			InputStream sourceStream = getClass().getResourceAsStream("icons/" + fileName);
-			ImageData source = new ImageData(sourceStream);
-			ImageData mask = source.getTransparencyMask();
-			image = new Image(display, source, mask);
-			sourceStream.close();
-		} catch (IOException e) {
-		}
-		return image;
-	}
-	
-	void setStyle(int style) {
-		int[] ranges = ((StyledText)fViewer.getControl()).getSelectionRanges();
-		int i = 0;
-		while (i < ranges.length) {
-			setStyle(style, ranges[i++], ranges[i++]);
-		}
-		updateStyleState(style, FOREGROUND);
-		updateStyleState(style, BACKGROUND);
-	}
-	
-	void updateStyleState(int style, int changingStyle) {
-		if ((style & changingStyle) != 0) {
-			if ((style & changingStyle) == (styleState & changingStyle)) {
-				styleState &= ~changingStyle;
-			} else {
-				styleState &= ~changingStyle;
-				styleState |= style;
-			}
-		}
-	}
-	
-	void setStyle(int style, int start, int length) {
-		if (length == 0) return;
-		
-		/* Create new style range */
-		StyleRange newRange = new StyleRange();
-		if ((style & FONT) != 0) {
-			newRange.font = textFont;
-		}
-		if ((style & FONT_STYLE) != 0) {
-			newRange.fontStyle = style & FONT_STYLE;
-		}
-		if ((style & FOREGROUND) != 0) {
-			newRange.foreground = textForeground;
-		}
-		if ((style & BACKGROUND) != 0) {
-			newRange.background = textBackground;
-		}
-		
-		int newRangeStart = start;
-		int newRangeLength = length;
-		int[] ranges = ((StyledText)fViewer.getControl()).getRanges(start, length);
-		StyleRange[] styles = ((StyledText)fViewer.getControl()).getStyleRanges(start, length, false);		
-		int maxCount = ranges.length * 2 + 2;
-		int[] newRanges = new int[maxCount];
-		StyleRange[] newStyles = new StyleRange[maxCount / 2];		
-		int count = 0;
-		for (int i = 0; i < ranges.length; i+=2) {
-			int rangeStart = ranges[i];
-			int rangeLength = ranges[i + 1];
-			StyleRange range = styles[i / 2];
-			if (rangeStart > newRangeStart) {
-				newRangeLength = rangeStart - newRangeStart;
-				newRanges[count] = newRangeStart;
-				newRanges[count + 1] = newRangeLength;
-				newStyles[count / 2] = newRange;
-				count += 2;
-			}
-			newRangeStart = rangeStart + rangeLength;
-			newRangeLength = (start + length) - newRangeStart;
-
-			/* Create merged style range*/
-			StyleRange mergedRange = new StyleRange(range);
-			//Note: fontStyle is not copied by the constructor
-			mergedRange.fontStyle = range.fontStyle;
-			
-			if ((style & FONT) != 0) {
-				mergedRange.font = textFont;
-			}
-			if ((style & FONT_STYLE) != 0) {
-				mergedRange.fontStyle =  range.fontStyle ^ newRange.fontStyle;
-			}
-			if (mergedRange.font != null && ((style & FONT_STYLE) != 0)) {
-				boolean change = false;
-				FontData[] fds = mergedRange.font.getFontData();
-				for (int j = 0; j < fds.length; j++) {
-					FontData fd = fds[j];
-					if (fd.getStyle() != mergedRange.fontStyle) {
-						fds[j].setStyle(mergedRange.fontStyle);
-						change = true;
-					}
-				}
-				if (change) {
-					mergedRange.font = new Font(Display.getCurrent(), fds);
-				}
-			}
-			if ((style & FOREGROUND) != 0) {
-				mergedRange.foreground = newRange.foreground != range.foreground ? newRange.foreground : null;
-			}
-			if ((style & BACKGROUND) != 0) {
-				mergedRange.background = newRange.background != range.background ? newRange.background : null;
-			}
-			
-			newRanges[count] = rangeStart;
-			newRanges[count + 1] = rangeLength;
-			newStyles[count / 2] = mergedRange;
-			count += 2;
-		}
-		if (newRangeLength > 0) {
-			newRanges[count] = newRangeStart;
-			newRanges[count + 1] = newRangeLength;
-			newStyles[count / 2] = newRange;
-			count += 2;
-		}
-		if (0 < count && count < maxCount) {			
-			int[] tmpRanges = new int[count];
-			StyleRange[] tmpStyles = new StyleRange[count / 2];
-			System.arraycopy(newRanges, 0, tmpRanges, 0, count);
-			System.arraycopy(newStyles, 0, tmpStyles, 0, count / 2);
-			newRanges = tmpRanges;
-			newStyles = tmpStyles;
-		}
-		((StyledText)fViewer.getControl()).setStyleRanges(start, length, newRanges, newStyles);
-		disposeRanges(styles);
-	}
-	
-	void disposeRanges(StyleRange[] ranges) {
-		StyleRange[] allRanges = ((StyledText)fViewer.getControl()).getStyleRanges(0, ((StyledText)fViewer.getControl()).getCharCount(), false);
-		for (int i = 0; i < ranges.length; i++) {
-			StyleRange style = ranges[i];
-			boolean disposeFg = true, disposeBg = true, disposeStrike= true, disposeUnder= true, disposeBorder = true, disposeFont = true;
-
-			for (int j = 0; j < allRanges.length; j++) {
-				StyleRange s = allRanges[j];
-				if (disposeFont && style.font == s.font) disposeFont = false;
-				if (disposeFg && style.foreground == s.foreground) disposeFg = false;
-				if (disposeBg && style.background == s.background) disposeBg = false;
-				if (disposeStrike && style.strikeoutColor == s.strikeoutColor) disposeStrike = false;
-				if (disposeUnder && style.underlineColor == s.underlineColor) disposeUnder = false;
-				if (disposeBorder && style.borderColor == s.borderColor) disposeBorder =  false;
-			}
-			if (disposeFont && style.font != textFont && style.font != null)  style.font.dispose();
-			if (disposeFg && style.foreground != textForeground && style.foreground != null) style.foreground.dispose();
-			if (disposeBg && style.background != textBackground && style.background != null) style.background.dispose();
-			
-			Object data = style.data;
-			if (data != null) {
-				if (data instanceof Image) ((Image)data).dispose();
-				if (data instanceof Control) ((Control)data).dispose();
-			}
-		}
-	}
-	
-	void disposeResource(Resource resource) {
-		if (resource == null) return;
-		StyleRange[] styles = ((StyledText)fViewer.getControl()).getStyleRanges(0, ((StyledText)fViewer.getControl()).getCharCount(), false);
-		int index = 0;
-		while (index < styles.length) {
-			if (styles[index].font == resource) break;
-			if (styles[index].foreground == resource) break;
-			if (styles[index].background == resource) break;
-			if (styles[index].strikeoutColor == resource) break;
-			if (styles[index].underlineColor == resource) break;
-			if (styles[index].borderColor == resource) break;
-			index++;
-		}
-		if (index == styles.length) resource.dispose();
+	private ImageDescriptor loadImage(Display display, String fileName) {
+		return ImageDescriptor.createFromURL(TextPad.class.getClassLoader().getResource("/icons/" + fileName));
 	}
 	
 	@Override
@@ -540,117 +271,23 @@ public class TextPad extends CompositePad<TextPart> {
 				.replaceAll("\t", " \\\\quad ");
 	}
 	
-	public String rootToString(Node root) {
+	public String rootToString(Document root) {
 		final StringWriter sw = new StringWriter();
 		root.traverse(new NodeVisitor() {
 			
 			@Override
-			public void tail(Node node, int depth) {
+			public void tail(INode node) {
 			}
 			
 			@Override
-			public void head(Node node, int depth) {
-				if (node instanceof TextNode) {
-					sw.append(((TextNode) node).getText());
+			public void head(INode node) {
+				if (node instanceof Text) {
+					sw.append(((Text) node).getText());
 				}
 			}
 		});
 		
 		return sw.toString();
-	}
-	
-	public StyleRange[] rootToStyleRanges(Node root) {
-		final List<StyleRange> srs = new ArrayList<>();
-		root.traverse(new NodeVisitor() {
-			private int offset = 0;
-			private int length = 0;
-			
-			@Override
-			public void tail(Node node, int depth) {
-				if (node instanceof Span) {
-					Span span = (Span) node;
-					StyleRange styleRange = new StyleRange();
-					styleRange.start = offset;
-					styleRange.length = length;
-					Boolean bold = span.isBold().or(Boolean.FALSE);
-					Boolean italic = span.isItalic().or(Boolean.FALSE);
-					styleRange.fontStyle = 0xFF & ((bold ? SWT.BOLD : 0) | (italic ? SWT.ITALIC : 0));
-					StyledText textWidget = fViewer.getTextWidget();
-					Display display = textWidget.getDisplay();
-					styleRange.foreground = toSwtColor(display, span.getFgColor().or(java.awt.Color.BLACK));
-					styleRange.background = toSwtColor(display, span.getBgColor().or(java.awt.Color.WHITE));
-					if (span.getFont().isPresent()) {
-						FontData[] fontData = JFaceResources.getFontRegistry().getFontData(span.getFont().get());
-						if (span.getFontSize().isPresent()) {
-							fontData[0].setHeight(span.getFontSize().get());
-						}
-						styleRange.font = new Font(display, fontData);
-					}
-					srs.add(styleRange);
-					offset += length;
-					length = 0;
-				}
-			}
-			
-			@Override
-			public void head(Node node, int depth) {
-				if (node instanceof TextNode) {
-					length = ((TextNode) node).getText().length();
-				}
-			}
-		});
-		
-		return (StyleRange[]) srs.toArray(new StyleRange[srs.size()]);
-	}
-	
-	public Node toRoot(Document document) {
-		Node root = new Node();
-		StyledText textWidget = fViewer.getTextWidget();
-		
-		String text = document.get();
-		for (int i = 0; i < text.length(); i++) {
-			StringBuilder spanText = new StringBuilder().append(text.charAt(i)); 
-			StyleRange styleRange = textWidget.getStyleRangeAtOffset(i);
-			while (i + 1 < text.length()
-					&& isSimilarTo(styleRange, textWidget.getStyleRangeAtOffset(i + 1))) {
-				i++;
-				spanText.append(text.charAt(i));
-			}
-			Span span = new Span();
-			if (styleRange != null) {
-				if ((styleRange.fontStyle & SWT.BOLD) > 0) {
-					span.setBold(true);
-				}
-				if ((styleRange.fontStyle & SWT.ITALIC) > 0) {
-					span.setItalic(true);
-				}
-				if (styleRange.foreground != null) {
-					span.setFgColor(toAwtColor(styleRange.foreground));
-				}
-				if (styleRange.background != null) {
-					span.setBgColor(toAwtColor(styleRange.background));
-				}
-				Font font = styleRange.font;
-				if (font != null) {
-					span.setFont(font.getFontData()[0].getName());
-					span.setFontSize(font.getFontData()[0].getHeight());
-				}
-			}
-			span.appendChild(new TextNode().setText(spanText.toString()));
-			root.appendChild(span);
-		}
-		return root;
-	}
-
-	private boolean isSimilarTo(StyleRange sr1, StyleRange sr2) {
-		if (sr1 == null && sr2 == null) {
-			return true;
-		} else if (sr1 == sr2) {
-			return true;
-		} else if (sr1 != null && sr2 != null && sr1.similarTo(sr2)) {
-			return true;
-		}
-		return false;
 	}
 	
     public static java.awt.Color toAwtColor(Color color) { 
@@ -675,6 +312,19 @@ public class TextPad extends CompositePad<TextPart> {
         } 
         return new org.eclipse.swt.graphics.Color(device, 
                 color.getRed(), color.getGreen(), color.getBlue()); 
-    } 
+    }
+
+	@Override
+	protected Figure createFigure() {
+		Figure figure = new Figure();
+		figure.setLayoutManager(new BorderLayout());
+		figure.add(fDocumentEditor.getView().getWrapped(IFigure.class), BorderLayout.CENTER);
+		return figure;
+	}
+	
+	@Override
+	public Optional<IEditorLocation> getTextLocation(int x, int y) {
+		return getStart();
+	}
 	
 }

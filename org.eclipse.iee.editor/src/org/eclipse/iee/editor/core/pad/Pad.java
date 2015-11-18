@@ -1,5 +1,6 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.awt.Rectangle;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
@@ -9,14 +10,13 @@ import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
 import com.google.common.base.Optional;
 
-public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends AbstractTextEditor<T, F> implements IDisposable {
+public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends AbstractVisualTextEditor<T, F> implements IDisposable {
 
 	protected Container fContainer;
 
@@ -104,7 +104,9 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 	/**
 	 * Save pad
 	 */
-	public abstract void save();
+	public void save() {
+		
+	};
 
 	public abstract String getType();
 
@@ -113,7 +115,7 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 	public void updateData(Map<String, String> params, String value) {
 	}
 
-	protected void moveCaretToContainerTail() {
+	public void moveCaretToContainerTail() {
 		Container c = getContainer();
 		ContainerManager containerManager = c.getContainerManager();
 		containerManager.getUserInteractionManager().moveCaretTo(
@@ -134,8 +136,6 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 
 	public void dispose() {
 	}
-
-	public abstract Rectangle getBounds();
 
 	public abstract void setBounds(Rectangle newBounds);
 

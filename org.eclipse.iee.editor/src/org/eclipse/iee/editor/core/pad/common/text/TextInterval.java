@@ -3,21 +3,21 @@ package org.eclipse.iee.editor.core.pad.common.text;
 
 public class TextInterval {
 
-	private TextLocation from;
+	private IEditorLocation from;
 	
-	private TextLocation to;
+	private IEditorLocation to;
 
-	public TextInterval(TextLocation from, TextLocation to) {
+	public TextInterval(IEditorLocation from, IEditorLocation to) {
 		super();
 		this.from = from;
 		this.to = to;
 	}
 	
-	public TextLocation getFrom() {
+	public IEditorLocation getFrom() {
 		return from;
 	}
 	
-	public TextLocation getTo() {
+	public IEditorLocation getTo() {
 		return to;
 	}
 	

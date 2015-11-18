@@ -6,6 +6,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
@@ -18,11 +19,11 @@ public class EditorManager {
 	
 	private Figure fRoot;
 	
-	private ITextEditor<?, ?> fSelectedEditor;
+	private ITextEditor<?> fSelectedEditor;
 
-	private ITextEditor<?, ?> fActiveEditor;
+	private ITextEditor<?> fActiveEditor;
 	
-	private Map<IFigure, ITextEditor<?, ?>> fFigureToEditor = Maps.newHashMap();
+	private Map<IFigure, ITextEditor<?>> fFigureToEditor = Maps.newHashMap();
 	
 	public EditorManager() {
 
@@ -57,9 +58,9 @@ public class EditorManager {
 		return result;
 	}
 	
-	public Optional<ITextEditor<?, ?>> getEditorAt(org.eclipse.draw2d.geometry.Point p) {
+	public Optional<ITextEditor<?>> getEditorAt(org.eclipse.draw2d.geometry.Point p) {
 		IFigure findFigureAt = fMainFigure.findFigureAt(p);
-		ITextEditor<?, ?> editor = null;
+		ITextEditor<?> editor = null;
 		while (findFigureAt != null) {
 			editor = fFigureToEditor.get(findFigureAt);
 			if (editor != null) {
@@ -68,10 +69,10 @@ public class EditorManager {
 			findFigureAt = findFigureAt.getParent();
 		}
 		
-		return Optional.<ITextEditor<?, ?>> fromNullable(editor);
+		return Optional.<ITextEditor<?>> fromNullable(editor);
 	}
 
-	public void selectEditor(ITextEditor<?, ?> editor) {
+	public void selectEditor(ITextEditor<?> editor) {
 		if (editor != null && editor.equals(fSelectedEditor)) {
 			return;
 		}
@@ -85,7 +86,7 @@ public class EditorManager {
 		}
 	}
 
-	public void activateEditor(ITextEditor<?, ?> editor) {
+	public void activateEditor(ITextEditor<?> editor) {
 		if (editor != null && editor.equals(fActiveEditor)) {
 			return;
 		}
@@ -99,15 +100,15 @@ public class EditorManager {
 		selectEditor(editor);	
 	}
 	
-	public void registerVisual(ITextEditor<?, ?> textPartEditor, IFigure figure) {
-		fFigureToEditor.put(figure, textPartEditor);
+	public void registerVisual(ITextEditor<?> textPartEditor, IView view) {
+		fFigureToEditor.put(view.getWrapped(IFigure.class), textPartEditor);
 	}
 	
-	public void unregisterVisual(IFigure figure) {
-		fFigureToEditor.remove(figure);
+	public void unregisterVisual(IView view) {
+		fFigureToEditor.remove(view.getWrapped(IFigure.class));
 	}
 
-	public ITextEditor<?, ?> getSelectedEditor() {
+	public ITextEditor<?> getSelectedEditor() {
 		return fSelectedEditor;
 	}
 
@@ -123,12 +124,12 @@ public class EditorManager {
 		return fFeedbackFigure;
 	}
 	
-	public void addEditor(ITextEditor<?, ?> editor) {
+	public void addEditor(ITextEditor<?> editor) {
 		editor.attach(this);
 	}
 
-	public void removeEditor(ITextEditor<?, ?> editor) {
+	public void removeEditor(ITextEditor<?> editor) {
 		editor.detach(this);
 	}
-	
+
 }

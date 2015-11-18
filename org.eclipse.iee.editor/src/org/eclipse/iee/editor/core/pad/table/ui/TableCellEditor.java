@@ -5,8 +5,8 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.iee.editor.core.pad.table.TableCell;
@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Event;
 
 import com.google.common.base.Optional;
 
-public class TableCellEditor extends AbstractTextEditor<TableCell, IFigure> implements IMenuContributor {
+public class TableCellEditor extends AbstractVisualTextEditor<TableCell, IFigure> implements IMenuContributor {
 
 	private TextPartEditor fTextPartEditor;
 	

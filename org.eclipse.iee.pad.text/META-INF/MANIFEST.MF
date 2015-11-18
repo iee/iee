@@ -5,10 +5,13 @@ Bundle-SymbolicName: org.eclipse.iee.pad.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: com.google.common.base;version="16.0.1",
+ com.google.common.eventbus;version="17.0.0",
  com.steadystate.css.parser,
  org.eclipse.core.expressions,
+ org.eclipse.iee.core,
  org.eclipse.iee.core.document,
  org.eclipse.iee.core.document.parser,
+ org.eclipse.iee.core.document.text,
  org.eclipse.iee.core.document.writer,
  org.jsoup;version="1.7.2",
  org.jsoup.nodes;version="1.7.2",
@@ -16,7 +19,6 @@ Import-Package: com.google.common.base;version="16.0.1",
  org.osgi.service.component.annotations;version="1.2.0",
  org.slf4j,
  org.w3c.css.sac;version="1.3.0"
-Export-Package: org.eclipse.iee.pad.text,
- org.eclipse.iee.pad.text.elements
+Export-Package: org.eclipse.iee.pad.text
 Service-Component: OSGI-INF/*.xml
 Bundle-ActivationPolicy: lazy

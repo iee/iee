@@ -7,8 +7,8 @@ public interface ITextPart {
 
 	Optional<ICompositeTextPart> getParentTextPart();
 	
-	TextLocation getStart();
+	IEditorLocation getStart();
 	
-	TextLocation getEnd();
+	IEditorLocation getEnd();
 	
 }

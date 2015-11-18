@@ -1,7 +1,9 @@
 package org.eclipse.iee.translator.antlr.translator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.eclipse.iee.translator.antlr.math.MathBaseVisitor;
@@ -16,7 +18,6 @@ import org.eclipse.iee.translator.antlr.math.MathParser.MatrixRowContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.MultContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.PowerContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.PrimaryExprContext;
-import org.eclipse.iee.translator.antlr.math.MathParser.PrimaryFunctionsContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.StandardFunctionContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableAssignmentContext;
 import org.eclipse.iee.translator.antlr.math.MathParser.VariableContext;
@@ -33,32 +34,38 @@ public class FormulaModelCreator extends MathBaseVisitor<Expression> {
 	
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
-		return new IdentifierExpression(ctx.getText());
+		IdentifierExpression expression = new IdentifierExpression(ctx.getText());
+		return expression;
 	}
 	
 	@Override
 	public Expression visitPower(PowerContext ctx) {
-		return new BinaryExpression(visit(ctx.left), "^", visit(ctx.right));
+		BinaryExpression expression = new BinaryExpression(visit(ctx.left), "^", visit(ctx.right));
+		return expression;
 	}
 	
 	@Override
 	public Expression visitVariableAssignment(VariableAssignmentContext ctx) {
-		return new BinaryExpression(visit(ctx.left), "=", visit(ctx.right));
+		BinaryExpression expression = new BinaryExpression(visit(ctx.name), "=", visit(ctx.value));
+		return expression;
 	}
 	
 	@Override
 	public Expression visitPrimaryExpr(PrimaryExprContext ctx) {
-		return new IdentifierExpression(ctx.getText());
+		IdentifierExpression expression = new IdentifierExpression(ctx.getText());
+		return expression;
 	}
 	
 	@Override
 	public Expression visitAdd(AddContext ctx) {
-		return new BinaryExpression(visit(ctx.left), ctx.sign.getText(), visit(ctx.right));
+		BinaryExpression expression = new BinaryExpression(visit(ctx.left), ctx.sign.getText(), visit(ctx.right));
+		return expression;
 	}
 
 	@Override
 	public Expression visitMult(MultContext ctx) {
-		return new BinaryExpression(visit(ctx.left), ctx.sign.getText(), visit(ctx.right));
+		BinaryExpression expression = new BinaryExpression(visit(ctx.left), ctx.sign.getText(), visit(ctx.right));
+		return expression;
 	}
 
 	@Override
@@ -67,25 +74,28 @@ public class FormulaModelCreator extends MathBaseVisitor<Expression> {
 		for (ExpressionContext expression : ctx.params) {
 			lst.add(visit(expression));
 		}
-		return new FunctionExpression(ctx.name.getText(), lst);
+		FunctionExpression expression = new FunctionExpression(ctx.name.getText(), lst);
+		return expression;
 	}
 	
 	@Override
 	public Expression visitExprBrackets(ExprBracketsContext ctx) {
-		return new BracketsExpression(visit(ctx.bracketedExpr));
+		BracketsExpression expression = new BracketsExpression(visit(ctx.bracketedExpr));
+		return expression;
 	}
 	
 	@Override
 	public Expression visitErrorNode(ErrorNode node) {
-		return new IdentifierExpression("!!!" + node.getText() + "!!!");
+		IdentifierExpression expression = new IdentifierExpression("!!!" + node.getText() + "!!!");
+		return expression;
 	}
 	
 	public Expression visitInternalFunction(MathParser.InternalFunctionContext ctx) {
-		Expression result;
+		Expression expression;
 
 		switch (ctx.name.getText()) {
 		case "Integrate":
-			result = new IdentifierExpression("Integrate");
+			expression = new IdentifierExpression("Integrate");
 //			for (int i = ctx.params.size() - 1; i >= 0; i--) {
 //				function += "\\int_";
 //
@@ -111,10 +121,10 @@ public class FormulaModelCreator extends MathBaseVisitor<Expression> {
 			break;
 		case "Sum":
 			String s = "\u2211";
-			result = createMathSymbol(ctx, s);
+			expression = createMathSymbol(ctx, s);
 			break;
 		case "Diff":
-			result = new IdentifierExpression("Diff");
+			expression = new IdentifierExpression("Diff");
 //			ValueParameterContext valueParamCtx = (ValueParameterContext) ctx.params
 //					.get(0);
 //			function += "\\frac{d}{d" + valueParamCtx.variable.getText()
@@ -123,26 +133,26 @@ public class FormulaModelCreator extends MathBaseVisitor<Expression> {
 //			function += "(" + visit(ctx.func) + ")";
 			break;
 		case "Product":
-			result = createMathSymbol(ctx, "\u220f");
+			expression = createMathSymbol(ctx, "\u220f");
 			break;
 		case "Sqrt":
-			result = new IdentifierExpression("Sqrt");
+			expression = new IdentifierExpression("Sqrt");
 //			function += "\\sqrt{" + visit(ctx.func) + "}";
 			break;
 		default:
-			result = new IdentifierExpression("Default");
+			expression = new IdentifierExpression("Default");
 		}
-
-		return result;
+		return expression;
 	}
 	
 	private Expression createMathSymbol(MathParser.InternalFunctionContext ctx, String s) {
 		List<VariableAssignment> variables = new ArrayList<>();
 		for (int i = ctx.params.size() - 1; i >= 0; i--) {
 			IntervalParameterContext paramCtx = (IntervalParameterContext) ctx.params.get(i);
-			variables.add(new VariableAssignment(paramCtx.variable.getText(), visit(paramCtx.range)));
+			variables.add(new VariableAssignment(paramCtx.variable.getText(), visit(paramCtx.min), visit(paramCtx.max)));
 		}
-		return new NaryExpression(s, variables, visit(ctx.func));
+		NaryExpression expression = new NaryExpression(s, variables, visit(ctx.func));
+		return expression;
 	}
 	
 //	@Override
@@ -160,17 +170,21 @@ public class FormulaModelCreator extends MathBaseVisitor<Expression> {
 	
 	@Override
 	public Expression visitMatrixElement(MatrixElementContext ctx) {
-		return new IndexExpression(new IndexExpression(visit(ctx.container), visit(ctx.rowId)), visit(ctx.columnId));
+		IndexExpression expression = new IndexExpression(new IndexExpression(visit(ctx.container), visit(ctx.rowId)), visit(ctx.columnId));
+		return expression;
 	}
 	
 	@Override
 	public Expression visitMatrixRow(MatrixRowContext ctx) {
-		return new IndexExpression(visit(ctx.container), visit(ctx.rowId));
+		IndexExpression expression = new IndexExpression(visit(ctx.container), visit(ctx.rowId));
+		return expression;
 	}
 	
 	@Override
 	public Expression visitBitwiseAdd(BitwiseAddContext ctx) {
-		return new BinaryExpression(visit(ctx.left), "&", visit(ctx.right));
+		BinaryExpression expression = new BinaryExpression(visit(ctx.left), "&", visit(ctx.right));
+		return expression;
 	}
+	
 	
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.jface.window.IShellProvider;
@@ -30,7 +30,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.PaintUtilities;
 
-public class ChartEditor extends AbstractTextEditor<GraphModel, ChartFigure> {
+public class ChartEditor extends AbstractVisualTextEditor<GraphModel, ChartFigure> {
 
 	private AxisChangeListener fDomainAxisListener;
 

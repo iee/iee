@@ -3,28 +3,29 @@ package org.eclipse.iee.pad.formula.ui.editors;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
-import org.eclipse.iee.editor.core.pad.common.text.WrapperEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
+import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
 import org.eclipse.iee.translator.antlr.translator.model.FunctionExpression;
 
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
 
-public final class FunctionExpressionEditor extends AbstractTextEditor<FunctionExpression, Figure> {
-	private WrapperEditor<FunctionExpression> fNameEditor;
+public final class FunctionExpressionEditor extends AbstractVisualTextEditor<FunctionExpression, Figure>  implements IExpressionEditor<FunctionExpression, Figure> {
+	private WrappedExpressionEditor<FunctionExpression> fNameEditor;
 	private ExpressionsListEditor fArgumentsEditor;
-	private RenderCtx fRenderCtx;
+	private TextRenderCtx fRenderCtx;
 	private Optional<ObservableProperty<List<Expression>>> fArguments;
 
-	public FunctionExpressionEditor(RenderCtx renderCtx) {
+	public FunctionExpressionEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
-		addEditor(fNameEditor = new WrapperEditor<>("name", renderCtx));
+		addEditor(fNameEditor = new WrappedExpressionEditor<>("name", renderCtx));
 		addEditor(fArgumentsEditor = new ExpressionsListEditor(renderCtx));
 	}
 
@@ -47,11 +48,11 @@ public final class FunctionExpressionEditor extends AbstractTextEditor<FunctionE
 		figure.add(fNameEditor.getFigure());
 		TextPartEditor t = new TextPartEditor(fRenderCtx);
 		t.setValue(Optional.of(DefaultObservableValue.fromValue("(")));
-		figure.add(addEditor(t).getFigure());
+		figure.add(addEditor(t).getView().getWrapped(IFigure.class));
 		figure.add(fArgumentsEditor.getFigure());
 		TextPartEditor t1 = new TextPartEditor(fRenderCtx);
 		t1.setValue(Optional.of(DefaultObservableValue.fromValue(")")));
-		figure.add(addEditor(t1).getFigure());
+		figure.add(addEditor(t1).getView().getWrapped(IFigure.class));
 		return figure;
 	}
 
@@ -70,4 +71,5 @@ public final class FunctionExpressionEditor extends AbstractTextEditor<FunctionE
 		fNameEditor.setValue(Optional.<ObservableProperty<FunctionExpression>> absent());
 		fArgumentsEditor.setValue(Optional.<ObservableProperty<List<Expression>>> absent());
 	}
+
 }

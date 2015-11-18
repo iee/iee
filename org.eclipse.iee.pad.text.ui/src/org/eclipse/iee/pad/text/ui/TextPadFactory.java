@@ -11,9 +11,9 @@ public class TextPadFactory implements IPadFactory<TextPart> {
 
 	@Override
 	public TextPad create(TextPart documentPart, IPadFactoryContext factoryContext) {
-		TextPad textPad = new TextPad();
+		TextPad textPad = new TextPad(factoryContext.getRenderContext());
 		textPad.bindDocumentPart(DefaultObservableValue.fromValue(documentPart));
 		return textPad;
 	}
-
+	
 }

@@ -5,24 +5,21 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
-import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
-import org.eclipse.iee.pad.formula.ui.ExpressionEditor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public class ExpressionsListEditor extends AbstractTextEditor<List<Expression>, Figure> {
+public class ExpressionsListEditor extends AbstractVisualTextEditor<List<Expression>, Figure> {
 	
-	private RenderCtx fRenderCtx;
+	private TextRenderCtx fRenderCtx;
 	
 	private List<ExpressionEditor> fEditors = new ArrayList<>();
 
-	public ExpressionsListEditor(RenderCtx renderCtx) {
+	public ExpressionsListEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
 	}
 
@@ -71,4 +68,5 @@ public class ExpressionsListEditor extends AbstractTextEditor<List<Expression>, 
 		fEditors.clear();
 		getFigure().removeAll();
 	}
+
 }

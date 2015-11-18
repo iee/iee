@@ -4,8 +4,8 @@ import java.beans.PropertyChangeListener;
 
 public interface IHasPropertyChangeListener {
 
-	public abstract void addPropertyChangeListener(PropertyChangeListener listener);
+	void addPropertyChangeListener(PropertyChangeListener listener);
 
-	public abstract void removePropertyChangeListener(PropertyChangeListener listener);
+	void removePropertyChangeListener(PropertyChangeListener listener);
 
 }

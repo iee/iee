@@ -1,20 +1,20 @@
 package org.eclipse.iee.pad.text;
 
 import org.eclipse.iee.core.document.PadDocumentPart;
-import org.eclipse.iee.pad.text.elements.Node;
+import org.eclipse.iee.core.document.text.Document;
 
 public class TextPart extends PadDocumentPart {
 
-	private Node root;
+	private Document root;
 
-	public Node getRoot() {
+	public Document getRoot() {
 		if (root == null) {
-			return new Node();
+			root = new Document();
 		}
 		return root;
 	}
 
-	public void setRoot(Node root) {
+	public void setRoot(Document root) {
 		this.root = root;
 	}
 

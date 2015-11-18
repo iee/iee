@@ -1,33 +1,31 @@
 package org.eclipse.iee.pad.formula.ui.editors;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.container.ITextEditor;
-import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
-import org.eclipse.iee.editor.core.pad.common.text.WrapperEditor;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
-import org.eclipse.iee.pad.formula.ui.ExpressionEditor;
+import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
 import org.eclipse.iee.translator.antlr.translator.model.BinaryExpression;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public class BinaryExpressionEditor extends AbstractTextEditor<BinaryExpression, Figure> {
+public class BinaryExpressionEditor extends AbstractVisualTextEditor<BinaryExpression, IFigure> implements IExpressionEditor<BinaryExpression, IFigure> {
+	
 	private ExpressionEditor fLeftEditor;
-	private WrapperEditor<BinaryExpression> fSignEditor;
+	private WrappedExpressionEditor<BinaryExpression> fSignEditor;
 	private ExpressionEditor fRightEditor;
 	private Optional<ObservableProperty<Expression>> fLeft;
 	private Optional<ObservableProperty<Expression>> fRight;
-	private RenderCtx fRenderCtx;
+	private TextRenderCtx fRenderCtx;
 
-	public BinaryExpressionEditor(RenderCtx renderCtx) {
+	public BinaryExpressionEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
 		addEditor(fLeftEditor = new ExpressionEditor(fRenderCtx));
-		addEditor(fSignEditor = new WrapperEditor<>("sign", renderCtx));
+		addEditor(fSignEditor = new WrappedExpressionEditor<>("sign", renderCtx));
 		addEditor(fRightEditor = new ExpressionEditor(fRenderCtx));
 	}
 
@@ -52,7 +50,7 @@ public class BinaryExpressionEditor extends AbstractTextEditor<BinaryExpression,
 		figure.add(fRightEditor.getFigure());
 		return figure;
 	}
-
+	
 	@Override
 	protected void doBindValue(BinaryExpression value) {
 		fLeftEditor.setValue(fLeft = Optional.of(new ObservableProperty<Expression>(value, "left", Expression.class)));

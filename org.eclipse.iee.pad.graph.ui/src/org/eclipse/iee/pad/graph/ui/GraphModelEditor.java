@@ -17,8 +17,8 @@ import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.bindings.converter.DoubleConverter;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 import org.eclipse.iee.pad.graph.model.GraphElement;
@@ -32,7 +32,7 @@ import com.google.common.base.Converter;
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
 
-public class GraphModelEditor extends AbstractTextEditor<GraphModel, IFigure> {
+public class GraphModelEditor extends AbstractVisualTextEditor<GraphModel, IFigure> {
 
 	private Map<GraphElement, GraphElementEditor> editors = new HashMap<>();
 	

@@ -1,5 +1,7 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.awt.Rectangle;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
@@ -9,7 +11,6 @@ import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFigure> {
@@ -50,7 +51,7 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFi
 
 	@Override
 	public Rectangle getBounds() {
-		Rectangle bounds = fContent.getBounds();
+		org.eclipse.swt.graphics.Rectangle bounds = fContent.getBounds();
 		Point viewLocation = getContainer().getContainerManager().getViewLocation();
 		return new Rectangle(viewLocation.x + bounds.x, viewLocation.y + bounds.y, bounds.width, bounds.height);
 	}
@@ -58,7 +59,7 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFi
 	@Override
 	public void setBounds(Rectangle newBounds) {
 		Point viewLocation = getContainer().getContainerManager().getViewLocation();
-		Rectangle bounds = new Rectangle(newBounds.x - viewLocation.x, newBounds.y - viewLocation.y, newBounds.width, newBounds.height);
+		org.eclipse.swt.graphics.Rectangle bounds = new org.eclipse.swt.graphics.Rectangle(newBounds.x - viewLocation.x, newBounds.y - viewLocation.y, newBounds.width, newBounds.height);
 		fContent.setBounds(bounds);
 		updateSelectionBounds(newBounds);
 	}

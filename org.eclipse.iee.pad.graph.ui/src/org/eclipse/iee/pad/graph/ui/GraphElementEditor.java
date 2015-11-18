@@ -11,8 +11,8 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
@@ -39,7 +39,7 @@ import org.jfree.util.PaintUtilities;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 
-public class GraphElementEditor extends AbstractTextEditor<GraphElement, Figure> implements IMenuContributor {
+public class GraphElementEditor extends AbstractVisualTextEditor<GraphElement, Figure> implements IMenuContributor {
 
 	private ImageFigure fFormulaImage;
 	

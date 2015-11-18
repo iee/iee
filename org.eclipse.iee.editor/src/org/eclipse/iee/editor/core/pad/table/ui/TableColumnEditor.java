@@ -5,8 +5,8 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.table.TableColumn;
 import org.eclipse.iee.editor.core.pad.table.ui.TablePad.CellFigureBorder;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public class TableColumnEditor extends AbstractTextEditor<TableColumn, IFigure> {
+public class TableColumnEditor extends AbstractVisualTextEditor<TableColumn, IFigure> {
 
 	private TextPartEditor fTextPartEditor;
 	private ObservableProperty<String> fValue;

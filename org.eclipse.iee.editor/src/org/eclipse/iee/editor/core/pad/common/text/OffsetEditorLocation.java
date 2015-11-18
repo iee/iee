@@ -6,62 +6,62 @@ import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public class OffsetTextLocation implements TextLocation {
+public class OffsetEditorLocation implements IEditorLocation {
 
-	private TextPartEditor fTextPart;
+	private ITextContainer<?> fTextPart;
 	
 	private int fTextOffset;
 	
-	public OffsetTextLocation(TextPartEditor textPart, int textOffset) {
+	public OffsetEditorLocation(ITextContainer<?> textPart, int textOffset) {
 		fTextOffset = textOffset;
 		fTextPart = textPart;
 	}
 
-	public Optional<TextLocation> getPrevious() {
+	public Optional<IEditorLocation> getPrevious() {
 		if (fTextOffset > 0) {
-			return Optional.<TextLocation> of(new OffsetTextLocation(fTextPart, fTextOffset - 1));
+			return Optional.<IEditorLocation> of(new OffsetEditorLocation(fTextPart, fTextOffset - 1));
 		} else if (fTextPart.getParent().isPresent()) {
-			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			Optional<ITextEditor<?>> parent = fTextPart.getParent();
 			return parent.get().getPrevious(fTextPart);
 		} else {
-			return Optional.<TextLocation> absent();
+			return Optional.<IEditorLocation> absent();
 		}
 	}
 
 	@Override
-	public Optional<TextLocation> getNext() {
+	public Optional<IEditorLocation> getNext() {
 		if (fTextOffset < fTextPart.getLength()) {
-			return Optional.<TextLocation> of(new OffsetTextLocation(fTextPart, fTextOffset + 1));
+			return Optional.<IEditorLocation> of(new OffsetEditorLocation(fTextPart, fTextOffset + 1));
 		} else if (fTextPart.getParent().isPresent()) {
-			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			Optional<ITextEditor<?>> parent = fTextPart.getParent();
 			return parent.get().getNext(fTextPart);
 		} else {
-			return Optional.<TextLocation> absent();
+			return Optional.<IEditorLocation> absent();
 		}
 	}
 
 	@Override
 	public void putCaret(Caret caret) {
-		fTextPart.updateCaret(caret, fTextOffset, fTextOffset == fTextPart.getLength());
+		fTextPart.updateCaret(caret, fTextOffset);
 	}
 
 	@Override
-	public Optional<TextLocation> getAbove() {
+	public Optional<IEditorLocation> getAbove() {
 		if (fTextPart.getParent().isPresent()) {
-			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			Optional<ITextEditor<?>> parent = fTextPart.getParent();
 			return parent.get().getAbove(this);
 		} else {
-			return Optional.<TextLocation> absent();
+			return Optional.<IEditorLocation> absent();
 		}
 	}
 
 	@Override
-	public Optional<TextLocation> getBelow() {
+	public Optional<IEditorLocation> getBelow() {
 		if (fTextPart.getParent().isPresent()) {
-			Optional<ITextEditor<?,?>> parent = fTextPart.getParent();
+			Optional<ITextEditor<?>> parent = fTextPart.getParent();
 			return parent.get().getBelow(this);
 		} else {
-			return Optional.<TextLocation> absent();
+			return Optional.<IEditorLocation> absent();
 		}
 	};
 	
@@ -71,7 +71,7 @@ public class OffsetTextLocation implements TextLocation {
 	}
 
 	@Override
-	public ITextEditor<?, ?> getEditor() {
+	public ITextEditor<?> getEditor() {
 		return fTextPart;
 	}
 	

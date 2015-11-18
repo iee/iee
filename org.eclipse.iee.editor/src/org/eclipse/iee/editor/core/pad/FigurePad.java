@@ -1,12 +1,13 @@
 package org.eclipse.iee.editor.core.pad;
 
+import java.awt.Rectangle;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
-import org.eclipse.swt.graphics.Rectangle;
 
 public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> extends Pad<T, F> {
 
@@ -37,7 +38,6 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 		});
 		
 		fContent.setPreferredSize(new Dimension(300, 200));
-
 	}
 
 	@Override

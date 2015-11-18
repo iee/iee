@@ -5,19 +5,19 @@ import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.core.IHasPropertyChangeListener;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.container.RenderCtx;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
 
 import com.google.common.base.Preconditions;
 
-public class WrapperEditor<T extends IHasPropertyChangeListener> extends AbstractTextEditor<T, IFigure> {
+public class WrapperEditor<T extends IHasPropertyChangeListener> extends AbstractVisualTextEditor<T, IFigure> {
 
-	private TextPartEditor fTextPartEditor;
+	protected TextPartEditor fTextPartEditor;
 	
 	private ObservableProperty<String> fValue;
 
 	private String fProperty;
 
-	public WrapperEditor(String property, RenderCtx renderCtx) {
+	public WrapperEditor(String property, TextRenderCtx renderCtx) {
 		this.fProperty = Preconditions.checkNotNull(property);
 		fTextPartEditor = new TextPartEditor(renderCtx);
 		addEditor(fTextPartEditor);

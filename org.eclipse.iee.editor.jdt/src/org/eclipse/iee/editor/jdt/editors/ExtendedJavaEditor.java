@@ -43,6 +43,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
@@ -54,6 +55,7 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -176,7 +178,13 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 			boolean isOverviewRulerVisible, int styles, IPreferenceStore store) {
 		ISourceViewer viewer = super.createJavaSourceViewer(parent, verticalRuler, overviewRuler, isOverviewRulerVisible, styles, store);
 		fContainerManager = new ContainerManager(IeeEditorPlugin.getDefault().getPadFactoryManager(), IeeEditorPlugin.getDefault().getParser(), 
-				IeeEditorPlugin.getDefault().getWriter(), viewer);
+				IeeEditorPlugin.getDefault().getWriter(), viewer, new IShellProvider() {
+					
+					@Override
+					public Shell getShell() {
+						return getSite().getWorkbenchWindow().getShell();
+					}
+				});
 		fContainerManager.setCompilationUnit(fCompilationUnit);
 
 		

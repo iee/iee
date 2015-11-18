@@ -2,9 +2,10 @@ package org.eclipse.iee.editor.core.container;
 
 import java.util.Hashtable;
 
-import org.eclipse.iee.editor.core.pad.common.text.IContentTextPart;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
+import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Position;
@@ -90,62 +91,53 @@ public class UserInteractionManager {
 			}
 		});
 
-		textWidget.addVerifyKeyListener(new VerifyKeyListener() {
-			@Override
-			public void verifyKey(VerifyEvent event) {
-				int action = textWidget.getKeyBinding(event.keyCode
-						| event.stateMask);
-				if (action == SWT.NULL) {
-					if (event.character == SWT.DEL) {
-						action = ST.DELETE_NEXT;
-					}
-				}
-				if (action != SWT.NULL) {
-					int caretOffset = getExt5().widgetOffset2ModelOffset(textWidget.getCaretOffset());
-					switch (action) {
-					case ST.COLUMN_PREVIOUS:
-					case ST.SELECT_COLUMN_PREVIOUS:
-						event.doit = caretPositionChange(caretOffset, false);
-						break;
-					case ST.COLUMN_NEXT:
-					case ST.SELECT_COLUMN_NEXT:	
-						event.doit = caretPositionChange(caretOffset, true);
-						break;
-					case ST.DELETE_NEXT:
-						Container container = fContainerManager
-								.getContainerHavingOffset(caretOffset);
-						if (container != null) {
-							container.destroy();
-						}
-					case ST.DELETE_PREVIOUS:
-						Container prevContainer = fContainerManager
-								.getContainerHavingOffset(caretOffset - 1);
-						if (prevContainer != null) {
-							prevContainer.destroy();
-						}
-					}
-				}
-			}
-		});
-
 		textWidget.addVerifyKeyListener(new VerifyKeyListener () {
 
 			@Override
 			public void verifyKey(VerifyEvent e) {
-				
-				TextLocation position = fContainerManager.getCursonPosition();
+				IEditorLocation position = fContainerManager.getCursonPosition();
+				int action = getAction(e);
 				if (position != null) {
-					int action = getAction(e);
-					if (action == SWT.NULL) {
-						replace(position, position, String.valueOf(e.character));
-						doColumnNext();
+					if (action == SWT.NULL && e.character != 0) {
+						IEditorLocation replace = fContainerManager.getSelectionModel().replace(String.valueOf(e.character));
+						fContainerManager.setCursorPosition(replace);
 					} else {
 						doAction(action);
 					}
 					e.doit = false;
+				} else {
+					if (action == SWT.NULL) {
+						if (e.character == SWT.DEL) {
+							action = ST.DELETE_NEXT;
+						}
+					}
+					if (action != SWT.NULL) {
+						int caretOffset = getExt5().widgetOffset2ModelOffset(textWidget.getCaretOffset());
+						switch (action) {
+						case ST.COLUMN_PREVIOUS:
+						case ST.SELECT_COLUMN_PREVIOUS:
+							e.doit = caretPositionChange(caretOffset, false);
+							break;
+						case ST.COLUMN_NEXT:
+						case ST.SELECT_COLUMN_NEXT:	
+							e.doit = caretPositionChange(caretOffset, true);
+							break;
+						case ST.DELETE_NEXT:
+							Container container = fContainerManager
+									.getContainerHavingOffset(caretOffset);
+							if (container != null) {
+								container.destroy();
+							}
+						case ST.DELETE_PREVIOUS:
+							Container prevContainer = fContainerManager
+									.getContainerHavingOffset(caretOffset - 1);
+							if (prevContainer != null) {
+								prevContainer.destroy();
+							}
+						}
+					}
 				}
 			}
-		
 		});
 
 		/*
@@ -178,7 +170,7 @@ public class UserInteractionManager {
 			@Override
 			public void menuDetected(MenuDetectEvent e) {
 				Point control = textWidget.toControl(e.x, e.y);
-				Optional<ITextEditor<?, ?>> editor = fContainerManager.getEditorAt(control.x, control.y);
+				Optional<ITextEditor<?>> editor = fContainerManager.getEditorAt(control.x, control.y);
 				while (editor.isPresent() && !(editor.get() instanceof IMenuContributor)) {
 					editor = editor.get().getParent();
 				}
@@ -356,58 +348,93 @@ public class UserInteractionManager {
 			doDeleteNext();
 			break;
 		case ST.COLUMN_NEXT:
-			doColumnNext();
+			doColumnNext(false);
+			break;
+		case ST.SELECT_COLUMN_NEXT:
+			doColumnNext(true);
 			break;
 		case ST.COLUMN_PREVIOUS:
-			doColumnPrevious();
+			doColumnPrevious(false);
+			break;
+		case ST.SELECT_COLUMN_PREVIOUS:
+			doColumnPrevious(true);
 			break;
 		default:
 			break;
 		}
 	}
 	
-	private void doColumnNext() {
-		TextLocation position = getCursonPosition();
-		Optional<TextLocation> next = position.getNext();
+	private void doColumnNext(boolean selection) {
+		IEditorLocation position = getCursonPosition();
+		Optional<IEditorLocation> next = position.getNext();
 		if (next.isPresent()) {
-			fContainerManager.setCursorPosition(next.get());
+			if (!selection) {
+				fContainerManager.setCursorPosition(next.get());
+			} else {
+				fContainerManager.setSelectionEnd(next.get());
+			}
+		} else if (!selection) {
+			ITextEditor<?> editor = getPad(position);
+			if (editor != null) {
+				((Pad) editor).moveCaretToContainerTail();
+			}
 		}
 	}
+
+	private ITextEditor<?> getPad(IEditorLocation position) {
+		ITextEditor<?> editor = position.getEditor();
+		while (editor != null && !(editor instanceof Pad)) {
+			editor = editor.getParent().isPresent() ? editor.getParent().get() : null;
+		}
+		return editor;
+	}
 	
-	private void doColumnPrevious() {
-		TextLocation position = getCursonPosition();
-		Optional<TextLocation> previous = position.getPrevious();
+	private void doColumnPrevious(boolean selection) {
+		IEditorLocation position = getCursonPosition();
+		Optional<IEditorLocation> previous = position.getPrevious();
 		if (previous.isPresent()) {
-			fContainerManager.setCursorPosition(previous.get());
+			if (!selection) {
+				fContainerManager.setCursorPosition(previous.get());
+			} else {
+				fContainerManager.setSelectionEnd(previous.get());
+			}
+		} else if (!selection) {
+			ITextEditor<?> editor = getPad(position);
+			if (editor != null) {
+				((Pad) editor).moveCaretToCurrentPad();
+			}
 		}
 	}
 	
 	
 	private void doDeletePrevious() {
-		TextLocation start = getCursonPosition();
-		Optional<TextLocation> previous = start.getPrevious();
-		if (previous.isPresent()) {
-			replace(previous.get(), start, "");
-			fContainerManager.setCursorPosition(previous.get());
+		SelectionModel selectionModel = fContainerManager.getSelectionModel();
+		if (selectionModel.isEmpty()) {
+			IEditorLocation start = getCursonPosition();
+			Optional<IEditorLocation> previous = start.getPrevious();
+			if (previous.isPresent()) {
+				fContainerManager.setCursorPosition(new SelectionModel(previous.get(), start).replace(""));
+			} 
+		} else {
+			fContainerManager.setCursorPosition(selectionModel.replace(""));
 		}
 	}
 	
 	private void doDeleteNext() {
-		TextLocation start = getCursonPosition();
-		Optional<TextLocation> next = start.getNext();
-		if (next.isPresent()) {
-			replace(start, next.get(), "");
+		SelectionModel selectionModel = fContainerManager.getSelectionModel();
+		if (selectionModel.isEmpty()) {
+			IEditorLocation start = getCursonPosition();
+			Optional<IEditorLocation> next = start.getNext();
+			if (next.isPresent()) {
+				fContainerManager.setCursorPosition(new SelectionModel(start, next.get()).replace(""));
+			}
+		} else {
+			fContainerManager.setCursorPosition(selectionModel.replace(""));
 		}
 	}
 	
-	private TextLocation getCursonPosition() {
+	private IEditorLocation getCursonPosition() {
 		return fContainerManager.getCursonPosition();
-	}
-
-
-	private void replace(TextLocation start, TextLocation end, String text) {
-//		IContentTextPart textPart = start.getTextPart();
-//		textPart.replace(start.getPosition(), end.getPosition(), text);
 	}
 	
 }

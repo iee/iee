@@ -3,25 +3,23 @@ package org.eclipse.iee.pad.formula.ui.editors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
-import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
-import org.eclipse.iee.pad.formula.ui.ExpressionEditor;
+import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
 import org.eclipse.iee.translator.antlr.translator.model.IndexExpression;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public final class IndexExpressionEditor extends AbstractTextEditor<IndexExpression, Figure> {
+public final class IndexExpressionEditor extends AbstractVisualTextEditor<IndexExpression, Figure>  implements IExpressionEditor<IndexExpression, Figure> {
 	private ExpressionEditor fContainerEditor;
 	private ExpressionEditor fIndexEditor;
 	private Optional<ObservableProperty<Expression>> fContainer;
 	private Optional<ObservableProperty<Expression>> fIndex;
-	private RenderCtx fRenderCtx;
+	private TextRenderCtx fRenderCtx;
 
-	public IndexExpressionEditor(RenderCtx renderCtx) {
+	public IndexExpressionEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
 		addEditor(fContainerEditor = new ExpressionEditor(fRenderCtx));
 		addEditor(fIndexEditor = new ExpressionEditor(fRenderCtx.createSubscriptCtx()));
@@ -61,4 +59,5 @@ public final class IndexExpressionEditor extends AbstractTextEditor<IndexExpress
 		fContainer.get().dispose();
 		fIndex.get().dispose();
 	}
+
 }

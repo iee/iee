@@ -6,22 +6,22 @@ import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public interface TextLocation {
+public interface IEditorLocation {
 
-	Optional<TextLocation> getPrevious();
+	Optional<IEditorLocation> getPrevious();
 	
-	Optional<TextLocation> getNext();
+	Optional<IEditorLocation> getNext();
 
-	Optional<TextLocation> getAbove();
+	Optional<IEditorLocation> getAbove();
 
-	Optional<TextLocation> getBelow();
+	Optional<IEditorLocation> getBelow();
 	
 	void putCaret(Caret caret);
 
 	CaretInfo getCaretInfo();
 
-	ITextEditor<?, ?> getEditor();
+	ITextEditor<?> getEditor();
 
 	int getOffset();
-	
+
 }

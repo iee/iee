@@ -22,21 +22,22 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Translatable;
-import org.eclipse.iee.core.document.DocumentPart;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
+import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
-import org.eclipse.iee.editor.core.pad.common.text.IContentTextPart;
 import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
+import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DocumentEvent;
@@ -62,6 +63,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
@@ -75,6 +77,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,13 +132,19 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private List<ISelectionChangedListener> fPostSelectionChangedListeners;
 	
-	private TextLocation fCursorPositon;
+	private IEditorLocation fCursorPositon;
+	
+	private SelectionModel fSelectionModel = new SelectionModel(); 
 
 	private Field fVerticalScrollOffsetField;
 
 	private Field fHorizontalScrollOffsetField;
 
 	private EditorManager fEditorManager;
+	
+	private TextRenderCtx fRenderCtx;
+
+	private IShellProvider fShellProvider;
 
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
@@ -201,7 +210,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	/* INTERFACE FUNCTIONS */
 
-	public ContainerManager(IPadFactoryManager padFactoryManager, IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer) {
+	public ContainerManager(IPadFactoryManager padFactoryManager, IDocumentParser parser, IDocumentWriter writer, ISourceViewer sourceViewer, IShellProvider shellProvider) {
+		fShellProvider = shellProvider;
 		fContainerManagerID = UUID.randomUUID().toString();
 
 		fPadFactoryManager = padFactoryManager;
@@ -281,6 +291,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fUserInteractionManager = new UserInteractionManager(this);
 		fDocumentAccess = new DocumentAccess(this);
 
+		TextStyle defaultStyle = new TextStyle();
+		fRenderCtx = new TextRenderCtx(defaultStyle, new LocalResourceManager(JFaceResources.getResources()));
+		
 		initViewer(sourceViewer);
 		
 		try {
@@ -307,7 +320,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fMouseListener = new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if (event.type == SWT.MouseDown) {
+				if (event.type == SWT.MouseDown && event.button == 1) {
 					if (!(event.widget instanceof Control))
 	                {
 	                    return;
@@ -316,7 +329,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	                if (isEventFromChild(event)) {
 						Point displayPoint = ((Control) event.widget).toDisplay(event.x, event.y);
 						Point styledTextPoint = fStyledText.toControl(displayPoint);
-						Optional<ITextEditor<?, ?>> c = getEditorAt(styledTextPoint.x, styledTextPoint.y);
+						Optional<ITextEditor<?>> c = getEditorAt(styledTextPoint.x, styledTextPoint.y);
 						
 						c = getSelectableEditor(c);
 						
@@ -328,16 +341,22 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 							activateEditor(null);
 						}
 						
-						Optional<ITextEditor<?, ?>> editor = getEditorAt(styledTextPoint.x, styledTextPoint.y);
+						Optional<ITextEditor<?>> editor = getEditorAt(styledTextPoint.x, styledTextPoint.y);
 						if (editor.isPresent()) {
 							org.eclipse.draw2d.geometry.Point point = translateViewToReal(styledTextPoint.x, styledTextPoint.y);
-							Optional<TextLocation> textLocation = editor.get().getTextLocation(point.x, point.y);
+							IView view = editor.get().getView();
+							
+							IFigure mainFigure = fEditorManager.getMainFigure();
+							IFigure wrapped = view.getWrapped(IFigure.class);
+							org.eclipse.draw2d.geometry.Point t = new org.eclipse.draw2d.geometry.Point(point.x, point.y);
+							wrapped.translateToRelative(t);
+							
+							Optional<IEditorLocation> textLocation = editor.get().getTextLocation(t.x, t.y);
 							if (textLocation.isPresent()) {
-								fCursorPositon = textLocation.get();
-								textLocation.get().putCaret(getCaret());
+								setCursorPosition(textLocation.get());
 							}
 						} else {
-							fCursorPositon = null;
+							setCursorPosition(null);
 						}
 					}
 				}
@@ -357,8 +376,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 				return isOurChild;
 			}
 
-			private Optional<ITextEditor<?, ?>> getSelectableEditor(
-					Optional<ITextEditor<?, ?>> c) {
+			private Optional<ITextEditor<?>> getSelectableEditor(
+					Optional<ITextEditor<?>> c) {
 				while (c.isPresent() && !c.get().isSelectable()) {
 					c = c.get().getParent();
 				}
@@ -454,6 +473,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			@Override
 			public void run() {
 				activateEditor(pad);
+				Optional<IEditorLocation> start = pad.getStart();
+				if (start.isPresent()) {
+					setCursorPosition(start.get());
+				}
 			}
 		});
 	    return container; 
@@ -684,7 +707,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	private Pad<PadDocumentPart, ?> createPad(PadDocumentPart padPart) {
-		Pad<PadDocumentPart, ?> pad = fPadFactoryManager.createPad(padPart);
+		Pad<PadDocumentPart, ?> pad = fPadFactoryManager.createPad(padPart, fRenderCtx);
 		return pad;
 	}
 
@@ -791,7 +814,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return result;
 	}
 	
-	public void select(@Nullable ITextEditor<?, ?> c) {
+	public void select(@Nullable ITextEditor<?> c) {
 		selectEditor(c);
 		if (c != null) {
 			SelectionChangedEvent event = new SelectionChangedEvent(this, new StructuredSelection(c));
@@ -809,7 +832,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		}
 		Object selected = ((IStructuredSelection) selection).getFirstElement();
 		if (selected instanceof ITextEditor) {
-			select((ITextEditor<?, ?>) selected);
+			select((ITextEditor<?>) selected);
 		}
 	}
 	
@@ -898,20 +921,20 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		}
 	}
 	
-	public void selectEditor(ITextEditor<?, ?> editor) {
+	public void selectEditor(ITextEditor<?> editor) {
 		fEditorManager.selectEditor(editor);
 	}
 
-	public void activateEditor(@Nullable ITextEditor<?, ?> editor) {
+	public void activateEditor(@Nullable ITextEditor<?> editor) {
 		fEditorManager.activateEditor(editor);
 	}
 
-	public void deactivateEditor(ITextEditor<?, ?> container) {
+	public void deactivateEditor(ITextEditor<?> container) {
 		activateEditor(null);
 		fSourceViewer.getTextWidget().forceFocus();
 	}
 
-	public TextLocation getCursonPosition() {
+	public IEditorLocation getCursonPosition() {
 		return fCursorPositon;
 	}
 
@@ -920,17 +943,22 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return false;
 	}
 
-	public void setCursorPosition(TextLocation textLocation) {
-		fCursorPositon = textLocation;
-		textLocation.putCaret(getCaret());
+	public void setCursorPosition(IEditorLocation textLocation) {
+		if (textLocation != null) {
+			fCursorPositon = textLocation;
+			fSelectionModel.set(textLocation);
+			textLocation.putCaret(getCaret());
+		} else {
+			fCursorPositon = null;
+		}
 	}
 
-	public Optional<ITextEditor<?, ?>> getEditorAt(int x, int y) {
-		Optional<ITextEditor<?, ?>> editor = fEditorManager.getEditorAt(translateViewToReal(x, y));
+	public Optional<ITextEditor<?>> getEditorAt(int x, int y) {
+		Optional<ITextEditor<?>> editor = fEditorManager.getEditorAt(translateViewToReal(x, y));
 		if (!editor.isPresent()) {
 			Container containerAtPoint = getContainerAtPoint(x, y);
 			if (containerAtPoint != null) {
-				editor = Optional.<ITextEditor<?, ?>> fromNullable(containerAtPoint.getPad());
+				editor = Optional.<ITextEditor<?>> fromNullable(containerAtPoint.getPad());
 			}
 		}
 		return editor;
@@ -941,7 +969,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return new ICompositeTextPart() {
 			
 			@Override
-			public TextLocation getStart() {
+			public IEditorLocation getStart() {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -953,7 +981,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			}
 			
 			@Override
-			public TextLocation getEnd() {
+			public IEditorLocation getEnd() {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -1031,7 +1059,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		private Pad<?, ?> getPad() {
 			Object firstElement = getFirstElement();
 			if (firstElement instanceof ITextEditor) {
-				ITextEditor<?, ?> element = (ITextEditor<?, ?>) firstElement;
+				ITextEditor<?> element = (ITextEditor<?>) firstElement;
 				while(element.getParent().isPresent()) {
 					element = element.getParent().get();
 				}
@@ -1045,5 +1073,19 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public EditorManager getEditorManager() {
 		return fEditorManager;
+	}
+	
+	public SelectionModel getSelectionModel() {
+		return fSelectionModel;
+	}
+
+	public void setSelectionEnd(IEditorLocation textLocation) {
+		fSelectionModel.setEnd(textLocation);
+		fCursorPositon = textLocation;
+		textLocation.putCaret(getCaret());
+	}
+
+	public Shell getShell() {
+		return fShellProvider.getShell();
 	}
 }

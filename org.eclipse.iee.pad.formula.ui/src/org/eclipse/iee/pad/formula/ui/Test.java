@@ -7,16 +7,22 @@ import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.iee.core.document.text.Document;
+import org.eclipse.iee.core.document.text.Span;
+import org.eclipse.iee.core.document.text.Text;
+import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.container.EditorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
-import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
+import org.eclipse.iee.pad.text.ui.DocumentEditor;
 import org.eclipse.iee.translator.antlr.math.MathLexer;
 import org.eclipse.iee.translator.antlr.math.MathParser;
 import org.eclipse.iee.translator.antlr.translator.FormulaModelCreator;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -30,7 +36,7 @@ import com.google.common.base.Optional;
 
 public class Test {
 
-	private static TextLocation fTextLocation;
+	private static IEditorLocation fTextLocation;
 	
 	private static SelectionModel fSelectionModel = new SelectionModel();
 	
@@ -49,23 +55,25 @@ public class Test {
 	    };
 		lws.setContents(editorManager.getRoot());
 
-	    String formula = "k_D=h_2^2 + (2*c*cos(phi)-2*sigma_0*sin(phi))/(sigma_1-sigma_3+(sigma_1+sigma_3-2*sigma_0)*sin(phi)) + Sum(f(x), x=13..44)+Product(B[0][i],i=0..1) + 1/x + 2/$^$%^&%$&";
+//	    String formula = "k_D=h_2^2 + (2*c*cos(phi)-2*sigma_0*sin(phi))/(sigma_1-sigma_3+(sigma_1+sigma_3-2*sigma_0)*sin(phi)) + Sum(f(x), x=13..44)+Product(B[0][i],i=0..1) + 1/x + 2/$^$%^&%$&";
 //		String formula = "Sum(f(x), x=(13..44))";
+		String formula = "1 + 2 * 3";
 	    
-		ANTLRInputStream input = new ANTLRInputStream(formula);
-		MathLexer lexer = new MathLexer(input);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		MathParser parser = new MathParser(tokens);
-		parser.setBuildParseTree(true);
-		ParserRuleContext tree = parser.expression();
-
-		FormulaModelCreator mathVisitor = new FormulaModelCreator();
-		Expression fExpression = mathVisitor.visit(tree);
-		System.out.println(fExpression.getText());
-		ExpressionEditor editor = new ExpressionEditor(new RenderCtx());
-	    editor.setValue(Optional.of(DefaultObservableValue.fromValue(fExpression)));
-		editorManager.addEditor(editor);
-		editorManager.getMainFigure().add(editor.getFigure(), BorderLayout.CENTER);
+//		final ExpressionEditor editor = new ExpressionEditor(new RenderCtx());
+//		updateExpression(formula);
+		TextStyle textStyle = new TextStyle();
+		textStyle.setFontSize(16);
+		DocumentEditor documentEditor = new DocumentEditor(new TextRenderCtx(new TextStyle(), JFaceResources.getResources()));
+		Document value = new Document();
+		Span span = new Span();
+		Text text = new Text();
+		text.setText("T B D ! ! ! ");
+		span.addChild(text);
+		value.addChild(span);
+		documentEditor.setValue(Optional.of(DefaultObservableValue.fromValue(value)));
+		editorManager.addEditor(documentEditor);
+		IFigure figure = documentEditor.getView().getWrapped(IFigure.class);
+		editorManager.getMainFigure().add(figure, BorderLayout.CENTER);
 		
 		shell.addMouseListener(new MouseListener() {
 			
@@ -78,7 +86,7 @@ public class Test {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				org.eclipse.draw2d.geometry.Point p = new org.eclipse.draw2d.geometry.Point(e.x, e.y);
-				Optional<ITextEditor<?, ?>> c = editorManager.getEditorAt(p);
+				Optional<ITextEditor<?>> c = editorManager.getEditorAt(p);
 				
 				c = getSelectableEditor(c);
 				
@@ -90,9 +98,9 @@ public class Test {
 					editorManager.activateEditor(null);
 				}
 				
-				Optional<ITextEditor<?, ?>> editor = editorManager.getEditorAt(p);
+				Optional<ITextEditor<?>> editor = editorManager.getEditorAt(p);
 				if (editor.isPresent()) {
-					Optional<TextLocation> textLocation = editor.get().getTextLocation(e.x, e.y);
+					Optional<IEditorLocation> textLocation = editor.get().getTextLocation(e.x, e.y);
 					if (textLocation.isPresent()) {
 						setPosition(shell, textLocation);
 					}
@@ -104,8 +112,8 @@ public class Test {
 				// TODO Auto-generated method stub
 				
 			}
-			private Optional<ITextEditor<?, ?>> getSelectableEditor(
-					Optional<ITextEditor<?, ?>> c) {
+			private Optional<ITextEditor<?>> getSelectableEditor(
+					Optional<ITextEditor<?>> c) {
 				while (c.isPresent() && !c.get().isSelectable()) {
 					c = c.get().getParent();
 				}
@@ -123,7 +131,7 @@ public class Test {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.ARROW_LEFT) {
-					Optional<TextLocation> previous = fTextLocation.getPrevious();
+					Optional<IEditorLocation> previous = fTextLocation.getPrevious();
 					if (previous.isPresent()) {
 						if ((e.stateMask & SWT.SHIFT) != 0) {
 							appendSelection(shell, previous.get());
@@ -132,7 +140,7 @@ public class Test {
 						}
 					}
 				} else if (e.keyCode == SWT.ARROW_RIGHT) {
-					Optional<TextLocation> next = fTextLocation.getNext();
+					Optional<IEditorLocation> next = fTextLocation.getNext();
 					if (next.isPresent()) {
 						if ((e.stateMask & SWT.SHIFT) != 0) {
 							appendSelection(shell, next.get());
@@ -141,15 +149,31 @@ public class Test {
 						}
 					}
 				} else if (e.keyCode == SWT.ARROW_UP) {
-					Optional<TextLocation> above = fTextLocation.getAbove();
+					Optional<IEditorLocation> above = fTextLocation.getAbove();
 					if (above.isPresent()) {
-						setPosition(shell, above);
+						if ((e.stateMask & SWT.SHIFT) != 0) {
+							appendSelection(shell, above.get());
+						} else {
+							setPosition(shell, above);
+						}
 					}
 				} else if (e.keyCode == SWT.ARROW_DOWN) {
-					Optional<TextLocation> below = fTextLocation.getBelow();
+					Optional<IEditorLocation> below = fTextLocation.getBelow();
 					if (below.isPresent()) {
-						setPosition(shell, below);
+						if ((e.stateMask & SWT.SHIFT) != 0) {
+							appendSelection(shell, below.get());
+						} else {
+							setPosition(shell, below);
+						};
 					}
+				} else if (e.character != 0){
+					System.out.println(e.character + " " + e.keyCode);
+					setPosition(shell, Optional.of(fSelectionModel.replace(String.valueOf(e.character))));
+//					TextGenerationContext textGenerationContext = new TextGenerationContext(fSelectionModel.normalize(), String.valueOf(e.character));
+//					editor.generateText(textGenerationContext);
+//					String formula = textGenerationContext.getResult();
+//					System.out.println(formula);
+//					updateExpression(formula);
 				}
 			}
 			
@@ -170,13 +194,27 @@ public class Test {
 	    
 	    
 	}
+
+	private static Expression updateExpression(String formula) {
+		ANTLRInputStream input = new ANTLRInputStream(formula);
+		MathLexer lexer = new MathLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		MathParser parser = new MathParser(tokens);
+		parser.setBuildParseTree(true);
+		ParserRuleContext tree = parser.expression();
+
+		FormulaModelCreator mathVisitor = new FormulaModelCreator();
+		Expression fExpression = mathVisitor.visit(tree);
+		System.out.println(fExpression.getText());
+		return fExpression;
+	}
 	
-	public static void setPosition(final Shell shell, Optional<TextLocation> previous) {
+	public static void setPosition(final Shell shell, Optional<IEditorLocation> previous) {
 		(fTextLocation = previous.get()).putCaret(getCaret(shell));
 		fSelectionModel.set(previous.get());
 	}
 	
-	public static void appendSelection(final Shell shell, TextLocation to) {
+	public static void appendSelection(final Shell shell, IEditorLocation to) {
 		fSelectionModel.append(to);
 		(fTextLocation = to).putCaret(getCaret(shell));
 	}

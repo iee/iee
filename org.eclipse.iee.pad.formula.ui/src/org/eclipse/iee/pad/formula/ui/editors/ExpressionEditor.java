@@ -1,25 +1,26 @@
-package org.eclipse.iee.pad.formula.ui;
+package org.eclipse.iee.pad.formula.ui.editors;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.iee.editor.core.container.RenderCtx;
-import org.eclipse.iee.editor.core.pad.common.text.AbstractTextEditor;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.pad.formula.ui.EditorVisitor;
+import org.eclipse.iee.pad.formula.ui.EditorVisitorContext;
+import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
-import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public class ExpressionEditor extends AbstractTextEditor<Expression, Figure> {
+public class ExpressionEditor extends AbstractVisualTextEditor<Expression, Figure> {
 
-	private RenderCtx fRenderCtx;
+	private TextRenderCtx fRenderCtx;
 	
 	private EditorVisitor fEditorVisitor = new EditorVisitor();
 
-	private Optional<? extends AbstractTextEditor<? extends Expression, ? extends IFigure>> fSubeditor = Optional.absent();
+	private Optional<? extends IExpressionEditor<? extends Expression, ? extends IFigure>> fSubeditor = Optional.absent();
 	
-	public ExpressionEditor(RenderCtx fRenderCtx) {
+	public ExpressionEditor(TextRenderCtx fRenderCtx) {
 		this.fRenderCtx = fRenderCtx;
 	}
 
@@ -53,14 +54,14 @@ public class ExpressionEditor extends AbstractTextEditor<Expression, Figure> {
 	@Override
 	protected void onValueChanged(Expression oldValue, Expression newValue) {
 		if (fSubeditor.isPresent()) {
-			getFigure().remove(fSubeditor.get().getFigure());
+			getFigure().remove(fSubeditor.get().getView().getWrapped(IFigure.class));
 			removeEditor(fSubeditor.get());
 			fSubeditor = Optional.absent();
 		}
 		if (newValue != null) {
 			fSubeditor = Optional.of(newValue.accept(fEditorVisitor, new EditorVisitorContext(fRenderCtx)));
 			addEditor(fSubeditor.get());
-			getFigure().add(fSubeditor.get().getFigure());
+			getFigure().add(fSubeditor.get().getView().getWrapped(IFigure.class));
 		}
 	}
 

@@ -2,15 +2,14 @@ package org.eclipse.iee.editor.core.container;
 
 import java.util.List;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
-import org.eclipse.iee.editor.core.pad.common.text.TextLocation;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 
 import com.google.common.base.Optional;
 
-public interface ITextEditor<M, F extends IFigure> {
+public interface ITextEditor<M> {
 
-	Optional<TextLocation> getTextLocation(int x, int y);
+	Optional<IEditorLocation> getTextLocation(int x, int y);
 
 	boolean isSelectable();
 	
@@ -20,15 +19,15 @@ public interface ITextEditor<M, F extends IFigure> {
 	
 	M getModel();
 	
+	IView getView();
+	
 	Optional<? extends IObservableValue<M>> getValue();
 	
 	void setValue(Optional<? extends IObservableValue<M>> value);
 
-	void setParent(Optional<ITextEditor<?, ?>> parent);
+	void setParent(Optional<ITextEditor<?>> parent);
 	
-	Optional<ITextEditor<?, ?>> getParent();
-	
-	F getFigure();
+	Optional<ITextEditor<?>> getParent();
 	
 	void dispose();
 
@@ -36,22 +35,22 @@ public interface ITextEditor<M, F extends IFigure> {
 
 	void detach(EditorManager containerManager);
 
-	Optional<TextLocation> getPrevious(ITextEditor<?, ?> textPart);
+	Optional<IEditorLocation> getPrevious(ITextEditor<?> textPart);
 	
-	Optional<TextLocation> getNext(ITextEditor<?, ?> textPart);
+	Optional<IEditorLocation> getNext(ITextEditor<?> textPart);
 
-	Optional<TextLocation> getEnd();
+	Optional<IEditorLocation> getEnd();
 
-	Optional<TextLocation> getStart();
+	Optional<IEditorLocation> getStart();
+	
+	Optional<IEditorLocation> getAbove(IEditorLocation textLocation);
 
-	Optional<TextLocation> getAbove(TextLocation textLocation);
+	Optional<IEditorLocation> getBelow(IEditorLocation textLocation);
 
-	Optional<TextLocation> getBelow(TextLocation textLocation);
+	void selectBetween(IEditorLocation start, IEditorLocation end);
 
-	void selectBetween(TextLocation start, TextLocation end);
+	void unselectBetween(IEditorLocation start, IEditorLocation end);
 
-	void unselectBetween(TextLocation start, TextLocation end);
-
-	List<ITextEditor<?, ?>> getChildren();
+	List<ITextEditor<?>> getChildren();
 
 }
