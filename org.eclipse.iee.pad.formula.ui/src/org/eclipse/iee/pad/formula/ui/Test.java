@@ -38,7 +38,7 @@ public class Test {
 
 	private static IEditorLocation fTextLocation;
 	
-	private static SelectionModel fSelectionModel = new SelectionModel();
+	private static SelectionModel fSelectionModel;
 	
 	public static void main(String[] args) {
 
@@ -54,7 +54,7 @@ public class Test {
 	    	}
 	    };
 		lws.setContents(editorManager.getRoot());
-
+		fSelectionModel = new SelectionModel(editorManager);
 //	    String formula = "k_D=h_2^2 + (2*c*cos(phi)-2*sigma_0*sin(phi))/(sigma_1-sigma_3+(sigma_1+sigma_3-2*sigma_0)*sin(phi)) + Sum(f(x), x=13..44)+Product(B[0][i],i=0..1) + 1/x + 2/$^$%^&%$&";
 //		String formula = "Sum(f(x), x=(13..44))";
 		String formula = "1 + 2 * 3";

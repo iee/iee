@@ -134,7 +134,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private IEditorLocation fCursorPositon;
 	
-	private SelectionModel fSelectionModel = new SelectionModel(); 
+	private SelectionModel fSelectionModel; 
 
 	private Field fVerticalScrollOffsetField;
 
@@ -284,6 +284,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fEditorManager = new EditorManager();
 		viewport.add(fEditorManager.getRoot());
 		lightweightSystem.setContents(viewport);
+		
+		fSelectionModel = new SelectionModel(fEditorManager);
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 

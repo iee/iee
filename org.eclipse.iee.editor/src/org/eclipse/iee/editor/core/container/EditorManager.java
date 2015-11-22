@@ -6,7 +6,9 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.iee.core.document.text.INode;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
+import org.eclipse.iee.editor.core.pad.common.text.ITextContainer;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
@@ -24,6 +26,8 @@ public class EditorManager {
 	private ITextEditor<?> fActiveEditor;
 	
 	private Map<IFigure, ITextEditor<?>> fFigureToEditor = Maps.newHashMap();
+	
+	private Map<Object, ITextEditor<?>> fModelToEditor = Maps.newHashMap();
 	
 	public EditorManager() {
 
@@ -131,5 +135,17 @@ public class EditorManager {
 	public void removeEditor(ITextEditor<?> editor) {
 		editor.detach(this);
 	}
+
+	public ITextEditor<?> getEditorByModel(INode model) {
+		return fModelToEditor.get(model);
+	}
+	
+	public void registerModel(Object model, ITextEditor<?> editor) {
+		fModelToEditor.put(model, editor);
+	}
+	
+	public void unregisterModel(Object model) {
+		fModelToEditor.remove(model);
+	}	
 
 }

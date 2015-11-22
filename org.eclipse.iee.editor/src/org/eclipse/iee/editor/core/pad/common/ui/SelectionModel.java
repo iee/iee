@@ -8,6 +8,7 @@ import org.eclipse.iee.core.document.text.OffsetTextLocation;
 import org.eclipse.iee.core.document.text.Span;
 import org.eclipse.iee.core.document.text.Text;
 import org.eclipse.iee.core.document.text.TextStyle;
+import org.eclipse.iee.editor.core.container.EditorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.ITextContainer;
@@ -15,6 +16,7 @@ import org.eclipse.iee.editor.core.pad.common.text.OffsetEditorLocation;
 import org.eclipse.iee.editor.text.edit.ChangeStyleCtx;
 import org.eclipse.iee.editor.text.edit.ChangeStyleVisitor;
 import org.eclipse.iee.editor.text.edit.CompositeCommand;
+import org.eclipse.iee.editor.text.edit.IEditCommand;
 import org.eclipse.iee.editor.text.edit.ReplaceCtx;
 import org.eclipse.iee.editor.text.edit.ReplaceVisitor;
 
@@ -27,7 +29,10 @@ public class SelectionModel {
 	
 	private IEditorLocation fEnd;
 	
-	public SelectionModel() {
+	private EditorManager fEditorManager;
+	
+	public SelectionModel(EditorManager editorManager) {
+		fEditorManager = editorManager;
 	}
 	
 	public SelectionModel(IEditorLocation start, IEditorLocation end) {
@@ -156,11 +161,32 @@ public class SelectionModel {
 		ITextLocation modelEnd = new OffsetTextLocation((Text) normalized.getEnd().getEditor().getModel(), normalized.getEnd().getOffset());
 		CompositeCommand accept = modelStart.findCommonAncestor(modelEnd).accept(new ChangeStyleVisitor(), new ChangeStyleCtx(modelStart, modelEnd) {
 			@Override
-			protected void do_(Span span) {
-				styleProcessor.apply(span.getStyle());
+			protected IEditCommand do_(final Span span) {
+				return new IEditCommand() {
+					
+					@Override
+					public void perform() {
+						styleProcessor.apply(span.getStyle());
+					}
+					
+					@Override
+					public ITextLocation adjust(ITextLocation location) {
+						return location;
+					}
+				};
+				
 			}
 		});
 		accept.perform();
+		
+		modelStart = accept.adjust(modelStart);
+		modelEnd = accept.adjust(modelEnd);
+		
+		fStart = new OffsetEditorLocation((ITextContainer<?>) fEditorManager.getEditorByModel(modelStart.getModel()), modelStart.getOffset());
+		fEnd = new OffsetEditorLocation((ITextContainer<?>) fEditorManager.getEditorByModel(modelEnd.getModel()), modelEnd.getOffset());
+		
+		select();
+		
 	}
 
 	

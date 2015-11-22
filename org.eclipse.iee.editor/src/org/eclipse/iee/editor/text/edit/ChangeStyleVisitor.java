@@ -4,7 +4,6 @@ import org.eclipse.iee.core.document.text.Document;
 import org.eclipse.iee.core.document.text.ICompositeNode;
 import org.eclipse.iee.core.document.text.INode;
 import org.eclipse.iee.core.document.text.INodeVisitor;
-import org.eclipse.iee.core.document.text.ITextLocation;
 import org.eclipse.iee.core.document.text.Span;
 import org.eclipse.iee.core.document.text.Text;
 
@@ -30,34 +29,8 @@ public class ChangeStyleVisitor implements INodeVisitor<ChangeStyleCtx, Composit
 		if (from != 0 || to != text.getText().length()) {
 			ctx.append(new WrapCommand(text, from, to));
 		}
-		ctx.append(new IEditCommand() {
-			
-			@Override
-			public void perform() {
-				ctx.do_((Span) text.getParent());
-			}
-			
-			@Override
-			public ITextLocation adjust(ITextLocation location) {
-				return location;
-			}
-		});
+		ctx.append(ctx.do_((Span) text.getParent()));
 		return ctx.getCommand();
-	}
-
-	private IEditCommand createCommand(final Span span, final ChangeStyleCtx ctx) {
-		return new IEditCommand() {
-			
-			@Override
-			public void perform() {
-				ctx.do_(span);
-			}
-			
-			@Override
-			public ITextLocation adjust(ITextLocation location) {
-				return location;
-			}
-		};
 	}
 
 	@Override
@@ -68,8 +41,8 @@ public class ChangeStyleVisitor implements INodeVisitor<ChangeStyleCtx, Composit
 
 	@Override
 	public CompositeCommand visitSpan(final Span span, final ChangeStyleCtx ctx) {
-		if (ctx.isStarted()) {
-			ctx.append(createCommand(span, ctx));
+		if (ctx.isStarted() && !span.isOrContains(ctx.getTo().getModel())) {
+			ctx.append(ctx.do_(span));
 		} else {
 			traverse(span, ctx);
 		}
@@ -77,14 +50,15 @@ public class ChangeStyleVisitor implements INodeVisitor<ChangeStyleCtx, Composit
 	}
 
 	protected void traverse(ICompositeNode<?> composite, ChangeStyleCtx ctx) {
-		boolean started = false;
+		boolean started = ctx.isStarted();
 		for (INode node : composite.getChildren()) {
 			if (started) {
 				node.accept(this, ctx);
 			} else if (node.isOrContains(ctx.getFrom().getModel())) {
 				started = true;
 				node.accept(this, ctx);
-			} else if (node.isOrContains(ctx.getTo().getModel())) {
+			} 
+			if (node.isOrContains(ctx.getTo().getModel())) {
 				started = false;
 			}
 		}

@@ -6,6 +6,8 @@ public class ReplaceCtx extends BaseCtx {
 
 	private String fText;
 	
+	private boolean started = false;
+	
 	public ReplaceCtx(ITextLocation from, ITextLocation to, String text) {
 		super(from, to);
 		fText = text;
@@ -14,5 +16,13 @@ public class ReplaceCtx extends BaseCtx {
 	public String getText() {
 		return fText;
 	}
-	
+
+	public boolean isStarted() {
+		return started;
+	}
+
+	public void setStarted(boolean started) {
+		this.started = started;
+	}
+
 }

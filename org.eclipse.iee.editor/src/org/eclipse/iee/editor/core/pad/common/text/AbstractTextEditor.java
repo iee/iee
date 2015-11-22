@@ -163,6 +163,10 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 
 	public void attach(EditorManager manager) {
 		setManager(Optional.of(manager));
+		T model = getModel();
+		if (model != null) {
+			manager.registerModel(model, this);
+		}
 		getManager().get().registerVisual(this, getView());
 		for (ITextEditor<?> iTextEditor : fChildren) {
 			iTextEditor.attach(manager);
@@ -182,6 +186,10 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 			iTextEditor.detach(manager);
 		}
 		manager.unregisterVisual(getView());
+		T model = getModel();
+		if (model != null) {
+			manager.unregisterModel(model);
+		}
 		setManager(Optional.<EditorManager> absent());
 	}
 
@@ -194,6 +202,9 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 			if (oldValue != null) {
 				old = oldValue.getValue();
 				if (old != null) {
+					if (fManager.isPresent()) {
+						fManager.get().unregisterModel(old);
+					}
 					doUnbindValue(old);
 				}
 				oldValue.removeObserver(fObserver);
@@ -202,6 +213,9 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 				value.get().addObserver(fObserver);
 				T newV = value.get().getValue();
 				if (newV != null) {
+					if (fManager.isPresent()) {
+						fManager.get().registerModel(newV, this);
+					}
 					doBindValue(newV);
 				}
 				onValueChanged(old, newV);
@@ -259,7 +273,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 		Optional<ITextEditor<?>> startContainer = getChildContaining(start.getEditor());
 		int startindex = startContainer.isPresent() ? children.indexOf(startContainer.get()) : 0;
 		Optional<ITextEditor<?>> endContainer = getChildContaining(end.getEditor());
-		int endindex = endContainer.isPresent() ? children.indexOf(endContainer) + 1 : children.size();
+		int endindex = endContainer.isPresent() ? children.indexOf(endContainer.get()) + 1 : children.size();
 		for(int i = startindex; i < endindex; i++) {
 			children.get(i).unselectBetween(start, end);
 		}

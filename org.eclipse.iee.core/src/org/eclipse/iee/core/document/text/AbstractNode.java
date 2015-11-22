@@ -56,4 +56,9 @@ public abstract class AbstractNode implements INode {
 		return febs;
 	}
 
+	@Override
+	public boolean hasParent(INode node) {
+		return getParent() == node || (getParent() != null && getParent().hasParent(node));
+	}
+
 }

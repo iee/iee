@@ -11,7 +11,7 @@ public abstract class ChangeStyleCtx extends BaseCtx {
 		super(from, to);
 	}
 
-	protected abstract void do_(Span span);
+	protected abstract IEditCommand do_(Span span);
 
 	public boolean isStarted() {
 		return started;

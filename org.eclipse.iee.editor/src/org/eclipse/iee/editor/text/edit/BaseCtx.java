@@ -1,7 +1,7 @@
 package org.eclipse.iee.editor.text.edit;
 
+import org.eclipse.iee.core.document.text.INode;
 import org.eclipse.iee.core.document.text.ITextLocation;
-import org.eclipse.iee.core.document.text.Text;
 
 public class BaseCtx {
 
@@ -16,11 +16,11 @@ public class BaseCtx {
 		fTo = to;
 	}
 
-	public boolean isFrom(Text text) {
+	public boolean isFrom(INode text) {
 		return fFrom.getModel() == text;
 	}
 
-	public boolean isTo(Text text) {
+	public boolean isTo(INode text) {
 		return fTo.getModel() == text;
 	}
 

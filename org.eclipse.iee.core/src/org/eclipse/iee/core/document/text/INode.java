@@ -15,5 +15,7 @@ public interface INode {
 	boolean isOrContains(INode node);
 
 	TextStyle getStyle();
+
+	boolean hasParent(INode span);
 	
 }
