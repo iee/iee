@@ -7,8 +7,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.iee.core.document.text.INode;
-import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
-import org.eclipse.iee.editor.core.pad.common.text.ITextContainer;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;

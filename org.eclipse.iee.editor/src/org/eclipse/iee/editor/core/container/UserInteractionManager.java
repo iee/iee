@@ -49,6 +49,7 @@ public class UserInteractionManager {
 
 	public void moveCaretTo(int offset) {
 		fContainerManager.selectEditor(null);
+		fContainerManager.activateEditor(null);
 		ITextViewerExtension5 ext5 = getExt5();
 		fSourceViewer.getTextWidget().setCaretOffset(ext5.modelOffset2WidgetOffset(offset));
 	}
@@ -95,9 +96,9 @@ public class UserInteractionManager {
 
 			@Override
 			public void verifyKey(VerifyEvent e) {
-				IEditorLocation position = fContainerManager.getCursonPosition();
+				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
 				int action = getAction(e);
-				if (position != null) {
+				if (position.isPresent()) {
 					if (action == SWT.NULL && e.character != 0) {
 						IEditorLocation replace = fContainerManager.getSelectionModel().replace(String.valueOf(e.character));
 						fContainerManager.setCursorPosition(replace);
@@ -207,11 +208,21 @@ public class UserInteractionManager {
 			if (container != null) {
 				Position position = container.getPosition();
 				if (caretMovesForward) {
-					fContainerManager.activateEditor(container.getPad());
+					Pad<?, ?> pad = container.getPad();
+					Optional<IEditorLocation> start = pad.getStart();
+					fContainerManager.activateEditor(pad);
+					if (start.isPresent()) {
+						fContainerManager.setCursorPosition(start.get());
+					}
 					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
 							+ position.getLength()));
 				} else {
-					fContainerManager.activateEditor(container.getPad());
+					Pad<?, ?> pad = container.getPad();
+					Optional<IEditorLocation> end = pad.getEnd();
+					fContainerManager.activateEditor(pad);
+					if (end.isPresent()) {
+						fContainerManager.setCursorPosition(end.get());
+					}
 					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()));
 				}
 				return false;
@@ -365,8 +376,8 @@ public class UserInteractionManager {
 	}
 	
 	private void doColumnNext(boolean selection) {
-		IEditorLocation position = getCursonPosition();
-		Optional<IEditorLocation> next = position.getNext();
+		Optional<IEditorLocation> position = getCursonPosition();
+		Optional<IEditorLocation> next = position.get().getNext();
 		if (next.isPresent()) {
 			if (!selection) {
 				fContainerManager.setCursorPosition(next.get());
@@ -374,7 +385,7 @@ public class UserInteractionManager {
 				fContainerManager.setSelectionEnd(next.get());
 			}
 		} else if (!selection) {
-			ITextEditor<?> editor = getPad(position);
+			ITextEditor<?> editor = getPad(position.get());
 			if (editor != null) {
 				((Pad) editor).moveCaretToContainerTail();
 			}
@@ -390,8 +401,8 @@ public class UserInteractionManager {
 	}
 	
 	private void doColumnPrevious(boolean selection) {
-		IEditorLocation position = getCursonPosition();
-		Optional<IEditorLocation> previous = position.getPrevious();
+		Optional<IEditorLocation> position = getCursonPosition();
+		Optional<IEditorLocation> previous = position.get().getPrevious();
 		if (previous.isPresent()) {
 			if (!selection) {
 				fContainerManager.setCursorPosition(previous.get());
@@ -399,7 +410,7 @@ public class UserInteractionManager {
 				fContainerManager.setSelectionEnd(previous.get());
 			}
 		} else if (!selection) {
-			ITextEditor<?> editor = getPad(position);
+			ITextEditor<?> editor = getPad(position.get());
 			if (editor != null) {
 				((Pad) editor).moveCaretToCurrentPad();
 			}
@@ -410,10 +421,10 @@ public class UserInteractionManager {
 	private void doDeletePrevious() {
 		SelectionModel selectionModel = fContainerManager.getSelectionModel();
 		if (selectionModel.isEmpty()) {
-			IEditorLocation start = getCursonPosition();
-			Optional<IEditorLocation> previous = start.getPrevious();
+			Optional<IEditorLocation> start = getCursonPosition();
+			Optional<IEditorLocation> previous = start.get().getPrevious();
 			if (previous.isPresent()) {
-				fContainerManager.setCursorPosition(new SelectionModel(previous.get(), start).replace(""));
+				fContainerManager.setCursorPosition(new SelectionModel(previous.get(), start.get()).replace(""));
 			} 
 		} else {
 			fContainerManager.setCursorPosition(selectionModel.replace(""));
@@ -423,17 +434,17 @@ public class UserInteractionManager {
 	private void doDeleteNext() {
 		SelectionModel selectionModel = fContainerManager.getSelectionModel();
 		if (selectionModel.isEmpty()) {
-			IEditorLocation start = getCursonPosition();
-			Optional<IEditorLocation> next = start.getNext();
+			Optional<IEditorLocation> start = getCursonPosition();
+			Optional<IEditorLocation> next = start.get().getNext();
 			if (next.isPresent()) {
-				fContainerManager.setCursorPosition(new SelectionModel(start, next.get()).replace(""));
+				fContainerManager.setCursorPosition(new SelectionModel(start.get(), next.get()).replace(""));
 			}
 		} else {
 			fContainerManager.setCursorPosition(selectionModel.replace(""));
 		}
 	}
 	
-	private IEditorLocation getCursonPosition() {
+	private Optional<IEditorLocation> getCursonPosition() {
 		return fContainerManager.getCursonPosition();
 	}
 	

@@ -132,7 +132,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private List<ISelectionChangedListener> fPostSelectionChangedListeners;
 	
-	private IEditorLocation fCursorPositon;
+	private Optional<IEditorLocation> fCursorPositon = Optional.absent();
 	
 	private SelectionModel fSelectionModel; 
 
@@ -928,6 +928,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public void activateEditor(@Nullable ITextEditor<?> editor) {
+		if (editor == null) {
+			fCursorPositon = Optional.absent();
+		}
 		fEditorManager.activateEditor(editor);
 	}
 
@@ -936,7 +939,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fSourceViewer.getTextWidget().forceFocus();
 	}
 
-	public IEditorLocation getCursonPosition() {
+	public Optional<IEditorLocation> getCursonPosition() {
 		return fCursorPositon;
 	}
 
@@ -947,11 +950,11 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public void setCursorPosition(IEditorLocation textLocation) {
 		if (textLocation != null) {
-			fCursorPositon = textLocation;
+			fCursorPositon = Optional.of(textLocation);
 			fSelectionModel.set(textLocation);
 			textLocation.putCaret(getCaret());
 		} else {
-			fCursorPositon = null;
+			fCursorPositon = Optional.absent();
 		}
 	}
 
@@ -964,47 +967,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			}
 		}
 		return editor;
-	}
-
-
-	public ICompositeTextPart getRootTextPart() {
-		return new ICompositeTextPart() {
-			
-			@Override
-			public IEditorLocation getStart() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public Optional<ICompositeTextPart> getParentTextPart() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public IEditorLocation getEnd() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public Optional<ITextPart> getPrevious(ITextPart textPart) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public Optional<ITextPart> getNext(ITextPart textPart) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-	}
-
-	public void addTextPart(ITextPart tablePad) {
-		
-		
 	}
 
 	public void deactivate() {
@@ -1083,7 +1045,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public void setSelectionEnd(IEditorLocation textLocation) {
 		fSelectionModel.setEnd(textLocation);
-		fCursorPositon = textLocation;
+		fCursorPositon = Optional.of(textLocation);
 		textLocation.putCaret(getCaret());
 	}
 
