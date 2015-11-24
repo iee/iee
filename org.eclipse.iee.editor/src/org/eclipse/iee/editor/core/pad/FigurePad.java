@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
@@ -37,7 +38,18 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 			}
 		});
 		
-		fContent.setPreferredSize(new Dimension(300, 200));
+		fContent.addLayoutListener(new LayoutListener.Stub() {
+			
+			@Override
+			public void invalidate(IFigure container) {
+				Dimension preferredSize = container.getPreferredSize(-1, -1);
+				Rectangle bounds = getBounds();
+				bounds.height = preferredSize.height;
+				bounds.width = preferredSize.width;
+				setBounds(bounds);
+			}
+			
+		});
 	}
 
 	@Override

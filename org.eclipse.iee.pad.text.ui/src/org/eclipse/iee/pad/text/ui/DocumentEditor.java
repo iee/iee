@@ -2,9 +2,14 @@ package org.eclipse.iee.pad.text.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.TextUtilities;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.text.FlowFigure;
 import org.eclipse.draw2d.text.FlowPage;
+import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.iee.core.document.text.Document;
 import org.eclipse.iee.core.document.text.EventBusSupport;
 import org.eclipse.iee.core.document.text.IDocumentContent;
@@ -131,7 +136,44 @@ public class DocumentEditor extends AbstractVisualTextEditor<Document, FlowPage>
 
 	@Override
 	protected FlowPage createFigure() {
-		return new FlowPage();
+		return new FlowPage() {
+			@Override
+			public Dimension getPreferredSize(int w, int h) {
+				int width = getWidth(this);
+				System.out.println(width);
+				return super.getPreferredSize(width, h);
+			}
+
+			
+			@Override
+			protected void revalidateBidi(IFigure origin) {
+				super.revalidateBidi(origin);
+				getPreferredSize(-1, -1);
+				revalidate();
+			}
+			
+			private int getWidth(IFigure figure) {
+				List<IFigure> children2 = figure.getChildren();
+				int width = 0;
+				for (IFigure object : children2) {
+					if (object instanceof TextFlow) {
+						TextFlow textFlow = ((TextFlow) object);
+						String[] parts = textFlow.getText().split("\n");
+						String text = parts[0];
+						int iw = TextUtilities.INSTANCE.getTextExtents(text, textFlow.getFont()).width;
+						width += iw;
+						if (parts.length > 1) {
+							break;
+						}
+					} else if (object instanceof FlowFigure) {
+						width += getWidth(object);
+					}
+				}
+				return width;
+			}
+			
+		};
+		
 	}
 	
 }

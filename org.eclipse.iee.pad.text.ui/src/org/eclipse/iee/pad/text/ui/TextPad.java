@@ -2,9 +2,13 @@ package org.eclipse.iee.pad.text.ui;
 
 import java.io.StringWriter;
 
+import org.eclipse.draw2d.AbstractLayout;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.core.document.text.Document;
 import org.eclipse.iee.core.document.text.INode;
 import org.eclipse.iee.core.document.text.NodeVisitor;
@@ -317,7 +321,7 @@ public class TextPad extends FigurePad<TextPart, Figure> implements IMenuContrib
 	@Override
 	protected Figure createFigure() {
 		Figure figure = new Figure();
-		figure.setLayoutManager(new BorderLayout());
+		figure.setLayoutManager(new ToolbarLayout());
 		figure.add(fDocumentEditor.getView().getWrapped(IFigure.class), BorderLayout.CENTER);
 		return figure;
 	}
