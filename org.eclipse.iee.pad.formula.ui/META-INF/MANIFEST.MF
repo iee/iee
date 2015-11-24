@@ -4,8 +4,9 @@ Bundle-Name: Formula UI
 Bundle-SymbolicName: org.eclipse.iee.pad.formula.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: com.google.common.base;version="17.0.0",
- com.google.common.reflect;version="17.0.0",
+Import-Package: com.google.common.base;version="18.0.0",
+ com.google.common.eventbus;version="18.0.0",
+ com.google.common.reflect;version="18.0.0",
  org.antlr.v4.runtime,
  org.antlr.v4.runtime.tree,
  org.eclipse.draw2d,

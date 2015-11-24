@@ -19,7 +19,7 @@ public class FormulaPadFactory implements IPadFactory<FormulaPart> {
 	
 	@Override
 	public FormulaPad create(FormulaPart part, IPadFactoryContext factoryContext) {
-		FormulaPad formulaPad = new FormulaPad(formulaRenderer);
+		FormulaPad formulaPad = new FormulaPad(formulaRenderer, factoryContext.getRenderContext());
 		formulaPad.bindDocumentPart(DefaultObservableValue.fromValue(part));
 		return formulaPad;
 	}

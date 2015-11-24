@@ -1,12 +1,28 @@
 package org.eclipse.iee.pad.formula.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.iee.pad.formula.FormulaPart;
 import org.eclipse.iee.pad.formula.InputPart;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 
 public class InputPad extends AbstractFormulaPad<InputPart> {
 
-	public InputPad(UIFormulaRenderer formulaRenderer) {
-		super(formulaRenderer);
+	private PropertyChangeListener fListener;
+	
+	public InputPad(UIFormulaRenderer formulaRenderer, TextRenderCtx renderCtx) {
+		super(formulaRenderer, renderCtx);
+		fListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if ("variable".equals(evt.getPropertyName())
+						|| "defaultValue".equals(evt.getPropertyName())) {
+					onValueChanged((InputPart) evt.getSource());
+				}
+			}
+		};
 	}
 
 	@Override
@@ -33,17 +49,27 @@ public class InputPad extends AbstractFormulaPad<InputPart> {
 		return expressions.length > 1 ? expressions[1] : "";
 	}
 	
-	@Override
-	protected void onValueChanged(InputPart oldValue, InputPart newValue) {
+	protected void onValueChanged(InputPart part) {
 		String expression = "";
-		if (!newValue.getVariable().isEmpty()) {
-			expression += newValue.getVariable();
+		if (!part.getVariable().isEmpty()) {
+			expression += part.getVariable();
 		}
-		if (!newValue.getDefaultValue().isEmpty()) {
-			expression += "=" + newValue.getDefaultValue();
+		if (!part.getDefaultValue().isEmpty()) {
+			expression += "=" + part.getDefaultValue();
 		}
 		setTranslatingExpression(expression);
 		setOriginalExpression(expression);
+	}
+	
+	@Override
+	protected void doBindValue(InputPart value) {
+		value.addPropertyChangeListener(fListener);
+		onValueChanged(value);
+	}
+	
+	@Override
+	protected void doUnbindValue(InputPart oldValue) {
+		oldValue.removePropertyChangeListener(fListener);
 	}
 	
 }

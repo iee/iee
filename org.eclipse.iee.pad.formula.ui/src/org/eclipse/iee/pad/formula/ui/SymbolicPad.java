@@ -1,8 +1,12 @@
 package org.eclipse.iee.pad.formula.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collection;
 
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.pad.formula.FormulaPart;
 import org.eclipse.iee.pad.formula.SymbolicEngine;
 import org.eclipse.iee.pad.formula.SymbolicPart;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
@@ -17,9 +21,19 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
 	private SymbolicEngine fSymbolicEngine;
 
-	public SymbolicPad(UIFormulaRenderer formulaRenderer) {
-		super(formulaRenderer);
+	private PropertyChangeListener fListener;
+	
+	public SymbolicPad(UIFormulaRenderer formulaRenderer, TextRenderCtx renderCtx) {
+		super(formulaRenderer, renderCtx);
 		fSymbolicEngine = new SymbolicEngine();
+		fListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if ("formula".equals(evt.getPropertyName())) {
+					updateFormula((String) evt.getNewValue());
+				}
+			}
+		};
 	}
 
 	@Override
@@ -28,7 +42,7 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 	}
 
 	public void validateInput() {
-		String text = fDocument.get();
+		String text = getText();
 		fOriginalExpression = text;
 
 		if (SymbolicEngine.validate(text)) {
@@ -42,7 +56,7 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 
 	public void processInput() {
 		if (fIsInputValid) {
-			if (!fDocument.get().equals(fTranslatingExpression)) {
+			if (!getText().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
 				Collection<Pad<?, ?>> following = FormulaPadManager
 						.getFollowingPads(this);
@@ -58,7 +72,8 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 		/* Set formula image */
 		fTexExpression = translateToLatex(fTranslatingExpression);
 		Image image = getFormulaRenderer().getSymbolicImage(fTexExpression);
-		fFormulaImageLabel.setImage(image);
+		
+		updateFormulaImage(image);
 
 		/* Generate code */
 
@@ -94,13 +109,9 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 			image = getFormulaRenderer().getSymbolicImage(latex);
 		}
 		Function updateImage = new Function() {
-
 			@Override
 			public void f() {
-				if (!fLastResultImageLabel.isDisposed()) {
-					fLastResultImageLabel.setImage(image);
-					fParent.pack();
-				}
+				updateLastResult(image);
 			}
 		};
 
@@ -130,9 +141,19 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 	}
 	
 	@Override
-	protected void onValueChanged(SymbolicPart oldValue, SymbolicPart newValue) {
-		setTranslatingExpression(newValue.getFormula());
-		setOriginalExpression(newValue.getFormula());
+	protected void doBindValue(SymbolicPart value) {
+		value.addPropertyChangeListener(fListener);
+		updateFormula(value.getFormula());
+	}
+	
+	@Override
+	protected void doUnbindValue(SymbolicPart oldValue) {
+		oldValue.removePropertyChangeListener(fListener);
+	}
+	
+	private void updateFormula(String formula) {
+		setTranslatingExpression(formula);
+		setOriginalExpression(formula);
 	}
 
 }

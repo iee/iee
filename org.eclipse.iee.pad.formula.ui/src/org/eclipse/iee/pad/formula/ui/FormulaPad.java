@@ -1,5 +1,9 @@
 package org.eclipse.iee.pad.formula.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.pad.formula.FormulaPart;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
@@ -7,8 +11,18 @@ import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
 @SuppressWarnings("unused")
 public class FormulaPad extends AbstractFormulaPad<FormulaPart> {
 
-	public FormulaPad(UIFormulaRenderer formulaRenderer) {
-		super(formulaRenderer);
+	private PropertyChangeListener fListener;
+	
+	public FormulaPad(UIFormulaRenderer formulaRenderer, TextRenderCtx renderCtx) {
+		super(formulaRenderer, renderCtx);
+		fListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if ("formula".equals(evt.getPropertyName())) {
+					updateFormula((String) evt.getNewValue());
+				}
+			}
+		};
 	}
 	
 	@Override
@@ -19,9 +33,19 @@ public class FormulaPad extends AbstractFormulaPad<FormulaPart> {
 	}
 	
 	@Override
-	protected void onValueChanged(FormulaPart oldValue, FormulaPart newValue) {
-		setTranslatingExpression(newValue.getFormula());
-		setOriginalExpression(newValue.getFormula());
+	protected void doBindValue(FormulaPart value) {
+		value.addPropertyChangeListener(fListener);
+		updateFormula(value.getFormula());
+	}
+	
+	@Override
+	protected void doUnbindValue(FormulaPart oldValue) {
+		oldValue.removePropertyChangeListener(fListener);
+	}
+	
+	private void updateFormula(String formula) {
+		setTranslatingExpression(formula);
+		setOriginalExpression(formula);
 	}
 	
 }

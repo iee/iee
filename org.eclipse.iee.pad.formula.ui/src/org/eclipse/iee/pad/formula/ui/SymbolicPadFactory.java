@@ -19,7 +19,7 @@ public class SymbolicPadFactory implements IPadFactory<SymbolicPart> {
 	
 	@Override
 	public SymbolicPad create(SymbolicPart part, IPadFactoryContext factoryContext) {
-		SymbolicPad formulaPad = new SymbolicPad(formulaRenderer);
+		SymbolicPad formulaPad = new SymbolicPad(formulaRenderer, factoryContext.getRenderContext());
 		formulaPad.bindDocumentPart(DefaultObservableValue.fromValue(part));
 		return formulaPad;
 	}

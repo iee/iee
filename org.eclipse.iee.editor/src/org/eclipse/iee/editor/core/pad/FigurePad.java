@@ -72,5 +72,7 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 	
 	@Override
 	public void dispose() {
+		fContainer.getContainerManager().getEditorManager().removeEditor(this);
+		fContainer.getMainFigure().remove(fContent);
 	}
 }
