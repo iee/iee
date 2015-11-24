@@ -140,7 +140,6 @@ public class DocumentEditor extends AbstractVisualTextEditor<Document, FlowPage>
 			@Override
 			public Dimension getPreferredSize(int w, int h) {
 				int width = getWidth(this);
-				System.out.println(width);
 				return super.getPreferredSize(width, h);
 			}
 
