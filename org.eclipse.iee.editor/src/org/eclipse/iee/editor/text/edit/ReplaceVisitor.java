@@ -40,14 +40,16 @@ public class ReplaceVisitor implements INodeVisitor<ReplaceCtx, CompositeCommand
 
 	@Override
 	public CompositeCommand visitText(Text text, ReplaceCtx ctx) {
+		int from = ctx.getFrom().getOffset();
+		int to = ctx.getTo().getOffset();
 		if (ctx.isFrom(text)) {
 			if (ctx.isTo(text)) {
-				ctx.append(new ReplaceText(text, ctx.getFrom().getOffset(), ctx.getTo().getOffset(), ctx.getText()));
+				createReplacement(text, ctx, from, to, ctx.getText());
 			} else {
-				ctx.append(new ReplaceText(text, ctx.getFrom().getOffset(), text.getText().length(), ctx.getText()));
+				createReplacement(text, ctx, from, text.getText().length(), ctx.getText());
 			}
 		} else if (ctx.isTo(text)) {
-			ctx.append(new ReplaceText(text, 0, ctx.getTo().getOffset(), ""));
+			createReplacement(text, ctx, 0, to, "");
 		} else if (ctx.isStarted()) {
 			createCommand(text, ctx);
 		}
@@ -58,6 +60,14 @@ public class ReplaceVisitor implements INodeVisitor<ReplaceCtx, CompositeCommand
 			ctx.setStarted(false);
 		}
 		return ctx.getCommand();
+	}
+
+	private void createReplacement(Text text, ReplaceCtx ctx, int from, int to, String t) {
+		if (t.length() > 0 || from != 0 || to != text.getText().length()) {
+			ctx.append(new ReplaceText(text, from, to, ctx.getText()));
+		} else {
+			createCommand(text, ctx);
+		}
 	}
 
 	@Override
