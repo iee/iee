@@ -23,7 +23,7 @@
 									<source>true</source>
 								</artifact>
 								<artifact>
-									<id>com.google.guava:guava:17.0</id>
+									<id>com.google.guava:guava:18.0</id>
 									<source>true</source>
 								</artifact>
 								<artifact>
