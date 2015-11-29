@@ -30,8 +30,6 @@ import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.pad.Pad;
-import org.eclipse.iee.editor.core.pad.common.text.ICompositeTextPart;
-import org.eclipse.iee.editor.core.pad.common.text.ITextPart;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -53,7 +51,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
@@ -70,6 +67,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Caret;
@@ -294,6 +292,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fDocumentAccess = new DocumentAccess(this);
 
 		TextStyle defaultStyle = new TextStyle();
+		FontData fontData = sourceViewer.getTextWidget().getFont().getFontData()[0];
+		defaultStyle.setFont(fontData.getName());
+		defaultStyle.setFontSize(fontData.getHeight());
 		fRenderCtx = new TextRenderCtx(defaultStyle, new LocalResourceManager(JFaceResources.getResources()));
 		
 		initViewer(sourceViewer);
@@ -440,10 +441,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		if (document != null) {
 			initDocumentListener();
 			fPartitioningManager = new PartitioningManager(new DocumentStructureConfig(), fDocument);
-			List<Container> containers = parseContainersFromDocumentRegion(document, new Region(0, fDocument.getLength()));
-			for (Container container : containers) {
-				fContainers.add(container);
-			}
+//			List<Container> containers = parseContainersFromDocumentRegion(document, new Region(0, fDocument.getLength()));
+//			for (Container container : containers) {
+//				fContainers.add(container);
+//			}
 		}
 	}
 

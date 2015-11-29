@@ -99,11 +99,13 @@ public class UserInteractionManager {
 				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
 				int action = getAction(e);
 				if (position.isPresent()) {
-					if (action == SWT.NULL && e.character != 0) {
-						IEditorLocation replace = fContainerManager.getSelectionModel().replace(String.valueOf(e.character));
-						fContainerManager.setCursorPosition(replace);
-					} else {
-						doAction(action);
+					if (!position.get().getEditor().handleKey(e)) {
+						if (action == SWT.NULL && e.character != 0) {
+							IEditorLocation replace = fContainerManager.getSelectionModel().replace(String.valueOf(e.character));
+							fContainerManager.setCursorPosition(replace);
+						} else {
+							doAction(action);
+						}
 					}
 					e.doit = false;
 				} else {

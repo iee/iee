@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
+import org.eclipse.swt.events.VerifyEvent;
 
 import com.google.common.base.Optional;
 
@@ -52,5 +53,7 @@ public interface ITextEditor<M> {
 	void unselectBetween(IEditorLocation start, IEditorLocation end);
 
 	List<ITextEditor<?>> getChildren();
+
+	boolean handleKey(VerifyEvent e);
 
 }

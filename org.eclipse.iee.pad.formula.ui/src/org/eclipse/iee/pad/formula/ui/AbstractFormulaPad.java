@@ -2,7 +2,6 @@ package org.eclipse.iee.pad.formula.ui;
 
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Collection;
 
 import org.eclipse.draw2d.Figure;
@@ -35,6 +34,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -305,30 +305,6 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 		FileMessager.getInstance().addFileMessageListener(fFileMessageListener,
 				getContainer().getContainerManager().getStoragePath());
 
-//		fViewer.getControl().addKeyListener(new KeyAdapter() {
-//			public void keyPressed(KeyEvent e) {
-//				switch (e.keyCode) {
-//				case SWT.CR:
-//					e.doit = false;
-//					switchToResultView();
-//					moveCaretToContainerTail();
-//					break;
-//				case SWT.ESC:
-//					switchToResultView();
-//					moveCaretToContainerTail();
-//					break;
-//				case SWT.ARROW_UP:
-//					moveCaretToCurrentPad();
-//					focusOnMainEditor();
-//					break;
-//				case SWT.ARROW_DOWN:
-//					moveCaretToCurrentPad();
-//					focusOnMainEditor();
-//					break;
-//				}
-//			}
-//		});
-
 //		fViewer.getTextWidget().addMouseWheelListener(new MouseWheelListener() {
 //
 //			@Override
@@ -395,4 +371,19 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 		return fTexExpression;
 	}
 
+	@Override
+	public boolean handleKey(VerifyEvent e) {
+		switch (e.keyCode) {
+		case SWT.CR:
+			switchToResultView();
+			moveCaretToContainerTail();
+			return true;
+		case SWT.ESC:
+			switchToResultView();
+			moveCaretToContainerTail();
+			return true;
+		}
+		return super.handleKey(e);
+	}
+	
 }

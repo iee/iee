@@ -11,6 +11,7 @@ import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.container.EditorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.container.IView;
+import org.eclipse.swt.events.VerifyEvent;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -312,6 +313,14 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 
 	protected void setManager(Optional<EditorManager> manager) {
 		fManager = manager;
+	}
+	
+	@Override
+	public boolean handleKey(VerifyEvent e) {
+		if (getParent().isPresent()) {
+			return getParent().get().handleKey(e);
+		}
+		return false;
 	}
 
 }
