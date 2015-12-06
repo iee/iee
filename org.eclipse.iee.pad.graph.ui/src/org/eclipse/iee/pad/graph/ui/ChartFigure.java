@@ -870,7 +870,7 @@ public class ChartFigure extends Figure implements ChartChangeListener,
     }
 
     @Override
-    public void paint(Graphics graphics) {
+    protected void paintClientArea(Graphics graphics) {
         // first determine the size of the chart rendering area...
         // TODO workout insets for SWT
         org.eclipse.draw2d.geometry.Rectangle available = getBounds();
@@ -911,7 +911,7 @@ public class ChartFigure extends Figure implements ChartChangeListener,
         Graphics2D graphics2d = renderer.getGraphics2D();
         
         this.chart.draw(graphics2d, new Rectangle2D.Double(0, 0,
-                getBounds().width, getBounds().height), getAnchor(),
+                bounds.width, bounds.height), getAnchor(),
                 this.info);
         
         renderer.render(graphics);
