@@ -13,6 +13,7 @@ import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.ITextContainer;
 import org.eclipse.iee.editor.core.pad.common.text.OffsetEditorLocation;
+import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.text.edit.ChangeStyleCtx;
 import org.eclipse.iee.editor.text.edit.ChangeStyleVisitor;
 import org.eclipse.iee.editor.text.edit.CompositeCommand;
@@ -144,12 +145,21 @@ public class SelectionModel {
 		Verify.verifyNotNull(fEnd);
 		SelectionModel normalized = normalize();
 		
-		ITextLocation modelStart = new OffsetTextLocation((Text) normalized.getStart().getEditor().getModel(), normalized.getStart().getOffset());
-		ITextLocation modelEnd = new OffsetTextLocation((Text) normalized.getEnd().getEditor().getModel(), normalized.getEnd().getOffset());
+		IEditorLocation start = normalized.getStart();
+		ITextEditor<?> startEditor = start.getEditor();
+		IEditorLocation end = normalized.getEnd();
+		ITextEditor<?> endEditor = end.getEditor();
+		if (startEditor == endEditor && startEditor instanceof TextPartEditor) {
+			TextPartEditor textPartEditor = (TextPartEditor) startEditor;
+			textPartEditor.replace(start.getOffset(), end.getOffset(), text);
+			return new OffsetEditorLocation((ITextContainer<?>) end.getEditor(), start.getOffset() + end.getOffset() - start.getOffset() + text.length());
+		}
+		ITextLocation modelStart = new OffsetTextLocation((Text) startEditor.getModel(), start.getOffset());
+		ITextLocation modelEnd = new OffsetTextLocation((Text) endEditor.getModel(), end.getOffset());
 		CompositeCommand accept = modelStart.findCommonAncestor(modelEnd).accept(new ReplaceVisitor(), new ReplaceCtx(modelStart, modelEnd, text));
 		accept.perform();
 		modelEnd = accept.adjust(modelEnd);
-		return new OffsetEditorLocation((ITextContainer<?>) normalized.getEnd().getEditor(), modelEnd.getOffset());
+		return new OffsetEditorLocation((ITextContainer<?>) end.getEditor(), modelEnd.getOffset());
 	}
 	
 	public void applyStyle(final StyleProcessor styleProcessor) {

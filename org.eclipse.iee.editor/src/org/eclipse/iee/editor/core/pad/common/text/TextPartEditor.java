@@ -11,6 +11,7 @@ import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> implements ITextContainer<String> {
@@ -30,7 +32,7 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 
 	private FlowPage fFlowPage;
 
-	private TextRenderCtx fRenderCtx;
+	private Optional<TextRenderCtx> fRenderCtx = Optional.absent();
 	
 	public TextPartEditor() {
 		fText = new Document();
@@ -38,7 +40,6 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 	
 	public TextPartEditor(TextRenderCtx renderCtx) {
 		fText = new Document();
-		this.fRenderCtx = renderCtx;
 	}
 
 	protected FlowPage createFigure() {
@@ -51,7 +52,7 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 			}
 		};
 		fTextFlow = new TextFlow(fText.get());
-		fTextFlow.setFont(fRenderCtx.getFont(Optional.<TextStyle> absent()));
+		fTextFlow.setFont(getRenderCtx().getFont(Optional.<TextStyle> absent()));
 		fTextFlow.setLayoutManager(new ParagraphTextLayout(fTextFlow, ParagraphTextLayout.WORD_WRAP_SOFT));
 		fFlowPage.add(fTextFlow);
 		
@@ -87,6 +88,15 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 		return fFlowPage;
 	}
 	
+	private TextRenderCtx getRenderCtx() {
+		return fRenderCtx.or(new Supplier<TextRenderCtx>() {
+			@Override
+			public TextRenderCtx get() {
+				return new TextRenderCtx(new TextStyle(), JFaceResources.getResources());
+			}
+		});
+	}
+
 	private String getVisibleText(String s) {
 		if (!Strings.isNullOrEmpty(s)) {
 			return s;
@@ -190,5 +200,5 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 	public void unselectBetween(IEditorLocation start, IEditorLocation end) {
 		fTextFlow.setSelection(-1, -1);
 	}
-	
+
 }
