@@ -95,34 +95,38 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 		if (document != null && (source instanceof INode) && ((INode)source).hasParent(document)) {
 			fTexExpression = getText();
 			
-			validateInput();
-			
-			removeFormulaHover();
-			
-			Image image = createImage(fTexExpression);
-			if (image == null) {
-				fTexExpression = fLastValidText;
-				image = createImage(fTexExpression);
-			}
-			
-			fHoverShell = new ImageFigure(image);
-			fHoverShell.setBorder(new LineBorder(1));
-			// hack to paint hover image after widgets size
-			// recalculation.
-			Display.getCurrent().asyncExec(new Runnable() {
-				public void run() {
-					if (fHoverShell != null) {
-						Rectangle bounds = getBounds();
-						getContainer().getFeedbackFigure().add(
-								fHoverShell,
-								new org.eclipse.draw2d.geometry.Rectangle(bounds.x + 5, bounds.y + bounds.height + 5, -1, -1)
-								);
-					}
-				}
-			});
+			updateHover();
 			
 		}
 			
+	}
+
+	private void updateHover() {
+		validateInput();
+		
+		removeFormulaHover();
+		
+		Image image = createImage(fTexExpression);
+		if (image == null) {
+			fTexExpression = fLastValidText;
+			image = createImage(fTexExpression);
+		}
+		
+		fHoverShell = new ImageFigure(image);
+		fHoverShell.setBorder(new LineBorder(1));
+		// hack to paint hover image after widgets size
+		// recalculation.
+		Display.getCurrent().asyncExec(new Runnable() {
+			public void run() {
+				if (fHoverShell != null) {
+					Rectangle bounds = getBounds();
+					getContainer().getFeedbackFigure().add(
+							fHoverShell,
+							new org.eclipse.draw2d.geometry.Rectangle(bounds.x + 5, bounds.y + bounds.height + 5, -1, -1)
+							);
+				}
+			}
+		});
 	}
 
 	protected String getText() {
@@ -195,6 +199,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 		Figure figure = getFigure();
 		figure.removeAll();
 		figure.add(fDocumentEditor.getFigure());
+		updateHover();
 	}
 
 	public void toggleFormulaImage() {
