@@ -215,17 +215,19 @@ public class UserInteractionManager {
 					fContainerManager.activateEditor(pad);
 					if (start.isPresent()) {
 						fContainerManager.setCursorPosition(start.get());
+					} else {
+						fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
+								+ position.getLength()));
 					}
-					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()
-							+ position.getLength()));
 				} else {
 					Pad<?, ?> pad = container.getPad();
 					Optional<IEditorLocation> end = pad.getEnd();
 					fContainerManager.activateEditor(pad);
 					if (end.isPresent()) {
 						fContainerManager.setCursorPosition(end.get());
+					} else {
+						fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()));
 					}
-					fSourceViewer.getTextWidget().setCaretOffset(getExt5().modelOffset2WidgetOffset(position.getOffset()));
 				}
 				return false;
 			}

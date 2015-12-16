@@ -152,7 +152,7 @@ public class SelectionModel {
 		if (startEditor == endEditor && startEditor instanceof TextPartEditor) {
 			TextPartEditor textPartEditor = (TextPartEditor) startEditor;
 			textPartEditor.replace(start.getOffset(), end.getOffset(), text);
-			return new OffsetEditorLocation((ITextContainer<?>) end.getEditor(), start.getOffset() + end.getOffset() - start.getOffset() + text.length());
+			return new OffsetEditorLocation((ITextContainer<?>) end.getEditor(), start.getOffset() + text.length());
 		}
 		ITextLocation modelStart = new OffsetTextLocation((Text) startEditor.getModel(), start.getOffset());
 		ITextLocation modelEnd = new OffsetTextLocation((Text) endEditor.getModel(), end.getOffset());

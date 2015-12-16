@@ -21,6 +21,7 @@ import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.FigurePad;
 import org.eclipse.iee.editor.core.pad.Pad;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessageEvent;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
@@ -384,6 +385,12 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 			return true;
 		}
 		return super.handleKey(e);
+	}
+	
+
+	@Override
+	public Optional<IEditorLocation> getTextLocation(int x, int y) {
+		return fDocumentEditor.getStart();
 	}
 	
 }
