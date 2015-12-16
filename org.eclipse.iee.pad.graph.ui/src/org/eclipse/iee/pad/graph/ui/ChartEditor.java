@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
@@ -66,7 +67,9 @@ public class ChartEditor extends AbstractVisualTextEditor<GraphModel, ChartFigur
 
 	@Override
 	protected ChartFigure createFigure() {
-		return new ChartFigure(getChart(), fShellProvider);
+		ChartFigure chartFigure = new ChartFigure(getChart(), fShellProvider);
+		chartFigure.setPreferredSize(new Dimension(500, 250));
+		return chartFigure;
 	}
 
 	public JFreeChart createChart() {
