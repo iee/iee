@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.antlr.v4.runtime.misc.Nullable;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.draw2d.AbstractHintLayout;
+import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -143,6 +144,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	private TextRenderCtx fRenderCtx;
 
 	private IShellProvider fShellProvider;
+
+	private AncestorListener fAncestorListener;
 
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
@@ -307,6 +310,13 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException e1) {
 			throw Throwables.propagate(e1);
 		}
+		
+		fAncestorListener = new AncestorListener.Stub()  {
+			@Override
+			public void ancestorMoved(IFigure source) {
+				fCursorPositon.get().putCaret(getCaret());
+			}
+		};
 	}
 	
 	public org.eclipse.draw2d.geometry.Point getViewLocation() {
@@ -951,9 +961,21 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public void setCursorPosition(IEditorLocation textLocation) {
 		if (textLocation != null) {
-			fCursorPositon = Optional.of(textLocation);
 			fSelectionModel.set(textLocation);
+		}
+		setCursorIntl(textLocation);
+	}
+
+	private void setCursorIntl(IEditorLocation textLocation) {
+		if (fCursorPositon.isPresent()) {
+			IFigure wrapped = fCursorPositon.get().getEditor().getView().getWrapped(IFigure.class);
+			wrapped.removeAncestorListener(fAncestorListener);
+		}
+		if (textLocation != null) {
+			fCursorPositon = Optional.of(textLocation);
 			textLocation.putCaret(getCaret());
+			IFigure wrapped = textLocation.getEditor().getView().getWrapped(IFigure.class);
+			wrapped.addAncestorListener(fAncestorListener);
 		} else {
 			fCursorPositon = Optional.absent();
 		}
@@ -1046,8 +1068,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public void setSelectionEnd(IEditorLocation textLocation) {
 		fSelectionModel.setEnd(textLocation);
-		fCursorPositon = Optional.of(textLocation);
-		textLocation.putCaret(getCaret());
+		setCursorIntl(textLocation);
 	}
 
 	public Shell getShell() {

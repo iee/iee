@@ -4,10 +4,13 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
+import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.text.Document;
 import org.eclipse.iee.core.document.text.EventBusSupport;
@@ -80,12 +83,20 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 	private ImageFigure fFormulaFigure = new ImageFigure();
 	private ImageFigure fResultFigure = new ImageFigure();
 
+	private AncestorListener.Stub fAncestorListener;
+
 	public AbstractFormulaPad(UIFormulaRenderer formulaRenderer, TextRenderCtx renderCtx) {
 		fFormulaRenderer = formulaRenderer;
 		fRenderCtx = renderCtx;
 		fDocumentEditor = new DocumentEditor(renderCtx);
 		addEditor(fDocumentEditor);
 		EventBusSupport.getDefault().register(this);
+		fAncestorListener = new AncestorListener.Stub() {
+			@Override
+			public void ancestorMoved(IFigure ancestor) {
+				updateHover();
+			}
+		};
 	}
 	
 	@Subscribe
@@ -198,12 +209,16 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 	public void toggleInputText() {
 		Figure figure = getFigure();
 		figure.removeAll();
-		figure.add(fDocumentEditor.getFigure());
+		FlowPage editorFigure = fDocumentEditor.getFigure();
+		editorFigure.addAncestorListener(fAncestorListener);
+		figure.add(editorFigure);
 		updateHover();
 	}
 
 	public void toggleFormulaImage() {
 		Figure figure = getFigure();
+		FlowPage editorFigure = fDocumentEditor.getFigure();
+		editorFigure.removeAncestorListener(fAncestorListener);
 		toggleFormulaFigure(figure);
 	}
 
