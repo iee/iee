@@ -234,6 +234,20 @@ final class IeeExportOperation implements IRunnableWithProgress {
 						}
 					});
 				}
+				final IFolder osgiInfFolder = iProject.getFolder("OSGI-INF");
+				if (osgiInfFolder.exists()) {
+					osgiInfFolder.accept(new IResourceVisitor() {
+						
+						@Override
+						public boolean visit(IResource resource) throws CoreException {
+							if (resource.getType() == IResource.FILE) {
+								final IFile file = (IFile) resource;
+								addResource(export, root, file);
+							}
+							return true;
+						}
+					});
+				}
 				final IFolder iconsFolder = iProject.getFolder("icons");
 				if (iconsFolder.exists()) {
 					iconsFolder.accept(new IResourceVisitor() {
