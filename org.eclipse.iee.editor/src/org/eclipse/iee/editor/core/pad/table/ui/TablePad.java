@@ -14,6 +14,7 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.FigurePad;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
@@ -180,6 +181,7 @@ public class TablePad extends FigurePad<TablePart, IFigure> {
 			for (int j = 0; j < documentPart.getColumnCount(); j++) {
 				TableCell cell = documentPart.getCell(i, j);
 				TableCellEditor tableCellEditor = new TableCellEditor();
+				tableCellEditor.setValue(Optional.of(DefaultObservableValue.fromValue(cell)));
 				addCellEditor(tableCellEditor);
 			}
 		}
@@ -212,6 +214,7 @@ public class TablePad extends FigurePad<TablePart, IFigure> {
 
 	private void createColumn(Figure table, TableColumn column) {
 		TableColumnEditor tableCellEditor = new TableColumnEditor();
+		tableCellEditor.setValue(Optional.of(DefaultObservableValue.fromValue(column)));
 		addColumnEditor(tableCellEditor);
 	}
 
