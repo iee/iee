@@ -4,10 +4,18 @@ import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
 
 public class EventBusSupport {
 	
-	private static EventBus fDefaultEventBus = new EventBus();
+	private static EventBus fDefaultEventBus = new EventBus(new SubscriberExceptionHandler() {
+		
+		@Override
+		public void handleException(Throwable exception, SubscriberExceptionContext context) {
+			exception.printStackTrace(System.err);
+		}
+	});
 	
 	public static EventBus getDefault() {
 		return fDefaultEventBus;

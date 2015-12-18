@@ -23,9 +23,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Translatable;
+import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
+import org.eclipse.iee.core.document.text.ITextLocation;
 import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
@@ -84,7 +86,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 
-public class ContainerManager extends EventManager implements IPostSelectionProvider {
+public class ContainerManager extends EventManager implements IPostSelectionProvider, ICursorManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ContainerManager.class);
@@ -146,6 +148,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	private IShellProvider fShellProvider;
 
 	private AncestorListener fAncestorListener;
+	
+	private Runnable fCaretTask;
+	
+	private IEditorLocation fEditorLocation;
 
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
@@ -286,7 +292,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		viewport.add(fEditorManager.getRoot());
 		lightweightSystem.setContents(viewport);
 		
-		fSelectionModel = new SelectionModel(fEditorManager);
+		fSelectionModel = new SelectionModel(fEditorManager, this);
 		
 		fContainers = new TreeSet<Container>(fContainerComparator);
 
@@ -314,7 +320,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fAncestorListener = new AncestorListener.Stub()  {
 			@Override
 			public void ancestorMoved(IFigure source) {
-				fCursorPositon.get().putCaret(getCaret());
+				if (fCursorPositon.isPresent()) {
+					putCursor(fCursorPositon.get());
+				}
 			}
 		};
 	}
@@ -963,10 +971,25 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		if (textLocation != null) {
 			fSelectionModel.set(textLocation);
 		}
-		setCursorIntl(textLocation);
+		putCursor(textLocation);
+	}
+	
+	@Override
+	public void putCursor(IEditorLocation textLocation) {
+		fEditorLocation = textLocation;
+		if (fCaretTask == null) {
+			fCaretTask = new Runnable() {
+					public void run() {
+						fCaretTask = null;
+						putCaretIntl(fEditorLocation);
+						fEditorLocation = null;
+					}
+				};
+			Display.getDefault().asyncExec(fCaretTask);
+		}
 	}
 
-	private void setCursorIntl(IEditorLocation textLocation) {
+	private void putCaretIntl(IEditorLocation textLocation) {
 		if (fCursorPositon.isPresent()) {
 			IFigure wrapped = fCursorPositon.get().getEditor().getView().getWrapped(IFigure.class);
 			wrapped.removeAncestorListener(fAncestorListener);
@@ -1068,7 +1091,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	public void setSelectionEnd(IEditorLocation textLocation) {
 		fSelectionModel.setEnd(textLocation);
-		setCursorIntl(textLocation);
+		putCursor(textLocation);
 	}
 
 	public Shell getShell() {

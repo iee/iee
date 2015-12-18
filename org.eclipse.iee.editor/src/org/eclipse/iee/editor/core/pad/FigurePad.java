@@ -1,6 +1,8 @@
 package org.eclipse.iee.editor.core.pad;
 
 import java.awt.Rectangle;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureListener;
@@ -9,10 +11,15 @@ import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> extends Pad<T, F> {
 
 	private IFigure fContent;
+	
+	private Set<IFigure> fPosponedFigures = new HashSet<>();
+	
+	private Runnable fPostponedTask; 
 	
 	@Override
 	public void attachContainer(Container container)  {
@@ -42,11 +49,26 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 			
 			@Override
 			public void invalidate(IFigure container) {
-				Dimension preferredSize = container.getPreferredSize(-1, -1);
-				Rectangle bounds = getBounds();
-				bounds.height = preferredSize.height;
-				bounds.width = preferredSize.width;
-				setBounds(bounds);
+				//postpone processing because FlowFigure initialized to get preferred size only after "add" method finished
+				fPosponedFigures.add(container);
+				if (fPostponedTask == null) {
+					fPostponedTask = new Runnable() {
+						@Override
+						public void run() {
+							fPostponedTask = null;
+							Set<IFigure> figures = new HashSet<>(fPosponedFigures);
+							fPosponedFigures = new HashSet<>();
+							for (IFigure iFigure : figures) {
+								Dimension preferredSize = iFigure.getPreferredSize(-1, -1);
+								Rectangle bounds = getBounds();
+								bounds.height = preferredSize.height;
+								bounds.width = preferredSize.width;
+								setBounds(bounds);								
+							}
+						}
+					};
+					Display.getDefault().asyncExec(fPostponedTask);
+				}
 			}
 			
 		});

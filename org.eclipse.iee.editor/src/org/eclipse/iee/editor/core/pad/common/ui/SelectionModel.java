@@ -9,6 +9,7 @@ import org.eclipse.iee.core.document.text.Span;
 import org.eclipse.iee.core.document.text.Text;
 import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.container.EditorManager;
+import org.eclipse.iee.editor.core.container.ICursorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.ITextContainer;
@@ -32,8 +33,11 @@ public class SelectionModel {
 	
 	private EditorManager fEditorManager;
 	
-	public SelectionModel(EditorManager editorManager) {
+	private ICursorManager fCursorManager;
+	
+	public SelectionModel(EditorManager editorManager, ICursorManager cursorManager) {
 		fEditorManager = editorManager;
+		fCursorManager = cursorManager;
 	}
 	
 	public SelectionModel(IEditorLocation start, IEditorLocation end) {
@@ -162,7 +166,7 @@ public class SelectionModel {
 		return new OffsetEditorLocation((ITextContainer<?>) end.getEditor(), modelEnd.getOffset());
 	}
 	
-	public void applyStyle(final StyleProcessor styleProcessor) {
+	public IEditorLocation applyStyle(final StyleProcessor styleProcessor) {
 		Verify.verifyNotNull(fStart);
 		Verify.verifyNotNull(fEnd);
 		SelectionModel normalized = normalize();
@@ -192,11 +196,14 @@ public class SelectionModel {
 		modelStart = accept.adjust(modelStart);
 		modelEnd = accept.adjust(modelEnd);
 		
-		fStart = new OffsetEditorLocation((ITextContainer<?>) fEditorManager.getEditorByModel(modelStart.getModel()), modelStart.getOffset());
-		fEnd = new OffsetEditorLocation((ITextContainer<?>) fEditorManager.getEditorByModel(modelEnd.getModel()), modelEnd.getOffset());
+		ITextContainer<?> editorStart = (ITextContainer<?>) Verify.verifyNotNull(fEditorManager.getEditorByModel(modelStart.getModel()));
+		fStart = new OffsetEditorLocation(editorStart, modelStart.getOffset());
+		ITextContainer<?> editorEnd = (ITextContainer<?>) Verify.verifyNotNull(fEditorManager.getEditorByModel(modelEnd.getModel()));
+		fEnd = new OffsetEditorLocation(editorEnd, modelEnd.getOffset());
 		
 		select();
-		
+		fCursorManager.putCursor(fEnd);
+		return fEnd;
 	}
 
 	

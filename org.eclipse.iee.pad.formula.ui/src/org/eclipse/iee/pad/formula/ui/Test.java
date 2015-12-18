@@ -13,6 +13,7 @@ import org.eclipse.iee.core.document.text.Text;
 import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.container.EditorManager;
+import org.eclipse.iee.editor.core.container.ICursorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
@@ -54,7 +55,13 @@ public class Test {
 	    	}
 	    };
 		lws.setContents(editorManager.getRoot());
-		fSelectionModel = new SelectionModel(editorManager);
+		fSelectionModel = new SelectionModel(editorManager, new ICursorManager() {
+			
+			@Override
+			public void putCursor(IEditorLocation textLocation) {
+				updateCaret(shell, textLocation);
+			}
+		});
 //	    String formula = "k_D=h_2^2 + (2*c*cos(phi)-2*sigma_0*sin(phi))/(sigma_1-sigma_3+(sigma_1+sigma_3-2*sigma_0)*sin(phi)) + Sum(f(x), x=13..44)+Product(B[0][i],i=0..1) + 1/x + 2/$^$%^&%$&";
 //		String formula = "Sum(f(x), x=(13..44))";
 		String formula = "1 + 2 * 3";
@@ -210,8 +217,12 @@ public class Test {
 	}
 	
 	public static void setPosition(final Shell shell, Optional<IEditorLocation> previous) {
-		(fTextLocation = previous.get()).putCaret(getCaret(shell));
+		updateCaret(shell, previous.get());
 		fSelectionModel.set(previous.get());
+	}
+
+	private static void updateCaret(final Shell shell, IEditorLocation previous) {
+		(fTextLocation = previous).putCaret(getCaret(shell));
 	}
 	
 	public static void appendSelection(final Shell shell, IEditorLocation to) {

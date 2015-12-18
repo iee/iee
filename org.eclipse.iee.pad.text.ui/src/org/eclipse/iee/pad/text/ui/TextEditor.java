@@ -24,12 +24,6 @@ import com.google.common.eventbus.Subscribe;
 
 public class TextEditor extends AbstractVisualTextEditor<Text, TextFlow> implements ITextContainer<Text> {
 
-	private Runnable fCaretTask;
-	
-	private int fNewCaretOffset;
-	
-	private Caret fNewCaret;
-
 	private TextRenderCtx fRenderCtx;
 
 	private PropertyChangeListener fStyleListener;
@@ -84,24 +78,11 @@ public class TextEditor extends AbstractVisualTextEditor<Text, TextFlow> impleme
 		}
 	}
 	
-	public void updateCaret(final Caret caret,
-			final int offset) {
-		if (fCaretTask == null) {
-			fCaretTask = new Runnable() {
-					public void run() {
-						CaretInfo caretPlacement = getFigure().getCaretPlacement(fNewCaretOffset, fNewCaretOffset == getLength());
-						fNewCaret.setVisible(true);
-						fNewCaret.setSize(1, caretPlacement.getHeight());
-						fNewCaret.setLocation(caretPlacement.getX(), caretPlacement.getY());
-						fNewCaret = null;
-						fNewCaretOffset = -1;
-						fCaretTask = null;
-					}
-				};
-			Display.getDefault().asyncExec(fCaretTask);
-		}
-		fNewCaretOffset = offset;
-		fNewCaret = caret;
+	public void updateCaret(final Caret caret, final int offset) {
+		CaretInfo caretPlacement = getFigure().getCaretPlacement(offset, offset == getLength());
+		caret.setVisible(true);
+		caret.setSize(1, caretPlacement.getHeight());
+		caret.setLocation(caretPlacement.getX(), caretPlacement.getY());
 	}
 	
 	public CaretInfo getCaretInfo(final int offset, final boolean b) {
