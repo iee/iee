@@ -3,6 +3,8 @@ package org.eclipse.iee.editor.text.edit;
 import org.eclipse.iee.core.document.text.ITextLocation;
 import org.eclipse.iee.core.document.text.Span;
 
+import com.google.common.base.Supplier;
+
 public abstract class ChangeStyleCtx extends BaseCtx {
 
 	private boolean started = false;
@@ -11,8 +13,6 @@ public abstract class ChangeStyleCtx extends BaseCtx {
 		super(from, to);
 	}
 
-	protected abstract IEditCommand do_(Span span);
-
 	public boolean isStarted() {
 		return started;
 	}
@@ -20,5 +20,7 @@ public abstract class ChangeStyleCtx extends BaseCtx {
 	public void setStarted(boolean started) {
 		this.started = started;
 	}
+
+	protected abstract IEditCommand do_(Supplier<Span> supplier);
 	
 }

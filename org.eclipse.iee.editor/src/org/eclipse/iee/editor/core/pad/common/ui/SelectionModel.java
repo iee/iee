@@ -23,6 +23,7 @@ import org.eclipse.iee.editor.text.edit.ReplaceCtx;
 import org.eclipse.iee.editor.text.edit.ReplaceVisitor;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import com.google.common.base.Verify;
 
 public class SelectionModel {
@@ -175,12 +176,12 @@ public class SelectionModel {
 		ITextLocation modelEnd = new OffsetTextLocation((Text) normalized.getEnd().getEditor().getModel(), normalized.getEnd().getOffset());
 		CompositeCommand accept = modelStart.findCommonAncestor(modelEnd).accept(new ChangeStyleVisitor(), new ChangeStyleCtx(modelStart, modelEnd) {
 			@Override
-			protected IEditCommand do_(final Span span) {
+			protected IEditCommand do_(final Supplier<Span> span) {
 				return new IEditCommand() {
 					
 					@Override
 					public void perform() {
-						styleProcessor.apply(span.getStyle());
+						styleProcessor.apply(span.get().getStyle());
 					}
 					
 					@Override

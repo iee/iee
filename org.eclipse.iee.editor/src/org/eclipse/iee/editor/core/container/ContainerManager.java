@@ -972,9 +972,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	@Override
 	public void putCursor(IEditorLocation textLocation) {
-		System.out.println("+" + textLocation.getOffset());
 		final Optional<IEditorLocation> oldLocation = fCursorPositon;
-		fCursorPositon = Optional.of(textLocation);
+		fCursorPositon = Optional.fromNullable(textLocation);
 		if (fCaretTask == null) {
 			fCaretTask = new Runnable() {
 					public void run() {

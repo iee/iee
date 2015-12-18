@@ -7,6 +7,8 @@ import org.eclipse.iee.core.document.text.INodeVisitor;
 import org.eclipse.iee.core.document.text.Span;
 import org.eclipse.iee.core.document.text.Text;
 
+import com.google.common.base.Supplier;
+
 public class ChangeStyleVisitor implements INodeVisitor<ChangeStyleCtx, CompositeCommand>{
 
 	@Override
@@ -29,7 +31,12 @@ public class ChangeStyleVisitor implements INodeVisitor<ChangeStyleCtx, Composit
 		if (from != 0 || to != text.getText().length()) {
 			ctx.append(new WrapCommand(text, from, to));
 		}
-		ctx.append(ctx.do_((Span) text.getParent()));
+		ctx.append(ctx.do_(new Supplier<Span>() {
+			@Override
+			public Span get() {
+				return (Span) text.getParent();
+			}
+		}));
 		return ctx.getCommand();
 	}
 
@@ -42,7 +49,12 @@ public class ChangeStyleVisitor implements INodeVisitor<ChangeStyleCtx, Composit
 	@Override
 	public CompositeCommand visitSpan(final Span span, final ChangeStyleCtx ctx) {
 		if (ctx.isStarted() && !span.isOrContains(ctx.getTo().getModel())) {
-			ctx.append(ctx.do_(span));
+			ctx.append(ctx.do_(new Supplier<Span>() {
+				@Override
+				public Span get() {
+					return span;
+				}
+			}));
 		} else {
 			traverse(span, ctx);
 		}
