@@ -23,11 +23,9 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Translatable;
-import org.eclipse.draw2d.text.CaretInfo;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.parser.IDocumentParser;
-import org.eclipse.iee.core.document.text.ITextLocation;
 import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.container.partitioning.PartitioningManager;
@@ -151,8 +149,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private Runnable fCaretTask;
 	
-	private IEditorLocation fEditorLocation;
-
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
 	}
@@ -976,28 +972,28 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	@Override
 	public void putCursor(IEditorLocation textLocation) {
-		fEditorLocation = textLocation;
+		System.out.println("+" + textLocation.getOffset());
+		final Optional<IEditorLocation> oldLocation = fCursorPositon;
+		fCursorPositon = Optional.of(textLocation);
 		if (fCaretTask == null) {
 			fCaretTask = new Runnable() {
 					public void run() {
 						fCaretTask = null;
-						putCaretIntl(fEditorLocation);
-						fEditorLocation = null;
+						putCaretIntl(oldLocation);
 					}
 				};
 			Display.getDefault().asyncExec(fCaretTask);
 		}
 	}
 
-	private void putCaretIntl(IEditorLocation textLocation) {
-		if (fCursorPositon.isPresent()) {
-			IFigure wrapped = fCursorPositon.get().getEditor().getView().getWrapped(IFigure.class);
+	private void putCaretIntl(Optional<IEditorLocation> oldLocation) {
+		if (oldLocation.isPresent()) {
+			IFigure wrapped = oldLocation.get().getEditor().getView().getWrapped(IFigure.class);
 			wrapped.removeAncestorListener(fAncestorListener);
 		}
-		if (textLocation != null) {
-			fCursorPositon = Optional.of(textLocation);
-			textLocation.putCaret(getCaret());
-			IFigure wrapped = textLocation.getEditor().getView().getWrapped(IFigure.class);
+		if (fCursorPositon.isPresent()) {
+			fCursorPositon.get().putCaret(getCaret());
+			IFigure wrapped = fCursorPositon.get().getEditor().getView().getWrapped(IFigure.class);
 			wrapped.addAncestorListener(fAncestorListener);
 		} else {
 			fCursorPositon = Optional.absent();
