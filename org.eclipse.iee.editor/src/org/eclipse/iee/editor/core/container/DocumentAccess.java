@@ -9,15 +9,12 @@ import org.eclipse.iee.core.document.parser.DocumentStructureConfig;
 import org.eclipse.iee.core.document.source.IScope;
 import org.eclipse.iee.core.document.source.ISourceGeneratorContext;
 import org.eclipse.iee.core.document.source.IVariableType;
-import org.eclipse.iee.core.document.source.VariableType;
 import org.eclipse.iee.core.document.writer.IDocumentWriter;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
 import org.eclipse.iee.translator.antlr.java.JavaBaseVisitor;
 import org.eclipse.iee.translator.antlr.java.JavaParser.ClassBodyContext;
 import org.eclipse.iee.translator.antlr.java.JavaParser.CompilationUnitContext;
 import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -166,14 +163,8 @@ public class DocumentAccess {
 
 	private String getPayload(final Container container) {
 
-		ICompilationUnit compilationUnit = container.getContainerManager().getCompilationUnit();
-		
-		CompilationUnitContext ctx;
-		try {
-			ctx = new JavaTranslator().createTree(compilationUnit.getSource());
-		} catch (JavaModelException e1) {
-			throw Throwables.propagate(e1);
-		}
+		final ContainerManager containerManager = container.getContainerManager();
+		CompilationUnitContext ctx = containerManager.getCompilationUnitContext();
 		FindByOffset visitor = new FindByOffset(container);
 		ctx.accept(visitor);
 		final RuleNode node = visitor.getNode();
@@ -183,7 +174,7 @@ public class DocumentAccess {
 			public String translateFunction(String function, String id) {
 				try {
 					return JavaTranslator.translate(function,
-							container.getContainerManager().getCompilationUnit(),
+							containerManager.getCompilationUnit(),
 							container.getPosition().getOffset(), container.getContainerID());
 				} catch (Exception e) {
 					logger.error("Failed to translate expression " + function, e);
@@ -193,7 +184,7 @@ public class DocumentAccess {
 
 			@Override
 			public String getStoragePath() {
-				return container.getContainerManager().getStoragePath() + "/" +
+				return containerManager.getStoragePath() + "/" +
 						FileMessager.getInstance().getRuntimeDirectoryName();
 			}
 
@@ -205,13 +196,13 @@ public class DocumentAccess {
 			@Override
 			public IVariableType getExpressionType(String expression, IScope scope) {
 				return JavaTranslator.getType(expression,
-						container.getContainerManager().getCompilationUnit(),
+						containerManager.getCompilationUnit(),
 						container.getPosition().getOffset(), container.getContainerID());
 			}
 
 			@Override
 			public IScope getScope() {
-				return JavaTranslator.getScope(container.getContainerManager().getCompilationUnit(),
+				return JavaTranslator.getScope(containerManager.getCompilationUnit(),
 						container.getPosition().getOffset());
 			}});
 		return payload;

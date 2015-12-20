@@ -34,7 +34,12 @@ import org.eclipse.iee.editor.core.pad.Pad;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
 import org.eclipse.iee.editor.core.utils.runtime.file.FileMessager;
+import org.eclipse.iee.translator.antlr.java.JavaParser.CompilationUnitContext;
+import org.eclipse.iee.translator.antlr.translator.JavaTranslator;
+import org.eclipse.jdt.core.BufferChangedEvent;
+import org.eclipse.jdt.core.IBufferChangedListener;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.text.BadLocationException;
@@ -149,6 +154,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private Runnable fCaretTask;
 	
+	private CompilationUnitContext fCompilationUnitContext;
+
+	private IBufferChangedListener fBufferChangeListener;
+	
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
 	}
@@ -208,7 +217,21 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	public void setCompilationUnit(ICompilationUnit compilationUnit) {
+		if (fCompilationUnit != null) {
+			try {
+				compilationUnit.getBuffer().removeBufferChangedListener(fBufferChangeListener);
+			} catch (JavaModelException e) {
+				Throwables.propagate(e);
+			}
+		}
 		this.fCompilationUnit = compilationUnit;
+		if (compilationUnit != null) {
+			try {
+				compilationUnit.getBuffer().addBufferChangedListener(fBufferChangeListener);
+			} catch (JavaModelException e) {
+				Throwables.propagate(e);
+			}
+		}
 	}
 
 	/* INTERFACE FUNCTIONS */
@@ -321,6 +344,14 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 				}
 			}
 		};
+		
+		fBufferChangeListener = new IBufferChangedListener() {
+			@Override
+			public void bufferChanged(BufferChangedEvent event) {
+				fCompilationUnitContext = null;
+			}
+		};
+		
 	}
 	
 	public org.eclipse.draw2d.geometry.Point getViewLocation() {
@@ -463,6 +494,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public void dispose() {
 		fStyledText.getDisplay().removeFilter(SWT.MouseDown, fMouseListener);
 		setDocument(null);
+		setCompilationUnit(null);
 	}
 
 	public Container createContainer(PadDocumentPart part, int offset) {
@@ -1090,4 +1122,17 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public Shell getShell() {
 		return fShellProvider.getShell();
 	}
+	
+
+	public CompilationUnitContext getCompilationUnitContext() {
+		if (fCompilationUnitContext == null) {
+			try {
+				fCompilationUnitContext = new JavaTranslator().createTree(fCompilationUnit.getSource());
+			} catch (JavaModelException e1) {
+				throw Throwables.propagate(e1);
+			}
+		}
+		return fCompilationUnitContext;
+	}
+	
 }
