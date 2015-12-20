@@ -360,12 +360,10 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 						
 						Optional<ITextEditor<?>> editor = getEditorAt(styledTextPoint.x, styledTextPoint.y);
 						if (editor.isPresent()) {
-							org.eclipse.draw2d.geometry.Point point = translateViewToReal(styledTextPoint.x, styledTextPoint.y);
 							IView view = editor.get().getView();
 							
-							IFigure mainFigure = fEditorManager.getMainFigure();
 							IFigure wrapped = view.getWrapped(IFigure.class);
-							org.eclipse.draw2d.geometry.Point t = new org.eclipse.draw2d.geometry.Point(point.x, point.y);
+							org.eclipse.draw2d.geometry.Point t = new org.eclipse.draw2d.geometry.Point(styledTextPoint.x, styledTextPoint.y);
 							wrapped.translateToRelative(t);
 							
 							Optional<IEditorLocation> textLocation = editor.get().getTextLocation(t.x, t.y);
