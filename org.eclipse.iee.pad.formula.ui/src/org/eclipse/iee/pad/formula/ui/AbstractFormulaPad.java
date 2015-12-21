@@ -38,6 +38,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -393,7 +394,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 	}
 
 	@Override
-	public boolean handleKey(VerifyEvent e) {
+	public boolean handleKey(KeyEvent e) {
 		switch (e.keyCode) {
 		case SWT.CR:
 			switchToResultView();

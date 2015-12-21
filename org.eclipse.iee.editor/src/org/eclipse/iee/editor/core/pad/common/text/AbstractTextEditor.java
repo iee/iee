@@ -11,7 +11,7 @@ import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.container.EditorManager;
 import org.eclipse.iee.editor.core.container.ITextEditor;
 import org.eclipse.iee.editor.core.container.IView;
-import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.KeyEvent;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -137,6 +137,58 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 			return getChildren().get(getChildren().size() - 1).getEnd();
 		}
 		return Optional.<IEditorLocation> absent();
+	}
+	
+	@Override
+	public Optional<IEditorLocation> getLineStart(int x, int y) {
+		return getLineStart(x, y, true);
+	}
+	
+	@Override
+	public Optional<IEditorLocation> getLineStart(int x, int y, boolean askParent) {
+		if (askParent && getParent().isPresent()) {
+			return getParent().get().getLineStart(x, y, true);
+		} else {
+			List<ITextEditor<?>> children = getChildren();
+			Optional<IEditorLocation> lineStart = Optional.absent();
+			for (ITextEditor<?> iTextEditor : children) {
+				Optional<IEditorLocation> tmp = iTextEditor.getLineStart(x, y, false);
+				if (tmp.isPresent()) {
+					CaretInfo caretInfo = tmp.get().getCaretInfo();
+					if (caretInfo.getX() < x) {
+						x = caretInfo.getX();
+						lineStart = tmp;
+					}
+				}
+			}
+			return lineStart;
+		}
+	}
+	
+	@Override
+	public Optional<IEditorLocation> getLineEnd(int x, int y) {
+		return getLineEnd(x, y, true);
+	}
+	
+	@Override
+	public Optional<IEditorLocation> getLineEnd(int x, int y, boolean askParent) {
+		if (askParent && getParent().isPresent()) {
+			return getParent().get().getLineEnd(x, y, true);
+		} else {
+			List<ITextEditor<?>> children = getChildren();
+			Optional<IEditorLocation> lineStart = Optional.absent();
+			for (ITextEditor<?> iTextEditor : children) {
+				Optional<IEditorLocation> tmp = iTextEditor.getLineEnd(x, y, false);
+				if (tmp.isPresent()) {
+					CaretInfo caretInfo = tmp.get().getCaretInfo();
+					if (caretInfo.getX() > x) {
+						x = caretInfo.getX();
+						lineStart = tmp;
+					}
+				}
+			}
+			return lineStart;
+		}
 	}
 
 	@Override
@@ -316,7 +368,7 @@ public abstract class AbstractTextEditor<T> implements ITextEditor<T>, IAdaptabl
 	}
 	
 	@Override
-	public boolean handleKey(VerifyEvent e) {
+	public boolean handleKey(KeyEvent e) {
 		if (getParent().isPresent()) {
 			return getParent().get().handleKey(e);
 		}

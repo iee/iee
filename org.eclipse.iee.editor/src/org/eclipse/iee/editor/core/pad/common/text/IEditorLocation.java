@@ -24,4 +24,8 @@ public interface IEditorLocation {
 
 	int getOffset();
 
+	Optional<IEditorLocation> getLineEnd();
+	
+	Optional<IEditorLocation> getLineStart();
+
 }

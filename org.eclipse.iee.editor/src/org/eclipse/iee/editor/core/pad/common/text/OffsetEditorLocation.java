@@ -39,7 +39,19 @@ public class OffsetEditorLocation implements IEditorLocation {
 			return Optional.<IEditorLocation> absent();
 		}
 	}
+	
+	@Override
+	public Optional<IEditorLocation> getLineEnd() {
+		CaretInfo caretInfo = fTextPart.getCaretInfo(fTextOffset, false);
+		return fTextPart.getLineEnd(caretInfo.getX(), caretInfo.getBaseline());
+	}
 
+	@Override
+	public Optional<IEditorLocation> getLineStart() {
+		CaretInfo caretInfo = fTextPart.getCaretInfo(fTextOffset, false);
+		return fTextPart.getLineStart(caretInfo.getX(), caretInfo.getBaseline());
+	}
+	
 	@Override
 	public void putCaret(Caret caret) {
 		fTextPart.updateCaret(caret, fTextOffset);

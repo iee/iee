@@ -118,6 +118,44 @@ public class TextEditor extends AbstractVisualTextEditor<Text, TextFlow> impleme
 	}
 	
 	@Override
+	public Optional<IEditorLocation> getLineStart(int x, int y, boolean askParent) {
+		if (askParent && getParent().isPresent()) {
+			return getParent().get().getLineStart(x, y, true);
+		} else {
+			Optional<IEditorLocation> lineStart = Optional.absent();
+			Point t = new Point(x, y);
+			getFigure().translateToRelative(t);
+			int firstOffsetForLine = getFigure().getFirstOffsetForLine(t.y);
+			if (firstOffsetForLine >= 0) {
+				CaretInfo caretPlacement = getFigure().getCaretPlacement(firstOffsetForLine, false);
+				if (caretPlacement.getX() < x) {
+					lineStart = Optional.<IEditorLocation> of(new OffsetEditorLocation(this, firstOffsetForLine));
+				}
+			}
+			return lineStart;
+		}
+	}
+
+	@Override
+	public Optional<IEditorLocation> getLineEnd(int x, int y, boolean askParent) {
+		if (askParent && getParent().isPresent()) {
+			return getParent().get().getLineEnd(x, y, true);
+		} else {
+			Optional<IEditorLocation> lineEnd = Optional.absent();
+			Point t = new Point(x, y);
+			getFigure().translateToRelative(t);
+			int lastOffsetForLine = getFigure().getLastOffsetForLine(t.y);
+			if (lastOffsetForLine >= 0) {
+				CaretInfo caretPlacement = getFigure().getCaretPlacement(lastOffsetForLine, true);
+				if (caretPlacement.getX() > x) {
+					lineEnd = Optional.<IEditorLocation> of(new OffsetEditorLocation(this, lastOffsetForLine + 1));
+				}
+			}
+			return lineEnd;
+		}
+	}
+	
+	@Override
 	protected void doBindValue(Text value) {
 		fStyleListener = new PropertyChangeListener() {
 			@Override

@@ -395,7 +395,7 @@ public class UserInteractionManager {
 			}
 		}
 	}
-
+	
 	private ITextEditor<?> getPad(IEditorLocation position) {
 		ITextEditor<?> editor = position.getEditor();
 		while (editor != null && !(editor instanceof Pad)) {

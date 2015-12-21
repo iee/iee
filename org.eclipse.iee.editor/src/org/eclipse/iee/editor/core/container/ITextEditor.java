@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.VerifyEvent;
 
 import com.google.common.base.Optional;
@@ -44,6 +45,14 @@ public interface ITextEditor<M> {
 
 	Optional<IEditorLocation> getStart();
 	
+	Optional<IEditorLocation> getLineEnd(int x, int y);
+	
+	Optional<IEditorLocation> getLineEnd(int x, int y, boolean askParent);
+	
+	Optional<IEditorLocation> getLineStart(int x, int y);
+	
+	Optional<IEditorLocation> getLineStart(int x, int y, boolean askParent);
+	
 	Optional<IEditorLocation> getAbove(IEditorLocation textLocation);
 
 	Optional<IEditorLocation> getBelow(IEditorLocation textLocation);
@@ -54,6 +63,6 @@ public interface ITextEditor<M> {
 
 	List<ITextEditor<?>> getChildren();
 
-	boolean handleKey(VerifyEvent e);
+	boolean handleKey(KeyEvent e);
 
 }

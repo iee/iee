@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -21,6 +22,7 @@ import org.eclipse.iee.editor.IeeEditorPlugin;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
+import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
@@ -32,7 +34,6 @@ import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration;
 import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -45,7 +46,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.ImageTransfer;
@@ -65,6 +65,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
@@ -72,6 +73,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
 
@@ -238,6 +240,93 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				run();
 			}
 		});
+		
+	}
+	
+	@Override
+	protected void createNavigationActions() {
+		super.createNavigationActions();
+
+		
+		createNavigationAction(ITextEditorActionDefinitionIds.LINE_START, new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
+				if (position.isPresent()) {
+					Optional<IEditorLocation> start = position.get().getLineStart();
+					if (start.isPresent()) {
+						fContainerManager.setCursorPosition(start.get());
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+		createNavigationAction(ITextEditorActionDefinitionIds.SELECT_LINE_START, new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
+				if (position.isPresent()) {
+					Optional<IEditorLocation> start = position.get().getLineStart();
+					if (start.isPresent()) {
+						fContainerManager.setSelectionEnd(start.get());
+					} 
+					return true;
+				}
+				return false;
+			}
+		});
+		createNavigationAction(ITextEditorActionDefinitionIds.LINE_END, new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
+				if (position.isPresent()) {
+					Optional<IEditorLocation> end = position.get().getLineEnd();
+					if (end.isPresent()) {
+						fContainerManager.setCursorPosition(end.get());
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+		createNavigationAction(ITextEditorActionDefinitionIds.SELECT_LINE_END, new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
+				if (position.isPresent()) {
+					Optional<IEditorLocation> end = position.get().getLineEnd();
+					if (end.isPresent()) {
+						fContainerManager.setSelectionEnd(end.get());
+					} 
+					return true;
+				}
+				return false;
+			}
+		});
+		
+	}
+	
+	private void createNavigationAction(String actionId, final Callable<Boolean> callable) {
+		DelegateAction action = new DelegateAction(getAction(actionId)) {
+			@Override
+			public void run() {
+				try {
+					if (!callable.call()) {
+						super.run();
+					}
+				} catch (Exception e) {
+					throw Throwables.propagate(e);
+				}
+			}
+			
+			@Override
+			public void runWithEvent(Event event) {
+				run();
+			}
+		};
+		action.setActionDefinitionId(actionId);
+		setAction(actionId, action);	
 	}
 	
 	@Override
@@ -337,6 +426,36 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	
 	private ITextViewerExtension5 getExt5() {
 		return (ITextViewerExtension5) getViewer();
+	}
+	
+	private boolean doLineEnd(boolean selection) {
+		System.out.println("doLineEnd");
+		Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
+		Optional<IEditorLocation> end = position.get().getLineEnd();
+		if (end.isPresent()) {
+			if (!selection) {
+				fContainerManager.setCursorPosition(end.get());
+			} else {
+				fContainerManager.setSelectionEnd(end.get());
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean doLineStart(boolean selection) {
+		System.out.println("doLineStart");
+		Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
+		Optional<IEditorLocation> start = position.get().getLineEnd();
+		if (start.isPresent()) {
+			if (!selection) {
+				fContainerManager.setCursorPosition(start.get());
+			} else {
+				fContainerManager.setSelectionEnd(start.get());
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	private class DelegateAction implements IAction, IUpdate {
