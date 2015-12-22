@@ -23,6 +23,7 @@ import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
 import org.eclipse.iee.editor.core.pad.IPadFactoryManager;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
+import org.eclipse.iee.editor.core.pad.common.ui.SelectionModel;
 import org.eclipse.iee.pad.image.ImagePart;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
@@ -38,6 +39,7 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -49,6 +51,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.ImageTransfer;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -61,12 +65,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.ui.texteditor.IWorkbenchActionDefinitionIds;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -225,22 +231,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	@Override
 	protected void createActions() {
 		super.createActions();
-		IAction action = getAction(ITextEditorActionConstants.PASTE);
-		setAction(ITextEditorActionConstants.PASTE, new DelegateAction(action) {
-			@Override
-			public void run() {
-				boolean result = paste();
-				if (!result) {
-					super.run();
-				}
-			}
-			
-			@Override
-			public void runWithEvent(Event event) {
-				run();
-			}
-		});
-		
+
 	}
 	
 	@Override
@@ -248,7 +239,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		super.createNavigationActions();
 
 		
-		createNavigationAction(ITextEditorActionDefinitionIds.LINE_START, new Callable<Boolean>() {
+		createDelegateAction(ITextEditorActionDefinitionIds.LINE_START, new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
@@ -262,7 +253,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				return false;
 			}
 		});
-		createNavigationAction(ITextEditorActionDefinitionIds.SELECT_LINE_START, new Callable<Boolean>() {
+		createDelegateAction(ITextEditorActionDefinitionIds.SELECT_LINE_START, new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
@@ -276,7 +267,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				return false;
 			}
 		});
-		createNavigationAction(ITextEditorActionDefinitionIds.LINE_END, new Callable<Boolean>() {
+		createDelegateAction(ITextEditorActionDefinitionIds.LINE_END, new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
@@ -290,7 +281,7 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				return false;
 			}
 		});
-		createNavigationAction(ITextEditorActionDefinitionIds.SELECT_LINE_END, new Callable<Boolean>() {
+		createDelegateAction(ITextEditorActionDefinitionIds.SELECT_LINE_END, new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
@@ -307,26 +298,30 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		
 	}
 	
-	private void createNavigationAction(String actionId, final Callable<Boolean> callable) {
-		DelegateAction action = new DelegateAction(getAction(actionId)) {
+	private void createDelegateAction(String actionId, final Callable<Boolean> callable) {
+		createDelegateAction(actionId, callable, actionId);	
+	}
+
+	private void createDelegateAction(String actionId, final Callable<Boolean> callable, String definitionId) {
+		final DelegateAction action = new DelegateAction(getAction(actionId)) {
 			@Override
 			public void run() {
 				try {
 					if (!callable.call()) {
 						super.run();
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					throw Throwables.propagate(e);
 				}
 			}
 			
 			@Override
-			public void runWithEvent(Event event) {
+			public void runWithEvent(final Event event) {
 				run();
 			}
 		};
-		action.setActionDefinitionId(actionId);
-		setAction(actionId, action);	
+		action.setActionDefinitionId(definitionId);
+		setAction(actionId, action);
 	}
 	
 	@Override
@@ -339,7 +334,39 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 		return fContainerManager;
 	}
 
+	private boolean copy() {
+		Optional<IEditorLocation> position = getContainerManager().getCursonPosition();
+		if (position.isPresent()) {
+			String txt = getContainerManager().getSelectionModel().copy();
+			Clipboard clipboard = new Clipboard(getDisplay());
+			TextTransfer textTransfer = TextTransfer.getInstance();
+			clipboard.setContents(new Object[] {txt}, new Transfer[] {textTransfer});
+			return true;
+		}
+		return false;
+	}
+
+	private boolean cut() {
+		if (getContainerManager().getCursonPosition().isPresent()) {
+			Clipboard clipboard = new Clipboard(getDisplay());
+			SelectionModel selectionModel = getContainerManager().getSelectionModel();
+			String txt = selectionModel.copy();
+			getContainerManager().setCursorPosition(selectionModel.replace(""));
+			TextTransfer textTransfer = TextTransfer.getInstance();
+			clipboard.setContents(new Object[] {txt}, new Transfer[] {textTransfer});
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean paste() {
+		if (getContainerManager().getCursonPosition().isPresent()) {
+			Clipboard clipboard = new Clipboard(getDisplay());
+			TextTransfer textTransfer = TextTransfer.getInstance();
+			String contents = (String) clipboard.getContents(textTransfer);
+			getContainerManager().setCursorPosition(getContainerManager().getSelectionModel().replace(contents));
+			return true;
+		}
 		Clipboard clipboard = new Clipboard(getDisplay());
 		try {
 			ImageTransfer transfer = ImageTransfer.getInstance();
@@ -426,36 +453,6 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 	
 	private ITextViewerExtension5 getExt5() {
 		return (ITextViewerExtension5) getViewer();
-	}
-	
-	private boolean doLineEnd(boolean selection) {
-		System.out.println("doLineEnd");
-		Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
-		Optional<IEditorLocation> end = position.get().getLineEnd();
-		if (end.isPresent()) {
-			if (!selection) {
-				fContainerManager.setCursorPosition(end.get());
-			} else {
-				fContainerManager.setSelectionEnd(end.get());
-			}
-			return true;
-		}
-		return false;
-	}
-
-	private boolean doLineStart(boolean selection) {
-		System.out.println("doLineStart");
-		Optional<IEditorLocation> position = fContainerManager.getCursonPosition();
-		Optional<IEditorLocation> start = position.get().getLineEnd();
-		if (start.isPresent()) {
-			if (!selection) {
-				fContainerManager.setCursorPosition(start.get());
-			} else {
-				fContainerManager.setSelectionEnd(start.get());
-			}
-			return true;
-		}
-		return false;
 	}
 	
 	private class DelegateAction implements IAction, IUpdate {
@@ -684,6 +681,45 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				
 			});
 			return fPropertySheetPage;
+		} else if (ITextOperationTarget.class.equals(required)) {
+			final ITextOperationTarget delegate = (ITextOperationTarget) super.getAdapter(ITextOperationTarget.class);
+			return new ITextOperationTarget() {
+				@Override
+				public void doOperation(int operation) {
+					Optional<IEditorLocation> position = getContainerManager().getCursonPosition();
+					if (position.isPresent()) {
+						switch (operation) {
+						case ITextOperationTarget.CUT:
+							cut();
+							return;
+						case ITextOperationTarget.COPY:
+							copy();
+							return;
+						case ITextOperationTarget.DELETE:
+						case ITextOperationTarget.PASTE:
+							paste();
+							return;
+						}
+					} else {
+						delegate.doOperation(operation);
+					}
+				}
+				
+				@Override
+				public boolean canDoOperation(int operation) {
+					Optional<IEditorLocation> position = getContainerManager().getCursonPosition();
+					switch (operation) {
+					case ITextOperationTarget.CUT:
+						return isEditable() && position.isPresent();
+					case ITextOperationTarget.COPY:
+						return position.isPresent();
+					case ITextOperationTarget.DELETE:
+					case ITextOperationTarget.PASTE:
+						return isEditable();
+					}
+					return delegate.canDoOperation(operation);
+				}
+			};
 		}
 		return super.getAdapter(required);
 	}

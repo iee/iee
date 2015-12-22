@@ -18,6 +18,8 @@ import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.text.edit.ChangeStyleCtx;
 import org.eclipse.iee.editor.text.edit.ChangeStyleVisitor;
 import org.eclipse.iee.editor.text.edit.CompositeCommand;
+import org.eclipse.iee.editor.text.edit.CopyCtx;
+import org.eclipse.iee.editor.text.edit.CopyVisitor;
 import org.eclipse.iee.editor.text.edit.IEditCommand;
 import org.eclipse.iee.editor.text.edit.ReplaceCtx;
 import org.eclipse.iee.editor.text.edit.ReplaceVisitor;
@@ -222,6 +224,25 @@ public class SelectionModel {
 		SelectionModel normalized = normalize();
 		Text model = (Text) normalized.getStart().getEditor().getModel();
 		return model.getStyle();
+	}
+
+	public String copy() {
+		Verify.verifyNotNull(fStart);
+		Verify.verifyNotNull(fEnd);
+		SelectionModel normalized = normalize();
+		
+		IEditorLocation start = normalized.getStart();
+		ITextEditor<?> startEditor = start.getEditor();
+		IEditorLocation end = normalized.getEnd();
+		ITextEditor<?> endEditor = end.getEditor();
+		if (startEditor == endEditor && startEditor instanceof TextPartEditor) {
+			TextPartEditor textPartEditor = (TextPartEditor) startEditor;
+			return textPartEditor.getModel().substring(start.getOffset(), end.getOffset());
+		}
+		ITextLocation modelStart = new OffsetTextLocation((Text) startEditor.getModel(), start.getOffset());
+		ITextLocation modelEnd = new OffsetTextLocation((Text) endEditor.getModel(), end.getOffset());
+		String txt = modelStart.findCommonAncestor(modelEnd).accept(new CopyVisitor(), new CopyCtx(modelStart, modelEnd));
+		return txt;
 	}
 	
 }

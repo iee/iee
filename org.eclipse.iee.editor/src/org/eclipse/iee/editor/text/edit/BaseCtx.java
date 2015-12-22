@@ -11,6 +11,8 @@ public class BaseCtx {
 	
 	private CompositeCommand fCommand = new CompositeCommand();
 
+	private boolean started = false;
+	
 	public BaseCtx(ITextLocation from, ITextLocation to) {
 		fFrom = from;
 		fTo = to;
@@ -38,6 +40,14 @@ public class BaseCtx {
 
 	public CompositeCommand getCommand() {
 		return fCommand;
+	}
+	
+	public boolean isStarted() {
+		return started;
+	}
+
+	public void setStarted(boolean started) {
+		this.started = started;
 	}
 
 }
