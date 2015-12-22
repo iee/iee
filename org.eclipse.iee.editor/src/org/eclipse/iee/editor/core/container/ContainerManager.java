@@ -219,7 +219,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public void setCompilationUnit(ICompilationUnit compilationUnit) {
 		if (fCompilationUnit != null) {
 			try {
-				compilationUnit.getBuffer().removeBufferChangedListener(fBufferChangeListener);
+				fCompilationUnit.getBuffer().removeBufferChangedListener(fBufferChangeListener);
 			} catch (JavaModelException e) {
 				Throwables.propagate(e);
 			}
