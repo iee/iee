@@ -708,14 +708,16 @@ public class ExtendedJavaEditor extends CompilationUnitEditor implements
 				@Override
 				public boolean canDoOperation(int operation) {
 					Optional<IEditorLocation> position = getContainerManager().getCursonPosition();
-					switch (operation) {
-					case ITextOperationTarget.CUT:
-						return isEditable() && position.isPresent();
-					case ITextOperationTarget.COPY:
-						return position.isPresent();
-					case ITextOperationTarget.DELETE:
-					case ITextOperationTarget.PASTE:
-						return isEditable();
+					if (position.isPresent()) {
+						switch (operation) {
+						case ITextOperationTarget.CUT:
+							return isEditable() && position.isPresent();
+						case ITextOperationTarget.COPY:
+							return position.isPresent();
+						case ITextOperationTarget.DELETE:
+						case ITextOperationTarget.PASTE:
+							return isEditable();
+						}
 					}
 					return delegate.canDoOperation(operation);
 				}
