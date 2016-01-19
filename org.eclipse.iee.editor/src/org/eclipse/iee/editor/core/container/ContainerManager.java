@@ -40,6 +40,9 @@ import org.eclipse.jdt.core.BufferChangedEvent;
 import org.eclipse.jdt.core.IBufferChangedListener;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.ui.SharedASTProvider;
+import org.eclipse.jdt.ui.SharedASTProvider.WAIT_FLAG;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.text.BadLocationException;
@@ -82,6 +85,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.internal.SharedImages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,6 +162,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	private IBufferChangedListener fBufferChangeListener;
 	
+	private IASTProvider fAstProvider;
+	
 	public Pad<?, ?> getPadById(String id) {
 		return fPads.get(id);
 	}
@@ -212,8 +218,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		return fUserInteractionManager;	
 	}
 
-	public ICompilationUnit getCompilationUnit() {
-		return fCompilationUnit;
+	public CompilationUnit getCompilationUnit() {
+		return fAstProvider.getAst(fCompilationUnit);
 	}
 
 	public void setCompilationUnit(ICompilationUnit compilationUnit) {
@@ -349,6 +355,14 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			@Override
 			public void bufferChanged(BufferChangedEvent event) {
 				fCompilationUnitContext = null;
+			}
+		};
+		
+		fAstProvider = new IASTProvider() {
+			
+			@Override
+			public CompilationUnit getAst(ICompilationUnit compilationUnit) {
+				return SharedASTProvider.getAST(compilationUnit, SharedASTProvider.WAIT_YES, null);
 			}
 		};
 		
@@ -1127,7 +1141,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public CompilationUnitContext getCompilationUnitContext() {
 		if (fCompilationUnitContext == null) {
 			try {
-				fCompilationUnitContext = new JavaTranslator().createTree(fCompilationUnit.getSource());
+				fCompilationUnitContext = new JavaTranslator(getCompilationUnit()).createTree(fCompilationUnit.getSource());
 			} catch (JavaModelException e1) {
 				throw Throwables.propagate(e1);
 			}

@@ -2,6 +2,7 @@ package org.eclipse.iee.translator.antlr.translator;
 
 import org.eclipse.iee.core.document.source.IVariableType;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 
 public interface ExternalTranslationContext {
 
