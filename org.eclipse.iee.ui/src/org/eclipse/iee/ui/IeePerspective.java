@@ -1,4 +1,4 @@
-package org.eclipse.iee.editor.jdt.perspectives;
+package org.eclipse.iee.ui;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
@@ -10,11 +10,11 @@ import org.eclipse.jdt.ui.JavaUI;
 /**
  *  Defines IEE Perspective layout.
  */
-public class IEEPerspective implements IPerspectiveFactory {
+public class IeePerspective implements IPerspectiveFactory {
 
 	private IPageLayout factory;
 
-	public IEEPerspective() {
+	public IeePerspective() {
 		super();
 	}
 
@@ -59,8 +59,8 @@ public class IEEPerspective implements IPerspectiveFactory {
 	}
 
 	private void addNewWizardShortcuts() {
-		factory.addNewWizardShortcut("org.eclipse.iee.editor.wizard.wizards.IEEProjectWizard");//NON-NLS-1
-		factory.addNewWizardShortcut("org.eclipse.iee.editor.wizard.wizards.GeneralIEEWizard");//NON-NLS-1
+		factory.addNewWizardShortcut("org.eclipse.iee.ui.wizards.IEEProjectWizard");//NON-NLS-1
+		factory.addNewWizardShortcut("org.eclipse.iee.ui.wizards.GeneralIEEWizard");//NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");//NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");//NON-NLS-1
 	}

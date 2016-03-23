@@ -1,9 +1,10 @@
-package org.eclipse.iee.editor.wizard.wizards;
+package org.eclipse.iee.ui.wizards;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +51,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.osgi.framework.Constants;
 
 @SuppressWarnings("restriction")
-public class IEEProjectWizard extends Wizard implements INewWizard,
+public class IeeProjectWizard extends Wizard implements INewWizard,
 		IExecutableExtension {
 
 	/*
@@ -68,7 +69,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 	/**
 	 * Constructor
 	 */
-	public IEEProjectWizard() {
+	public IeeProjectWizard() {
 		super();
 	}
 
@@ -162,10 +163,12 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			 * before updating the perspective.
 			 */
 			IJavaProject javaProject = JavaCore.create(proj);
-			if (!proj.hasNature(PDE.PLUGIN_NATURE))
+			if (!proj.hasNature(PDE.PLUGIN_NATURE)) {
 				CoreUtility.addNatureToProject(proj, PDE.PLUGIN_NATURE, null);
-			if (!proj.hasNature(JavaCore.NATURE_ID))
+			}
+			if (!proj.hasNature(JavaCore.NATURE_ID)) {
 				CoreUtility.addNatureToProject(proj, JavaCore.NATURE_ID, null);
+			}
 
 			/*
 			 * Add the bin folder
@@ -189,7 +192,7 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 
 			/* Add an java file */
 			addFileToProject(proj, new Path("src/Iee.java"),
-					GeneralIEEWizard.openContentStream(), monitor);
+					GeneralIeeWizard.openContentStream(), monitor);
 
 			IFile pluginXml = PDEProject.getPluginXml(proj);
 			IFile manifest = PDEProject.getManifest(proj);
@@ -222,8 +225,8 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			for (Iterator<String> it = libs.iterator(); it.hasNext();) {
 				String libName = it.next();
 
-				InputStream input = IEEProjectWizard.class
-						.getResourceAsStream("templates/" + libName);
+				InputStream input = IeeProjectWizard.class
+						.getResourceAsStream("/resources/" + libName);
 				/* Add an java file */
 				addFileToProject(proj, new Path("lib/" + libName), input,
 						monitor);
@@ -244,6 +247,11 @@ public class IEEProjectWizard extends Wizard implements INewWizard,
 			javaProject.setRawClasspath(newEntries, null);
 			
 			ClasspathComputer.setClasspath(proj, model);
+			
+			HashMap<String, String> options = new HashMap<String, String>();
+			JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+			javaProject.setOptions(options);
+			
 		} finally {
 			monitor.done();
 		}

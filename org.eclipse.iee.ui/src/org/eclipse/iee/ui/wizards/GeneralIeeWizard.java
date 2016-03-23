@@ -1,4 +1,4 @@
-package org.eclipse.iee.editor.wizard.wizards;
+package org.eclipse.iee.ui.wizards;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -27,14 +27,14 @@ import org.eclipse.ui.ide.IDE;
  * be able to open it.
  */
 
-public class GeneralIEEWizard extends Wizard implements INewWizard {
-	private GeneralIEEWizardPage page;
+public class GeneralIeeWizard extends Wizard implements INewWizard {
+	private GeneralIeeWizardPage page;
 	private ISelection selection;
 
 	/**
 	 * Constructor for GeneralIEEWizard.
 	 */
-	public GeneralIEEWizard() {
+	public GeneralIeeWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -44,7 +44,7 @@ public class GeneralIEEWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new GeneralIEEWizardPage(selection);
+		page = new GeneralIeeWizardPage(selection);
 		addPage(page);
 	}
 
@@ -129,7 +129,7 @@ public class GeneralIEEWizard extends Wizard implements INewWizard {
 	 */
 
 	static InputStream openContentStream() {
-			InputStream input = GeneralIEEWizard.class.getResourceAsStream("templates/iee-main-template.resource");
+			InputStream input = GeneralIeeWizard.class.getResourceAsStream("/resources/iee-main-template.resource");
 			return input; 			
 	}
 

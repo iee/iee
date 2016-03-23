@@ -11,6 +11,7 @@
 		<module>../org.eclipse.iee.feature</module>
 		<module>../org.eclipse.iee.core</module>
 		<module>../org.eclipse.iee.core.feature</module>
+		<module>../org.eclipse.iee.ui</module>
 		<module>../org.eclipse.iee.logging</module>
 		<module>../org.eclipse.iee.logging.configuration</module>
 		<module>../org.eclipse.iee.export</module>
@@ -20,7 +21,6 @@
 		<module>../org.eclipse.iee.editor.feature</module>
 		<module>../org.eclipse.iee.editor.jdt</module>
 		<module>../org.eclipse.iee.editor.monitoring</module>
-		<module>../org.eclipse.iee.editor.wizard</module>
 		<module>../org.eclipse.iee.web</module>
 		<module>../org.eclipse.iee.web.ui</module>
 		<module>../org.eclipse.iee.pad.image</module>

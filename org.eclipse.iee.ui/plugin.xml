@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.eclipse.iee.ui.IeePerspective"
+            icon="icons/iee_logo.png"
+            id="org.eclipse.iee.ui.perspective"
+            name="IEE">
+      </perspective>
+   </extension>
+     <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="IEE Wizards"
+            id="org.eclipse.iee.ui.wizards.IEEWizards">
+      </category>
+      <wizard
+            name="General IEE Wizard"
+            icon="icons/iee_logo.png"
+            category="org.eclipse.iee.ui.wizards.IEEWizards"
+            class="org.eclipse.iee.ui.wizards.GeneralIeeWizard"
+            id="org.eclipse.iee.ui.wizards.GeneralIEEWizard">
+      </wizard>
+      <wizard
+            category="org.eclipse.iee.ui.wizards.IEEWizards"
+            class="org.eclipse.iee.ui.wizards.IeeProjectWizard"
+            icon="icons/iee_logo.png"
+            id="org.eclipse.iee.ui.wizards.IEEProjectWizard"
+            name="IEE General Project"
+            project="true">
+      </wizard>
+   </extension>
+
+</plugin>

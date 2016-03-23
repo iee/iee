@@ -1,4 +1,4 @@
-package org.eclipse.iee.editor.wizard.wizards;
+package org.eclipse.iee.ui.wizards;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -26,7 +26,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
  * OR with the extension that matches the expected one (java).
  */
 
-public class GeneralIEEWizardPage extends WizardPage {
+public class GeneralIeeWizardPage extends WizardPage {
 	private Text containerText;
 
 	private Text fileText;
@@ -38,7 +38,7 @@ public class GeneralIEEWizardPage extends WizardPage {
 	 * 
 	 * @param pageName
 	 */
-	public GeneralIEEWizardPage(ISelection selection) {
+	public GeneralIeeWizardPage(ISelection selection) {
 		super("wizardPage");
 		setTitle("Multi-page Editor File");
 		setDescription("This wizard creates a new file with *.java extension that can be opened by a multi-page editor.");
