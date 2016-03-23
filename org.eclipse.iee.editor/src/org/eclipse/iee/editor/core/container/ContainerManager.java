@@ -573,6 +573,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			throw Throwables.propagate(e);
 		}
 		Container container = new Container(position, this, part, createPad(part));
+		container.updatePresentation();
 		return container;
 	}
 
@@ -816,7 +817,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			container = parseContainer(
 					new Position(region.getOffset(),
 							region.getLength()), containerID);
-		container.setVisible(false);
 		return container;
 	}
 

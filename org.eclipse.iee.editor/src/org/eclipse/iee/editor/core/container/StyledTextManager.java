@@ -52,11 +52,9 @@ public class StyledTextManager {
 
 						IRegion changedRegion = textPresentation.getExtent();
 
-						logger.debug("applyTextPresentation start "
-								+ changedRegion);
+						System.out.println("applyTextPresentation start " + changedRegion);
 
-						injectStylesToTextPresentation(textPresentation,
-								getContainersStyleRanges(changedRegion));
+						injectStylesToTextPresentation(textPresentation, getContainersStyleRanges(changedRegion));
 
 					}
 				});
@@ -94,7 +92,7 @@ public class StyledTextManager {
 
 	protected void injectStylesToTextPresentation(TextPresentation tp,
 			StyleRange[] containersStyleRanges) {
-		tp.mergeStyleRanges(containersStyleRanges);
+		tp.replaceStyleRanges(containersStyleRanges);
 	}
 
 	protected StyleRange[] getContainersStyleRanges(IRegion region) {

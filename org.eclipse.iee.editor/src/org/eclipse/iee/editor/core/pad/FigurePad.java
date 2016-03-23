@@ -41,7 +41,7 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 				}
 				Rectangle bounds = getBounds();
 				updateSelectionBounds(bounds);
-				fContainer.updatePresentation();
+//				fContainer.updatePresentation();
 			}
 		});
 		

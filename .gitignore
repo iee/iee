@@ -5,3 +5,5 @@
 .metadata/
 .recommenders/
 org.eclipse.gef.examples.text/
+target/
+.DS_Store
