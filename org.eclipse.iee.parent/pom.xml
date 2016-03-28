@@ -50,14 +50,19 @@
 			<url>file://${basedir}/../local-repo</url>
 		</repository>
 		<repository>
-			<id>platform-e43</id>
+			<id>platform-e45</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.3/</url>
+			<url>http://download.eclipse.org/eclipse/updates/4.5/</url>
 		</repository>
 		<repository>
-			<id>kepler</id>
+			<id>gef</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/kepler/</url>
+			<url>http://download.eclipse.org/tools/gef/updates/releases/</url>
+		</repository>
+		<repository>
+			<id>jetty</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/jetty/updates/jetty-bundles-8.x/8.1.14.v20131031</url>
 		</repository>
 		<repository>
 			<id>orbit</id>
