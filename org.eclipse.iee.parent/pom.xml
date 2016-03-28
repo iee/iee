@@ -153,6 +153,7 @@
 						<resolver>p2</resolver>
 						<pomDependencies>consider</pomDependencies>
 						<ignoreTychoRepositories>true</ignoreTychoRepositories>
+						<executionEnvironment>JavaSE-1.8</executionEnvironment>
 						<environments>
 							<environment>
 								<os>win32</os>

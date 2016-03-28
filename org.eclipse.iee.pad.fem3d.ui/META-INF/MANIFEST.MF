@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fem 3D UI
 Bundle-SymbolicName: org.eclipse.iee.pad.fem3d.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.google.common.base;version="17.0.0",
  org.apache.commons.codec.binary;version="1.4.0",
  org.eclipse.draw2d,

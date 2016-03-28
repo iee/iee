@@ -4,7 +4,7 @@ Bundle-Name: Web
 Bundle-SymbolicName: org.eclipse.iee.web;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.google.common.base;version="16.0.1",
  com.google.common.cache;version="16.0.1",
  com.google.common.escape;version="16.0.1",

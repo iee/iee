@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Formula UI
 Bundle-SymbolicName: org.eclipse.iee.pad.formula.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.google.common.base;version="18.0.0",
  com.google.common.eventbus;version="18.0.0",
  com.google.common.reflect;version="18.0.0",
