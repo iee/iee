@@ -39,7 +39,7 @@
 	</modules>
 
 	<properties>
-		<tycho-version>0.23.1</tycho-version>
+		<tycho-version>0.24.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -60,11 +60,6 @@
 			<url>http://download.eclipse.org/releases/kepler/</url>
 		</repository>
 		<repository>
-			<id>ajdt-e37</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/tools/ajdt/43/milestone/</url>
-		</repository>
-		<repository>
 			<id>orbit</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url>
@@ -73,11 +68,6 @@
 			<id>local-repo</id>
 			<layout>p2</layout>
 			<url>file:../org.eclipse.iee.p2-repo/target/repository/</url>
-		</repository>
-		<repository>
-			<id>swtbot</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/technology/swtbot/releases/latest/</url>
 		</repository>
 	</repositories>
 
@@ -172,11 +162,6 @@
 							<environment>
 								<os>linux</os>
 								<ws>gtk</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>macosx</os>
-								<ws>cocoa</ws>
 								<arch>x86_64</arch>
 							</environment>
 						</environments>
