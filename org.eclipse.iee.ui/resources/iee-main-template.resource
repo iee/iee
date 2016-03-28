@@ -5,9 +5,16 @@ import static java.lang.Math.*;
 import Jama.Matrix;
 import com.ieecloud.ieeutils.Function;
 import static com.ieecloud.ieeutils.FunctionUtils.*;
+import org.eclipse.iee.core.IWorksheet;
 
-class Iee {
-    public static void main(String[] args) {
-		
+public class Iee implements IWorksheet {
+	
+	@Override
+	public void calculate() throws Exception {
+		// TODO put code here
+	}
+	
+    public static void main(String[] args) throws Exception {
+    	new Iee().calculate();
     }
 }
