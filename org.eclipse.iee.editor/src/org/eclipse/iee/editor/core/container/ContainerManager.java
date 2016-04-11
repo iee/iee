@@ -528,6 +528,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	    	ignoreDocumentChanges = false;
 	    }
 	    fContainers.add(container);
+	    container.updatePresentation();
 		containerCreated(container);
 		final Pad<?, ?> pad = container.getPad();
 		Display.getDefault().asyncExec(new Runnable() {
@@ -573,7 +574,6 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			throw Throwables.propagate(e);
 		}
 		Container container = new Container(position, this, part, createPad(part));
-		container.updatePresentation();
 		return container;
 	}
 
@@ -676,6 +676,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 				List<Container> containers = parseContainersFromDocumentRegion(fDocument, changedRegion);
 				for (Container container : containers) {
 					fContainers.add(container);
+					container.updatePresentation();
 					containerCreated(container);
 				}
 			}
