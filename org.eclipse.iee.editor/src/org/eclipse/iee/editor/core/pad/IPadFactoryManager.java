@@ -5,6 +5,6 @@ import org.eclipse.iee.editor.core.container.TextRenderCtx;
 
 public interface IPadFactoryManager {
 
-	public <T extends PadDocumentPart> Pad<T, ?> createPad(T padPart, TextRenderCtx renderCtx);
+	public <T extends PadDocumentPart> Pad<T> createPad(T padPart, TextRenderCtx renderCtx);
 
 }

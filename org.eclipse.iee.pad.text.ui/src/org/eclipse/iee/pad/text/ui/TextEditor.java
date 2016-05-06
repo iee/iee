@@ -10,8 +10,10 @@ import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.iee.core.document.text.EventBusSupport;
 import org.eclipse.iee.core.document.text.Text;
 import org.eclipse.iee.core.document.text.TextStyle;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.ITextContainer;
 import org.eclipse.iee.editor.core.pad.common.text.OffsetEditorLocation;
@@ -22,13 +24,15 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
 
-public class TextEditor extends AbstractVisualTextEditor<Text, TextFlow> implements ITextContainer<Text> {
+public class TextEditor extends AbstractVisualTextEditor<Text> implements ITextContainer<Text> {
 
 	private TextRenderCtx fRenderCtx;
 
 	private PropertyChangeListener fStyleListener;
 
 	private TextStyle fStyle;
+
+	private TextFlow fFigure;
 	
 	public TextEditor(TextRenderCtx renderCtx) {
 		fRenderCtx = renderCtx;
@@ -243,6 +247,18 @@ public class TextEditor extends AbstractVisualTextEditor<Text, TextFlow> impleme
 	public void setActive(boolean b) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public TextFlow getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 	
 }

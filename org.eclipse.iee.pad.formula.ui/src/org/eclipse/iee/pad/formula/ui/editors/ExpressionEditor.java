@@ -3,8 +3,10 @@ package org.eclipse.iee.pad.formula.ui.editors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitorContext;
 import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
@@ -12,13 +14,15 @@ import org.eclipse.iee.translator.antlr.translator.model.Expression;
 
 import com.google.common.base.Optional;
 
-public class ExpressionEditor extends AbstractVisualTextEditor<Expression, Figure> {
+public class ExpressionEditor extends AbstractVisualTextEditor<Expression> {
 
 	private TextRenderCtx fRenderCtx;
 	
 	private EditorVisitor fEditorVisitor = new EditorVisitor();
 
 	private Optional<? extends IExpressionEditor<? extends Expression, ? extends IFigure>> fSubeditor = Optional.absent();
+
+	private Figure fFigure;
 	
 	public ExpressionEditor(TextRenderCtx fRenderCtx) {
 		this.fRenderCtx = fRenderCtx;
@@ -42,7 +46,6 @@ public class ExpressionEditor extends AbstractVisualTextEditor<Expression, Figur
 		
 	}
 
-	@Override
 	protected Figure createFigure() {
 		Figure figure = new Figure();
 		FlowLayout manager = new FlowLayout(true);
@@ -63,6 +66,18 @@ public class ExpressionEditor extends AbstractVisualTextEditor<Expression, Figur
 			addEditor(fSubeditor.get());
 			getFigure().add(fSubeditor.get().getView().getWrapped(IFigure.class));
 		}
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public Figure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

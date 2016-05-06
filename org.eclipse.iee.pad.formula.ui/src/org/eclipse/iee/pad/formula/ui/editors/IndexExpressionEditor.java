@@ -3,8 +3,10 @@ package org.eclipse.iee.pad.formula.ui.editors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
 import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
@@ -12,12 +14,13 @@ import org.eclipse.iee.translator.antlr.translator.model.IndexExpression;
 
 import com.google.common.base.Optional;
 
-public final class IndexExpressionEditor extends AbstractVisualTextEditor<IndexExpression, Figure>  implements IExpressionEditor<IndexExpression, Figure> {
+public final class IndexExpressionEditor extends AbstractVisualTextEditor<IndexExpression>  implements IExpressionEditor<IndexExpression, Figure> {
 	private ExpressionEditor fContainerEditor;
 	private ExpressionEditor fIndexEditor;
 	private Optional<ObservableProperty<Expression>> fContainer;
 	private Optional<ObservableProperty<Expression>> fIndex;
 	private TextRenderCtx fRenderCtx;
+	private Figure fFigure;
 
 	public IndexExpressionEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
@@ -38,7 +41,6 @@ public final class IndexExpressionEditor extends AbstractVisualTextEditor<IndexE
 	public void setActive(boolean b) {
 	}
 
-	@Override
 	protected Figure createFigure() {
 		Figure figure = EditorVisitor.createTextContainerFigure();
 		figure.add(fContainerEditor.getFigure());
@@ -58,6 +60,18 @@ public final class IndexExpressionEditor extends AbstractVisualTextEditor<IndexE
 		fIndexEditor.setValue(Optional.<IObservableValue<Expression>> absent());
 		fContainer.get().dispose();
 		fIndex.get().dispose();
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public Figure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

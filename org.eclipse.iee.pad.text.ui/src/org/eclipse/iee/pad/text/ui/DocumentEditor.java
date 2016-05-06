@@ -19,15 +19,18 @@ import org.eclipse.iee.core.document.text.Span;
 import org.eclipse.iee.core.document.text.Text;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.container.ITextEditor;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 
 import com.google.common.base.Optional;
 import com.google.common.eventbus.Subscribe;
 
-public class DocumentEditor extends AbstractVisualTextEditor<Document, FlowPage> {
+public class DocumentEditor extends AbstractVisualTextEditor<Document> {
 
 	private TextRenderCtx fRenderCtx;
+	private FlowPage fFigure;
 
 	public DocumentEditor(TextRenderCtx renderCtx) {
 		fRenderCtx = renderCtx;
@@ -134,7 +137,6 @@ public class DocumentEditor extends AbstractVisualTextEditor<Document, FlowPage>
 		
 	}
 
-	@Override
 	protected FlowPage createFigure() {
 		return new FlowPage() {
 			@Override
@@ -173,6 +175,18 @@ public class DocumentEditor extends AbstractVisualTextEditor<Document, FlowPage>
 			
 		};
 		
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public FlowPage getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 	
 }

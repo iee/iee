@@ -131,7 +131,7 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 		Display.getCurrent().asyncExec(new Runnable() {
 			public void run() {
 				if (fHoverShell != null) {
-					Rectangle bounds = getBounds();
+					Rectangle bounds = getView().getBounds();
 					getContainer().getFeedbackFigure().add(
 							fHoverShell,
 							new org.eclipse.draw2d.geometry.Rectangle(bounds.x + 5, bounds.y + bounds.height + 5, -1, -1)
@@ -252,10 +252,10 @@ public abstract class AbstractFormulaPad<T extends PadDocumentPart> extends Figu
 		if (fIsInputValid) {
 			if (!getText().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
-				Collection<Pad<?, ?>> following = FormulaPadManager
+				Collection<Pad<?>> following = FormulaPadManager
 						.getFollowingPads(this);
 
-				for (Pad<?, ?> pad : following) {
+				for (Pad<?> pad : following) {
 					((AbstractFormulaPad<?>) pad).updateLastResult("");
 				}
 			}

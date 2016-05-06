@@ -58,10 +58,10 @@ public class SymbolicPad extends AbstractFormulaPad<SymbolicPart> {
 		if (fIsInputValid) {
 			if (!getText().equals(fTranslatingExpression)) {
 				/* Remove result images from following pads */
-				Collection<Pad<?, ?>> following = FormulaPadManager
+				Collection<Pad<?>> following = FormulaPadManager
 						.getFollowingPads(this);
 
-				for (Pad<?, ?> pad : following) {
+				for (Pad<?> pad : following) {
 					((SymbolicPad) pad).updateLastResult("");
 				}
 			}

@@ -17,7 +17,9 @@ import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
 import org.eclipse.iee.editor.core.bindings.converter.DoubleConverter;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.pad.formula.ui.utils.UIFormulaRenderer;
@@ -32,7 +34,7 @@ import com.google.common.base.Converter;
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
 
-public class GraphModelEditor extends AbstractVisualTextEditor<GraphModel, IFigure> {
+public class GraphModelEditor extends AbstractVisualTextEditor<GraphModel> {
 
 	private Map<GraphElement, GraphElementEditor> editors = new HashMap<>();
 	
@@ -57,6 +59,8 @@ public class GraphModelEditor extends AbstractVisualTextEditor<GraphModel, IFigu
 	private ObservableProperty<List<String>> fVariablesValue;
 
 	private ObservableProperty<List<GraphElement>> fElementsValue;
+
+	private IFigure fFigure;
 	
 	public GraphModelEditor(UIFormulaRenderer formulaRenderer, IShellProvider shellProvider) {
 		fFormulaRenderer = formulaRenderer;
@@ -262,6 +266,18 @@ public class GraphModelEditor extends AbstractVisualTextEditor<GraphModel, IFigu
 
 	public JFreeChart getChart() {
 		return fChartEditor.getChart();
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public IFigure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

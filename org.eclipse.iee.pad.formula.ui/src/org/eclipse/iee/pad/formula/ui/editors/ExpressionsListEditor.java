@@ -5,19 +5,23 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
 import org.eclipse.iee.translator.antlr.translator.model.Expression;
 
 import com.google.common.base.Optional;
 
-public class ExpressionsListEditor extends AbstractVisualTextEditor<List<Expression>, Figure> {
+public class ExpressionsListEditor extends AbstractVisualTextEditor<List<Expression>> {
 	
 	private TextRenderCtx fRenderCtx;
 	
 	private List<ExpressionEditor> fEditors = new ArrayList<>();
+
+	private Figure fFigure;
 
 	public ExpressionsListEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
@@ -36,7 +40,6 @@ public class ExpressionsListEditor extends AbstractVisualTextEditor<List<Express
 	public void setActive(boolean b) {
 	}
 
-	@Override
 	protected Figure createFigure() {
 		Figure figure = EditorVisitor.createTextContainerFigure();
 		return figure;
@@ -67,6 +70,18 @@ public class ExpressionsListEditor extends AbstractVisualTextEditor<List<Express
 		}
 		fEditors.clear();
 		getFigure().removeAll();
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public Figure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

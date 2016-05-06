@@ -5,17 +5,20 @@ import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.core.IHasPropertyChangeListener;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 
 import com.google.common.base.Preconditions;
 
-public class WrapperEditor<T extends IHasPropertyChangeListener> extends AbstractVisualTextEditor<T, IFigure> {
+public class WrapperEditor<T extends IHasPropertyChangeListener> extends AbstractVisualTextEditor<T> {
 
 	protected TextPartEditor fTextPartEditor;
 	
 	private ObservableProperty<String> fValue;
 
 	private String fProperty;
+
+	private IFigure fFigure;
 
 	public WrapperEditor(String property, TextRenderCtx renderCtx) {
 		this.fProperty = Preconditions.checkNotNull(property);
@@ -36,7 +39,6 @@ public class WrapperEditor<T extends IHasPropertyChangeListener> extends Abstrac
 	public void setActive(boolean b) {
 	}
 
-	@Override
 	protected IFigure createFigure() {
 		Figure figure = new Figure();
 		figure.setLayoutManager(new FlowLayout(true));
@@ -53,6 +55,18 @@ public class WrapperEditor<T extends IHasPropertyChangeListener> extends Abstrac
 	@Override
 	protected void doUnbindValue(T oldValue) {
 		fValue.dispose();
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public IFigure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

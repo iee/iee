@@ -10,17 +10,19 @@ import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.container.Container;
 import org.eclipse.iee.editor.core.container.ContainerManager;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 
 import com.google.common.base.Optional;
 
-public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends AbstractVisualTextEditor<T, F> implements IDisposable {
+public abstract class Pad<T extends PadDocumentPart> extends AbstractVisualTextEditor<T> implements IDisposable {
 
 	protected Container fContainer;
 
-	private final RectangleFigure selectionFigure; 
+	private final RectangleFigure selectionFigure;
 
 	public Pad() {
 		selectionFigure = new RectangleFigure();
@@ -62,7 +64,7 @@ public abstract class Pad<T extends PadDocumentPart, F extends IFigure> extends 
 
 	private void addSelectionFrame() {
 		IFigure figure = fContainer.getFeedbackFigure();
-		Rectangle bounds = getBounds();
+		Rectangle bounds = getView().getBounds();
 		updateSelectionBounds(bounds);
 		figure.add(selectionFigure);
 	}

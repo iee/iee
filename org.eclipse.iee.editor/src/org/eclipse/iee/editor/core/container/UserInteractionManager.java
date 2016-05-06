@@ -210,7 +210,7 @@ public class UserInteractionManager {
 			if (container != null) {
 				Position position = container.getPosition();
 				if (caretMovesForward) {
-					Pad<?, ?> pad = container.getPad();
+					Pad<?> pad = container.getPad();
 					Optional<IEditorLocation> start = pad.getStart();
 					fContainerManager.activateEditor(pad);
 					if (start.isPresent()) {
@@ -220,7 +220,7 @@ public class UserInteractionManager {
 								+ position.getLength()));
 					}
 				} else {
-					Pad<?, ?> pad = container.getPad();
+					Pad<?> pad = container.getPad();
 					Optional<IEditorLocation> end = pad.getEnd();
 					fContainerManager.activateEditor(pad);
 					if (end.isPresent()) {

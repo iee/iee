@@ -5,7 +5,9 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.common.ui.IMenuContributor;
@@ -22,11 +24,13 @@ import org.eclipse.swt.widgets.Event;
 
 import com.google.common.base.Optional;
 
-public class TableCellEditor extends AbstractVisualTextEditor<TableCell, IFigure> implements IMenuContributor {
+public class TableCellEditor extends AbstractVisualTextEditor<TableCell> implements IMenuContributor {
 
 	private TextPartEditor fTextPartEditor;
 	
 	private ObservableProperty<String> fValue;
+
+	private IFigure fFigure;
 
 	public TableCellEditor() {
 		fTextPartEditor = new TextPartEditor();
@@ -50,7 +54,6 @@ public class TableCellEditor extends AbstractVisualTextEditor<TableCell, IFigure
 		
 	}
 
-	@Override
 	protected IFigure createFigure() {
 		Figure figure = new Figure();
 		figure.setLayoutManager(new BorderLayout());
@@ -138,6 +141,18 @@ public class TableCellEditor extends AbstractVisualTextEditor<TableCell, IFigure
 		}));
 		
 		
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public IFigure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

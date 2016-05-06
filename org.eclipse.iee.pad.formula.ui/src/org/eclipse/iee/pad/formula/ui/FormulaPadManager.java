@@ -8,12 +8,12 @@ import org.eclipse.iee.editor.core.pad.Pad;
 
 public class FormulaPadManager {
 
-	public static List<Pad<?, ?>> getFollowingPads(Pad<?, ?> pad) {		
-		List<Pad<?, ?>> pads = pad.getContainer().getContainerManager().selectPadsByType(pad.getType());
+	public static List<Pad<?>> getFollowingPads(Pad<?> pad) {		
+		List<Pad<?>> pads = pad.getContainer().getContainerManager().selectPadsByType(pad.getType());
 		
-		Collections.sort(pads, new Comparator<Pad<?, ?>>() {
+		Collections.sort(pads, new Comparator<Pad<?>>() {
 			@Override
-			public int compare(Pad<?, ?> pad1, Pad<?, ?> pad2) {
+			public int compare(Pad<?> pad1, Pad<?> pad2) {
 				int offset1 = pad1.getContainer().getPosition().getOffset();
 				int offset2 = pad2.getContainer().getPosition().getOffset();
 				if (offset1 < offset2) {

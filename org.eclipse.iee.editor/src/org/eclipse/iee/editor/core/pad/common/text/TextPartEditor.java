@@ -10,6 +10,7 @@ import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
@@ -24,7 +25,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
-public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> implements ITextContainer<String> {
+public class TextPartEditor extends AbstractVisualTextEditor<String> implements ITextContainer<String> {
 
 	private TextFlow fTextFlow;
 
@@ -33,6 +34,8 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 	private FlowPage fFlowPage;
 
 	private Optional<TextRenderCtx> fRenderCtx = Optional.absent();
+
+	private FlowPage fFigure;
 	
 	public TextPartEditor() {
 		fText = new Document();
@@ -199,6 +202,18 @@ public class TextPartEditor extends AbstractVisualTextEditor<String, FlowPage> i
 	@Override
 	public void unselectBetween(IEditorLocation start, IEditorLocation end) {
 		fTextFlow.setSelection(-1, -1);
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public FlowPage getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

@@ -5,7 +5,9 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.IObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.editor.core.pad.common.text.IEditorLocation;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.editor.core.pad.table.TableColumn;
@@ -14,10 +16,11 @@ import org.eclipse.swt.widgets.Caret;
 
 import com.google.common.base.Optional;
 
-public class TableColumnEditor extends AbstractVisualTextEditor<TableColumn, IFigure> {
+public class TableColumnEditor extends AbstractVisualTextEditor<TableColumn> {
 
 	private TextPartEditor fTextPartEditor;
 	private ObservableProperty<String> fValue;
+	private IFigure fFigure;
 
 	public TableColumnEditor() {
 		fTextPartEditor = new TextPartEditor();
@@ -42,7 +45,6 @@ public class TableColumnEditor extends AbstractVisualTextEditor<TableColumn, IFi
 		
 	}
 
-	@Override
 	protected IFigure createFigure() {
 		Figure figure = new Figure();
 		figure.setLayoutManager(new BorderLayout());
@@ -64,6 +66,18 @@ public class TableColumnEditor extends AbstractVisualTextEditor<TableColumn, IFi
 	@Override
 	protected void doUnbindValue(TableColumn oldValue) {
 		fValue.dispose();
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public IFigure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

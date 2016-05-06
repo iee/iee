@@ -29,7 +29,7 @@ public class Container implements IAdaptable {
 	
 	private DocumentAccess fDocumentAccess;
 
-	private final Pad<?, ?> fPad;
+	private final Pad<?> fPad;
 	
 	/* Setters */
 
@@ -66,7 +66,7 @@ public class Container implements IAdaptable {
 
 	/* FUNCTION USED IN CONTAINER MANAGER: */
 
-	public Container(Position position, ContainerManager containerManager, PadDocumentPart part, Pad<?, ?> pad) {
+	public Container(Position position, ContainerManager containerManager, PadDocumentPart part, Pad<?> pad) {
 		fPosition = position;
 		fContainerManager = containerManager;
 		this.fPad = pad;
@@ -87,7 +87,7 @@ public class Container implements IAdaptable {
 		StyledText textWidget = fContainerManager.getStyledText();
 		Point point = textWidget.getLocationAtOffset(offset);
 		int height = textWidget.getLineHeight(offset);
-		Rectangle bounds = fPad.getBounds();
+		Rectangle bounds = fPad.getView().getBounds();
 		int heightOffset = height - bounds.height;
 		org.eclipse.draw2d.geometry.Point viewLocation = getContainerManager().getViewLocation();
 		Rectangle newBounds = new Rectangle(
@@ -141,7 +141,7 @@ public class Container implements IAdaptable {
 		return fContainerManager.getStyledText();
 	}
 
-	public Pad<?, ?> getPad() {
+	public Pad<?> getPad() {
 		return fPad;
 	}
 
@@ -151,14 +151,14 @@ public class Container implements IAdaptable {
 		Position p = getPosition();
 
 		int descent = // TODO: Quickly fix it!!!
-		(fPad.getBounds().height < 10) ? 0
-				: fPad.getBounds().height - 10;
+		(fPad.getView().getBounds().height < 10) ? 0
+				: fPad.getView().getBounds().height - 10;
 
 		/* First symbol is shaped by container's geometry */
 		StyleRange firstSymbol = new StyleRange();
 		firstSymbol.start = p.getOffset();
 		firstSymbol.length = 1;
-		firstSymbol.metrics = new GlyphMetrics(0, descent, fPad.getBounds().width);
+		firstSymbol.metrics = new GlyphMetrics(0, descent, fPad.getView().getBounds().width);
 
 		/* Setting data */
 		firstSymbol.data = this;

@@ -10,7 +10,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.pad.graph.model.GraphElement;
 import org.eclipse.iee.pad.graph.model.GraphModel;
 import org.eclipse.jface.window.IShellProvider;
@@ -31,7 +33,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.PaintUtilities;
 
-public class ChartEditor extends AbstractVisualTextEditor<GraphModel, ChartFigure> {
+public class ChartEditor extends AbstractVisualTextEditor<GraphModel> {
 
 	private AxisChangeListener fDomainAxisListener;
 
@@ -46,6 +48,8 @@ public class ChartEditor extends AbstractVisualTextEditor<GraphModel, ChartFigur
 	private IShellProvider fShellProvider;
 
 	private JFreeChart fChart;
+
+	private ChartFigure fFigure;
 
 	/** The resourceBundle for the localization. */
 	protected static ResourceBundle localizationResources = ResourceBundleWrapper
@@ -65,7 +69,6 @@ public class ChartEditor extends AbstractVisualTextEditor<GraphModel, ChartFigur
 		};
 	}
 
-	@Override
 	protected ChartFigure createFigure() {
 		ChartFigure chartFigure = new ChartFigure(getChart(), fShellProvider);
 		chartFigure.setPreferredSize(new Dimension(500, 250));
@@ -275,6 +278,18 @@ public class ChartEditor extends AbstractVisualTextEditor<GraphModel, ChartFigur
 			fChart = createChart();
 		}
 		return fChart;
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public ChartFigure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

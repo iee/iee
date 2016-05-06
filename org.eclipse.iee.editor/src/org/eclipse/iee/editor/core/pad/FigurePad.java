@@ -11,15 +11,19 @@ import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.IView;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.swt.widgets.Display;
 
-public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> extends Pad<T, F> {
+public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> extends Pad<T> {
 
 	private IFigure fContent;
 	
 	private Set<IFigure> fPosponedFigures = new HashSet<>();
 	
-	private Runnable fPostponedTask; 
+	private Runnable fPostponedTask;
+
+	private F fFigure; 
 	
 	@Override
 	public void attachContainer(Container container)  {
@@ -39,7 +43,7 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 				if (source != fContent) {
 					return;
 				}
-				Rectangle bounds = getBounds();
+				Rectangle bounds = getView().getBounds();
 				updateSelectionBounds(bounds);
 //				fContainer.updatePresentation();
 			}
@@ -60,7 +64,7 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 							fPosponedFigures = new HashSet<>();
 							for (IFigure iFigure : figures) {
 								Dimension preferredSize = iFigure.getPreferredSize(-1, -1);
-								Rectangle bounds = getBounds();
+								Rectangle bounds = getView().getBounds();
 								bounds.height = preferredSize.height;
 								bounds.width = preferredSize.width;
 								setBounds(bounds);								
@@ -72,12 +76,6 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 			}
 			
 		});
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		org.eclipse.draw2d.geometry.Rectangle bounds = fContent.getBounds();
-		return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 
 	@Override
@@ -97,4 +95,25 @@ public abstract class FigurePad<T extends PadDocumentPart, F extends IFigure> ex
 		fContainer.getContainerManager().getEditorManager().removeEditor(this);
 		fContainer.getMainFigure().remove(fContent);
 	}
+	
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure()) {
+			@Override
+			public Rectangle getBounds() {
+				org.eclipse.draw2d.geometry.Rectangle bounds = fContent.getBounds();
+				return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+			}
+		};
+	}
+
+	public F getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
+	}
+
+	protected abstract F createFigure();
+	
 }

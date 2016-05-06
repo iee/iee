@@ -6,8 +6,10 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.editor.core.pad.common.text.TextPartEditor;
 import org.eclipse.iee.pad.formula.ui.EditorVisitor;
 import org.eclipse.iee.pad.formula.ui.IExpressionEditor;
@@ -17,11 +19,12 @@ import org.eclipse.iee.translator.antlr.translator.model.FunctionExpression;
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
 
-public final class FunctionExpressionEditor extends AbstractVisualTextEditor<FunctionExpression, Figure>  implements IExpressionEditor<FunctionExpression, Figure> {
+public final class FunctionExpressionEditor extends AbstractVisualTextEditor<FunctionExpression>  implements IExpressionEditor<FunctionExpression, Figure> {
 	private WrappedExpressionEditor<FunctionExpression> fNameEditor;
 	private ExpressionsListEditor fArgumentsEditor;
 	private TextRenderCtx fRenderCtx;
 	private Optional<ObservableProperty<List<Expression>>> fArguments;
+	private Figure fFigure;
 
 	public FunctionExpressionEditor(TextRenderCtx renderCtx) {
 		this.fRenderCtx = renderCtx;
@@ -42,7 +45,6 @@ public final class FunctionExpressionEditor extends AbstractVisualTextEditor<Fun
 	public void setActive(boolean b) {
 	}
 
-	@Override
 	protected Figure createFigure() {
 		Figure figure = EditorVisitor.createTextContainerFigure();
 		figure.add(fNameEditor.getFigure());
@@ -70,6 +72,18 @@ public final class FunctionExpressionEditor extends AbstractVisualTextEditor<Fun
 		}
 		fNameEditor.setValue(Optional.<ObservableProperty<FunctionExpression>> absent());
 		fArgumentsEditor.setValue(Optional.<ObservableProperty<List<Expression>>> absent());
+	}
+
+	@Override
+	protected IView createView() {
+		return new FigureView(getFigure());
+	}
+
+	public Figure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
 	}
 
 }

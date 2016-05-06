@@ -11,8 +11,10 @@ import org.eclipse.iee.core.document.text.TextStyle;
 import org.eclipse.iee.editor.core.bindings.DefaultObservableValue;
 import org.eclipse.iee.editor.core.bindings.IObserver;
 import org.eclipse.iee.editor.core.bindings.ObservableProperty;
+import org.eclipse.iee.editor.core.container.IView;
 import org.eclipse.iee.editor.core.container.TextRenderCtx;
 import org.eclipse.iee.editor.core.pad.common.text.AbstractVisualTextEditor;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.iee.pad.formula.ui.editors.BinaryExpressionEditor;
 import org.eclipse.iee.pad.formula.ui.editors.ExpressionEditor;
 import org.eclipse.iee.pad.formula.ui.editors.FunctionExpressionEditor;
@@ -35,7 +37,7 @@ import com.google.common.reflect.TypeToken;
 public class EditorVisitor
 		implements Visitor<IExpressionEditor<? extends Expression, ? extends IFigure>, EditorVisitorContext> {
 
-	public static class NaryExpressionEditor extends AbstractVisualTextEditor<NaryExpression, Figure> implements IExpressionEditor<NaryExpression, Figure> {
+	public static class NaryExpressionEditor extends AbstractVisualTextEditor<NaryExpression> implements IExpressionEditor<NaryExpression, Figure> {
 
 		private final TextRenderCtx fRenderCtx;
 		private Optional<ObservableProperty<Expression>> fExpression = Optional.absent();
@@ -43,6 +45,7 @@ public class EditorVisitor
 		private ExpressionEditor fExpressionEditor;
 		private Optional<ObservableProperty<String>> fName;
 		private Optional<Figure> fSymbol = Optional.absent();
+		private Figure fFigure;
 
 		public NaryExpressionEditor(TextRenderCtx renderCtx) {
 			fRenderCtx = renderCtx;
@@ -62,7 +65,6 @@ public class EditorVisitor
 		public void setActive(boolean b) {
 		}
 
-		@Override
 		protected Figure createFigure() {
 			Figure result = new Figure();
 			FlowLayout resultLayout = new FlowLayout();
@@ -137,6 +139,18 @@ public class EditorVisitor
 				fSymbol.get().removeAll();
 				fSymbol.get().add(createTextFigure(symbol, fRenderCtx.createNAryFigureCtx()));
 			}
+		}
+
+		@Override
+		protected IView createView() {
+			return new FigureView(getFigure());
+		}
+
+		public Figure getFigure() {
+			if (fFigure == null) {
+				fFigure = createFigure();
+			}
+			return fFigure;
 		}
 
 	}

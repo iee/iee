@@ -93,6 +93,10 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 public class ContainerManager extends EventManager implements IPostSelectionProvider, ICursorManager {
 
 	private static final Logger logger = LoggerFactory
@@ -130,7 +134,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 
 	private boolean ignoreDocumentChanges;
 
-	private final Map<String, Pad<?, ?>> fPads = new TreeMap<>();
+	private final Map<String, Pad<?>> fPads = new TreeMap<>();
 	
 	private IPadFactoryManager fPadFactoryManager;
 
@@ -164,7 +168,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	
 	private IASTProvider fAstProvider;
 	
-	public Pad<?, ?> getPadById(String id) {
+	public Pad<?> getPadById(String id) {
 		return fPads.get(id);
 	}
 
@@ -316,6 +320,11 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fEditorManager = new EditorManager();
 		viewport.add(fEditorManager.getRoot());
 		lightweightSystem.setContents(viewport);
+		
+		FxIntegration fxIntegration = new FxIntegration(fStyledText);
+		Scene newScene = new Scene(fEditorManager.getFxRoot());
+		newScene.setFill(Color.TRANSPARENT);
+		fxIntegration.setScene(newScene);
 		
 		fSelectionModel = new SelectionModel(fEditorManager, this);
 		
@@ -530,7 +539,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	    fContainers.add(container);
 	    container.updatePresentation();
 		containerCreated(container);
-		final Pad<?, ?> pad = container.getPad();
+		final Pad<?> pad = container.getPad();
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -769,8 +778,8 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		fPads.put(containerID, c.getPad());
 	}
 
-	private Pad<PadDocumentPart, ?> createPad(PadDocumentPart padPart) {
-		Pad<PadDocumentPart, ?> pad = fPadFactoryManager.createPad(padPart, fRenderCtx);
+	private Pad<PadDocumentPart> createPad(PadDocumentPart padPart) {
+		Pad<PadDocumentPart> pad = fPadFactoryManager.createPad(padPart, fRenderCtx);
 		return pad;
 	}
 
@@ -825,7 +834,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		org.eclipse.draw2d.geometry.Point p = translateViewToReal(x, y);
 		
 		for(Container container : getContainers()) {
-			if (container.getPad().getBounds().contains(p.x, p.y)) {
+			if (container.getPad().getView().getBounds().contains(p.x, p.y)) {
 				return container;
 			}
 		}
@@ -839,7 +848,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	}
 
 	private void clearPadSetsAndRuntime(String containerID) {
-		Pad<?, ?> pad = fPads.get(containerID);
+		Pad<?> pad = fPads.get(containerID);
 
 		String runtimePath = pad.getContainer().getContainerManager()
 				.getStoragePath()
@@ -857,7 +866,7 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 	public void savePads() {
 		String[] containerIDs = getContainerIDs();
 		for (String containerID : containerIDs) {
-			Pad<?, ?> pad = fPads.get(containerID);
+			Pad<?> pad = fPads.get(containerID);
 			if (pad != null) {
 				pad.save();
 			} else {
@@ -866,9 +875,9 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 		}
 	}
 	
-	public List<Pad<?, ?>> selectPadsByType(String type) {
-		List<Pad<?, ?>> result = new ArrayList<>();
-		for(Pad<?, ?> pad : fPads.values()) {
+	public List<Pad<?>> selectPadsByType(String type) {
+		List<Pad<?>> result = new ArrayList<>();
+		for(Pad<?> pad : fPads.values()) {
 			if (pad.getType().equals(type)) {
 				result.add(pad);
 			}
@@ -1106,14 +1115,14 @@ public class ContainerManager extends EventManager implements IPostSelectionProv
 			return null;
 		}
 		
-		private Pad<?, ?> getPad() {
+		private Pad<?> getPad() {
 			Object firstElement = getFirstElement();
 			if (firstElement instanceof ITextEditor) {
 				ITextEditor<?> element = (ITextEditor<?>) firstElement;
 				while(element.getParent().isPresent()) {
 					element = element.getParent().get();
 				}
-				return (Pad<?, ?>) element;
+				return (Pad<?>) element;
 			}
 			return null;
 		}

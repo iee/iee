@@ -8,14 +8,18 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.iee.core.document.PadDocumentPart;
 import org.eclipse.iee.editor.core.container.Container;
+import org.eclipse.iee.editor.core.container.IView;
+import org.eclipse.iee.editor.core.pad.common.text.FigureView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.widgets.Composite;
 
-public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFigure> {
+public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T> {
 	
 	private Composite fContent;
+	
+	private IFigure fFigure;
 	
 	@Override
 	public void attachContainer(Container container)  {
@@ -31,7 +35,7 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFi
 			@Override
 			public void controlResized(ControlEvent e) {
 				fContainer.updatePresentation();
-				Rectangle bounds = getBounds();
+				Rectangle bounds = getView().getBounds();
 				updateSelectionBounds(bounds);
 			}
 
@@ -48,13 +52,6 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFi
 	}
 	
 	protected abstract void createPartControl(Composite parent);
-
-	@Override
-	public Rectangle getBounds() {
-		org.eclipse.swt.graphics.Rectangle bounds = fContent.getBounds();
-		Point viewLocation = getContainer().getContainerManager().getViewLocation();
-		return new Rectangle(viewLocation.x + bounds.x, viewLocation.y + bounds.y, bounds.width, bounds.height);
-	}
 
 	@Override
 	public void setBounds(Rectangle newBounds) {
@@ -74,9 +71,27 @@ public abstract class CompositePad<T extends PadDocumentPart> extends Pad<T, IFi
 		fContent.dispose();
 	}
 
-	@Override
 	protected IFigure createFigure() {
 		return new Figure();
 	}
 	
+	@Override
+	public IView createView() {
+		return new FigureView(getFigure()) {
+			@Override
+			public Rectangle getBounds() {
+				org.eclipse.swt.graphics.Rectangle bounds = fContent.getBounds();
+				Point viewLocation = getContainer().getContainerManager().getViewLocation();
+				return new Rectangle(viewLocation.x + bounds.x, viewLocation.y + bounds.y, bounds.width, bounds.height);
+			}
+		};
+	}
+
+	public IFigure getFigure() {
+		if (fFigure == null) {
+			fFigure = createFigure();
+		}
+		return fFigure;
+	}
+
 }
